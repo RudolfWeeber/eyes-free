@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.google.tts"
+          android:versionCode="1"
+          android:versionName="1.0">
+    <application android:icon="@drawable/tts" android:label="@string/app_name">
+	  <service android:enabled="true" 
+	    	android:name=".TTSService" 
+	    	android:label="@string/app_name" 
+	    	android:icon="@drawable/tts" >
+	    	<intent-filter>
+	    		<action android:name="android.intent.action.USE_TTS" />
+				<category android:name="android.intent.category.TTS" />
+			</intent-filter>
+		</service>
+		<activity android:name=".ConfigurationManager" >
+		</activity>
+	</application>
+</manifest> 
