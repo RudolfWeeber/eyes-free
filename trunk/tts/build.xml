@@ -1,9 +1,8 @@
 <?xml version="1.0" ?>
 <project name="ConfigurationManager" default="debug">
     <!-- SDK Locations -->
-    <property name="sdk-folder" value="C:\eclipse\android-sdk-windows-1.0_r1" />
-    <property name="android-tools" value="C:\eclipse\android-sdk-windows-1.0_r1\tools" />
-    
+    <property name="sdk-folder" value="/usr/local/android" />
+    <property name="android-tools" value="${sdk-folder}/tools" />
     <!-- Application Package Name -->
     <property name="application-package" value="com.google.tts" />
 
