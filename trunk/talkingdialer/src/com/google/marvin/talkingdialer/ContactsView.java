@@ -18,7 +18,6 @@ package com.google.marvin.talkingdialer;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.Contacts.PeopleColumns;
@@ -103,31 +102,26 @@ public class ContactsView extends TextView {
   }
 
   private void speakCurrentContact(boolean interrupt) {
-    String ringtoneFileName = null;
-    try {
-      ringtoneFileName = managedCursor.getString(RINGTONE);
-    } catch (CursorIndexOutOfBoundsException e) {
-      managedCursor.moveToFirst();
-    } finally {
-      if (ringtoneFileName != null) {
-        String name = managedCursor.getString(NAME);
-
-        parent.tts.addSpeech(name, ringtoneFileName);
-        if (interrupt) {
-          parent.tts.speak(name, 0, null);
-        } else {
-          parent.tts.speak(name, 1, null);
-        }
-        int phoneType = Integer.parseInt(managedCursor.getString(TYPE));
-        if (phoneType == PhonesColumns.TYPE_HOME) {
-          parent.tts.speak("home", 1, null);
-        } else if (phoneType == PhonesColumns.TYPE_MOBILE) {
-          parent.tts.speak("cell", 1, null);
-        } else if (phoneType == PhonesColumns.TYPE_WORK) {
-          parent.tts.speak("work", 1, null);
-        }
-      }
+    String name = managedCursor.getString(NAME);
+    if (interrupt) {
+      parent.tts.speak(name, 0, null);
+    } else {
+      parent.tts.speak(name, 1, null);
     }
+    int phoneType = Integer.parseInt(managedCursor.getString(TYPE));
+    String type = "";
+    if (phoneType == PhonesColumns.TYPE_HOME) {
+      type = "home";
+    } else if (phoneType == PhonesColumns.TYPE_MOBILE) {
+      type = "cell";
+    } else if (phoneType == PhonesColumns.TYPE_WORK) {
+      type = "work";
+    }
+    if (type.length() > 0) {
+      parent.tts.speak(type, 1, null);
+    }
+    setTextSize(80);
+    setText(name + "\n" + type);
   }
 
   @Override

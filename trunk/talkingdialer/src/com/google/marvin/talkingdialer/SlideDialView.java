@@ -87,7 +87,7 @@ public class SlideDialView extends TextView {
         }
         // Debug sound
         if (tremorCount > 9) {
-          parent.tts.speak("[honk]", 0, null);
+  //        parent.tts.speak("[honk]", 0, null);
         }
       } else {
         if ((values[0] > (deletionForce * 2)) && !lastShakePositive) {

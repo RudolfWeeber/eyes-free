@@ -87,6 +87,11 @@ public class SlideDial extends Activity {
     if (contactsView != null) {
       contactsView.setVisibility(View.GONE);
     }
+    if (mView != null) {
+      mView.unregisterListeners();
+      mView.setVisibility(View.GONE);
+      mView = null;
+    }
     contactsView = new ContactsView(this);
     setContentView(contactsView);
     tts.speak("Phonebook", 0, null);
@@ -111,7 +116,11 @@ public class SlideDial extends Activity {
   @Override
   public void onStop() {
     super.onStop();
-    mView.unregisterListeners();
+    if (mView != null) {
+      mView.unregisterListeners();
+      mView.setVisibility(View.GONE);
+      mView = null;
+    }
   }
 
   @Override
