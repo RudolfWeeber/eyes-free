@@ -2,7 +2,11 @@
 <project name="ConfigurationManager" default="debug">
     <!-- SDK Locations -->
     <property name="sdk-folder" value="/usr/local/android" />
-    <property name="android-tools" value="${sdk-folder}/tools" />
+    <condition property="android-tools"
+            value="${sdk-folder}\tools"
+            else="${sdk-folder}/tools" >
+        <os family="windows"/>
+    </condition>
     <!-- Application Package Name -->
     <property name="application-package" value="com.google.tts" />
 
