@@ -1,0 +1,38 @@
+This directory contains all of the native code necessary for speech
+synthesis on Android.
+
+The external/espeak directory contains a port of espeak, a free tts engine.
+Very little is changed - a build file (Android.mk) is provided, wide
+characters are disabled, and a few advanced pthread features (not needed)
+are commented out.
+
+The frameworks/tts directory contains a C library and build files that
+create a JNI shared library allowing you to call espeak from Java.
+The corresponding Java class that works with this JNI code is found in
+the top-level of eyes-free in: tts/src/com/google/tts/SpeechSynthesis.java
+
+To compile the code here, you will need to download the latest Android
+source code from git - note that this is not the SDK, but the entire
+source package.  See the instructions here:
+
+  http://source.android.com/download
+
+Follow the instructions and complete a full build of Android before
+proceeding.
+
+Copy external/espeak to the "external" directory in the Android source, then
+copy frameworks/tts to the "frameworks" directory in the Android source.
+To recompile just those directories, assuming you have run
+"source build/envsetup.sh" in your bash shell, you an just type:
+
+  mmm external/espeak
+
+  mmm frameworks/tts
+
+When you're done, you'll get this file:
+
+  out/target/product/generic/system/lib/libspeechsynthesis.so
+
+Copy this file to tts/lib/armeabi.  In order to make use of this file,
+you will need to make sure that lib/armeabi/libspeechsynthesis.so is
+copied into your apk before it is signed.
