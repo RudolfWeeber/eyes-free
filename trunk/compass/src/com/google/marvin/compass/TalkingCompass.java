@@ -1,5 +1,18 @@
-// Copyright 2008 Google Inc. All Rights Reserved.
-
+/*
+ * Copyright (C) 2008 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.google.marvin.compass;
 
 import com.google.tts.TTS;
@@ -89,8 +102,8 @@ public class TalkingCompass extends Activity {
       sensorOk = (arg1 == SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
     }
   };
-  
-  private TTS.InitListener ttsInitListener = new TTS.InitListener(){
+
+  private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
       if (version < TTS_MIN_VER) {
         tts.showVersionAlert();
@@ -108,7 +121,7 @@ public class TalkingCompass extends Activity {
       speechMode = DEFAULT_SPEECHMODE;
       lastCardinalDir = 0;
       loadUtterances();
-    }    
+    }
   };
 
   @Override
@@ -169,7 +182,7 @@ public class TalkingCompass extends Activity {
     sensorManager.unregisterListener(mListener);
     super.onStop();
   }
-  
+
   @Override
   protected void onDestroy() {
     tts.shutdown();

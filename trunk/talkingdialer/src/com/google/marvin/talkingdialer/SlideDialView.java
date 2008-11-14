@@ -1,4 +1,18 @@
-// Copyright 2008 Google Inc. All Rights Reserved.
+/*
+ * Copyright (C) 2008 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 
 package com.google.marvin.talkingdialer;
 
@@ -71,8 +85,8 @@ public class SlideDialView extends TextView {
           tremorCount++;
           lastTremorPositive = false;
         }
-        //Debug sound
-        if (tremorCount > 9){
+        // Debug sound
+        if (tremorCount > 9) {
           parent.tts.speak("[honk]", 0, null);
         }
       } else {
@@ -101,7 +115,7 @@ public class SlideDialView extends TextView {
 
   public SlideDialView(Context context) {
     super(context);
- //    android.os.Debug.waitForDebugger();
+    // android.os.Debug.waitForDebugger();
     downX = 0;
     downY = 0;
     dialedNumber = "";

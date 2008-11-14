@@ -1,4 +1,18 @@
-// Copyright 2008 Google Inc. All Rights Reserved.
+/*
+ * Copyright (C) 2008 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.google.tts;
 
 import com.google.tts.ITTS.Stub;
@@ -58,12 +72,12 @@ public class TTSService extends Service implements OnCompletionListener {
   public void onCreate() {
     super.onCreate();
     Log.i("TTS", "TTS starting");
-//  android.os.Debug.waitForDebugger();
+    // android.os.Debug.waitForDebugger();
     self = this;
     isSpeaking = false;
 
     utterances = new HashMap<String, SoundResource>();
-    
+
     speechQueue = new ArrayList<String>();
     player = null;
 
@@ -82,12 +96,12 @@ public class TTSService extends Service implements OnCompletionListener {
     utterances = new HashMap<String, SoundResource>();
     boolean fallbackToPrerecordedOnly = false;
     if (selectedEngine == TTSEngine.ESPEAK_ONLY) {
-      if (!espeakIsUsable()){
+      if (!espeakIsUsable()) {
         fallbackToPrerecordedOnly = true;
       }
       engine = selectedEngine;
     } else if (selectedEngine == TTSEngine.PRERECORDED_WITH_ESPEAK) {
-      if (!espeakIsUsable()){
+      if (!espeakIsUsable()) {
         fallbackToPrerecordedOnly = true;
       }
       loadUtterancesFromPropertiesFile();
@@ -95,7 +109,7 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       fallbackToPrerecordedOnly = true;
     }
-    if (fallbackToPrerecordedOnly){  
+    if (fallbackToPrerecordedOnly) {
       loadUtterancesFromPropertiesFile();
       engine = TTSEngine.PRERECORDED_ONLY;
     }
@@ -129,8 +143,8 @@ public class TTSService extends Service implements OnCompletionListener {
       e.printStackTrace();
     }
   }
-  
-  private boolean espeakIsUsable(){
+
+  private boolean espeakIsUsable() {
     if (!new File("/sdcard/").canWrite()) {
       return false;
     }
@@ -140,19 +154,19 @@ public class TTSService extends Service implements OnCompletionListener {
     if (!directoryExists) {
       // Launch downloader here ?
       return false;
-    }    
+    }
 
     File scratchDir = new File(ESPEAK_SCRATCH_DIRECTORY);
     directoryExists = scratchDir.isDirectory();
     if (directoryExists) {
       File[] scratchFiles = scratchDir.listFiles();
-      for (int i=0; i<scratchFiles.length; i++){
+      for (int i = 0; i < scratchFiles.length; i++) {
         scratchFiles[i].delete();
       }
     } else {
       scratchDir.mkdir();
     }
-    
+
     return true;
   }
 
@@ -194,7 +208,7 @@ public class TTSService extends Service implements OnCompletionListener {
     if (engine == TTSEngine.PRERECORDED_WITH_ESPEAK) {
       speakPrerecordedWithEspeak(text, queueMode, params);
     } else if (engine == TTSEngine.ESPEAK_ONLY) {
-      speakEspeakOnly(text, queueMode, params);     
+      speakEspeakOnly(text, queueMode, params);
     } else {
       speakPrerecordedOnly(text, queueMode, params);
     }
@@ -475,23 +489,24 @@ public class TTSService extends Service implements OnCompletionListener {
      */
     public void setEngine(String selectedEngine) {
       TTSEngine theEngine;
-      if (selectedEngine.equals(TTSEngine.ESPEAK_ONLY.toString())){
+      if (selectedEngine.equals(TTSEngine.ESPEAK_ONLY.toString())) {
         theEngine = TTSEngine.ESPEAK_ONLY;
-      } else if (selectedEngine.equals(TTSEngine.PRERECORDED_ONLY.toString())){
+      } else if (selectedEngine.equals(TTSEngine.PRERECORDED_ONLY.toString())) {
         theEngine = TTSEngine.PRERECORDED_ONLY;
       } else {
-        theEngine = TTSEngine.PRERECORDED_WITH_ESPEAK;        
+        theEngine = TTSEngine.PRERECORDED_WITH_ESPEAK;
       }
       self.setEngine(theEngine);
     }
-    
+
     /**
      * Speaks the given text using the specified queueing mode and parameters.
      * 
      * @param text The text that should be spoken
      * @param queueMode 0 for no queue (interrupts all previous utterances), 1
      *        for queued
-     * @param params An ArrayList of parameters. The first element of this array controls the type of voice to use.
+     * @param params An ArrayList of parameters. The first element of this array
+     *        controls the type of voice to use.
      */
     public void speak(String text, int queueMode, String[] params) {
       ArrayList<String> speakingParams = new ArrayList<String>();

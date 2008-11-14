@@ -1,5 +1,18 @@
-// Copyright 2008 Google Inc. All Rights Reserved.
-
+/*
+ * Copyright (C) 2008 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.google.marvin.androidsays;
 
 
@@ -25,7 +38,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 /**
- * Android Says... A memory game for the Android Platform
+ * mem A memory game for the Android Platform
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
@@ -158,7 +171,7 @@ public class AndroidSays extends Activity {
         return filename.endsWith(THEME_FILE_EXTENSION);
       }
     });
-    
+
     // Read the available themes from the SD card
     ArrayList<String> filenamesArrayList = new ArrayList<String>();
     filenamesArrayList.add("Default");
@@ -223,7 +236,8 @@ public class AndroidSays extends Activity {
   }
 
   private void displayMissingSdCardToast() {
-    Toast.makeText(this, "Please insert an SD card before trying to download themes.", Toast.LENGTH_LONG).show();
+    Toast.makeText(this, "Please insert an SD card before trying to download themes.",
+        Toast.LENGTH_LONG).show();
   }
 
   private void displayAbout() {
@@ -260,34 +274,34 @@ public class AndroidSays extends Activity {
 
     about.show();
   }
-  
-  public void recordScore(int score){
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);    
+
+  public void recordScore(int score) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String modeStr = prefs.getString("game_mode_pref", "1");
     gameMode = Integer.parseInt(modeStr);
     String sequenceLengthStr = prefs.getString("sequence_length_pref", "1");
     String scorePrefStr = "";
     String modeName = "";
-    if (gameMode == 1){
+    if (gameMode == 1) {
       scorePrefStr = "classic_";
       modeName = "Classic";
     } else {
-      scorePrefStr = "challenge_";  
-      modeName = "Challenge";    
+      scorePrefStr = "challenge_";
+      modeName = "Challenge";
     }
     scorePrefStr = scorePrefStr + sequenceLengthStr;
-    
+
     int prevHiScore = Integer.parseInt(prefs.getString(scorePrefStr, "0"));
     int diff = score - prevHiScore;
-    if (diff > 0){
+    if (diff > 0) {
       Editor editor = prefs.edit();
       editor.putString(scorePrefStr, Integer.toString(score));
       editor.commit();
-      
+
       Toast.makeText(this, "You beat your old record by " + diff + "!", Toast.LENGTH_LONG).show();
     }
   }
-  
+
 
   private void displayHiscores() {
     Builder hiscores = new Builder(this);
@@ -326,7 +340,7 @@ public class AndroidSays extends Activity {
 
     hiscores.show();
   }
-  
+
 
   private void displayScoreResetConfirmation() {
     Builder confirmation = new Builder(this);

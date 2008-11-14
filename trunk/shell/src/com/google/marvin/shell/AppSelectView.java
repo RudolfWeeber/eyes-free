@@ -1,7 +1,21 @@
+/*
+ * Copyright (C) 2008 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.google.marvin.shell;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -84,7 +98,8 @@ public class AppSelectView extends View {
     applications.put(7,
         new MenuItem("Android Says", "com.google.marvin.androidsays", "AndroidSays"));
     applications.put(8, new MenuItem("Compass", "com.google.marvin.compass", "TalkingCompass"));
-    //applications.put(9, new MenuItem("Text input", "com.google.marvin.brailler", "Brailler"));
+    // applications.put(9, new MenuItem("Text input",
+    // "com.google.marvin.brailler", "Brailler"));
   }
 
 
@@ -198,7 +213,7 @@ public class AppSelectView extends View {
     } else if (Math.abs(theta - down) < thetaTolerance) {
       return 8;
     } else if (Math.abs(theta - downleft) < thetaTolerance) {
-      if (movedFar){// && ((currentValue == 7) || (currentValue == -2))) {
+      if (movedFar) {// && ((currentValue == 7) || (currentValue == -2))) {
         return -2;
       } else {
         return 7;
@@ -394,37 +409,37 @@ public class AppSelectView extends View {
     parent.tts.speak(Integer.toString(day), 1, null);
   }
 
-  private void announceWeather(){
-      int version = 0;
-      try {
-        URLConnection cn;     
-        URL url = new URL("http://www.weather.gov/xml/current_obs/KSJC.rss");
-        cn = url.openConnection();
-        cn.connect();
-        InputStream stream = cn.getInputStream();
-        DocumentBuilder docBuild = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document weatherRssDoc = docBuild.parse(stream);
-        NodeList titles = weatherRssDoc.getElementsByTagName("title");
-        NodeList descriptions = weatherRssDoc.getElementsByTagName("description");
-        String title = titles.item(2).getFirstChild().getNodeValue();
-        String description = descriptions.item(1).getChildNodes().item(2).getNodeValue();
-        parent.tts.speak(title, 0, null);
-        parent.tts.speak(description, 1, null);
-      } catch (IOException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } catch (SAXException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } catch (ParserConfigurationException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } catch (FactoryConfigurationError e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+  private void announceWeather() {
+    int version = 0;
+    try {
+      URLConnection cn;
+      URL url = new URL("http://www.weather.gov/xml/current_obs/KSJC.rss");
+      cn = url.openConnection();
+      cn.connect();
+      InputStream stream = cn.getInputStream();
+      DocumentBuilder docBuild = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+      Document weatherRssDoc = docBuild.parse(stream);
+      NodeList titles = weatherRssDoc.getElementsByTagName("title");
+      NodeList descriptions = weatherRssDoc.getElementsByTagName("description");
+      String title = titles.item(2).getFirstChild().getNodeValue();
+      String description = descriptions.item(1).getChildNodes().item(2).getNodeValue();
+      parent.tts.speak(title, 0, null);
+      parent.tts.speak(description, 1, null);
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (SAXException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (ParserConfigurationException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (FactoryConfigurationError e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
-  
+
   private void toggleAirplaneMode() {
     boolean setAirPlaneMode = !airplaneModeEnabled();
     if (!setAirPlaneMode) {

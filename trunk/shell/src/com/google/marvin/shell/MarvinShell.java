@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2008 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.google.marvin.shell;
 
 import com.google.tts.TTS;
@@ -8,8 +23,8 @@ import android.os.Bundle;
 import android.view.View;
 
 /**
- * Shell An alternate home screen that is designed to be friendly for
- * eyes-free use
+ * Shell An alternate home screen that is designed to be friendly for eyes-free
+ * use
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
@@ -63,10 +78,10 @@ public class MarvinShell extends Activity {
     tts.shutdown();
     super.onDestroy();
   }
-  
-  private void resetTTS(){
+
+  private void resetTTS() {
     tts.setEngine(TTSEngine.PRERECORDED_WITH_ESPEAK);
-    
+
     String pkgName = MarvinShell.class.getPackage().getName();
     tts.addSpeech("[marvin intro]", pkgName, R.raw.marvin_intro);
     tts.addSpeech("Home", pkgName, R.raw.home);
@@ -97,12 +112,12 @@ public class MarvinShell extends Activity {
     tts.addSpeech("enabled", pkgName, R.raw.enabled);
     tts.addSpeech("disabled", pkgName, R.raw.disabled);
     tts.addSpeech("Camera", pkgName, R.raw.camera);
-    tts.addSpeech("Weather", pkgName, R.raw.weather);    
+    tts.addSpeech("Weather", pkgName, R.raw.weather);
   }
-  
+
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
-      resetTTS();      
+      resetTTS();
       tts.speak("[marvin intro]", 0, null);
 
       if (mView != null) {
