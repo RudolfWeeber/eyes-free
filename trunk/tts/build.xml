@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project name="ConfigurationManager" default="debug">
     <!-- SDK Locations -->
-    <property name="sdk-folder" value="/usr/local/android" />
+    <property name="sdk-folder" value="C:\eclipse\android-sdk-windows-1.0_r1" />
     <condition property="android-tools"
             value="${sdk-folder}\tools"
             else="${sdk-folder}/tools" >
@@ -30,7 +30,7 @@
         <os family="windows"/>
     </condition>
 
-    <property name="external-libs" value="libs" />
+    <property name="external-libs" value="lib" />
     <condition property="external-libs-ospath"
             value="${basedir}\${external-libs}"
             else="${basedir}/${external-libs}" >
