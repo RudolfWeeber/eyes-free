@@ -1,0 +1,211 @@
+
+// This file is UTF8 encoded 
+// Spelling to phoneme rules for Tamil
+
+// B means a combining vowel sign, or a virama
+
+
+.replace
+௦	0	// Tamil numbers
+௧	1
+௨	2
+௩	3
+௪	4
+௫	5
+௬	6
+௭	7
+௮	8
+௯	9
+
+.
+.group 0xe0ae   // characters which start with UTF-8 bytes: [e0 ae]
+
+	ஂ		// anusvara
+
+	ஃ		// visarga
+
+	அ	a
+
+	ஆ	a:
+
+	இ	i
+
+	ஈ	i:
+
+	உ	u
+
+	ஊ	u:
+
+	எ	e
+
+	ஏ	e::
+
+	ஐ	E:
+
+	ஒ	o
+
+	ஓ	o:
+
+	ஔ	aU
+
+// consonants
+
+	க	gV   // inter-vocalic, unless there is virama before or after
+	க (B	g
+	க (் 	g
+     ்) க	gV
+     ்) க (B	g
+     _) க	kV
+     _) க (B	k
+	க்க	kkV
+	க்க (B	kk
+
+	ங	NV
+	ங (B	N
+
+	ச	dZV
+	ச (B	dZ
+     _) ச	sa
+     _) ச (B	s
+	ச்ச	tS:V
+	ச்ச (B	tS:
+
+	ஜ	dZV
+	ஜ (B	dZ
+
+	ஞ	n^V
+	ஞ (B	n^
+
+	ட	d.V
+	ட (B	d.
+     _) ட	t.V
+     _) ட (B	t.
+	ட்ட	t.t.V
+	ட்ட (B	t.t.
+
+	ண	n.V
+	ண (B	n.
+
+	த	dV
+	த (B	d
+     _) த	tV
+     _) த (B	t
+	த்த	ttV
+	த்த (B	tt
+
+	ந	nV
+	ந (B	n  // dental n
+
+	ன	nV
+	ன (B	n  // alveolar n
+
+	ப	bV
+	ப (B	b
+     _) ப	pV
+     _) ப (B	p
+	ப்ப	ppV
+	ப்ப (B	pp
+     ஃ) ப	fV
+     ஃ) ப (B	f
+
+	ம	mV
+	ம (B	m
+
+	ய	jV
+	ய (B	j
+
+	ர	rV
+	ர (B	r
+
+	ற	RV
+	ற (B	R
+	ற் (ற	t.	// RR -> t.R
+
+	ல	lV
+	ல (B	l
+
+	ள	l.V
+	ள (B	l.
+
+	ழ	z.V
+	ழ (B	z.
+
+	வ	vV
+	வ (B	v
+
+	ஶ	SV
+	ஶ (B	S
+
+	ஷ	s.V
+	ஷ (B	s.
+
+	ஸ	sV
+	ஸ (B	s
+
+	ஹ	hV
+	ஹ (B	h
+
+
+// combining vowels
+
+	ா	a:
+
+	ி	i
+
+.group 0xe0af   // characters which start with UTF-8 bytes: [e0 af]
+	ீ	i:
+
+	ு	u
+
+	ூ	u:
+
+	ெ	e
+
+	ே	e:
+
+	ை	E:
+
+	ொ	o
+
+	ோ	o:
+
+	ௌ	aU
+
+	்		// virama
+
+	ௗ	:	// aU length mark
+
+.group 0xe0a4  // devanagari
+	\340\244  _^_HI  // switch to hindi voice
+.group 0xe0a5  // devanagari
+	\340\245  _^_HI
+
+.group
+	்	  // virama
+	$	dolV
+a	_^_EN
+b	_^_EN
+c	_^_EN
+d	_^_EN
+e	_^_EN
+f	_^_EN
+g	_^_EN
+h	_^_EN
+i	_^_EN
+j	_^_EN
+k	_^_EN
+l	_^_EN
+m	_^_EN
+n	_^_EN
+o	_^_EN
+p	_^_EN
+q	_^_EN
+r	_^_EN
+s	_^_EN
+t	_^_EN
+u	_^_EN
+v	_^_EN
+w	_^_EN
+x	_^_EN
+y	_^_EN
+z	_^_EN

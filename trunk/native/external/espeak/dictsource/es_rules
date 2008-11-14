@@ -1,0 +1,265 @@
+// translation rules for Spanish
+// This file is UTF-8 encoded
+
+// Conditional rules
+// ?1  Castilian
+// ?2  Latin America
+
+.L01 j w l r d g n m
+.L02 b d g n m         // change [s] to [z] before these
+
+.group a
+       _) a (_       a
+          a          a
+          ai         aI
+          ay (K      aI
+          ay (_      'aI
+          au         aU
+          au (_      'aU
+
+
+.group b
+       _) b (_       be
+          b          B
+       _) b          b
+       m) b          b
+       n) b          b
+          b (L01     b
+          b (iA      b
+          b (uA      b
+
+.group c
+       _) c (_       Te
+          c          k
+          c (Y       T         // ce, ci
+          ch         tS
+
+
+.group d
+       _) d (_       de
+          d          D
+       _) d          d
+       m) d          d
+       n) d          d
+
+
+.group e
+       _) e (_       e
+          e          e
+          e (CK      E
+          e (r       E
+          e (Ch      e
+      Ar) e          E
+          ei         eI
+          ey (K      eI
+          ey (_      'eI
+          eu         eU
+          eu (_      'eU
+
+
+.group f
+       _) f (_       'Efe
+          f          f
+
+
+.group g
+       _) g (_       xe
+          g          Q
+       _) g          g
+       m) g          g
+       n) g          g
+          g (Y+      x        // ge gi
+          g (r       g
+
+
+.group h
+       _) h (_       'atSe
+          h              // silent
+
+
+.group i
+       _) i (_       i
+          i          i
+          i (A       J^
+       C) i (A       j
+       l) i (A       %i
+       r) i (A       %i
+
+
+.group j
+       _) j (_       x'Ota
+          j          x
+
+
+.group k
+       _) k (_       ka
+          k          k
+
+
+.group l
+       _) l (_       Ele
+          l          l
+          ll         J^
+?2     A) ll (A      j:
+
+
+.group m
+       _) m (_       Eme
+          m          m
+
+
+.group n
+       _) n (_       Ene
+          n          n
+          n (b       m
+          n (v       m
+          n (f       m
+          n (p       m
+          n (g       N  // ??
+          n (k       N  // ??
+          n (j       N
+
+
+.group o
+       _) o (_       o
+          o          o
+          o (CK      O
+          o (r       O
+          o (Ch      o
+      Ar) o          O
+          oi         oI
+          oy (K      oI
+          oy (_      'oI
+
+
+.group p
+       _) p (_       pe
+          p          p
+          p (t       p:
+
+
+.group q
+       _) q (_       ku
+          q          k
+          qu         k
+
+
+.group r
+       _) r (_       E**e
+          r          R
+       _) r          R
+          r (_       *
+          r (t       **
+       A) r (A       **
+       C) r (A       **
+       l) r (A       R
+       m) r (A       R
+       n) r (A       R
+       s) r (A       R
+          rr         *R
+
+
+.group s
+       _) s (_       Ese
+          s          s
+       &) s (_S1     s
+
+
+.group t
+       _) t (_       te
+          t          t
+
+
+.group u
+       _) u (_       u
+          u          u
+          u (A       w
+          u (y_      w
+       l) u (A       %u
+       r) u (A       %u
+
+       g) u (Y             // gue gui
+
+
+.group v
+       _) v (_       uBe
+          v          B
+       _) v          v#
+?1     m) v          b
+?1     n) v          b
+?1        v (L01     b
+?1        v (iA      b
+?1        v (uA      b
+?2        v          v#
+?2     _) v          v
+?2        v (L01     v
+?2        v (j       v
+?2        v (iA      v
+?2        v (uA      v
+
+
+.group w
+       _) w (_       ,uBe||d'OBle
+          w          w
+
+
+.group x
+       _) x (_       Ekis
+          x          ks
+?1     A) x (A       Qs
+          x (_       =Qs
+       _) x          z      // ?
+
+
+.group y
+       _) y (_       ,ig**'iEQa
+          y          i
+       _) y          J
+      _m) y          J
+       n) y          J
+      _l) y          J
+          y (A       J^
+?2     A) y (A       j:
+
+
+.group z
+       _) z (_       TEta
+          z          T
+?2        z (L02     z
+
+
+
+.group
+          á          ''a
+          é          ''E
+          í          ''i
+          ó          ''O
+          ú          ''u
+          ü          u
+          ñ          n^
+        _)ñ (_       En^e
+
+          $          d'Olar
+
+          +          m'as
+      _)  ++ (_      masm'as
+ \+\+\+)  +          // ignore + after the first 3
+
+          #          almOaD'iJ^a
+      \#) #
+
+     __)  - (_D      m'EnOs
+     A_)  - (_D      _
+     C_)  - (_D      _
+      --) -
+
+          *          astE*'isko
+      *)  * (*
+          **
+     **)  * (_       _::
+
+          .          punto
+          . (.       _:
+      \.) .
+
+          , (D       kOma
