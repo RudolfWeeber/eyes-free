@@ -1,0 +1,41 @@
+#    -*- mode: org -*-
+
+* Introduction
+
+This directory contains source code for various eyes-free
+applications for the Android platform.
+It will also contain supporting code and libraries such as TTS.
+
+* Build Instructions
+
+Each of these eyes-free applications can be built with a simple
+command-line of the form:
+
+:ant -Dsdk-folder=<android-sdk-root>
+
+Thus, to build the Talking Dialer, 
+: cd talkingdialer
+: ant-Dsdk-folder=<android-sdk-root>
+
+
+* List Of Eyes-Free Applications
+
+Each application is found in its own sub-directory.
+
+| Name           | Description                       | Directory     |
+|----------------+-----------------------------------+---------------|
+| Compass        | Talking Compass                   | compass       |
+| Mem            | The Android Memory Game           | androidsays   |
+| TalkingDialer  | Talking Dialer Using Stroke Input | talkingdialer |
+| Shell          | Eyes-Free Shell                   | shell         |
+| Common Library | Jars used by all applications     | commonlib     |
+| Third Party    | Third Party Code                  | thirdparty    |
+|----------------+-----------------------------------+---------------|
+
+#+TITLE:     README For Project Eyes-Free
+#+AUTHOR:    T.V Raman
+#+EMAIL:     raman@google.com
+#+DATE:      2008-11-14 Fri
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc
+#+LINK_HOME:  http://eyes-free.googlecode.com

@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: C:\\sanity-check-eclipse\\workspace\\tts\\src\\com\\google\\tts\\ITTS.aidl
+ * Original file: /home/raman/src/eyes-free/tts/src/com/google/tts/ITTS.aidl
  */
 package com.google.tts;
 import java.lang.String;
