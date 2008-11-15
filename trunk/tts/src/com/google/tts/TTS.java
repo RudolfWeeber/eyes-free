@@ -16,10 +16,13 @@
 package com.google.tts;
 
 
+import java.io.File;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 import android.os.RemoteException;
 
@@ -46,6 +49,24 @@ public class TTS {
   private boolean started = false;
 
   public TTS(Context context, InitListener callback) {
+    File espeakDataDir = new File("/sdcard/espeak-data/");
+    boolean directoryExists = espeakDataDir.isDirectory();
+    if (!directoryExists) {
+      try {
+        int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
+        Context myContext = context.createPackageContext("com.google.tts", flags);
+        Class<?> appClass = myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
+        Intent intent = new Intent(myContext, appClass);
+        context.startActivity(intent);
+      } catch (NameNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+
     initTts(context, callback);
   }
 

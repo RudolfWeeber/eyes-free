@@ -10,10 +10,16 @@
 	    	android:icon="@drawable/tts" >
 	    	<intent-filter>
 	    		<action android:name="android.intent.action.USE_TTS" />
-				<category android:name="android.intent.category.TTS" />
-			</intent-filter>
+				  <category android:name="android.intent.category.TTS" />
+			  </intent-filter>
 		</service>
+		
 		<activity android:name=".ConfigurationManager" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
 		</activity>
 	</application>
+	
+  <uses-permission android:name="android.permission.INTERNET"/>
 </manifest> 
