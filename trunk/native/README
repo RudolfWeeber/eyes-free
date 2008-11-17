@@ -20,8 +20,9 @@ source package.  See the instructions here:
 Follow the instructions and complete a full build of Android before
 proceeding.
 
-Copy external/espeak to the "external" directory in the Android source, then
-copy frameworks/tts to the "frameworks" directory in the Android source.
+Copy external/espeak to the "external" directory in the Android source, copy frameworks/tts to the "frameworks" directory in the Android source, then create
+a java directory under frameworks/tts and copy SpeechSynthesis.java (from
+MY_SVN_DIRECTORY/tts/src/com/google/tts) into frameworks/tts/java.
 To recompile just those directories, assuming you have run
 "source build/envsetup.sh" in your bash shell, you an just type:
 
