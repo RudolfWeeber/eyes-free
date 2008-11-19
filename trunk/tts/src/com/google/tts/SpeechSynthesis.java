@@ -33,8 +33,8 @@ public class SpeechSynthesis {
   /**
    * Constructor; pass a language code such as 0 for English.
    */
-  public SpeechSynthesis(int languageCode) {
-    native_setup(new WeakReference<SpeechSynthesis>(this), languageCode);
+  public SpeechSynthesis(int languageCode, int speechRate) {
+    native_setup(new WeakReference<SpeechSynthesis>(this), languageCode, speechRate);
   }
 
   /**
@@ -56,7 +56,7 @@ public class SpeechSynthesis {
 
   private int mNativeContext; // accessed by native methods
 
-  private native final void native_setup(Object weak_this, int languageCode);
+  private native final void native_setup(Object weak_this, int languageCode, int speechRate);
 
   private native final void native_finalize();
 

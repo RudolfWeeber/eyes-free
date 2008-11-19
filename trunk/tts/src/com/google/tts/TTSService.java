@@ -66,7 +66,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private TTSService self;
 
   private final ReentrantLock speechQueueLock = new ReentrantLock();
-  private SpeechSynthesis speechSynthesis = new SpeechSynthesis(0);
+  private SpeechSynthesis speechSynthesis = new SpeechSynthesis(0, 180);
 
   @Override
   public void onCreate() {

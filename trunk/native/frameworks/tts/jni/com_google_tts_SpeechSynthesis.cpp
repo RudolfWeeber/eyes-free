@@ -61,7 +61,7 @@ static int AndroidEspeakSynthCallback(short *wav, int numsamples,
 
 static void
 com_google_tts_SpeechSynthesis_native_setup(
-    JNIEnv *env, jobject thiz, jobject weak_this, int languageCode)
+    JNIEnv *env, jobject thiz, jobject weak_this, int languageCode, int speechRate)
 {
     // TODO Make sure that the speech data is loaded in 
     // the directory /sdcard/espeak-data before calling this.
@@ -77,7 +77,7 @@ com_google_tts_SpeechSynthesis_native_setup(
     env->SetIntField(thiz, fields.mNativeContext, sampleRate);
 
     espeak_SetSynthCallback(AndroidEspeakSynthCallback);
-    espeak_ERROR err = espeak_SetParameter(espeakRATE, 260, 0);
+    espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
 }
 
 static void
@@ -189,7 +189,7 @@ static JNINativeMethod gMethods[] = {
         (void*)com_google_tts_SpeechSynthesis_synthesizeToFile
     },
     {   "native_setup",
-        "(Ljava/lang/Object;I)V",
+        "(Ljava/lang/Object;II)V",
         (void*)com_google_tts_SpeechSynthesis_native_setup
     },
     {   "native_finalize",     
