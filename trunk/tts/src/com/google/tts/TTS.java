@@ -25,6 +25,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 /**
  * Synthesizes speech from text. This abstracts away the complexities of using
@@ -84,9 +85,15 @@ public class TTS {
         } catch (RemoteException e) {
           initTts(ctx, cb);
           return;
-        }
+        } 
         started = true;
-        cb.onInit(version);
+        // The callback can become null if the Android OS decides to restart the
+        // TTS process as well as whatever is using it. In such cases, do 
+        // nothing - the error handling from the speaking calls will kick in
+        // and force a proper restart of the TTS.
+        if (cb != null){
+          cb.onInit(version);
+        }
       }
 
       public void onServiceDisconnected(ComponentName name) {
