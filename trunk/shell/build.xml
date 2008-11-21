@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="MarvinShell" default="debug">
+<project name="MarvinShell" default="reinstall">
     <!-- SDK Locations -->
     <property name="sdk-folder" value="C:\eclipse\android-sdk-windows-1.0_r1" />
     <condition property="android-tools"

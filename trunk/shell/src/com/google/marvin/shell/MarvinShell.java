@@ -18,12 +18,8 @@ package com.google.marvin.shell;
 import com.google.tts.TTS;
 import com.google.tts.TTSEngine;
 
-import java.io.File;
-
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 
@@ -44,6 +40,7 @@ public class MarvinShell extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setVolumeControlStream(AudioManager.STREAM_MUSIC);
     self = this;
     tts = new TTS(this, ttsInitListener);
     mView = null;
