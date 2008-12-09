@@ -25,7 +25,6 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.util.Log;
 
 /**
  * Synthesizes speech from text. This abstracts away the complexities of using
@@ -179,6 +178,28 @@ public class TTS {
       initTts(ctx, cb);
     }
   }
+  
+  public boolean isSpeaking() {
+    if (!started) {
+      return false;
+    }
+    try {
+      return itts.isSpeaking();
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts(ctx, cb);
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts(ctx, cb);
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts(ctx, cb);
+    }
+    return false;
+  }
 
   public void stop() {
     if (!started) {
@@ -211,6 +232,19 @@ public class TTS {
     }
     try {
       itts.setEngine(selectedEngine.toString());
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts(ctx, cb);
+    }
+  }
+
+  public void setSpeechRate(int speechRate) {
+    if (!started) {
+      return;
+    }
+    try {
+      itts.setSpeechRate(speechRate);
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;

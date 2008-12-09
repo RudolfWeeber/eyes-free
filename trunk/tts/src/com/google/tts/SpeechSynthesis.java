@@ -15,7 +15,6 @@
  */
 package com.google.tts;
 
-import android.util.Log;
 import java.lang.ref.WeakReference;
 
 /**
@@ -52,14 +51,17 @@ public class SpeechSynthesis {
     System.loadLibrary("speechsynthesis");
   }
 
+  @SuppressWarnings("unused")
   private final static String TAG = "SpeechSynthesis";
 
+  @SuppressWarnings("unused")
   private int mNativeContext; // accessed by native methods
 
   private native final void native_setup(Object weak_this, int languageCode, int speechRate);
 
   private native final void native_finalize();
 
+  @Override
   protected void finalize() {
     native_finalize();
   }

@@ -66,7 +66,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private TTSService self;
 
   private final ReentrantLock speechQueueLock = new ReentrantLock();
-  private SpeechSynthesis speechSynthesis = new SpeechSynthesis(0, 180);
+  private SpeechSynthesis speechSynthesis = new SpeechSynthesis(0, 140);
 
   @Override
   public void onCreate() {
@@ -90,6 +90,10 @@ public class TTSService extends Service implements OnCompletionListener {
 
     // Don't hog the media player
     cleanUpPlayer();
+  }
+  
+  private void setSpeechRate(int speechRate){
+    speechSynthesis = new SpeechSynthesis(0, speechRate);
   }
 
   private void setEngine(TTSEngine selectedEngine) {
@@ -524,6 +528,15 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     /**
+     * Returns whether or not the TTS is speaking.
+     * 
+     * @return Boolean to indicate whether or not the TTS is speaking
+     */
+    public boolean isSpeaking() {
+      return self.isSpeaking;
+    }
+
+    /**
      * Adds a sound resource to the TTS.
      * 
      * @param text The text that should be associated with the sound resource
@@ -543,6 +556,17 @@ public class TTSService extends Service implements OnCompletionListener {
      */
     public void addSpeechFile(String text, String filename) {
       self.addSpeech(text, filename);
+    }
+    
+    /**
+     * Sets the speech rate for the TTS.
+     * Note that this will only have an effect on synthesized speech; it will
+     * not affect pre-recorded speech.
+     * 
+     * @param speechRate The speech rate that should be used
+     */
+    public void setSpeechRate(int speechRate){
+      self.setSpeechRate(speechRate);
     }
 
     /**

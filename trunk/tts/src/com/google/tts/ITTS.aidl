@@ -13,7 +13,9 @@ package com.google.tts;
 interface ITTS {
 
   void setEngine(in String selectedEngine);
+  void setSpeechRate(in int speechRate);
   void speak(in String text, in int queueMode, in String[] params);
+  boolean isSpeaking();
   void stop();
   void addSpeech(in String text, in String packageName, in int resId);
   void addSpeechFile(in String text, in String filename);
