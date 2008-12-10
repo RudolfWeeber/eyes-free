@@ -15,7 +15,6 @@
  */
 package com.google.tts;
 
-
 import java.io.File;
 
 import android.content.ComponentName;
@@ -47,19 +46,24 @@ public class TTS {
   private InitListener cb = null;
   private int version = -1;
   private boolean started = false;
+  private boolean showInstaller = false;
 
-  public TTS(Context context, InitListener callback) {
+  public TTS(Context context, InitListener callback, boolean displayInstallMessage) {
+    showInstaller = displayInstallMessage;
     File espeakDataDir = new File("/sdcard/espeak-data/");
     boolean directoryExists = espeakDataDir.isDirectory();
     if (!directoryExists) {
       try {
         int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
         Context myContext = context.createPackageContext("com.google.tts", flags);
-        Class<?> appClass = myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
+        Class<?> appClass =
+            myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
         Intent intent = new Intent(myContext, appClass);
         context.startActivity(intent);
       } catch (NameNotFoundException e) {
-        // TODO Auto-generated catch block
+        // Just let it fail through; this exception means that the
+        // TTS apk has not been installed and this case will be handled
+        // in the initTts function
         e.printStackTrace();
       } catch (ClassNotFoundException e) {
         // TODO Auto-generated catch block
@@ -69,7 +73,7 @@ public class TTS {
 
     initTts(context, callback);
   }
-
+  
   private void initTts(Context context, InitListener callback) {
     started = false;
     ctx = context;
@@ -84,13 +88,13 @@ public class TTS {
         } catch (RemoteException e) {
           initTts(ctx, cb);
           return;
-        } 
+        }
         started = true;
         // The callback can become null if the Android OS decides to restart the
-        // TTS process as well as whatever is using it. In such cases, do 
+        // TTS process as well as whatever is using it. In such cases, do
         // nothing - the error handling from the speaking calls will kick in
         // and force a proper restart of the TTS.
-        if (cb != null){
+        if (cb != null) {
           cb.onInit(version);
         }
       }
@@ -108,9 +112,13 @@ public class TTS {
     // the TTSVersionAlert will give users a chance to install
     // the needed TTS.
     if (!ctx.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)) {
-      new TTSVersionAlert(ctx).show();
+      if (showInstaller) {
+        new TTSVersionAlert(ctx).show();
+      }
     }
   }
+
+
 
   public void shutdown() {
     ctx.unbindService(serviceConnection);
@@ -178,7 +186,7 @@ public class TTS {
       initTts(ctx, cb);
     }
   }
-  
+
   public boolean isSpeaking() {
     if (!started) {
       return false;

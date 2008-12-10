@@ -30,17 +30,25 @@ import android.net.Uri;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class TTSVersionAlert extends Builder {
+  // These strings must be in the Java file itself in order for this to be
+  // packed into a .jar file.
+  private final static String NO_TTS = 
+    "Please install the required TTS before running this application.";
+  private final static String MARKET_URI = "market://details?id=-7807259973203517256";
+  private final static String INSTALL_TTS = "Install the TTS";
+  private final static String QUIT = "Quit";
+  
   private Activity parent;
 
   public TTSVersionAlert(Context context) {
     super(context);
     parent = (Activity) context;
-    setMessage(R.string.NO_TTS);
+    setMessage(NO_TTS);
 
 
     OnClickListener installListener = new OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
-        Uri marketUri = Uri.parse(parent.getString(R.string.MARKET_URI));
+        Uri marketUri = Uri.parse(MARKET_URI);
         Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
         parent.startActivity(marketIntent);
         parent.finish();
@@ -53,8 +61,8 @@ public class TTSVersionAlert extends Builder {
       }
     };
 
-    setPositiveButton(R.string.INSTALL_TTS, installListener);
-    setNegativeButton(R.string.QUIT, quitListener);
+    setPositiveButton(INSTALL_TTS, installListener);
+    setNegativeButton(QUIT, quitListener);
   }
 
 }

@@ -45,7 +45,7 @@ public class SlideDialView extends TextView {
   private final double right = Math.PI;
   private final double rightWrap = -Math.PI;
   private final double deletionForce = 2.5;
-  private final int deletionCount = 1;
+  private final int deletionCount = 2;
   private final double tremorForce = 1.8;
 
   public SlideDial parent;
@@ -71,6 +71,10 @@ public class SlideDialView extends TextView {
    */
   private final SensorListener mListener = new SensorListener() {
     public void onSensorChanged(int sensor, float[] values) {
+      // Only try to process the accelerometer readings if the phone is flat
+      if (values[2] > -7){
+        return;
+      }
       if (tremorCount < 10) {
         if ((values[0] > deletionForce) && !lastShakePositive) {
           shakeCount++;
@@ -390,7 +394,10 @@ public class SlideDialView extends TextView {
       case KeyEvent.KEYCODE_CALL:
         if (!confirmed) {
           parent.tts.speak("You are about to dial", 1, null);
-          parent.tts.speak(dialedNumber, 1, null);
+          for (int i=0; i<dialedNumber.length(); i++){
+            String digit = dialedNumber.charAt(i) + "";
+            parent.tts.speak(digit, 1, null);
+          }
           confirmed = true;
           return true;
         } else {

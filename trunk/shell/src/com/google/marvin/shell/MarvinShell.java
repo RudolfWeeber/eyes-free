@@ -42,7 +42,7 @@ public class MarvinShell extends Activity {
     super.onCreate(savedInstanceState);
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     self = this;
-    tts = new TTS(this, ttsInitListener);
+    tts = new TTS(this, ttsInitListener, true);
     mView = null;
     isFocused = true;
   }

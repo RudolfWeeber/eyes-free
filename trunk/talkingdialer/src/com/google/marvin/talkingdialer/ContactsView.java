@@ -43,7 +43,7 @@ public class ContactsView extends TextView {
   private static final int NAME = 0;
   private static final int NUMBER = 1;
   private static final int TYPE = 2;
-  private static final int RINGTONE = 3;
+
   // An array specifying which columns to return.
   private static final String[] PROJECTION =
       new String[] {PeopleColumns.NAME, PhonesColumns.NUMBER, PhonesColumns.TYPE,

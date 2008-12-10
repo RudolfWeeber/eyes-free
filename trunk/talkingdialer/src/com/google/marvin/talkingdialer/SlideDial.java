@@ -51,7 +51,7 @@ public class SlideDial extends Activity {
     super.onCreate(icicle);
     // android.os.Debug.waitForDebugger();
 
-    tts = new TTS(this, ttsInitListener);
+    tts = new TTS(this, ttsInitListener, true);
 
   }
 

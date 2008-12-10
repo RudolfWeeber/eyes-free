@@ -131,7 +131,7 @@ public class TalkingCompass extends Activity {
     vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     sensorOk = true;
     sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-    tts = new TTS(this, ttsInitListener);
+    tts = new TTS(this, ttsInitListener, true);
   }
 
 

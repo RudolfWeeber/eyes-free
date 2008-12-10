@@ -99,6 +99,7 @@ public class AppSelectView extends View {
         new MenuItem("Android Says", "com.google.marvin.androidsays", "AndroidSays"));
     applications.put(8, new MenuItem("Compass", "com.google.marvin.compass", "TalkingCompass"));
     applications.put(0, new MenuItem("Text input", "com.google.marvin.brailler", "Brailler"));
+    applications.put(-2, new MenuItem("O C R", "com.android.ocr", "OcrActivity"));
     // applications.put(9, new MenuItem("Text input",
     // "com.google.marvin.brailler", "Brailler"));
   }
