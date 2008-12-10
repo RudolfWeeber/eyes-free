@@ -118,6 +118,34 @@ public class GameView extends TextView {
       parent.sfx.loadSoundResource("[yellow]", R.raw.yellow_snd);
       parent.sfx.loadSoundResource("[blue]", R.raw.blue_snd);
     }
+    
+    // Fall back to the default theme if anything went wrong
+    if ( (bgImg == null) ||
+         (greenImg == null) ||
+         (redImg == null) ||
+         (yellowImg == null) ||
+         (blueImg == null) ||
+         (touchedGreenImg == null) ||
+         (touchedRedImg == null) ||
+         (touchedYellowImg == null) ||
+         (touchedBlueImg== null) ){
+      // Default theme
+      Resources res = parent.getResources();
+      bgImg = BitmapFactory.decodeResource(res, R.drawable.bg);
+      greenImg = BitmapFactory.decodeResource(res, R.drawable.green);
+      redImg = BitmapFactory.decodeResource(res, R.drawable.red);
+      yellowImg = BitmapFactory.decodeResource(res, R.drawable.yellow);
+      blueImg = BitmapFactory.decodeResource(res, R.drawable.blue);
+      touchedGreenImg = BitmapFactory.decodeResource(res, R.drawable.flash);
+      touchedRedImg = BitmapFactory.decodeResource(res, R.drawable.flash);
+      touchedYellowImg = BitmapFactory.decodeResource(res, R.drawable.flash);
+      touchedBlueImg = BitmapFactory.decodeResource(res, R.drawable.flash);
+
+      parent.sfx.loadSoundResource("[red]", R.raw.red_snd);
+      parent.sfx.loadSoundResource("[green]", R.raw.green_snd);
+      parent.sfx.loadSoundResource("[yellow]", R.raw.yellow_snd);
+      parent.sfx.loadSoundResource("[blue]", R.raw.blue_snd);
+    }
 
     gameStart();
   }
