@@ -1,7 +1,7 @@
-<?xml version="1.0" ?>
-<project name="ConfigurationManager" default="debug">
+﻿<?xml version="1.0" ?>
+<project name="ConfigurationManager" default="reinstall">
     <!-- SDK Locations -->
-    <property name="sdk-folder" value="C:\eclipse\android-sdk-windows-1.0_r1" />
+    <property name="sdk-folder" value="C:\eclipse\android-sdk-windows-1.0_r2" />
     <condition property="android-tools"
             value="${sdk-folder}\tools"
             else="${sdk-folder}/tools" >
