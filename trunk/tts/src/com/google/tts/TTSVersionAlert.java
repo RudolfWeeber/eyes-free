@@ -34,7 +34,7 @@ public class TTSVersionAlert extends Builder {
   // packed into a .jar file.
   private final static String NO_TTS = 
     "Please install the required TTS before running this application.";
-  private final static String MARKET_URI = "market://details?id=-7807259973203517256";
+  private final static String MARKET_URI = "market://details?id=-8633716544499463376";
   private final static String INSTALL_TTS = "Install the TTS";
   private final static String QUIT = "Quit";
   
