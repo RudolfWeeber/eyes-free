@@ -54,7 +54,6 @@ public class TTSService extends Service implements OnCompletionListener {
   private static final String ACTION = "android.intent.action.USE_TTS";
   private static final String CATEGORY = "android.intent.category.TTS";
   private static final String PKGNAME = "com.google.tts";
-  private static final String ESPEAK_DATA_DIRECTORY = "/sdcard/espeak-data/";
   private static final String ESPEAK_SCRATCH_DIRECTORY = "/sdcard/espeak-data/scratch/";
 
   private TTSEngine engine;
@@ -81,7 +80,11 @@ public class TTSService extends Service implements OnCompletionListener {
     speechQueue = new ArrayList<String>();
     player = null;
 
-    setEngine(TTSEngine.PRERECORDED_WITH_ESPEAK);
+    if (espeakIsUsable()) {
+      setEngine(TTSEngine.PRERECORDED_WITH_ESPEAK);
+    } else {
+      setEngine(TTSEngine.PRERECORDED_ONLY);
+    }
   }
 
   @Override
@@ -91,8 +94,8 @@ public class TTSService extends Service implements OnCompletionListener {
     // Don't hog the media player
     cleanUpPlayer();
   }
-  
-  private void setSpeechRate(int speechRate){
+
+  private void setSpeechRate(int speechRate) {
     speechSynthesis = new SpeechSynthesis(0, speechRate);
   }
 
@@ -153,15 +156,13 @@ public class TTSService extends Service implements OnCompletionListener {
       return false;
     }
 
-    File espeakDataDir = new File(ESPEAK_DATA_DIRECTORY);
-    boolean directoryExists = espeakDataDir.isDirectory();
-    if (!directoryExists) {
+    if (!ConfigurationManager.allFilesExist()) {
       // Launch downloader here ?
       return false;
     }
 
     File scratchDir = new File(ESPEAK_SCRATCH_DIRECTORY);
-    directoryExists = scratchDir.isDirectory();
+    boolean directoryExists = scratchDir.isDirectory();
     if (directoryExists) {
       File[] scratchFiles = scratchDir.listFiles();
       for (int i = 0; i < scratchFiles.length; i++) {
@@ -557,15 +558,14 @@ public class TTSService extends Service implements OnCompletionListener {
     public void addSpeechFile(String text, String filename) {
       self.addSpeech(text, filename);
     }
-    
+
     /**
-     * Sets the speech rate for the TTS.
-     * Note that this will only have an effect on synthesized speech; it will
-     * not affect pre-recorded speech.
+     * Sets the speech rate for the TTS. Note that this will only have an effect
+     * on synthesized speech; it will not affect pre-recorded speech.
      * 
      * @param speechRate The speech rate that should be used
      */
-    public void setSpeechRate(int speechRate){
+    public void setSpeechRate(int speechRate) {
       self.setSpeechRate(speechRate);
     }
 

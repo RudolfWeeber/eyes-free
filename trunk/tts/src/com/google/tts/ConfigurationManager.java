@@ -41,7 +41,7 @@ public class ConfigurationManager extends Activity {
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
     File espeakDataDir = new File("/sdcard/espeak-data/");
-    if (!espeakDataDir.isDirectory()) {
+    if (!allFilesExist()) {
       setContentView(R.layout.downloading);
       (new Thread(new dataDownloader())).start();
     }
@@ -52,6 +52,30 @@ public class ConfigurationManager extends Activity {
       downloadEspeakData();
       finish();
     }
+  }
+
+  public static boolean allFilesExist() {
+    String espeakDataDirStr = "/sdcard/espeak-data/";
+    String[] datafiles =
+        {"config", "en_dict", "phondata", "phonindex", "phontab", "soundicons/dummyfile",
+            "voices/default", "voices/en/en", "voices/en/en-n", "voices/en/en-r",
+            "voices/en/en-rp", "voices/en/en-sc", "voices/en/en-wi", "voices/en/en-wm"};
+
+    File espeakDataDir = new File(espeakDataDirStr);
+    boolean directoryExists = espeakDataDir.isDirectory();
+
+    if (!directoryExists) {
+      return false;
+    } else {
+      for (int i = 0; i < datafiles.length; i++) {
+        File tempFile = new File(espeakDataDirStr + datafiles[i]);
+        if (!tempFile.isFile()) {
+          espeakDataDir.delete();
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   public static void downloadEspeakData() {
@@ -66,7 +90,8 @@ public class ConfigurationManager extends Activity {
       espeakDataDir.mkdir();
 
       // Download the espeak-data zip file
-      String fileUrl = "http://eyes-free.googlecode.com/svn/trunk/thirdparty/espeak-data.zip";
+      String fileUrl =
+          "http://eyes-free.googlecode.com/svn/trunk/thirdparty/espeak-data-en_only.zip";
       fileUrl = (new URL(new URL(fileUrl), fileUrl)).toString();
       URL url = new URL(fileUrl);
       URLConnection cn = url.openConnection();
