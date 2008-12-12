@@ -1,0 +1,67 @@
+#    -*- mode: org -*-
+
+* Introduction
+Here are some tips and tricks on using the TTS in your app. [[http://eyes-free.googlecode.com/svn/trunk/documentation/tutorial/tutorial.html][These notes assume that you already have a basic understanding of how to set up an Android project that uses the TTS.]]
+
+* Dependency Management
+One of the challenges in using a library like the TTS is dealing with the possibility that your app may be used by someone who does not have the TTS installed (or who has an obsolete version of the TTS).
+
+If the user doesn't have the TTS installed, the TTS library allows you to either:
+
+1. Fail silently and not produce any spoken feedback,
+2. Suggest that the user install the TTS but allow the user to proceed even if they choose not to install the TTS, or
+3. Prompt the user to install the TTS and refuse to start until the TTS exists.
+
+You can choose whichever of these behaviors makes the most sense for your app by how you [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTS.html#TTS(Context,%20com.google.tts.TTS.InitListener,%20boolean)][initialize the TTS object]].
+
+If you wish to fail silently, then you should set the displayInstallMessage parameter to false and ensure that your callback function does not do anything that is essential for starting your app because your callback will not be called at all if the TTS is not there.
+
+If you wish to suggest the user install the TTS but allow them to proceed without it, then you should set the displayInstallMessage parameter to true and ensure that your callback function does not do anything that is essential for starting your app because your callback will not be called at all if the TTS is not there. 
+
+If you wish to do nothing until the TTS has been installed because TTS functionality is an integral part of your app, then you should set the displayInstallMessage parameter to true and ensure that your callback function is what actually starts the app running. Typically, you can accomplish this by having an onCreate method which only has two lines: the first to call the super.onCreate method, and the second to initialize the TTS. The rest of your app initialization (including the call to setContentView which will set the layout of your app) should be done in your callback. This will ensure that the user gets a blank screen with nothing happening if they choose to not install the TTS.
+
+The prompt will work even if the user does not have the TTS installed because the Java code for putting up the prompt is inside the TTS_library_stub.jar file you are building against. If you allow the user to proceed without the TTS, any calls made to the TTS will return immediately and are essentially no-ops; this means that you do not need to do any special checks within your code because you can assume that calls to the TTS methods will fail gracefully without doing anything.
+
+Note that the argument for the callback function is the version number; if your app requires a minimum version of the TTS, the callback is a good place to check for it. The installation alert takes users to the TTS library on Market, so you should show that if you want the user to upgrade their TTS. You can show that by using the [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTS.html#showVersionAlert()][showVersionAlert]] method.
+
+
+* TTS Engines
+Having a stable, unified TTS API that developers can work against is one of the major goals of this project. The idea is that as synthesis engines become available for Android, they can be plugged into this TTS library. As such, the TTS library currently supports [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTSEngine.html][three engines]]: PRERECORDED_WITH_ESPEAK (default), ESPEAK_ONLY, and PRERECORDED_ONLY. You can specify the engine that you want your app to use by using the [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTS.html#setEngine(com.google.tts.TTSEngine)][setEngine]] method of the TTS.
+
+PRERECORDED_WITH_ESPEAK (default) - Uses pre-recorded speech where available; otherwise, generates the speech using eSpeak.
+
+ESPEAK_ONLY - Ignores all pre-recorded speech and only generates the speech using eSpeak.
+
+PRERECORDED_ONLY - Uses pre-recorded speech only; if pre-recorded speech is not available, the TTS will fall back on spelling the text letter by letter.
+
+
+* Pre-Recorded Speech
+There may be certain cases where pre-recorded audio is more appropriate than synthesized speech. Pre-recorded audio gives you higher quality voices and is easier on the CPU since it already exists so there are no computations needed to create it. For things that have a very limited vocabulary (a talking compass for instance) or for a special effect (perhaps you have a game where you want a particular phrase to be sung out in a jingle, rather than just spoken plainly), pre-recorded audio is a reasonable way to go.
+
+To use pre-recorded speech, unless you are only speaking the alphabet and numbers, you will first have to associate the string of text with some audio by using the [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTS.html#addSpeech(java.lang.String,%20java.lang.String,%20int)][addSpeech]] method.
+
+The audio can either be a raw resource bundled in a package or a file on the user's SD card.
+
+* Voice Types
+You can set the type of voice you would like used by having that as the params[0] in the [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTS.html#speak(java.lang.String,%20int,%20java.lang.String[])][speak]] method.
+
+The TTS does not support different types of voices in eSpeak yet, so for now, the voice types are for the alphabet/numbers of the pre-recorded sounds only. If you specify a voice type, eSpeak will just ignore it.
+
+* Speech Rate
+You can set the speech rate by using the [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTS.html#setSpeechRate(int)][setSpeechRate]] method.
+
+The TTS does not support changing the speech rate in pre-recorded sounds, so this will only affect the speech produced by eSpeak.
+
+* Shutting Down
+It's good practice to use the [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/com/google/tts/TTS.html#shutdown()][shutdown]] method when your activity quits (call shutdown from inside the onDestroy method of your activity). This ensures that the TTS shuts down cleanly and prevents your app from generating a leaked service connection error in logcat.
+
+
+
+
+#+TITLE:     Tips and Tricks for Using the TTS
+#+AUTHOR:    Charles L. Chen
+#+EMAIL:     clchen@google.com
+#+DATE:      2008-12-10
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc
+#+LINK_HOME:  http://eyes-free.googlecode.com
