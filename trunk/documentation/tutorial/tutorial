@@ -1,0 +1,66 @@
+#    -*- mode: org -*-
+
+* Introduction
+
+The Text-To-Speech (TTS) library is allows developers to add speech to their applications. Developers give the TTS object a text string, and the TTS will take care of converting that string to text and speaking it to the user.
+
+The TTS library is designed such that different underlying speech engines can be used without affecting the higher level application logic. Currently, a port of the [[http://espeak.sourceforge.net/][eSpeak engine]] is available.
+
+* Requirements
+
+Using the eSpeak engine requires the user to have an SD card with free space available that the phone can access. The voice data for eSpeak will be downloaded and unzipped onto the SD card when the TTS is first run.
+
+Note that if the SD card is mounted on the computer, it will not be accessible to the phone. You must unmount the SD card from the computer before the TTS will work properly.
+
+* Setting Up an Eclipse Project That Uses the TTS
+
+1. [[http://code.google.com/android/intro/index.html][Setup an Android project as you would normally.]]
+
+2. Go to Project > Properties > Java Build Path > Libraries and click on "Add External JARs..."  Then add in the [[http://eyes-free.googlecode.com/svn/trunk/commonlibs/TTS_library_stub.jar][TTS_library_stub.jar]] file.
+
+3. Start coding!
+
+* A Step-By-Step Tutorial To Get You Started
+
+This tutorial will take you step-by-step through writing a simple Hello World application. [[http://code.google.com/android/intro/index.html][It assumes that you have Eclipse setup to work with the Android SDK already.]] 
+
+1. [[http://eyes-free.googlecode.com/svn/trunk/commonlibs/TTS_library_stub.jar][Get the latest TTS_library_stub.jar file from the eyes-free SVN repository.]]
+
+2. Start Eclipse. Go to "File" > "New Project" > "Project..." and choose "Android Project" under "Android". Fill out the information and click "Finish" to generate the skeleton for a project. The rest of this tutorial assumes that you named your application "HelloWorldTTS".
+
+3. Select your project in the "Package Explorer", then go to "Project" > "Properties". Select "Java Build Path" and click on the "Libraries" tab. Click on "Add external JARs..." and select the TTS_library_stub.jar from step 1.
+
+4. You should see two Java files in your project: HelloWorldTTS.java and R.java. Open HelloWorldTTS.java and do the following:
+  -In the imports section at the top of the file, add this line:
+     import com.google.tts.TTS;
+  -After the line "public class HelloWorldTTS extends Activity {", add this line:
+     private TTS myTts;
+  -Add the following as the last line of the onCreate method:
+      myTts = new TTS(this, ttsInitListener, true);
+  -After the onCreate method, add these lines:
+    private TTS.InitListener ttsInitListener = new TTS.InitListener() {
+        public void onInit(int version) {
+          myTts.speak("Hello world", 0, null);
+        }
+      };
+
+5. [[][Now you should have a HelloWorldTTS.java that looks something like this.]]
+
+6. Build this app, install it on your Android device, and run it.
+
+7. Congratulations! You just wrote your first TTS-enabled Android app! Please see the documentation on the TTS and look at other apps in the eyes-free project to learn more about how to use the TTS.
+
+Notes:
+ -The TTS constructor takes 3 parameters: the application Context, the TTS.InitListener to call upon successful initialization of the TTS, and whether or not to show a message prompting the user to install the TTS from the Market if they have not done so already.
+ -The speak call takes 3 parameters: the String of text to be spoken, an int that indicates the queuing strategy (0 for no queuing, 1 for fifo queuing), and an array of Strings that are parameters for how to speak the text.
+ -The first time you run an app that uses the TTS, if you do not already have the necessary speech data files on your SD card, they will be downloaded automatically.
+
+
+
+#+TITLE:     Tutorial
+#+AUTHOR:    Charles L. Chen
+#+EMAIL:     clchen@google.com
+#+DATE:      2008-12-10
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc
+#+LINK_HOME:  http://eyes-free.googlecode.com
