@@ -32,11 +32,10 @@ import android.net.Uri;
 public class TTSVersionAlert extends Builder {
   // These strings must be in the Java file itself in order for this to be
   // packed into a .jar file.
-  private final static String NO_TTS = 
-    "Please install the required TTS before running this application.";
-  private final static String MARKET_URI = "market://details?id=-8633716544499463376";
+  private final static String NO_TTS = "This application can talk using the text-to-speech (TTS) library. Please install the TTS.";
+  private final static String MARKET_URI = "market://search?q=pname:com.google.tts";
   private final static String INSTALL_TTS = "Install the TTS";
-  private final static String QUIT = "Quit";
+  private final static String QUIT = "Do not install the TTS";
   
   private Activity parent;
 
@@ -51,13 +50,12 @@ public class TTSVersionAlert extends Builder {
         Uri marketUri = Uri.parse(MARKET_URI);
         Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
         parent.startActivity(marketIntent);
-        parent.finish();
       }
     };
 
     OnClickListener quitListener = new OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
-        parent.finish();
+
       }
     };
 
