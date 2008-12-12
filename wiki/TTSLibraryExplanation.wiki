@@ -21,6 +21,8 @@ Hello,
 
   -The TTS library for Android: http://code.google.com/p/eyes-free/
 
+  -Writing Android apps that use the TTS library: http://eyes-free.googlecode.com/svn/trunk/documentation/tutorial/tutorial.html
+
   -Software libraries: http://en.wikipedia.org/wiki/Library_(computing)
 
   -Speech synthesis technology: http://en.wikipedia.org/wiki/Speech_synthesis
