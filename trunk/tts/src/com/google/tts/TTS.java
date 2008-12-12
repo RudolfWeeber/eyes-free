@@ -229,7 +229,11 @@ public class TTS {
    * @param text The string of text to be spoken.
    * @param queueMode The queuing strategy to use. Use 0 for no queuing, and 1
    *        for queuing.
-   * @param params The array of speech parameters to be used.
+   * @param params The array of speech parameters to be used. Currently, only
+   *        params[0] is defined - it is for setting the type of voice if the
+   *        engine allows it. Possible values are "VOICE_MALE", "VOICE_FEMALE",
+   *        and "VOICE_ROBOT". Note that right now only the pre-recorded voice
+   *        has this support - this setting has no effect on eSpeak.
    */
   public void speak(String text, int queueMode, String[] params) {
     if (!started) {
