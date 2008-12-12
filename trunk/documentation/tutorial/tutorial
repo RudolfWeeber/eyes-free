@@ -44,11 +44,11 @@ This tutorial will take you step-by-step through writing a simple Hello World ap
         }
       };
 
-5. [[][Now you should have a HelloWorldTTS.java that looks something like this.]]
+5. [[http://eyes-free.googlecode.com/svn/trunk/documentation/tutorial/HelloWorldTTS.java][Now you should have a HelloWorldTTS.java that looks something like this.]]
 
-6. Build this app, install it on your Android device, and run it.
+6. Build this app, install it on your Android device, and run it. You should hear the TTS say "hello world" if you have the TTS library installed on the phone and your SD card contains the needed voice data files. If you do not have the TTS library installed on the phone, you will be prompted to install it. If this is the first time you have used an app that uses the TTS, you will hear the TTS spell out "h e l l o w o r l d" very fast and see a screen that says your device is downloading the voice data files; if you rerun the app, you will hear the TTS say "hello world" as it should.
 
-7. Congratulations! You just wrote your first TTS-enabled Android app! Please see the documentation on the TTS and look at other apps in the eyes-free project to learn more about how to use the TTS.
+7. Congratulations! You just wrote your first TTS-enabled Android app! Please [[http://eyes-free.googlecode.com/svn/trunk/documentation/tts/index.html][see the documentation on the TTS]] and [[http://eyes-free.googlecode.com/svn/trunk/][look at other apps in the eyes-free project]] to learn more about how to use the TTS.
 
 Notes:
  -The TTS constructor takes 3 parameters: the application Context, the TTS.InitListener to call upon successful initialization of the TTS, and whether or not to show a message prompting the user to install the TTS from the Market if they have not done so already.
@@ -57,7 +57,7 @@ Notes:
 
 
 
-#+TITLE:     Tutorial
+#+TITLE:     Developing Speech Enabled Android Applications
 #+AUTHOR:    Charles L. Chen
 #+EMAIL:     clchen@google.com
 #+DATE:      2008-12-10

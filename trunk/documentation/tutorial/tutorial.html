@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>Developing Speech Enabled Android Applications</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2008/12/12 10:20:46"/>
+<meta name="author" content="Charles L. Chen"/>
+<style type="text/css">
+  html {
+	font-family: Times, serif;
+	font-size: 12pt;
+  }
+  .title { text-align: center; }
+  .todo  { color: red; }
+  .done { color: green; }
+  .timestamp { color: grey }
+  .timestamp-kwd { color: CadetBlue }
+  .tag { background-color:lightblue; font-weight:normal }
+  .target { background-color: lavender; }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+  }
+  table { border-collapse: collapse; }
+  td, th {
+	vertical-align: top;
+	<!--border: 1pt solid #ADB9CC;-->
+  }
+</style>
+</head><body>
+<h1 class="title">Developing Speech Enabled Android Applications</h1>
+
+<h2>1 Introduction</h2>
+
+
+<p>
+The Text-To-Speech (TTS) library is allows developers to add speech to their applications. Developers give the TTS object a text string, and the TTS will take care of converting that string to text and speaking it to the user.
+</p>
+<p>
+The TTS library is designed such that different underlying speech engines can be used without affecting the higher level application logic. Currently, a port of the <a href="http://espeak.sourceforge.net/">eSpeak engine</a> is available.
+</p>
+
+<h2>2 Requirements</h2>
+
+
+<p>
+Using the eSpeak engine requires the user to have an SD card with free space available that the phone can access. The voice data for eSpeak will be downloaded and unzipped onto the SD card when the TTS is first run.
+</p>
+<p>
+Note that if the SD card is mounted on the computer, it will not be accessible to the phone. You must unmount the SD card from the computer before the TTS will work properly.
+</p>
+
+<h2>3 Setting Up an Eclipse Project That Uses the TTS</h2>
+
+
+<ol>
+<li>
+<a href="http://code.google.com/android/intro/index.html">Setup an Android project as you would normally.</a>
+
+</li>
+<li>
+Go to Project &gt; Properties &gt; Java Build Path &gt; Libraries and click on "Add External JARs..."  Then add in the <a href="http://eyes-free.googlecode.com/svn/trunk/commonlibs/TTS_library_stub.jar">TTS_library_stub.jar</a> file.
+
+</li>
+<li>
+Start coding!
+
+</li>
+</ol>
+
+<h2>4 A Step-By-Step Tutorial To Get You Started</h2>
+
+
+<p>
+This tutorial will take you step-by-step through writing a simple Hello World application. <a href="http://code.google.com/android/intro/index.html">It assumes that you have Eclipse setup to work with the Android SDK already.</a> 
+</p>
+<ol>
+<li>
+<a href="http://eyes-free.googlecode.com/svn/trunk/commonlibs/TTS_library_stub.jar">Get the latest TTS_library_stub.jar file from the eyes-free SVN repository.</a>
+
+</li>
+<li>
+Start Eclipse. Go to "File" &gt; "New Project" &gt; "Project..." and choose "Android Project" under "Android". Fill out the information and click "Finish" to generate the skeleton for a project. The rest of this tutorial assumes that you named your application "HelloWorldTTS".
+
+</li>
+<li>
+Select your project in the "Package Explorer", then go to "Project" &gt; "Properties". Select "Java Build Path" and click on the "Libraries" tab. Click on "Add external JARs..." and select the TTS_library_stub.jar from step 1.
+
+</li>
+<li>
+You should see two Java files in your project: HelloWorldTTS.java and R.java. Open HelloWorldTTS.java and do the following:
+-In the imports section at the top of the file, add this line:
+<pre>
+import com.google.tts.TTS;
+</pre>
+-After the line "public class HelloWorldTTS extends Activity {", add this line:
+<pre>
+private TTS myTts;
+</pre>
+-Add the following as the last line of the onCreate method:
+<pre>
+myTts = new TTS(this, ttsInitListener, true);
+</pre>
+
+-After the onCreate method, add these lines:
+<pre>
+    private TTS.InitListener ttsInitListener = new TTS.InitListener() {
+        public void onInit(int version) {
+          myTts.speak("Hello world", 0, null);
+        }
+      };
+</pre>
+
+</li>
+<li>
+<a href="http://eyes-free.googlecode.com/svn/trunk/documentation/tutorial/HelloWorldTTS.java">Now you should have a HelloWorldTTS.java that looks something like this.</a>
+
+</li>
+<li>
+Build this app, install it on your Android device, and run it. You should hear the TTS say "hello world" if you have the TTS library installed on the phone and your SD card contains the needed voice data files. 
+  <ul><li>If you do not have the TTS library installed on the phone, you will be prompted to install it. 
+</li>
+<li>If this is the first time you have used an app that uses the TTS, you will hear the TTS spell out "h e l l o w o r l d" very fast and see a screen that says your device is downloading the voice data files; if you rerun the app, you will hear the TTS say "hello world" as it should.</li>
+</ul>
+
+</li>
+<li>
+Congratulations! You just wrote your first TTS-enabled Android app! Please <a href="http://eyes-free.googlecode.com/svn/trunk/documentation/tts/index.html">see the documentation on the TTS</a> and <a href="http://eyes-free.googlecode.com/svn/trunk/">look at other apps in the eyes-free project</a> to learn more about how to use the TTS.
+</li>
+</ol>
+Notes:
+<ul>
+<li>
+The TTS constructor takes 3 parameters: the application Context, the TTS.InitListener to call upon successful initialization of the TTS, and whether or not to show a message prompting the user to install the TTS from the Market if they have not done so already.
+</li>
+<li>
+The speak call takes 3 parameters: the String of text to be spoken, an int that indicates the queuing strategy (0 for no queuing, 1 for fifo queuing), and an array of Strings that are parameters for how to speak the text.
+</li>
+<li>
+The first time you run an app that uses the TTS, if you do not already have the necessary voice data files on your SD card, they will be downloaded automatically.
+</li>
+</ul>
+
+
+<p class="author"> Author: Charles L. Chen
+<a href="mailto:clchen@google.com">&lt;clchen@google.com&gt;</a>
+</p>
+<p class="date"> Date: 2008/12/12 10:20:46</p>
+</body>
+</html>
