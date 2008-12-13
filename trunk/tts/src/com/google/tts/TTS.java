@@ -54,6 +54,7 @@ public class TTS {
   private int version = -1;
   private boolean started = false;
   private boolean showInstaller = false;
+  private TTSVersionAlert versionAlert = null;
 
   /**
    * The constructor for the TTS.
@@ -63,10 +64,29 @@ public class TTS {
    *        initialized successfully.
    * @param displayInstallMessage Boolean indicating whether or not an
    *        installation prompt should be displayed to users who do not have the
-   *        TTS library.
+   *        TTS library. If this is true, a generic alert asking the user to
+   *        install the TTS will be used. If you wish to specify the exact
+   *        message of that prompt, please use TTS(Context context, InitListener
+   *        callback, TTSVersionAlert alert) as the constructor instead.
    */
   public TTS(Context context, InitListener callback, boolean displayInstallMessage) {
     showInstaller = displayInstallMessage;
+    ctx = context;
+    dataFilesCheck();
+    initTts(context, callback);
+  }
+
+  /**
+   * The constructor for the TTS.
+   * 
+   * @param context The context
+   * @param callback The InitListener that should be called when the TTS has
+   *        initialized successfully.
+   * @param alert The TTSVersionAlert to be displayed
+   */
+  public TTS(Context context, InitListener callback, TTSVersionAlert alert) {
+    showInstaller = true;
+    versionAlert = alert;
     ctx = context;
     dataFilesCheck();
     initTts(context, callback);
@@ -133,7 +153,11 @@ public class TTS {
     // the needed TTS.
     if (!ctx.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)) {
       if (showInstaller) {
-        new TTSVersionAlert(ctx).show();
+        if (versionAlert != null) {
+          versionAlert.show();
+        } else {
+          new TTSVersionAlert(ctx, null, null, null).show();
+        }
       }
     }
   }
@@ -368,7 +392,12 @@ public class TTS {
     if (!started) {
       return;
     }
-    new TTSVersionAlert(ctx).show();
+    if (versionAlert != null) {
+      versionAlert.show();
+    } else {
+      new TTSVersionAlert(ctx, null, null, null).show();
+    }
   }
+
 
 }

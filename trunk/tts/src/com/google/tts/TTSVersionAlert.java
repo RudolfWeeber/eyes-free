@@ -32,17 +32,35 @@ import android.net.Uri;
 public class TTSVersionAlert extends Builder {
   // These strings must be in the Java file itself in order for this to be
   // packed into a .jar file.
-  private final static String NO_TTS = "This application can talk using the text-to-speech (TTS) library. Please install the TTS.";
+  private final static String NO_TTS =
+      "This application can talk using the text-to-speech (TTS) library. Please install the TTS.";
   private final static String MARKET_URI = "market://search?q=pname:com.google.tts";
   private final static String INSTALL_TTS = "Install the TTS";
   private final static String QUIT = "Do not install the TTS";
-  
+
   private Activity parent;
 
-  public TTSVersionAlert(Context context) {
+  /**
+   * The constructor for the TTSVersionAlert.
+   * 
+   * @param context The context
+   * @param noTTSMessage The String that should be shown to users to prompt them
+   *        to install the TTS. If null, the default string will be used.
+   * @param installButtonMessage The String that should be used for the
+   *        "Install the TTS" button. If null, the default string will be used.
+   * @param quitButtonMessage The String that should be used for the
+   *        "Do not install the TTS" button. If null, the default string will be
+   *        used.
+   */
+  public TTSVersionAlert(Context context, String noTTSMessage, String installButtonMessage,
+      String quitButtonMessage) {
     super(context);
     parent = (Activity) context;
-    setMessage(NO_TTS);
+    if (noTTSMessage != null) {
+      setMessage(noTTSMessage);
+    } else {
+      setMessage(NO_TTS);
+    }
 
 
     OnClickListener installListener = new OnClickListener() {
@@ -59,8 +77,16 @@ public class TTSVersionAlert extends Builder {
       }
     };
 
-    setPositiveButton(INSTALL_TTS, installListener);
-    setNegativeButton(QUIT, quitListener);
+    if (installButtonMessage != null) {
+      setPositiveButton(installButtonMessage, installListener);
+    } else {
+      setPositiveButton(INSTALL_TTS, installListener);
+    }
+    if (quitButtonMessage != null) {
+      setNegativeButton(quitButtonMessage, quitListener);
+    } else {
+      setNegativeButton(QUIT, quitListener);
+    }
   }
 
 }

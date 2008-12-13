@@ -203,7 +203,8 @@ public class TTSService extends Service implements OnCompletionListener {
    * @param text The text that should be spoken
    * @param queueMode 0 for no queue (interrupts all previous utterances), 1 for
    *        queued
-   * @param params An ArrayList of parameters. This is not implemented for all engines.
+   * @param params An ArrayList of parameters. This is not implemented for all
+   *        engines.
    */
   private void speak(String text, int queueMode, ArrayList<String> params) {
     if (isSpeaking && (queueMode == 0)) {
