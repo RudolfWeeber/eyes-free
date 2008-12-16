@@ -41,12 +41,14 @@ typedef unsigned short uint16;
    pointer found in the user data. */
 static int AndroidEspeakSynthCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {
+
+
     char buf[100];
     sprintf(buf, "AndroidEspeakSynthCallback: %d samples", numsamples);
-    LOGE(buf);
+    LOGI(buf);
 
     if (wav == NULL) {
-        LOGE("Null: speech has completed");
+        LOGI("Null: speech has completed");
     }
 
     // The user data should contain the file pointer of the file to write to
@@ -97,10 +99,10 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
     const char *filenameNativeString = env->GetStringUTFChars(
         filenameJavaString, 0);
 
-    LOGE("text:::");
-    LOGE(textNativeString);
-    LOGE("filename:::");
-    LOGE(filenameNativeString);
+    LOGI("text:::");
+    LOGI(textNativeString);
+    LOGI("filename:::");
+    LOGI(filenameNativeString);
 
     FILE *fp = fopen(filenameNativeString, "wb");
     // Write 44 blank bytes for WAV header, then come back and fill them in
@@ -112,7 +114,7 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
     void* user_data = (void *)fp;
     espeak_ERROR err;
 
-    LOGE("Calling synth");
+    LOGI("Calling synth");
 
     err = espeak_Synth(textNativeString,
                        strlen(textNativeString),
@@ -123,21 +125,22 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
                        &unique_identifier,
                        user_data);
 
-
     char buf[100];
     sprintf(buf, "synth err: %d\n", err);
-    LOGE(buf);
+    LOGI(buf);
 
     err = espeak_Synchronize();
 
     sprintf(buf, "synchronize err: %d\n", err);
-    LOGE(buf);
+    LOGI(buf);
 
-    LOGE("synth Done");
+    LOGI("synth Done");
 
     long filelen = ftell(fp);
+
     sprintf(buf, "file len: %ld\n", filelen);
-    LOGE(buf);
+    LOGI(buf);
+
 
     int samples = (((int)filelen) - 44) / 2;
     header[0] = 'R';
