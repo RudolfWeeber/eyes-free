@@ -65,7 +65,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private TTSService self;
 
   private final ReentrantLock speechQueueLock = new ReentrantLock();
-  private SpeechSynthesis speechSynthesis = new SpeechSynthesis(0, 140);
+  private SpeechSynthesis speechSynthesis = new SpeechSynthesis("zh", 140);
 
   @Override
   public void onCreate() {
@@ -96,7 +96,7 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void setSpeechRate(int speechRate) {
-    speechSynthesis = new SpeechSynthesis(0, speechRate);
+    speechSynthesis = new SpeechSynthesis("zh", speechRate);
   }
 
   private void setEngine(TTSEngine selectedEngine) {

@@ -80,6 +80,11 @@ com_google_tts_SpeechSynthesis_native_setup(
 
     espeak_SetSynthCallback(AndroidEspeakSynthCallback);
     espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
+
+    espeak_VOICE voice;
+    voice.languages = "en-us";
+
+    err = espeak_SetVoiceByProperties(&voice);
 }
 
 static void
