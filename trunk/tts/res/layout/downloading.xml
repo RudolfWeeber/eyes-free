@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Please wait while the voice data is being downloaded." android:textSize="18sp"
+            android:text="Please wait while the voice data is being downloaded; you will need to restart your application after the download has completed." android:textSize="18sp"
             android:textColor="?android:attr/textColorPrimary" />
             
         <ProgressBar android:id="@android:id/progress"

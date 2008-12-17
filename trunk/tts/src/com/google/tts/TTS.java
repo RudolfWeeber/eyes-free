@@ -72,8 +72,9 @@ public class TTS {
   public TTS(Context context, InitListener callback, boolean displayInstallMessage) {
     showInstaller = displayInstallMessage;
     ctx = context;
-    if (dataFilesCheck()){
-      initTts(context, callback);
+    cb = callback;
+    if (dataFilesCheck()) {
+      initTts();
     }
   }
 
@@ -89,13 +90,20 @@ public class TTS {
     showInstaller = true;
     versionAlert = alert;
     ctx = context;
-    if (dataFilesCheck()){
-      initTts(context, callback);
+    cb = callback;
+    if (dataFilesCheck()) {
+      initTts();
     }
   }
 
   private boolean dataFilesCheck() {
     if (!ConfigurationManager.allFilesExist()) {
+      // Treat missing voice data as the same as not having the TTS installed.
+      // If the developer wants to fail quietly, then just quit if there are
+      // missing voice data files.
+      if (!showInstaller) {
+        return false;
+      }
       try {
         int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
         Context myContext = ctx.createPackageContext("com.google.tts", flags);
@@ -118,10 +126,8 @@ public class TTS {
   }
 
 
-  private void initTts(Context context, InitListener callback) {
+  private void initTts() {
     started = false;
-    ctx = context;
-    cb = callback;
 
     // Initialize the TTS, run the callback after the binding is successful
     serviceConnection = new ServiceConnection() {
@@ -130,7 +136,7 @@ public class TTS {
         try {
           version = itts.getVersion();
         } catch (RemoteException e) {
-          initTts(ctx, cb);
+          initTts();
           return;
         }
         started = true;
@@ -206,15 +212,15 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (NullPointerException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (IllegalStateException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
   }
 
@@ -235,15 +241,15 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (NullPointerException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (IllegalStateException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
   }
 
@@ -272,15 +278,15 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (NullPointerException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (IllegalStateException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
   }
 
@@ -298,15 +304,15 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (NullPointerException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (IllegalStateException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
     return false;
   }
@@ -323,15 +329,15 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (NullPointerException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     } catch (IllegalStateException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
   }
 
@@ -358,7 +364,7 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
   }
 
@@ -383,24 +389,24 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
   }
 
   /**
    * Sets the language for the TTS engine.
    * 
-   * Note that the language is not universally supported by all engines and
-   * will be treated as a hint. The TTS library will try to use the specified
+   * Note that the language is not universally supported by all engines and will
+   * be treated as a hint. The TTS library will try to use the specified
    * language, but there is no guarantee.
    * 
-   * Currently, this will change the language for the espeak engine, but it
-   * has no effect on any pre-recorded speech.
+   * Currently, this will change the language for the espeak engine, but it has
+   * no effect on any pre-recorded speech.
    * 
-   * @param language The language to be used. The languages are specified by 
+   * @param language The language to be used. The languages are specified by
    *        their IETF language tags as defined by BCP 47. This is the same
-   *        standard used for the lang attribute in HTML. 
-   *        See: http://en.wikipedia.org/wiki/IETF_language_tag
+   *        standard used for the lang attribute in HTML. See:
+   *        http://en.wikipedia.org/wiki/IETF_language_tag
    */
   public void setLanguage(String language) {
     if (!started) {
@@ -411,7 +417,7 @@ public class TTS {
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
-      initTts(ctx, cb);
+      initTts();
     }
   }
 

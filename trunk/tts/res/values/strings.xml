@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NO_TTS">Please install the required TTS before running this application.</string>
+    
     <string name="app_name">TTS Service</string>
-<string name="MARKET_URI">market://details?id=-7807259973203517256</string>
-<string name="INSTALL_TTS">Install the TTS</string>
-<string name="QUIT">Quit</string>
+
+
+
 </resources>
