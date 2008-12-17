@@ -72,8 +72,9 @@ public class TTS {
   public TTS(Context context, InitListener callback, boolean displayInstallMessage) {
     showInstaller = displayInstallMessage;
     ctx = context;
-    dataFilesCheck();
-    initTts(context, callback);
+    if (dataFilesCheck()){
+      initTts(context, callback);
+    }
   }
 
   /**
@@ -88,11 +89,12 @@ public class TTS {
     showInstaller = true;
     versionAlert = alert;
     ctx = context;
-    dataFilesCheck();
-    initTts(context, callback);
+    if (dataFilesCheck()){
+      initTts(context, callback);
+    }
   }
 
-  private void dataFilesCheck() {
+  private boolean dataFilesCheck() {
     if (!ConfigurationManager.allFilesExist()) {
       try {
         int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
@@ -101,6 +103,7 @@ public class TTS {
             myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
         Intent intent = new Intent(myContext, appClass);
         ctx.startActivity(intent);
+        return false;
       } catch (NameNotFoundException e) {
         // Just let it fail through; this exception means that the
         // TTS apk has not been installed and this case will be handled
@@ -111,6 +114,7 @@ public class TTS {
         e.printStackTrace();
       }
     }
+    return true;
   }
 
 
