@@ -14,6 +14,7 @@ interface ITTS {
 
   void setEngine(in String selectedEngine);
   void setSpeechRate(in int speechRate);
+  void setLanguage(in String language);
   void speak(in String text, in int queueMode, in String[] params);
   boolean isSpeaking();
   void stop();

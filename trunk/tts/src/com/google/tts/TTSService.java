@@ -63,9 +63,12 @@ public class TTSService extends Service implements OnCompletionListener {
   private HashMap<String, SoundResource> utterances;
   private MediaPlayer player;
   private TTSService self;
+  
+  private int speechRate = 140;
+  private String language = "en-us";
 
   private final ReentrantLock speechQueueLock = new ReentrantLock();
-  private SpeechSynthesis speechSynthesis = new SpeechSynthesis("zh", 140);
+  private SpeechSynthesis speechSynthesis = new SpeechSynthesis(language, 0, speechRate);
 
   @Override
   public void onCreate() {
@@ -95,8 +98,26 @@ public class TTSService extends Service implements OnCompletionListener {
     cleanUpPlayer();
   }
 
-  private void setSpeechRate(int speechRate) {
-    speechSynthesis = new SpeechSynthesis("zh", speechRate);
+  private void setSpeechRate(int rate) {
+    speechRate = rate;
+    speechSynthesis.setSpeechRate(rate);
+  }
+
+  private void setLanguage(String lang) {
+    language = lang;
+    // Clear known utterances so that the TTS will regenerate the 
+    // sounds in the new language
+    utterances = new HashMap<String, SoundResource>();
+    // The eSpeak documentation for Cantonese seems to be wrong.
+    // It seems like using "zhy" will cause all Chinese characters to be
+    // spoken as "symbol blah blah blah". The solution is to actually use
+    // zh and variant 3. In addition, "zhy" is not a standard IETF language tag;
+    // the standard IETF language tag is "zh-yue".
+    if (language.equals("zh-yue")){
+      speechSynthesis.setLanguage("zh", 3);
+    } else {
+      speechSynthesis.setLanguage(lang, 0);
+    }
   }
 
   private void setEngine(TTSEngine selectedEngine) {
@@ -224,7 +245,12 @@ public class TTSService extends Service implements OnCompletionListener {
       String sanitizedName = text.replaceAll("'", " ");
       sanitizedName = text.replaceAll("\n", " ");
       sanitizedName = sanitizedName.replaceAll("[^a-zA-Z0-9,\\s]", "");
-      String filename = ESPEAK_SCRATCH_DIRECTORY + sanitizedName + ".wav";
+      // Use a timestamp in the name to prevent collisions;
+      // this is especially important for non-Latin character languages 
+      // such as Chinese where the sanitizedName will be an empty string.
+      long time = android.os.SystemClock.currentThreadTimeMillis();
+      String ts = Long.toString(time);
+      String filename = ESPEAK_SCRATCH_DIRECTORY + sanitizedName + ts + ".wav";
       speechSynthesis.synthesizeToFile(text, filename);
       addSpeech(text, filename);
     }
@@ -567,6 +593,19 @@ public class TTSService extends Service implements OnCompletionListener {
      */
     public void setSpeechRate(int speechRate) {
       self.setSpeechRate(speechRate);
+    }
+
+    /**
+     * Sets the speech rate for the TTS. Note that this will only have an effect
+     * on synthesized speech; it will not affect pre-recorded speech.
+     * 
+     * @param language The language to be used. The languages are specified by 
+     *        their IETF language tags as defined by BCP 47. This is the same
+     *        standard used for the lang attribute in HTML. 
+     *        See: http://en.wikipedia.org/wiki/IETF_language_tag
+     */
+    public void setLanguage(String language) {
+      self.setLanguage(language);
     }
 
     /**

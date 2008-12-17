@@ -384,6 +384,34 @@ public class TTS {
   }
 
   /**
+   * Sets the language for the TTS engine.
+   * 
+   * Note that the language is not universally supported by all engines and
+   * will be treated as a hint. The TTS library will try to use the specified
+   * language, but there is no guarantee.
+   * 
+   * Currently, this will change the language for the espeak engine, but it
+   * has no effect on any pre-recorded speech.
+   * 
+   * @param language The language to be used. The languages are specified by 
+   *        their IETF language tags as defined by BCP 47. This is the same
+   *        standard used for the lang attribute in HTML. 
+   *        See: http://en.wikipedia.org/wiki/IETF_language_tag
+   */
+  public void setLanguage(String language) {
+    if (!started) {
+      return;
+    }
+    try {
+      itts.setLanguage(language);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts(ctx, cb);
+    }
+  }
+
+  /**
    * Displays an alert that prompts users to install the TTS that is available
    * on the Market. This is useful if the application expects a newer version of
    * the TTS than what the user has.

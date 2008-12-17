@@ -31,10 +31,10 @@ public class SpeechSynthesis {
   //
 
   /**
-   * Constructor; pass a language code such as 0 for English.
+   * Constructor; pass a language code such as "en" for English.
    */
-  public SpeechSynthesis(String language, int speechRate) {
-    native_setup(new WeakReference<SpeechSynthesis>(this), language, speechRate);
+  public SpeechSynthesis(String language, int languageVariant, int speechRate) {
+    native_setup(new WeakReference<SpeechSynthesis>(this), language, languageVariant, speechRate);
   }
 
   /**
@@ -43,6 +43,16 @@ public class SpeechSynthesis {
    * "/sdcard/???.wav" is recommended.
    */
   public native final void synthesizeToFile(String text, String filename);
+
+  /**
+   * Sets the language
+   */
+  public native final void setLanguage(String language, int languageVariant);
+
+  /**
+   * Sets the speech rate
+   */
+  public native final void setSpeechRate(int speechRate);
 
   //
   // Internal
@@ -56,7 +66,7 @@ public class SpeechSynthesis {
 
   private int mNativeContext; // accessed by native methods
 
-  private native final void native_setup(Object weak_this, String language, int speechRate);
+  private native final void native_setup(Object weak_this, String language, int languageVariant, int speechRate);
 
   private native final void native_finalize();
 

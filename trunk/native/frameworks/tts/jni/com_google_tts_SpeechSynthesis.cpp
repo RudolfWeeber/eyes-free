@@ -63,7 +63,8 @@ static int AndroidEspeakSynthCallback(short *wav, int numsamples,
 
 static void
 com_google_tts_SpeechSynthesis_native_setup(
-    JNIEnv *env, jobject thiz, jobject weak_this, jstring language, int speechRate)
+    JNIEnv *env, jobject thiz, jobject weak_this, jstring language,
+    int languageVariant, int speechRate)
 {
     // TODO Make sure that the speech data is loaded in 
     // the directory /sdcard/espeak-data before calling this.
@@ -83,6 +84,7 @@ com_google_tts_SpeechSynthesis_native_setup(
 
     espeak_VOICE voice;
     voice.languages = env->GetStringUTFChars(language, 0);
+    voice.variant = languageVariant;
 
     err = espeak_SetVoiceByProperties(&voice);
     char buf[100];
@@ -93,10 +95,40 @@ com_google_tts_SpeechSynthesis_native_setup(
 }
 
 static void
+com_google_tts_SpeechSynthesis_setLanguage(JNIEnv *env, jobject thiz, 
+                                           jstring language,
+                                           int languageVariant)
+{
+    espeak_VOICE voice;
+    voice.languages = env->GetStringUTFChars(language, 0);
+    voice.variant = languageVariant;
+
+    espeak_ERROR err = espeak_SetVoiceByProperties(&voice);
+    char buf[100];
+    sprintf(buf, "Language: %s\n", voice.languages);
+    LOGI(buf);
+    sprintf(buf, "set voice: %d\n", err);
+    LOGI(buf);
+}
+
+static void
+com_google_tts_SpeechSynthesis_setSpeechRate(JNIEnv *env, jobject thiz, 
+                                             int speechRate)
+{
+    espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
+    char buf[100];
+    sprintf(buf, "Speechrate: %d\n", speechRate);
+    LOGI(buf);
+    sprintf(buf, "set speechrate result: %d\n", err);
+    LOGI(buf);
+}
+
+static void
 com_google_tts_SpeechSynthesis_native_finalize(JNIEnv *env,
 					       jobject thiz)
 {
     int sampleRate = (int)env->GetIntField(thiz, fields.mNativeContext);
+    espeak_Terminate();
 }
 
 static void
@@ -201,8 +233,16 @@ static JNINativeMethod gMethods[] = {
         "(Ljava/lang/String;Ljava/lang/String;)V",
         (void*)com_google_tts_SpeechSynthesis_synthesizeToFile
     },
+    {   "setLanguage",
+        "(Ljava/lang/String;I)V",
+        (void*)com_google_tts_SpeechSynthesis_setLanguage
+    },
+    {   "setSpeechRate",
+        "(I)V",
+        (void*)com_google_tts_SpeechSynthesis_setSpeechRate
+    },
     {   "native_setup",
-        "(Ljava/lang/Object;Ljava/lang/String;I)V",
+        "(Ljava/lang/Object;Ljava/lang/String;II)V",
         (void*)com_google_tts_SpeechSynthesis_native_setup
     },
     {   "native_finalize",     
