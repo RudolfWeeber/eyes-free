@@ -35,6 +35,9 @@ import android.os.RemoteException;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class TTS {
+  // This is the minimum version of the TTS service that is needed by this
+  // version of the library stub.
+  private final static int MIN_VER = 4; 
   /**
    * Called when the TTS has initialized
    * 
@@ -135,10 +138,25 @@ public class TTS {
         itts = ITTS.Stub.asInterface(service);
         try {
           version = itts.getVersion();
+          // The TTS service must be at least the min version needed by the 
+          // library stub. Do not try to run the older TTS with the newer 
+          // library stub as the newer library may reference methods which are
+          // unavailable and cause a crash.
+          if (version < MIN_VER){
+            if (showInstaller) {
+              if (versionAlert != null) {
+                versionAlert.show();
+              } else {
+                new TTSVersionAlert(ctx, null, null, null).show();
+              }
+            }
+            return;
+          }
         } catch (RemoteException e) {
           initTts();
           return;
         }
+        
         started = true;
         // The callback can become null if the Android OS decides to restart the
         // TTS process as well as whatever is using it. In such cases, do
