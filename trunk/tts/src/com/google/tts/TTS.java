@@ -456,9 +456,8 @@ public class TTS {
   }
   
   public static boolean isInstalled(Context ctx){
-   // int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
     try {
-      Context myContext = ctx.createPackageContext("com.google.tts", 0);//flags);
+      Context myContext = ctx.createPackageContext("com.google.tts", 0);
     } catch (NameNotFoundException e) {
       return false;
     }
