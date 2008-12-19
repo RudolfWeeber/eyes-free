@@ -15,8 +15,13 @@
  */
 package com.google.tts;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.IBinder;
+import android.os.RemoteException;
 
 /**
  * Synthesizes speech from text. This abstracts away the complexities of using
@@ -33,7 +38,6 @@ public class TTS {
   // This is the minimum version of the TTS service that is needed by this
   // version of the library stub.
   private final static int MIN_VER = 4; 
-  
   /**
    * Called when the TTS has initialized
    * 
@@ -46,16 +50,14 @@ public class TTS {
     public void onInit(int version);
   }
 
-
-  private AbstractITTSWrapper ittsWrapper;
-
-  
-  /*
+  private ServiceConnection serviceConnection; // Connection needed for the TTS
+  private ITTS itts;
+  private Context ctx;
+  private InitListener cb = null;
   private int version = -1;
   private boolean started = false;
   private boolean showInstaller = false;
   private TTSVersionAlert versionAlert = null;
-  */
 
   /**
    * The constructor for the TTS.
@@ -70,22 +72,12 @@ public class TTS {
    *        message of that prompt, please use TTS(Context context, InitListener
    *        callback, TTSVersionAlert alert) as the constructor instead.
    */
-  @SuppressWarnings("unchecked")
   public TTS(Context context, InitListener callback, boolean displayInstallMessage) {
-    try {
-      Class<AbstractITTSWrapper> clazz;
-      clazz = (Class<AbstractITTSWrapper>) Class.forName("com.google.tts.ITTSWrapper");
-      ittsWrapper = clazz.newInstance();
-      ittsWrapper.init(context, MIN_VER, callback, displayInstallMessage);
-    } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    showInstaller = displayInstallMessage;
+    ctx = context;
+    cb = callback;
+    if (dataFilesCheck()) {
+      initTts();
     }
   }
 
@@ -97,22 +89,104 @@ public class TTS {
    *        initialized successfully.
    * @param alert The TTSVersionAlert to be displayed
    */
-  @SuppressWarnings("unchecked")
   public TTS(Context context, InitListener callback, TTSVersionAlert alert) {
-    try {
-      Class<AbstractITTSWrapper> clazz;
-      clazz = (Class<AbstractITTSWrapper>) Class.forName("com.google.tts.ITTSWrapper");
-      ittsWrapper = clazz.newInstance();
-      ittsWrapper.init(context, MIN_VER, callback, alert);
-    } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    showInstaller = true;
+    versionAlert = alert;
+    ctx = context;
+    cb = callback;
+    if (dataFilesCheck()) {
+      initTts();
+    }
+  }
+
+  private boolean dataFilesCheck() {
+    if (!ConfigurationManager.allFilesExist()) {
+      // Treat missing voice data as the same as not having the TTS installed.
+      // If the developer wants to fail quietly, then just quit if there are
+      // missing voice data files.
+      if (!showInstaller) {
+        return false;
+      }
+      try {
+        int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
+        Context myContext = ctx.createPackageContext("com.google.tts", flags);
+        Class<?> appClass =
+            myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
+        Intent intent = new Intent(myContext, appClass);
+        ctx.startActivity(intent);
+        return false;
+      } catch (NameNotFoundException e) {
+        // Just let it fail through; this exception means that the
+        // TTS apk has not been installed and this case will be handled
+        // in the initTts function
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    return true;
+  }
+
+
+  private void initTts() {
+    started = false;
+
+    // Initialize the TTS, run the callback after the binding is successful
+    serviceConnection = new ServiceConnection() {
+      public void onServiceConnected(ComponentName name, IBinder service) {
+        itts = ITTS.Stub.asInterface(service);
+        try {
+          version = itts.getVersion();
+          // The TTS service must be at least the min version needed by the 
+          // library stub. Do not try to run the older TTS with the newer 
+          // library stub as the newer library may reference methods which are
+          // unavailable and cause a crash.
+          if (version < MIN_VER){
+            if (showInstaller) {
+              if (versionAlert != null) {
+                versionAlert.show();
+              } else {
+                new TTSVersionAlert(ctx, null, null, null).show();
+              }
+            }
+            return;
+          }
+        } catch (RemoteException e) {
+          initTts();
+          return;
+        }
+        
+        started = true;
+        // The callback can become null if the Android OS decides to restart the
+        // TTS process as well as whatever is using it. In such cases, do
+        // nothing - the error handling from the speaking calls will kick in
+        // and force a proper restart of the TTS.
+        if (cb != null) {
+          cb.onInit(version);
+        }
+      }
+
+      public void onServiceDisconnected(ComponentName name) {
+        itts = null;
+        cb = null;
+        started = false;
+      }
+    };
+
+    Intent intent = new Intent("android.intent.action.USE_TTS");
+    intent.addCategory("android.intent.category.TTS");
+    // Binding will fail only if the TTS doesn't exist;
+    // the TTSVersionAlert will give users a chance to install
+    // the needed TTS.
+    if (!ctx.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)) {
+      if (showInstaller) {
+        if (versionAlert != null) {
+          versionAlert.show();
+        } else {
+          new TTSVersionAlert(ctx, null, null, null).show();
+        }
+      }
     }
   }
 
@@ -124,7 +198,7 @@ public class TTS {
    * cleanly.
    */
   public void shutdown() {
-    ittsWrapper.shutdown();
+    ctx.unbindService(serviceConnection);
   }
 
   /**
@@ -148,7 +222,24 @@ public class TTS {
    * @param resourceId Example: <b><code>R.raw.south_south_east</code></b>
    */
   public void addSpeech(String text, String packagename, int resourceId) {
-    ittsWrapper.addSpeech(text, packagename, resourceId);
+    if (!started) {
+      return;
+    }
+    try {
+      itts.addSpeech(text, packagename, resourceId);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
   }
 
   /**
@@ -160,7 +251,24 @@ public class TTS {
    *        "/sdcard/mysounds/hello.wav")
    */
   public void addSpeech(String text, String filename) {
-    ittsWrapper.addSpeech(text, filename);
+    if (!started) {
+      return;
+    }
+    try {
+      itts.addSpeechFile(text, filename);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
   }
 
   /**
@@ -180,7 +288,24 @@ public class TTS {
    *        has this support - this setting has no effect on eSpeak.
    */
   public void speak(String text, int queueMode, String[] params) {
-    ittsWrapper.speak(text, queueMode, params);
+    if (!started) {
+      return;
+    }
+    try {
+      itts.speak(text, queueMode, params);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
   }
 
   /**
@@ -189,14 +314,49 @@ public class TTS {
    * @return Whether or not the TTS is busy speaking.
    */
   public boolean isSpeaking() {
-    return ittsWrapper.isSpeaking();
+    if (!started) {
+      return false;
+    }
+    try {
+      return itts.isSpeaking();
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
+    return false;
   }
 
   /**
    * Stops speech from the TTS.
    */
   public void stop() {
-    ittsWrapper.stop();
+    if (!started) {
+      return;
+    }
+    try {
+      itts.stop();
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
   }
 
   /**
@@ -205,7 +365,7 @@ public class TTS {
    * @return The version number of the TTS library that the user has installed.
    */
   public int getVersion() {
-    return ittsWrapper.getVersion();
+    return version;
   }
 
   /**
@@ -214,7 +374,16 @@ public class TTS {
    * @param selectedEngine The TTS engine that should be used.
    */
   public void setEngine(TTSEngine selectedEngine) {
-    ittsWrapper.setEngine(selectedEngine);
+    if (!started) {
+      return;
+    }
+    try {
+      itts.setEngine(selectedEngine.toString());
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
   }
 
   /**
@@ -230,7 +399,16 @@ public class TTS {
    * @param speechRate The speech rate for the TTS engine.
    */
   public void setSpeechRate(int speechRate) {
-    ittsWrapper.setSpeechRate(speechRate);
+    if (!started) {
+      return;
+    }
+    try {
+      itts.setSpeechRate(speechRate);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
   }
 
   /**
@@ -249,7 +427,16 @@ public class TTS {
    *        http://en.wikipedia.org/wiki/IETF_language_tag
    */
   public void setLanguage(String language) {
-    ittsWrapper.setLanguage(language);
+    if (!started) {
+      return;
+    }
+    try {
+      itts.setLanguage(language);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
   }
 
   /**
@@ -258,7 +445,14 @@ public class TTS {
    * the TTS than what the user has.
    */
   public void showVersionAlert() {
-    ittsWrapper.showVersionAlert();
+    if (!started) {
+      return;
+    }
+    if (versionAlert != null) {
+      versionAlert.show();
+    } else {
+      new TTSVersionAlert(ctx, null, null, null).show();
+    }
   }
 
 
