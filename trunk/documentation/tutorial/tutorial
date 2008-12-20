@@ -24,7 +24,7 @@ Note that if the SD card is mounted on the computer, it will not be accessible t
 
 This tutorial will take you step-by-step through writing a simple Hello World application. [[http://code.google.com/android/intro/index.html][It assumes that you have Eclipse setup to work with the Android SDK already.]] 
 
-1. [[http://eyes-free.googlecode.com/svn/trunk/commonlibs/TTS_library_stub.jar][Get the latest TTS_library_stub.jar file from the eyes-free SVN repository.]]
+1. [[http://eyes-free.googlecode.com/svn/trunk/commonlibs/TTS_library_stub.jar][Get the TTS_library_stub.jar file from the downloads area.]] If you want to develop against the upcoming release, get the release candidate version by grabbing the _rc.jar and installing the _rc.apk on your phone. If you want to develop against the version of the TTS that is currently on Market, get the _market.jar and install the TTS from the Android Market. You should always build your app using the _market version before you release it on the Market; otherwise, there is a high probability that your app will not work correctly as most users will be on the Market version of the TTS and not the release candidate. 
 
 2. Start Eclipse. Go to "File" > "New Project" > "Project..." and choose "Android Project" under "Android". Fill out the information and click "Finish" to generate the skeleton for a project. The rest of this tutorial assumes that you named your application "HelloWorldTTS".
 
