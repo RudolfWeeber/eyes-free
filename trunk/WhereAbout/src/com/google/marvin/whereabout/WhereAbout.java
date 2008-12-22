@@ -94,6 +94,9 @@ public class WhereAbout extends Activity implements Runnable {
       progressDiag =
           ProgressDialog.show(this, getString(R.string.progress_title),
           getString(R.string.progress_msg), true, false);
+      if (ttsLoaded) {
+        tts.speak(getString(R.string.progress_msg), 0, null);
+      }
       (new Thread(this)).start();
     } else {
       super.onKeyUp(keyCode, event);
