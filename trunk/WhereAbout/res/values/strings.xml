@@ -12,5 +12,5 @@
     <string name="failed_intersection">Cannot determine intersection</string>
     <string name="failed_abs">Cannot determine address</string>
     <string name="progress_title">WhereAbout</string>
-    <string name="progress_msg">Obtaining street info...</string>
+    <string name="progress_msg">Obtaining street info. Please wait.</string>
 </resources>
