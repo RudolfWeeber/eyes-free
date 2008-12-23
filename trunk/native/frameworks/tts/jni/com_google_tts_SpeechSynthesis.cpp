@@ -83,32 +83,40 @@ com_google_tts_SpeechSynthesis_native_setup(
     espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
 
     espeak_VOICE voice;
-    voice.languages = env->GetStringUTFChars(language, 0);
+    memset( &voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
+    const char *langNativeString = env->GetStringUTFChars(language, 0);
+    voice.languages = langNativeString;
     voice.variant = languageVariant;
-
     err = espeak_SetVoiceByProperties(&voice);
     char buf[100];
     sprintf(buf, "Language: %s\n", voice.languages);
     LOGI(buf);
     sprintf(buf, "set voice: %d\n", err);
     LOGI(buf);
+
+    env->ReleaseStringUTFChars(language, langNativeString);
 }
 
 static void
 com_google_tts_SpeechSynthesis_setLanguage(JNIEnv *env, jobject thiz, 
                                            jstring language,
                                            int languageVariant)
-{
-    espeak_VOICE voice;
-    voice.languages = env->GetStringUTFChars(language, 0);
-    voice.variant = languageVariant;
+{   
 
-    espeak_ERROR err = espeak_SetVoiceByProperties(&voice);
     char buf[100];
+    espeak_VOICE voice;
+    memset( &voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
+    const char *langNativeString = env->GetStringUTFChars(language, 0);
+    voice.languages = langNativeString;
+    voice.variant = languageVariant;
+    espeak_ERROR err = espeak_SetVoiceByProperties(&voice);
+
     sprintf(buf, "Language: %s\n", voice.languages);
     LOGI(buf);
     sprintf(buf, "set voice: %d\n", err);
     LOGI(buf);
+
+    env->ReleaseStringUTFChars(language, langNativeString);
 }
 
 static void
