@@ -114,7 +114,7 @@ public class TTSService extends Service implements OnCompletionListener {
     // zh and variant 3. In addition, "zhy" is not a standard IETF language tag;
     // the standard IETF language tag is "zh-yue".
     if (language.equals("zh-yue")){
-      speechSynthesis.setLanguage("zh", 3);
+      speechSynthesis.setLanguage("zh", 5);
     } else {
       speechSynthesis.setLanguage(lang, 0);
     }
