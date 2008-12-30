@@ -497,6 +497,22 @@ public class TTSService extends Service implements OnCompletionListener {
     }
   }
 
+  /**
+   * Speaks the given text using the specified queueing mode and parameters.
+   * 
+   * @param text The String of text that should be synthesized
+   * @param params An ArrayList of parameters. The first element of this array
+   *        controls the type of voice to use.
+   * @param filename The string that gives the full output filename; it 
+   *        should be something like "/sdcard/myappsounds/mysound.wav".
+   * @return A boolean that indicates if the synthesis succeeded
+   */
+  private boolean synthesizeToFile(String text, ArrayList<String> params, String filename) {
+    Log.i("TTS", "Synthesizing " + filename);
+    speechSynthesis.synthesizeToFile(text, filename);
+    Log.i("TTS", "Completed synthesis for " + filename);
+    return true;
+  }
 
 
   @Override
@@ -624,6 +640,24 @@ public class TTSService extends Service implements OnCompletionListener {
         e.printStackTrace();
       }
       return pInfo.versionCode;
+    }
+
+    /**
+     * Speaks the given text using the specified queueing mode and parameters.
+     * 
+     * @param text The String of text that should be synthesized
+     * @param params An ArrayList of parameters. The first element of this array
+     *        controls the type of voice to use.
+     * @param filename The string that gives the full output filename; it 
+     *        should be something like "/sdcard/myappsounds/mysound.wav".
+     * @return A boolean that indicates if the synthesis succeeded
+     */
+    public boolean synthesizeToFile(String text, String[] params, String filename){
+      ArrayList<String> speakingParams = new ArrayList<String>();
+      if (params != null) {
+        speakingParams = new ArrayList<String>(Arrays.asList(params));
+      }
+      return self.synthesizeToFile(text, speakingParams, filename);
     }
   };
 

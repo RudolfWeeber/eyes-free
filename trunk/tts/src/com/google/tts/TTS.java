@@ -438,6 +438,38 @@ public class TTS {
       initTts();
     }
   }
+  
+  /**
+   * Speaks the given text using the specified queueing mode and parameters.
+   * 
+   * @param text The String of text that should be synthesized
+   * @param params An ArrayList of parameters. The first element of this array
+   *        controls the type of voice to use.
+   * @param filename The string that gives the full output filename; it 
+   *        should be something like "/sdcard/myappsounds/mysound.wav".
+   * @return A boolean that indicates if the synthesis succeeded
+   */
+  public boolean synthesizeToFile(String text, String[] params, String filename) {
+    if (!started) {
+      return false;
+    }
+    try {
+      return itts.synthesizeToFile(text, params, filename);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
+    return false;
+  }
 
   /**
    * Displays an alert that prompts users to install the TTS that is available
@@ -455,6 +487,11 @@ public class TTS {
     }
   }
   
+  /**
+   * Checks if the TTS service is installed or not
+   * 
+   * @return A boolean that indicates whether the TTS service is installed
+   */
   public static boolean isInstalled(Context ctx){
     try {
       Context myContext = ctx.createPackageContext("com.google.tts", 0);

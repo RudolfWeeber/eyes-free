@@ -20,4 +20,5 @@ interface ITTS {
   void addSpeechFile(in String text, in String filename);
   int getVersion();  
   void setLanguage(in String language);
+  boolean synthesizeToFile(in String text, in String[] params, in String outputDirectory);
 }
