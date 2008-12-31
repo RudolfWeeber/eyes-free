@@ -508,9 +508,12 @@ public class TTSService extends Service implements OnCompletionListener {
    * @return A boolean that indicates if the synthesis succeeded
    */
   private boolean synthesizeToFile(String text, ArrayList<String> params, String filename) {
+    stop();
+    isSpeaking = true;
     Log.i("TTS", "Synthesizing " + filename);
     speechSynthesis.synthesizeToFile(text, filename);
     Log.i("TTS", "Completed synthesis for " + filename);
+    isSpeaking = false;
     return true;
   }
 
