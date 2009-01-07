@@ -1,10 +1,15 @@
 package com.google.marvin.nihao;
 
+import com.google.tts.ConfigurationManager;
 import com.google.tts.TTS;
 
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,15 +19,56 @@ import android.widget.Spinner;
 public class NiHaoWorld extends Activity {
   private TTS myTts;
   private HashMap<String, Integer> hellos;
+  private static final int ttsCheckReqCode = 42;
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == ttsCheckReqCode) {
+      if (checkTtsRequirements(this, ttsCheckReqCode)) {
+        myTts = new TTS(this, ttsInitListener, true);
+      }
+    }
+  }
+
+  /** Checks to make sure that all the requirements for the TTS are there */
+  private boolean checkTtsRequirements(Activity activity, int resultCode) {
+    if (!TTS.isInstalled(activity)) {
+      Uri marketUri = Uri.parse("market://search?q=pname:com.google.tts");
+      Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+      activity.startActivityForResult(marketIntent, resultCode);
+      return false;
+    }
+    if (!ConfigurationManager.allFilesExist()) {
+      int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
+      Context myContext;
+      try {
+        myContext = createPackageContext("com.google.tts", flags);
+        Class<?> appClass =
+            myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
+        Intent intent = new Intent(myContext, appClass);
+        startActivityForResult(intent, resultCode);
+      } catch (NameNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      return false;
+    }
+    return true;
+  }
 
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     loadHellos();
-    myTts = new TTS(this, ttsInitListener, true);
+    if (checkTtsRequirements(this, ttsCheckReqCode)) {
+      myTts = new TTS(this, ttsInitListener, true);
+    }
   }
-  
+
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
       setContentView(R.layout.main);
@@ -79,16 +125,18 @@ public class NiHaoWorld extends Activity {
   private void sayHello() {
     Spinner comboBox = (Spinner) findViewById(R.id.list);
     String selection = comboBox.getSelectedItem().toString();
-    String languageCode = selection.substring(selection.indexOf("[")+1, selection.length() - 1);
+    String languageCode = selection.substring(selection.indexOf("[") + 1, selection.length() - 1);
     myTts.setLanguage(languageCode);
     String hello = getString(hellos.get(languageCode));
     myTts.speak(hello, 0, null);
   }
-  
+
   @Override
   protected void onDestroy() {
     myTts.shutdown();
     super.onDestroy();
   }
 
+
+  
 }
