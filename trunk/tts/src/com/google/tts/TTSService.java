@@ -118,6 +118,9 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       speechSynthesis.setLanguage(lang, 0);
     }
+    if (engine == TTSEngine.PRERECORDED_WITH_ESPEAK){
+      loadUtterancesFromPropertiesFile();
+    }
   }
 
   private void setEngine(TTSEngine selectedEngine) {
