@@ -27,12 +27,17 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 /**
  * Enables the user to configure TTS settings. This activity has not been
@@ -41,18 +46,28 @@ import android.widget.Spinner;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class ConfigurationManager extends Activity {
+  private static final String DEFAULT_LANGUAGE = "DEFAULT_LANGUAGE";
+  private static final String DEFAULT_SPEECH_RATE = "DEFAULT_SPEECH_RATE";
+  private static final String FORCE_OVERRIDE = "FORCE_OVERRIDE";
+  private static final String IS_CONFIG_MANAGER = "IS_CONFIG_MANAGER";
   private TTS myTts;
   private HashMap<String, Integer> hellos;
+  private SharedPreferences prefs;
+  private SharedPreferences.Editor editor;
+  
   
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
+    prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    editor = prefs.edit();
+    editor.putBoolean(IS_CONFIG_MANAGER, true);
+    editor.commit();
     File espeakDataDir = new File("/sdcard/espeak-data/");
     if (!allFilesExist()) {
       setContentView(R.layout.downloading);
       (new Thread(new dataDownloader())).start();
     } else {
-      loadHellos();
       setVolumeControlStream(AudioManager.STREAM_MUSIC);
       myTts = new TTS(this, ttsInitListener, true);
       setContentView(R.layout.main);
@@ -61,13 +76,30 @@ public class ConfigurationManager extends Activity {
   
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
-      setContentView(R.layout.main);
-      Button myButton = (Button) findViewById(R.id.test);
-      myButton.setOnClickListener(new OnClickListener() {
+      loadHellos();
+      
+      Button testButton = (Button) findViewById(R.id.test);
+      testButton.setOnClickListener(new OnClickListener() {
         public void onClick(View v) {
           sayHello();
         }
       });
+
+      Button saveButton = (Button) findViewById(R.id.save);
+      saveButton.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          saveSettings();
+        }
+      });
+
+      Button cancelButton = (Button) findViewById(R.id.cancel);
+      cancelButton.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          cancel();
+        }
+      });
+      
+      loadSettings();
     }
   };
 
@@ -112,19 +144,48 @@ public class ConfigurationManager extends Activity {
     hellos.put("cy", R.string.cy);
   }
   
-  private void sayHello() {
-    Spinner langComboBox = (Spinner) findViewById(R.id.language);
-    String selection = langComboBox.getSelectedItem().toString();
-    String languageCode = selection.substring(selection.indexOf("[") + 1, selection.length() - 1);
+  private void loadSettings(){
+    CheckBox forceOverrideCheckbox = (CheckBox) findViewById(R.id.forceOverride);   
+    forceOverrideCheckbox.setChecked(prefs.getBoolean(FORCE_OVERRIDE, false));
     
-    Spinner rateComboBox = (Spinner) findViewById(R.id.rate);
-    int rateIndex = (int)rateComboBox.getSelectedItemId() + 1;
-    int rate = rateIndex * 46;
+
+  }
+  
+  private void saveSettings(){
+    CheckBox forceOverrideCheckbox = (CheckBox) findViewById(R.id.forceOverride);    
+    editor.putString(DEFAULT_LANGUAGE, getSelectedLangCode());
+    editor.putInt(DEFAULT_SPEECH_RATE, getSelectedSpeechRate());
+    editor.putBoolean(FORCE_OVERRIDE, forceOverrideCheckbox.isChecked());
+    Toast.makeText(this, "Settings saved.", 1).show();
+    finish();
+  }
+  
+  private void cancel(){
+    finish();
+  }
+  
+  private void sayHello() {
+    String languageCode = getSelectedLangCode();
+    int rate = getSelectedSpeechRate();
     
     myTts.setLanguage(languageCode);
     myTts.setSpeechRate(rate);
     String hello = getString(hellos.get(languageCode));
     myTts.speak(hello, 0, null);
+  }
+  
+  private String getSelectedLangCode(){
+    Spinner langComboBox = (Spinner) findViewById(R.id.language);
+    String selection = langComboBox.getSelectedItem().toString();
+    String languageCode = selection.substring(selection.indexOf("[") + 1, selection.length() - 1);
+    return languageCode;
+  }
+  
+  private int getSelectedSpeechRate(){
+    Spinner rateComboBox = (Spinner) findViewById(R.id.rate);
+    int rateIndex = (int)rateComboBox.getSelectedItemId() + 1;
+    int rate = rateIndex * 46;
+    return rate;
   }
 
   @Override
@@ -132,6 +193,8 @@ public class ConfigurationManager extends Activity {
     if (myTts != null){
       myTts.shutdown();
     }
+    editor.putBoolean(IS_CONFIG_MANAGER, false);
+    editor.commit();
     super.onDestroy();
   }
 
