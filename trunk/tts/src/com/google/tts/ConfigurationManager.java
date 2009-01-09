@@ -22,11 +22,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import android.app.Activity;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.Spinner;
 
 /**
  * Enables the user to configure TTS settings. This activity has not been
@@ -35,6 +41,9 @@ import android.os.Bundle;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class ConfigurationManager extends Activity {
+  private TTS myTts;
+  private HashMap<String, Integer> hellos;
+  
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
@@ -42,7 +51,88 @@ public class ConfigurationManager extends Activity {
     if (!allFilesExist()) {
       setContentView(R.layout.downloading);
       (new Thread(new dataDownloader())).start();
+    } else {
+      loadHellos();
+      setVolumeControlStream(AudioManager.STREAM_MUSIC);
+      myTts = new TTS(this, ttsInitListener, true);
+      setContentView(R.layout.main);
     }
+  }
+  
+  private TTS.InitListener ttsInitListener = new TTS.InitListener() {
+    public void onInit(int version) {
+      setContentView(R.layout.main);
+      Button myButton = (Button) findViewById(R.id.test);
+      myButton.setOnClickListener(new OnClickListener() {
+        public void onClick(View v) {
+          sayHello();
+        }
+      });
+    }
+  };
+
+  private void loadHellos() {
+    hellos = new HashMap<String, Integer>();
+    hellos.put("af", R.string.af);
+    hellos.put("bs", R.string.bs);
+    hellos.put("zh-yue", R.string.zhyue);
+    hellos.put("zh", R.string.zh);
+    hellos.put("hr", R.string.hr);
+    hellos.put("cz", R.string.cz);
+    hellos.put("nl", R.string.nl);
+    hellos.put("en-us", R.string.enus);
+    hellos.put("en-uk", R.string.enuk);
+    hellos.put("eo", R.string.eo);
+    hellos.put("fi", R.string.fi);
+    hellos.put("fr", R.string.fr);
+    hellos.put("de", R.string.de);
+    hellos.put("el", R.string.el);
+    hellos.put("hi", R.string.hi);
+    hellos.put("hu", R.string.hu);
+    hellos.put("is", R.string.is);
+    hellos.put("id", R.string.id);
+    hellos.put("it", R.string.it);
+    hellos.put("ku", R.string.ku);
+    hellos.put("la", R.string.la);
+    hellos.put("mk", R.string.mk);
+    hellos.put("no", R.string.no);
+    hellos.put("pl", R.string.pl);
+    hellos.put("pt", R.string.pt);
+    hellos.put("ro", R.string.ro);
+    hellos.put("ru", R.string.ru);
+    hellos.put("sr", R.string.sr);
+    hellos.put("sk", R.string.sk);
+    hellos.put("es", R.string.es);
+    hellos.put("es-la", R.string.esla);
+    hellos.put("sw", R.string.sw);
+    hellos.put("sv", R.string.sv);
+    hellos.put("ta", R.string.ta);
+    hellos.put("tr", R.string.tr);
+    hellos.put("vi", R.string.vi);
+    hellos.put("cy", R.string.cy);
+  }
+  
+  private void sayHello() {
+    Spinner langComboBox = (Spinner) findViewById(R.id.language);
+    String selection = langComboBox.getSelectedItem().toString();
+    String languageCode = selection.substring(selection.indexOf("[") + 1, selection.length() - 1);
+    
+    Spinner rateComboBox = (Spinner) findViewById(R.id.rate);
+    int rateIndex = (int)rateComboBox.getSelectedItemId() + 1;
+    int rate = rateIndex * 46;
+    
+    myTts.setLanguage(languageCode);
+    myTts.setSpeechRate(rate);
+    String hello = getString(hellos.get(languageCode));
+    myTts.speak(hello, 0, null);
+  }
+
+  @Override
+  protected void onDestroy() {
+    if (myTts != null){
+      myTts.shutdown();
+    }
+    super.onDestroy();
   }
 
   public class dataDownloader implements Runnable {
