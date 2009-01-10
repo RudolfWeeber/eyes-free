@@ -15,6 +15,7 @@
  */
 package com.google.tts;
 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,15 +29,18 @@ import java.util.zip.ZipFile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -68,9 +72,12 @@ public class ConfigurationManager extends Activity {
       setContentView(R.layout.downloading);
       (new Thread(new dataDownloader())).start();
     } else {
-      setVolumeControlStream(AudioManager.STREAM_MUSIC);
-      myTts = new TTS(this, ttsInitListener, true);
-      setContentView(R.layout.main);
+      Intent intent = new Intent(this, PrefsActivity.class);
+      startActivityForResult(intent, 42);
+      finish();
+      //setVolumeControlStream(AudioManager.STREAM_MUSIC);
+      //myTts = new TTS(this, ttsInitListener, true);
+      //setContentView(R.layout.main);
     }
   }
   
@@ -147,7 +154,9 @@ public class ConfigurationManager extends Activity {
   private void loadSettings(){
     CheckBox forceOverrideCheckbox = (CheckBox) findViewById(R.id.forceOverride);   
     forceOverrideCheckbox.setChecked(prefs.getBoolean(FORCE_OVERRIDE, false));
-    
+
+    Spinner langComboBox = (Spinner) findViewById(R.id.language);
+
 
   }
   
@@ -177,7 +186,7 @@ public class ConfigurationManager extends Activity {
   private String getSelectedLangCode(){
     Spinner langComboBox = (Spinner) findViewById(R.id.language);
     String selection = langComboBox.getSelectedItem().toString();
-    String languageCode = selection.substring(selection.indexOf("[") + 1, selection.length() - 1);
+    String languageCode = selection.substring(selection.indexOf("[") + 1, selection.length() - 1);    
     return languageCode;
   }
   

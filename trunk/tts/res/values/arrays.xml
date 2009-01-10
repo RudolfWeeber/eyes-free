@@ -15,52 +15,98 @@
  * limitations under the License.
  -->
 
-<resources>
-    <string-array name="languages">
-        <item name="af">Afrikaans [af]</item>
-        <item name="bs">Bosnian [bs]</item>
-        <item name="zh-yue">Chinese (Cantonese) [zh-yue]</item>
-        <item name="zh">Chinese (Mandarin) [zh]</item>
-        <item name="hr">Croatian [hr]</item>
-        <item name="cz">Czech [cz]</item>
-        <item name="nl">Dutch [nl]</item>
-        <item name="en-us">English (American) [en-us]</item>
-        <item name="en-uk">English (British) [en-uk]</item>
-        <item name="eo">Esperanto [eo]</item>
-        <item name="fi">Finnish [fi]</item>
-        <item name="fr">French [fr]</item>
-        <item name="de">German [de]</item>
-        <item name="el">Greek [el]</item>
-        <item name="hi">Hindi [hi]</item>
-        <item name="hu">Hungarian [hu]</item>
-        <item name="is">Icelandic [is]</item>
-        <item name="id">Indonesian [id]</item>
-        <item name="it">Italian [it]</item>
-        <item name="ku">Kurdish [ku]</item>
-        <item name="la">Latin [la]</item>
-        <item name="mk">Macedonian [mk]</item>
-        <item name="no">Norwegian [no]</item>
-        <item name="pl">Polish [pl]</item>
-        <item name="pt">Portuguese [pt]</item>
-        <item name="ro">Romanian [ro]</item>
-        <item name="ru">Russian [ru]</item>
-        <item name="sr">Serbian [sr]</item>
-        <item name="sk">Slovak [sk]</item>
-        <item name="es">Spanish [es]</item>
-        <item name="es-la">Spanish (Latin America) [es-la]</item>
-        <item name="sw">Swahili [sw]</item>
-        <item name="sv">Swedish [sv]</item>
-        <item name="ta">Tamil [ta]</item>
-        <item name="tr">Turkish [tr]</item>
-        <item name="vi">Vietnamese [vi]</item>
-        <item name="cy">Welsh [cy]</item>
+<resources  xmlns:android="http://schemas.android.com/apk/res/android">
+    <string-array name="language_entries">
+        <item>Afrikaans [af]</item>
+        <item>Bosnian [bs]</item>
+        <item>Chinese (Cantonese) [zh-yue]</item>
+        <item>Chinese (Mandarin) [zh]</item>
+        <item>Croatian [hr]</item>
+        <item>Czech [cz]</item>
+        <item>Dutch [nl]</item>
+        <item>English (American) [en-us]</item>
+        <item>English (British) [en-uk]</item>
+        <item>Esperanto [eo]</item>
+        <item>Finnish [fi]</item>
+        <item>French [fr]</item>
+        <item>German [de]</item>
+        <item>Greek [el]</item>
+        <item>Hindi [hi]</item>
+        <item>Hungarian [hu]</item>
+        <item>Icelandic [is]</item>
+        <item>Indonesian [id]</item>
+        <item>Italian [it]</item>
+        <item>Kurdish [ku]</item>
+        <item>Latin [la]</item>
+        <item>Macedonian [mk]</item>
+        <item>Norwegian [no]</item>
+        <item>Polish [pl]</item>
+        <item>Portuguese [pt]</item>
+        <item>Romanian [ro]</item>
+        <item>Russian [ru]</item>
+        <item>Serbian [sr]</item>
+        <item>Slovak [sk]</item>
+        <item>Spanish [es]</item>
+        <item>Spanish (Latin America) [es-la]</item>
+        <item>Swahili [sw]</item>
+        <item>Swedish [sv]</item>
+        <item>Tamil [ta]</item>
+        <item>Turkish [tr]</item>
+        <item>Vietnamese [vi]</item>
+        <item>Welsh [cy]</item>
     </string-array>
+    <string-array name="language_values">
+        <item>af</item>
+        <item>bs</item>
+        <item>zh-yue</item>
+        <item>zh</item>
+        <item>hr</item>
+        <item>cz</item>
+        <item>nl</item>
+        <item>en-us</item>
+        <item>en-uk</item>
+        <item>eo</item>
+        <item>fi</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>el</item>
+        <item>hi</item>
+        <item>hu</item>
+        <item>is</item>
+        <item>id</item>
+        <item>it</item>
+        <item>ku</item>
+        <item>la</item>
+        <item>mk</item>
+        <item>no</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>sr</item>
+        <item>sk</item>
+        <item>es</item>
+        <item>es-la</item>
+        <item>sw</item>
+        <item>sv</item>
+        <item>ta</item>
+        <item>tr</item>
+        <item>vi</item>
+        <item>cy</item>
+    </string-array>    
 
-    <string-array name="rates">
-        <item name="60">Very slow</item>
-        <item name="100">Slow</item>
-        <item name="140">Normal</item>
-        <item name="180">Fast</item>
-        <item name="220">Very fast</item>
+    <string-array name="rate_entries">
+        <item>Very slow</item>
+        <item>Slow</item>
+        <item>Normal</item>
+        <item>Fast</item>
+        <item>Very fast</item>
+    </string-array>
+    <string-array name="rate_values">
+        <item>60</item>
+        <item>100</item>
+        <item>140</item>
+        <item>180</item>
+        <item>220</item>
     </string-array>
 </resources>

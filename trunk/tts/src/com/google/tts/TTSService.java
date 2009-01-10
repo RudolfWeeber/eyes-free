@@ -19,6 +19,7 @@ import com.google.tts.ITTS.Stub;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -27,6 +28,7 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -61,9 +63,11 @@ public class TTSService extends Service implements OnCompletionListener {
   private Boolean isSpeaking;
   private ArrayList<String> speechQueue;
   private HashMap<String, SoundResource> utterances;
+  private HashMap<String, SoundResource> cache;
   private MediaPlayer player;
   private TTSService self;
   
+  private SharedPreferences prefs;
   private int speechRate = 140;
   private String language = "en-us";
 
@@ -77,8 +81,11 @@ public class TTSService extends Service implements OnCompletionListener {
     // android.os.Debug.waitForDebugger();
     self = this;
     isSpeaking = false;
+    
+    prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     utterances = new HashMap<String, SoundResource>();
+    cache = new HashMap<String, SoundResource>();
 
     speechQueue = new ArrayList<String>();
     player = null;
@@ -88,6 +95,9 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       setEngine(TTSEngine.PRERECORDED_ONLY);
     }
+    
+    setLanguage(prefs.getString("lang_pref", "en-us"));
+    setSpeechRate(Integer.parseInt(prefs.getString("rate_pref", "140")));
   }
 
   @Override
@@ -99,15 +109,30 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void setSpeechRate(int rate) {
+    if (prefs.getBoolean("override_pref", false)){
+      // This is set to the default here so that the preview in the prefs
+      // activity will show the change without a restart, even if apps are not
+      // allowed to change the defaults.
+      rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
+    }
+    // Clear cache so that the TTS will regenerate the 
+    // sounds with the new rate
+    cache = new HashMap<String, SoundResource>();
     speechRate = rate;
     speechSynthesis.setSpeechRate(rate);
   }
 
   private void setLanguage(String lang) {
+    if (prefs.getBoolean("override_pref", false)){
+      // This is set to the default here so that the preview in the prefs
+      // activity will show the change without a restart, even if apps are not
+      // allowed to change the defaults.
+      lang = prefs.getString("lang_pref", "en-us");
+    }
     language = lang;
-    // Clear known utterances so that the TTS will regenerate the 
+    // Clear cache so that the TTS will regenerate the 
     // sounds in the new language
-    utterances = new HashMap<String, SoundResource>();
+    cache = new HashMap<String, SoundResource>();
     // The eSpeak documentation for Cantonese seems to be wrong.
     // It seems like using "zhy" will cause all Chinese characters to be
     // spoken as "symbol blah blah blah". The solution is to actually use
@@ -117,9 +142,6 @@ public class TTSService extends Service implements OnCompletionListener {
       speechSynthesis.setLanguage("zh", 5);
     } else {
       speechSynthesis.setLanguage(lang, 0);
-    }
-    if (engine == TTSEngine.PRERECORDED_WITH_ESPEAK){
-      loadUtterancesFromPropertiesFile();
     }
   }
 
@@ -220,6 +242,17 @@ public class TTSService extends Service implements OnCompletionListener {
   private void addSpeech(String text, String filename) {
     utterances.put(text, new SoundResource(filename));
   }
+  
+  /**
+   * Caches a generated utterance
+   * 
+   * @param text The text that should be associated with the sound resource
+   * @param filename The filename of the sound resource. This must be a complete
+   *        path like: (/sdcard/mysounds/mysoundbite.mp3).
+   */
+  private void cacheSpeech(String text, String filename) {
+    cache.put(text, new SoundResource(filename));
+  }
 
   /**
    * Speaks the given text using the specified queueing mode and parameters.
@@ -244,7 +277,7 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void speakEspeakOnly(String text, int queueMode, ArrayList<String> params) {
-    if (!utterances.containsKey(text)) {
+    if (!utterances.containsKey(text) && !cache.containsKey(text)) {
       String sanitizedName = text.replaceAll("'", " ");
       sanitizedName = text.replaceAll("\n", " ");
       sanitizedName = sanitizedName.replaceAll("[^a-zA-Z0-9,\\s]", "");
@@ -255,7 +288,7 @@ public class TTSService extends Service implements OnCompletionListener {
       String ts = Long.toString(time);
       String filename = ESPEAK_SCRATCH_DIRECTORY + sanitizedName + ts + ".wav";
       speechSynthesis.synthesizeToFile(text, filename);
-      addSpeech(text, filename);
+      cacheSpeech(text, filename);
     }
 
     speechQueue.add(text);
@@ -442,7 +475,12 @@ public class TTSService extends Service implements OnCompletionListener {
     }
     String text = speechQueue.get(0);
     isSpeaking = true;
+    // Look in the predefined utterances first
     SoundResource sr = utterances.get(text);
+    // If it's not there, then it was generated and should be in the cache
+    if (sr == null){
+      sr = cache.get(text);
+    }
     if (sr != null) {
       cleanUpPlayer();
       if (sr.sourcePackageName == PKGNAME) {

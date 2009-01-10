@@ -28,7 +28,7 @@
   <Spinner android:id="@+id/language"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:entries="@array/languages"
+      android:entries="@array/language_entries"
       android:text="English (American) [en-us]"
       />
 
@@ -50,7 +50,7 @@
   <Spinner android:id="@+id/rate"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:entries="@array/rates"
+      android:entries="@array/rate_entries"
       android:value="Normal"
       />
 
