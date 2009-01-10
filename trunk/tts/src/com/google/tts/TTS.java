@@ -198,7 +198,12 @@ public class TTS {
    * cleanly.
    */
   public void shutdown() {
-    ctx.unbindService(serviceConnection);
+    try {
+      ctx.unbindService(serviceConnection);
+    } catch (IllegalArgumentException e){
+      // Do nothing and fail silently since an error here indicates that
+      // binding never succeeded in the first place.
+    }
   }
 
   /**
