@@ -37,7 +37,7 @@ import android.os.RemoteException;
 public class TTS {
   // This is the minimum version of the TTS service that is needed by this
   // version of the library stub.
-  private final static int MIN_VER = 4; 
+  private final static int MIN_VER = 5; 
   /**
    * Called when the TTS has initialized
    * 

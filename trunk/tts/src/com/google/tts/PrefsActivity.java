@@ -4,6 +4,7 @@ package com.google.tts;
 import java.util.HashMap;
 
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -22,6 +23,7 @@ public class PrefsActivity extends PreferenceActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setVolumeControlStream(AudioManager.STREAM_MUSIC);
     myTts = new TTS(this, ttsInitListener, true);
   }
   
