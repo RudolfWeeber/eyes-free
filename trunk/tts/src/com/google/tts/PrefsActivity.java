@@ -1,15 +1,19 @@
 package com.google.tts;
 
-
 import java.util.HashMap;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
@@ -18,23 +22,21 @@ import android.widget.Button;
 public class PrefsActivity extends PreferenceActivity {
   private TTS myTts;
   private HashMap<String, Integer> hellos;
-  
-  
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     myTts = new TTS(this, ttsInitListener, true);
   }
-  
-  
 
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
       addPreferencesFromResource(R.xml.prefs);
       loadHellos();
       Preference previewPref = findPreference("preview");
-      previewPref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
+      previewPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
         public boolean onPreferenceClick(Preference preference) {
           sayHello();
           return true;
@@ -42,8 +44,6 @@ public class PrefsActivity extends PreferenceActivity {
       });
     }
   };
-  
-  
 
   private void loadHellos() {
     hellos = new HashMap<String, Integer>();
@@ -90,13 +90,44 @@ public class PrefsActivity extends PreferenceActivity {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String languageCode = prefs.getString("lang_pref", "en-us");
     int rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
-    
+
     myTts.setLanguage(languageCode);
     myTts.setSpeechRate(rate);
     String hello = getString(hellos.get(languageCode));
     myTts.speak(hello, 0, null);
   }
-  
-  
-  
+
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    menu.add(0, R.string.tts_apps, 0, R.string.tts_apps).setIcon(android.R.drawable.ic_menu_search);
+    menu.add(0, R.string.homepage, 0, R.string.homepage).setIcon(
+        android.R.drawable.ic_menu_info_details);
+    return super.onCreateOptionsMenu(menu);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    Intent i = new Intent();
+    ComponentName comp =
+        new ComponentName("com.android.browser", "com.android.browser.BrowserActivity");
+    i.setComponent(comp);
+    i.setAction("android.intent.action.VIEW");
+    i.addCategory("android.intent.category.BROWSABLE");
+    Uri uri;
+    switch (item.getItemId()) {
+      case R.string.tts_apps:
+        uri = Uri.parse("http://eyes-free.googlecode.com/svn/trunk/documentation/tts_apps.html");
+        i.setData(uri);
+        startActivity(i);
+        break;
+      case R.string.homepage:
+        uri = Uri.parse("http://eyes-free.googlecode.com/");
+        i.setData(uri);
+        startActivity(i);
+        break;
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
 }

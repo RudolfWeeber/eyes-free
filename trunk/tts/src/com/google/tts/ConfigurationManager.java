@@ -75,9 +75,6 @@ public class ConfigurationManager extends Activity {
       Intent intent = new Intent(this, PrefsActivity.class);
       startActivityForResult(intent, 42);
       finish();
-      //setVolumeControlStream(AudioManager.STREAM_MUSIC);
-      //myTts = new TTS(this, ttsInitListener, true);
-      //setContentView(R.layout.main);
     }
   }
   
