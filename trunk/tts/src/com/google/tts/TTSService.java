@@ -72,6 +72,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private String language = "en-us";
 
   private final ReentrantLock speechQueueLock = new ReentrantLock();
+  private final ReentrantLock synthesizerLock = new ReentrantLock();
   private SpeechSynthesis speechSynthesis = new SpeechSynthesis(language, 0, speechRate);
 
   @Override
@@ -287,7 +288,17 @@ public class TTSService extends Service implements OnCompletionListener {
       long time = android.os.SystemClock.currentThreadTimeMillis();
       String ts = Long.toString(time);
       String filename = ESPEAK_SCRATCH_DIRECTORY + sanitizedName + ts + ".wav";
+
+      // eSpeak does not behave correctly if called from multiple threads.
+      // Using a lock here will cause some text to be dropped if too many
+      // requests happen at once, but that is better than crashing.
+      boolean synthAvailable = synthesizerLock.tryLock();
+      if (!synthAvailable) {
+        return;
+      }
       speechSynthesis.synthesizeToFile(text, filename);
+      synthesizerLock.unlock();
+      
       cacheSpeech(text, filename);
     }
 
