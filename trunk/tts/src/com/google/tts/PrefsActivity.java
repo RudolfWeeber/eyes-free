@@ -14,10 +14,6 @@ import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
 public class PrefsActivity extends PreferenceActivity {
   private TTS myTts;
@@ -128,6 +124,15 @@ public class PrefsActivity extends PreferenceActivity {
         break;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+
+  @Override
+  protected void onDestroy() {
+    if (myTts != null) {
+      myTts.shutdown();
+    }
+    super.onDestroy();
   }
 
 }

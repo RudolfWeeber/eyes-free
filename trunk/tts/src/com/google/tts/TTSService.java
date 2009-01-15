@@ -66,7 +66,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private HashMap<String, SoundResource> cache;
   private MediaPlayer player;
   private TTSService self;
-  
+
   private SharedPreferences prefs;
   private int speechRate = 140;
   private String language = "en-us";
@@ -82,7 +82,7 @@ public class TTSService extends Service implements OnCompletionListener {
     // android.os.Debug.waitForDebugger();
     self = this;
     isSpeaking = false;
-    
+
     prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     utterances = new HashMap<String, SoundResource>();
@@ -96,7 +96,7 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       setEngine(TTSEngine.PRERECORDED_ONLY);
     }
-    
+
     setLanguage(prefs.getString("lang_pref", "en-us"));
     setSpeechRate(Integer.parseInt(prefs.getString("rate_pref", "140")));
   }
@@ -110,13 +110,13 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void setSpeechRate(int rate) {
-    if (prefs.getBoolean("override_pref", false)){
+    if (prefs.getBoolean("override_pref", false)) {
       // This is set to the default here so that the preview in the prefs
       // activity will show the change without a restart, even if apps are not
       // allowed to change the defaults.
       rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
     }
-    // Clear cache so that the TTS will regenerate the 
+    // Clear cache so that the TTS will regenerate the
     // sounds with the new rate
     cache = new HashMap<String, SoundResource>();
     speechRate = rate;
@@ -124,14 +124,14 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void setLanguage(String lang) {
-    if (prefs.getBoolean("override_pref", false)){
+    if (prefs.getBoolean("override_pref", false)) {
       // This is set to the default here so that the preview in the prefs
       // activity will show the change without a restart, even if apps are not
       // allowed to change the defaults.
       lang = prefs.getString("lang_pref", "en-us");
     }
     language = lang;
-    // Clear cache so that the TTS will regenerate the 
+    // Clear cache so that the TTS will regenerate the
     // sounds in the new language
     cache = new HashMap<String, SoundResource>();
     // The eSpeak documentation for Cantonese seems to be wrong.
@@ -139,7 +139,7 @@ public class TTSService extends Service implements OnCompletionListener {
     // spoken as "symbol blah blah blah". The solution is to actually use
     // zh and variant 3. In addition, "zhy" is not a standard IETF language tag;
     // the standard IETF language tag is "zh-yue".
-    if (language.equals("zh-yue")){
+    if (language.equals("zh-yue")) {
       speechSynthesis.setLanguage("zh", 5);
     } else {
       speechSynthesis.setLanguage(lang, 0);
@@ -243,7 +243,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private void addSpeech(String text, String filename) {
     utterances.put(text, new SoundResource(filename));
   }
-  
+
   /**
    * Caches a generated utterance
    * 
@@ -278,12 +278,12 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void speakEspeakOnly(String text, int queueMode, ArrayList<String> params) {
-    if (!utterances.containsKey(text) && !cache.containsKey(text)) {
+    if (!utterances.containsKey(text) && !isInCache(text)) {
       String sanitizedName = text.replaceAll("'", " ");
       sanitizedName = text.replaceAll("\n", " ");
       sanitizedName = sanitizedName.replaceAll("[^a-zA-Z0-9,\\s]", "");
       // Use a timestamp in the name to prevent collisions;
-      // this is especially important for non-Latin character languages 
+      // this is especially important for non-Latin character languages
       // such as Chinese where the sanitizedName will be an empty string.
       long time = android.os.SystemClock.currentThreadTimeMillis();
       String ts = Long.toString(time);
@@ -292,13 +292,16 @@ public class TTSService extends Service implements OnCompletionListener {
       // eSpeak does not behave correctly if called from multiple threads.
       // Using a lock here will cause some text to be dropped if too many
       // requests happen at once, but that is better than crashing.
-      boolean synthAvailable = synthesizerLock.tryLock();
-      if (!synthAvailable) {
-        return;
+      try {
+        boolean synthAvailable = synthesizerLock.tryLock();
+        if (!synthAvailable) {
+          return;
+        }
+        speechSynthesis.synthesizeToFile(text, filename);
+      } finally {
+        synthesizerLock.unlock();
       }
-      speechSynthesis.synthesizeToFile(text, filename);
-      synthesizerLock.unlock();
-      
+
       cacheSpeech(text, filename);
     }
 
@@ -306,6 +309,18 @@ public class TTSService extends Service implements OnCompletionListener {
     if (!isSpeaking) {
       processSpeechQueue();
     }
+  }
+  
+  private boolean isInCache(String text){
+    SoundResource sr = cache.get(text);
+    if (sr == null){
+      return false;
+    }
+    if (!new File(sr.filename).isFile()){
+      cache.remove(text);
+      return false;
+    }
+    return true;
   }
 
   private void speakPrerecordedOnly(String text, int queueMode, ArrayList<String> params) {
@@ -484,62 +499,65 @@ public class TTSService extends Service implements OnCompletionListener {
     if (!speechQueueAvailable) {
       return;
     }
-    String text = speechQueue.get(0);
-    isSpeaking = true;
-    // Look in the predefined utterances first
-    SoundResource sr = utterances.get(text);
-    // If it's not there, then it was generated and should be in the cache
-    if (sr == null){
-      sr = cache.get(text);
-    }
-    if (sr != null) {
-      cleanUpPlayer();
-      if (sr.sourcePackageName == PKGNAME) {
-        // Utterance is part of the TTS library
-        player = MediaPlayer.create(this, sr.resId);
-      } else if (sr.sourcePackageName != null) {
-        // Utterance is part of the app calling the library
-        Context ctx;
-        try {
-          ctx = this.createPackageContext(sr.sourcePackageName, 0);
-        } catch (NameNotFoundException e) {
-          e.printStackTrace();
-          speechQueue.remove(0); // Remove it from the queue and move on
+    try {
+      String text = speechQueue.get(0);
+      isSpeaking = true;
+      // Look in the predefined utterances first
+      SoundResource sr = utterances.get(text);
+      // If it's not there, then it was generated and should be in the cache
+      if (sr == null) {
+        sr = cache.get(text);
+      }
+      if (sr != null) {
+        cleanUpPlayer();
+        if (sr.sourcePackageName == PKGNAME) {
+          // Utterance is part of the TTS library
+          player = MediaPlayer.create(this, sr.resId);
+        } else if (sr.sourcePackageName != null) {
+          // Utterance is part of the app calling the library
+          Context ctx;
+          try {
+            ctx = this.createPackageContext(sr.sourcePackageName, 0);
+          } catch (NameNotFoundException e) {
+            e.printStackTrace();
+            speechQueue.remove(0); // Remove it from the queue and move on
+            speechQueueLock.unlock();
+            return;
+          }
+          player = MediaPlayer.create(ctx, sr.resId);
+        } else {
+          // Utterance is coming from a file
+          player = MediaPlayer.create(this, Uri.parse(sr.filename));
+        }
+
+        // Check for if Media Server is dead;
+        // if it is, clear the queue and give
+        // up for now - hopefully, it will recover itself.
+        if (player == null) {
+          speechQueue.clear();
+          isSpeaking = false;
           speechQueueLock.unlock();
           return;
         }
-        player = MediaPlayer.create(ctx, sr.resId);
-      } else {
-        // Utterance is coming from a file
-        player = MediaPlayer.create(this, Uri.parse(sr.filename));
+        player.setOnCompletionListener(this);
+        try {
+          player.start();
+        } catch (IllegalStateException e) {
+          speechQueue.clear();
+          isSpeaking = false;
+          cleanUpPlayer();
+          speechQueueLock.unlock();
+          return;
+        }
+        isSpeaking = true;
       }
 
-      // Check for if Media Server is dead;
-      // if it is, clear the queue and give
-      // up for now - hopefully, it will recover itself.
-      if (player == null) {
-        speechQueue.clear();
-        isSpeaking = false;
-        speechQueueLock.unlock();
-        return;
+      if (speechQueue.size() > 0) {
+        speechQueue.remove(0);
       }
-      player.setOnCompletionListener(this);
-      try {
-        player.start();
-      } catch (IllegalStateException e) {
-        speechQueue.clear();
-        isSpeaking = false;
-        cleanUpPlayer();
-        speechQueueLock.unlock();
-        return;
-      }
-      isSpeaking = true;
+    } finally {
+      speechQueueLock.unlock();
     }
-
-    if (speechQueue.size() > 0) {
-      speechQueue.remove(0);
-    }
-    speechQueueLock.unlock();
   }
 
   private void cleanUpPlayer() {
@@ -550,22 +568,30 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   /**
-   * Speaks the given text using the specified queueing mode and parameters.
+   * Synthesizes the given text using the specified queuing mode and parameters.
    * 
    * @param text The String of text that should be synthesized
    * @param params An ArrayList of parameters. The first element of this array
    *        controls the type of voice to use.
-   * @param filename The string that gives the full output filename; it 
-   *        should be something like "/sdcard/myappsounds/mysound.wav".
+   * @param filename The string that gives the full output filename; it should
+   *        be something like "/sdcard/myappsounds/mysound.wav".
    * @return A boolean that indicates if the synthesis succeeded
    */
   private boolean synthesizeToFile(String text, ArrayList<String> params, String filename) {
     stop();
-    isSpeaking = true;
     Log.i("TTS", "Synthesizing " + filename);
-    speechSynthesis.synthesizeToFile(text, filename);
+
+    try {
+      boolean synthAvailable = synthesizerLock.tryLock();
+      if (!synthAvailable) {
+        return false;
+      }
+      speechSynthesis.synthesizeToFile(text, filename);
+    } finally {
+      synthesizerLock.unlock();
+    }
+
     Log.i("TTS", "Completed synthesis for " + filename);
-    isSpeaking = false;
     return true;
   }
 
@@ -670,10 +696,10 @@ public class TTSService extends Service implements OnCompletionListener {
      * Sets the speech rate for the TTS. Note that this will only have an effect
      * on synthesized speech; it will not affect pre-recorded speech.
      * 
-     * @param language The language to be used. The languages are specified by 
+     * @param language The language to be used. The languages are specified by
      *        their IETF language tags as defined by BCP 47. This is the same
-     *        standard used for the lang attribute in HTML. 
-     *        See: http://en.wikipedia.org/wiki/IETF_language_tag
+     *        standard used for the lang attribute in HTML. See:
+     *        http://en.wikipedia.org/wiki/IETF_language_tag
      */
     public void setLanguage(String language) {
       self.setLanguage(language);
@@ -703,11 +729,11 @@ public class TTSService extends Service implements OnCompletionListener {
      * @param text The String of text that should be synthesized
      * @param params An ArrayList of parameters. The first element of this array
      *        controls the type of voice to use.
-     * @param filename The string that gives the full output filename; it 
-     *        should be something like "/sdcard/myappsounds/mysound.wav".
+     * @param filename The string that gives the full output filename; it should
+     *        be something like "/sdcard/myappsounds/mysound.wav".
      * @return A boolean that indicates if the synthesis succeeded
      */
-    public boolean synthesizeToFile(String text, String[] params, String filename){
+    public boolean synthesizeToFile(String text, String[] params, String filename) {
       ArrayList<String> speakingParams = new ArrayList<String>();
       if (params != null) {
         speakingParams = new ArrayList<String>(Arrays.asList(params));

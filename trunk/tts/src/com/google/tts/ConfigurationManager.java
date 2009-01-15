@@ -23,25 +23,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Enables the user to configure TTS settings. This activity has not been
@@ -50,23 +37,10 @@ import android.widget.Toast;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class ConfigurationManager extends Activity {
-  private static final String DEFAULT_LANGUAGE = "DEFAULT_LANGUAGE";
-  private static final String DEFAULT_SPEECH_RATE = "DEFAULT_SPEECH_RATE";
-  private static final String FORCE_OVERRIDE = "FORCE_OVERRIDE";
-  private static final String IS_CONFIG_MANAGER = "IS_CONFIG_MANAGER";
-  private TTS myTts;
-  private HashMap<String, Integer> hellos;
-  private SharedPreferences prefs;
-  private SharedPreferences.Editor editor;
-  
-  
+
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    editor = prefs.edit();
-    editor.putBoolean(IS_CONFIG_MANAGER, true);
-    editor.commit();
     File espeakDataDir = new File("/sdcard/espeak-data/");
     if (!allFilesExist()) {
       setContentView(R.layout.downloading);
@@ -76,132 +50,6 @@ public class ConfigurationManager extends Activity {
       startActivityForResult(intent, 42);
       finish();
     }
-  }
-  
-  private TTS.InitListener ttsInitListener = new TTS.InitListener() {
-    public void onInit(int version) {
-      loadHellos();
-      
-      Button testButton = (Button) findViewById(R.id.test);
-      testButton.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-          sayHello();
-        }
-      });
-
-      Button saveButton = (Button) findViewById(R.id.save);
-      saveButton.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-          saveSettings();
-        }
-      });
-
-      Button cancelButton = (Button) findViewById(R.id.cancel);
-      cancelButton.setOnClickListener(new OnClickListener() {
-        public void onClick(View v) {
-          cancel();
-        }
-      });
-      
-      loadSettings();
-    }
-  };
-
-  private void loadHellos() {
-    hellos = new HashMap<String, Integer>();
-    hellos.put("af", R.string.af);
-    hellos.put("bs", R.string.bs);
-    hellos.put("zh-yue", R.string.zhyue);
-    hellos.put("zh", R.string.zh);
-    hellos.put("hr", R.string.hr);
-    hellos.put("cz", R.string.cz);
-    hellos.put("nl", R.string.nl);
-    hellos.put("en-us", R.string.enus);
-    hellos.put("en-uk", R.string.enuk);
-    hellos.put("eo", R.string.eo);
-    hellos.put("fi", R.string.fi);
-    hellos.put("fr", R.string.fr);
-    hellos.put("de", R.string.de);
-    hellos.put("el", R.string.el);
-    hellos.put("hi", R.string.hi);
-    hellos.put("hu", R.string.hu);
-    hellos.put("is", R.string.is);
-    hellos.put("id", R.string.id);
-    hellos.put("it", R.string.it);
-    hellos.put("ku", R.string.ku);
-    hellos.put("la", R.string.la);
-    hellos.put("mk", R.string.mk);
-    hellos.put("no", R.string.no);
-    hellos.put("pl", R.string.pl);
-    hellos.put("pt", R.string.pt);
-    hellos.put("ro", R.string.ro);
-    hellos.put("ru", R.string.ru);
-    hellos.put("sr", R.string.sr);
-    hellos.put("sk", R.string.sk);
-    hellos.put("es", R.string.es);
-    hellos.put("es-la", R.string.esla);
-    hellos.put("sw", R.string.sw);
-    hellos.put("sv", R.string.sv);
-    hellos.put("ta", R.string.ta);
-    hellos.put("tr", R.string.tr);
-    hellos.put("vi", R.string.vi);
-    hellos.put("cy", R.string.cy);
-  }
-  
-  private void loadSettings(){
-    CheckBox forceOverrideCheckbox = (CheckBox) findViewById(R.id.forceOverride);   
-    forceOverrideCheckbox.setChecked(prefs.getBoolean(FORCE_OVERRIDE, false));
-
-    Spinner langComboBox = (Spinner) findViewById(R.id.language);
-
-
-  }
-  
-  private void saveSettings(){
-    CheckBox forceOverrideCheckbox = (CheckBox) findViewById(R.id.forceOverride);    
-    editor.putString(DEFAULT_LANGUAGE, getSelectedLangCode());
-    editor.putInt(DEFAULT_SPEECH_RATE, getSelectedSpeechRate());
-    editor.putBoolean(FORCE_OVERRIDE, forceOverrideCheckbox.isChecked());
-    Toast.makeText(this, "Settings saved.", 1).show();
-    finish();
-  }
-  
-  private void cancel(){
-    finish();
-  }
-  
-  private void sayHello() {
-    String languageCode = getSelectedLangCode();
-    int rate = getSelectedSpeechRate();
-    
-    myTts.setLanguage(languageCode);
-    myTts.setSpeechRate(rate);
-    String hello = getString(hellos.get(languageCode));
-    myTts.speak(hello, 0, null);
-  }
-  
-  private String getSelectedLangCode(){
-    Spinner langComboBox = (Spinner) findViewById(R.id.language);
-    String selection = langComboBox.getSelectedItem().toString();
-    String languageCode = selection.substring(selection.indexOf("[") + 1, selection.length() - 1);    
-    return languageCode;
-  }
-  
-  private int getSelectedSpeechRate(){
-    Spinner rateComboBox = (Spinner) findViewById(R.id.rate);
-    int rateIndex = (int)rateComboBox.getSelectedItemId() + 1;
-    int rate = rateIndex * 46;
-    return rate;
-  }
-
-  @Override
-  protected void onDestroy() {
-    if (myTts != null){
-      myTts.shutdown();
-    }
-    editor.putBoolean(IS_CONFIG_MANAGER, false);
-    editor.commit();
-    super.onDestroy();
   }
 
   public class dataDownloader implements Runnable {
@@ -261,7 +109,7 @@ public class ConfigurationManager extends Activity {
       for (int i = 0; i < datafiles.length; i++) {
         File tempFile = new File(espeakDataDirStr + datafiles[i]);
         if (!tempFile.exists()) {
-          for (int j=0; j<datafiles.length; j++){
+          for (int j = 0; j < datafiles.length; j++) {
             File delFile = new File(espeakDataDirStr + datafiles[j]);
             delFile.delete();
           }
