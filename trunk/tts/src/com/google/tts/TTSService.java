@@ -204,10 +204,15 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     if (!ConfigurationManager.allFilesExist()) {
-      // Launch downloader here ?
+      // This should have been taken care of when the TTS is launched 
+      // by the check in the TTS.java wrapper.
       return false;
     }
-
+    clearScratchFiles();
+    return true;
+  }
+  
+  private void clearScratchFiles(){
     File scratchDir = new File(ESPEAK_SCRATCH_DIRECTORY);
     boolean directoryExists = scratchDir.isDirectory();
     if (directoryExists) {
@@ -218,8 +223,7 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       scratchDir.mkdir();
     }
-
-    return true;
+    cache = new HashMap<String, SoundResource>();    
   }
 
   /**
