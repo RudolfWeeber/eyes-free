@@ -265,6 +265,16 @@ public class AppSelectView extends View {
       y -= paint.ascent() / 2;
       canvas.drawText("Airplane", x, y, paint);
     }
+
+    // Put up a how to escape message so that 
+    // sighted users won't be trapped
+    y = 400;
+    y -= paint.ascent() / 2;
+    paint.setTextSize(18);
+    canvas.drawText("Hold the back button for 5 seconds", x, y, paint);
+    y = 440;
+    y -= paint.ascent() / 2;
+    canvas.drawText("to go to the regular home screen.", x, y, paint);
   }
 
   @Override
