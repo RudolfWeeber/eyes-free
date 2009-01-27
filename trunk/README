@@ -3,8 +3,12 @@
 * Introduction
 
 This directory contains source code for various eyes-free
-applications for the Android platform.
-It will also contain supporting code and libraries such as TTS.
+applications for the Android platform --- see
+[[http://www.nytimes.com/2009/01/04/business/04blind.html?pagewanted=1&_r=1&ref=business][For
+The Blind, Technology Does What A Guide Dog Can't]], NYTimes,
+January 4, 2009. It will also contain supporting code and
+libraries for services such as Text-To-Speech
+[[http://en.wikipedia.org/wiki/Speech_synthesis][(TTS)]].
 
 * Build Instructions
 
