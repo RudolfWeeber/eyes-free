@@ -45,9 +45,8 @@ public class SlideDialView extends TextView {
   private final double downleft = -Math.PI * .25;
   private final double right = Math.PI;
   private final double rightWrap = -Math.PI;
-  private final double deletionForce = 2.5;
+  private final double deletionForce = 2.8;
   private final int deletionCount = 2;
-  private final double tremorForce = 1.8;
 
   public SlideDial parent;
   private double downX;
@@ -61,8 +60,7 @@ public class SlideDialView extends TextView {
   private SensorManager sensorManager;
   int shakeCount = 0;
   boolean lastShakePositive = false;
-  int tremorCount = 0;
-  boolean lastTremorPositive = false;
+  private int shakeCountTimeout = 500;
 
   boolean screenIsBeingTouched = false;
   boolean screenVisible = true;
@@ -73,35 +71,18 @@ public class SlideDialView extends TextView {
   private final SensorListener mListener = new SensorListener() {
     public void onSensorChanged(int sensor, float[] values) {
       // Only try to process the accelerometer readings if the phone is flat
-      if (values[2] > -7){
-        return;
+      if (values[2] > -7) {
+   //     return;
       }
-      if (tremorCount < 10) {
-        if ((values[0] > deletionForce) && !lastShakePositive) {
-          shakeCount++;
-          lastShakePositive = true;
-        } else if ((values[0] < -deletionForce) && lastShakePositive) {
-          shakeCount++;
-          lastShakePositive = false;
-        } else if ((values[0] > (tremorForce)) && !lastTremorPositive) {
-          tremorCount++;
-          lastTremorPositive = true;
-        } else if ((values[0] < -tremorForce) && lastTremorPositive) {
-          tremorCount++;
-          lastTremorPositive = false;
-        }
-        // Debug sound
-        if (tremorCount > 9) {
-  //        parent.tts.speak("[honk]", 0, null);
-        }
-      } else {
-        if ((values[0] > (deletionForce * 2)) && !lastShakePositive) {
-          shakeCount++;
-          lastShakePositive = true;
-        } else if ((values[0] < (-deletionForce * 2)) && lastShakePositive) {
-          shakeCount++;
-          lastShakePositive = false;
-        }
+
+      if ((values[0] > deletionForce) && !lastShakePositive) {
+        (new Thread(new resetShakeCount())).start();
+        shakeCount++;
+        lastShakePositive = true;
+      } else if ((values[0] < -deletionForce) && lastShakePositive) {
+        (new Thread(new resetShakeCount())).start();
+        shakeCount++;
+        lastShakePositive = false;
       }
       if (shakeCount > deletionCount) {
         deleteNumber();
@@ -112,7 +93,19 @@ public class SlideDialView extends TextView {
     public void onAccuracyChanged(int arg0, int arg1) {
 
     }
+
+    class resetShakeCount implements Runnable {
+      public void run() {
+        try {
+          Thread.sleep(shakeCountTimeout);
+          shakeCount = 0;
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+    }
   };
+
 
   public void unregisterListeners() {
     sensorManager.unregisterListener(mListener);
@@ -134,7 +127,6 @@ public class SlideDialView extends TextView {
     screenVisible = true;
     screenIsBeingTouched = false;
     shakeCount = 0;
-    tremorCount = 0;
     lastShakePositive = false;
     sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
@@ -256,7 +248,7 @@ public class SlideDialView extends TextView {
       paint.setTextAlign(Paint.Align.LEFT);
       y -= paint.ascent() / 2;
       canvas.drawText("Press MENU for phonebook.", x, y, paint);
-      
+
       x = 5;
       y = getHeight() - 40;
       paint.setTextSize(20);
@@ -269,7 +261,7 @@ public class SlideDialView extends TextView {
       paint.setTextAlign(Paint.Align.LEFT);
       y -= paint.ascent() / 2;
       canvas.drawText("Press CALL twice to confirm.", x, y, paint);
-      
+
     } else if (screenIsBeingTouched) {
 
       int offset = 130;
@@ -417,7 +409,7 @@ public class SlideDialView extends TextView {
       case KeyEvent.KEYCODE_CALL:
         if (!confirmed) {
           parent.tts.speak("You are about to dial", 1, null);
-          for (int i=0; i<dialedNumber.length(); i++){
+          for (int i = 0; i < dialedNumber.length(); i++) {
             String digit = dialedNumber.charAt(i) + "";
             parent.tts.speak(digit, 1, null);
           }
@@ -457,23 +449,23 @@ public class SlideDialView extends TextView {
         break;
       case KeyEvent.KEYCODE_9:
         newNumberEntered = true;
-        break;  
+        break;
       case KeyEvent.KEYCODE_DEL:
         deleteNumber();
-        return true;  
+        return true;
     }
-    if (newNumberEntered){
+    if (newNumberEntered) {
       confirmed = false;
       KeyCharacterMap kmap = KeyCharacterMap.load(event.getDeviceId());
       currentValue = kmap.getNumber(keyCode) + "";
-      if ((currentValue.equals("3")) && (event.isAltPressed() || event.isShiftPressed())){
+      if ((currentValue.equals("3")) && (event.isAltPressed() || event.isShiftPressed())) {
         currentValue = "#";
-      } else if ((currentValue.equals("8")) && (event.isAltPressed() || event.isShiftPressed())){
+      } else if ((currentValue.equals("8")) && (event.isAltPressed() || event.isShiftPressed())) {
         currentValue = "*";
       }
       parent.tts.speak(currentValue, 0, null);
       dialedNumber = dialedNumber + currentValue;
-      invalidate();   
+      invalidate();
       return true;
     }
     confirmed = false;

@@ -20,6 +20,7 @@ import com.google.tts.TTS;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -49,8 +50,8 @@ public class SlideDial extends Activity {
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    // android.os.Debug.waitForDebugger();
-
+     android.os.Debug.waitForDebugger();
+    setVolumeControlStream(AudioManager.STREAM_MUSIC);
     tts = new TTS(this, ttsInitListener, true);
 
   }

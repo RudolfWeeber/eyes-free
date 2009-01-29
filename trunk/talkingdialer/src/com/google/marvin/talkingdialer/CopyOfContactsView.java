@@ -16,8 +16,6 @@
 
 package com.google.marvin.talkingdialer;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -25,7 +23,6 @@ import android.os.Vibrator;
 import android.provider.Contacts.PeopleColumns;
 import android.provider.Contacts.Phones;
 import android.provider.Contacts.PhonesColumns;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.TextView;
@@ -41,7 +38,7 @@ import android.widget.TextView;
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
-public class ContactsView extends TextView {
+public class CopyOfContactsView extends TextView {
   private static final long[] PATTERN = {0, 1, 40, 41};
   private static final int NAME = 0;
   private static final int NUMBER = 1;
@@ -53,16 +50,13 @@ public class ContactsView extends TextView {
           PeopleColumns.CUSTOM_RINGTONE,};
 
   private SlideDial parent;
-  
   private Cursor managedCursor;
-  private FilterableContactsList filteredContacts;
-  
   private float downY;
   private float startY;
   private boolean confirmed;
   private Vibrator vibe;
 
-  public ContactsView(Context context) {
+  public CopyOfContactsView(Context context) {
     super(context);
 
     parent = ((SlideDial) context);
@@ -84,48 +78,25 @@ public class ContactsView extends TextView {
         null, // no selection args
         PeopleColumns.NAME + " ASC"); // Order-by clause.
 
-    boolean moveSucceeded = managedCursor.moveToFirst();
-    ArrayList<String> contactNames = new ArrayList<String>();
-    while (moveSucceeded){
-      contactNames.add(managedCursor.getString(NAME));
-      moveSucceeded = managedCursor.moveToNext();
-    }
-    filteredContacts = new FilterableContactsList(contactNames);
-        
+    managedCursor.moveToFirst();
     requestFocus();
   }
 
-  @Override
-  public boolean onTrackballEvent(MotionEvent event) {
-    Log.i("Motion", Float.toString(event.getY()));
-    if (event.getY() > .3){
-      nextContact();
-    }
-    if (event.getY() < -.3){
-      prevContact();
-    }
-    
-    return true;
-  }
 
   private void nextContact() {
-    ContactEntry entry = filteredContacts.next();
-    if (entry == null){
-      // Error message here
-      return;
+    boolean moveSucceeded = managedCursor.moveToNext();
+    if (!moveSucceeded) {
+      managedCursor.moveToFirst();
     }
-    managedCursor.moveToPosition(entry.index);
     vibe.vibrate(PATTERN, -1);
     speakCurrentContact(true);
   }
 
   private void prevContact() {
-    ContactEntry entry = filteredContacts.previous();
-    if (entry == null){
-      // Error message here
-      return;
+    boolean moveSucceeded = managedCursor.moveToPrevious();
+    if (!moveSucceeded) {
+      managedCursor.moveToLast();
     }
-    managedCursor.moveToPosition(entry.index);
     vibe.vibrate(PATTERN, -1);
     speakCurrentContact(true);
   }
