@@ -24,6 +24,7 @@ import android.graphics.Typeface;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Vibrator;
+import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -237,17 +238,38 @@ public class SlideDialView extends TextView {
 
     if (!screenIsBeingTouched) {
       int x = getWidth() / 2;
-      int y = getHeight() / 2;
+      int y = (getHeight() / 2) - 35;
       paint.setTextSize(400);
       y -= paint.ascent() / 2;
       canvas.drawText(currentValue, x, y, paint);
 
       x = 5;
-      y = 50;
+      y = 30;
       paint.setTextSize(50);
       paint.setTextAlign(Paint.Align.LEFT);
       y -= paint.ascent() / 2;
       canvas.drawText(dialedNumber, x, y, paint);
+
+      x = 5;
+      y = getHeight() - 60;
+      paint.setTextSize(20);
+      paint.setTextAlign(Paint.Align.LEFT);
+      y -= paint.ascent() / 2;
+      canvas.drawText("Press MENU for phonebook.", x, y, paint);
+      
+      x = 5;
+      y = getHeight() - 40;
+      paint.setTextSize(20);
+      paint.setTextAlign(Paint.Align.LEFT);
+      y -= paint.ascent() / 2;
+      canvas.drawText("Stroke the screen to dial.", x, y, paint);
+      x = 5;
+      y = getHeight() - 20;
+      paint.setTextSize(20);
+      paint.setTextAlign(Paint.Align.LEFT);
+      y -= paint.ascent() / 2;
+      canvas.drawText("Press CALL twice to confirm.", x, y, paint);
+      
     } else if (screenIsBeingTouched) {
 
       int offset = 130;
@@ -386,6 +408,7 @@ public class SlideDialView extends TextView {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
+    boolean newNumberEntered = false;
     switch (keyCode) {
       case KeyEvent.KEYCODE_MENU:
         parent.switchToContactsView();
@@ -404,6 +427,54 @@ public class SlideDialView extends TextView {
           parent.returnResults(dialedNumber);
           return true;
         }
+
+      case KeyEvent.KEYCODE_0:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_1:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_2:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_3:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_4:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_5:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_6:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_7:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_8:
+        newNumberEntered = true;
+        break;
+      case KeyEvent.KEYCODE_9:
+        newNumberEntered = true;
+        break;  
+      case KeyEvent.KEYCODE_DEL:
+        deleteNumber();
+        return true;  
+    }
+    if (newNumberEntered){
+      confirmed = false;
+      KeyCharacterMap kmap = KeyCharacterMap.load(event.getDeviceId());
+      currentValue = kmap.getNumber(keyCode) + "";
+      if ((currentValue.equals("3")) && (event.isAltPressed() || event.isShiftPressed())){
+        currentValue = "#";
+      } else if ((currentValue.equals("8")) && (event.isAltPressed() || event.isShiftPressed())){
+        currentValue = "*";
+      }
+      parent.tts.speak(currentValue, 0, null);
+      dialedNumber = dialedNumber + currentValue;
+      invalidate();   
+      return true;
     }
     confirmed = false;
     return false;
@@ -424,6 +495,7 @@ public class SlideDialView extends TextView {
     } else {
       parent.tts.speak("Nothing to delete", 0, null);
     }
+    currentValue = "";
     invalidate();
   }
 
