@@ -46,9 +46,9 @@ public class TalkingDialer extends Activity {
         finish();
         return;
       }
-      String dataStr = data.getData().toString();
-      String phoneNumber = Uri.decode(dataStr);
-      Uri phoneNumberURI = Uri.parse("tel:" + phoneNumber);
+      String phoneNumber = data.getStringExtra("number");
+      Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode(phoneNumber));
+
       Intent intent = new Intent(Intent.ACTION_CALL, phoneNumberURI);
       startActivity(intent);
       finish();

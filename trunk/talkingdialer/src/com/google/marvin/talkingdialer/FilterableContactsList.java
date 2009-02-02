@@ -43,11 +43,13 @@ public class FilterableContactsList {
   public boolean filter(String partialName) {
     filteredList = (ArrayList<ContactEntry>) fullList.clone();
     filteredListIter = filteredList.listIterator();
-    if (partialName.length() > 1) {
+    if (partialName.length() > 0) {
+      String lcPN = partialName.toLowerCase();
       filteredList = new ArrayList<ContactEntry>();
       for (int i = 0; i < fullList.size(); i++) {
         ContactEntry entry = fullList.get(i);
-        if (entry.name.startsWith(partialName)) {
+        String lcName = entry.name.toLowerCase();
+        if (lcName.startsWith(lcPN)) {
           filteredList.add(entry);
         }
       }

@@ -50,7 +50,7 @@ public class SlideDial extends Activity {
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-     android.os.Debug.waitForDebugger();
+  //   android.os.Debug.waitForDebugger();
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     tts = new TTS(this, ttsInitListener, true);
 
@@ -76,10 +76,9 @@ public class SlideDial extends Activity {
   };
 
   public void returnResults(String dialedNumber) {
-    dialedNumber = dialedNumber.replaceAll("\\D+", "");
-    Uri myData = Uri.parse(Uri.encode(dialedNumber));
+    dialedNumber = dialedNumber.replaceAll("[^0-9*#,;]", "");
     Intent dummyIntent = new Intent();
-    dummyIntent.setData(myData);
+    dummyIntent.putExtra("number", dialedNumber);
     setResult(RESULT_OK, dummyIntent);
     finish();
   }
