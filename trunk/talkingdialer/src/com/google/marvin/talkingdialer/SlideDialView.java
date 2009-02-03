@@ -262,7 +262,7 @@ public class SlideDialView extends TextView {
       y -= paint.ascent() / 2;
       canvas.drawText("Press CALL twice to confirm.", x, y, paint);
 
-    } else if (screenIsBeingTouched) {
+    } else {
 
       int offset = 130;
       int regSize = 100;

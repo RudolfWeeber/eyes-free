@@ -81,7 +81,6 @@ public class ContactsView extends TextView {
 
   private Cursor managedCursor;
   private FilterableContactsList filteredContacts;
-  //private String filterString;
 
   private boolean confirmed;
 
@@ -96,28 +95,25 @@ public class ContactsView extends TextView {
   private int currentWheel;
   private String currentCharacter;
   private String currentString;
+  private String currentContact;
 
 
   private SensorManager sensorManager;
-  int shakeCount = 0;
-  boolean lastShakePositive = false;
-  private int shakeCountTimeout = 500;
 
-  private boolean screenVisible = true;
-  private boolean justConfirmed;
-  
+
+  private int trackballTimeout = 500;
+  private boolean trackballEnabled = true;
 
 
   /**
    * Handles the sensor events for changes to readings and accuracy
    */
   private final SensorListener mListener = new SensorListener() {
-    public void onSensorChanged(int sensor, float[] values) {
-      // Only try to process the accelerometer readings if the phone is flat
-      if (values[2] > -7) {
-   //     return;
-      }
+    int shakeCount = 0;
+    boolean lastShakePositive = false;
+    private int shakeCountTimeout = 500;
 
+    public void onSensorChanged(int sensor, float[] values) {
       if ((values[0] > deletionForce) && !lastShakePositive) {
         (new Thread(new resetShakeCount())).start();
         shakeCount++;
@@ -134,7 +130,6 @@ public class ContactsView extends TextView {
     }
 
     public void onAccuracyChanged(int arg0, int arg1) {
-
     }
 
     class resetShakeCount implements Runnable {
@@ -160,10 +155,6 @@ public class ContactsView extends TextView {
 
     vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
-    setClickable(true);
-    setFocusable(true);
-    setFocusableInTouchMode(true);
-
     // Get the base URI for People table in Contacts content provider.
     // ie. content://contacts/people/
     Uri mContacts = Phones.CONTENT_URI;
@@ -174,7 +165,6 @@ public class ContactsView extends TextView {
         null, // WHERE clause--we won't specify.
         null, // no selection args
         PeopleColumns.NAME + " ASC"); // Order-by clause.
-
     boolean moveSucceeded = managedCursor.moveToFirst();
     ArrayList<String> contactNames = new ArrayList<String>();
     while (moveSucceeded) {
@@ -182,26 +172,22 @@ public class ContactsView extends TextView {
       moveSucceeded = managedCursor.moveToNext();
     }
     filteredContacts = new FilterableContactsList(contactNames);
-
-
     currentString = "";
+    currentContact = "";
 
+    setClickable(true);
+    setFocusable(true);
+    setFocusableInTouchMode(true);
     requestFocus();
-    
-    screenVisible = true;
-    screenIsBeingTouched = false;
-    shakeCount = 0;
-    lastShakePositive = false;
+
     sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
         SensorManager.SENSOR_DELAY_FASTEST);
   }
 
-  
-  
   @Override
   public boolean onTrackballEvent(MotionEvent event) {
-    if (trackballEnabled == false){
+    if (trackballEnabled == false) {
       return true;
     }
     Log.i("Motion", Float.toString(event.getY()));
@@ -217,10 +203,7 @@ public class ContactsView extends TextView {
     }
     return true;
   }
-  
-  private int trackballTimeout = 500;
-  private boolean trackballEnabled = true;
-  
+
   class trackballTimeout implements Runnable {
     public void run() {
       try {
@@ -281,8 +264,8 @@ public class ContactsView extends TextView {
     if (type.length() > 0) {
       parent.tts.speak(type, 1, null);
     }
-    setTextSize(80);
-    setText(name + "\n" + type);
+    currentContact = name + " " + type;
+    invalidate();
   }
 
   private void dialActionHandler() {
@@ -294,7 +277,6 @@ public class ContactsView extends TextView {
       parent.returnResults(managedCursor.getString(NUMBER));
     }
   }
-
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -394,8 +376,6 @@ public class ContactsView extends TextView {
     return false;
   }
 
-
-
   private void confirmEntry() {
     screenIsBeingTouched = false;
     int prevVal = currentValue;
@@ -418,7 +398,8 @@ public class ContactsView extends TextView {
       currentString = currentString + currentCharacter;
     }
     parent.tts.speak(currentCharacter, 0, null);
-    justConfirmed = true;
+    currentContact = "";
+
     invalidate();
     initiateMotion(lastX, lastY);
 
@@ -436,7 +417,6 @@ public class ContactsView extends TextView {
     currentWheel = NONE;
     currentCharacter = "";
   }
-
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
@@ -478,12 +458,12 @@ public class ContactsView extends TextView {
           String[] params = new String[1];
           params[0] = TTSParams.VOICE_FEMALE.toString();
           parent.tts.speak(currentCharacter, 0, params);
-          }
         }
-        vibe.vibrate(PATTERN, -1);
       }
-      return true;
+      vibe.vibrate(PATTERN, -1);
     }
+    return true;
+  }
 
   public int getWheel(int value) {
     switch (value) {
@@ -609,7 +589,6 @@ public class ContactsView extends TextView {
     }
   }
 
-
   public int evalMotion(double x, double y) {
     float rTolerance = 25;
     double thetaTolerance = (Math.PI / 16);
@@ -660,9 +639,41 @@ public class ContactsView extends TextView {
     paint.setTextSize(50);
     paint.setTextAlign(Paint.Align.LEFT);
     y -= paint.ascent() / 2;
+
     canvas.drawText(currentString, x, y, paint);
 
-    if (screenIsBeingTouched) {
+    if (currentContact.length() > 0) {
+      y = 140;
+      paint.setTextSize(45);
+      String[] lines = currentContact.split(" ");
+      for (int i = 0; i < lines.length; i++) {
+        canvas.drawText(lines[i], x, y + (i * 45), paint);
+      }
+    }
+    paint.setTextSize(50);
+
+    if (!screenIsBeingTouched) {
+      x = 5;
+      y = getHeight() - 60;
+      paint.setTextSize(20);
+      paint.setTextAlign(Paint.Align.LEFT);
+      y -= paint.ascent() / 2;
+      canvas.drawText("Press MENU for dialing mode.", x, y, paint);
+
+      x = 5;
+      y = getHeight() - 40;
+      paint.setTextSize(20);
+      paint.setTextAlign(Paint.Align.LEFT);
+      y -= paint.ascent() / 2;
+      canvas.drawText("Scroll contacts with trackball.", x, y, paint);
+
+      x = 5;
+      y = getHeight() - 20;
+      paint.setTextSize(20);
+      paint.setTextAlign(Paint.Align.LEFT);
+      y -= paint.ascent() / 2;
+      canvas.drawText("Press CALL twice to confirm.", x, y, paint);
+    } else {
       int offset = 90;
       int regSize = 50;
       int selectedSize = regSize * 2;
@@ -779,6 +790,10 @@ public class ContactsView extends TextView {
       parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
     } else {
       parent.tts.speak("Nothing to delete", 0, null);
+    }
+    if (currentString.length() > 0){
+      filteredContacts.filter(currentString);
+      jumpToFirstFilteredResult();
     }
     invalidate();
   }
