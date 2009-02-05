@@ -21,7 +21,6 @@ import com.google.tts.TTS;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -84,27 +83,31 @@ public class SlideDial extends Activity {
   }
 
   public void switchToContactsView() {
-    if (contactsView != null) {
-      contactsView.setVisibility(View.GONE);
-    }
-    if (mView != null) {
-      mView.unregisterListeners();
-      mView.setVisibility(View.GONE);
-      mView = null;
-    }
+    removeViews();
     contactsView = new ContactsView(this);
     setContentView(contactsView);
     tts.speak("Phonebook", 0, null);
   }
 
   public void switchToDialingView() {
-    if (mView != null) {
-      mView.setVisibility(View.GONE);
-    }
+    removeViews();
     mView = new SlideDialView(this);
     mView.parent = this;
     setContentView(mView);
     tts.speak("Dialing mode", 0, null);
+  }
+  
+  public void removeViews(){
+    if (contactsView != null) {
+      contactsView.unregisterListeners();
+      contactsView.setVisibility(View.GONE);
+      contactsView = null;
+    }
+    if (mView != null) {
+      mView.unregisterListeners();
+      mView.setVisibility(View.GONE);
+      mView = null;
+    }
   }
 
 
@@ -115,12 +118,8 @@ public class SlideDial extends Activity {
 
   @Override
   public void onStop() {
+    removeViews();
     super.onStop();
-    if (mView != null) {
-      mView.unregisterListeners();
-      mView.setVisibility(View.GONE);
-      mView = null;
-    }
   }
 
   @Override

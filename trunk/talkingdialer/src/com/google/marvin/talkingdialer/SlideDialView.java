@@ -58,9 +58,6 @@ public class SlideDialView extends TextView {
   private boolean confirmed;
 
   private SensorManager sensorManager;
-  int shakeCount = 0;
-  boolean lastShakePositive = false;
-  private int shakeCountTimeout = 500;
 
   boolean screenIsBeingTouched = false;
   boolean screenVisible = true;
@@ -69,12 +66,11 @@ public class SlideDialView extends TextView {
    * Handles the sensor events for changes to readings and accuracy
    */
   private final SensorListener mListener = new SensorListener() {
+    int shakeCount = 0;
+    boolean lastShakePositive = false;
+    private int shakeCountTimeout = 500;
+    
     public void onSensorChanged(int sensor, float[] values) {
-      // Only try to process the accelerometer readings if the phone is flat
-      if (values[2] > -7) {
-   //     return;
-      }
-
       if ((values[0] > deletionForce) && !lastShakePositive) {
         (new Thread(new resetShakeCount())).start();
         shakeCount++;
@@ -126,8 +122,6 @@ public class SlideDialView extends TextView {
     requestFocus();
     screenVisible = true;
     screenIsBeingTouched = false;
-    shakeCount = 0;
-    lastShakePositive = false;
     sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
         SensorManager.SENSOR_DELAY_FASTEST);
@@ -179,7 +173,6 @@ public class SlideDialView extends TextView {
     return true;
   }
 
-
   public String evalMotion(double x, double y) {
     float rTolerance = 25;
     double thetaTolerance = (Math.PI / 12);
@@ -219,7 +212,6 @@ public class SlideDialView extends TextView {
     // Off by more than the threshold, so it doesn't count
     return "";
   }
-
 
   @Override
   public void onDraw(Canvas canvas) {
@@ -396,8 +388,6 @@ public class SlideDialView extends TextView {
     }
   }
 
-
-
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     boolean newNumberEntered = false;
@@ -499,7 +489,4 @@ public class SlideDialView extends TextView {
       screenVisible = false;
     }
   }
-
-
-
 }

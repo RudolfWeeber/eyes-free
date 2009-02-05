@@ -791,7 +791,7 @@ public class ContactsView extends TextView {
     } else {
       parent.tts.speak("Nothing to delete", 0, null);
     }
-    if (currentString.length() > 0){
+    if (currentString.length() > 0) {
       filteredContacts.filter(currentString);
       jumpToFirstFilteredResult();
     }

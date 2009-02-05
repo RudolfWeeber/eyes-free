@@ -6,17 +6,16 @@ import java.util.ListIterator;
 public class FilterableContactsList {
   private ArrayList<ContactEntry> fullList;
   private ArrayList<ContactEntry> filteredList;
-  private String filterString;
   private ListIterator<ContactEntry> filteredListIter;
 
 
+  @SuppressWarnings("unchecked")
   public FilterableContactsList(ArrayList<String> names) {
     fullList = new ArrayList<ContactEntry>();
     for (int i = 0; i < names.size(); i++) {
       fullList.add(new ContactEntry(names.get(i), i));
     }
     filteredList = (ArrayList<ContactEntry>) fullList.clone();
-    filterString = "";
     filteredListIter = filteredList.listIterator();
   }
   
@@ -40,6 +39,7 @@ public class FilterableContactsList {
     return filteredListIter.previous();
   }
 
+  @SuppressWarnings("unchecked")
   public boolean filter(String partialName) {
     filteredList = (ArrayList<ContactEntry>) fullList.clone();
     filteredListIter = filteredList.listIterator();
