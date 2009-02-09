@@ -392,9 +392,13 @@ public class ContactsView extends TextView {
     currentCharacter = getCharacter(currentWheel, currentValue);
     if (currentCharacter.equals("SPACE")) {
       currentString = currentString + " ";
-    } else if (currentCharacter.equals("MODE")) {
+    }
+    /*
+    else if (currentCharacter.equals("MODE")) {
       // Do nothing
-    } else {
+    } 
+    */
+    else {
       currentString = currentString + currentCharacter;
     }
     parent.tts.speak(currentCharacter, 0, null);
@@ -568,7 +572,7 @@ public class ContactsView extends TextView {
           case 2:
             return "!";
           case 3:
-            return "MODE";
+            return ""; // return "MODE";
           case 4:
             return "SPACE";
           case 5:
@@ -743,7 +747,7 @@ public class ContactsView extends TextView {
           paint.setColor(Color.YELLOW);
           drawCharacter(",", x1, y1, canvas, paint, currentCharacter.equals(","));
           drawCharacter("!", x2, y2, canvas, paint, currentCharacter.equals("!"));
-          drawCharacter("MODE", x3, y3, canvas, paint, currentCharacter.equals("MODE"));
+         // drawCharacter("MODE", x3, y3, canvas, paint, currentCharacter.equals("MODE"));
           drawCharacter("SPACE", x4, y4, canvas, paint, currentCharacter.equals("SPACE"));
           drawCharacter("Y", x6, y6, canvas, paint, currentCharacter.equals("Y"));
           drawCharacter(".", x7, y7, canvas, paint, currentCharacter.equals("."));
