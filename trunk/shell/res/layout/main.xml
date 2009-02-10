@@ -1,12 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
-</LinearLayout>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent" 
+  android:layout_height="fill_parent"
+  android:id="@+id/mainFrameLayout">
+  
+  <RelativeLayout android:orientation="horizontal"
+    android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:layout_gravity="center">
+    
+    <TextView
+      android:id="@+id/statusText" 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+      android:textSize="30px"
+      android:textColor="#ffffff"
+      android:text=" " />
+    
+    <TextView
+      android:id="@+id/mainText" 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" android:layout_centerHorizontal="true"
+      android:layout_centerVertical="true" android:textSize="50px"
+      android:textColor="#ffffff"
+      android:textStyle="bold"
+      android:text="Home" />
+      
+      
+    <AbsoluteLayout android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+      <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="10px"
+        android:layout_y="390px"
+        android:textSize="16px"
+        android:textColor="#ffffff"
+        android:text="Stroke the screen to start applications." />
+      <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="10px"
+        android:layout_y="430px"
+        android:textSize="18px"
+        android:textColor="#ffffff"
+        android:text="Hold the BACK button for 5 seconds" />
+      <TextView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="10px"
+        android:layout_y="450px"
+        android:textSize="18px"
+        android:textColor="#ffffff"
+        android:text="to go to the regular home screen." />       
+    </AbsoluteLayout>
+    
+  </RelativeLayout>
+</FrameLayout>

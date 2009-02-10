@@ -22,13 +22,13 @@ package com.google.marvin.shell;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class MenuItem {
-  public String title;
-  public String packageName;
-  public String className;
+  public String label;
+  public String action;
+  public String data;
 
-  public MenuItem(String appTitle, String packagename, String classname) {
-    title = appTitle;
-    packageName = packagename;
-    className = classname;
+  public MenuItem(String itemLabel, String itemAction, String itemData) {
+    label = itemLabel;
+    action = itemAction;
+    data = itemData;
   }
 }
