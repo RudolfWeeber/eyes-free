@@ -63,40 +63,40 @@ public class AuditoryWidgets {
     String monthStr = "";
     switch (month) {
       case Calendar.JANUARY:
-        monthStr = "January";
+        monthStr = parent.getString(R.string.january);
         break;
       case Calendar.FEBRUARY:
-        monthStr = "February";
+        monthStr = parent.getString(R.string.february);
         break;
       case Calendar.MARCH:
-        monthStr = "March";
+        monthStr = parent.getString(R.string.march);
         break;
       case Calendar.APRIL:
-        monthStr = "April";
+        monthStr = parent.getString(R.string.april);
         break;
       case Calendar.MAY:
-        monthStr = "May";
+        monthStr = parent.getString(R.string.may);
         break;
       case Calendar.JUNE:
-        monthStr = "June";
+        monthStr = parent.getString(R.string.june);
         break;
       case Calendar.JULY:
-        monthStr = "July";
+        monthStr = parent.getString(R.string.july);
         break;
       case Calendar.AUGUST:
-        monthStr = "August";
+        monthStr = parent.getString(R.string.august);
         break;
       case Calendar.SEPTEMBER:
-        monthStr = "September";
+        monthStr = parent.getString(R.string.september);
         break;
       case Calendar.OCTOBER:
-        monthStr = "October";
+        monthStr = parent.getString(R.string.october);
         break;
       case Calendar.NOVEMBER:
-        monthStr = "November";
+        monthStr = parent.getString(R.string.november);
         break;
       case Calendar.DECEMBER:
-        monthStr = "December";
+        monthStr = parent.getString(R.string.december);
         break;
     }
     tts.speak(monthStr, 0, null);
@@ -112,15 +112,15 @@ public class AuditoryWidgets {
     int minutes = cal.get(Calendar.MINUTE);
     String ampm = "";
     if (hour == 0) {
-      ampm = "midnight";
+      ampm = parent.getString(R.string.midnight);
       hour = 12;
     } else if (hour == 12) {
-      ampm = "noon";
+      ampm = parent.getString(R.string.noon);
     } else if (hour > 12) {
       hour = hour - 12;
-      ampm = "PM";
+      ampm = parent.getString(R.string.pm);
     } else {
-      ampm = "AM";
+      ampm = parent.getString(R.string.am);
     }
     tts.speak(Integer.toString(hour), 0, null);
     tts.speak("[slnc]", 1, null);
@@ -136,9 +136,9 @@ public class AuditoryWidgets {
   public void toggleAirplaneMode() {
     boolean setAirPlaneMode = !airplaneModeEnabled();
     if (!setAirPlaneMode) {
-      tts.speak("disabled", 1, null);
+      tts.speak(parent.getString(R.string.disabled), 1, null);
     } else {
-      tts.speak("enabled", 1, null);
+      tts.speak(parent.getString(R.string.enabled), 1, null);
     }
     Settings.System.putInt(parent.getContentResolver(), Settings.System.AIRPLANE_MODE_ON,
         setAirPlaneMode ? 1 : 0);

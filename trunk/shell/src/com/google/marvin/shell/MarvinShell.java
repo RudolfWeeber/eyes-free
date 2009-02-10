@@ -90,7 +90,7 @@ public class MarvinShell extends Activity implements GestureListener {
       super.onResume();
       return;
     }
-    tts.speak("Press menu to unlock", 0, null);
+    tts.speak(getString(R.string.press_menu_to_unlock), 0, null);
     super.onResume();
   }
 
@@ -99,12 +99,12 @@ public class MarvinShell extends Activity implements GestureListener {
   public void onWindowFocusChanged(boolean hasFocus) {
     isFocused = hasFocus;
     if (hasFocus && (gestureOverlay != null)) {
-      String message = "Home";
+      String message = getString(R.string.home);
       updateStatusText();
       if (widgets.airplaneModeEnabled()) {
-        message = "Airplane mode";
+        message = getString(R.string.airplane_mode);
       } else if (messageWaiting) {
-        message = "You have new voice mail.";
+        message = getString(R.string.you_have_new_voicemail);
       }
       tts.speak(message, 0, null);
     }
@@ -121,42 +121,42 @@ public class MarvinShell extends Activity implements GestureListener {
     tts.setEngine(TTSEngine.PRERECORDED_WITH_ESPEAK);
 
     String pkgName = MarvinShell.class.getPackage().getName();
-    tts.addSpeech("[marvin intro]", pkgName, R.raw.marvin_intro);
-    tts.addSpeech("Home", pkgName, R.raw.home);
-    tts.addSpeech("Press menu to unlock", pkgName, R.raw.press_menu_to_unlock);
-    tts.addSpeech("Compass", pkgName, R.raw.compass);
-    tts.addSpeech("Make a call", pkgName, R.raw.make_a_call);
-    tts.addSpeech("Battery", pkgName, R.raw.battery);
-    tts.addSpeech("Text input", pkgName, R.raw.text_input);
-    tts.addSpeech("Android Says", pkgName, R.raw.android_says);
-    tts.addSpeech("Application not installed.", pkgName, R.raw.application_not_installed);
-    tts.addSpeech("January", pkgName, R.raw.january);
-    tts.addSpeech("February", pkgName, R.raw.february);
-    tts.addSpeech("March", pkgName, R.raw.march);
-    tts.addSpeech("April", pkgName, R.raw.april);
-    tts.addSpeech("May", pkgName, R.raw.may);
-    tts.addSpeech("June", pkgName, R.raw.june);
-    tts.addSpeech("July", pkgName, R.raw.july);
-    tts.addSpeech("August", pkgName, R.raw.august);
-    tts.addSpeech("September", pkgName, R.raw.september);
-    tts.addSpeech("October", pkgName, R.raw.october);
-    tts.addSpeech("November", pkgName, R.raw.november);
-    tts.addSpeech("December", pkgName, R.raw.december);
-    tts.addSpeech("midnight", pkgName, R.raw.midnight);
-    tts.addSpeech("noon", pkgName, R.raw.noon);
-    tts.addSpeech("AM", pkgName, R.raw.am);
-    tts.addSpeech("PM", pkgName, R.raw.pm);
-    tts.addSpeech("Airplane Mode", pkgName, R.raw.airplane_mode);
-    tts.addSpeech("enabled", pkgName, R.raw.enabled);
-    tts.addSpeech("disabled", pkgName, R.raw.disabled);
-    tts.addSpeech("Camera", pkgName, R.raw.camera);
-    tts.addSpeech("Weather", pkgName, R.raw.weather);
+    tts.addSpeech(getString(R.string.marvin_intro_snd_), pkgName, R.raw.marvin_intro);
+    tts.addSpeech(getString(R.string.home), pkgName, R.raw.home);
+    tts.addSpeech(getString(R.string.press_menu_to_unlock), pkgName, R.raw.press_menu_to_unlock);
+    tts.addSpeech(getString(R.string.compass), pkgName, R.raw.compass);
+    tts.addSpeech(getString(R.string.battery), pkgName, R.raw.battery);
+    tts.addSpeech(getString(R.string.application_not_installed), pkgName, R.raw.application_not_installed);
+    tts.addSpeech(getString(R.string.january), pkgName, R.raw.january);
+    tts.addSpeech(getString(R.string.february), pkgName, R.raw.february);
+    tts.addSpeech(getString(R.string.march), pkgName, R.raw.march);
+    tts.addSpeech(getString(R.string.april), pkgName, R.raw.april);
+    tts.addSpeech(getString(R.string.may), pkgName, R.raw.may);
+    tts.addSpeech(getString(R.string.june), pkgName, R.raw.june);
+    tts.addSpeech(getString(R.string.july), pkgName, R.raw.july);
+    tts.addSpeech(getString(R.string.august), pkgName, R.raw.august);
+    tts.addSpeech(getString(R.string.september), pkgName, R.raw.september);
+    tts.addSpeech(getString(R.string.october), pkgName, R.raw.october);
+    tts.addSpeech(getString(R.string.november), pkgName, R.raw.november);
+    tts.addSpeech(getString(R.string.december), pkgName, R.raw.december);
+    tts.addSpeech(getString(R.string.midnight), pkgName, R.raw.midnight);
+    tts.addSpeech(getString(R.string.noon), pkgName, R.raw.noon);
+    tts.addSpeech(getString(R.string.am), pkgName, R.raw.am);
+    tts.addSpeech(getString(R.string.pm), pkgName, R.raw.pm);
+    tts.addSpeech(getString(R.string.airplane_mode), pkgName, R.raw.airplane_mode);
+    tts.addSpeech(getString(R.string.enabled), pkgName, R.raw.enabled);
+    tts.addSpeech(getString(R.string.disabled), pkgName, R.raw.disabled);
+    tts.addSpeech(getString(R.string.camera), pkgName, R.raw.camera);
+    tts.addSpeech(getString(R.string.weather), pkgName, R.raw.weather);
+    tts.addSpeech(getString(R.string.applications), pkgName, R.raw.applications);
+    tts.addSpeech(getString(R.string.you_have_new_voicemail), pkgName, R.raw.you_have_new_voicemail);
+    tts.addSpeech(getString(R.string.voicemail), pkgName, R.raw.voicemail);
   }
 
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
       resetTTS();
-      tts.speak("[marvin intro]", 0, null);
+      tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
 
       setContentView(R.layout.main);
       widgets = new AuditoryWidgets(tts, self);
@@ -177,16 +177,16 @@ public class MarvinShell extends Activity implements GestureListener {
   private void loadItems(){
     items = new HashMap<Gesture, MenuItem>();
     
-    items.put(Gesture.UPLEFT, new MenuItem("Airplane Mode", "WIDGET", "AIRPLANE_MODE_TOGGLE"));
-    items.put(Gesture.UP, new MenuItem("Time & Date", "WIDGET", "TIME_DATE"));
-    items.put(Gesture.UPRIGHT, new MenuItem("Battery", "WIDGET", "BATTERY"));
+    items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.airplane_mode), "WIDGET", "AIRPLANE_MODE_TOGGLE"));
+    items.put(Gesture.UP, new MenuItem(getString(R.string.time_and_date), "WIDGET", "TIME_DATE"));
+    items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY"));
     
-    items.put(Gesture.LEFT, new MenuItem("Applications", "LOAD", "apps.xml"));
-    items.put(Gesture.RIGHT, new MenuItem("Voicemail", "WIDGET", "VOICEMAIL"));
+    items.put(Gesture.LEFT, new MenuItem(getString(R.string.applications), "LOAD", "apps.xml"));
+    items.put(Gesture.RIGHT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL"));
     
-    items.put(Gesture.DOWNLEFT, new MenuItem("Weather", "WIDGET", "WEATHER"));
-    items.put(Gesture.DOWN, new MenuItem("Compass", "LAUNCH", "com.google.marvin.compass.TalkingCompass"));
-    items.put(Gesture.DOWNRIGHT, new MenuItem("Camera", "LAUNCH", "com.android.camera.Camera"));
+    items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.weather), "WIDGET", "WEATHER"));
+    items.put(Gesture.DOWN, new MenuItem(getString(R.string.compass), "LAUNCH", "com.google.marvin.compass.TalkingCompass"));
+    items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.camera), "LAUNCH", "com.android.camera.Camera"));
   }
   
   private void launchApplication(String launchData){
@@ -205,17 +205,17 @@ public class MarvinShell extends Activity implements GestureListener {
 
       startActivity(intent);
     } catch (NameNotFoundException e) {
-      tts.speak("Application not installed.", 0, null);
+      tts.speak(getString(R.string.application_not_installed), 0, null);
       e.printStackTrace();
     } catch (ClassNotFoundException e) {
-      tts.speak("Application not installed.", 0, null);
+      tts.speak(getString(R.string.application_not_installed), 0, null);
       e.printStackTrace();
     }
   }
   
   private void updateStatusText(){
     if (widgets.airplaneModeEnabled()) {
-      statusText.setText("Airplane mode");
+      statusText.setText(getString(R.string.airplane_mode));
     } else {
       statusText.setText("");
     }
@@ -243,10 +243,12 @@ public class MarvinShell extends Activity implements GestureListener {
     if (item != null){
       String label = item.label;
       mainText.setText(label);
-      if (label.equals("Time & Date")){
+      if (label.equals(getString(R.string.time_and_date))){
         widgets.announceTime();
-      } else {
-        tts.speak(label, 0, null);        
+      } else if (label.equals(getString(R.string.voicemail)) && messageWaiting){
+        tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
+      } else{
+        tts.speak(label, 0, null);
       }
     } else {
       tts.speak("[tock]", 0, null);
@@ -266,7 +268,7 @@ public class MarvinShell extends Activity implements GestureListener {
         
       }
     }
-    mainText.setText("Home");
+    mainText.setText(getString(R.string.home));
   }
 
   public void onGestureStart(Gesture g) {
@@ -280,9 +282,9 @@ public class MarvinShell extends Activity implements GestureListener {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     switch (keyCode) {
       case KeyEvent.KEYCODE_MENU:
-        String message = "Home";
+        String message = getString(R.string.home);
         if (widgets.airplaneModeEnabled()) {
-          message = "Airplane mode";
+          message = getString(R.string.airplane_mode);
         }
         tts.speak(message, 0, null);
         return true;
