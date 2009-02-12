@@ -20,6 +20,8 @@ import com.google.marvin.shell.TouchGestureControlOverlay.GestureListener;
 import com.google.tts.TTS;
 import com.google.tts.TTSEngine;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -48,6 +50,15 @@ public class MarvinShell extends Activity implements GestureListener {
   private MarvinShell self;
   private AuditoryWidgets widgets;
   private HashMap<Gesture, MenuItem> items;
+  private ArrayList<Menu> menus;
+
+  /*
+   * Set the isReturningFromTask in the onRestart method to distinguish between
+   * a regular restart (returning to the Eyes-Free Shell after the launched
+   * application has stopped) and starting fresh (ie, the user has decided to
+   * bail and go back to the Eyes-Free Shell by pressing the Home key).
+   */
+  private boolean isReturningFromTask;
 
   private Vibrator vibe;
   private static final long[] VIBE_PATTERN = {0, 1, 40, 41};
@@ -59,18 +70,28 @@ public class MarvinShell extends Activity implements GestureListener {
   private boolean messageWaiting;
   public String voiceMailNumber = "";
 
+  // Need a flag here to prevent the keyUp for the Back button from firing when 
+  // the Back button was pressed to get out of an application that was launched;
+  // the keyUp should only be active if the initial keyDown for the Back button
+  // was pressed in the shell itself.
+  private boolean backButtonPressed; 
+
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+    am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+        0);
     self = this;
     gestureOverlay = null;
     tts = new TTS(this, ttsInitListener, true);
     isFocused = true;
     messageWaiting = false;
+    menus = new ArrayList<Menu>();
+    isReturningFromTask = false;
+    backButtonPressed = false;
 
     // Watch for voicemails
     TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -82,6 +103,12 @@ public class MarvinShell extends Activity implements GestureListener {
     }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR);
     voiceMailNumber = tm.getVoiceMailNumber();
 
+  }
+
+  @Override
+  protected void onRestart() {
+    super.onRestart();
+    isReturningFromTask = true;
   }
 
   @Override
@@ -98,15 +125,16 @@ public class MarvinShell extends Activity implements GestureListener {
   @Override
   public void onWindowFocusChanged(boolean hasFocus) {
     isFocused = hasFocus;
-    if (hasFocus && (gestureOverlay != null)) {
-      String message = getString(R.string.home);
-      updateStatusText();
-      if (widgets.airplaneModeEnabled()) {
-        message = getString(R.string.airplane_mode);
-      } else if (messageWaiting) {
-        message = getString(R.string.you_have_new_voicemail);
+    if (hasFocus) {
+      if (gestureOverlay != null) {
+        if (isReturningFromTask) {
+          isReturningFromTask = false;
+        } else {
+          menus = new ArrayList<Menu>();
+          loadHomeMenu();
+        }
       }
-      tts.speak(message, 0, null);
+      announceCurrentMenu();
     }
     super.onWindowFocusChanged(hasFocus);
   }
@@ -126,7 +154,8 @@ public class MarvinShell extends Activity implements GestureListener {
     tts.addSpeech(getString(R.string.press_menu_to_unlock), pkgName, R.raw.press_menu_to_unlock);
     tts.addSpeech(getString(R.string.compass), pkgName, R.raw.compass);
     tts.addSpeech(getString(R.string.battery), pkgName, R.raw.battery);
-    tts.addSpeech(getString(R.string.application_not_installed), pkgName, R.raw.application_not_installed);
+    tts.addSpeech(getString(R.string.application_not_installed), pkgName,
+        R.raw.application_not_installed);
     tts.addSpeech(getString(R.string.january), pkgName, R.raw.january);
     tts.addSpeech(getString(R.string.february), pkgName, R.raw.february);
     tts.addSpeech(getString(R.string.march), pkgName, R.raw.march);
@@ -149,7 +178,9 @@ public class MarvinShell extends Activity implements GestureListener {
     tts.addSpeech(getString(R.string.camera), pkgName, R.raw.camera);
     tts.addSpeech(getString(R.string.weather), pkgName, R.raw.weather);
     tts.addSpeech(getString(R.string.applications), pkgName, R.raw.applications);
-    tts.addSpeech(getString(R.string.you_have_new_voicemail), pkgName, R.raw.you_have_new_voicemail);
+    tts
+        .addSpeech(getString(R.string.you_have_new_voicemail), pkgName,
+            R.raw.you_have_new_voicemail);
     tts.addSpeech(getString(R.string.voicemail), pkgName, R.raw.voicemail);
   }
 
@@ -159,49 +190,74 @@ public class MarvinShell extends Activity implements GestureListener {
       tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
 
       setContentView(R.layout.main);
-      widgets = new AuditoryWidgets(tts, self);
-      loadItems();
-
       mainText = (TextView) self.findViewById(R.id.mainText);
       statusText = (TextView) self.findViewById(R.id.statusText);
+
+      widgets = new AuditoryWidgets(tts, self);
+      loadHomeMenu();
+
       updateStatusText();
-      
+
       FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
       vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
       gestureOverlay = new TouchGestureControlOverlay(self, self);
       mainFrameLayout.addView(gestureOverlay);
-
     }
   };
-  
-  private void loadItems(){
+
+  private void announceCurrentMenu() {
+    if (gestureOverlay != null) {
+      Menu currentMenu = menus.get(menus.size() - 1);
+      String message = currentMenu.title;
+      updateStatusText();
+      // Only announce airplane mode and voicemails
+      // if the user is on the home screen.
+      if (currentMenu.title.equals(getString(R.string.home))) {
+        if (widgets.airplaneModeEnabled()) {
+          message = getString(R.string.airplane_mode);
+        } else if (messageWaiting) {
+          message = getString(R.string.you_have_new_voicemail);
+        }
+      }
+      tts.speak(message, 0, null);
+    }
+  }
+
+  private void loadHomeMenu() {
     items = new HashMap<Gesture, MenuItem>();
-    
-    items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.airplane_mode), "WIDGET", "AIRPLANE_MODE_TOGGLE"));
+
+    items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.airplane_mode), "WIDGET",
+        "AIRPLANE_MODE_TOGGLE"));
     items.put(Gesture.UP, new MenuItem(getString(R.string.time_and_date), "WIDGET", "TIME_DATE"));
     items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY"));
-    
-    items.put(Gesture.LEFT, new MenuItem(getString(R.string.applications), "LOAD", "apps.xml"));
+
+    items.put(Gesture.LEFT, new MenuItem(getString(R.string.applications), "LOAD",
+        "/sdcard/eyesfree/apps.xml"));
     items.put(Gesture.RIGHT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL"));
-    
+
     items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.weather), "WIDGET", "WEATHER"));
-    items.put(Gesture.DOWN, new MenuItem(getString(R.string.compass), "LAUNCH", "com.google.marvin.compass.TalkingCompass"));
-    items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.camera), "LAUNCH", "com.android.camera.Camera"));
+    items.put(Gesture.DOWN, new MenuItem(getString(R.string.compass), "LAUNCH",
+        "com.google.marvin.compass.TalkingCompass"));
+    items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.camera), "LAUNCH",
+        "com.android.camera.Camera"));
+
+    menus.add(new Menu(getString(R.string.home), ""));
+    mainText.setText(menus.get(menus.size() - 1).title);
   }
-  
-  private void launchApplication(String launchData){
+
+  private void launchApplication(String launchData) {
     try {
-      String packageName = launchData.substring(0,launchData.lastIndexOf("."));
-      String className = launchData.substring(launchData.lastIndexOf(".")+1);
-      
+      String packageName = launchData.substring(0, launchData.lastIndexOf("."));
+      String className = launchData.substring(launchData.lastIndexOf(".") + 1);
+
       int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
       Context myContext = createPackageContext(packageName, flags);
       Class<?> appClass = myContext.getClassLoader().loadClass(packageName + "." + className);
       Intent intent = new Intent(myContext, appClass);
-      
+
       // Add in functionality for complex launch data that includes flags
-      // such as intent.putExtra("com.mycorp.appfoo.flagbar", true);      
-      //intent.putExtra(keyName, keyValue);
+      // such as intent.putExtra("com.mycorp.appfoo.flagbar", true);
+      // intent.putExtra(keyName, keyValue);
 
       startActivity(intent);
     } catch (NameNotFoundException e) {
@@ -212,86 +268,89 @@ public class MarvinShell extends Activity implements GestureListener {
       e.printStackTrace();
     }
   }
-  
-  private void updateStatusText(){
+
+  private void updateStatusText() {
     if (widgets.airplaneModeEnabled()) {
       statusText.setText(getString(R.string.airplane_mode));
     } else {
       statusText.setText("");
     }
   }
-  
-  private void runWidget(String widgetName){
-    if (widgetName.equals("AIRPLANE_MODE_TOGGLE")){
+
+  private void runWidget(String widgetName) {
+    if (widgetName.equals("AIRPLANE_MODE_TOGGLE")) {
       widgets.toggleAirplaneMode();
       updateStatusText();
-    } else if (widgetName.equals("TIME_DATE")){
+    } else if (widgetName.equals("TIME_DATE")) {
       widgets.announceDate();
-    } else if (widgetName.equals("BATTERY")){
+    } else if (widgetName.equals("BATTERY")) {
       widgets.announceBattery();
-    } else if (widgetName.equals("VOICEMAIL")){
+    } else if (widgetName.equals("VOICEMAIL")) {
       widgets.callVoiceMail();
-    } else if (widgetName.equals("WEATHER")){
+    } else if (widgetName.equals("WEATHER")) {
       widgets.announceWeather();
     }
   }
-  
-  
+
+
 
   public void onGestureChange(Gesture g) {
     MenuItem item = items.get(g);
-    if (item != null){
+    if (item != null) {
       String label = item.label;
       mainText.setText(label);
-      if (label.equals(getString(R.string.time_and_date))){
+      if (label.equals(getString(R.string.time_and_date))) {
         widgets.announceTime();
-      } else if (label.equals(getString(R.string.voicemail)) && messageWaiting){
+      } else if (label.equals(getString(R.string.voicemail)) && messageWaiting) {
         tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
-      } else{
+      } else {
         tts.speak(label, 0, null);
       }
     } else {
       tts.speak("[tock]", 0, null);
-      mainText.setText("Home");
+      mainText.setText(menus.get(menus.size() - 1).title);
     }
     vibe.vibrate(VIBE_PATTERN, -1);
   }
 
   public void onGestureFinish(Gesture g) {
     MenuItem item = items.get(g);
-    if (item != null){
-      if (item.action.equals("LAUNCH")){
+    if (item != null) {
+      if (item.action.equals("LAUNCH")) {
         launchApplication(item.data);
-      } else if (item.action.equals("WIDGET")){
+      } else if (item.action.equals("WIDGET")) {
         runWidget(item.data);
-      } else if (item.action.equals("LOAD")){
-        
+      } else if (item.action.equals("LOAD")) {
+        if (new File(item.data).isFile()) {
+          menus.add(new Menu(item.label, item.data));
+          items = MenuLoader.loadMenu(item.data);
+          tts.speak(item.label + " loaded.", 0, null);
+        } else {
+          tts.speak("Unable to load " + item.data, 0, null);
+        }
       }
     }
-    mainText.setText(getString(R.string.home));
+    mainText.setText(menus.get(menus.size() - 1).title);
   }
 
   public void onGestureStart(Gesture g) {
     tts.speak("[tock]", 0, null);
     vibe.vibrate(VIBE_PATTERN, -1);
   }
-  
-  
+
+
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     switch (keyCode) {
       case KeyEvent.KEYCODE_MENU:
-        String message = getString(R.string.home);
-        if (widgets.airplaneModeEnabled()) {
-          message = getString(R.string.airplane_mode);
-        }
-        tts.speak(message, 0, null);
+        announceCurrentMenu();
         return true;
       case KeyEvent.KEYCODE_CALL:
         launchApplication("com.google.marvin.talkingdialer.TalkingDialer");
         return true;
       case KeyEvent.KEYCODE_BACK:
+        backButtonPressed = true;
         return true;
     }
     return false;
@@ -301,12 +360,26 @@ public class MarvinShell extends Activity implements GestureListener {
   public boolean onKeyUp(int keyCode, KeyEvent event) {
     switch (keyCode) {
       case KeyEvent.KEYCODE_BACK:
-        long duration = event.getEventTime() - event.getDownTime();
-        if (duration > 3000) {
-          launchApplication("com.android.launcher.Launcher");
-          return true;
-        } else {
-          return true;
+        if (backButtonPressed) {
+          backButtonPressed = false;
+          long duration = event.getEventTime() - event.getDownTime();
+          if (duration > 3000) {
+            launchApplication("com.android.launcher.Launcher");
+            return true;
+          } else {
+            if (menus.size() > 1) {
+              menus.remove(menus.size() - 1);
+              Menu currentMenu = menus.get(menus.size() - 1);
+              if (currentMenu.title.equals(getString(R.string.home))) {
+                loadHomeMenu();
+              } else {
+                items = MenuLoader.loadMenu(currentMenu.filename);
+                mainText.setText(currentMenu.title);
+              }
+              announceCurrentMenu();
+            }
+            return true;
+          }
         }
     }
     return false;
