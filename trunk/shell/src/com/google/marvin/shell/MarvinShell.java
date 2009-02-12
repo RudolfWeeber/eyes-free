@@ -247,18 +247,33 @@ public class MarvinShell extends Activity implements GestureListener {
 
   private void launchApplication(String launchData) {
     try {
-      String packageName = launchData.substring(0, launchData.lastIndexOf("."));
-      String className = launchData.substring(launchData.lastIndexOf(".") + 1);
+      String appInfo = launchData.substring(0, launchData.indexOf("|"));
+      String params = launchData.substring(launchData.indexOf("|") + 1);
+      
+      String packageName = appInfo.substring(0, appInfo.lastIndexOf("."));
+      String className = appInfo.substring(appInfo.lastIndexOf(".") + 1);
 
       int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
       Context myContext = createPackageContext(packageName, flags);
       Class<?> appClass = myContext.getClassLoader().loadClass(packageName + "." + className);
       Intent intent = new Intent(myContext, appClass);
-
-      // Add in functionality for complex launch data that includes flags
-      // such as intent.putExtra("com.mycorp.appfoo.flagbar", true);
-      // intent.putExtra(keyName, keyValue);
-
+      
+      while (params.length() > 0){
+        int nameValueSeparatorIndex = params.indexOf(":");
+        int nextParamIndex = params.indexOf("|");
+        String keyName = params.substring(0, nameValueSeparatorIndex);
+        String keyValueStr = ""; 
+        if (nextParamIndex != -1){
+          keyValueStr = params.substring(nameValueSeparatorIndex + 1, nextParamIndex);
+          params = params.substring(nextParamIndex + 1);
+        } else {
+          keyValueStr = params.substring(nameValueSeparatorIndex + 1);
+          params = "";
+        }
+        boolean keyValue = keyValueStr.equalsIgnoreCase("true");
+        intent.putExtra(keyName, keyValue);
+      }
+      
       startActivity(intent);
     } catch (NameNotFoundException e) {
       tts.speak(getString(R.string.application_not_installed), 0, null);
