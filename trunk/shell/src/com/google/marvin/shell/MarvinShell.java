@@ -247,8 +247,15 @@ public class MarvinShell extends Activity implements GestureListener {
 
   private void launchApplication(String launchData) {
     try {
-      String appInfo = launchData.substring(0, launchData.indexOf("|"));
-      String params = launchData.substring(launchData.indexOf("|") + 1);
+      String appInfo = "";
+      String params = "";
+      if (launchData.indexOf("|") != -1){
+         appInfo = launchData.substring(0, launchData.indexOf("|"));
+         params = launchData.substring(launchData.indexOf("|") + 1);      
+      } else {
+        appInfo = launchData;
+        params = "";
+      }
       
       String packageName = appInfo.substring(0, appInfo.lastIndexOf("."));
       String className = appInfo.substring(appInfo.lastIndexOf(".") + 1);
