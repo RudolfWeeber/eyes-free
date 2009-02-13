@@ -239,6 +239,9 @@ public class ContactsView extends TextView {
     ContactEntry entry = filteredContacts.next();
     if (entry == null) {
       parent.tts.speak("No contacts found.", 0, null);
+      if (currentString.length() > 0) {
+        currentString = currentString.substring(0, currentString.length() - 1);
+      }
       return;
     }
     managedCursor.moveToPosition(entry.index);
