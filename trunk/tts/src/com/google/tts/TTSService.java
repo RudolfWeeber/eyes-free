@@ -283,9 +283,6 @@ public class TTSService extends Service implements OnCompletionListener {
 
   private void speakEspeakOnly(String text, int queueMode, ArrayList<String> params) {
     if (!utterances.containsKey(text) && !isInCache(text)) {
-      // Use a timestamp in the name to prevent collisions;
-      // this is especially important for non-Latin character languages
-      // such as Chinese where the sanitizedName will be an empty string.
       long time = System.currentTimeMillis();
       String ts = Long.toString(time);
       String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
@@ -586,6 +583,10 @@ public class TTSService extends Service implements OnCompletionListener {
       boolean synthAvailable = synthesizerLock.tryLock();
       if (!synthAvailable) {
         return false;
+      }
+      // Don't allow a filename that is too long
+      if (filename.length() > 250){
+        return false;        
       }
       speechSynthesis.synthesizeToFile(text, filename);
     } finally {
