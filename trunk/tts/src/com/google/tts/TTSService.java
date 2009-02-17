@@ -283,15 +283,12 @@ public class TTSService extends Service implements OnCompletionListener {
 
   private void speakEspeakOnly(String text, int queueMode, ArrayList<String> params) {
     if (!utterances.containsKey(text) && !isInCache(text)) {
-      String sanitizedName = text.replaceAll("'", " ");
-      sanitizedName = text.replaceAll("\n", " ");
-      sanitizedName = sanitizedName.replaceAll("[^a-zA-Z0-9,\\s]", "");
       // Use a timestamp in the name to prevent collisions;
       // this is especially important for non-Latin character languages
       // such as Chinese where the sanitizedName will be an empty string.
-      long time = android.os.SystemClock.currentThreadTimeMillis();
+      long time = System.currentTimeMillis();
       String ts = Long.toString(time);
-      String filename = ESPEAK_SCRATCH_DIRECTORY + sanitizedName + ts + ".wav";
+      String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
 
       // eSpeak does not behave correctly if called from multiple threads.
       // Using a lock here will cause some text to be dropped if too many
