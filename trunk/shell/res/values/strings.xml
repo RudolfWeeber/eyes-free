@@ -30,6 +30,7 @@
     <string name="applications">Applications</string>
     <string name="voicemail">Voicemail</string>
     <string name="marvin_intro_snd_">[marvin intro]</string>
+    <string name="charging">charging</string>
     
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>

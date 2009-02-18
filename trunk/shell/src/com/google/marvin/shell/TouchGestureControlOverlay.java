@@ -62,7 +62,7 @@ public class TouchGestureControlOverlay extends View {
   }
 
   @Override
-  public boolean onTouchEvent(MotionEvent event) {
+  public boolean onTouchEvent(MotionEvent event) {    
     int action = event.getAction();
     float x = event.getX();
     float y = event.getY();
@@ -96,7 +96,7 @@ public class TouchGestureControlOverlay extends View {
           break;
         }
         if (prevGesture != currentGesture) {
-          if (cb != null) {
+          if (cb != null) {            
             cb.onGestureChange(currentGesture);
           }
         }
@@ -138,7 +138,5 @@ public class TouchGestureControlOverlay extends View {
     // Off by more than the threshold, so it doesn't count
     return null;
   }
-
-
 
 }

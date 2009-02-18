@@ -23,6 +23,8 @@ import com.google.tts.TTSEngine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.app.Activity;
 import android.content.Context;
@@ -61,7 +63,7 @@ public class MarvinShell extends Activity implements GestureListener {
   private boolean isReturningFromTask;
 
   private Vibrator vibe;
-  private static final long[] VIBE_PATTERN = {0, 1, 40, 41};
+  private static final long[] VIBE_PATTERN = {0, 10, 70, 80};
   private TouchGestureControlOverlay gestureOverlay;
 
   private TextView mainText;
@@ -70,11 +72,13 @@ public class MarvinShell extends Activity implements GestureListener {
   private boolean messageWaiting;
   public String voiceMailNumber = "";
 
-  // Need a flag here to prevent the keyUp for the Back button from firing when 
+  // Need a flag here to prevent the keyUp for the Back button from firing when
   // the Back button was pressed to get out of an application that was launched;
   // the keyUp should only be active if the initial keyDown for the Back button
   // was pressed in the shell itself.
-  private boolean backButtonPressed; 
+  private boolean backButtonPressed;
+
+
 
   /** Called when the activity is first created. */
   @Override
@@ -182,6 +186,9 @@ public class MarvinShell extends Activity implements GestureListener {
         .addSpeech(getString(R.string.you_have_new_voicemail), pkgName,
             R.raw.you_have_new_voicemail);
     tts.addSpeech(getString(R.string.voicemail), pkgName, R.raw.voicemail);
+    tts.addSpeech(getString(R.string.charging), pkgName, R.raw.charging);
+    tts.addSpeech("[cancel]", pkgName, R.raw.cancel_snd);
+    tts.addSpeech("[launch]", pkgName, R.raw.launch_snd);
   }
 
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
@@ -202,6 +209,8 @@ public class MarvinShell extends Activity implements GestureListener {
       vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
       gestureOverlay = new TouchGestureControlOverlay(self, self);
       mainFrameLayout.addView(gestureOverlay);
+      
+      (new Thread(new ActionMonitor())).start();
     }
   };
 
@@ -249,14 +258,14 @@ public class MarvinShell extends Activity implements GestureListener {
     try {
       String appInfo = "";
       String params = "";
-      if (launchData.indexOf("|") != -1){
-         appInfo = launchData.substring(0, launchData.indexOf("|"));
-         params = launchData.substring(launchData.indexOf("|") + 1);      
+      if (launchData.indexOf("|") != -1) {
+        appInfo = launchData.substring(0, launchData.indexOf("|"));
+        params = launchData.substring(launchData.indexOf("|") + 1);
       } else {
         appInfo = launchData;
         params = "";
       }
-      
+
       String packageName = appInfo.substring(0, appInfo.lastIndexOf("."));
       String className = appInfo.substring(appInfo.lastIndexOf(".") + 1);
 
@@ -264,13 +273,13 @@ public class MarvinShell extends Activity implements GestureListener {
       Context myContext = createPackageContext(packageName, flags);
       Class<?> appClass = myContext.getClassLoader().loadClass(packageName + "." + className);
       Intent intent = new Intent(myContext, appClass);
-      
-      while (params.length() > 0){
+
+      while (params.length() > 0) {
         int nameValueSeparatorIndex = params.indexOf(":");
         int nextParamIndex = params.indexOf("|");
         String keyName = params.substring(0, nameValueSeparatorIndex);
-        String keyValueStr = ""; 
-        if (nextParamIndex != -1){
+        String keyValueStr = "";
+        if (nextParamIndex != -1) {
           keyValueStr = params.substring(nameValueSeparatorIndex + 1, nextParamIndex);
           params = params.substring(nextParamIndex + 1);
         } else {
@@ -280,7 +289,8 @@ public class MarvinShell extends Activity implements GestureListener {
         boolean keyValue = keyValueStr.equalsIgnoreCase("true");
         intent.putExtra(keyName, keyValue);
       }
-      
+
+      tts.speak("[launch]", 0, null);
       startActivity(intent);
     } catch (NameNotFoundException e) {
       tts.speak(getString(R.string.application_not_installed), 0, null);
@@ -314,39 +324,71 @@ public class MarvinShell extends Activity implements GestureListener {
     }
   }
 
+  private class ActionMonitor implements Runnable {
+    public void run() {
+      if (((System.currentTimeMillis() - currentGestureTime) > 100) && (currentGesture != null) && (confirmedGesture == null)){
+        confirmedGesture = currentGesture;
+        MenuItem item = items.get(confirmedGesture);
+        if (item != null) {
+          String label = item.label;
+          if (label.equals(getString(R.string.time_and_date))) {
+            widgets.announceTime();
+          } else if (label.equals(getString(R.string.voicemail)) && messageWaiting) {
+            tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
+          } else {
+            tts.speak(label, 0, null);
+          }
+        } else {
+          String titleText = menus.get(menus.size() - 1).title;
+          tts.speak(titleText, 0, null);
+        }
+      }
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      (new Thread(new ActionMonitor())).start();
+    }  
+  }
+  
+  private Gesture currentGesture = Gesture.CENTER;
+  private long currentGestureTime = 0;
+  private Gesture confirmedGesture = null;
 
 
   public void onGestureChange(Gesture g) {
+    confirmedGesture = null;
+    currentGesture = g;
     MenuItem item = items.get(g);
     if (item != null) {
       String label = item.label;
       mainText.setText(label);
-      if (label.equals(getString(R.string.time_and_date))) {
-        widgets.announceTime();
-      } else if (label.equals(getString(R.string.voicemail)) && messageWaiting) {
-        tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
-      } else {
-        tts.speak(label, 0, null);
-      }
     } else {
-      tts.speak("[tock]", 0, null);
-      mainText.setText(menus.get(menus.size() - 1).title);
+      String titleText = menus.get(menus.size() - 1).title;
+      mainText.setText(titleText);
     }
     vibe.vibrate(VIBE_PATTERN, -1);
   }
 
   public void onGestureFinish(Gesture g) {
-    MenuItem item = items.get(g);
+    Gesture acceptedGesture = Gesture.CENTER;
+    if (confirmedGesture != null){
+      acceptedGesture = confirmedGesture;
+    }
+    MenuItem item = items.get(acceptedGesture);
     if (item != null) {
       if (item.action.equals("LAUNCH")) {
         launchApplication(item.data);
       } else if (item.action.equals("WIDGET")) {
+        tts.speak("[launch]", 0, null);
         runWidget(item.data);
       } else if (item.action.equals("LOAD")) {
         if (new File(item.data).isFile()) {
           menus.add(new Menu(item.label, item.data));
           items = MenuLoader.loadMenu(item.data);
-          tts.speak(item.label + " loaded.", 0, null);
+          tts.speak("[launch]", 0, null);
         } else {
           tts.speak("Unable to load " + item.data, 0, null);
         }
@@ -356,11 +398,11 @@ public class MarvinShell extends Activity implements GestureListener {
   }
 
   public void onGestureStart(Gesture g) {
-    tts.speak("[tock]", 0, null);
+    confirmedGesture = null;
+    currentGesture = g;
+    tts.speak(menus.get(menus.size() - 1).title, 0, null);
     vibe.vibrate(VIBE_PATTERN, -1);
   }
-
-
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -406,4 +448,6 @@ public class MarvinShell extends Activity implements GestureListener {
     }
     return false;
   }
+  
+  
 }
