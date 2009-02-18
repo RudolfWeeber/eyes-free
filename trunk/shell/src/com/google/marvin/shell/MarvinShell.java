@@ -326,7 +326,7 @@ public class MarvinShell extends Activity implements GestureListener {
 
   private class ActionMonitor implements Runnable {
     public void run() {
-      if (((System.currentTimeMillis() - currentGestureTime) > 100) && (currentGesture != null) && (confirmedGesture == null)){
+      if (((System.currentTimeMillis() - currentGestureTime) > 250) && (currentGesture != null) && (confirmedGesture == null)){
         confirmedGesture = currentGesture;
         MenuItem item = items.get(confirmedGesture);
         if (item != null) {
@@ -361,6 +361,7 @@ public class MarvinShell extends Activity implements GestureListener {
   public void onGestureChange(Gesture g) {
     confirmedGesture = null;
     currentGesture = g;
+    currentGestureTime = System.currentTimeMillis();
     MenuItem item = items.get(g);
     if (item != null) {
       String label = item.label;
@@ -400,7 +401,7 @@ public class MarvinShell extends Activity implements GestureListener {
   public void onGestureStart(Gesture g) {
     confirmedGesture = null;
     currentGesture = g;
-    tts.speak(menus.get(menus.size() - 1).title, 0, null);
+  //  tts.speak(menus.get(menus.size() - 1).title, 0, null);
     vibe.vibrate(VIBE_PATTERN, -1);
   }
 
