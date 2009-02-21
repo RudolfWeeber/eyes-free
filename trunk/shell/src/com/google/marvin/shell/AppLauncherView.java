@@ -27,6 +27,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -642,25 +644,18 @@ public class AppLauncherView extends TextView {
 
     if (!screenIsBeingTouched) {
       x = 5;
-      y = getHeight() - 60;
-      paint.setTextSize(20);
-      paint.setTextAlign(Paint.Align.LEFT);
-      y -= paint.ascent() / 2;
-      canvas.drawText("Press MENU for dialing mode.", x, y, paint);
-
-      x = 5;
       y = getHeight() - 40;
       paint.setTextSize(20);
       paint.setTextAlign(Paint.Align.LEFT);
       y -= paint.ascent() / 2;
-      canvas.drawText("Scroll contacts with trackball.", x, y, paint);
+      canvas.drawText("Scroll apps with trackball.", x, y, paint);
 
       x = 5;
       y = getHeight() - 20;
       paint.setTextSize(20);
       paint.setTextAlign(Paint.Align.LEFT);
       y -= paint.ascent() / 2;
-      canvas.drawText("Press CALL twice to confirm.", x, y, paint);
+      canvas.drawText("Press CALL to launch app.", x, y, paint);
     } else {
       int offset = 90;
       int regSize = 50;
