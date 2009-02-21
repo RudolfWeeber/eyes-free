@@ -14,14 +14,14 @@ import android.view.View;
  */
 
 public class TouchGestureControlOverlay extends View {
-  
+
   /**
    * An enumeration of the possible gestures.
    */
   public enum Gesture {
     UPLEFT, UP, UPRIGHT, LEFT, CENTER, RIGHT, DOWNLEFT, DOWN, DOWNRIGHT
   }
-  
+
   /**
    * The callback interface to be used when a gesture is detected.
    */
@@ -52,17 +52,17 @@ public class TouchGestureControlOverlay extends View {
     super(context);
     cb = callback;
   }
-  
+
   public TouchGestureControlOverlay(Context context) {
     super(context);
   }
-  
-  public void setGestureListener(GestureListener callback){
-    cb = callback;    
+
+  public void setGestureListener(GestureListener callback) {
+    cb = callback;
   }
 
   @Override
-  public boolean onTouchEvent(MotionEvent event) {    
+  public boolean onTouchEvent(MotionEvent event) {
     int action = event.getAction();
     float x = event.getX();
     float y = event.getY();
@@ -96,7 +96,7 @@ public class TouchGestureControlOverlay extends View {
           break;
         }
         if (prevGesture != currentGesture) {
-          if (cb != null) {            
+          if (cb != null) {
             cb.onGestureChange(currentGesture);
           }
         }
@@ -109,8 +109,7 @@ public class TouchGestureControlOverlay extends View {
     float rTolerance = 25;
     double thetaTolerance = (Math.PI / 12);
 
-    double r = Math.sqrt(((downX - x) * (downX - x)) + 
-                         ((downY - y) * (downY - y)));
+    double r = Math.sqrt(((downX - x) * (downX - x)) + ((downY - y) * (downY - y)));
 
     if (r < rTolerance) {
       return Gesture.CENTER;
@@ -131,8 +130,7 @@ public class TouchGestureControlOverlay extends View {
       return Gesture.DOWN;
     } else if (Math.abs(theta - downleft) < thetaTolerance) {
       return Gesture.DOWNLEFT;
-    } else if ((theta > right - thetaTolerance) || 
-               (theta < rightWrap + thetaTolerance)) {
+    } else if ((theta > right - thetaTolerance) || (theta < rightWrap + thetaTolerance)) {
       return Gesture.RIGHT;
     }
     // Off by more than the threshold, so it doesn't count

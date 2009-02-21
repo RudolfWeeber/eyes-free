@@ -50,7 +50,7 @@ public class MenuLoader {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    
+
     return menu;
   }
 

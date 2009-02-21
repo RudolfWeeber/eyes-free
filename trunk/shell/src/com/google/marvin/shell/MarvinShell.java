@@ -23,9 +23,6 @@ import com.google.tts.TTSEngine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -194,8 +191,7 @@ public class MarvinShell extends Activity implements GestureListener {
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
       resetTTS();
-      tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
-
+      tts.speak(getString(R.string.marvin_intro_snd_), 0, null);      
       setContentView(R.layout.main);
       mainText = (TextView) self.findViewById(R.id.mainText);
       statusText = (TextView) self.findViewById(R.id.statusText);
@@ -240,13 +236,14 @@ public class MarvinShell extends Activity implements GestureListener {
     items.put(Gesture.UP, new MenuItem(getString(R.string.time_and_date), "WIDGET", "TIME_DATE"));
     items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY"));
 
-    items.put(Gesture.LEFT, new MenuItem(getString(R.string.applications), "LOAD",
+    items.put(Gesture.LEFT, new MenuItem(getString(R.string.shortcuts), "LOAD",
         "/sdcard/eyesfree/apps.xml"));
     items.put(Gesture.RIGHT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL"));
 
-    items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.weather), "WIDGET", "WEATHER"));
-    items.put(Gesture.DOWN, new MenuItem(getString(R.string.compass), "LAUNCH",
+    items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.compass), "LAUNCH",
         "com.google.marvin.compass.TalkingCompass"));
+    items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "LAUNCH",
+    "com.google.marvin.shell.AppLauncher"));    
     items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.camera), "LAUNCH",
         "com.android.camera.Camera"));
 
@@ -318,9 +315,8 @@ public class MarvinShell extends Activity implements GestureListener {
     } else if (widgetName.equals("BATTERY")) {
       widgets.announceBattery();
     } else if (widgetName.equals("VOICEMAIL")) {
+      tts.speak("[launch]", 0, null);
       widgets.callVoiceMail();
-    } else if (widgetName.equals("WEATHER")) {
-      widgets.announceWeather();
     }
   }
 
@@ -383,7 +379,6 @@ public class MarvinShell extends Activity implements GestureListener {
       if (item.action.equals("LAUNCH")) {
         launchApplication(item.data);
       } else if (item.action.equals("WIDGET")) {
-        tts.speak("[launch]", 0, null);
         runWidget(item.data);
       } else if (item.action.equals("LOAD")) {
         if (new File(item.data).isFile()) {

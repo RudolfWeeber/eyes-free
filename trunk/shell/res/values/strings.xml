@@ -28,6 +28,7 @@
     <string name="camera">Camera</string>    
     <string name="weather">Weather</string>
     <string name="applications">Applications</string>
+    <string name="shortcuts">Shortcuts</string>
     <string name="voicemail">Voicemail</string>
     <string name="marvin_intro_snd_">[marvin intro]</string>
     <string name="charging">charging</string>
