@@ -24,8 +24,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -76,6 +78,7 @@ public class MarvinShell extends Activity implements GestureListener {
   private boolean backButtonPressed;
 
 
+  private BroadcastReceiver screenStateOnReceiver;
 
   /** Called when the activity is first created. */
   @Override
@@ -104,6 +107,16 @@ public class MarvinShell extends Activity implements GestureListener {
     }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR);
     voiceMailNumber = tm.getVoiceMailNumber();
 
+    screenStateOnReceiver = new BroadcastReceiver() {
+      @Override
+      public void onReceive(Context context, Intent intent) {
+        if (!isFocused && (tts != null)){
+          tts.speak(getString(R.string.press_menu_to_unlock), 0, null);
+        }
+      }
+    };
+    IntentFilter screenOnFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+    registerReceiver(screenStateOnReceiver, screenOnFilter);
   }
 
   @Override
@@ -111,17 +124,6 @@ public class MarvinShell extends Activity implements GestureListener {
     super.onRestart();
     isReturningFromTask = true;
   }
-
-  @Override
-  public void onResume() {
-    if (isFocused) {
-      super.onResume();
-      return;
-    }
-    tts.speak(getString(R.string.press_menu_to_unlock), 0, null);
-    super.onResume();
-  }
-
 
   @Override
   public void onWindowFocusChanged(boolean hasFocus) {
@@ -143,6 +145,7 @@ public class MarvinShell extends Activity implements GestureListener {
   @Override
   protected void onDestroy() {
     tts.shutdown();
+    unregisterReceiver(screenStateOnReceiver);
     super.onDestroy();
   }
 
@@ -191,7 +194,7 @@ public class MarvinShell extends Activity implements GestureListener {
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
       resetTTS();
-      tts.speak(getString(R.string.marvin_intro_snd_), 0, null);      
+      tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
       setContentView(R.layout.main);
       mainText = (TextView) self.findViewById(R.id.mainText);
       statusText = (TextView) self.findViewById(R.id.statusText);
@@ -205,7 +208,7 @@ public class MarvinShell extends Activity implements GestureListener {
       vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
       gestureOverlay = new TouchGestureControlOverlay(self, self);
       mainFrameLayout.addView(gestureOverlay);
-      
+
       (new Thread(new ActionMonitor())).start();
     }
   };
@@ -237,13 +240,13 @@ public class MarvinShell extends Activity implements GestureListener {
     items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY"));
 
     items.put(Gesture.LEFT, new MenuItem(getString(R.string.shortcuts), "LOAD",
-        "/sdcard/eyesfree/apps.xml"));
+        "/sdcard/eyesfree/shortcuts.xml"));
     items.put(Gesture.RIGHT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL"));
 
     items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.compass), "LAUNCH",
         "com.google.marvin.compass.TalkingCompass"));
     items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "LAUNCH",
-    "com.google.marvin.shell.AppLauncher"));    
+        "com.google.marvin.shell.AppLauncher"));
     items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.camera), "LAUNCH",
         "com.android.camera.Camera"));
 
@@ -322,7 +325,8 @@ public class MarvinShell extends Activity implements GestureListener {
 
   private class ActionMonitor implements Runnable {
     public void run() {
-      if (((System.currentTimeMillis() - currentGestureTime) > 250) && (currentGesture != null) && (confirmedGesture == null)){
+      if (((System.currentTimeMillis() - currentGestureTime) > 250) && (currentGesture != null)
+          && (confirmedGesture == null)) {
         confirmedGesture = currentGesture;
         MenuItem item = items.get(confirmedGesture);
         if (item != null) {
@@ -346,9 +350,9 @@ public class MarvinShell extends Activity implements GestureListener {
         e.printStackTrace();
       }
       (new Thread(new ActionMonitor())).start();
-    }  
+    }
   }
-  
+
   private Gesture currentGesture = Gesture.CENTER;
   private long currentGestureTime = 0;
   private Gesture confirmedGesture = null;
@@ -371,7 +375,7 @@ public class MarvinShell extends Activity implements GestureListener {
 
   public void onGestureFinish(Gesture g) {
     Gesture acceptedGesture = Gesture.CENTER;
-    if (confirmedGesture != null){
+    if (confirmedGesture != null) {
       acceptedGesture = confirmedGesture;
     }
     MenuItem item = items.get(acceptedGesture);
@@ -396,7 +400,7 @@ public class MarvinShell extends Activity implements GestureListener {
   public void onGestureStart(Gesture g) {
     confirmedGesture = null;
     currentGesture = g;
-  //  tts.speak(menus.get(menus.size() - 1).title, 0, null);
+    // tts.speak(menus.get(menus.size() - 1).title, 0, null);
     vibe.vibrate(VIBE_PATTERN, -1);
   }
 
@@ -444,6 +448,4 @@ public class MarvinShell extends Activity implements GestureListener {
     }
     return false;
   }
-  
-  
 }

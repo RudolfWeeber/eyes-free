@@ -32,6 +32,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorListener;
@@ -40,6 +41,7 @@ import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -155,8 +157,7 @@ public class AppLauncherView extends TextView {
         title = info.activityInfo.name.toString();
       }
       String packageName = info.activityInfo.packageName;
-      String className =
-          info.activityInfo.name.substring(info.activityInfo.name.lastIndexOf(".") + 1);
+      String className = info.activityInfo.name;
       Drawable icon = info.loadIcon(pm);
       AppEntry entry = new AppEntry(title, packageName, className, icon);
       appList.add(entry);
@@ -172,14 +173,12 @@ public class AppLauncherView extends TextView {
 
     currentString = "";
 
+    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
     setClickable(true);
     setFocusable(true);
     setFocusableInTouchMode(true);
     requestFocus();
-
-    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-    sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
-        SensorManager.SENSOR_DELAY_FASTEST);
   }
 
   @Override
@@ -781,6 +780,17 @@ public class AppLauncherView extends TextView {
     invalidate();
   }
 
+  @Override
+  protected void onWindowVisibilityChanged(int visibility){
+    if (visibility == View.VISIBLE){
+      sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
+          SensorManager.SENSOR_DELAY_FASTEST);
+    } else {
+      unregisterListeners();
+    }
+    super.onWindowVisibilityChanged(visibility);
+  }
+  
 
 
 }

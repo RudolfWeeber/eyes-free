@@ -28,7 +28,7 @@
                 android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" 
                 android:clearTaskOnLaunch="true"
                 android:stateNotNeeded="true"
-                android:screenOrientation="portrait"
+                android:screenOrientation="user"
                 android:configChanges="mcc|mnc">
         </activity>
         
