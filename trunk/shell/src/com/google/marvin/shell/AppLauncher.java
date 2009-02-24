@@ -31,6 +31,11 @@ public class AppLauncher extends Activity {
     tts = new TTS(this, ttsInitListener, true);
   }
 
+  @Override
+  protected void onDestroy() {
+    tts.shutdown();
+    super.onDestroy();
+  }
 
   public void launchApp(AppEntry theApp) {
     try {

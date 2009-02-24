@@ -1,15 +1,20 @@
 package com.google.marvin.shell;
 
+import android.util.Log;
+
+import com.google.marvin.shell.Param;
 import com.google.marvin.shell.TouchGestureControlOverlay.Gesture;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,8 +39,41 @@ public class MenuLoader {
         if (g != null) {
           String label = attribs.getNamedItem("label").getNodeValue();
           String action = attribs.getNamedItem("action").getNodeValue();
-          String data = attribs.getNamedItem("data").getNodeValue();
-          menu.put(g, new MenuItem(label, action, data));
+          String data = null;
+          Node dataAttrNode = attribs.getNamedItem("data");
+          if (dataAttrNode != null) {
+            data = dataAttrNode.getNodeValue();
+          }
+          AppEntry appInfo = null;
+          if (action.equalsIgnoreCase("launch")) {
+            Node appInfoNode = null;
+            ArrayList<Param> params = new ArrayList<Param>();
+            NodeList nodes = items.item(i).getChildNodes();
+
+            for (int j = 0; j < nodes.getLength(); j++) {
+              Node currentNode = nodes.item(j);
+              String tagName = currentNode.getNodeName();
+              // Only process actual nodes
+              if (tagName != null) {
+                if (tagName.equalsIgnoreCase("appInfo")) {
+                  appInfoNode = currentNode;
+                } else if (tagName.equalsIgnoreCase("param")) {
+                  NamedNodeMap paramAttr = currentNode.getAttributes();
+                  Param param = new Param();
+                  param.name = paramAttr.getNamedItem("name").getNodeValue();
+                  param.value = paramAttr.getNamedItem("value").getNodeValue();
+                  params.add(param);
+                }
+              }
+            }
+            NamedNodeMap appInfoAttr = appInfoNode.getAttributes();
+            String packageName = appInfoAttr.getNamedItem("package").getNodeValue();
+            String className = appInfoAttr.getNamedItem("class").getNodeValue();
+            appInfo = new AppEntry(null, packageName, className, null, params);
+          }
+
+
+          menu.put(g, new MenuItem(label, action, data, appInfo));
         }
       }
 

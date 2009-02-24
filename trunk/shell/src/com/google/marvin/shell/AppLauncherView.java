@@ -27,18 +27,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -159,7 +155,7 @@ public class AppLauncherView extends TextView {
       String packageName = info.activityInfo.packageName;
       String className = info.activityInfo.name;
       Drawable icon = info.loadIcon(pm);
-      AppEntry entry = new AppEntry(title, packageName, className, icon);
+      AppEntry entry = new AppEntry(title, packageName, className, icon, null);
       appList.add(entry);
     }
     class appEntrySorter implements Comparator {
@@ -186,7 +182,7 @@ public class AppLauncherView extends TextView {
     if (trackballEnabled == false) {
       return true;
     }
-    Log.i("Motion", Float.toString(event.getY()));
+    // Log.i("Motion", Float.toString(event.getY()));
     if (event.getAction() == MotionEvent.ACTION_DOWN) {
       startActionHandler();
       return true;
@@ -781,8 +777,8 @@ public class AppLauncherView extends TextView {
   }
 
   @Override
-  protected void onWindowVisibilityChanged(int visibility){
-    if (visibility == View.VISIBLE){
+  protected void onWindowVisibilityChanged(int visibility) {
+    if (visibility == View.VISIBLE) {
       sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
           SensorManager.SENSOR_DELAY_FASTEST);
     } else {
@@ -790,7 +786,7 @@ public class AppLauncherView extends TextView {
     }
     super.onWindowVisibilityChanged(visibility);
   }
-  
+
 
 
 }

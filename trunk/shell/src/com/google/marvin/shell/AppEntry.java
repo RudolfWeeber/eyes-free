@@ -1,5 +1,7 @@
 package com.google.marvin.shell;
 
+import java.util.ArrayList;
+
 import android.graphics.drawable.Drawable;
 
 public class AppEntry {
@@ -7,12 +9,14 @@ public class AppEntry {
   private String packageName;
   private String className;
   private Drawable icon;
+  private ArrayList<Param> params;
 
-  AppEntry(String appTitle, String appPackageName, String appClassName, Drawable appIcon) {
+  AppEntry(String appTitle, String appPackageName, String appClassName, Drawable appIcon, ArrayList<Param> parameters){
     title = appTitle;
     packageName = appPackageName;
     className = appClassName;
     icon = appIcon;
+    params = parameters;
   }
 
   String getTitle() {
@@ -31,5 +35,10 @@ public class AppEntry {
     return icon;
   }
 
+  ArrayList<Param> getParams() {
+    return params;
+  }
 
 }
+
+

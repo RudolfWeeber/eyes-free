@@ -25,10 +25,12 @@ public class MenuItem {
   public String label;
   public String action;
   public String data;
+  public AppEntry appInfo;
 
-  public MenuItem(String itemLabel, String itemAction, String itemData) {
+  public MenuItem(String itemLabel, String itemAction, String itemData, AppEntry applicationInfo) {
     label = itemLabel;
     action = itemAction;
     data = itemData;
+    appInfo = applicationInfo;
   }
 }

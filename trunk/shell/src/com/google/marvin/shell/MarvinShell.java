@@ -15,6 +15,7 @@
  */
 package com.google.marvin.shell;
 
+import com.google.marvin.shell.Param;
 import com.google.marvin.shell.TouchGestureControlOverlay.Gesture;
 import com.google.marvin.shell.TouchGestureControlOverlay.GestureListener;
 import com.google.tts.TTS;
@@ -110,7 +111,7 @@ public class MarvinShell extends Activity implements GestureListener {
     screenStateOnReceiver = new BroadcastReceiver() {
       @Override
       public void onReceive(Context context, Intent intent) {
-        if (!isFocused && (tts != null)){
+        if (!isFocused && (tts != null)) {
           tts.speak(getString(R.string.press_menu_to_unlock), 0, null);
         }
       }
@@ -235,59 +236,52 @@ public class MarvinShell extends Activity implements GestureListener {
     items = new HashMap<Gesture, MenuItem>();
 
     items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.airplane_mode), "WIDGET",
-        "AIRPLANE_MODE_TOGGLE"));
-    items.put(Gesture.UP, new MenuItem(getString(R.string.time_and_date), "WIDGET", "TIME_DATE"));
-    items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY"));
+        "AIRPLANE_MODE_TOGGLE", null));
+    items.put(Gesture.UP, new MenuItem(getString(R.string.time_and_date), "WIDGET", "TIME_DATE",
+        null));
+    items
+        .put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY", null));
 
     items.put(Gesture.LEFT, new MenuItem(getString(R.string.shortcuts), "LOAD",
-        "/sdcard/eyesfree/shortcuts.xml"));
-    items.put(Gesture.RIGHT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL"));
+        "/sdcard/eyesfree/shortcuts.xml", null));
+    items.put(Gesture.RIGHT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL",
+        null));
 
-    items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.compass), "LAUNCH",
-        "com.google.marvin.compass.TalkingCompass"));
-    items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "LAUNCH",
-        "com.google.marvin.shell.AppLauncher"));
-    items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.camera), "LAUNCH",
-        "com.android.camera.Camera"));
+    AppEntry compass =
+        new AppEntry(null, "com.google.marvin.compass", "com.google.marvin.compass.TalkingCompass",
+            null, null);
+    items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.compass), "LAUNCH", null, compass));
+
+    AppEntry appLauncher =
+        new AppEntry(null, "com.google.marvin.shell", "com.google.marvin.shell.AppLauncher", null,
+            null);
+    items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "LAUNCH", null,
+        appLauncher));
+
+    AppEntry camera =
+        new AppEntry(null, "com.android.camera", "com.android.camera.Camera", null, null);
+    items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.camera), "LAUNCH", null, camera));
 
     menus.add(new Menu(getString(R.string.home), ""));
     mainText.setText(menus.get(menus.size() - 1).title);
   }
 
-  private void launchApplication(String launchData) {
+  private void launchApplication(AppEntry appInfo) {
     try {
-      String appInfo = "";
-      String params = "";
-      if (launchData.indexOf("|") != -1) {
-        appInfo = launchData.substring(0, launchData.indexOf("|"));
-        params = launchData.substring(launchData.indexOf("|") + 1);
-      } else {
-        appInfo = launchData;
-        params = "";
-      }
-
-      String packageName = appInfo.substring(0, appInfo.lastIndexOf("."));
-      String className = appInfo.substring(appInfo.lastIndexOf(".") + 1);
+      String packageName = appInfo.getPackageName();
+      String className = appInfo.getClassName();
+      ArrayList<Param> params = appInfo.getParams();
 
       int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
       Context myContext = createPackageContext(packageName, flags);
-      Class<?> appClass = myContext.getClassLoader().loadClass(packageName + "." + className);
+      Class<?> appClass = myContext.getClassLoader().loadClass(className);
       Intent intent = new Intent(myContext, appClass);
 
-      while (params.length() > 0) {
-        int nameValueSeparatorIndex = params.indexOf(":");
-        int nextParamIndex = params.indexOf("|");
-        String keyName = params.substring(0, nameValueSeparatorIndex);
-        String keyValueStr = "";
-        if (nextParamIndex != -1) {
-          keyValueStr = params.substring(nameValueSeparatorIndex + 1, nextParamIndex);
-          params = params.substring(nextParamIndex + 1);
-        } else {
-          keyValueStr = params.substring(nameValueSeparatorIndex + 1);
-          params = "";
+      if (params != null) {
+        for (int i = 0; i < params.size(); i++) {
+          boolean keyValue = params.get(i).value.equalsIgnoreCase("true");
+          intent.putExtra(params.get(i).name, keyValue);
         }
-        boolean keyValue = keyValueStr.equalsIgnoreCase("true");
-        intent.putExtra(keyName, keyValue);
       }
 
       tts.speak("[launch]", 0, null);
@@ -381,7 +375,7 @@ public class MarvinShell extends Activity implements GestureListener {
     MenuItem item = items.get(acceptedGesture);
     if (item != null) {
       if (item.action.equals("LAUNCH")) {
-        launchApplication(item.data);
+        launchApplication(item.appInfo);
       } else if (item.action.equals("WIDGET")) {
         runWidget(item.data);
       } else if (item.action.equals("LOAD")) {
@@ -411,7 +405,10 @@ public class MarvinShell extends Activity implements GestureListener {
         announceCurrentMenu();
         return true;
       case KeyEvent.KEYCODE_CALL:
-        launchApplication("com.google.marvin.talkingdialer.TalkingDialer");
+        AppEntry talkingDialer =
+            new AppEntry(null, "com.google.marvin.talkingdialer",
+                "com.google.marvin.talkingdialer.TalkingDialer", null, null);
+        launchApplication(talkingDialer);
         return true;
       case KeyEvent.KEYCODE_BACK:
         backButtonPressed = true;
@@ -428,7 +425,10 @@ public class MarvinShell extends Activity implements GestureListener {
           backButtonPressed = false;
           long duration = event.getEventTime() - event.getDownTime();
           if (duration > 3000) {
-            launchApplication("com.android.launcher.Launcher");
+            AppEntry regularHome =
+                new AppEntry(null, "com.android.launcher", "com.android.launcher.Launcher", null,
+                    null);
+            launchApplication(regularHome);
             return true;
           } else {
             if (menus.size() > 1) {
