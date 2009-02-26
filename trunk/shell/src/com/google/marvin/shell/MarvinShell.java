@@ -146,6 +146,7 @@ public class MarvinShell extends Activity implements GestureListener {
   @Override
   protected void onDestroy() {
     tts.shutdown();
+    widgets.shutdown();
     unregisterReceiver(screenStateOnReceiver);
     super.onDestroy();
   }
@@ -244,13 +245,17 @@ public class MarvinShell extends Activity implements GestureListener {
 
     items.put(Gesture.LEFT, new MenuItem(getString(R.string.shortcuts), "LOAD",
         "/sdcard/eyesfree/shortcuts.xml", null));
-    items.put(Gesture.RIGHT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL",
+    items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL",
         null));
 
+    /*
     AppEntry compass =
         new AppEntry(null, "com.google.marvin.compass", "com.google.marvin.compass.TalkingCompass",
             null, null);
     items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.compass), "LAUNCH", null, compass));
+*/
+  items.put(Gesture.RIGHT, new MenuItem("Location", "WIDGET", "LOCATION", null));
+
 
     AppEntry appLauncher =
         new AppEntry(null, "com.google.marvin.shell", "com.google.marvin.shell.AppLauncher", null,
@@ -314,6 +319,9 @@ public class MarvinShell extends Activity implements GestureListener {
     } else if (widgetName.equals("VOICEMAIL")) {
       tts.speak("[launch]", 0, null);
       widgets.callVoiceMail();
+    } else if (widgetName.equals("LOCATION")) {
+      tts.speak("[launch]", 0, null);
+      widgets.speakLocation();
     }
   }
 

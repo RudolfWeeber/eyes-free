@@ -262,6 +262,7 @@ public class AppLauncherView extends TextView {
   }
 
   private void startActionHandler() {
+    currentString = "";
     // Launch app here
     parent.launchApp(appList.get(appListIndex));
   }

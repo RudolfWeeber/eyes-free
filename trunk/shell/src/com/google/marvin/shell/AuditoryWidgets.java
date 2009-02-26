@@ -22,10 +22,16 @@ public class AuditoryWidgets {
   private TTS tts;
   private MarvinShell parent;
   private final ReentrantLock speakingTimeLock = new ReentrantLock();
+  private Guide guide;
 
   public AuditoryWidgets(TTS theTts, MarvinShell shell) {
     tts = theTts;
     parent = shell;
+    guide = new Guide(parent);
+  }
+  
+  public void shutdown(){
+    guide.shutdown();
   }
 
   public void announceBattery() {
@@ -151,6 +157,10 @@ public class AuditoryWidgets {
     Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode("18056377243"));
     Intent intent = new Intent(Intent.ACTION_CALL, phoneNumberURI);
     parent.startActivity(intent);
+  }
+  
+  public void speakLocation(){
+    guide.speakLocation();
   }
 
 }
