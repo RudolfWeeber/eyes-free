@@ -1,0 +1,23 @@
+= Troubleshooting the TTS =
+
+99% of all issues with using the TTS is caused by the phone being unable to access the voice data stored on the SD card.
+
+
+Please try the following steps and retry the application at each step; you can stop going through this list once the speech is working.
+
+1. Unplug your phone from the computer. The TTS cannot use the SD card if the SD card is already being used by the computer as a mounted drive.
+
+2. Remove and reinsert the SD card. This will help make sure that the SD card is seated properly.
+
+3. Retry the app when you have wifi. If this is your first run, then the TTS needs to download the voice data files from the Internet. This only needs to be done the first time; after that you don't need an Internet connection.
+
+4. Try tapping on "Listen to a preview" in the TTS Service application. You can make the TTS say "hello" in various languages; if this test works but the application you are trying to use does not, please contact the developer of that application as it probably indicates a bug with how they are using the TTS.
+
+5. If all else fails, install the voice data manually on your scard.
+  * Download [http://eyes-free.googlecode.com/svn/trunk/thirdparty/espeak-data.zip the data file.]
+  * Plug your phone into your computer and mount it
+  * Create a directory on your sdcard called "espeak-data"
+  * Unzip the contents of that zip file into the "espeak-data" directory on your sdcard
+  * Be sure to unplug your phone from your computer after this before retrying the app
+
+6. If it still doesn't work, email me (clchen@google.com) with a detailed description of the problem and what error screens (if any) you are seeing.
