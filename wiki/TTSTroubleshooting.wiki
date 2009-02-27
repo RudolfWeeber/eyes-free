@@ -1,7 +1,6 @@
 = Troubleshooting the TTS =
 
-99% of all issues with using the TTS is caused by the phone being unable to access the voice data stored on the SD card.
-
+99% of all issues with using the TTS is caused by the phone being unable to access the voice data stored on the SD card. Usually this is because there was a problem downloading the data in the first place, or the SD card is not seated well in the device.
 
 Please try the following steps and retry the application at each step; you can stop going through this list once the speech is working.
 
