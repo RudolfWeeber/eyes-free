@@ -189,6 +189,22 @@ public class MarvinShell extends Activity implements GestureListener {
             R.raw.you_have_new_voicemail);
     tts.addSpeech(getString(R.string.voicemail), pkgName, R.raw.voicemail);
     tts.addSpeech(getString(R.string.charging), pkgName, R.raw.charging);
+    tts.addSpeech("north", pkgName, R.raw.north);
+    tts.addSpeech("north east", pkgName, R.raw.north_east);
+    tts.addSpeech("north west", pkgName, R.raw.north_west);
+    tts.addSpeech("north north east", pkgName, R.raw.north_north_east);
+    tts.addSpeech("north north west", pkgName, R.raw.north_north_west);
+    tts.addSpeech("east north east", pkgName, R.raw.east_north_east);
+    tts.addSpeech("west north west", pkgName, R.raw.west_north_west);
+    tts.addSpeech("south", pkgName, R.raw.south);
+    tts.addSpeech("south east", pkgName, R.raw.south_east);
+    tts.addSpeech("south west", pkgName, R.raw.south_west);
+    tts.addSpeech("south south east", pkgName, R.raw.south_south_east);
+    tts.addSpeech("south south west", pkgName, R.raw.south_south_west);
+    tts.addSpeech("east south east", pkgName, R.raw.east_south_east);
+    tts.addSpeech("west south west", pkgName, R.raw.west_south_west);
+    tts.addSpeech("east", pkgName, R.raw.east);
+    tts.addSpeech("west", pkgName, R.raw.west);    
     tts.addSpeech("[cancel]", pkgName, R.raw.cancel_snd);
     tts.addSpeech("[launch]", pkgName, R.raw.launch_snd);
   }

@@ -8,18 +8,25 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.util.Log;
 
+/**
+ * Guide uses the magnetic compass, GPS/Network location provider, and the
+ * Google Maps API to generate a meaningful spoken string to let users know
+ * where they are.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class Guide implements Runnable {
 
   private LocationListener networkLocationListener = new LocationListener() {
     public void onLocationChanged(Location arg0) {
       networkLoc = arg0;
-      networkLocLastUpdate = System.currentTimeMillis();
+      networkLocLastUpdateTime = System.currentTimeMillis();
       networkFixCount++;
       parent.tts.speak("[tock]", 1, null);
       if (networkFixCount > minFixCount) {
         unregisterLocationServices();
-        Log.i("Network location", "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());
-        Log.i("Network location", "Accuracy: " + arg0.getAccuracy());
+        log("Network location", "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());
+        log("Network location", "Accuracy: " + arg0.getAccuracy());
         (new Thread(self)).start();
       }
     }
@@ -27,7 +34,7 @@ public class Guide implements Runnable {
     public void onProviderDisabled(String arg0) {
       unregisterLocationServices();
       networkLoc = null;
-      networkLocLastUpdate = -1;
+      networkLocLastUpdateTime = -1;
     }
 
     public void onProviderEnabled(String arg0) {
@@ -37,7 +44,7 @@ public class Guide implements Runnable {
       if (arg1 != LocationProvider.AVAILABLE) {
         unregisterLocationServices();
         networkLoc = null;
-        networkLocLastUpdate = -1;
+        networkLocLastUpdateTime = -1;
         (new Thread(self)).start();
       }
     }
@@ -47,13 +54,13 @@ public class Guide implements Runnable {
   private LocationListener gpsLocationListener = new LocationListener() {
     public void onLocationChanged(Location arg0) {
       gpsLoc = arg0;
-      gpsLocLastUpdate = System.currentTimeMillis();
+      gpsLocLastUpdateTime = System.currentTimeMillis();
       gpsFixCount++;
       parent.tts.speak("[tock]", 1, null);
       if (gpsFixCount > minFixCount) {
         unregisterLocationServices();
-        Log.i("GPS location", "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());
-        Log.i("GPS location", "Accuracy: " + arg0.getAccuracy());
+        log("GPS location", "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());
+        log("GPS location", "Accuracy: " + arg0.getAccuracy());
         (new Thread(self)).start();
       }
     }
@@ -61,7 +68,7 @@ public class Guide implements Runnable {
     public void onProviderDisabled(String arg0) {
       unregisterLocationServices();
       gpsLoc = null;
-      gpsLocLastUpdate = -1;
+      gpsLocLastUpdateTime = -1;
     }
 
     public void onProviderEnabled(String arg0) {
@@ -71,7 +78,7 @@ public class Guide implements Runnable {
       if (arg1 != LocationProvider.AVAILABLE) {
         unregisterLocationServices();
         gpsLoc = null;
-        gpsLocLastUpdate = -1;
+        gpsLocLastUpdateTime = -1;
         LocationManager locationManager =
             (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
@@ -84,16 +91,20 @@ public class Guide implements Runnable {
   private LocationListener dummyLocationListener = new LocationListener() {
     public void onLocationChanged(Location arg0) {
     }
+
     public void onProviderDisabled(String arg0) {
     }
+
     public void onProviderEnabled(String arg0) {
     }
+
     public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
     }
   };
 
-  private long networkLocLastUpdate = -1;
-  private long gpsLocLastUpdate = -1;
+  private boolean triedGpsLastTime = false;
+  private long networkLocLastUpdateTime = -1;
+  private long gpsLocLastUpdateTime = -1;
   private long lastLocateTime = 0;
   private Location networkLoc = null;
   private Location gpsLoc = null;
@@ -107,6 +118,7 @@ public class Guide implements Runnable {
   private MarvinShell parent;
 
   private Guide self;
+  private Compass compass;
 
   public Guide(MarvinShell parentActivity) {
     self = this;
@@ -119,26 +131,33 @@ public class Guide implements Runnable {
     // determined, a GPS fix can be acquired quickly.
     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000000, 0,
         dummyLocationListener);
+    compass = new Compass(parent);
   }
 
-  private long lastTouchTime = 0;
-  private long switchTime = 30000;
 
   public void speakLocation() {
-    // parent.tts.speak("Obtaining location.", 0, null);
-
     LocationManager locationManager =
         (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
 
+    networkLocLastUpdateTime = -1;
+    gpsLocLastUpdateTime = -1;
+    lastLocateTime = 0;
+    networkLoc = null;
+    gpsLoc = null;
     long currentTime = System.currentTimeMillis();
-    if (currentTime - lastTouchTime > switchTime) {
-      lastTouchTime = currentTime;
-      locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-          gpsLocationListener);
-    } else {
-      lastTouchTime = 0;
+    if (triedGpsLastTime) {
       locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
           networkLocationListener);
+      triedGpsLastTime = false;
+    } else {
+      locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
+          gpsLocationListener);
+      triedGpsLastTime = true;
+    }
+
+    String heading = compass.getCurrentHeading();
+    if (heading.length() > 1) {
+      parent.tts.speak(heading, 0, null);
     }
   }
 
@@ -163,30 +182,41 @@ public class Guide implements Runnable {
       return;
     } else if ((networkLoc == null) && (gpsLoc != null)) {
       loc = gpsLoc;
-      time = gpsLocLastUpdate;
+      time = gpsLocLastUpdateTime;
       usingGPS = true;
     } else if ((networkLoc != null) && (gpsLoc == null)) {
       loc = networkLoc;
-      time = networkLocLastUpdate;
+      time = networkLocLastUpdateTime;
     } else {
-      if (gpsLocLastUpdate + gpsTimeAdvantage > networkLocLastUpdate) {
+      if (gpsLocLastUpdateTime + gpsTimeAdvantage > networkLocLastUpdateTime) {
         loc = gpsLoc;
-        time = gpsLocLastUpdate;
+        time = gpsLocLastUpdateTime;
         usingGPS = true;
       } else {
         loc = networkLoc;
-        time = networkLocLastUpdate;
+        time = networkLocLastUpdateTime;
       }
     }
 
-    String address = getIntersection(loc);
-    if (address.contains(" and ")) { // Intersection
-      address = "Near the intersection of " + address;
-    } else {
-      address = "Near " + getAbsAddress(loc);
+    String message = "";
+
+    String intersection = getIntersection(loc);
+    String absAddress = getAbsAddress(loc);
+    log("Intersection", intersection);
+    log("Address", absAddress);
+
+    message = message + "Near ";
+    if (intersection.contains(" and ")) { // Intersection
+      message = message + intersection;
+    }
+    message = message + absAddress;
+
+    if (intersection.length() + absAddress.length() < 1) {
+      message = "Unable to determine address from lat long. Please try again later.";
     }
 
-    parent.tts.speak(address, 0, null);
+    parent.tts.speak(message, 1, null);
+
     if (usingGPS) {
       parent.tts.speak("G P S", 1, null);
     } else {
@@ -202,7 +232,7 @@ public class Guide implements Runnable {
    * Obtains the reverse geocoded address for the specified location
    * 
    * @param currentLocation The location to reverse geocode
-   * @return
+   * @return The exact address
    */
   private String getAbsAddress(Location currentLocation) {
 
@@ -211,7 +241,7 @@ public class Guide implements Runnable {
     if (address != null) {
       return address;
     } else {
-      return "Unable to determine address.";
+      return "";
     }
   }
 
@@ -219,7 +249,7 @@ public class Guide implements Runnable {
    * Obtains the street names at the specified location.
    * 
    * @param currentLocation The location to find streets names at
-   * @return
+   * @return String The street names at the intersection
    */
   private String getIntersection(Location currentLocation) {
     String[] addr =
@@ -227,7 +257,7 @@ public class Guide implements Runnable {
             .getStreetIntersection(currentLocation.getLatitude(), currentLocation.getLongitude());
     String address = "";
     if (addr.length == 0) {
-      return "Unable to determine address.";
+      return "";
     }
     for (String ad : addr) {
       address += ad + " and ";
@@ -250,6 +280,12 @@ public class Guide implements Runnable {
         (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
     locationManager.removeUpdates(dummyLocationListener);
     unregisterLocationServices();
+    compass.shutdown();
+  }
+
+  private void log(String tag, String message) {
+    // Comment out the following line to turn off logging.
+    Log.i(tag, message);
   }
 
 }
