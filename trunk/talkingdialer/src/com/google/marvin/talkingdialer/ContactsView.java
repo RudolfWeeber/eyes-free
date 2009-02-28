@@ -16,6 +16,7 @@
 
 package com.google.marvin.talkingdialer;
 
+import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
 import com.google.tts.TTSParams;
 
 import java.util.ArrayList;
@@ -59,8 +60,6 @@ public class ContactsView extends TextView {
   private static final int QU = 2;
   private static final int Y = 4;
   private static final int NONE = 5;
-  private final double deletionForce = 2.8;
-  private final int deletionCount = 2;
 
   private final double left = 0;
   private final double upleft = Math.PI * .25;
@@ -97,56 +96,12 @@ public class ContactsView extends TextView {
   private String currentString;
   private String currentContact;
 
-
-  private SensorManager sensorManager;
-
-
   private int trackballTimeout = 500;
   private boolean trackballEnabled = true;
+  
+  private ShakeDetector shakeDetector;
 
 
-  /**
-   * Handles the sensor events for changes to readings and accuracy
-   */
-  private final SensorListener mListener = new SensorListener() {
-    int shakeCount = 0;
-    boolean lastShakePositive = false;
-    private int shakeCountTimeout = 500;
-
-    public void onSensorChanged(int sensor, float[] values) {
-      if ((values[0] > deletionForce) && !lastShakePositive) {
-        (new Thread(new resetShakeCount())).start();
-        shakeCount++;
-        lastShakePositive = true;
-      } else if ((values[0] < -deletionForce) && lastShakePositive) {
-        (new Thread(new resetShakeCount())).start();
-        shakeCount++;
-        lastShakePositive = false;
-      }
-      if (shakeCount > deletionCount) {
-        backspace();
-        shakeCount = 0;
-      }
-    }
-
-    public void onAccuracyChanged(int arg0, int arg1) {
-    }
-
-    class resetShakeCount implements Runnable {
-      public void run() {
-        try {
-          Thread.sleep(shakeCountTimeout);
-          shakeCount = 0;
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-  };
-
-  public void unregisterListeners() {
-    sensorManager.unregisterListener(mListener);
-  }
 
   public ContactsView(Context context) {
     super(context);
@@ -180,9 +135,15 @@ public class ContactsView extends TextView {
     setFocusableInTouchMode(true);
     requestFocus();
 
-    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-    sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
-        SensorManager.SENSOR_DELAY_FASTEST);
+    shakeDetector = new ShakeDetector(context, new ShakeListener(){
+      public void onShakeDetected() {
+        backspace();
+      }      
+    });
+  }
+  
+  public void shutdown(){
+    shakeDetector.shutdown();
   }
 
   @Override

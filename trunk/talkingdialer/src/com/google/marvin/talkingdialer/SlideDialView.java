@@ -16,13 +16,13 @@
 
 package com.google.marvin.talkingdialer;
 
+import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.hardware.SensorListener;
-import android.hardware.SensorManager;
 import android.os.Vibrator;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -45,8 +45,6 @@ public class SlideDialView extends TextView {
   private final double downleft = -Math.PI * .25;
   private final double right = Math.PI;
   private final double rightWrap = -Math.PI;
-  private final double deletionForce = 2.8;
-  private final int deletionCount = 2;
 
   public SlideDial parent;
   private double downX;
@@ -57,55 +55,10 @@ public class SlideDialView extends TextView {
   private String dialedNumber;
   private boolean confirmed;
 
-  private SensorManager sensorManager;
-
   boolean screenIsBeingTouched = false;
   boolean screenVisible = true;
-
-  /**
-   * Handles the sensor events for changes to readings and accuracy
-   */
-  private final SensorListener mListener = new SensorListener() {
-    int shakeCount = 0;
-    boolean lastShakePositive = false;
-    private int shakeCountTimeout = 500;
-    
-    public void onSensorChanged(int sensor, float[] values) {
-      if ((values[0] > deletionForce) && !lastShakePositive) {
-        (new Thread(new resetShakeCount())).start();
-        shakeCount++;
-        lastShakePositive = true;
-      } else if ((values[0] < -deletionForce) && lastShakePositive) {
-        (new Thread(new resetShakeCount())).start();
-        shakeCount++;
-        lastShakePositive = false;
-      }
-      if (shakeCount > deletionCount) {
-        deleteNumber();
-        shakeCount = 0;
-      }
-    }
-
-    public void onAccuracyChanged(int arg0, int arg1) {
-
-    }
-
-    class resetShakeCount implements Runnable {
-      public void run() {
-        try {
-          Thread.sleep(shakeCountTimeout);
-          shakeCount = 0;
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-  };
-
-
-  public void unregisterListeners() {
-    sensorManager.unregisterListener(mListener);
-  }
+  
+  private ShakeDetector shakeDetector;
 
   public SlideDialView(Context context) {
     super(context);
@@ -122,10 +75,17 @@ public class SlideDialView extends TextView {
     requestFocus();
     screenVisible = true;
     screenIsBeingTouched = false;
-    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-    sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
-        SensorManager.SENSOR_DELAY_FASTEST);
+    shakeDetector = new ShakeDetector(context, new ShakeListener(){
+      public void onShakeDetected() {
+        deleteNumber();
+      }      
+    });
   }
+  
+  public void shutdown(){
+    shakeDetector.shutdown();
+  }
+
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {

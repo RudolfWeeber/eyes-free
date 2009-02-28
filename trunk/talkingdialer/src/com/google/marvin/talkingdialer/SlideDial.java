@@ -99,12 +99,12 @@ public class SlideDial extends Activity {
   
   public void removeViews(){
     if (contactsView != null) {
-      contactsView.unregisterListeners();
+      contactsView.shutdown();
       contactsView.setVisibility(View.GONE);
       contactsView = null;
     }
     if (mView != null) {
-      mView.unregisterListeners();
+      mView.shutdown();
       mView.setVisibility(View.GONE);
       mView = null;
     }
