@@ -16,6 +16,7 @@
 
 package com.google.marvin.shell;
 
+import com.google.marvin.shell.ShakeDetector.ShakeListener;
 import com.google.tts.TTSParams;
 
 import java.util.ArrayList;
@@ -32,8 +33,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.hardware.SensorListener;
-import android.hardware.SensorManager;
 import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -53,8 +52,6 @@ public class AppLauncherView extends TextView {
   private static final int QU = 2;
   private static final int Y = 4;
   private static final int NONE = 5;
-  private final double deletionForce = 2.8;
-  private final int deletionCount = 2;
 
   private final double left = 0;
   private final double upleft = Math.PI * .25;
@@ -82,55 +79,10 @@ public class AppLauncherView extends TextView {
   private String currentCharacter;
   private String currentString;
 
-  private SensorManager sensorManager;
-
-
   private int trackballTimeout = 500;
   private boolean trackballEnabled = true;
 
-
-  /**
-   * Handles the sensor events for changes to readings and accuracy
-   */
-  private final SensorListener mListener = new SensorListener() {
-    int shakeCount = 0;
-    boolean lastShakePositive = false;
-    private int shakeCountTimeout = 500;
-
-    public void onSensorChanged(int sensor, float[] values) {
-      if ((values[0] > deletionForce) && !lastShakePositive) {
-        (new Thread(new resetShakeCount())).start();
-        shakeCount++;
-        lastShakePositive = true;
-      } else if ((values[0] < -deletionForce) && lastShakePositive) {
-        (new Thread(new resetShakeCount())).start();
-        shakeCount++;
-        lastShakePositive = false;
-      }
-      if (shakeCount > deletionCount) {
-        backspace();
-        shakeCount = 0;
-      }
-    }
-
-    public void onAccuracyChanged(int arg0, int arg1) {
-    }
-
-    class resetShakeCount implements Runnable {
-      public void run() {
-        try {
-          Thread.sleep(shakeCountTimeout);
-          shakeCount = 0;
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-  };
-
-  public void unregisterListeners() {
-    sensorManager.unregisterListener(mListener);
-  }
+  private ShakeDetector shakeDetector;
 
   @SuppressWarnings("unchecked")
   public AppLauncherView(Context context) {
@@ -169,7 +121,11 @@ public class AppLauncherView extends TextView {
 
     currentString = "";
 
-    sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+    shakeDetector = new ShakeDetector(context, new ShakeListener() {
+      public void onShakeDetected() {
+        backspace();
+      }
+    });
 
     setClickable(true);
     setFocusable(true);
@@ -779,11 +735,16 @@ public class AppLauncherView extends TextView {
 
   @Override
   protected void onWindowVisibilityChanged(int visibility) {
+    if (shakeDetector != null){
+      shakeDetector.shutdown();
+      shakeDetector = null;        
+    }
     if (visibility == View.VISIBLE) {
-      sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
-          SensorManager.SENSOR_DELAY_FASTEST);
-    } else {
-      unregisterListeners();
+      shakeDetector = new ShakeDetector(parent, new ShakeListener() {
+        public void onShakeDetected() {
+          backspace();
+        }
+      });
     }
     super.onWindowVisibilityChanged(visibility);
   }

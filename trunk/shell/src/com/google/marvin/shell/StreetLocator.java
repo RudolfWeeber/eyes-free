@@ -38,6 +38,12 @@ import android.util.Log;
  * @author chaitanyag@google.com (Chaitanya Gharpure)
  */
 public class StreetLocator {
+  public interface StreetLocatorListener{
+    public void onIntersectionLocated(String[] streetnames);
+    public void onAddressLocated(String address);
+  }
+  
+  private StreetLocatorListener cb;
 
   private static final String ENCODING = "UTF-8";
 
@@ -47,6 +53,48 @@ public class StreetLocator {
   //URL for obtaining reverse geocoded location
   private static final String URL_GEO_STRING =
     "http://maps.google.com/maps/geo?";
+  
+  public StreetLocator(StreetLocatorListener callback){
+    cb = callback;
+  }
+  
+  /**
+   * Queries the map server and obtains the street names at the specified
+   * location. This is done by obtaining street name at specified location,
+   * and at locations X meters to the N, S, E, and W of the specified location.
+   * @param lat The latitude in degrees
+   * @param lon The longitude in degrees
+   */
+  public void getStreetIntersectionAsync(double lat, double lon) {
+    final double latitude = lat;
+    final double longitude = lon;    
+    class IntersectionThread implements Runnable{
+      public void run() {
+        cb.onIntersectionLocated(getStreetIntersection(latitude, longitude));
+      }      
+    }
+    (new Thread(new IntersectionThread())).start();
+  }
+  
+
+  
+  /**
+   * Queries the map server and obtains the reverse geocoded address of the
+   * specified location.
+   * @param lat The latitude in degrees
+   * @param lon The longitude in degrees
+   */
+  public void getAddressAsync(double lat, double lon) {
+    final double latitude = lat;
+    final double longitude = lon;    
+    class AddressThread implements Runnable{
+      public void run() {
+        cb.onAddressLocated(getAddress(latitude, longitude));
+      }
+    }
+    (new Thread(new AddressThread())).start();
+  }
+  
   
   /**
    * Queries the map server and obtains the street names at the specified

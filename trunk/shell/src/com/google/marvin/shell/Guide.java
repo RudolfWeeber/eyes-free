@@ -1,5 +1,7 @@
 package com.google.marvin.shell;
 
+import com.google.marvin.shell.StreetLocator.StreetLocatorListener;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,7 +17,7 @@ import android.util.Log;
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
-public class Guide implements Runnable {
+public class Guide implements Runnable, StreetLocatorListener {
 
   private LocationListener networkLocationListener = new LocationListener() {
     public void onLocationChanged(Location arg0) {
@@ -123,7 +125,7 @@ public class Guide implements Runnable {
   public Guide(MarvinShell parentActivity) {
     self = this;
     parent = parentActivity;
-    locator = new StreetLocator();
+    locator = new StreetLocator(this);
     LocationManager locationManager =
         (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
     // Run the dummy listener a bit more often than once per hour to ensure that
@@ -144,6 +146,11 @@ public class Guide implements Runnable {
     lastLocateTime = 0;
     networkLoc = null;
     gpsLoc = null;
+
+    currentLocation = null;
+    currentAddress = "";
+    currentIntersection = "";
+
     long currentTime = System.currentTimeMillis();
     if (triedGpsLastTime) {
       locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
@@ -174,55 +181,42 @@ public class Guide implements Runnable {
     }
     lastLocateTime = System.currentTimeMillis();
     long gpsTimeAdvantage = 300000;
-    Location loc = null;
+    currentLocation = null;
     long time = 0;
     boolean usingGPS = false;
     if ((networkLoc == null) && (gpsLoc == null)) {
       parent.tts.speak("Unable to determine location. Please retry later.", 0, null);
       return;
     } else if ((networkLoc == null) && (gpsLoc != null)) {
-      loc = gpsLoc;
+      currentLocation = gpsLoc;
       time = gpsLocLastUpdateTime;
       usingGPS = true;
     } else if ((networkLoc != null) && (gpsLoc == null)) {
-      loc = networkLoc;
+      currentLocation = networkLoc;
       time = networkLocLastUpdateTime;
     } else {
       if (gpsLocLastUpdateTime + gpsTimeAdvantage > networkLocLastUpdateTime) {
-        loc = gpsLoc;
+        currentLocation = gpsLoc;
         time = gpsLocLastUpdateTime;
         usingGPS = true;
       } else {
-        loc = networkLoc;
+        currentLocation = networkLoc;
         time = networkLocLastUpdateTime;
       }
     }
-
-    String message = "";
-
-    String intersection = getIntersection(loc);
-    String absAddress = getAbsAddress(loc);
-    log("Intersection", intersection);
-    log("Address", absAddress);
-
-    message = message + "Near ";
-    if (intersection.contains(" and ")) { // Intersection
-      message = message + intersection;
-    }
-    message = message + absAddress;
-
-    if (intersection.length() + absAddress.length() < 1) {
-      message = "Unable to determine address from lat long. Please try again later.";
-    }
-
-    parent.tts.speak(message, 1, null);
 
     if (usingGPS) {
       parent.tts.speak("G P S", 1, null);
     } else {
       parent.tts.speak("network", 1, null);
     }
-
+    if (currentLocation != null) {
+      locator.getAddressAsync(currentLocation.getLatitude(), currentLocation.getLongitude());
+    } else {
+      if (currentIntersection.length() + currentAddress.length() < 1) {
+        parent.tts.speak("Unable to determine location. Please try again later.", 1, null);
+      }
+    }
 
   }
 
@@ -286,6 +280,40 @@ public class Guide implements Runnable {
   private void log(String tag, String message) {
     // Comment out the following line to turn off logging.
     Log.i(tag, message);
+  }
+
+
+  private Location currentLocation;
+  private String currentAddress;
+  private String currentIntersection;
+
+  public void onAddressLocated(String address) {
+    currentAddress = address;
+    if (address.length() > 0) {
+      parent.tts.speak("Near " + address, 1, null);
+    }
+    if (currentLocation != null) {
+      locator.getStreetIntersectionAsync(currentLocation.getLatitude(), currentLocation
+          .getLongitude());
+    }
+  }
+
+  public void onIntersectionLocated(String[] streetnames) {
+    if (streetnames.length == 0) {
+      return;
+    }
+    currentIntersection = " Nearby streets are: ";
+    for (String ad : streetnames) {
+      currentIntersection += ad + " and ";
+    }
+    currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
+    if (currentIntersection.length() > 0) {
+      parent.tts.speak(currentIntersection, 1, null);
+    }
+    if (currentIntersection.length() + currentAddress.length() < 1) {
+      parent.tts.speak("Unable to determine address from lat long. Please try again later.", 1,
+          null);
+    }
   }
 
 }
