@@ -19,6 +19,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -498,9 +500,11 @@ public class TTS {
    * @return A boolean that indicates whether the TTS service is installed
    */
   public static boolean isInstalled(Context ctx){
-    try {
-      Context myContext = ctx.createPackageContext("com.google.tts", 0);
-    } catch (NameNotFoundException e) {
+    PackageManager pm = ctx.getPackageManager();
+    Intent intent = new Intent("android.intent.action.USE_TTS");
+    intent.addCategory("android.intent.category.TTS");
+    ResolveInfo info = pm.resolveService(intent, 0);
+    if (info == null){
       return false;
     }
     return true;
