@@ -725,7 +725,8 @@ public class AppLauncherView extends TextView {
     if (!deletedCharacter.equals("")) {
       parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
     } else {
-      parent.tts.speak("Nothing to delete", 0, null);
+      parent.tts.speak("[tock]", 0, null);
+      parent.tts.speak("[tock]", 1, null);
     }
     if (currentString.length() > 0) {
       jumpToFirstMatchingApp();

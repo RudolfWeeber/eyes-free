@@ -53,6 +53,16 @@ public class Compass {
     int index = (int) ((currentHeading * 100 + 1125) / 2250);
     return DIRECTION_NAMES[index];
   }
+  
+  public double getCurrentHeadingValue() {
+    if (currentHeading == -1) {
+      return -1;
+    }
+    if (!sensorOk) {
+      return -1;
+    }
+    return currentHeading;
+  }
 
   public void shutdown() {
     sensorManager.unregisterListener(mListener);

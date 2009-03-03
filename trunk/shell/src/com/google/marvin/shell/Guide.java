@@ -220,46 +220,6 @@ public class Guide implements Runnable, StreetLocatorListener {
 
   }
 
-
-
-  /**
-   * Obtains the reverse geocoded address for the specified location
-   * 
-   * @param currentLocation The location to reverse geocode
-   * @return The exact address
-   */
-  private String getAbsAddress(Location currentLocation) {
-
-    String address =
-        locator.getAddress(currentLocation.getLatitude(), currentLocation.getLongitude());
-    if (address != null) {
-      return address;
-    } else {
-      return "";
-    }
-  }
-
-  /**
-   * Obtains the street names at the specified location.
-   * 
-   * @param currentLocation The location to find streets names at
-   * @return String The street names at the intersection
-   */
-  private String getIntersection(Location currentLocation) {
-    String[] addr =
-        locator
-            .getStreetIntersection(currentLocation.getLatitude(), currentLocation.getLongitude());
-    String address = "";
-    if (addr.length == 0) {
-      return "";
-    }
-    for (String ad : addr) {
-      address += ad + " and ";
-    }
-    address = address.substring(0, address.length() - 4);
-    return address;
-  }
-
   private void unregisterLocationServices() {
     LocationManager locationManager =
         (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
@@ -288,13 +248,30 @@ public class Guide implements Runnable, StreetLocatorListener {
   private String currentIntersection;
 
   public void onAddressLocated(String address) {
-    currentAddress = address;
+    currentAddress = "";
     if (address.length() > 0) {
-      parent.tts.speak("Near " + address, 1, null);
+      // Drop the country
+      address = address.substring(0, address.lastIndexOf(","));
+      // Extract the state and zip and insert spaces in the state name
+      // that the synthesizer will do the right thing.
+      String rawStateZip = address.substring(address.lastIndexOf(",") + 1);
+      String zip = rawStateZip.substring(rawStateZip.lastIndexOf(" ") + 1);
+      String state = rawStateZip.substring(0, rawStateZip.lastIndexOf(" ") + 1);
+      String stateZip = "";
+      for (int i = 0; i < state.length(); i++) {
+        stateZip = stateZip + state.charAt(i) + " ";
+      }
+      stateZip = stateZip + zip;
+      currentAddress = address.substring(0, address.lastIndexOf(",")) + ". " + stateZip;
+
+      parent.tts.speak("Near " + currentAddress, 1, null);
     }
     if (currentLocation != null) {
-      locator.getStreetIntersectionAsync(currentLocation.getLatitude(), currentLocation
-          .getLongitude());
+      double heading = compass.getCurrentHeadingValue();
+      if (heading != -1) {
+        locator.getStreetsInFrontAndBackAsync(currentLocation.getLatitude(), currentLocation
+            .getLongitude(), compass.getCurrentHeadingValue());
+      }
     }
   }
 
@@ -302,17 +279,58 @@ public class Guide implements Runnable, StreetLocatorListener {
     if (streetnames.length == 0) {
       return;
     }
-    currentIntersection = " Nearby streets are: ";
+    currentIntersection = "";
     for (String ad : streetnames) {
-      currentIntersection += ad + " and ";
+      if (currentAddress.indexOf(ad) == -1) {
+        currentIntersection += ad + " and ";
+      }
     }
-    currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
-    if (currentIntersection.length() > 0) {
+    if (currentIntersection.length() > 5) {
+      currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
+      currentIntersection = " Nearby streets are: " + currentIntersection;
       parent.tts.speak(currentIntersection, 1, null);
+
     }
     if (currentIntersection.length() + currentAddress.length() < 1) {
       parent.tts.speak("Unable to determine address from lat long. Please try again later.", 1,
           null);
+    }
+  }
+
+
+  public void onFrontBackLocated(String[] streetsFront, String[] streetsBack) {
+    String currentIntersection = "";
+    boolean spokeSomething = false;
+    if (streetsFront.length > 0) {
+      for (String ad : streetsFront) {
+        if (currentAddress.indexOf(ad) == -1) {
+          currentIntersection += ad + " and ";
+        }
+      }
+      if (currentIntersection.length() > 5) {
+        currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
+        parent.tts.speak("Ahead. " + currentIntersection, 1, null);
+        spokeSomething = true;
+      }
+    }
+
+    currentIntersection = "";
+    if (streetsBack.length > 0) {
+      for (String ad : streetsBack) {
+        if (currentAddress.indexOf(ad) == -1) {
+          currentIntersection += ad + " and ";
+        }
+      }
+      if (currentIntersection.length() > 5) {
+        currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
+        parent.tts.speak("Behind. " + currentIntersection, 1, null);
+        spokeSomething = true;
+      }
+    }
+
+    if (!spokeSomething) {
+      locator.getStreetIntersectionAsync(currentLocation.getLatitude(), currentLocation
+          .getLongitude());
     }
   }
 
