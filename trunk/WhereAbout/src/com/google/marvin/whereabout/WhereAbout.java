@@ -46,9 +46,8 @@ public class WhereAbout extends Activity implements Runnable {
   private TextView mainText = null;
   private LocationManager locationManager = null;
   private Location currentLocation = null;
-  private WhereAboutListener locListener = null;
-  private StreetLocator locator = null;
   private TTS tts = null;
+  private WhereAboutListener locListener = null;
   
   private boolean ttsLoaded = false;
   private long timeDown, pressTime;
@@ -58,7 +57,6 @@ public class WhereAbout extends Activity implements Runnable {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    locator = new StreetLocator();
     tts = new TTS(this, new InitListener() {
       public void onInit(int arg0) {
          ttsLoaded = true;
@@ -105,11 +103,9 @@ public class WhereAbout extends Activity implements Runnable {
   }
 
   public synchronized void run() {
-    if (pressTime > 500) {    // Long press: intersection
-      locate(true);
-    } else {      // Short press: absolute street address
-      locate(false);
-    }
+    // if pressTime > 500: Long press: intersection
+    // else Short press: absolute street address
+    locate(pressTime > 500);
   }
   
   /**
@@ -156,7 +152,10 @@ public class WhereAbout extends Activity implements Runnable {
     msg.setData(data);
     handler.sendMessage(msg);
   }
-  
+
+  /**
+   * Dismisses th progress dialog, and displays result.
+   */
   private Handler handler = new Handler() {
     @Override
     public void handleMessage(Message msg) {
@@ -187,11 +186,10 @@ public class WhereAbout extends Activity implements Runnable {
    * @param currentLocation The location to reverse geocode
    * @return
    */
-  private String getAbsAddress(Location currentLocation) {
+  private String getAbsAddress(Location loc) {
     
     String address = 
-        locator.getAddress(currentLocation.getLatitude(),
-        currentLocation.getLongitude());
+        StreetLocator.getAddress(loc.getLatitude(), loc.getLongitude());
     if (address != null) {
       return address;
     } else {
@@ -204,10 +202,10 @@ public class WhereAbout extends Activity implements Runnable {
    * @param currentLocation The location to find streets names at
    * @return
    */
-  private String getIntersection(Location currentLocation) {
+  private String getIntersection(Location loc) {
     String[] addr =
-        locator.getStreetIntersection(currentLocation.getLatitude(),
-        currentLocation.getLongitude());
+        StreetLocator.getStreetIntersection(loc.getLatitude(),
+        loc.getLongitude());
     String address = "";
     if (addr.length == 0) {
       return getString(R.string.failed_intersection);
@@ -245,11 +243,11 @@ public class WhereAbout extends Activity implements Runnable {
       }
     }
 
-	public void onProviderDisabled(String provider) {
-	  currentLocation = null;
-	}
-
-	public void onProviderEnabled(String provider) {
-	}
+    public void onProviderDisabled(String provider) {
+      currentLocation = null;
+    }
+    
+    public void onProviderEnabled(String provider) {
+    }
   }  
 }
