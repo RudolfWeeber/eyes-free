@@ -32,6 +32,14 @@
     <string name="voicemail">Voicemail</string>
     <string name="marvin_intro_snd_">[marvin intro]</string>
     <string name="charging">charging</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="gps_enabled">GPS enabled</string>
+    <string name="no_data_network">No data network</string>
+    <string name="mobile_data_network">Mobile data network</string>
+    <string name="threeg_data_network">3G data network</string>
+    <string name="edge_data_network">EDGE data network</string>
+    <string name="bars">bars.</string>
+    <string name="wifi">Wi fi</string>
     
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>
