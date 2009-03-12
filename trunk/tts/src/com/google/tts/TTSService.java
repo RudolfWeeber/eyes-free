@@ -42,9 +42,7 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.FactoryConfigurationError;
-
 
 /**
  * Synthesizes speech from text. This is implemented as a service so that other
@@ -112,8 +110,8 @@ public class TTSService extends Service implements OnCompletionListener {
   private void setSpeechRate(int rate) {
     if (prefs.getBoolean("override_pref", false)) {
       // This is set to the default here so that the preview in the prefs
-      // activity will show the change without a restart, even if apps are not
-      // allowed to change the defaults.
+      // activity will show the change without a restart, even if apps are
+      // not allowed to change the defaults.
       rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
     }
     // Clear cache so that the TTS will regenerate the
@@ -126,7 +124,8 @@ public class TTSService extends Service implements OnCompletionListener {
   private void setLanguage(String lang) {
     if (prefs.getBoolean("override_pref", false)) {
       // This is set to the default here so that the preview in the prefs
-      // activity will show the change without a restart, even if apps are not
+      // activity will show the change without a restart, even if apps are
+      // not
       // allowed to change the defaults.
       lang = prefs.getString("lang_pref", "en-us");
     }
@@ -137,8 +136,8 @@ public class TTSService extends Service implements OnCompletionListener {
     // The eSpeak documentation for Cantonese seems to be wrong.
     // It seems like using "zhy" will cause all Chinese characters to be
     // spoken as "symbol blah blah blah". The solution is to actually use
-    // zh and variant 3. In addition, "zhy" is not a standard IETF language tag;
-    // the standard IETF language tag is "zh-yue".
+    // zh and variant 3. In addition, "zhy" is not a standard IETF language
+    // tag; the standard IETF language tag is "zh-yue".
     if (language.equals("zh-yue")) {
       speechSynthesis.setLanguage("zh", 5);
     } else {
@@ -175,7 +174,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private void loadUtterancesFromPropertiesFile() {
     Resources res = getResources();
     InputStream fis = res.openRawResource(R.raw.soundsamples);
-    DocumentBuilder docBuild;
+
     try {
       Properties soundsamples = new Properties();
       soundsamples.load(fis);
@@ -204,15 +203,15 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     if (!ConfigurationManager.allFilesExist()) {
-      // This should have been taken care of when the TTS is launched 
+      // This should have been taken care of when the TTS is launched
       // by the check in the TTS.java wrapper.
       return false;
     }
     clearScratchFiles();
     return true;
   }
-  
-  private void clearScratchFiles(){
+
+  private void clearScratchFiles() {
     File scratchDir = new File(ESPEAK_SCRATCH_DIRECTORY);
     boolean directoryExists = scratchDir.isDirectory();
     if (directoryExists) {
@@ -223,7 +222,7 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       scratchDir.mkdir();
     }
-    cache = new HashMap<String, SoundResource>();    
+    cache = new HashMap<String, SoundResource>();
   }
 
   /**
@@ -281,40 +280,46 @@ public class TTSService extends Service implements OnCompletionListener {
     }
   }
 
-  private void speakEspeakOnly(String text, int queueMode, ArrayList<String> params) {
-    if (!utterances.containsKey(text) && !isInCache(text)) {
-      long time = System.currentTimeMillis();
-      String ts = Long.toString(time);
-      String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
+  private void speakEspeakOnly(final String text, int queueMode, ArrayList<String> params) {
+    class synthThread implements Runnable {
+      public void run() {
+        if (!utterances.containsKey(text) && !isInCache(text)) {
+          long time = System.currentTimeMillis();
+          String ts = Long.toString(time);
+          String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
 
-      // eSpeak does not behave correctly if called from multiple threads.
-      // Using a lock here will cause some text to be dropped if too many
-      // requests happen at once, but that is better than crashing.
-      try {
-        boolean synthAvailable = synthesizerLock.tryLock();
-        if (!synthAvailable) {
-          return;
+          // eSpeak does not behave correctly if called from multiple
+          // threads.
+          // Using a lock here will cause some text to be dropped if too many
+          // requests happen at once, but that is better than crashing.
+          try {
+            boolean synthAvailable = synthesizerLock.tryLock();
+            if (!synthAvailable) {
+              return;
+            }
+            speechSynthesis.synthesizeToFile(text, filename);
+          } finally {
+            synthesizerLock.unlock();
+          }
+
+          cacheSpeech(text, filename);
         }
-        speechSynthesis.synthesizeToFile(text, filename);
-      } finally {
-        synthesizerLock.unlock();
+
+        speechQueue.add(text);
+        if (!isSpeaking) {
+          processSpeechQueue();
+        }
       }
-
-      cacheSpeech(text, filename);
     }
-
-    speechQueue.add(text);
-    if (!isSpeaking) {
-      processSpeechQueue();
-    }
+    (new Thread(new synthThread())).run();
   }
-  
-  private boolean isInCache(String text){
+
+  private boolean isInCache(String text) {
     SoundResource sr = cache.get(text);
-    if (sr == null){
+    if (sr == null) {
       return false;
     }
-    if (!new File(sr.filename).isFile()){
+    if (!new File(sr.filename).isFile()) {
       cache.remove(text);
       return false;
     }
@@ -352,8 +357,8 @@ public class TTSService extends Service implements OnCompletionListener {
             speak(currentCharacter, 1, params);
           }
         }
+        return;
       }
-      return;
     }
 
     speechQueue.add(text);
@@ -377,7 +382,7 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     if (!utterances.containsKey(text)) {
-      if (text.length() > 1) {
+      if (text.length() > 0) {
         // Flush the queue first if needed
         if (queueMode == 0) {
           speak("", 0, null);
@@ -467,7 +472,6 @@ public class TTSService extends Service implements OnCompletionListener {
     }
   }
 
-
   /**
    * Stops all speech output and removes any utterances still in the queue.
    */
@@ -482,7 +486,6 @@ public class TTSService extends Service implements OnCompletionListener {
       }
     }
   }
-
 
   public void onCompletion(MediaPlayer arg0) {
     if (speechQueue.size() > 0) {
@@ -528,9 +531,8 @@ public class TTSService extends Service implements OnCompletionListener {
           player = MediaPlayer.create(this, Uri.parse(sr.filename));
         }
 
-        // Check for if Media Server is dead;
-        // if it is, clear the queue and give
-        // up for now - hopefully, it will recover itself.
+        // Check if Media Server is dead; if it is, clear the queue and
+        // give up for now - hopefully, it will recover itself.
         if (player == null) {
           speechQueue.clear();
           isSpeaking = false;
@@ -585,8 +587,8 @@ public class TTSService extends Service implements OnCompletionListener {
         return false;
       }
       // Don't allow a filename that is too long
-      if (filename.length() > 250){
-        return false;        
+      if (filename.length() > 250) {
+        return false;
       }
       speechSynthesis.synthesizeToFile(text, filename);
     } finally {
@@ -596,7 +598,6 @@ public class TTSService extends Service implements OnCompletionListener {
     Log.i("TTS", "Completed synthesis for " + filename);
     return true;
   }
-
 
   @Override
   public IBinder onBind(Intent intent) {
