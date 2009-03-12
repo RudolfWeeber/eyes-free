@@ -33,7 +33,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.SystemClock;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,12 +86,20 @@ public class AppLauncherView extends TextView {
 
   private ShakeDetector shakeDetector;
 
+  private long lastLogTime = 0;
+
+  private void logTime() {
+    long time = System.currentTimeMillis();
+    long diff = time - lastLogTime;
+    lastLogTime = time;
+    Log.i("debug time logger", diff + " ");
+  }
+
   @SuppressWarnings("unchecked")
   public AppLauncherView(Context context) {
     super(context);
 
     parent = ((AppLauncher) context);
-
     vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
     // Build app list here
@@ -97,6 +107,8 @@ public class AppLauncherView extends TextView {
     mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
     PackageManager pm = parent.getPackageManager();
     List<ResolveInfo> apps = pm.queryIntentActivities(mainIntent, 0);
+    logTime();
+
     appList = new ArrayList<AppEntry>();
     appListIndex = 0;
     for (ResolveInfo info : apps) {
@@ -104,12 +116,12 @@ public class AppLauncherView extends TextView {
       if (title.length() == 0) {
         title = info.activityInfo.name.toString();
       }
-      String packageName = info.activityInfo.packageName;
-      String className = info.activityInfo.name;
-      Drawable icon = info.loadIcon(pm);
-      AppEntry entry = new AppEntry(title, packageName, className, icon, null);
+
+      AppEntry entry = new AppEntry(title, info, null);
       appList.add(entry);
     }
+    logTime();
+
     class appEntrySorter implements Comparator {
       public int compare(Object arg0, Object arg1) {
         String title0 = ((AppEntry) arg0).getTitle();
@@ -120,12 +132,6 @@ public class AppLauncherView extends TextView {
     Collections.sort(appList, new appEntrySorter());
 
     currentString = "";
-
-    shakeDetector = new ShakeDetector(context, new ShakeListener() {
-      public void onShakeDetected() {
-        backspace();
-      }
-    });
 
     setClickable(true);
     setFocusable(true);
@@ -330,22 +336,24 @@ public class AppLauncherView extends TextView {
       currentValue = 5;
     }
     currentCharacter = getCharacter(currentWheel, currentValue);
-    if (currentCharacter.equals("SPACE")) {
-      currentString = currentString + " ";
+    if (currentCharacter.equals("<-")) {
+      currentCharacter = "";
+      backspace();
+    } else {
+      if (currentCharacter.equals("SPACE")) {
+        currentString = currentString + " ";
+      }
+      /*
+       * else if (currentCharacter.equals("MODE")) { // Do nothing }
+       */
+      else {
+        currentString = currentString + currentCharacter;
+      }
+      parent.tts.speak(currentCharacter, 0, null);
+      jumpToFirstMatchingApp();
     }
-    /*
-     * else if (currentCharacter.equals("MODE")) { // Do nothing }
-     */
-    else {
-      currentString = currentString + currentCharacter;
-    }
-    parent.tts.speak(currentCharacter, 0, null);
-
     invalidate();
     initiateMotion(lastX, lastY);
-
-    currentString = currentString + currentCharacter;
-    jumpToFirstMatchingApp();
   }
 
   private void initiateMotion(double x, double y) {
@@ -508,9 +516,9 @@ public class AppLauncherView extends TextView {
           case 2:
             return "!";
           case 3:
-            return ""; // return "MODE";
+            return "SPACE"; // return "MODE";
           case 4:
-            return "SPACE";
+            return "<-";
           case 5:
             return "";
           case 6:
@@ -630,7 +638,6 @@ public class AppLauncherView extends TextView {
       int x9 = (int) downX + offset;
       int y9 = (int) downY + offset;
 
-
       y1 -= paint.ascent() / 2;
       y2 -= paint.ascent() / 2;
       y3 -= paint.ascent() / 2;
@@ -678,9 +685,8 @@ public class AppLauncherView extends TextView {
           paint.setColor(Color.YELLOW);
           drawCharacter(",", x1, y1, canvas, paint, currentCharacter.equals(","));
           drawCharacter("!", x2, y2, canvas, paint, currentCharacter.equals("!"));
-          // drawCharacter("MODE", x3, y3, canvas, paint,
-          // currentCharacter.equals("MODE"));
-          drawCharacter("SPACE", x4, y4, canvas, paint, currentCharacter.equals("SPACE"));
+          drawCharacter("SPACE", x3, y3, canvas, paint, currentCharacter.equals("SPACE"));
+          drawCharacter("<-", x4, y4, canvas, paint, currentCharacter.equals("<-"));
           drawCharacter("Y", x6, y6, canvas, paint, currentCharacter.equals("Y"));
           drawCharacter(".", x7, y7, canvas, paint, currentCharacter.equals("."));
           drawCharacter("?", x8, y8, canvas, paint, currentCharacter.equals("?"));
@@ -698,7 +704,7 @@ public class AppLauncherView extends TextView {
           canvas.drawText("U", x7, y7, paint);
           paint.setColor(Color.YELLOW);
           canvas.drawText("Y", x6, y6, paint);
-          canvas.drawText("SPACE", x4, y4, paint);
+          canvas.drawText("<-", x4, y4, paint);
           break;
       }
     }
@@ -736,9 +742,9 @@ public class AppLauncherView extends TextView {
 
   @Override
   protected void onWindowVisibilityChanged(int visibility) {
-    if (shakeDetector != null){
+    if (shakeDetector != null) {
       shakeDetector.shutdown();
-      shakeDetector = null;        
+      shakeDetector = null;
     }
     if (visibility == View.VISIBLE) {
       shakeDetector = new ShakeDetector(parent, new ShakeListener() {
@@ -749,7 +755,5 @@ public class AppLauncherView extends TextView {
     }
     super.onWindowVisibilityChanged(visibility);
   }
-
-
 
 }

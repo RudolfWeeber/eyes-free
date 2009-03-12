@@ -6,6 +6,7 @@ import android.hardware.SensorManager;
 
 /**
  * Compass uses the magnetic compass to track the current heading.
+ * 
  * @author clchen@google.com (Charles L. Chen)
  */
 
@@ -53,7 +54,7 @@ public class Compass {
     int index = (int) ((currentHeading * 100 + 1125) / 2250);
     return DIRECTION_NAMES[index];
   }
-  
+
   public double getCurrentHeadingValue() {
     if (currentHeading == -1) {
       return -1;

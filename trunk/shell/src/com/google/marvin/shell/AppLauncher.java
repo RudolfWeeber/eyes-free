@@ -41,8 +41,7 @@ public class AppLauncher extends Activity {
     try {
       int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
       Context myContext = createPackageContext(theApp.getPackageName(), flags);
-      Class<?> appClass =
-          myContext.getClassLoader().loadClass(theApp.getClassName());
+      Class<?> appClass = myContext.getClassLoader().loadClass(theApp.getClassName());
       Intent intent = new Intent(myContext, appClass);
       startActivity(intent);
     } catch (NameNotFoundException e) {
