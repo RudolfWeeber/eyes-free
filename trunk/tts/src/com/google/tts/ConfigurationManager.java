@@ -41,7 +41,6 @@ public class ConfigurationManager extends Activity {
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    File espeakDataDir = new File("/sdcard/espeak-data/");
     if (!allFilesExist()) {
       setContentView(R.layout.downloading);
       (new Thread(new dataDownloader())).start();

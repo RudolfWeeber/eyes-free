@@ -311,7 +311,7 @@ public class TTSService extends Service implements OnCompletionListener {
         }
       }
     }
-    (new Thread(new synthThread())).run();
+    (new Thread(new synthThread())).start();
   }
 
   private boolean isInCache(String text) {

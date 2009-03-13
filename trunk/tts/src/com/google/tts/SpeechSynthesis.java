@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
  * 
  * @author dmazzoni@gmail.com (Dominic Mazzoni)
  */
+@SuppressWarnings("unused")
 public class SpeechSynthesis {
 
   //
