@@ -47,9 +47,10 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
   private static final String permaLinkText = "Permanent link to this comic: http://xkcd.com/";
 
   private xkcdroid self;
-  
+
   private TTS tts;
   private String speakButtonPref;
+  private Boolean displayToastPref;
 
   private WebView web;
   private TextView title;
@@ -59,13 +60,13 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
   private String currentComicTitle = "";
 
 
-  ProgressDialog loadingDialog = null; 
+  ProgressDialog loadingDialog = null;
 
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    
+
     self = this;
 
     loadPrefs();
@@ -73,7 +74,7 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
     setContentView(R.layout.main);
     web = (WebView) findViewById(R.id.webView);
     title = (TextView) findViewById(R.id.titleText);
-    
+
     Button randomButton = (Button) findViewById(R.id.randomButton);
     randomButton.setOnClickListener(new OnClickListener() {
       public void onClick(View arg0) {
@@ -101,13 +102,15 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
         tts.speak(currentComment, 0, null);
       }
     }
-    Toast.makeText(this, currentComment, 1).show();
+    if (displayToastPref) {
+      Toast.makeText(this, currentComment, 1).show();
+    }
   }
 
 
 
   private void loadRandomComic() {
-    loadingDialog = ProgressDialog.show(self, "Loading...", "Please wait", true); 
+    loadingDialog = ProgressDialog.show(self, "Loading...", "Please wait", true);
     class comicLoader implements Runnable {
       public void run() {
         String url = "";
@@ -156,16 +159,16 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
     Thread loadThread = (new Thread(new comicLoader()));
     loadThread.start();
   }
-  
-  private void updateDisplay(){
+
+  private void updateDisplay() {
     class titleTextUpdater implements Runnable {
       public void run() {
         title.setText(currentComicTitle);
-      }      
+      }
     }
     title.post(new titleTextUpdater());
   }
-  
+
 
   private void fetchTranscript() {
     String transcriptUrl = transcriptsUrlStart + currentComicNumber + transcriptsUrlEnd;
@@ -249,6 +252,7 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     // From the game mode setting
     speakButtonPref = prefs.getString("speak_pref", "Commentary");
+    displayToastPref = prefs.getBoolean("display_toast_pref", true);
   }
 
   private void displayAbout() {

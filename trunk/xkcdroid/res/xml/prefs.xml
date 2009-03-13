@@ -9,6 +9,13 @@
                 android:defaultValue="Commentary"
                 android:entryValues="@array/speak_entries"  />
                 
+        <CheckBoxPreference
+                android:key="display_toast_pref"
+                android:title="Show comments visually"
+                android:summaryOn="(Default) Commentary will be displayed visually."
+                android:summaryOff="Commentary will not be displayed."
+                android:defaultValue="true"/>
+                
        <Preference
                 android:key="tts_settings" 
                 android:title="Text-To-Speech Settings" />           
