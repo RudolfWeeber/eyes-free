@@ -1,4 +1,4 @@
-package com.marvin.xkcdroid;
+package com.google.marvin.randroid;
 
 
 import com.google.tts.TTS;
@@ -12,9 +12,6 @@ import org.htmlparser.tags.HeadingTag;
 import org.htmlparser.tags.TextareaTag;
 import org.htmlparser.tags.ParagraphTag;
 
-import java.io.IOException;
-import java.net.URL;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,7 +23,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +33,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class xkcdroid extends Activity implements WebDataLoadedListener {
+public class randroid extends Activity {
   private static final int PREFS_UPDATED = 42;
   private static final String randomUrl = "http://dynamic.xkcd.com/comic/random/";
   private static final String comicImagesBaseUrl = "http://imgs.xkcd.com/comics/";
@@ -46,7 +42,7 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
   private static final String transcriptsUrlEnd = "%2F";
   private static final String permaLinkText = "Permanent link to this comic: http://xkcd.com/";
 
-  private xkcdroid self;
+  private randroid self;
 
   private TTS tts;
   private String speakButtonPref;
@@ -115,10 +111,9 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
       public void run() {
         String url = "";
         try {
-          String html = HttpUtil.getResult(new URL(randomUrl.toString()));
           Parser p = new Parser();
+          p.setURL(randomUrl.toString());
 
-          p.setInputHTML(html);
           NodeList headings = p.extractAllNodesThatMatch(new NodeClassFilter(HeadingTag.class));
           for (int i = 0; i < headings.size(); i++) {
             HeadingTag n = (HeadingTag) headings.elementAt(i);
@@ -130,7 +125,7 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
             }
           }
 
-          p.setInputHTML(html);
+          p.reset();
           NodeList images = p.extractAllNodesThatMatch(new NodeClassFilter(ImageTag.class));
           for (int i = 0; i < images.size(); i++) {
             ImageTag n = (ImageTag) images.elementAt(i);
@@ -146,10 +141,8 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
           if (speakButtonPref.equals("Transcript")) {
             fetchTranscript();
           }
-        } catch (IOException e) {
-          Log.d("xkcdroid", "ioexception - network error");
         } catch (ParserException pce) {
-          Log.d("xkcdroid", "parsing error - wtf?");
+          currentComicTitle = "Network error - please retry later.";
         }
         web.loadUrl(url);
         updateDisplay();
@@ -174,11 +167,10 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
     String transcriptUrl = transcriptsUrlStart + currentComicNumber + transcriptsUrlEnd;
     String transcript = "";
     try {
-      String html = HttpUtil.getResult(new URL(transcriptUrl.toString()));
       Parser p = new Parser();
+      p.setURL(transcriptUrl.toString());
 
       // Sometimes transcripts are inside a textarea
-      p.setInputHTML(html);
       NodeList textareas = p.extractAllNodesThatMatch(new NodeClassFilter(TextareaTag.class));
       if (textareas.size() > 0) {
         TextareaTag n = (TextareaTag) textareas.elementAt(0);
@@ -190,7 +182,7 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
       }
 
       // Othertimes, they are inside a P
-      p.setInputHTML(html);
+      p.reset();
       NodeList paragraphs = p.extractAllNodesThatMatch(new NodeClassFilter(ParagraphTag.class));
       if (paragraphs.size() > 0) {
         ParagraphTag n = (ParagraphTag) paragraphs.elementAt(0);
@@ -200,10 +192,8 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
           return;
         }
       }
-    } catch (IOException e) {
-      Log.d("xkcdroid", "ioexception - network error");
     } catch (ParserException pce) {
-      Log.d("xkcdroid", "parsing error - wtf?");
+      // This can happen if there is a network error. Do nothing here.
     }
   }
 
@@ -303,11 +293,6 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
     });
 
     about.show();
-  }
-
-
-  public void onDataLoaded() {
-    title.setText(currentComicTitle);
   }
 
 }

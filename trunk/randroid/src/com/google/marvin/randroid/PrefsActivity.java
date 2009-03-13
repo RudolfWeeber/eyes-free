@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.marvin.xkcdroid;
+package com.google.marvin.randroid;
 
 import com.google.tts.TTS;
 
