@@ -91,7 +91,7 @@ public class randroid extends Activity {
   }
 
   private void speak() {
-    if (!speakButtonPref.equals("None")) {
+    if (!speakButtonPref.equals(getString(R.string.none))) {
       if (tts.isSpeaking()) {
         tts.stop();
       } else {
@@ -106,7 +106,9 @@ public class randroid extends Activity {
 
 
   private void loadRandomComic() {
-    loadingDialog = ProgressDialog.show(self, "Loading...", "Please wait", true);
+    loadingDialog =
+        ProgressDialog.show(self, getString(R.string.loading), getString(R.string.please_wait),
+            true);
     class comicLoader implements Runnable {
       public void run() {
         String url = "";
@@ -138,11 +140,11 @@ public class randroid extends Activity {
             }
           }
 
-          if (speakButtonPref.equals("Transcript")) {
+          if (speakButtonPref.equals(getString(R.string.transcript))) {
             fetchTranscript();
           }
         } catch (ParserException pce) {
-          currentComicTitle = "Network error - please retry later.";
+          currentComicTitle = self.getString(R.string.net_error);
         }
         web.loadUrl(url);
         updateDisplay();
@@ -181,7 +183,7 @@ public class randroid extends Activity {
         }
       }
 
-      // Othertimes, they are inside a P
+      // Other times, they are inside a P
       p.reset();
       NodeList paragraphs = p.extractAllNodesThatMatch(new NodeClassFilter(ParagraphTag.class));
       if (paragraphs.size() > 0) {
@@ -210,8 +212,9 @@ public class randroid extends Activity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    menu.add(0, 0, 0, "Preferences").setIcon(android.R.drawable.ic_menu_preferences);
-    menu.add(0, 1, 0, "About").setIcon(android.R.drawable.ic_menu_info_details);
+    menu.add(0, R.string.preferences, 0, R.string.preferences).setIcon(
+        android.R.drawable.ic_menu_preferences);
+    menu.add(0, R.string.about, 0, R.string.about).setIcon(android.R.drawable.ic_menu_info_details);
     return super.onCreateOptionsMenu(menu);
   }
 
@@ -219,11 +222,11 @@ public class randroid extends Activity {
   public boolean onOptionsItemSelected(MenuItem item) {
     Intent intent;
     switch (item.getItemId()) {
-      case 0:
+      case R.string.preferences:
         intent = new Intent(this, PrefsActivity.class);
         startActivityForResult(intent, PREFS_UPDATED);
         break;
-      case 1:
+      case R.string.about:
         displayAbout();
         break;
     }
@@ -241,24 +244,19 @@ public class randroid extends Activity {
   private void loadPrefs() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     // From the game mode setting
-    speakButtonPref = prefs.getString("speak_pref", "Commentary");
+    speakButtonPref = prefs.getString("speak_pref", getString(R.string.commentary));
     displayToastPref = prefs.getBoolean("display_toast_pref", true);
   }
 
   private void displayAbout() {
     Builder about = new Builder(this);
 
-    String titleText = "xkcdroid";
-
-    about.setTitle(titleText);
-    String message =
-        "xkcd by Randall Munroe\n\nTranscripts by various xkcd fans and hosted on ohnorobot.com\n\nRandroid by Charles L. Chen";
-
-    about.setMessage(message);
+    about.setTitle(R.string.app_name);
+    about.setMessage(R.string.about_message);
 
     final Activity self = this;
 
-    about.setNeutralButton("Randroid Source", new Dialog.OnClickListener() {
+    about.setNeutralButton(R.string.source, new Dialog.OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
         Intent i = new Intent();
         ComponentName comp =
@@ -272,7 +270,7 @@ public class randroid extends Activity {
       }
     });
 
-    about.setPositiveButton("xkcd Website", new Dialog.OnClickListener() {
+    about.setPositiveButton(R.string.xkcd_website, new Dialog.OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
         Intent i = new Intent();
         ComponentName comp =
@@ -286,7 +284,7 @@ public class randroid extends Activity {
       }
     });
 
-    about.setNegativeButton("Close", new Dialog.OnClickListener() {
+    about.setNegativeButton(R.string.close, new Dialog.OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
 
       }

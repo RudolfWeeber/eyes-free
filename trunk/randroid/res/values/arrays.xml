@@ -20,9 +20,9 @@
     <!-- Speak Button Settings -->
 
     <string-array name="speak_entries">
-        <item>None</item>
-        <item>Commentary</item>
-        <item>Transcript</item>
+        <item>@string/none</item>
+        <item>@string/commentary</item>
+        <item>@string/transcript</item>
     </string-array>
 
 

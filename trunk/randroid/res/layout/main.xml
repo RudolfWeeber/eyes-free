@@ -17,13 +17,13 @@
     android:layout_height="wrap_content"  
     android:padding="10sp"     
     android:src="@drawable/speak_icon"
-    android:text="Speak"/>
+    android:text="@string/speak"/>
 <Button
     android:id="@+id/randomButton"
     android:layout_width="wrap_content" 
     android:layout_height="fill_parent" 
     android:textSize="18sp"
-    android:text="Random"
+    android:text="@string/random"
     android:padding="10sp"
     />
     <TextView
@@ -32,7 +32,7 @@
     android:layout_height="wrap_content" 
     android:textSize="18sp"
     android:padding="10sp"
-    android:text="xkcd"
+    android:text="@string/xkcd"
     />
 </LinearLayout>
     
