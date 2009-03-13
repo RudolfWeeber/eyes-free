@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, xkcdroid</string>
-    <string name="app_name">xkcdroid</string>
+    <string name="app_name">Randroid</string>
 </resources>

@@ -17,6 +17,7 @@ import java.net.URL;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
 import android.content.DialogInterface;
@@ -45,6 +46,8 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
   private static final String transcriptsUrlEnd = "%2F";
   private static final String permaLinkText = "Permanent link to this comic: http://xkcd.com/";
 
+  private xkcdroid self;
+  
   private TTS tts;
   private String speakButtonPref;
 
@@ -56,18 +59,21 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
   private String currentComicTitle = "";
 
 
+  ProgressDialog loadingDialog = null; 
 
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    
+    self = this;
 
     loadPrefs();
 
     setContentView(R.layout.main);
     web = (WebView) findViewById(R.id.webView);
     title = (TextView) findViewById(R.id.titleText);
-
+    
     Button randomButton = (Button) findViewById(R.id.randomButton);
     randomButton.setOnClickListener(new OnClickListener() {
       public void onClick(View arg0) {
@@ -101,6 +107,7 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
 
 
   private void loadRandomComic() {
+    loadingDialog = ProgressDialog.show(self, "Loading...", "Please wait", true); 
     class comicLoader implements Runnable {
       public void run() {
         String url = "";
@@ -142,11 +149,23 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
           Log.d("xkcdroid", "parsing error - wtf?");
         }
         web.loadUrl(url);
+        updateDisplay();
+        loadingDialog.dismiss();
       }
     }
     Thread loadThread = (new Thread(new comicLoader()));
     loadThread.start();
   }
+  
+  private void updateDisplay(){
+    class titleTextUpdater implements Runnable {
+      public void run() {
+        title.setText(currentComicTitle);
+      }      
+    }
+    title.post(new titleTextUpdater());
+  }
+  
 
   private void fetchTranscript() {
     String transcriptUrl = transcriptsUrlStart + currentComicNumber + transcriptsUrlEnd;
@@ -239,13 +258,13 @@ public class xkcdroid extends Activity implements WebDataLoadedListener {
 
     about.setTitle(titleText);
     String message =
-        "xkcd by Randall Munroe\n\nTranscripts by various xkcd fans and hosted on ohnorobot.com\n\nxkcdroid by Charles L. Chen";
+        "xkcd by Randall Munroe\n\nTranscripts by various xkcd fans and hosted on ohnorobot.com\n\nRandroid by Charles L. Chen";
 
     about.setMessage(message);
 
     final Activity self = this;
 
-    about.setNeutralButton("xkcdroid Source", new Dialog.OnClickListener() {
+    about.setNeutralButton("Randroid Source", new Dialog.OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
         Intent i = new Intent();
         ComponentName comp =
