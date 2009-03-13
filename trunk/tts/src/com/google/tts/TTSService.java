@@ -280,28 +280,17 @@ public class TTSService extends Service implements OnCompletionListener {
     }
   }
 
-  private void speakEspeakOnly(final String text, int queueMode, ArrayList<String> params) {
+  private void speakEspeakOnly(final String text, int queueMode, final ArrayList<String> params) {
     class synthThread implements Runnable {
       public void run() {
         if (!utterances.containsKey(text) && !isInCache(text)) {
           long time = System.currentTimeMillis();
           String ts = Long.toString(time);
           String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
-
-          // eSpeak does not behave correctly if called from multiple
-          // threads.
-          // Using a lock here will cause some text to be dropped if too many
-          // requests happen at once, but that is better than crashing.
-          try {
-            boolean synthAvailable = synthesizerLock.tryLock();
-            if (!synthAvailable) {
-              return;
-            }
-            speechSynthesis.synthesizeToFile(text, filename);
-          } finally {
-            synthesizerLock.unlock();
+          boolean synthOk = synthesizeToFile(text, params, filename);
+          if (!synthOk) {
+            return;
           }
-
           cacheSpeech(text, filename);
         }
 
@@ -496,11 +485,12 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void processSpeechQueue() {
-    boolean speechQueueAvailable = speechQueueLock.tryLock();
-    if (!speechQueueAvailable) {
-      return;
-    }
+    boolean speechQueueAvailable = false;
     try {
+      speechQueueAvailable = speechQueueLock.tryLock();
+      if (!speechQueueAvailable) {
+        return;
+      }
       String text = speechQueue.get(0);
       isSpeaking = true;
       // Look in the predefined utterances first
@@ -522,7 +512,6 @@ public class TTSService extends Service implements OnCompletionListener {
           } catch (NameNotFoundException e) {
             e.printStackTrace();
             speechQueue.remove(0); // Remove it from the queue and move on
-            speechQueueLock.unlock();
             return;
           }
           player = MediaPlayer.create(ctx, sr.resId);
@@ -536,7 +525,6 @@ public class TTSService extends Service implements OnCompletionListener {
         if (player == null) {
           speechQueue.clear();
           isSpeaking = false;
-          speechQueueLock.unlock();
           return;
         }
         player.setOnCompletionListener(this);
@@ -546,7 +534,6 @@ public class TTSService extends Service implements OnCompletionListener {
           speechQueue.clear();
           isSpeaking = false;
           cleanUpPlayer();
-          speechQueueLock.unlock();
           return;
         }
         isSpeaking = true;
@@ -556,7 +543,11 @@ public class TTSService extends Service implements OnCompletionListener {
         speechQueue.remove(0);
       }
     } finally {
-      speechQueueLock.unlock();
+      // This check is needed because finally will always run; even if the
+      // method returns somewhere in the try block.
+      if (speechQueueAvailable) {
+        speechQueueLock.unlock();
+      }
     }
   }
 
@@ -580,9 +571,9 @@ public class TTSService extends Service implements OnCompletionListener {
   private boolean synthesizeToFile(String text, ArrayList<String> params, String filename) {
     stop();
     Log.i("TTS", "Synthesizing " + filename);
-
+    boolean synthAvailable = false;
     try {
-      boolean synthAvailable = synthesizerLock.tryLock();
+      synthAvailable = synthesizerLock.tryLock();
       if (!synthAvailable) {
         return false;
       }
@@ -592,9 +583,12 @@ public class TTSService extends Service implements OnCompletionListener {
       }
       speechSynthesis.synthesizeToFile(text, filename);
     } finally {
-      synthesizerLock.unlock();
+      // This check is needed because finally will always run; even if the
+      // method returns somewhere in the try block.
+      if (synthAvailable) {
+        synthesizerLock.unlock();
+      }
     }
-
     Log.i("TTS", "Completed synthesis for " + filename);
     return true;
   }
