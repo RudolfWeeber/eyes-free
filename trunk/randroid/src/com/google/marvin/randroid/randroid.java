@@ -106,6 +106,9 @@ public class randroid extends Activity {
 
 
   private void loadRandomComic() {
+    // Clear the cache before loading so that the size of the app doesn't keep growing.
+    web.clearCache(true);
+    web.clearHistory();
     loadingDialog =
         ProgressDialog.show(self, getString(R.string.loading), getString(R.string.please_wait),
             true);
@@ -205,6 +208,9 @@ public class randroid extends Activity {
     if (tts != null) {
       tts.shutdown();
     }
+    // Clean up the cache
+    web.clearCache(true);
+    web.clearHistory();
     super.onDestroy();
   }
 
