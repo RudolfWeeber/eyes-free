@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.TwoLineListItem;
 
 public class AppListAdapter implements ListAdapter {
   ArrayList<AppDesc> apps;
@@ -59,7 +58,9 @@ public class AppListAdapter implements ListAdapter {
     AppDesc currentApp = apps.get(arg0);
     
     LinearLayout baseView = new LinearLayout(ctx);
-    
+
+    TextView spacerTop = new TextView(ctx);
+    TextView spacerBottom = new TextView(ctx);
     TextView title = new TextView(ctx);
     title.setText(currentApp.getTitle());
     title.setTextSize(32);
@@ -68,8 +69,10 @@ public class AppListAdapter implements ListAdapter {
     desc.setTextSize(18);
 
     baseView.setOrientation(LinearLayout.VERTICAL);
+    baseView.addView(spacerTop);
     baseView.addView(title);
     baseView.addView(desc);
+    baseView.addView(spacerBottom);
 
     return baseView;
   }
