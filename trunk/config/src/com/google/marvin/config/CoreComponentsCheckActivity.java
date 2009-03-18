@@ -112,7 +112,7 @@ public class CoreComponentsCheckActivity extends Activity {
   }
 
   private void startConfig() {
-    Intent mainConfigIntent = new Intent(this, InstallerActivity.class);
+    Intent mainConfigIntent = new Intent(this, MainConfigActivity.class);
     startActivityForResult(mainConfigIntent, 0);
   }
 
