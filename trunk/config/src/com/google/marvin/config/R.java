@@ -21,7 +21,6 @@ public final class R {
         public static final int hello=0x7f050000;
     }
     public static final class xml {
-        public static final int applist=0x7f040000;
-        public static final int prefs=0x7f040001;
+        public static final int prefs=0x7f040000;
     }
 }

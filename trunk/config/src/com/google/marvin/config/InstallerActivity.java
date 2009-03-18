@@ -47,7 +47,7 @@ public class InstallerActivity extends Activity {
       public void run() {
         try {
           URLConnection cn;
-          URL url = new URL("http://eyes-free.googlecode.com/svn/trunk/config/res/xml/applist.xml");
+          URL url = new URL("http://eyes-free.googlecode.com/svn/trunk/config/assets/applist.xml");
           cn = url.openConnection();
           cn.connect();
           InputStream stream = cn.getInputStream();

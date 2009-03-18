@@ -2,20 +2,11 @@ package com.google.marvin.config;
 
 import com.google.tts.R;
 
-import java.util.ArrayList;
-
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class MainConfigActivity extends PreferenceActivity  {
 
@@ -36,6 +27,7 @@ public class MainConfigActivity extends PreferenceActivity  {
         return true;
       }
     });
+    getPackageManager().addPackageToPreferred(this.getPackageName());
   }
 
 
