@@ -1,5 +1,0 @@
-<apps>
- <app packageName="com.google.marvin.shell" title="Eyes-Free Shell" desc="An alternative, eyes-free home screen"/>
- <app packageName="com.google.marvin.talkingdialer" title="Talking Dialer" desc="A talking dialer and phonebook"/>
- <app packageName="com.google.marvin.compass" title="Talking Compass" desc="A talking compass"/>
-</apps>
