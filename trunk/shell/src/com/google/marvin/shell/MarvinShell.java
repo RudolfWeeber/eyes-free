@@ -148,9 +148,15 @@ public class MarvinShell extends Activity implements GestureListener {
 
   @Override
   protected void onDestroy() {
-    tts.shutdown();
-    widgets.shutdown();
-    unregisterReceiver(screenStateOnReceiver);
+    if (tts != null) {
+      tts.shutdown();
+    }
+    if (widgets != null) {
+      widgets.shutdown();
+    }
+    if (screenStateOnReceiver != null) {
+      unregisterReceiver(screenStateOnReceiver);
+    }
     super.onDestroy();
   }
 
@@ -281,11 +287,8 @@ public class MarvinShell extends Activity implements GestureListener {
     items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.voicemail), "WIDGET", "VOICEMAIL",
         null));
 
-    AppEntry appLauncher =
-        new AppEntry(null, "com.google.marvin.shell", "com.google.marvin.shell.AppLauncher", null,
-            null);
-    items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "LAUNCH", null,
-        appLauncher));
+    items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "WIDGET", "APPLAUNCHER",
+        null));
 
     /*
      * AppEntry camera = new AppEntry(null, "com.android.camera",
@@ -316,7 +319,6 @@ public class MarvinShell extends Activity implements GestureListener {
           intent.putExtra(params.get(i).name, keyValue);
         }
       }
-
       tts.speak("[launch]", 0, null);
       startActivity(intent);
     } catch (NameNotFoundException e) {
@@ -326,6 +328,7 @@ public class MarvinShell extends Activity implements GestureListener {
       tts.speak(getString(R.string.application_not_installed), 0, null);
       e.printStackTrace();
     }
+
   }
 
   private void updateStatusText() {
@@ -352,6 +355,8 @@ public class MarvinShell extends Activity implements GestureListener {
       widgets.speakLocation();
     } else if (widgetName.equals("CONNECTIVITY")) {
       widgets.announceConnectivity();
+    } else if (widgetName.equals("APPLAUNCHER")) {
+      widgets.startAppLauncher();
     }
   }
 

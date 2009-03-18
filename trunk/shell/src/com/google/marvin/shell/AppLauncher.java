@@ -15,7 +15,6 @@ public class AppLauncher extends Activity {
 
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
-      setContentView(new AppLauncherView(self));
       tts.speak("Applications loaded.", 0, null);
     }
   };
@@ -28,6 +27,7 @@ public class AppLauncher extends Activity {
     super.onCreate(savedInstanceState);
     self = this;
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    setContentView(new AppLauncherView(self));
     tts = new TTS(this, ttsInitListener, true);
   }
 

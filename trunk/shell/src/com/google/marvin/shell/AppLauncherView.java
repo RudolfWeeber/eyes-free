@@ -32,8 +32,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.os.SystemClock;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -89,10 +87,10 @@ public class AppLauncherView extends TextView {
   private long lastLogTime = 0;
 
   private void logTime() {
-    long time = System.currentTimeMillis();
-    long diff = time - lastLogTime;
-    lastLogTime = time;
-    Log.i("debug time logger", diff + " ");
+    /*
+     * long time = System.currentTimeMillis(); long diff = time - lastLogTime;
+     * lastLogTime = time; Log.i("debug time logger", diff + " ");
+     */
   }
 
   @SuppressWarnings("unchecked")

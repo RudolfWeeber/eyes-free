@@ -43,6 +43,7 @@ public class AuditoryWidgets {
     voiceSignalStrength = 0;
     TelephonyManager tm = (TelephonyManager) parent.getSystemService(Context.TELEPHONY_SERVICE);
     tm.listen(new PhoneStateListener() {
+      @Override
       public void onSignalStrengthChanged(int asu) {
         if (asu <= 0 || asu == 99)
           voiceSignalStrength = 0;
@@ -259,4 +260,10 @@ public class AuditoryWidgets {
     guide.speakLocation();
   }
 
+  public void startAppLauncher(){
+    Intent intent = new Intent(parent, AppLauncher.class);
+    tts.speak("[launch]", 0, null);
+    parent.startActivity(intent);
+  }
+  
 }
