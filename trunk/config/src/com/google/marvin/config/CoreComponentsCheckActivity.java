@@ -10,12 +10,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.DialogInterface.OnClickListener;
-import android.net.Uri;
 import android.os.Bundle;
 
+/**
+ * Does a quick sanity check to make sure that critical core components (the TTS
+ * and the Eyes-Free Shell) are both installed before starting the main config
+ * screen.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class CoreComponentsCheckActivity extends Activity {
   private static final int ttsCheckCode = 42;
   private static final int shellCheckCode = 43;
+  private static final String ttsPackageName = "com.google.tts";
+  private static final String shellPackageName = "com.google.marvin.shell";
 
   /** Called when the activity is first created. */
   @Override
@@ -53,27 +61,13 @@ public class CoreComponentsCheckActivity extends Activity {
   /** Checks to make sure that all the requirements for the TTS are there */
   private boolean checkTtsRequirements(Activity activity) {
     if (!TTS.isInstalled(activity)) {
-      Uri marketUri = Uri.parse("market://search?q=pname:com.google.tts");
-      Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-      activity.startActivityForResult(marketIntent, ttsCheckCode);
+      activity.startActivityForResult(Utils.getMarketIntent(ttsPackageName), ttsCheckCode);
       return false;
     }
     if (!ConfigurationManager.allFilesExist()) {
-      int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
-      Context myContext;
-      try {
-        myContext = createPackageContext("com.google.tts", flags);
-        Class<?> appClass =
-            myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
-        Intent intent = new Intent(myContext, appClass);
-        startActivityForResult(intent, ttsCheckCode);
-      } catch (NameNotFoundException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      } catch (ClassNotFoundException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
+      Intent intent =
+          Utils.getAppStartIntent(this, ttsPackageName, "com.google.tts.ConfigurationManager");
+      startActivityForResult(intent, ttsCheckCode);
       return false;
     }
     return true;
@@ -82,21 +76,14 @@ public class CoreComponentsCheckActivity extends Activity {
   /** Checks to make sure that the shell is there */
   private boolean checkShell(Activity activity) {
     if (!shellInstalled()) {
-      Uri marketUri = Uri.parse("market://search?q=pname:com.google.marvin.shell");
-      Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-      activity.startActivityForResult(marketIntent, shellCheckCode);
+      activity.startActivityForResult(Utils.getMarketIntent(shellPackageName), shellCheckCode);
       return false;
     }
     return true;
   }
 
   private boolean shellInstalled() {
-    try {
-      Context myContext = createPackageContext("com.google.marvin.shell", 0);
-    } catch (NameNotFoundException e) {
-      return false;
-    }
-    return true;
+    return Utils.applicationInstalled(this, shellPackageName);
   }
 
   private void displayMissingComponentError(String component) {

@@ -1,6 +1,5 @@
 package com.google.marvin.config;
 
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -21,6 +20,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
+/**
+ * InstallerActivity that displays the list of installable apps from the
+ * Eyes-Free project.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class InstallerActivity extends Activity {
 
   private InstallerActivity self;

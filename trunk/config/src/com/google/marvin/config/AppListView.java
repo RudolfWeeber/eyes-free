@@ -3,14 +3,17 @@ package com.google.marvin.config;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Canvas;
-import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+/**
+ * A ListView for dealing with applications that can be installed.
+ * This list will filter out already installed apps and not display them.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class AppListView extends ListView {
   private AppListAdapter appListAdapter;
   private ArrayList<AppDesc> appDescs;
@@ -29,9 +32,7 @@ public class AppListView extends ListView {
     setOnItemClickListener(new OnItemClickListener() {
       public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long rowId) {
         String packageName = appListAdapter.getPackageName((int) rowId);
-        Uri marketUri = Uri.parse("market://search?q=pname:" + packageName);
-        Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-        ctx.startActivity(marketIntent);
+        ctx.startActivity(Utils.getMarketIntent(packageName));
       }
     });
   }
@@ -40,23 +41,13 @@ public class AppListView extends ListView {
     appDescs = new ArrayList<AppDesc>();
     for (int i = 0; i < apps.size(); i++) {
       AppDesc app = apps.get(i);
-      if (!appAlreadyInstalled(app.getPackageName())) {
+      if (!Utils.applicationInstalled(ctx, app.getPackageName())) {
         appDescs.add(app);
       }
     }
     if (appDescs.size() < 1) {
-      appDescs.add(new AppDesc("", "All eyes-free apps installed",
-          "All applications currently available from the Eyes-Free project have been installed."));
+      appDescs.add(new AppDesc("", ctx.getString(R.string.allAppsInstalledTitle), ctx.getString(R.string.allAppsInstalledMessage)));
     }
-  }
-
-  private boolean appAlreadyInstalled(String packageName) {
-    try {
-      Context myContext = ctx.createPackageContext(packageName, 0);
-    } catch (NameNotFoundException e) {
-      return false;
-    }
-    return true;
   }
 
   @Override

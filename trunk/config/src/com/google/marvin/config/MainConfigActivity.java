@@ -8,6 +8,12 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceClickListener;
 
+/**
+ * Main configuration screen that displays a menu of installable apps
+ * and a checkbox option to use the Eyes-Free Shell as the default Home screen.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class MainConfigActivity extends PreferenceActivity  {
 
   private MainConfigActivity self;

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, EyesFreeConfig</string>
+    
     <string name="app_name">Eyes-Free Configuration Manager</string>
+    <string name="allAppsInstalledTitle">All eyes-free apps installed</string>
+    <string name="allAppsInstalledMessage">All applications currently available from the Eyes-Free project have been installed.</string>
 </resources>

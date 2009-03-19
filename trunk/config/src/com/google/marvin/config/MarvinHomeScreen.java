@@ -18,16 +18,14 @@ package com.google.marvin.config;
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.content.Intent;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 
 /**
  * Alternate home screen that dispatches to the actual shell home screen
  * replacement.
  * 
  * @author sdoyon@google.com (Stephane Doyon)
+ * @author clchen@google.com (Charles L. Chen)
  */
 
 public class MarvinHomeScreen extends Activity {
@@ -37,31 +35,12 @@ public class MarvinHomeScreen extends Activity {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String packageName = "com.android.launcher";
     String className = "com.android.launcher.Launcher";
-    int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
-    try {
-      if (prefs.getBoolean("use_shell", false) && shellInstalled()) {
-        packageName = "com.google.marvin.shell";
-        className = "com.google.marvin.shell.MarvinShell";
-      }
-      Context myContext = createPackageContext(packageName, flags);
-      Class<?> appClass = myContext.getClassLoader().loadClass(className);
-      Intent intent = new Intent(myContext, appClass);
-      intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-      startActivity(intent);
-      finish();
-    } catch (NameNotFoundException e) {
-      e.printStackTrace();
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
+    if (prefs.getBoolean("use_shell", false)
+        && Utils.applicationInstalled(this, "com.google.marvin.shell")) {
+      packageName = "com.google.marvin.shell";
+      className = "com.google.marvin.shell.MarvinShell";
     }
-  }
-  
-  private boolean shellInstalled() {
-    try {
-      Context myContext = createPackageContext("com.google.marvin.shell", 0);
-    } catch (NameNotFoundException e) {
-      return false;
-    }
-    return true;
+    startActivity(Utils.getAppStartIntent(this, packageName, className));
+    finish();
   }
 }

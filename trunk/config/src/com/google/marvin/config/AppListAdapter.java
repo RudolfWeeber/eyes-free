@@ -10,6 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+/**
+ * ListAdapter for the AppListView that returns the list items as views.
+ * Each of the list item views are in a two row format, with the top row having
+ * the title of the app and using a larger sized font than the bottom row which
+ * contains the description.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class AppListAdapter implements ListAdapter {
   ArrayList<AppDesc> apps;
   Context ctx;
