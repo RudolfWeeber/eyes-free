@@ -182,6 +182,12 @@ public class ContactsView extends TextView {
     if (!moveSucceeded) {
       managedCursor.moveToFirst();
     }
+    // Keep going if the entry doesn't have a name
+    String name = managedCursor.getString(NAME);
+    if (name == null){
+      nextContact();
+      return;
+    }
     vibe.vibrate(PATTERN, -1);
     speakCurrentContact(true);
   }
@@ -191,6 +197,12 @@ public class ContactsView extends TextView {
     boolean moveSucceeded = managedCursor.moveToPrevious();
     if (!moveSucceeded) {
       managedCursor.moveToLast();
+    }
+    // Keep going if the entry doesn't have a name
+    String name = managedCursor.getString(NAME);
+    if (name == null){
+      prevContact();
+      return;
     }
     vibe.vibrate(PATTERN, -1);
     speakCurrentContact(true);
@@ -757,7 +769,8 @@ public class ContactsView extends TextView {
     if (!deletedCharacter.equals("")) {
       parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
     } else {
-      parent.tts.speak("Nothing to delete", 0, null);
+      parent.tts.speak("[tock]", 0, null);
+      parent.tts.speak("[tock]", 1, null);
     }
     if (currentString.length() > 0) {
       filteredContacts.filter(currentString);

@@ -18,22 +18,22 @@ public class FilterableContactsList {
     filteredList = (ArrayList<ContactEntry>) fullList.clone();
     filteredListIter = filteredList.listIterator();
   }
-  
-  public ContactEntry next(){
-    if (filteredList.size() < 1){
+
+  public ContactEntry next() {
+    if (filteredList.size() < 1) {
       return null;
     }
-    if (!filteredListIter.hasNext()){
+    if (!filteredListIter.hasNext()) {
       filteredListIter = filteredList.listIterator();
     }
     return filteredListIter.next();
   }
-  
-  public ContactEntry previous(){
-    if (filteredList.size() < 1){
+
+  public ContactEntry previous() {
+    if (filteredList.size() < 1) {
       return null;
     }
-    if (!filteredListIter.hasPrevious()){
+    if (!filteredListIter.hasPrevious()) {
       filteredListIter = filteredList.listIterator(filteredList.size());
     }
     return filteredListIter.previous();
@@ -48,19 +48,21 @@ public class FilterableContactsList {
       filteredList = new ArrayList<ContactEntry>();
       for (int i = 0; i < fullList.size(); i++) {
         ContactEntry entry = fullList.get(i);
-        String lcName = entry.name.toLowerCase();
-        if (lcName.startsWith(lcPN)) {
-          filteredList.add(entry);
+        if (entry.name != null) {
+          String lcName = entry.name.toLowerCase();
+          if (lcName.startsWith(lcPN)) {
+            filteredList.add(entry);
+          }
         }
       }
       filteredListIter = filteredList.listIterator();
     }
-    if (filteredList.size() > 0){
+    if (filteredList.size() > 0) {
       return true;
     }
     return false;
   }
-  
-  
+
+
 
 }

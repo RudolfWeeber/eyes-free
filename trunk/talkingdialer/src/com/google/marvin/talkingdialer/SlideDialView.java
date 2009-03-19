@@ -435,7 +435,8 @@ public class SlideDialView extends TextView {
       parent.tts.speak(deletedNum, 0, null);
       parent.tts.speak("deleted", 1, null);
     } else {
-      parent.tts.speak("Nothing to delete", 0, null);
+      parent.tts.speak("[tock]", 0, null);
+      parent.tts.speak("[tock]", 1, null);
     }
     currentValue = "";
     invalidate();
