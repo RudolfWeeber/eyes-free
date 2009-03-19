@@ -50,7 +50,6 @@ public class PrefsActivity extends PreferenceActivity {
     ttsSettings.setOnPreferenceClickListener(new OnPreferenceClickListener() {
       public boolean onPreferenceClick(Preference preference) {
         if (TTS.isInstalled(ctx)) {
-
           try {
             int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
             Context myContext = createPackageContext("com.google.tts", flags);

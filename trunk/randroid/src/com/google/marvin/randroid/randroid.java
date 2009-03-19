@@ -56,7 +56,7 @@ public class randroid extends Activity {
   private String currentComicTitle = "";
 
 
-  ProgressDialog loadingDialog = null;
+  private ProgressDialog loadingDialog = null;
 
   /** Called when the activity is first created. */
   @Override
