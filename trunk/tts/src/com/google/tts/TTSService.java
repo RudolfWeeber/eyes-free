@@ -59,7 +59,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private TTSEngine engine;
 
   private Boolean isSpeaking;
-  private ArrayList<String> speechQueue;
+  private ArrayList<SpeechItem> speechQueue;
   private HashMap<String, SoundResource> utterances;
   private HashMap<String, SoundResource> cache;
   private MediaPlayer player;
@@ -86,7 +86,7 @@ public class TTSService extends Service implements OnCompletionListener {
     utterances = new HashMap<String, SoundResource>();
     cache = new HashMap<String, SoundResource>();
 
-    speechQueue = new ArrayList<String>();
+    speechQueue = new ArrayList<SpeechItem>();
     player = null;
 
     if (espeakIsUsable()) {
@@ -268,196 +268,12 @@ public class TTSService extends Service implements OnCompletionListener {
    *        engines.
    */
   private void speak(String text, int queueMode, ArrayList<String> params) {
-    if (isSpeaking && (queueMode == 0)) {
+    if (queueMode == 0) {
       stop();
     }
-    if (engine == TTSEngine.PRERECORDED_WITH_ESPEAK) {
-      speakPrerecordedWithEspeak(text, queueMode, params);
-    } else if (engine == TTSEngine.ESPEAK_ONLY) {
-      speakEspeakOnly(text, queueMode, params);
-    } else {
-      speakPrerecordedOnly(text, queueMode, params);
-    }
-  }
-
-  private void speakEspeakOnly(final String text, int queueMode, final ArrayList<String> params) {
-    class synthThread implements Runnable {
-      public void run() {
-        if (!utterances.containsKey(text) && !isInCache(text)) {
-          long time = System.currentTimeMillis();
-          String ts = Long.toString(time);
-          String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
-          boolean synthOk = synthesizeToFile(text, params, filename);
-          if (!synthOk) {
-            return;
-          }
-          cacheSpeech(text, filename);
-        }
-
-        speechQueue.add(text);
-        if (!isSpeaking) {
-          processSpeechQueue();
-        }
-      }
-    }
-    (new Thread(new synthThread())).start();
-  }
-
-  private boolean isInCache(String text) {
-    SoundResource sr = cache.get(text);
-    if (sr == null) {
-      return false;
-    }
-    if (!new File(sr.filename).isFile()) {
-      cache.remove(text);
-      return false;
-    }
-    return true;
-  }
-
-  private void speakPrerecordedOnly(String text, int queueMode, ArrayList<String> params) {
-    // Apply voices if possible
-    if ((params != null) && (params.size() > 0)) {
-      String textWithVoice = text;
-      if (params.get(0).equals(TTSParams.VOICE_ROBOT.toString())) {
-        textWithVoice = textWithVoice + "[robot]";
-      } else if (params.get(0).equals(TTSParams.VOICE_FEMALE.toString())) {
-        textWithVoice = textWithVoice + "[fem]";
-      }
-      if (utterances.containsKey(textWithVoice)) {
-        text = textWithVoice;
-      }
-    }
-
-    if (!utterances.containsKey(text)) {
-      if (text.length() > 1) {
-        // Flush the queue first if needed
-        if (queueMode == 0) {
-          speak("", 0, null);
-        }
-        // Decompose this into a number if possible.
-        // Remove this once full-fledged TTS is available.
-        if (spokenAsNumber(text, params)) {
-          return;
-        }
-        for (int i = 0; i < text.length(); i++) {
-          String currentCharacter = text.substring(i, i + 1);
-          if (currentCharacter.length() == 1) {
-            speak(currentCharacter, 1, params);
-          }
-        }
-        return;
-      }
-    }
-
-    speechQueue.add(text);
+    speechQueue.add(new SpeechItem(text, params));
     if (!isSpeaking) {
       processSpeechQueue();
-    }
-  }
-
-  private void speakPrerecordedWithEspeak(String text, int queueMode, ArrayList<String> params) {
-    // Apply voices if possible
-    if ((params != null) && (params.size() > 0)) {
-      String textWithVoice = text;
-      if (params.get(0).equals(TTSParams.VOICE_ROBOT.toString())) {
-        textWithVoice = textWithVoice + "[robot]";
-      } else if (params.get(0).equals(TTSParams.VOICE_FEMALE.toString())) {
-        textWithVoice = textWithVoice + "[fem]";
-      }
-      if (utterances.containsKey(textWithVoice)) {
-        text = textWithVoice;
-      }
-    }
-
-    if (!utterances.containsKey(text)) {
-      if (text.length() > 0) {
-        // Flush the queue first if needed
-        if (queueMode == 0) {
-          speak("", 0, null);
-        }
-        // Decompose this into a number if possible.
-        // Remove this once full-fledged TTS is available.
-        if (spokenAsNumber(text, params)) {
-          return;
-        }
-        // This is an unknown utterance, handle it with eSpeak.
-        speakEspeakOnly(text, queueMode, params);
-      }
-      return;
-    }
-
-    speechQueue.add(text);
-    if (!isSpeaking) {
-      processSpeechQueue();
-    }
-  }
-
-  // Special algorithm to decompose numbers into speakable parts.
-  // This will handle positive numbers up to 999.
-  private boolean spokenAsNumber(String text, ArrayList<String> params) {
-    try {
-      int number = Integer.parseInt(text);
-      // Handle cases that are between 100 and 999, inclusive
-      if ((number > 99) && (number < 1000)) {
-        int remainder = number % 100;
-        number = number / 100;
-        speak(Integer.toString(number), 1, params);
-        speak("[slnc]", 1, params);
-        speak("hundred", 1, params);
-        speak("[slnc]", 1, params);
-        if (remainder > 0) {
-          speak(Integer.toString(remainder), 1, params);
-        }
-        return true;
-      }
-
-      // Handle cases that are less than 100
-      int digit = 0;
-      if ((number > 20) && (number < 100)) {
-        if ((number > 20) && (number < 30)) {
-          speak(Integer.toString(20), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 20;
-        } else if ((number > 30) && (number < 40)) {
-          speak(Integer.toString(30), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 30;
-        } else if ((number > 40) && (number < 50)) {
-          speak(Integer.toString(40), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 40;
-        } else if ((number > 50) && (number < 60)) {
-          speak(Integer.toString(50), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 50;
-        } else if ((number > 60) && (number < 70)) {
-          speak(Integer.toString(60), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 60;
-        } else if ((number > 70) && (number < 80)) {
-          speak(Integer.toString(70), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 70;
-        } else if ((number > 80) && (number < 90)) {
-          speak(Integer.toString(80), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 80;
-        } else if ((number > 90) && (number < 100)) {
-          speak(Integer.toString(90), 1, params);
-          speak("[slnc]", 1, params);
-          digit = number - 90;
-        }
-        if (digit > 0) {
-          speak(Integer.toString(digit), 1, params);
-          return true;
-        }
-      }
-      // Any other cases are either too large to handle
-      // or have an utterance that is directly mapped.
-      return false;
-    } catch (NumberFormatException nfe) {
-      return false;
     }
   }
 
@@ -484,22 +300,198 @@ public class TTSService extends Service implements OnCompletionListener {
     }
   }
 
+  private boolean isInCache(String text) {
+    SoundResource sr = cache.get(text);
+    if (sr == null) {
+      return false;
+    }
+    if (!new File(sr.filename).isFile()) {
+      cache.remove(text);
+      return false;
+    }
+    return true;
+  }
+
+  private void speakWithChosenEngine(SpeechItem speechItem) {
+    if (engine == TTSEngine.PRERECORDED_WITH_ESPEAK) {
+      speakPrerecordedWithEspeak(speechItem.text, speechItem.params);
+    } else if (engine == TTSEngine.ESPEAK_ONLY) {
+      speakEspeakOnly(speechItem.text, speechItem.params);
+    } else {
+      speakPrerecordedOnly(speechItem.text, speechItem.params);
+    }
+  }
+
+  private void speakPrerecordedOnly(String text, ArrayList<String> params) {
+    if (!utterances.containsKey(text)) {
+      if (text.length() > 1) {
+        decomposedToNumbers(text, params);
+      }
+    }
+    processSpeechQueue();
+  }
+
+  private void speakPrerecordedWithEspeak(String text, ArrayList<String> params) {
+    if (!utterances.containsKey(text)) {
+      if ((text.length() > 1) && decomposedToNumbers(text, params)) {
+        processSpeechQueue();
+      } else {
+        speakEspeakOnly(text, params);
+      }
+    }
+  }
+
+
+  private void speakEspeakOnly(final String text, final ArrayList<String> params) {
+    class synthThread implements Runnable {
+      public void run() {
+        if (!isInCache(text)) {
+          long time = System.currentTimeMillis();
+          String ts = Long.toString(time);
+          String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
+          boolean synthOk = synthesizeToFile(text, params, filename, false);
+          if (!synthOk) {
+            return;
+          }
+          cacheSpeech(text, filename);
+          processSpeechQueue();
+        }
+      }
+    }
+    (new Thread(new synthThread())).start();
+  }
+
+  private SoundResource getSoundResource(SpeechItem speechItem) {
+    SoundResource sr = null;
+    String text = speechItem.text;
+    ArrayList<String> params = speechItem.params;
+    /* TODO: Add methods for playing earcons */
+    // TODO: Cleanup special params system
+    if (engine != TTSEngine.ESPEAK_ONLY) {
+      if ((params != null) && (params.size() > 0)) {
+        String textWithVoice = text;
+        if (params.get(0).equals(TTSParams.VOICE_ROBOT.toString())) {
+          textWithVoice = textWithVoice + "[robot]";
+        } else if (params.get(0).equals(TTSParams.VOICE_FEMALE.toString())) {
+          textWithVoice = textWithVoice + "[fem]";
+        }
+        if (utterances.containsKey(textWithVoice)) {
+          text = textWithVoice;
+        }
+      }
+      sr = utterances.get(text);
+    }
+
+    // If it's not there, check if it was generated and in the cache
+    if ((sr == null) && isInCache(speechItem.text)) {
+      sr = cache.get(speechItem.text);
+    }
+
+    return sr;
+  }
+
+  // Special algorithm to decompose numbers into speakable parts.
+  // This will handle positive numbers up to 999.
+  private boolean decomposedToNumbers(String text, ArrayList<String> params) {
+    boolean speechQueueAvailable = false;
+    try {
+      speechQueueAvailable = speechQueueLock.tryLock();
+      if (!speechQueueAvailable || (speechQueue.size() < 1)) {
+        return false;
+      }
+      int number = Integer.parseInt(text);
+      ArrayList<SpeechItem> decomposedNumber = new ArrayList<SpeechItem>();
+      // Handle cases that are between 100 and 999, inclusive
+      if ((number > 99) && (number < 1000)) {
+        int remainder = number % 100;
+        number = number / 100;
+        decomposedNumber.add(new SpeechItem(Integer.toString(number), params));
+        decomposedNumber.add(new SpeechItem("[slnc]", params));
+        decomposedNumber.add(new SpeechItem("hundred", params));
+        decomposedNumber.add(new SpeechItem("[slnc]", params));
+        if (remainder > 0) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(remainder), params));
+        }
+        speechQueue.remove(0);
+        speechQueue.addAll(0, decomposedNumber);
+        return true;
+      }
+
+      // Handle cases that are less than 100
+      int digit = 0;
+      if ((number > 20) && (number < 100)) {
+        if ((number > 20) && (number < 30)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(20), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 20;
+        } else if ((number > 30) && (number < 40)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(30), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 30;
+        } else if ((number > 40) && (number < 50)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(40), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 40;
+        } else if ((number > 50) && (number < 60)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(50), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 50;
+        } else if ((number > 60) && (number < 70)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(60), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 60;
+        } else if ((number > 70) && (number < 80)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(70), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 70;
+        } else if ((number > 80) && (number < 90)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(80), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 80;
+        } else if ((number > 90) && (number < 100)) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(90), params));
+          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          digit = number - 90;
+        }
+        if (digit > 0) {
+          decomposedNumber.add(new SpeechItem(Integer.toString(digit), params));
+        }
+        speechQueue.remove(0);
+        speechQueue.addAll(0, decomposedNumber);
+        return true;
+      }
+      // Any other cases are either too large to handle
+      // or have an utterance that is directly mapped.
+      return false;
+    } catch (NumberFormatException nfe) {
+      return false;
+    } finally {
+      // This check is needed because finally will always run; even if the
+      // method returns somewhere in the try block.
+      if (speechQueueAvailable) {
+        speechQueueLock.unlock();
+      }
+    }
+  }
+
+
   private void processSpeechQueue() {
     boolean speechQueueAvailable = false;
     try {
       speechQueueAvailable = speechQueueLock.tryLock();
-      if (!speechQueueAvailable) {
+      if (!speechQueueAvailable || (speechQueue.size() < 1)) {
         return;
       }
-      String text = speechQueue.get(0);
+      SpeechItem currentSpeechItem = speechQueue.get(0);
       isSpeaking = true;
-      // Look in the predefined utterances first
-      SoundResource sr = utterances.get(text);
-      // If it's not there, then it was generated and should be in the cache
+      SoundResource sr = getSoundResource(currentSpeechItem);
+      // Synth speech as needed - synthesizer should call
+      // processSpeechQueue to continue running the queue
       if (sr == null) {
-        sr = cache.get(text);
-      }
-      if (sr != null) {
+        isSpeaking = false;
+        speakWithChosenEngine(currentSpeechItem);
+        return;
+      } else {
         cleanUpPlayer();
         if (sr.sourcePackageName == PKGNAME) {
           // Utterance is part of the TTS library
@@ -512,6 +504,7 @@ public class TTSService extends Service implements OnCompletionListener {
           } catch (NameNotFoundException e) {
             e.printStackTrace();
             speechQueue.remove(0); // Remove it from the queue and move on
+            isSpeaking = false;
             return;
           }
           player = MediaPlayer.create(ctx, sr.resId);
@@ -536,9 +529,7 @@ public class TTSService extends Service implements OnCompletionListener {
           cleanUpPlayer();
           return;
         }
-        isSpeaking = true;
       }
-
       if (speechQueue.size() > 0) {
         speechQueue.remove(0);
       }
@@ -568,8 +559,14 @@ public class TTSService extends Service implements OnCompletionListener {
    *        be something like "/sdcard/myappsounds/mysound.wav".
    * @return A boolean that indicates if the synthesis succeeded
    */
-  private boolean synthesizeToFile(String text, ArrayList<String> params, String filename) {
-    stop();
+  private boolean synthesizeToFile(String text, ArrayList<String> params, String filename,
+      boolean calledFromApi) {
+    // Only stop everything if this is a call made by an outside app trying to
+    // use the API. Do NOT stop if this is a call from within the service as
+    // clearing the speech queue here would be a mistake.
+    if (calledFromApi) {
+      stop();
+    }
     Log.i("TTS", "Synthesizing " + filename);
     boolean synthAvailable = false;
     try {
@@ -595,7 +592,6 @@ public class TTSService extends Service implements OnCompletionListener {
 
   @Override
   public IBinder onBind(Intent intent) {
-
     if (ACTION.equals(intent.getAction())) {
       for (String category : intent.getCategories()) {
         if (category.equals(CATEGORY)) {
@@ -654,7 +650,7 @@ public class TTSService extends Service implements OnCompletionListener {
      * @return Boolean to indicate whether or not the TTS is speaking
      */
     public boolean isSpeaking() {
-      return self.isSpeaking;
+      return (self.isSpeaking && (speechQueue.size() < 1));
     }
 
     /**
@@ -735,8 +731,17 @@ public class TTSService extends Service implements OnCompletionListener {
       if (params != null) {
         speakingParams = new ArrayList<String>(Arrays.asList(params));
       }
-      return self.synthesizeToFile(text, speakingParams, filename);
+      return self.synthesizeToFile(text, speakingParams, filename, true);
     }
   };
 
+  private class SpeechItem {
+    public String text;
+    public ArrayList<String> params;
+
+    public SpeechItem(String text, ArrayList<String> params) {
+      this.text = text;
+      this.params = params;
+    }
+  }
 }
