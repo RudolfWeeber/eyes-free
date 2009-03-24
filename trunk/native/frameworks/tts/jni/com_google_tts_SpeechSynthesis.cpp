@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define wchar_t owchar_t
+//#define wchar_t owchar_t
 
 #include <stdio.h>
 #include <unistd.h>

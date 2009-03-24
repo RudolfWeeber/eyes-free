@@ -33,7 +33,7 @@ LOCAL_PRELINK_MODULE:= false
 
 LOCAL_MODULE:= libespeak
 
-LOCAL_CFLAGS+= $(TOOL_CFLAGS) -DDEBUG_ENABLED=1 -Dwchar_t=owchar_t
+LOCAL_CFLAGS+= $(TOOL_CFLAGS) -DDEBUG_ENABLED=1 # -Dwchar_t=owchar_t
 
 LOCAL_LDFLAGS:= $(TOOL_LDFLAGS) -lstdc++ -lc
 
