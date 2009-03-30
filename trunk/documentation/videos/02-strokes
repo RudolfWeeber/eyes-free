@@ -1,0 +1,58 @@
+# -*- mode: org -*-
+
+* [[./02-strokes.mp4][Video: Stroke Dialer For Eyes-Free Keypad Input]]
+
+
+The /stroke dialer/ enables one-handed keypad input using the
+touch-screen --- and that without having to even look at the
+screen. Here is how it works --- we start with a brief
+description of the problem  that asks the /right/
+question. The answer becomes self-evident as you follow this
+video.
+
+** The Problem
+
+On-screen keyboards typically show some buttons on the screen
+that you activate by touching the screen. To activate such
+buttons, one needs to look at the screen, because the buttons are
+placed at specific points on the screen, i.e., they are
+/absolutely/ positioned. So what if you want to activate such
+buttons /without/ looking at the screen?
+From the foregoing description, it's clear that the only reason
+one is forced to  look at  an on-screen keyboard  is because the
+buttons are /absolutely/ positioned. So let's relax that
+constraint, let's use /relative/ positioning to place the
+buttons.
+
+We'll start with a keyboard we're all familiar with, the
+telephone keypad. Since we're using relative positioning,
+let's place  the center of the keypad  /wherever/ you  first
+touch the screen.
+So, to dial a _5_, you just touch the screen.
+
+Now, you know where _5_ is --- it's where you first touch
+down. But look, since you know the layout of a phone keypad, you
+can now find all the other digits /relative/ to the _5_. So for
+example, _2_ is directly above _5_ --- so to    press _2_, you
+touch down on the screen, and stroke up before lifting your
+finger.
+similarly, you stroke down for an _8_, or diagonally up for a
+_1_.
+
+In real life, we both /hear/ and /feel/ as we press physical
+buttons. This form of synchronized auditory and tactile feedback
+is essential for creating user interfaces that /feel/
+realistic. The stroke dialer produces a slight vibration as  the
+finger moves over the various buttons that is synchronized with
+an auditory /tick/ to achieve this effect. It also produces
+spoken feedback to indicate the button that was pressed.
+
+To conclude this video, let's dial a few numbers.
+
+#+TITLE: Video: Stroke Dialer For Android
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com +DATE: 2009-03-30 Mon +LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/

@@ -18,8 +18,11 @@ viewing the visual component.
      Eyes-Free and its goal of turning Android into an  eyes-free
      communication device supporting one-handed, single-touch interaction.
   2. [[./02-strokes.html][Stroke Dialing]] Demonstrates the stroke dialer, a key
-     component of eyes-free interaction on Android. This dialing
-     technique is used across a wide variety of applications.
+     component of eyes-free interaction on Android. It differs
+     from traditional on-screen keyboards in that it uses
+     /relative positioning/ rather than /absolute positioning/
+     --- this enables eyes-free use. This dialing technique is
+     used across a wide variety of applications.
   3. [[./03-phone.html][Talking Dialer ]] Demonstrates using Android as
      a   communication  device for fluent, eyes-free
      interaction. Concludes with a teaser --- talking phonebook.
