@@ -76,14 +76,12 @@ letters to further filter the contact list.
 Notice from the mapping shown earlier that we can /enter/ each
 circle either at the _top_ or _bottom_. Thus, entering the red
 circle at the _top_ gets to _A_, while entering it at the
-_bottom_ gets us to _E_. This means that the _8_ letters on the
-red circle are no more for example, to enter _C_, one needs to
-trace clockwise from _A_, or counter-clockwise from _E_. than _3_
-steps away. As an example, _H_ is only _1_ step from _A_ on the
-red circle. similarly, _P_ is only _1_ step from _I_ on the blue
-circle.
-
-
+_bottom_ gets us to _E_. This means that the _8_ letters on any
+given circle are no more than _3_ steps away --- for example, to
+enter _C_, one needs to trace clockwise from _A_, or
+counter-clockwise from _E_. As an example, _H_ is only _1_ step
+from _A_ on the red circle. similarly, _P_ is only _1_ step from
+_I_ on the blue circle.
 
 #+TITLE: Video: Talking Phonebook: Eyes-Free Communication Device
 #+AUTHOR: T.V Raman
