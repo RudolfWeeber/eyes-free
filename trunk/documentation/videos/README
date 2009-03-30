@@ -1,0 +1,45 @@
+# -*- mode: org -*-
+
+* Android Eyes-Free Video Demos
+This directory contains videos demonstrating the use of the
+various applications that make up Project Eyes-Free for
+Android. For each video, there is an accompanying text file that
+is the script used to prepare the video --- these also make up
+high-quality text transcripts for those not able to listen to the
+audio. Users wishing to appreciate these
+videos without looking at the screen can rest assured that the
+audio content, in conjunction with the text scripts
+together ensure that one misses nothing substantive by not
+viewing the visual component.
+
+
+
+  1. [[./01-intro][Introduction]] Gives a high-level overview of Project
+     Eyes-Free and its goal of turning Android into an  eyes-free
+     communication device supporting one-handed, single-touch interaction.
+  2. [[./02-strokes][Stroke Dialing]] Demonstrates the stroke dialer, a key
+     component of eyes-free interaction on Android. This dialing
+     technique is used across a wide variety of applications.
+  3. [[./03-phone][Talking Dialer ]] Demonstrates using Android as
+     a   communication  device for fluent, eyes-free
+     interaction. Concludes with a teaser --- talking phonebook.
+  4. [[./04-phonebook][Talking Phonebook]] Demonstrates how we use strokes for rapid
+     access to contacts in the phone book.
+  5. [[./05-eyes-free-home][Eyes-Free Shell]] Demonstrates the /Home/ screen  that
+     supports eyes-free access to oft-used tasks. Uses stroke
+     dialer for rapid access.
+  6. [[./06-mini-apps][Talking Mini-Applications]] Demonstrates useful talking
+      mini-applications that provide single-touch access to
+      useful information.
+
+
+
+
+#+TITLE:     Android Eyes-Free Video Demos
+#+AUTHOR:    T.V Raman
+#+EMAIL:     raman@google.com
+#+DATE:      2009-03-30 Mon
+#+LANGUAGE:  en
+#+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc
+#+LINK_UP:    http://eyes-free.googlecode.com/svn/trunk/documentation/
+#+LINK_HOME:  http://eyes-free.googlecode.com/
