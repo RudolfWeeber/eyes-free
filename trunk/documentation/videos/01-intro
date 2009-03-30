@@ -1,0 +1,30 @@
+# -*- mode: org -*-
+
+* [[./01-intro.mp4][Video: Introducing Project Eyes-Free  For Android]]
+
+Project Eyes-Free turns your Android into an eyes-free
+communication device with one-handed, single-touch access to
+common tasks. Applications from this project can be used
+stand-alone; they can also be used together through the Eyes-Free
+shell. This collection of videos will cover the latter scenario.
+
+
+We will refer to the eyes-free shell as /Marvin/ in honor of
+Douglas Adams' famous paranoid android
+--- our Marvin says 
+:Brain the size of a planet and they expect me to make phone calls?
+The Marvin home screen 
+provides single-touch access to useful information via a
+collection of talking mini-applications. In addition,  commonly
+used applications can be placed under /shortcuts/ for quick
+access. Finally, the /call/ button automatically launches the
+eyes-free /Talking Dialer/ --- all of these applications are
+covered in detail in subsequent videos.
+
+#+TITLE: Android Eyes-Free Introduction 
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com +DATE: 2009-03-30 Mon +LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/
