@@ -88,7 +88,9 @@ circle.
 
 #+TITLE: Video: Talking Phonebook: Eyes-Free Communication Device
 #+AUTHOR: T.V Raman
-#+EMAIL: raman@google.com +DATE: 2009-03-30 Mon +LANGUAGE: en
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
 #+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
 #TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
 #http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
