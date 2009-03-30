@@ -1,0 +1,51 @@
+# -*- mode: org -*-
+
+
+* [[./05-eyes-free-home.mp4][Video: Eyes-Free Home: The Marvin Shell]]
+
+The Marvin shell pulls together available eyes-free applications
+to provide an integrated user experience. Note that talking
+applications can come from many sources, with project Eyes-Free
+being but one such source. For other exciting talking
+applications that use our open Text To Speech (TTS)  APIs, see
+the Android Marketplace, where you  will find many useful tools
+that integrate seamlessly with Marvin.
+
+when you install the Eyes-Free Shell, you can choose to make
+Marvin your default _home_ screen --- this means that pressing
+the _home_ button always brings up the Marvin shell. To return to
+the default Android home screen, hold down the _back_ button for
+3 seconds or more.
+Here is a brief description of  the Marvin user interface.
+
+** Single Touch Access To Useful Tools
+
+The Marvin shell uses the [[./02-strokes.html][Stroke Dialer]]
+to provide single touch access to useful tools right from the
+home screen. 
+You can explore this interface  by moving 
+your finger around the screen --- as you move over the /buttons/,
+Marvin speaks the associated action. Lifting up the finger
+executes the current action. As an example,
+the  top row of the keypad, i.e., _1_, _2_, and _3_
+provide status information.
+Stroking to _4_ brings up your favorite /short-cuts/, and _6_
+speaks your current location using  geo-location information
+obtained from Google Maps. 
+Pressing _7_ connects to your voice-mailbox, and pressing _9_
+puts the phone in /airplane mode/
+--- this disables all wireless connections, and helpfully shows a
+large airplane on the screen to satisfy your friendly airline
+crew when flying.
+Finally, the applications that appear on the /shortcuts/ screen
+can be customized by editing  XML file 
+:/sdcard/eyesfree/shortcuts.xml
+on your SD-Card --- as is apparent, this is a /power-user/ feature:-)!
+
+#+TITLE: Video: Eyes-Free Home: The Marvin Shell
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com +DATE: 2009-03-30 Mon +LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/
