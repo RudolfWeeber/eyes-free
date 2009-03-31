@@ -1,4 +1,4 @@
 =Videos Demonstrating Eyes-Free Android Use =
 
-1. [[01-intro.avi Introducing Marvin]] --- your speech-friendly paranoid android who will do a lot more than  just make phone calls.
+1. [01-intro.avi Introducing Marvin] --- your speech-friendly paranoid android who will do a lot more than  just make phone calls.
 
