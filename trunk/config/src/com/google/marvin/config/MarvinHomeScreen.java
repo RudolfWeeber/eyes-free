@@ -15,9 +15,13 @@
  */
 package com.google.marvin.config;
 
+import com.google.tts.ConfigurationManager;
+import com.google.tts.TTS;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 
 /**
@@ -36,11 +40,18 @@ public class MarvinHomeScreen extends Activity {
     String packageName = "com.android.launcher";
     String className = "com.android.launcher.Launcher";
     if (prefs.getBoolean("use_shell", false)
-        && Utils.applicationInstalled(this, "com.google.marvin.shell")) {
+        && Utils.applicationInstalled(this, "com.google.marvin.shell")
+        && ttsChecksAllPassed() ) {
       packageName = "com.google.marvin.shell";
       className = "com.google.marvin.shell.MarvinShell";
     }
-    startActivity(Utils.getAppStartIntent(this, packageName, className));
+    Intent homeIntent = Utils.getAppStartIntent(this, packageName, className);
+    startActivity(homeIntent);
     finish();
+  }
+  
+  
+  private boolean ttsChecksAllPassed(){
+    return TTS.isInstalled(this) && ConfigurationManager.allFilesExist();
   }
 }
