@@ -27,8 +27,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.hardware.SensorListener;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.Contacts.PeopleColumns;
