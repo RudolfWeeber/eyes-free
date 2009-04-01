@@ -42,9 +42,45 @@ can be customized by editing  XML file
 :/sdcard/eyesfree/shortcuts.xml
 on your SD-Card --- as is apparent, this is a /power-user/ feature:-)!
 
-For an in-depth demonstration of the various talking mini-apps
-available within Marvin, see the subsequent video on 
-[[./06-mini-apps.html][talking mini-applications]].
+
+
+* Talking Mini-Applications  For Single Touch Access
+
+Here, we demonstrate some of the talking mini-applications that
+can be accessed from the Marvin screen.
+All of these mini-applications speak useful information without
+the need for the user to do some form of /context switch/.
+
+
+
+** Device State
+
+Available from _1_ on the Marvin screen, this mini-application
+announces useful information such as signal strength, and
+availability of WiFi networks.
+
+** Date And Time
+
+Available on _2_ on the Marvin screen, this mini-application provides single-touch access to current
+date and time.
+
+
+** Battery State And Power
+
+Pressing _3_ on the Marvin screen speaks the current battery
+level and announces if the phone is presently being charged.
+
+
+** Knowing Your Location 
+
+Available as _6_ from the Marvin home screen,
+this mini-application announces your present location based on
+information acquired via GPS and the cell network. It speaks your
+current heading using the built-in magnetic compass, looks up the
+current location on Google Maps, and announces the location in
+terms of a nearby address and street intersection.
+
+
 #+TITLE: Video: Eyes-Free Home: The Marvin Shell
 #+AUTHOR: T.V Raman
 #+EMAIL: raman@google.com
