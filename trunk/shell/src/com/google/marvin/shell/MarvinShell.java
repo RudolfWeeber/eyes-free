@@ -18,19 +18,31 @@ package com.google.marvin.shell;
 import com.google.marvin.shell.Param;
 import com.google.marvin.shell.TouchGestureControlOverlay.Gesture;
 import com.google.marvin.shell.TouchGestureControlOverlay.GestureListener;
+import com.google.tts.ConfigurationManager;
 import com.google.tts.TTS;
 import com.google.tts.TTSEngine;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.telephony.PhoneNumberUtils;
@@ -47,8 +59,10 @@ import android.widget.TextView;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class MarvinShell extends Activity implements GestureListener {
-  // private AppSelectView mView;
+  private static final int ttsCheckCode = 42;
+
   public TTS tts;
+  private boolean ttsStartedSuccessfully;
   public boolean isFocused;
   private MarvinShell self;
   private AuditoryWidgets widgets;
@@ -88,6 +102,13 @@ public class MarvinShell extends Activity implements GestureListener {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    ttsStartedSuccessfully = false;
+    if (checkTtsRequirements()) {
+      initMarvinShell();
+    }
+  }
+
+  private void initMarvinShell() {
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
@@ -214,6 +235,7 @@ public class MarvinShell extends Activity implements GestureListener {
     tts.addSpeech("west", pkgName, R.raw.west);
     tts.addSpeech("[cancel]", pkgName, R.raw.cancel_snd);
     tts.addSpeech("[launch]", pkgName, R.raw.launch_snd);
+    tts.addSpeech("Android Says", pkgName, R.raw.android_says);
     tts.addSpeech("<-", pkgName, R.raw.backspace);
     tts.addSpeech(getString(R.string.gps), pkgName, R.raw.gps);
     tts.addSpeech(getString(R.string.signal), pkgName, R.raw.signal);
@@ -242,6 +264,8 @@ public class MarvinShell extends Activity implements GestureListener {
       mainFrameLayout.addView(gestureOverlay);
 
       (new Thread(new ActionMonitor())).start();
+
+      ttsStartedSuccessfully = true;
     }
   };
 
@@ -426,7 +450,37 @@ public class MarvinShell extends Activity implements GestureListener {
           items = MenuLoader.loadMenu(item.data);
           tts.speak("[launch]", 0, null);
         } else {
-          tts.speak("Unable to load " + item.data, 0, null);
+          final String label = item.label;
+          final String data = item.data;
+          // Write file and retry
+          class createShortcutsFileThread implements Runnable {
+            public void run() {
+              try {
+                String efDirStr = "/sdcard/eyesfree/";
+                String filename = efDirStr + "shortcuts.xml";
+                Resources res = getResources();
+                InputStream fis = res.openRawResource(R.raw.default_shortcuts);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                String contents = "";
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                  contents = contents + line;
+                }
+                File efDir = new File(efDirStr);
+                boolean directoryExists = efDir.isDirectory();
+                if (!directoryExists) {
+                  efDir.mkdir();
+                }
+                FileWriter writer = new FileWriter(filename);
+                writer.write(contents);
+                writer.close();
+                tts.speak("Default shortcuts dot X M L created.", 0, null);
+              } catch (IOException e) {
+                tts.speak("S D Card error.", 0, null);
+              }
+            }
+          }
+          new Thread(new createShortcutsFileThread()).start();
         }
       }
     }
@@ -442,6 +496,9 @@ public class MarvinShell extends Activity implements GestureListener {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (!ttsStartedSuccessfully) {
+      return false;
+    }
     switch (keyCode) {
       case KeyEvent.KEYCODE_MENU:
         announceCurrentMenu();
@@ -461,6 +518,9 @@ public class MarvinShell extends Activity implements GestureListener {
 
   @Override
   public boolean onKeyUp(int keyCode, KeyEvent event) {
+    if (!ttsStartedSuccessfully) {
+      return false;
+    }
     switch (keyCode) {
       case KeyEvent.KEYCODE_BACK:
         if (backButtonPressed) {
@@ -489,5 +549,61 @@ public class MarvinShell extends Activity implements GestureListener {
         }
     }
     return false;
+  }
+
+
+  /** Checks to make sure that all the requirements for the TTS are there */
+  private boolean checkTtsRequirements() {
+    if (!TTS.isInstalled(this)) {
+      Uri marketUri = Uri.parse("market://search?q=pname:com.google.tts");
+      Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+      startActivityForResult(marketIntent, ttsCheckCode);
+      return false;
+    }
+    if (!ConfigurationManager.allFilesExist()) {
+      Intent intent = null;
+      try {
+        int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
+        Context myContext = createPackageContext("com.google.tts", flags);
+        Class<?> appClass =
+            myContext.getClassLoader().loadClass("com.google.tts.ConfigurationManager");
+        intent = new Intent(myContext, appClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivityForResult(intent, ttsCheckCode);
+      } catch (NameNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      return false;
+    }
+    return true;
+  }
+
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == ttsCheckCode) {
+      if (TTS.isInstalled(this)) {
+        initMarvinShell();
+      } else {
+        displayTTSMissing();
+      }
+    }
+  }
+
+  private void displayTTSMissing() {
+    AlertDialog errorDialog = new Builder(this).create();
+    errorDialog.setTitle("Unable to continue");
+    errorDialog.setMessage("TTS is a required component. Please install it first.");
+    errorDialog.setButton("Quit", new OnClickListener() {
+      public void onClick(DialogInterface arg0, int arg1) {
+        finish();
+      }
+    });
+    errorDialog.setCancelable(false);
+    errorDialog.show();
   }
 }

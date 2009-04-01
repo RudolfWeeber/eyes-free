@@ -43,6 +43,5 @@
     
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>
-    <string name="time_and_date">Time &amp; Date</string>
-    
+    <string name="time_and_date">Time &amp; Date</string>    
 </resources>

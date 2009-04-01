@@ -33,7 +33,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,7 +83,7 @@ public class AppLauncherView extends TextView {
 
   private ShakeDetector shakeDetector;
 
-  private long lastLogTime = 0;
+  //private long lastLogTime = 0;
 
   private void logTime() {
     /*
