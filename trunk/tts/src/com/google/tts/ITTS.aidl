@@ -21,4 +21,7 @@ interface ITTS {
   int getVersion();  
   void setLanguage(in String language);
   boolean synthesizeToFile(in String text, in String[] params, in String outputDirectory);
+  void playEarcon(in String earcon, in int queueMode, in String[] params);
+  void addEarcon(in String earcon, in String packageName, in int resId);
+  void addEarconFile(in String earcon, in String filename);
 }

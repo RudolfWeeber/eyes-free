@@ -39,7 +39,8 @@ import android.os.RemoteException;
 public class TTS {
   // This is the minimum version of the TTS service that is needed by this
   // version of the library stub.
-  private final static int MIN_VER = 5; 
+  private final static int MIN_VER = 5;
+
   /**
    * Called when the TTS has initialized
    * 
@@ -123,7 +124,6 @@ public class TTS {
         // in the initTts function
         e.printStackTrace();
       } catch (ClassNotFoundException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -140,11 +140,11 @@ public class TTS {
         itts = ITTS.Stub.asInterface(service);
         try {
           version = itts.getVersion();
-          // The TTS service must be at least the min version needed by the 
-          // library stub. Do not try to run the older TTS with the newer 
+          // The TTS service must be at least the min version needed by the
+          // library stub. Do not try to run the older TTS with the newer
           // library stub as the newer library may reference methods which are
           // unavailable and cause a crash.
-          if (version < MIN_VER){
+          if (version < MIN_VER) {
             if (showInstaller) {
               if (versionAlert != null) {
                 versionAlert.show();
@@ -158,7 +158,7 @@ public class TTS {
           initTts();
           return;
         }
-        
+
         started = true;
         // The callback can become null if the Android OS decides to restart the
         // TTS process as well as whatever is using it. In such cases, do
@@ -202,7 +202,7 @@ public class TTS {
   public void shutdown() {
     try {
       ctx.unbindService(serviceConnection);
-    } catch (IllegalArgumentException e){
+    } catch (IllegalArgumentException e) {
       // Do nothing and fail silently since an error here indicates that
       // binding never succeeded in the first place.
     }
@@ -218,8 +218,9 @@ public class TTS {
    * @param packagename Pass the packagename of the application that contains
    *        the resource. If the resource is in your own application (this is
    *        the most common case), then put the packagename of your application
-   *        here.<br/>Example: <b>"com.google.marvin.compass"</b><br/> The
-   *        packagename can be found in the AndroidManifest.xml of your
+   *        here.<br/>
+   *        Example: <b>"com.google.marvin.compass"</b><br/>
+   *        The packagename can be found in the AndroidManifest.xml of your
    *        application.
    *        <p>
    *        <code>&lt;manifest xmlns:android=&quot;...&quot;
@@ -300,6 +301,35 @@ public class TTS {
     }
     try {
       itts.speak(text, queueMode, params);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (NullPointerException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    } catch (IllegalStateException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
+  }
+
+  /**
+   * Plays the earcon using the specified queueing mode and parameters.
+   * 
+   * @param earcon The earcon that should be played
+   * @param queueMode 0 for no queue (interrupts all previous utterances), 1 for
+   *        queued
+   * @param params An ArrayList of parameters.
+   */
+  public void playEarcon(String earcon, int queueMode, String[] params) {
+    if (!started) {
+      return;
+    }
+    try {
+      itts.playEarcon(earcon, queueMode, params);
     } catch (RemoteException e) {
       // TTS died; restart it.
       started = false;
@@ -445,15 +475,15 @@ public class TTS {
       initTts();
     }
   }
-  
+
   /**
    * Speaks the given text using the specified queueing mode and parameters.
    * 
    * @param text The String of text that should be synthesized
    * @param params An ArrayList of parameters. The first element of this array
    *        controls the type of voice to use.
-   * @param filename The string that gives the full output filename; it 
-   *        should be something like "/sdcard/myappsounds/mysound.wav".
+   * @param filename The string that gives the full output filename; it should
+   *        be something like "/sdcard/myappsounds/mysound.wav".
    * @return A boolean that indicates if the synthesis succeeded
    */
   public boolean synthesizeToFile(String text, String[] params, String filename) {
@@ -493,23 +523,23 @@ public class TTS {
       new TTSVersionAlert(ctx, null, null, null).show();
     }
   }
-  
+
   /**
    * Checks if the TTS service is installed or not
    * 
    * @return A boolean that indicates whether the TTS service is installed
    */
-  public static boolean isInstalled(Context ctx){
+  public static boolean isInstalled(Context ctx) {
     PackageManager pm = ctx.getPackageManager();
     Intent intent = new Intent("android.intent.action.USE_TTS");
     intent.addCategory("android.intent.category.TTS");
     ResolveInfo info = pm.resolveService(intent, 0);
-    if (info == null){
+    if (info == null) {
       return false;
     }
     return true;
   }
 
-  
+
 
 }

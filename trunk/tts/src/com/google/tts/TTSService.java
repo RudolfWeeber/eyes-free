@@ -51,6 +51,18 @@ import javax.xml.parsers.FactoryConfigurationError;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class TTSService extends Service implements OnCompletionListener {
+  private class SpeechItem {
+    public String text;
+    public ArrayList<String> params;
+    public boolean isEarcon;
+
+    public SpeechItem(String text, ArrayList<String> params, boolean isEarcon) {
+      this.text = text;
+      this.params = params;
+      this.isEarcon = isEarcon;
+    }
+  }
+
   private static final String ACTION = "android.intent.action.USE_TTS";
   private static final String CATEGORY = "android.intent.category.TTS";
   private static final String PKGNAME = "com.google.tts";
@@ -60,6 +72,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
   private Boolean isSpeaking;
   private ArrayList<SpeechItem> speechQueue;
+  private HashMap<String, SoundResource> earcons;
   private HashMap<String, SoundResource> utterances;
   private HashMap<String, SoundResource> cache;
   private MediaPlayer player;
@@ -83,6 +96,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
     prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+    earcons = new HashMap<String, SoundResource>();
     utterances = new HashMap<String, SoundResource>();
     cache = new HashMap<String, SoundResource>();
 
@@ -166,9 +180,15 @@ public class TTSService extends Service implements OnCompletionListener {
       loadUtterancesFromPropertiesFile();
       engine = TTSEngine.PRERECORDED_ONLY;
     }
-    // Load earcons
+
+    // Deprecated - these should be earcons from now on!
+    // Leave this here for one more version before removing it completely.
     utterances.put("[tock]", new SoundResource(PKGNAME, R.raw.tock_snd));
     utterances.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
+
+    // Load earcons
+    earcons.put("[tock]", new SoundResource(PKGNAME, R.raw.tock_snd));
+    earcons.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
   }
 
   private void loadUtterancesFromPropertiesFile() {
@@ -248,6 +268,28 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   /**
+   * Adds a sound resource to the TTS as an earcon.
+   * 
+   * @param earcon The text that should be associated with the sound resource
+   * @param packageName The name of the package which has the sound resource
+   * @param resId The resource ID of the sound within its package
+   */
+  private void addEarcon(String earcon, String packageName, int resId) {
+    earcons.put(earcon, new SoundResource(packageName, resId));
+  }
+
+  /**
+   * Adds a sound resource to the TTS as an earcon.
+   * 
+   * @param earcon The text that should be associated with the sound resource
+   * @param filename The filename of the sound resource. This must be a complete
+   *        path like: (/sdcard/mysounds/mysoundbite.mp3).
+   */
+  private void addEarcon(String earcon, String filename) {
+    earcons.put(earcon, new SoundResource(filename));
+  }
+
+  /**
    * Caches a generated utterance
    * 
    * @param text The text that should be associated with the sound resource
@@ -271,7 +313,26 @@ public class TTSService extends Service implements OnCompletionListener {
     if (queueMode == 0) {
       stop();
     }
-    speechQueue.add(new SpeechItem(text, params));
+    speechQueue.add(new SpeechItem(text, params, false));
+    if (!isSpeaking) {
+      processSpeechQueue();
+    }
+  }
+
+  /**
+   * Plays the earcon using the specified queueing mode and parameters.
+   * 
+   * @param earcon The earcon that should be played
+   * @param queueMode 0 for no queue (interrupts all previous utterances), 1 for
+   *        queued
+   * @param params An ArrayList of parameters. This is not implemented for all
+   *        engines.
+   */
+  private void playEarcon(String earcon, int queueMode, ArrayList<String> params) {
+    if (queueMode == 0) {
+      stop();
+    }
+    speechQueue.add(new SpeechItem(earcon, params, true));
     if (!isSpeaking) {
       processSpeechQueue();
     }
@@ -365,9 +426,17 @@ public class TTSService extends Service implements OnCompletionListener {
     SoundResource sr = null;
     String text = speechItem.text;
     ArrayList<String> params = speechItem.params;
-    /* TODO: Add methods for playing earcons */
+    // If this is an earcon, just load that sound resource
+    if (speechItem.isEarcon) {
+      sr = earcons.get(text);
+      if (sr == null) {
+        // Invalid earcon requested; play the default [tock] sound.
+        sr = new SoundResource(PKGNAME, R.raw.tock_snd);
+      }
+    }
+
     // TODO: Cleanup special params system
-    if (engine != TTSEngine.ESPEAK_ONLY) {
+    if ((sr == null) && (engine != TTSEngine.ESPEAK_ONLY)) {
       if ((params != null) && (params.size() > 0)) {
         String textWithVoice = text;
         if (params.get(0).equals(TTSParams.VOICE_ROBOT.toString())) {
@@ -405,12 +474,12 @@ public class TTSService extends Service implements OnCompletionListener {
       if ((number > 99) && (number < 1000)) {
         int remainder = number % 100;
         number = number / 100;
-        decomposedNumber.add(new SpeechItem(Integer.toString(number), params));
-        decomposedNumber.add(new SpeechItem("[slnc]", params));
-        decomposedNumber.add(new SpeechItem("hundred", params));
-        decomposedNumber.add(new SpeechItem("[slnc]", params));
+        decomposedNumber.add(new SpeechItem(Integer.toString(number), params, false));
+        decomposedNumber.add(new SpeechItem("[slnc]", params, true));
+        decomposedNumber.add(new SpeechItem("hundred", params, false));
+        decomposedNumber.add(new SpeechItem("[slnc]", params, true));
         if (remainder > 0) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(remainder), params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(remainder), params, false));
         }
         speechQueue.remove(0);
         speechQueue.addAll(0, decomposedNumber);
@@ -421,40 +490,40 @@ public class TTSService extends Service implements OnCompletionListener {
       int digit = 0;
       if ((number > 20) && (number < 100)) {
         if ((number > 20) && (number < 30)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(20), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(20), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 20;
         } else if ((number > 30) && (number < 40)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(30), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(30), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 30;
         } else if ((number > 40) && (number < 50)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(40), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(40), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 40;
         } else if ((number > 50) && (number < 60)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(50), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(50), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 50;
         } else if ((number > 60) && (number < 70)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(60), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(60), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 60;
         } else if ((number > 70) && (number < 80)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(70), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(70), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 70;
         } else if ((number > 80) && (number < 90)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(80), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(80), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 80;
         } else if ((number > 90) && (number < 100)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(90), params));
-          decomposedNumber.add(new SpeechItem("[slnc]", params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(90), params, false));
+          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
           digit = number - 90;
         }
         if (digit > 0) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(digit), params));
+          decomposedNumber.add(new SpeechItem(Integer.toString(digit), params, false));
         }
         speechQueue.remove(0);
         speechQueue.addAll(0, decomposedNumber);
@@ -638,6 +707,22 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     /**
+     * Plays the earcon using the specified queueing mode and parameters.
+     * 
+     * @param earcon The earcon that should be played
+     * @param queueMode 0 for no queue (interrupts all previous utterances), 1
+     *        for queued
+     * @param params An ArrayList of parameters.
+     */
+    public void playEarcon(String earcon, int queueMode, String[] params) {
+      ArrayList<String> speakingParams = new ArrayList<String>();
+      if (params != null) {
+        speakingParams = new ArrayList<String>(Arrays.asList(params));
+      }
+      self.playEarcon(earcon, queueMode, speakingParams);
+    }
+
+    /**
      * Stops all speech output and removes any utterances still in the queue.
      */
     public void stop() {
@@ -673,6 +758,28 @@ public class TTSService extends Service implements OnCompletionListener {
      */
     public void addSpeechFile(String text, String filename) {
       self.addSpeech(text, filename);
+    }
+
+    /**
+     * Adds a sound resource to the TTS as an earcon.
+     * 
+     * @param earcon The text that should be associated with the sound resource
+     * @param packageName The name of the package which has the sound resource
+     * @param resId The resource ID of the sound within its package
+     */
+    public void addEarcon(String earcon, String packageName, int resId) {
+      self.addEarcon(earcon, packageName, resId);
+    }
+
+    /**
+     * Adds a sound resource to the TTS as an earcon.
+     * 
+     * @param earcon The text that should be associated with the sound resource
+     * @param filename The filename of the sound resource. This must be a
+     *        complete path like: (/sdcard/mysounds/mysoundbite.mp3).
+     */
+    public void addEarconFile(String earcon, String filename) {
+      self.addEarcon(earcon, filename);
     }
 
     /**
@@ -734,14 +841,4 @@ public class TTSService extends Service implements OnCompletionListener {
       return self.synthesizeToFile(text, speakingParams, filename, true);
     }
   };
-
-  private class SpeechItem {
-    public String text;
-    public ArrayList<String> params;
-
-    public SpeechItem(String text, ArrayList<String> params) {
-      this.text = text;
-      this.params = params;
-    }
-  }
 }
