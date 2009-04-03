@@ -29,7 +29,7 @@ public class ReminderSpeakerActivity extends Activity {
     stopNow = false;
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String reminderUriStr = prefs.getString("REMINDER", null);
-    if (reminderUriStr != null) {
+    //if (reminderUriStr != null) {
       class AlarmPlayer implements Runnable {
         public void run() {
           MediaPlayer mPlayer =
@@ -52,9 +52,9 @@ public class ReminderSpeakerActivity extends Activity {
       }
       displayDismissDialog();
       new Thread(new AlarmPlayer()).start();
-    } else {
-      finish();
-    }
+  //  } else {
+//      finish();
+//    }
   }
 
   private void displayDismissDialog() {

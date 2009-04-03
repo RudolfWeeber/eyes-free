@@ -334,6 +334,9 @@ public class NumberEntryView extends TextView {
     boolean newNumberEntered = false;
     switch (keyCode) {
       case KeyEvent.KEYCODE_CALL:
+        parent.setTime(dialedNumber);
+        return true;
+        /*
         if (!confirmed) {
           parent.tts.speak("Reminder at ", 1, null);
           for (int i = 0; i < dialedNumber.length(); i++) {
@@ -346,6 +349,7 @@ public class NumberEntryView extends TextView {
           parent.setTime(dialedNumber);
           return true;
         }
+        */
 
       case KeyEvent.KEYCODE_0:
         newNumberEntered = true;

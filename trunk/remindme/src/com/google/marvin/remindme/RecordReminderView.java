@@ -85,7 +85,7 @@ public class RecordReminderView extends TextView {
   }
   
   private void startRecording(){    
-    File outputDir = new File("/sdcard/reminder/");
+    File outputDir = new File("/sdcard/remindme/");
     outputDir.mkdirs();
     recorder = new MediaRecorder();
     recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
