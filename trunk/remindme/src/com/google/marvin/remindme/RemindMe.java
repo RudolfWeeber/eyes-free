@@ -25,8 +25,6 @@ import android.widget.Toast;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class RemindMe extends Activity {
-  private static final int NOTE_RECORDED = 1;
-
   public TTS tts;
 
   public NumberEntryView numberEntryView;
@@ -115,17 +113,14 @@ public class RemindMe extends Activity {
         cal.setTimeInMillis(triggerTime);
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int min = cal.get(Calendar.MINUTE);
+        if (alreadyQuit){
+          return;
+        }
         tts.speak("will be set for " + hour + " " + min + " Press call to confirm, back to cancel.", 0, null);
       }      
     });
     mplayer.start();    
   }
-  
-  private void debug(){
-    MediaPlayer mplayer = new MediaPlayer().create(this, Uri.parse("/sdcard/remindme/note00.amr"));
-    mplayer.start();    
-  }
-
 
   public void confirmAlarm(){
     alreadyQuit = true;

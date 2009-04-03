@@ -17,6 +17,7 @@ import com.google.tts.TTS;
 public class ReminderSpeakerActivity extends Activity {
 
   private ReminderSpeakerActivity self;
+  private boolean stopNow;
 
 
 
@@ -25,6 +26,7 @@ public class ReminderSpeakerActivity extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     self = this;
+    stopNow = false;
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String reminderUriStr = prefs.getString("REMINDER", null);
     if (reminderUriStr != null) {
@@ -40,7 +42,9 @@ public class ReminderSpeakerActivity extends Activity {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
               }
-              new Thread(new AlarmPlayer()).start();
+              if (!stopNow) {
+                new Thread(new AlarmPlayer()).start();
+              }
             }
           });
           mPlayer.start();
@@ -59,9 +63,10 @@ public class ReminderSpeakerActivity extends Activity {
     String titleText = "Alarm";
     dismissDialog.setTitle(titleText);
     dismissDialog.setMessage("Press the DISMISS button to stop the alarm.");
-    
+
     dismissDialog.setNeutralButton("Dismiss", new OnClickListener() {
       public void onClick(DialogInterface dialog, int which) {
+        stopNow = true;
         finish();
       }
     });
