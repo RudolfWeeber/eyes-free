@@ -39,7 +39,7 @@ import android.os.RemoteException;
 public class TTS {
   // This is the minimum version of the TTS service that is needed by this
   // version of the library stub.
-  private final static int MIN_VER = 5;
+  private final static int MIN_VER = 9;
 
   /**
    * Called when the TTS has initialized
@@ -343,6 +343,18 @@ public class TTS {
       started = false;
       initTts();
     }
+  }
+
+  /**
+   * Plays the earcon using the specified queueing mode and parameters.
+   * 
+   * @param earcon The TTSEarcon that should be played
+   * @param queueMode 0 for no queue (interrupts all previous utterances), 1 for
+   *        queued
+   * @param params An ArrayList of parameters.
+   */
+  public void playEarcon(TTSEarcon earcon, int queueMode, String[] params) {
+    playEarcon(earcon.name(), queueMode, params);
   }
 
   /**
