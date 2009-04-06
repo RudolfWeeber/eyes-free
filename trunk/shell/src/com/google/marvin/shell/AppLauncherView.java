@@ -17,6 +17,7 @@
 package com.google.marvin.shell;
 
 import com.google.marvin.shell.ShakeDetector.ShakeListener;
+import com.google.tts.TTSEarcon;
 import com.google.tts.TTSParams;
 
 import java.util.ArrayList;
@@ -398,7 +399,7 @@ public class AppLauncherView extends TextView {
       invalidate();
       if (prevVal != currentValue) {
         if (currentCharacter.equals("")) {
-          parent.tts.speak("[tock]", 0, null);
+          parent.tts.playEarcon(TTSEarcon.TOCK, 0, null);
         } else {
           String[] params = new String[1];
           params[0] = TTSParams.VOICE_FEMALE.toString();
@@ -728,8 +729,8 @@ public class AppLauncherView extends TextView {
     if (!deletedCharacter.equals("")) {
       parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
     } else {
-      parent.tts.speak("[tock]", 0, null);
-      parent.tts.speak("[tock]", 1, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK, 0, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK, 1, null);
     }
     if (currentString.length() > 0) {
       jumpToFirstMatchingApp();

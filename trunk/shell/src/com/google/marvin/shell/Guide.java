@@ -1,6 +1,7 @@
 package com.google.marvin.shell;
 
 import com.google.marvin.shell.StreetLocator.StreetLocatorListener;
+import com.google.tts.TTSEarcon;
 
 import android.content.Context;
 import android.location.Location;
@@ -24,7 +25,7 @@ public class Guide implements Runnable, StreetLocatorListener {
       networkLoc = arg0;
       networkLocLastUpdateTime = System.currentTimeMillis();
       networkFixCount++;
-      parent.tts.speak("[tock]", 1, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK, 1, null);
       if (networkFixCount > minFixCount) {
         unregisterLocationServices();
         log("Network location", "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());
@@ -58,7 +59,7 @@ public class Guide implements Runnable, StreetLocatorListener {
       gpsLoc = arg0;
       gpsLocLastUpdateTime = System.currentTimeMillis();
       gpsFixCount++;
-      parent.tts.speak("[tock]", 1, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK, 1, null);
       if (gpsFixCount > minFixCount) {
         unregisterLocationServices();
         log("GPS location", "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());

@@ -20,6 +20,7 @@ import com.google.marvin.shell.TouchGestureControlOverlay.Gesture;
 import com.google.marvin.shell.TouchGestureControlOverlay.GestureListener;
 import com.google.tts.ConfigurationManager;
 import com.google.tts.TTS;
+import com.google.tts.TTSEarcon;
 import com.google.tts.TTSEngine;
 
 import java.io.BufferedReader;
@@ -233,8 +234,6 @@ public class MarvinShell extends Activity implements GestureListener {
     tts.addSpeech("west south west", pkgName, R.raw.west_south_west);
     tts.addSpeech("east", pkgName, R.raw.east);
     tts.addSpeech("west", pkgName, R.raw.west);
-    tts.addSpeech("[cancel]", pkgName, R.raw.cancel_snd);
-    tts.addSpeech("[launch]", pkgName, R.raw.launch_snd);
     tts.addSpeech("Android Says", pkgName, R.raw.android_says);
     tts.addSpeech("<-", pkgName, R.raw.backspace);
     tts.addSpeech(getString(R.string.gps), pkgName, R.raw.gps);
@@ -343,7 +342,7 @@ public class MarvinShell extends Activity implements GestureListener {
           intent.putExtra(params.get(i).name, keyValue);
         }
       }
-      tts.speak("[launch]", 0, null);
+      tts.playEarcon(TTSEarcon.TICK, 0, null);
       startActivity(intent);
     } catch (NameNotFoundException e) {
       tts.speak(getString(R.string.application_not_installed), 0, null);
@@ -372,10 +371,10 @@ public class MarvinShell extends Activity implements GestureListener {
     } else if (widgetName.equals("BATTERY")) {
       widgets.announceBattery();
     } else if (widgetName.equals("VOICEMAIL")) {
-      tts.speak("[launch]", 0, null);
+      tts.playEarcon(TTSEarcon.TICK, 0, null);
       widgets.callVoiceMail();
     } else if (widgetName.equals("LOCATION")) {
-      tts.speak("[launch]", 0, null);
+      tts.playEarcon(TTSEarcon.TICK, 0, null);
       widgets.speakLocation();
     } else if (widgetName.equals("CONNECTIVITY")) {
       widgets.announceConnectivity();
@@ -448,7 +447,7 @@ public class MarvinShell extends Activity implements GestureListener {
         if (new File(item.data).isFile()) {
           menus.add(new Menu(item.label, item.data));
           items = MenuLoader.loadMenu(item.data);
-          tts.speak("[launch]", 0, null);
+          tts.playEarcon(TTSEarcon.TICK, 0, null);
         } else {
           final String label = item.label;
           final String data = item.data;

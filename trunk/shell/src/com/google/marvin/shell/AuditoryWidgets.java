@@ -18,6 +18,7 @@ import android.telephony.TelephonyManager;
 import android.provider.Settings.System;
 
 import com.google.tts.TTS;
+import com.google.tts.TTSEarcon;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -145,7 +146,7 @@ public class AuditoryWidgets {
           tts.speak("%", 1, null);
         }
         if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-          tts.speak("[slnc]", 1, null);
+          parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
           tts.speak(parent.getString(R.string.charging), 1, null);
         }
       }
@@ -157,19 +158,19 @@ public class AuditoryWidgets {
   public void announceDate() {
     Calendar cal = Calendar.getInstance();
     int day = cal.get(Calendar.DAY_OF_MONTH);
-    int year = cal.get(Calendar.YEAR);
+   // int year = cal.get(Calendar.YEAR);
     SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");
     String monthStr = monthFormat.format(cal.getTime());
     try {
       boolean canSpeak = speakingTimeLock.tryLock(1000, TimeUnit.MILLISECONDS);
       if (canSpeak) {
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
         tts.speak(monthStr, 1, null);
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
         tts.speak(Integer.toString(day), 1, null);
       }
     } catch (InterruptedException e) {
@@ -199,13 +200,13 @@ public class AuditoryWidgets {
       boolean canSpeak = speakingTimeLock.tryLock(1000, TimeUnit.MILLISECONDS);
       if (canSpeak) {
         tts.speak(Integer.toString(hour), 0, null);
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
         tts.speak(Integer.toString(minutes), 1, null);
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
-        tts.speak("[slnc]", 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
         tts.speak(ampm, 1, null);
       }
     } catch (InterruptedException e) {
@@ -262,7 +263,7 @@ public class AuditoryWidgets {
 
   public void startAppLauncher(){
     Intent intent = new Intent(parent, AppLauncher.class);
-    tts.speak("[launch]", 0, null);
+    parent.tts.playEarcon(TTSEarcon.TICK, 0, null);
     parent.startActivity(intent);
   }
   
