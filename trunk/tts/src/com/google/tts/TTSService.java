@@ -187,9 +187,10 @@ public class TTSService extends Service implements OnCompletionListener {
     utterances.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
 
     // Load earcons
+    earcons.put(TTSEarcon.CANCEL.name(), new SoundResource(PKGNAME, R.raw.cancel_snd));
+    earcons.put(TTSEarcon.SILENCE.name(), new SoundResource(PKGNAME, R.raw.slnc_snd));
     earcons.put(TTSEarcon.TICK.name(), new SoundResource(PKGNAME, R.raw.tick_snd));
     earcons.put(TTSEarcon.TOCK.name(), new SoundResource(PKGNAME, R.raw.tock_snd));
-    earcons.put(TTSEarcon.SILENCE.name(), new SoundResource(PKGNAME, R.raw.slnc_snd));
   }
 
   private void loadUtterancesFromPropertiesFile() {

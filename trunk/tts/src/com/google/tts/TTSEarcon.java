@@ -21,5 +21,5 @@ package com.google.tts;
  * @author clchen@google.com (Charles L. Chen)
  */
 public enum TTSEarcon {
-  SILENCE, TICK, TOCK 
+  SILENCE, TICK, TOCK, CANCEL
 }
