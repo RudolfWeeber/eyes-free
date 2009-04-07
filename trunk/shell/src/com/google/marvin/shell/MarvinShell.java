@@ -30,7 +30,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -40,6 +44,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.media.AudioManager;
@@ -61,6 +67,8 @@ import android.widget.TextView;
  */
 public class MarvinShell extends Activity implements GestureListener {
   private static final int ttsCheckCode = 42;
+
+  private PackageManager pm;
 
   public TTS tts;
   private boolean ttsStartedSuccessfully;
@@ -103,6 +111,8 @@ public class MarvinShell extends Activity implements GestureListener {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    pm = getPackageManager();
     ttsStartedSuccessfully = false;
     if (checkTtsRequirements()) {
       initMarvinShell();
@@ -149,6 +159,7 @@ public class MarvinShell extends Activity implements GestureListener {
   protected void onRestart() {
     super.onRestart();
     isReturningFromTask = true;
+    new ProcessTask().execute();
   }
 
   @Override
@@ -604,5 +615,26 @@ public class MarvinShell extends Activity implements GestureListener {
     });
     errorDialog.setCancelable(false);
     errorDialog.show();
+  }
+
+
+  // This is a dummy version of the ProcessTask.
+  // It's only function is to call the info.loadLabel to prime the pump
+  // for the app launcher view.
+  private class ProcessTask extends UserTask<Void, Void, Integer> {
+    @Override
+    public Integer doInBackground(Void... params) {
+      Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+      mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+      List<ResolveInfo> apps = pm.queryIntentActivities(mainIntent, 0);
+      for (ResolveInfo info : apps) {
+        info.loadLabel(pm);
+      }
+      return 0;
+    }
+
+    @Override
+    public void end(Integer x) {
+    }
   }
 }

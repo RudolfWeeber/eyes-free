@@ -94,41 +94,15 @@ public class AppLauncherView extends TextView {
   }
 
   @SuppressWarnings("unchecked")
-  public AppLauncherView(Context context) {
+  public AppLauncherView(Context context, ArrayList<AppEntry> installedApps) {
     super(context);
 
     parent = ((AppLauncher) context);
     vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
     // Build app list here
-    Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-    PackageManager pm = parent.getPackageManager();
-    List<ResolveInfo> apps = pm.queryIntentActivities(mainIntent, 0);
-    logTime();
-
-    appList = new ArrayList<AppEntry>();
+    appList = installedApps;
     appListIndex = 0;
-    for (ResolveInfo info : apps) {
-      String title = info.loadLabel(pm).toString();
-      if (title.length() == 0) {
-        title = info.activityInfo.name.toString();
-      }
-
-      AppEntry entry = new AppEntry(title, info, null);
-      appList.add(entry);
-    }
-    logTime();
-
-    class appEntrySorter implements Comparator {
-      public int compare(Object arg0, Object arg1) {
-        String title0 = ((AppEntry) arg0).getTitle();
-        String title1 = ((AppEntry) arg1).getTitle();
-        return title0.compareTo(title1);
-      }
-    }
-    Collections.sort(appList, new appEntrySorter());
-
     currentString = "";
 
     setClickable(true);
