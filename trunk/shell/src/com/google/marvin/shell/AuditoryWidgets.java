@@ -62,8 +62,15 @@ public class AuditoryWidgets {
 
   public void shutdown() {
     guide.shutdown();
-    TelephonyManager tm = (TelephonyManager) parent.getSystemService(Context.TELEPHONY_SERVICE);
-    tm.listen(new PhoneStateListener() {}, PhoneStateListener.LISTEN_NONE);
+    try {
+      TelephonyManager tm = (TelephonyManager) parent.getSystemService(Context.TELEPHONY_SERVICE);
+      tm.listen(new PhoneStateListener() {}, PhoneStateListener.LISTEN_NONE);
+    } catch (RuntimeException e) {
+      // There will be a runtime exception if shutdown is being forced by the
+      // user.
+      // Ignore the error here as shutdown will be called a second time when the
+      // shell is destroyed.
+    }
   }
 
   private void speakDataNetworkInfo() {
@@ -85,8 +92,7 @@ public class AuditoryWidgets {
         WifiManager wManager = (WifiManager) parent.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wInfo = wManager.getConnectionInfo();
         int wifiSignalStrength = WifiManager.calculateSignalLevel(wInfo.getRssi(), 4);
-        info =  wInfo.getSSID() + " " + wifiSignalStrength + " "
-                + parent.getString(R.string.bars);
+        info = wInfo.getSSID() + " " + wifiSignalStrength + " " + parent.getString(R.string.bars);
       }
     }
     tts.speak(info, 1, null);
@@ -120,7 +126,6 @@ public class AuditoryWidgets {
       }
 
     } catch (SettingNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
 
@@ -158,7 +163,6 @@ public class AuditoryWidgets {
   public void announceDate() {
     Calendar cal = Calendar.getInstance();
     int day = cal.get(Calendar.DAY_OF_MONTH);
-   // int year = cal.get(Calendar.YEAR);
     SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");
     String monthStr = monthFormat.format(cal.getTime());
     try {
@@ -251,8 +255,6 @@ public class AuditoryWidgets {
 
   public void callVoiceMail() {
     Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode(parent.voiceMailNumber));
-
-    // Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode("18056377243"));
     Intent intent = new Intent(Intent.ACTION_CALL, phoneNumberURI);
     parent.startActivity(intent);
   }
@@ -261,10 +263,8 @@ public class AuditoryWidgets {
     guide.speakLocation();
   }
 
-  public void startAppLauncher(){
-    Intent intent = new Intent(parent, AppLauncher.class);
-    parent.tts.playEarcon(TTSEarcon.TICK, 0, null);
-    parent.startActivity(intent);
+  public void startAppLauncher() {
+    parent.switchToAppLauncherView();
   }
-  
+
 }

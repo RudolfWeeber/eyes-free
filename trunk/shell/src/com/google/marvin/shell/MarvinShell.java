@@ -69,6 +69,9 @@ public class MarvinShell extends Activity implements GestureListener {
   private static final int ttsCheckCode = 42;
 
   private PackageManager pm;
+  private FrameLayout mainFrameLayout;
+  private AppLauncherView appLauncherView;
+  private boolean appLauncherActive;
 
   public TTS tts;
   private boolean ttsStartedSuccessfully;
@@ -78,6 +81,7 @@ public class MarvinShell extends Activity implements GestureListener {
   private HashMap<Gesture, MenuItem> items;
   private ArrayList<Menu> menus;
 
+  long backKeyTimeDown = -1;
   /*
    * Set the isReturningFromTask in the onRestart method to distinguish between
    * a regular restart (returning to the Eyes-Free Shell after the launched
@@ -96,22 +100,13 @@ public class MarvinShell extends Activity implements GestureListener {
   private boolean messageWaiting;
   public String voiceMailNumber = "";
 
-  // Need a flag here to prevent the keyUp for the Back button from firing
-  // when
-  // the Back button was pressed to get out of an application that was
-  // launched;
-  // the keyUp should only be active if the initial keyDown for the Back
-  // button
-  // was pressed in the shell itself.
-  private boolean backButtonPressed;
-
   private BroadcastReceiver screenStateOnReceiver;
 
   /** Called when the activity is first created. */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    appLauncherActive = false;
     pm = getPackageManager();
     ttsStartedSuccessfully = false;
     if (checkTtsRequirements()) {
@@ -131,7 +126,6 @@ public class MarvinShell extends Activity implements GestureListener {
     messageWaiting = false;
     menus = new ArrayList<Menu>();
     isReturningFromTask = false;
-    backButtonPressed = false;
 
     // Watch for voicemails
     TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -159,7 +153,6 @@ public class MarvinShell extends Activity implements GestureListener {
   protected void onRestart() {
     super.onRestart();
     isReturningFromTask = true;
-    new ProcessTask().execute();
   }
 
   @Override
@@ -169,6 +162,7 @@ public class MarvinShell extends Activity implements GestureListener {
       if (gestureOverlay != null) {
         if (isReturningFromTask) {
           isReturningFromTask = false;
+          resetTTS();
         } else {
           menus = new ArrayList<Menu>();
           loadHomeMenu();
@@ -181,15 +175,7 @@ public class MarvinShell extends Activity implements GestureListener {
 
   @Override
   protected void onDestroy() {
-    if (tts != null) {
-      tts.shutdown();
-    }
-    if (widgets != null) {
-      widgets.shutdown();
-    }
-    if (screenStateOnReceiver != null) {
-      unregisterReceiver(screenStateOnReceiver);
-    }
+    shutdown();
     super.onDestroy();
   }
 
@@ -268,7 +254,7 @@ public class MarvinShell extends Activity implements GestureListener {
 
       updateStatusText();
 
-      FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+      mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
       vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
       gestureOverlay = new TouchGestureControlOverlay(self, self);
       mainFrameLayout.addView(gestureOverlay);
@@ -276,6 +262,8 @@ public class MarvinShell extends Activity implements GestureListener {
       (new Thread(new ActionMonitor())).start();
 
       ttsStartedSuccessfully = true;
+
+      new ProcessTask().execute();
     }
   };
 
@@ -283,6 +271,9 @@ public class MarvinShell extends Activity implements GestureListener {
     if (gestureOverlay != null) {
       Menu currentMenu = menus.get(menus.size() - 1);
       String message = currentMenu.title;
+      if (appLauncherActive) {
+        message = getString(R.string.applications);
+      }
       updateStatusText();
       // Only announce airplane mode and voicemails
       // if the user is on the home screen.
@@ -309,12 +300,7 @@ public class MarvinShell extends Activity implements GestureListener {
 
     items.put(Gesture.LEFT, new MenuItem(getString(R.string.shortcuts), "LOAD",
         "/sdcard/eyesfree/shortcuts.xml", null));
-    /*
-     * AppEntry compass = new AppEntry(null, "com.google.marvin.compass",
-     * "com.google.marvin.compass.TalkingCompass", null, null);
-     * items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.compass),
-     * "LAUNCH", null, compass));
-     */
+
     items
         .put(Gesture.RIGHT, new MenuItem(getString(R.string.location), "WIDGET", "LOCATION", null));
 
@@ -324,11 +310,6 @@ public class MarvinShell extends Activity implements GestureListener {
     items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "WIDGET", "APPLAUNCHER",
         null));
 
-    /*
-     * AppEntry camera = new AppEntry(null, "com.android.camera",
-     * "com.android.camera.Camera", null, null); items.put(Gesture.DOWNRIGHT,
-     * new MenuItem(getString(R.string.camera), "LAUNCH", null, camera));
-     */
     items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.airplane_mode), "WIDGET",
         "AIRPLANE_MODE_TOGGLE", null));
 
@@ -500,9 +481,10 @@ public class MarvinShell extends Activity implements GestureListener {
   public void onGestureStart(Gesture g) {
     confirmedGesture = null;
     currentGesture = g;
-    // tts.speak(menus.get(menus.size() - 1).title, 0, null);
     vibe.vibrate(VIBE_PATTERN, -1);
   }
+
+
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -520,7 +502,28 @@ public class MarvinShell extends Activity implements GestureListener {
         launchApplication(talkingDialer);
         return true;
       case KeyEvent.KEYCODE_BACK:
-        backButtonPressed = true;
+        if (backKeyTimeDown == -1) {
+          backKeyTimeDown = System.currentTimeMillis();
+          class QuitCommandWatcher implements Runnable {
+            public void run() {
+              try {
+                Thread.sleep(3000);
+                if ((backKeyTimeDown > 0) && (System.currentTimeMillis() - backKeyTimeDown > 2500)) {
+                  AppEntry regularHome =
+                      new AppEntry(null, "com.android.launcher", "com.android.launcher.Launcher",
+                          null, null);
+                  launchApplication(regularHome);
+                  shutdown();
+                  finish();
+                }
+              } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
+            }
+          }
+          new Thread(new QuitCommandWatcher()).start();
+        }
         return true;
     }
     return false;
@@ -533,30 +536,8 @@ public class MarvinShell extends Activity implements GestureListener {
     }
     switch (keyCode) {
       case KeyEvent.KEYCODE_BACK:
-        if (backButtonPressed) {
-          backButtonPressed = false;
-          long duration = event.getEventTime() - event.getDownTime();
-          if (duration > 3000) {
-            AppEntry regularHome =
-                new AppEntry(null, "com.android.launcher", "com.android.launcher.Launcher", null,
-                    null);
-            launchApplication(regularHome);
-            return true;
-          } else {
-            if (menus.size() > 1) {
-              menus.remove(menus.size() - 1);
-              Menu currentMenu = menus.get(menus.size() - 1);
-              if (currentMenu.title.equals(getString(R.string.home))) {
-                loadHomeMenu();
-              } else {
-                items = MenuLoader.loadMenu(currentMenu.filename);
-                mainText.setText(currentMenu.title);
-              }
-              announceCurrentMenu();
-            }
-            return true;
-          }
-        }
+        backKeyTimeDown = -1;
+        return true;
     }
     return false;
   }
@@ -592,7 +573,6 @@ public class MarvinShell extends Activity implements GestureListener {
     return true;
   }
 
-
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == ttsCheckCode) {
@@ -617,24 +597,92 @@ public class MarvinShell extends Activity implements GestureListener {
     errorDialog.show();
   }
 
+  public void switchToAppLauncherView() {
+    if (appLauncherView != null) {
+      setContentView(appLauncherView);
+      appLauncherView.requestFocus();
+      appLauncherView.speakCurrentApp(true);
+      appLauncherActive = true;
+    }
+  }
 
-  // This is a dummy version of the ProcessTask.
-  // It's only function is to call the info.loadLabel to prime the pump
-  // for the app launcher view.
-  private class ProcessTask extends UserTask<Void, Void, Integer> {
+  public void switchToMainView() {
+    setContentView(mainFrameLayout);
+    mainFrameLayout.requestFocus();
+    appLauncherActive = false;
+    announceCurrentMenu();
+  }
+
+  public void launchApp(AppEntry theApp) {
+    try {
+      int flags = Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY;
+      Context myContext = createPackageContext(theApp.getPackageName(), flags);
+      Class<?> appClass = myContext.getClassLoader().loadClass(theApp.getClassName());
+      Intent intent = new Intent(myContext, appClass);
+      startActivity(intent);
+    } catch (NameNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  private void shutdown() {
+    if (tts != null) {
+      tts.shutdown();
+    }
+    if (widgets != null) {
+      widgets.shutdown();
+    }
+    try {
+      if (screenStateOnReceiver != null) {
+        unregisterReceiver(screenStateOnReceiver);
+      }
+    } catch (IllegalArgumentException e) {
+      // Sometimes there may be 2 shutdown requests in which case, the 2nd
+      // request will fail
+    }
+  }
+
+
+  private class ProcessTask extends UserTask<Void, Void, ArrayList<AppEntry>> {
+    @SuppressWarnings("unchecked")
     @Override
-    public Integer doInBackground(Void... params) {
+    public ArrayList<AppEntry> doInBackground(Void... params) {
+      // search for all launchable apps
       Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
       mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+
       List<ResolveInfo> apps = pm.queryIntentActivities(mainIntent, 0);
+      ArrayList<AppEntry> appList = new ArrayList<AppEntry>();
       for (ResolveInfo info : apps) {
-        info.loadLabel(pm);
+        String title = info.loadLabel(pm).toString();
+        if (title.length() == 0) {
+          title = info.activityInfo.name.toString();
+        }
+
+        AppEntry entry = new AppEntry(title, info, null);
+        appList.add(entry);
       }
-      return 0;
+
+      class appEntrySorter implements Comparator {
+        public int compare(Object arg0, Object arg1) {
+          String title0 = ((AppEntry) arg0).getTitle();
+          String title1 = ((AppEntry) arg1).getTitle();
+          return title0.compareTo(title1);
+        }
+      }
+      Collections.sort(appList, new appEntrySorter());
+
+      // now that app tree is built, pass along to adapter
+      return appList;
     }
 
     @Override
-    public void end(Integer x) {
+    public void end(ArrayList<AppEntry> appList) {
+      appLauncherView = new AppLauncherView(self, appList);
     }
   }
 }

@@ -21,14 +21,7 @@ import com.google.tts.TTSEarcon;
 import com.google.tts.TTSParams;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -63,7 +56,7 @@ public class AppLauncherView extends TextView {
   private final double right = Math.PI;
   private final double rightWrap = -Math.PI;
 
-  private AppLauncher parent;
+  private MarvinShell parent;
   private ArrayList<AppEntry> appList;
   private int appListIndex;
 
@@ -84,20 +77,11 @@ public class AppLauncherView extends TextView {
 
   private ShakeDetector shakeDetector;
 
-  //private long lastLogTime = 0;
 
-  private void logTime() {
-    /*
-     * long time = System.currentTimeMillis(); long diff = time - lastLogTime;
-     * lastLogTime = time; Log.i("debug time logger", diff + " ");
-     */
-  }
-
-  @SuppressWarnings("unchecked")
   public AppLauncherView(Context context, ArrayList<AppEntry> installedApps) {
     super(context);
 
-    parent = ((AppLauncher) context);
+    parent = ((MarvinShell) context);
     vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
     // Build app list here
@@ -185,7 +169,7 @@ public class AppLauncherView extends TextView {
     }
   }
 
-  private void speakCurrentApp(boolean interrupt) {
+  public void speakCurrentApp(boolean interrupt) {
     String name = appList.get(appListIndex).getTitle();
     if (interrupt) {
       parent.tts.speak(name, 0, null);
@@ -207,6 +191,9 @@ public class AppLauncherView extends TextView {
     switch (keyCode) {
       case KeyEvent.KEYCODE_CALL:
         startActionHandler();
+        return true;
+      case KeyEvent.KEYCODE_BACK:
+        parent.switchToMainView();
         return true;
       case KeyEvent.KEYCODE_A:
         input = "a";
