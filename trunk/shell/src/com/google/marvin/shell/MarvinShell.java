@@ -556,6 +556,17 @@ public class MarvinShell extends Activity implements GestureListener {
     switch (keyCode) {
       case KeyEvent.KEYCODE_BACK:
         backKeyTimeDown = -1;
+        if (menus.size() > 1) {
+          menus.remove(menus.size() - 1);
+          Menu currentMenu = menus.get(menus.size() - 1);
+          if (currentMenu.title.equals(getString(R.string.home))) {
+            loadHomeMenu();
+          } else {
+            items = MenuLoader.loadMenu(currentMenu.filename);
+            mainText.setText(currentMenu.title);
+          }
+          announceCurrentMenu();
+        }
         return true;
     }
     return false;
