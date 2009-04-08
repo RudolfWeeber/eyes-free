@@ -22,9 +22,6 @@ import com.google.tts.TTSEarcon;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 // Most of the logic for determining strength levels is based on the code here:
 // http://android.git.kernel.org/?p=platform/frameworks/base.git;a=blob_plain;f=services/java/com/android/server/status/StatusBarPolicy.java
@@ -32,7 +29,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AuditoryWidgets {
   private TTS tts;
   private MarvinShell parent;
-  private final ReentrantLock speakingTimeLock = new ReentrantLock();
   private Guide guide;
 
   private int voiceSignalStrength;
@@ -160,32 +156,11 @@ public class AuditoryWidgets {
     parent.registerReceiver(battReceiver, battFilter);
   }
 
-  public void announceDate() {
+  public void announceTime() {
     Calendar cal = Calendar.getInstance();
     int day = cal.get(Calendar.DAY_OF_MONTH);
     SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");
     String monthStr = monthFormat.format(cal.getTime());
-    try {
-      boolean canSpeak = speakingTimeLock.tryLock(1000, TimeUnit.MILLISECONDS);
-      if (canSpeak) {
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        tts.speak(monthStr, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        tts.speak(Integer.toString(day), 1, null);
-      }
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } finally {
-      speakingTimeLock.unlock();
-    }
-  }
-
-  public void announceTime() {
-    GregorianCalendar cal = new GregorianCalendar();
     int hour = cal.get(Calendar.HOUR_OF_DAY);
     int minutes = cal.get(Calendar.MINUTE);
     String ampm = "";
@@ -200,24 +175,24 @@ public class AuditoryWidgets {
     } else {
       ampm = parent.getString(R.string.am);
     }
-    try {
-      boolean canSpeak = speakingTimeLock.tryLock(1000, TimeUnit.MILLISECONDS);
-      if (canSpeak) {
-        tts.speak(Integer.toString(hour), 0, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        tts.speak(Integer.toString(minutes), 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-        tts.speak(ampm, 1, null);
-      }
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } finally {
-      speakingTimeLock.unlock();
-    }
+
+    tts.speak(Integer.toString(hour), 0, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.speak(Integer.toString(minutes), 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.speak(ampm, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.speak(monthStr, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+    tts.speak(Integer.toString(day), 1, null);
   }
 
   public void toggleAirplaneMode() {

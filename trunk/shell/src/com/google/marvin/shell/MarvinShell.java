@@ -90,6 +90,16 @@ public class MarvinShell extends Activity implements GestureListener {
    */
   private boolean isReturningFromTask;
 
+  /*
+   * There is a race condition caused by the initialization of the TTS happening
+   * at about the same time as the Activity's onRestart which leads to the
+   * Marvin intro being cut off part way through by announceCurrentMenu. The
+   * initial announcement is not interesting; it just says "Home". Fix is to not
+   * even bother with the "Home" announcement when the Shell has just started
+   * up.
+   */
+  private boolean justStarted;
+
   private Vibrator vibe;
   private static final long[] VIBE_PATTERN = {0, 10, 70, 80};
   private TouchGestureControlOverlay gestureOverlay;
@@ -109,6 +119,7 @@ public class MarvinShell extends Activity implements GestureListener {
     appLauncherActive = false;
     pm = getPackageManager();
     ttsStartedSuccessfully = false;
+    justStarted = true;
     if (checkTtsRequirements()) {
       initMarvinShell();
     }
@@ -245,6 +256,7 @@ public class MarvinShell extends Activity implements GestureListener {
     public void onInit(int version) {
       resetTTS();
       tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
+
       setContentView(R.layout.main);
       mainText = (TextView) self.findViewById(R.id.mainText);
       statusText = (TextView) self.findViewById(R.id.statusText);
@@ -259,6 +271,7 @@ public class MarvinShell extends Activity implements GestureListener {
       gestureOverlay = new TouchGestureControlOverlay(self, self);
       mainFrameLayout.addView(gestureOverlay);
 
+      currentGesture = null;
       (new Thread(new ActionMonitor())).start();
 
       ttsStartedSuccessfully = true;
@@ -284,7 +297,11 @@ public class MarvinShell extends Activity implements GestureListener {
           message = getString(R.string.you_have_new_voicemail);
         }
       }
-      tts.speak(message, 0, null);
+      if (justStarted) {
+        justStarted = false;
+      } else {
+        tts.speak(message, 0, null);
+      }
     }
   }
 
@@ -359,7 +376,9 @@ public class MarvinShell extends Activity implements GestureListener {
       widgets.toggleAirplaneMode();
       updateStatusText();
     } else if (widgetName.equals("TIME_DATE")) {
-      widgets.announceDate();
+      // Time and date are already being spoken; lifting up should make it stop
+      // speaking.
+      tts.stop();
     } else if (widgetName.equals("BATTERY")) {
       widgets.announceBattery();
     } else if (widgetName.equals("VOICEMAIL")) {
