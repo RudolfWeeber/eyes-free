@@ -39,6 +39,16 @@ public class SpeechSynthesis {
   }
 
   /**
+   * Stops and clears the AudioTrack.
+   */
+  public native final void stop();
+
+  /**
+   * Synthesize speech and speak it directly using AudioTrack.
+   */
+  public native final void speak(String text);
+
+  /**
    * Synthesize speech to a file. The current implementation writes a valid WAV
    * file to the given path, assuming it is writable. Something like
    * "/sdcard/???.wav" is recommended.

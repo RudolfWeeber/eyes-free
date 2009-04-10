@@ -344,7 +344,9 @@ public class TTSService extends Service implements OnCompletionListener {
    * Stops all speech output and removes any utterances still in the queue.
    */
   private void stop() {
+    Log.i("TTS", "Stopping");
     speechQueue.clear();
+    speechSynthesis.stop();
     isSpeaking = false;
     if (player != null) {
       try {
@@ -353,6 +355,7 @@ public class TTSService extends Service implements OnCompletionListener {
         // Do nothing, the player is already stopped.
       }
     }
+    Log.i("TTS", "Stopped");
   }
 
   public void onCompletion(MediaPlayer arg0) {
@@ -409,18 +412,33 @@ public class TTSService extends Service implements OnCompletionListener {
     class synthThread implements Runnable {
       public void run() {
         if (!isInCache(text)) {
-          long time = System.currentTimeMillis();
-          String ts = Long.toString(time);
-          String filename = ESPEAK_SCRATCH_DIRECTORY + ts + ".wav";
-          boolean synthOk = synthesizeToFile(text, params, filename, false);
-          if (!synthOk) {
-            return;
+          boolean synthAvailable = false;
+          try {
+            synthAvailable = synthesizerLock.tryLock();
+            if (!synthAvailable) {
+              Thread.sleep(500);
+              Thread synth = (new Thread(new synthThread()));
+              synth.setPriority(Thread.MIN_PRIORITY);
+              (new Thread(new synthThread())).start();
+              return;
+            }
+            speechSynthesis.speak(text);
+            processSpeechQueue();
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          } finally {
+            // This check is needed because finally will always run; even if the
+            // method returns somewhere in the try block.
+            if (synthAvailable) {
+              synthesizerLock.unlock();
+            }
           }
-          cacheSpeech(text, filename);
-          processSpeechQueue();
         }
       }
     }
+    Thread synth = (new Thread(new synthThread()));
+    synth.setPriority(Thread.MIN_PRIORITY);
     (new Thread(new synthThread())).start();
   }
 
@@ -561,7 +579,6 @@ public class TTSService extends Service implements OnCompletionListener {
       if (sr == null) {
         isSpeaking = false;
         speakWithChosenEngine(currentSpeechItem);
-        return;
       } else {
         cleanUpPlayer();
         if (sr.sourcePackageName == PKGNAME) {

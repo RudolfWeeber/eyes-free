@@ -26,6 +26,7 @@
 #include <nativehelper/JNIHelp.h>
 #include <android_runtime/AndroidRuntime.h>
 #include <speak_lib.h>
+#include <media/AudioTrack.h>
 
 using namespace android;
 
@@ -37,14 +38,18 @@ static struct fields_t {
 typedef unsigned int uint32;
 typedef unsigned short uint16;
 
+
+static AudioTrack* audout;
+
+
 /* Callback from espeak.  Write whatever bytes are returned to the file
    pointer found in the user data. */
-static int AndroidEspeakSynthCallback(short *wav, int numsamples,
+static int AndroidEspeakSynthToFileCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {
 
 
     char buf[100];
-    sprintf(buf, "AndroidEspeakSynthCallback: %d samples", numsamples);
+    sprintf(buf, "AndroidEspeakSynthToFileCallback: %d samples", numsamples);
     LOGI(buf);
 
     if (wav == NULL) {
@@ -57,9 +62,31 @@ static int AndroidEspeakSynthCallback(short *wav, int numsamples,
 
     // Write all of the samples
     fwrite(wav, sizeof(short), numsamples, fp);
+    return 0;  // continue synthesis (1 is to abort)
+}
+
+
+/* Callback from espeak.  Directly speaks using AudioTrack. */
+static int AndroidEspeakDirectSpeechCallback(short *wav, int numsamples,
+				      espeak_EVENT *events) {
+    char buf[100];
+    sprintf(buf, "AndroidEspeakDirectSpeechCallback: %d samples", numsamples);
+    LOGI(buf);
+
+    if (wav == NULL) {
+        LOGI("Null: speech has completed");
+    }
+
+      if (numsamples > 0){
+        audout->write(wav, sizeof(short) * numsamples);
+        sprintf(buf, "AudioTrack wrote: %d bytes", sizeof(short) * numsamples);
+        LOGI(buf);
+      }
 
     return 0;  // continue synthesis (1 is to abort)
 }
+
+
 
 static void
 com_google_tts_SpeechSynthesis_native_setup(
@@ -79,7 +106,17 @@ com_google_tts_SpeechSynthesis_native_setup(
 
     env->SetIntField(thiz, fields.mNativeContext, sampleRate);
 
-    espeak_SetSynthCallback(AndroidEspeakSynthCallback);
+
+    audout = new AudioTrack(AudioSystem::MUSIC, 22050, AudioSystem::PCM_16_BIT, 1, 4096, 0, 0, 0, 0);
+    if (audout->initCheck() != NO_ERROR) {
+      LOGI("AudioTrack error");
+    } else {
+      LOGI("AudioTrack OK");
+      audout->start();
+      LOGI("AudioTrack started");
+    }
+
+    espeak_SetSynthCallback(AndroidEspeakDirectSpeechCallback);
     espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
 
     espeak_VOICE voice;
@@ -92,6 +129,8 @@ com_google_tts_SpeechSynthesis_native_setup(
     sprintf(buf, "Language: %s\n", voice.languages);
     LOGI(buf);
     sprintf(buf, "set voice: %d\n", err);
+    LOGI(buf);
+    sprintf(buf, "sample rate: %d\n", sampleRate);
     LOGI(buf);
 
     env->ReleaseStringUTFChars(language, langNativeString);
@@ -137,6 +176,7 @@ com_google_tts_SpeechSynthesis_native_finalize(JNIEnv *env,
 {
     int sampleRate = (int)env->GetIntField(thiz, fields.mNativeContext);
     espeak_Terminate();
+    delete audout;
 }
 
 static void
@@ -144,6 +184,7 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
 						jstring textJavaString,
 						jstring filenameJavaString)
 {
+    espeak_SetSynthCallback(AndroidEspeakSynthToFileCallback);
     int sampleRate = (int)env->GetIntField(thiz, fields.mNativeContext);
     const char *textNativeString = env->GetStringUTFChars(textJavaString, 0);
     const char *filenameNativeString = env->GetStringUTFChars(
@@ -235,8 +276,64 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
     env->ReleaseStringUTFChars(filenameJavaString, filenameNativeString);
 }
 
+
+static void
+com_google_tts_SpeechSynthesis_speak(JNIEnv *env, jobject thiz,
+						jstring textJavaString)
+{
+    audout->flush();
+    audout->start();
+    espeak_SetSynthCallback(AndroidEspeakDirectSpeechCallback);
+    int sampleRate = (int)env->GetIntField(thiz, fields.mNativeContext);
+    const char *textNativeString = env->GetStringUTFChars(textJavaString, 0);
+
+    LOGI("text:::");
+    LOGI(textNativeString);
+
+    unsigned int unique_identifier;
+    espeak_ERROR err;
+
+    LOGI("Calling synth");
+
+    err = espeak_Synth(textNativeString,
+                       strlen(textNativeString),
+                       0,  // position
+                       POS_CHARACTER,
+                       0,  // end position (0 means no end position)
+                       espeakCHARS_UTF8,
+                       &unique_identifier,
+                       0); // Pointer to userdata, but this isn't used for direct speech.
+
+    char buf[100];
+    sprintf(buf, "synth err: %d\n", err);
+    LOGI(buf);
+
+    err = espeak_Synchronize();
+
+    sprintf(buf, "synchronize err: %d\n", err);
+    LOGI(buf);
+
+    LOGI("synth Done");
+
+    env->ReleaseStringUTFChars(textJavaString, textNativeString);
+}
+
+
+static void
+com_google_tts_SpeechSynthesis_stop(JNIEnv *env, jobject thiz)
+{
+  audout->stop();
+}
 // Dalvik VM type signatures
 static JNINativeMethod gMethods[] = {
+    {   "stop",             
+        "()V",
+        (void*)com_google_tts_SpeechSynthesis_stop
+    },
+    {   "speak",             
+        "(Ljava/lang/String;)V",
+        (void*)com_google_tts_SpeechSynthesis_speak
+    },
     {   "synthesizeToFile",             
         "(Ljava/lang/String;Ljava/lang/String;)V",
         (void*)com_google_tts_SpeechSynthesis_synthesizeToFile
