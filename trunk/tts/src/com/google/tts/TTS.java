@@ -24,6 +24,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 /**
  * Synthesizes speech from text. This abstracts away the complexities of using
@@ -296,6 +297,7 @@ public class TTS {
    *        has this support - this setting has no effect on eSpeak.
    */
   public void speak(String text, int queueMode, String[] params) {
+    Log.i("TTS received: ", text);
     if (!started) {
       return;
     }

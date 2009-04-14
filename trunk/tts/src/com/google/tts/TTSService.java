@@ -74,7 +74,6 @@ public class TTSService extends Service implements OnCompletionListener {
   private ArrayList<SpeechItem> speechQueue;
   private HashMap<String, SoundResource> earcons;
   private HashMap<String, SoundResource> utterances;
-  private HashMap<String, SoundResource> cache;
   private MediaPlayer player;
   private TTSService self;
 
@@ -98,7 +97,6 @@ public class TTSService extends Service implements OnCompletionListener {
 
     earcons = new HashMap<String, SoundResource>();
     utterances = new HashMap<String, SoundResource>();
-    cache = new HashMap<String, SoundResource>();
 
     speechQueue = new ArrayList<SpeechItem>();
     player = null;
@@ -128,9 +126,6 @@ public class TTSService extends Service implements OnCompletionListener {
       // not allowed to change the defaults.
       rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
     }
-    // Clear cache so that the TTS will regenerate the
-    // sounds with the new rate
-    cache = new HashMap<String, SoundResource>();
     speechRate = rate;
     speechSynthesis.setSpeechRate(rate);
   }
@@ -144,9 +139,7 @@ public class TTSService extends Service implements OnCompletionListener {
       lang = prefs.getString("lang_pref", "en-us");
     }
     language = lang;
-    // Clear cache so that the TTS will regenerate the
-    // sounds in the new language
-    cache = new HashMap<String, SoundResource>();
+
     // The eSpeak documentation for Cantonese seems to be wrong.
     // It seems like using "zhy" will cause all Chinese characters to be
     // spoken as "symbol blah blah blah". The solution is to actually use
@@ -244,7 +237,6 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       scratchDir.mkdir();
     }
-    cache = new HashMap<String, SoundResource>();
   }
 
   /**
@@ -291,16 +283,7 @@ public class TTSService extends Service implements OnCompletionListener {
     earcons.put(earcon, new SoundResource(filename));
   }
 
-  /**
-   * Caches a generated utterance
-   * 
-   * @param text The text that should be associated with the sound resource
-   * @param filename The filename of the sound resource. This must be a complete
-   *        path like: (/sdcard/mysounds/mysoundbite.mp3).
-   */
-  private void cacheSpeech(String text, String filename) {
-    cache.put(text, new SoundResource(filename));
-  }
+
 
   /**
    * Speaks the given text using the specified queueing mode and parameters.
@@ -366,18 +349,6 @@ public class TTSService extends Service implements OnCompletionListener {
     }
   }
 
-  private boolean isInCache(String text) {
-    SoundResource sr = cache.get(text);
-    if (sr == null) {
-      return false;
-    }
-    if (!new File(sr.filename).isFile()) {
-      cache.remove(text);
-      return false;
-    }
-    return true;
-  }
-
   private void speakWithChosenEngine(SpeechItem speechItem) {
     if (engine == TTSEngine.PRERECORDED_WITH_ESPEAK) {
       speakPrerecordedWithEspeak(speechItem.text, speechItem.params);
@@ -409,37 +380,39 @@ public class TTSService extends Service implements OnCompletionListener {
 
 
   private void speakEspeakOnly(final String text, final ArrayList<String> params) {
-    class synthThread implements Runnable {
+    class SynthThread implements Runnable {
       public void run() {
-        if (!isInCache(text)) {
-          boolean synthAvailable = false;
-          try {
-            synthAvailable = synthesizerLock.tryLock();
-            if (!synthAvailable) {
-              Thread.sleep(500);
-              Thread synth = (new Thread(new synthThread()));
-              synth.setPriority(Thread.MIN_PRIORITY);
-              (new Thread(new synthThread())).start();
-              return;
-            }
-            speechSynthesis.speak(text);
+        boolean synthAvailable = false;
+        try {
+          synthAvailable = synthesizerLock.tryLock();
+          if (!synthAvailable) {
+            Thread.sleep(100);
+            Thread synth = (new Thread(new SynthThread()));
+            synth.setPriority(Thread.MIN_PRIORITY);
+            synth.start();
+            return;
+          }
+          speechSynthesis.speak(text);
+          if (speechQueue.size() > 0) {
             processSpeechQueue();
-          } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          } finally {
-            // This check is needed because finally will always run; even if the
-            // method returns somewhere in the try block.
-            if (synthAvailable) {
-              synthesizerLock.unlock();
-            }
+          } else {
+            isSpeaking = false;
+          }
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } finally {
+          // This check is needed because finally will always run; even if the
+          // method returns somewhere in the try block.
+          if (synthAvailable) {
+            synthesizerLock.unlock();
           }
         }
       }
     }
-    Thread synth = (new Thread(new synthThread()));
+    Thread synth = (new Thread(new SynthThread()));
     synth.setPriority(Thread.MIN_PRIORITY);
-    (new Thread(new synthThread())).start();
+    synth.start();
   }
 
   private SoundResource getSoundResource(SpeechItem speechItem) {
@@ -470,12 +443,6 @@ public class TTSService extends Service implements OnCompletionListener {
       }
       sr = utterances.get(text);
     }
-
-    // If it's not there, check if it was generated and in the cache
-    if ((sr == null) && isInCache(speechItem.text)) {
-      sr = cache.get(speechItem.text);
-    }
-
     return sr;
   }
 
@@ -576,8 +543,8 @@ public class TTSService extends Service implements OnCompletionListener {
       SoundResource sr = getSoundResource(currentSpeechItem);
       // Synth speech as needed - synthesizer should call
       // processSpeechQueue to continue running the queue
+      Log.i("TTS processing: ", currentSpeechItem.text);
       if (sr == null) {
-        isSpeaking = false;
         speakWithChosenEngine(currentSpeechItem);
       } else {
         cleanUpPlayer();
