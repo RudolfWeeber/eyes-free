@@ -1,7 +1,7 @@
 package com.google.marvin.shell;
 
 import com.google.marvin.shell.Param;
-import com.google.marvin.shell.TouchGestureControlOverlay.Gesture;
+import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;

@@ -16,8 +16,10 @@
 package com.google.marvin.shell;
 
 import com.google.marvin.shell.Param;
-import com.google.marvin.shell.TouchGestureControlOverlay.Gesture;
-import com.google.marvin.shell.TouchGestureControlOverlay.GestureListener;
+import com.google.marvin.utils.UserTask;
+import com.google.marvin.widget.TouchGestureControlOverlay;
+import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
+import com.google.marvin.widget.TouchGestureControlOverlay.GestureListener;
 import com.google.tts.ConfigurationManager;
 import com.google.tts.TTS;
 import com.google.tts.TTSEarcon;
@@ -699,8 +701,8 @@ public class MarvinShell extends Activity implements GestureListener {
 
       class appEntrySorter implements Comparator {
         public int compare(Object arg0, Object arg1) {
-          String title0 = ((AppEntry) arg0).getTitle();
-          String title1 = ((AppEntry) arg1).getTitle();
+          String title0 = ((AppEntry) arg0).getTitle().toLowerCase();
+          String title1 = ((AppEntry) arg1).getTitle().toLowerCase();
           return title0.compareTo(title1);
         }
       }
@@ -711,7 +713,7 @@ public class MarvinShell extends Activity implements GestureListener {
     }
 
     @Override
-    public void end(ArrayList<AppEntry> appList) {
+    public void onPostExecute(ArrayList<AppEntry> appList) {
       appLauncherView = new AppLauncherView(self, appList);
     }
   }

@@ -108,7 +108,6 @@ public class AuditoryWidgets {
       return;
     }
 
-    int btStatus = 0;
     String bluetooth = "";
     String gps = "";
     try {
@@ -139,7 +138,6 @@ public class AuditoryWidgets {
         context.unregisterReceiver(this);
         int rawlevel = intent.getIntExtra("level", -1);
         int scale = intent.getIntExtra("scale", -1);
-        String state = intent.getStringExtra("state");
         int status = intent.getIntExtra("status", -1);
         if (rawlevel >= 0 && scale > 0) {
           int batteryLevel = (rawlevel * 100) / scale;

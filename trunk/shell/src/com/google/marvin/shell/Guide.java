@@ -152,7 +152,6 @@ public class Guide implements Runnable, StreetLocatorListener {
     currentAddress = "";
     currentIntersection = "";
 
-    long currentTime = System.currentTimeMillis();
     if (triedGpsLastTime) {
       locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
           networkLocationListener);
