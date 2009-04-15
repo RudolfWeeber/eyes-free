@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" ?>
 <project name="WhereAbout" default="reinstall">
     <!-- SDK Locations -->
-    <property name="sdk-folder" value="C:\Android\android-sdk_TC4-RC30_windows" />
+    <property name="sdk-folder" value="C:\eclipse\android-sdk-windows-1.1_r1" />
     <condition property="android-tools"
             value="${sdk-folder}\tools"
             else="${sdk-folder}/tools" >
