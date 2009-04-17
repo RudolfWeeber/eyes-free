@@ -212,4 +212,11 @@ public class MusicFileBrowser extends Activity {
     }
     return super.onKeyDown(keyCode, event);
   }
+  
+  @Override
+  public void onDestroy(){
+    tts.shutdown();
+    mp.stop();
+    super.onDestroy();
+  }
 }
