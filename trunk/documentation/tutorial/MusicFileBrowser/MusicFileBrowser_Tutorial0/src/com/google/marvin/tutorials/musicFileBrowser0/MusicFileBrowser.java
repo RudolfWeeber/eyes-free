@@ -65,8 +65,6 @@ public class MusicFileBrowser extends Activity {
 
     lastPosition = 0;
     vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-    // setContentView() gets called within the next line,
-    // so we do not need it here.
     browseTo(new File("/sdcard/"));
   }
 
