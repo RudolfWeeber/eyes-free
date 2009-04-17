@@ -44,8 +44,8 @@ public class MusicFileBrowser extends Activity {
   private int lastPosition;
   private String lastPlayedFilename = "";
   private TTS tts;
-  private FrameLayout myFrame;
   private ListView myList;
+  private FrameLayout myFrame;
   private TouchGestureControlOverlay myGestureOverlay;
   private boolean overlayActive;
 
@@ -85,7 +85,7 @@ public class MusicFileBrowser extends Activity {
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
-    tts = new TTS(this, ttsInitListener, true);
+
     myList = new ListView(this);
     myList.setOnItemClickListener(new OnItemClickListener() {
       public void onItemClick(AdapterView<?> l, View v, int position, long id) {
@@ -108,6 +108,8 @@ public class MusicFileBrowser extends Activity {
     myGestureOverlay = new TouchGestureControlOverlay(this, gestureListener);
     overlayActive = false;
     setContentView(myFrame);
+
+    tts = new TTS(this, ttsInitListener, true);
   }
 
   /**
@@ -236,12 +238,10 @@ public class MusicFileBrowser extends Activity {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK){
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
       // Pressing back should go up a level, not quit the app
-      if (upOneLevel()){
+      if (upOneLevel()) {
         return true;
-      } else {
-        return super.onKeyDown(keyCode, event);   
       }
     } else if (keyCode == KeyEvent.KEYCODE_MENU) {
       if (overlayActive) {
