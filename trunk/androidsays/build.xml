@@ -59,6 +59,4 @@
     -->
     <setup />
 
-    <property name="external-libs" value="../commonlibs"/>
-
 </project>
