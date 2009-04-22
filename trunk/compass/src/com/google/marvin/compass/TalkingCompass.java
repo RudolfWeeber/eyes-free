@@ -159,7 +159,8 @@ public class TalkingCompass extends Activity {
     tts.addSpeech("default", pkgName, R.raw.default_);
     tts.addSpeech("verbose", pkgName, R.raw.verbose);
     tts.addSpeech(PLEASECALIBRATE, pkgName, R.raw.please_calibrate);
-    tts.speak("compass", 0, null);
+    //tts.speak("compass", 0, null);
+    tts.synthesizeToFile("This is a test", null, "/sdcard/foo.wav");
   }
 
 
