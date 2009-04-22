@@ -16,6 +16,8 @@
 package com.google.marvin.androidsays;
 
 
+import com.scoreninja.adapter.ScoreNinjaAdapter;
+
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
@@ -57,6 +59,12 @@ public class AndroidSays extends Activity {
 
   private String[] filenames;
   public String themeFilename;
+  
+  
+  private ScoreNinjaAdapter scoreNinjaAdapter;
+  private String appId = "androidsays-0800200c9a66";
+  private String privateKey = "94A8C7321A86D435631D9A9B1B350FCE";
+
 
 
   /** Called when the activity is first created. */
@@ -65,6 +73,7 @@ public class AndroidSays extends Activity {
     super.onCreate(icicle);
     halt = false;
     themeFilename = null;
+    scoreNinjaAdapter = new ScoreNinjaAdapter(this, appId, privateKey);
     loadPrefs();
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     startApp();
@@ -120,6 +129,7 @@ public class AndroidSays extends Activity {
       loadPrefs();
     }
     super.onActivityResult(requestCode, resultCode, data);
+    scoreNinjaAdapter.onActivityResult(requestCode, resultCode, data);
   }
 
   private void loadPrefs() {
@@ -281,13 +291,10 @@ public class AndroidSays extends Activity {
     gameMode = Integer.parseInt(modeStr);
     String sequenceLengthStr = prefs.getString("sequence_length_pref", "1");
     String scorePrefStr = "";
-    String modeName = "";
     if (gameMode == 1) {
       scorePrefStr = "classic_";
-      modeName = "Classic";
     } else {
       scorePrefStr = "challenge_";
-      modeName = "Challenge";
     }
     scorePrefStr = scorePrefStr + sequenceLengthStr;
 
@@ -300,6 +307,8 @@ public class AndroidSays extends Activity {
 
       Toast.makeText(this, "You beat your old record by " + diff + "!", Toast.LENGTH_LONG).show();
     }
+    
+    scoreNinjaAdapter.show(score);
   }
 
 
@@ -349,10 +358,7 @@ public class AndroidSays extends Activity {
 
     confirmation.setTitle(titleText);
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
     String message = "Are you sure you want to erase the high scores?";
-
 
     confirmation.setMessage(message);
 
@@ -384,5 +390,8 @@ public class AndroidSays extends Activity {
 
     confirmation.show();
   }
+  
+
+  
 
 }

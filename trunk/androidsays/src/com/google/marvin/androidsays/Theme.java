@@ -65,7 +65,6 @@ public class Theme {
       DocumentBuilder docBuild = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
       Document themeDoc = docBuild.parse(fis);
-      Node root = themeDoc.getElementsByTagName("theme").item(0);
 
       // Go through the nodes, for each known type, if it exists, then apply the
       // skin.
