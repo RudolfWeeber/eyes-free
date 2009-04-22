@@ -1,0 +1,1353 @@
+// French translation rules for Espeak
+
+// ***************************************************************************
+// *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+// *   email: jonsd@users.sourceforge.net                                    *
+// *                                                                         *
+// *   This program is free software; you can redistribute it and/or modify  *
+// *   it under the terms of the GNU General Public License as published by  *
+// *   the Free Software Foundation; either version 3 of the License, or     *
+// *   (at your option) any later version.                                   *
+// *                                                                         *
+// *   This program is distributed in the hope that it will be useful,       *
+// *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+// *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+// *   GNU General Public License for more details.                          *
+// *                                                                         *
+// *   You should have received a copy of the GNU General Public License     *
+// *   along with this program; if not, see:                                 *
+// *               <http://www.gnu.org/licenses/>.                           *
+// ***************************************************************************/
+
+// This file is UTF-8 encoded
+
+// 2006-11-18  Gilles Casse  <gcasse@oralux.org>
+//
+// Updated: 2008-09-02 Michel Such  <michel.such@free.fr>
+//
+
+// Letter classes:
+// A  all vowels:  a e i o u y â ä é ê è î ï ô ö ù û
+// C  all consonants
+// Y  front vowels: e i y é ê è î
+// K  not a vowel  (i.e. consonant, space, )
+
+.L01 d e l n r t u
+
+
+.group a
+		ae (_       e		// reggae vitae
+		aen         A~		// caen (diff Cicero: aA~)
+		ae          ae		// maestro
+		aî          E		// maître
+		aim (K      W~		// faim
+		ain (K      E~		// pain
+	CC)	ain (_      E~n2		// prochain arret
+		ai (_      e		// dirai ferai...
+	_ess)	ai (_      E		// essai
+	_vr)	ai (_      E		// vrai
+		ais (_      Ez2		// dirais ferais...
+		ait (_      Et2		// dirait ferait...
+		aient (_      Et2		// diraient feraient...
+	f)	ai (sA      @		// faisons faisan
+		a (ill      a
+		a (ils_     a
+		a (il_      a
+		aie (me     E		// paiement
+		ai          E		// aile
+		am (b       A~		// jambon
+		am (p       A~		// camp
+		am (m       a		// programmation
+	_)	am (n       am		// amnistie
+		am (n       a		// condamner
+
+	_)	arché (@P5      arke		// archéologue
+	_)	archéo (@P6      arkeo		// archéologue
+	_)	arch (aP4      ark		// archange
+	_)	arch (oP4      ark		// archonte
+	_)	anarcho (@P7      anarko		// anarchosyndicalisme
+
+		a  (nnA     a		// manne
+		an (K       A~		// ancien, élan
+	_C)	aon  (_        A~		// faon, paon, taon
+	s)	aoul (_         u		// saoul
+	s)	aou (le          u		// saoule
+		août         ut		// août
+		août (i        aus		// aoûtien
+		aut (_          ot2
+		au          o		// autruche
+		au (l_      O		// Paul
+		au (re      O		// dinosaure
+	_)	audio (@P5       odio
+	_)	auto (@P4       oto
+	_)	autom (n       otO
+	_)	au (treX       o2
+	p)	a (ys       E		// pays paysage
+		ay (C       E		// aymé
+		ay          Ej		// paye
+		ay (_         E		// display
+	Xl)	ayer (X         EjWr		// player, layer
+		a           a		// bateau
+
+// group a: English section
+	sm)	all       _^_en		// small, smaller
+		a (wC      _^_en
+
+
+.group b
+		bb          b		// abbé
+	om)	b (_                    // plomb applomb
+		b           b		// aube
+
+// group b: English section
+		back       _^_en
+		bbl       _^_en
+		bird       _^_en		// bird
+		board      _^_en              // board, keyboard
+		box (_      _^_en              // box, inbox, outbox
+		bug (g      _^_en              // debugger
+	_)	by       _^_en              // by, bye, bypass
+
+
+.group c
+	_)	c' (P2v         s		// s
+		cch         k		// bacchanale
+		cc (Y       ks		// accéder
+		cc          k		// occuper
+	_)	ch (arism      k		// charisme, charismatique
+	a)	ch (_     k		// almanach
+	e)	ch (_     k		// varech
+	_A)	ch (o_      k		// écho
+	_eu)	ch (ari      k		// eucharistie
+	or) 	ch (esC     k		// orchestre
+	or) 	ch (iC      k		// orchidée
+	_) 	ch (ao      k		// chaos, chaotique
+	_) 	ch (or      k		// chorale
+	te)	ch (_       k
+		ch (r       k		// chrétien
+	_)	chrono (@P6       kro2no
+		ch (l       k
+		ch (n       k
+		ch (s       k
+		ch (to      k
+		ch          S		// chien
+		ck          k		// nickel
+		cqu         k		// grecque
+		cq          k		// pecq
+	s)	c (Y			//
+	x)	c (Y
+		c (Y        s 		// cède
+	_)	cyber (P5       sibEr
+	ban)	c (_			// banc
+	blan)	c (_			// blan
+	ron) 	c (_     		// tronc
+	cler)	c (_			// leclerc
+	tchou)	c (_
+	taba)	c (_
+	toma)	c (_
+	se)	c (ond      g		// seconde secondaire
+		c           k		// recoin donc
+
+	s)	cien (t	    jA~		// conscient scientifique
+		cient (_    sit2		// ils appr�ient, remercient.
+	effi)	cien (t    sjA~	// coefficient
+	défi)	cien (t    sjA~	// déficient
+		cast (_S4      kast		// podcast
+		casts (_S5      kast		// podcasts
+
+// group c: English section
+	n)	ch (_      _^_en		// french
+		cut (_      _^_en		// cut, shortcut
+
+
+.group ç
+
+	ç           s		// rançon
+_) 	ç' (P2v      s
+
+
+.group d
+		dd          d		// addition
+	_) 	d' (P2      d
+	_lan)	d (_        d		// land
+	_stan)	d (_        d		// stand
+	an)	d (_
+	_san)	d (_        d
+
+	_gran)	d (_        t2 		// grand ami, grand marchand
+	Cen)	d (_        t2
+	Con)	d (_        t2
+	quen)	d (_        t2
+	r)	d (_
+	_har)	d (_	d
+	lor)	d (_	d
+	au)	d (_
+	oi)	d (_
+
+		dt (_       t       	// Schmidt
+	_ni)	d (_        		// nid
+	_noeu)	d (_        		// noeud
+		d           d		// don bled
+	_expé)	dien (t_    djA~		// expédient
+	V_expé)	dien (t_    di		// expédient
+	_ingré)	dien (t_    djA~		// ingrédient
+		dien (t_    di		// étudient (verbe)
+	_)	dendro (@P6    dE~dro
+
+// group d: English section
+		day (_        _^_en
+	_)	devic        _^_en
+		dle (X        _^_en // bundle, handle
+
+
+.group e
+
+// Define use of the final 'e' in french
+		e (_
+	qu)	e (_   =@-
+	qu)	e (s_   =@-
+	elqu)	e    	  =@-
+	uisqu)	e    =@
+	rsqu)	e   	  =@
+	_C) 	e (_        @2		// je te
+	-c) 	e (_       @-
+	-j) 	e (_       @-
+	C) 	e (-       @-
+
+		e (Ce_      E
+		eau         o		// bateau cheveaux
+	g)	ea (s_ 	a      		// mangeas
+	j)	e (a        		// Jean Jeanne
+	p)	ect (_      E		// suspect
+		ect (_      Ekt		// direct
+	pi)	ed (_         e		// pied
+	_cl)	ef (_       e		// clef
+		ein (K      E~		// peindre
+	CC)	ein (_      E~n2		// plein emploi
+		e (il       E		// vieille
+		ei          E		// neige
+		ell         El		// selle
+		el (K       El		// celsius, caramel
+	_f)	em (me      a		// femme
+	i)	e (mA     		// remerciement, d�ploiement
+	A)	e (rA     		// remerciera
+	gu)	e (rA     	@-
+	qu)	e (rA     	@-
+	@)	em (me      a		// patiemment
+		em (b       A~		// décembre
+		em (mACC       A~		// emmancher
+		em (mACAC       A~		// emmagasiner
+		em (ma       e		// emmanuel
+		em (mai       A~		// emmailloter
+	l)	em (n       a		// solemnel
+	il)	emn        Em		// dilemne
+		em (p       A~
+		en (_       A~n2		// en
+		en (hA      A~n		// enharmonique
+		en (A       A~n		// enivrer
+
+	C)	en (d_      A~		// comprend dépend
+	od)	en (dr      E~		// rhododendron
+	qu)	en (d_      A~
+
+	pati)	en          A~		// patient patience
+	X)	en (nu      A~		// ennui
+
+	C)	en (A       @n		// menu
+
+		en (nA      E		// penne ennemi
+	Ci)	en (nA      E		// mienne
+
+	éC)	en (t_      A~		// récent différent élément
+	équ)	en (t_      A~		// fréquent, conséquent
+	étic)	en (t_      A~		// réticent
+
+	_C)	en (t_      A~		// cent vent lent dent
+	cc)	en (t_      A~		// accent
+	Asc)	en (t_      A~		// luminescent
+	_dol)	en (t_      A~		// dolent
+	ol)	en (t_      A~		// somnolent, violent
+	Vol)	en (t_        		// somnolent, violent
+	Xol)	ent (_      t2  		// volent
+	ul)	en (t_      A~		// turbulent
+	Vul)	en (t_
+	imCoC)	en (t_      A~		// impotent
+	inCoC)	en (t_      A~		// innocent, indolent
+
+	XACcid)	en (t_      A~		// accident, occident
+
+	_ag)	en (t_      A~		// agent
+	_ard)	en (t_      A~		// ardent
+	_arg)	en (t_      A~		// argent
+	_urg)	en (t_      A~		// urgent
+	V_urg)	ent (_   	t2	// urgent (verbe)
+
+	_émin)	en (t_      A~		// éminent
+	immin)	en (t_      A~		// imminent
+	oémin)	en (t_      A~		// proéminent
+	jac)	en (t_      A~		// sous-jacent, adjacent
+	_lat)	en (t_      A~		// latent
+
+	@@Cig)	en (t_      A~		// intransigent, intelligent
+	_dilig)	en (t_      A~		// diligent
+	XACig)	en (t_      A~		// dirigent, exigent
+	VXACig)	ent (_      t2	// dirigent, exigent (verbe)
+	flig)	en (t_      A~		// affligent
+	Vflig)	ent (_     t2		// infligent (verbe)
+	Xig)	ent (_     t2       // figent, pigent
+	oblig)	en (t_      A~		// obligent, d�sobligent
+	Voblig)	ent (_      t2  		// obligent (verbe)
+	tang)	en (t_      A~		// tangent
+
+	man)	en (t_      A~		// permanent
+	@@ing)	en (t_      A~		// astreingent, contingentindigent
+	_pat)	en (t_      A~		// patent
+	rmam)	en (t_      A~		// firmament
+	éCerg)	en (t_      A~		// détergent
+	V_éCerg)	ent (_  t2 		// émergent
+	verg)	en (t_      A~		// convergent, divergent
+	Vverg)	ent (_   	t2	// convergent, divergent (verbe)
+
+	_serg)	en (t_      A~		// sergent
+	CACCim)	en (t_      A~		// condiment, gentiment
+	dim)	en (t_      A~		// rudiment
+	Agim)	en (t_      A~		// régiment
+	Alim)	en (t_      A~		// poliment
+	inim)	en (t_      A~		// infiniment
+	manim)	en (t_      A~		// maniment
+	onim)	en (t_      A~		// boniment
+	plim)	en (t_      A~		// compliment
+	Atim)	en (t_      A~		// bâtiment
+	_cim)	en (t_      A~		// ciment
+	_pim)	en (t_      A~		// piment
+
+	ertin)	en (t_      A~		// pertinent, impertinent
+	ontin)	en (t_      A~		// continent, incontinent
+	_sArm)	en (t_      A~		// sarment, serment
+	erm)	en (t_      A~		// ferment
+	Vferm)	ent (_   	t2	// ferment, referment (verbe)
+	XArp)	en (t_      A~		// arpent, serpent
+	CArr)	en (t_      A~		// conncurrent, torrent
+	Cerr)	ent (_  t2     // ils serrent
+	_appar)	en (t_      A~		// apparent
+	spar)	en (t_      A~		// transparent
+	_par)	en (t_      A~		// parent
+	V_par)	ent (_     t2		// parent (verbe)
+	_var)	en (t_      A~		// varent
+	mitt)	en (t_      A~		// intermittent
+	énit)	en (t_      A~		// pénitent
+	tourm)	en (t_      A~		// tourment
+	Cflu)	en (t_      A~		// affluent, confluent
+	VCflu)	ent (_      t2  		// refluent, influent (verbe)
+
+	_tal)	en (t_      A~		// talent
+	ival)	en (t_      A~		// équivalent
+	Vival)	ent (_     t2		// équivalent (verbe)
+	xcell)	en (t_      A~		// excellent
+	Vxcell)	ent (_      t2  // excellent
+
+	iCam)	en (t_      A~
+	mm)	en (t_      A~
+	em)	en (t_      A~		// lentement
+	mom)	en (t_      A~		// moment
+	Aaim)	en (t_      A~
+	Caim)	en (t_      A~
+	dum)	en (t_      A~
+	gum)	en (t_      A~
+	jum)	en (t_      A~
+	oCum)	en (t_      A~
+	rum)	en (t_      A~
+
+	éCid)	en (t_      A~
+	VéCid)	ent (_	t2
+	Xtrid)	en (t_      A~
+	_flor)	en (t_      A~
+	_laur)	en (t_      A~
+	_mécont) en (t_     A~
+	_cont)	en (t_      A~
+	_Vcont)	ent (_	t2
+	éC)	en (t_      A~		// compétent
+	_souv)	en (t_      A~		// souvent
+	Cud)	en (t_      A~
+
+	_couv)	en (tS3f      A~		// le couvent
+	V_couv)	en (t_      		// elles couvent
+	s_couv)	en (t_      		// elles couvent
+
+		ent (_      t2      	// étaient mangent
+	A)	ent (_      t2      	// étaient mangent
+
+	Ci)	en (K       E~      	// rien, lien
+	Ci)	en (c       A~      	// science
+
+	AA)	en (_       E~
+	C)	en (_       En      	// amen, abdomen, golden
+	xam)	en (_       E~      	// examen
+
+		en (s_      A~
+		en (CA      A~      	// pentathlon
+		en (CC      A~      	// entre
+	sp)	ens (_      Ens  // suspens
+	éC)	ens (_      A~z2  // dépens démens
+
+	_C)	er (_       Er      	// fer
+	_Ch)	er (_       Er      	// cher
+	_env)	er (_       Er
+	_hi)	er (_       Er      	// hier
+	_fi)	er (_       Er      	// fier
+	_hiv)	er (X       Er      	// hiver
+	tain)	er (X       Er      	// container
+	_ti)	er (_       Er
+	ack)	er (K      Wr
+	ock)	er (K      Er
+	rock)	er (K      Wr
+
+		er (_       e      	// parler léger
+		er (s_      e
+
+	i)	e (rt_      E		// requiert
+
+	d)	e (ssus_    @      	// dessus
+
+	_d)	es (bA      e
+	_d)	es (jA      e      	// Desjardins
+	_d)	es (nA      e
+	_d)	es (qA      e      	// desquels
+
+	_l)	es (qA      e      	// lesquels
+
+	_m)	es (dA      e      	// mesdames
+	_m)	es (nA      e
+	Am)	es (dA      e
+	Am)	es (nA      e      	// Dumesnil
+
+	d)	esh (A      ez      	// Deshormeaux
+
+	_r)	e (ss       @      	// ressembler
+	_r)	e (ssu       e      	// ressusciter
+	_r)	e (stra     @
+	_r)	e (stro     @
+	_r)	e (stru     @      	// restructurer
+         -)     est (_      Est         // -est
+
+	dg)	et (_      Et     	// Bridget, gadget
+
+		eu        Y		// eu
+	_)	eu (ss        y		// eu
+
+		eu (C       W
+		eu (h_       Y
+		eu (x_       Y
+		eu (i       W
+		eu (rC       W2
+	_l)	eu (r_       W2
+		eu (tr       Y
+
+	_)	eut (_       yt2
+		eut (_       Yt2
+	_)	extra (uP5       Ekstra
+	_)	extra (CP5       Ekstra
+	_)	eû          y		// eût
+		eû          Y		// jeûne
+
+		e (x        E		// exact
+		ey (_       E		// dahomey
+		ey (C       E		// ceylan
+		ey          Ej		// asseye
+
+		ez (_       ez2		// nez mangez chez
+
+	g) 	e (A       		// mangeons
+	g) 	eu		W      		// vengeur
+	g) 	eu	(re	y      		// gageure
+
+	_d) 	e (ch       @
+	_r) 	e (ch       @  		// recherche
+	 	e (Cl       @
+
+	_l) 	e (xA       E
+	_l) 	e (CA       @
+	_l) 	e (ChA      @
+	_l) 	e (ClA      @  		// Leclerc
+	tr) 	e (CA       @
+	tr) 	e (ChA      @
+
+ 		e (CC       E  		// infect pelle mettre
+ 		e (Cr       @
+ _)		e (C%       e  		// effet, effectuer
+ 		e (C_       E
+ 		e (t_       E
+ 		e (rC       E
+ 		es (_       z2
+
+	%C) 	e (CA   @-
+	%C) 	e (Ce     		// actuellement guillemets
+	%C) 	e (xA   E
+	%C) 	e (mA     		// actuellement guillemets
+	ct) 	e (ment   @
+	rC) 	e (ment   @
+	AC) 	e (ment
+	u) 	e (ment   @-
+	ul) 	e (CA
+	ull) 	e (CA
+
+	As) 	e (gA
+	As) 	e (pA
+	Av) 	e (gA       		// sauvegarde
+	Av) 	e (pA
+
+	 	e           @		// menue
+	_) 	e (CA          e
+	_) 	e (xA          E
+	Cr)	eamer		i:mWr
+	Cl)	eaner		i:nWr
+	Ack)	et (_      Et
+
+
+// group e: English section
+		eac		_^_en
+	C)	ead		_^_en      		// read, head
+		eak           _^_en		// break, speak
+		ear		_^_en      		// ear, search
+		eas  	_^_en      		// please
+		eave       _^_en		// leave
+		ed (_  	_^_en
+		ee          _^_en		// meeting
+		eing (_      _^_en		// being, boeing
+		eive       _^_en		// receive
+	 	eld (_        _^_en		// field
+	_) 	enter (_        _^_en		// enter
+	_) 	enhan         _^_en
+	qu) 	est (_        _^_en		// request
+	qu) 	este (X_        _^_en		// requested, requester
+	_) 	even         _^_en		// forever, however
+	_) 	ever         _^_en		// forever, however
+	oC) 	ever         _^_en		// forever, however
+	_) 	eye         _^_en
+
+
+.group è
+
+	Z)	ème 		iEm
+	è		E
+
+
+.group ë
+	u) 	ë			// ambiguë
+	 	ë           E		// citroën noël
+
+
+.group f
+		f           f
+		f (f
+	_neu)	f (_ans     v		// liaison: neuf ans
+	_neu)	f (_heures  v
+
+// group f: English section
+	_)	fire       _^_en
+		fly        _^_en
+	_)	frame            _^_en
+
+
+.group g
+		g           g
+		g (Y          Z
+
+	su)	gg (Y       gZ       	// suggérer suggestif
+		gg          g		// agglomérer
+	ai)	gni         n^		// craignions châtaignier
+		gn          n^		// agneau
+	_quatrevin) gts (_  z2
+
+	vin) 	gt (_A      t 		// liaison: vingt ans
+
+	vin) 	gt (_un
+	vin) 	gt (_deux   t
+	vin) 	gt (_trois  t 		//liaison: vingt-trois
+	vin) 	gt (_quatr  t
+	vin) 	gt (_cinq   t
+	vin) 	gt (_six    t
+	vin) 	gt (_sept   t
+	vin) 	gt (_huit   t
+	vin) 	gt (_neuf   t
+
+		gt (_ 			// vingt doigts
+
+		gt          t		// vingtaine doigté
+		gui       gi		// anguille
+	ai)	gu (il      gy		// aiguillage
+	in)     gu (is      gy		// linguiste
+		g (C        g
+
+	_ran) 	g (_ 			// rang
+	_san) 	g (_ 			// sang
+	_lon) 	g (_ 			// long
+	bour) 	g (_ 			// Strasbourg
+
+		g (_        g		// grog gag goulag
+
+// group g: English section
+	_)	game (X         _^_en
+	@@)	gate (X         _^_en
+		girl        _^_en		// girl
+		gy (_         _^_en
+
+
+.group h
+_)	h		_!
+Ca)	h	(_	h
+_)	h	(abi			// habit, habilleur
+_)	h	(allo			// hallogène
+_)	h	(ame			// hameçon
+_)	h	(andr			// handroïde
+_)	h	(arm			// harmonie
+_)	h	(el			// hellène
+_)	h	(éb			// hébreux
+_)	h	(ect			// hectare
+_)	h	(él			// hélice
+_)	h	(erb			// herbe
+_)	h	(éCa			// hématie
+_)	h	(érit			// hériter
+_)	h	(eure			// heure
+_)	h	(iber			// hibernation
+_)	h	(ippo			// hippodrome
+_)	h	(iro			// hirondelle
+_)	h	(ist			// histoire
+_)	h	(iv			// hiver
+_)	h	(omm			// homme
+_)	h	(onn			// honneur
+_)	h	(ôp			// hôpital
+_)	h	(os			// hostile
+_)	h	(ora			// horaire
+_)	h	(orip			// horipeau
+_)	h	(oriz			// horizon
+_)	h	(oro			// horoscope
+_)	h	(orlo			// horloge
+_)	h	(orr			// horreur
+_)	h	(ôt			// hôtel
+_)	h	(uil			// huile
+_)	h	(uiss			// huissier
+_)	h	(uî			// huître
+_)	h	(uma			// humain
+_)	h	(umb			// humble
+_)	h	(umi			// humide
+_)	h	(umo			// humour
+_)	h	(y			// hypermarché
+	_)	hyper (@P5       ipEr
+	_)	hyper (_       ipEr
+	_)	hypra (@P5       ipra
+	h			// ahuri
+
+// group h: English section
+_)		half  	_^_en
+		here (_	_^_en		// here
+
+
+.group i
+		i           i		// cri
+
+		i (A    i
+	AC)	i (a    j
+		i (o    j
+		i (è    j
+		i (eu    j
+	_f)	i (a    i:
+	l)	i (a    i:
+	Cr)	i (a    i:
+	_Cr)	i (A    i:
+	Cr)	i (é    i:
+	Cr)	i (er_    i:
+	rr)	i (er_    j
+	dr)	iver    a2jvWr
+	C)	ien (t_       i
+	dév)	ien (t_       i
+	t)	ien (K_      jE~		// tient
+	v)	ien (K_      jE~		// vient
+	at)	ien (t_      jA~		// patient
+	cip)	ien (C     jA~		// récipient
+	cl)	ien (C     i:A~		// client
+	mol)	ien (C     jA~		// émolient
+	vén)	ien (C     jA~		// inconvénient
+	or)	ien (t      jA~		// orient, orienter
+	ot)	ien (t_      jA~		// quotient
+
+		i (e_       i
+	_)	ill         ill		// illégal
+	aigu)	ill         ij		// aiguille
+	anqu)	ill         il		// tranquille
+	dist)	ill         il		// distiller
+	_m)	ill         il		// mille
+	v)	ill         il		// village
+	qu)	ill         ij		// cuillière cueillir
+	A)	ill         j		// caillou
+	C)	ill         ij		// famille
+	a)	il (_       j		// bail
+	e)	il (_       j
+	u)	il (_       j		// deuil
+	L01_f)	ils (_       is		// deuil
+
+		imm         imm		// immaculé
+		im (_       im		// karim
+		im (C       E~		// timbre
+	w)	in        in		// winrar
+		inct (_     E~		// distinct
+		in (h       in		// inhumain
+		in (kX       iN		// link
+		in (n       in		// innombrable
+		in (C       E~		// vingt
+		in (_       W~		// vin
+		ing (_      iN
+	_)	infra (_P5       E~fra
+	_)	inter (@P5       E~tEr
+	_)	inter (_       E~t'Er
+	_)	inter (ne_       E~t'Er
+	_)	intra (neP5       E~tra
+	_)	intra (uP5       E~tra
+	C)	is (_       i
+
+// group i: English section
+		ibuter (X         _^_en
+		iev         _^_en
+		ife (_      _^_en
+		igh       _^_en
+		ind (_     _^_en		// find, mind
+	_C)	ind (er_     _^_en		// finder, reminder
+	_AC)	ind (er_     _^_en		// finder, reminder
+//		ink       _^_en		// link
+		ize (X         _^_en		// realize
+
+
+.group î
+		î           i		// abîme
+		în (i       in		// vînimes
+
+
+.group ï
+		ïn (C       E~		// coïncider
+		ïn (_       E~
+		ïs        is  // maïs, archaïsme
+		ï (q       i  // archaïque
+		ï (c       i  // laïc
+	a) 	ï           j		// aïeul
+		ï           i		// ambiguïté
+
+
+.group j
+		j           Z		// adjoint joujoux
+	_) 	j' (P2v      Z
+	_) 	j (azz      dZ
+	_) 	j (obK      dZ
+	_) 	j (ohK      dZ
+	_) 	jusqu' (P6      Zysk
+
+
+.group k
+		k           k		// kafka
+
+
+// group k: English section
+		ke (X     _^_en		// basket, make, take
+
+.group l
+		l           l		// lit
+		ll          l		// aller
+	_)	l' (P2      l
+	au)	lt			// hérault
+	uCi)	l (_ 			// outil, fusil
+	nti)	l (_ 			// gentil
+	ui)	ll          j		// juillet
+	_)	lorsqu' (P7          lO2rsk
+
+// group l: English section
+		less (_      _^_en  // noiseless
+	_)	live       _^_en
+
+
+.group m
+		m           m		// film
+		mm          m		// pomme
+	_)	m' (P2v      m
+	_)	mc (P2      mak
+	_)	ms (P2      Em_!Es
+		master (_S6      mastWr
+
+// group m: English section
+	_)	mail (_       _^_en  // mailer
+		mov (A         _^_en		// move, movy
+
+
+.group n
+	_)	n (_        En
+		n           n		// une
+		nn          n
+		ng (_       N
+
+	_)	n' (P2v      n
+
+	A) 	ng (_       N		// parking meeting
+		nn          n		// panne
+	_)	n (_°       nymero
+	_)	neuro (@@P5       nYro
+
+
+.group o
+	br) 	oc (_       o		// broc
+	cr) 	oc (_       o		// escroc
+	 	o (ckK       O2
+	 	o (CerA       O2
+	 	o (lC       O2
+	 	om (merA       O2
+	 	on (n       O
+	 	on (nerA       O2
+	 	o (rC       O2
+	 	o (rX       O2
+	_) 	os (_       Os
+	s_) 	os (_       o
+	x_) 	os (_       o
+	X) 	o (se_       o2
+	X) 	o (ses_       o2
+	 	o (CCement_       O2
+	 	o (Che@       O2
+	 	o (Cement_       O2
+	 	o (t_       o
+	 	o (tre_       O2
+	_) 	o (bCC       o2
+	_) 	o (bCe       o2
+	X) 	o (Co@       o2
+	 	o (Cau       o2
+	 	o (Ceau       o2
+	 	o (Co_       o2
+	 	o (Cos_       o2
+	C) 	o (d_       O2
+
+		oe (ll      w^a		// moelleux
+		oe (i      W2		// oeil
+	_)	oe (C       Y		// oesophage
+	_ph)	oe (C       e		// phoetus
+		oeu       W		// soeur coeur
+		oeufs       @		// oeufs boeufs
+		o (eC       o		// coefficient
+		 _l)	o (gi		o2
+		 _p)	o (ten		o2
+		 _pr)	o (gra		o2
+		 _C)	o (teri		O2
+	_) 	oi (gnon    o		// oignons
+		oin (C      wE~
+		oin (_      wE~		// coin
+	_)	oi          w^a		// oiseau
+		oi          w^a		// poil
+		oê (l       w^a		// poêle
+		oî          w^a		// boîte
+		om (C       O~		// bombe
+		om (m       O		// nommer
+	_)	om (n       O2m		// omnibus
+	n) 	om (X       O~		// nom
+		om (_       Om          //  www.web.com
+		on (K       O~		// mon
+		on (t_       O~t2		// mont vont sont
+	_m)	ont (CAC       O~		// montpellier
+		onsh (A     O~z		// bonshommes
+		onh (A      On		// bonhomme
+	_)		on	(z	_!O~		// onze, onzi�me
+
+	_c)	on (_      O~		// no comment
+	_C)	on (_      O~n2		// mon appui, mon histoire, mon havre
+
+	alc)	oo (l       O		// alcool
+	z) 	oo          o		// zoo
+	z)	oo (C       o2o		// zoologue
+	z)	oo (m       u		// zoom
+	_gal)	op (_       o		// galop
+
+	_sir) 	op (_       o		// sirop
+
+	_tr)	op (_       op2		// trop
+	v) 	ost (_      o		// Prévost
+	_C) 	oup (_      u		// coup, loup
+	uC) 	oup (_      up2		// beaucoup
+
+
+		ou          u		// hibou brouillard
+		où          u		// où
+		oû          u		// coûter
+		oyes (_     w^a		// troyes
+		oy (A       w^aj		// noyer voyelles
+		oy          w^a		// roy
+		o (_        o		// zorro allégro
+		o (z_       o		// berlioz
+		o           O
+
+
+// group o: English section
+	 	oa (X       _^_en		// approach, load
+	 	oa (CeX       _^_en
+	 	oach       _^_en
+		old (er_       _^_en		// folder, older
+C)		oing (_      _^_en	// going
+		oo  (Ce     _^_en		// boomer
+		oo (X       _^_en		// pool
+		ook        _^_en		// book, cook
+	C)	oot        _^_en		// bootable football
+	_)	one       _^_en
+	_sC)	ot       _^_en
+	 	oun (C      _^_en		// bounce, found
+	_)	over        _^_en		// over
+		ow          _^_en		// cow, town, down
+		oy (X       _^_en		// boy, toy
+
+
+.group ô
+		ôt (_       o		// rôt
+		ô           o		// cône
+
+
+.group p
+		p           p		// pas
+	_)	para (CCP4       para
+	_)	photo (@P5       fo2to
+	_)	poly (@P4       poli
+	_) 	post (KP4       pO2st
+	_) 	post (ACCP4       pO2st
+	_)	pseudo (@P6       psYdo
+		p (p			// appliquer
+		ph          f		// phrase
+
+	m) 	ps (_			// temps champs
+	r) 	ps (_			// corps
+
+	cham) 	p (_			// contrechamp
+
+	cam) 	p (_			// camp
+
+	dra)    p (_			// drap
+	_)	psych (@P5       psik
+	_)	psych (iCP5       psiS
+	_)	psych (AA_P5       psiS
+
+	ba) 	p (t          		// baptiser
+	com) 	p (t          		// compte
+
+	C) 	pt (_			// prompt exempt
+
+	se)	pt (_      t      	// sept
+	se)	pt (iè     t      	// septième
+	_)	puisqu' (P7     pyisk
+
+// group p: English section
+		pad (_        _^_en
+		plug 	_^_en		// plug
+		print (_        _^_en		// print
+		printer (_        _^_en		// printer
+
+
+.group q
+		q           k		// coq
+	_)	qu' (AP3          k
+ 	_a)	qu (a      kw		// aquarium
+ 	_a)	qu (if      kw		// aquifère
+ 	_A)	qu (idist      ky		// équidistant
+ 	_A)	qu (ilat      ky		// équilatéral
+ 	_C)	qu (a      kw		// squale square
+ 	_A)	qu (a      kw		// équateur
+ 	dé)	qu (a      kw		// adequate
+ 	_)	qu (artz      kw		// quartz
+		qu          k		// quatre
+ 	_)	que (_      k@		// que
+	n)	q (_        k		// cinq cent
+
+// group q: English section
+		quick        _^_en		// quick, quickly
+
+
+.group r
+	_su)	rr          rr		// surréaliste
+cou)	rr          rr		// courrai
+cou)	rr (i         r		// courrier
+mou)	rr          rr		// mourrai
+		rr          r		// erreur
+		r           r		// rien
+	_)	radio (@P5       radio
+
+// group r: English section
+	_)	real         _^_en
+		rese         _^_en
+		rst (_        _^_en
+
+
+.group s
+		s           s		// verser sien
+
+		s (_S1      z2
+
+	_)	s' (P2v      s		// s'amène
+		sç 	    s		// immisça
+		sch (ie     sk		// schierzo
+		sch (iz    sk		// schizophrène
+		sch (ol     sk
+		sch (oo     sk
+
+		sch         S		// schéma
+	dé) 	sh (A       z		// déshabiller
+		sh          S		// shérif
+	CA)	sh (_         _^_en		// punish
+		ss          s		// assez
+
+	ai) 	s (em       s		// vraisemblable
+	aCè)	s (_	s
+	ub)	s (is       z		// subsister
+	tran) 	s (A        z		// transition
+	tran) 	s (e        s		// transe
+	tran) 	s (ub       s		// transubstantiation
+	A) 	s (A        z		// baiser
+	A) 	s (oft        s		// microsoft
+	A) 	s (ol_        s		// tournesol
+	_anti) 	s (A        s		// antisocial
+	_)	socio (@P5       sosio
+	_)	super (@@P5       sypEr
+	_)	super (_       sypEr
+	_)	supra (@P5       sypra
+		batro)	s (_		s
+		océro)	s (_		s
+
+
+	_u) 	s (_        s
+	Cu) 	s (_
+	Abu) 	s (_        s
+	_Abu) 	s (_
+	mbu) 	s (_        s
+	Acu) 	s (_        s
+	écu) 	s (_
+	asu) 	s (_        s
+	odu) 	s (_        s
+	gu) 	s (_        s
+	igu) 	s (_               // aigus
+	iu) 	s (_        s      // radius
+	ïu) 	s (_        s      // laïus
+	Culu) 	s (_        s   // cumulus
+	plu) 	s (_        z2     // plus, surplus
+	ylu) 	s (_        s     // stylus
+	mu) 	s (_        s
+	_mu) 	s (_
+	ému) 	s (_
+	opu) 	s (_        s // opus, octopus
+	Aru) 	s (_        s // virus
+	aru) 	s (_         // disparus
+	ouru) 	s (_         // courus
+	Anu) 	s (_        s // bonus, tonus
+	enu) 	s (_         // menus, venus
+	psu) 	s (_        s // lapsus
+	cessu) 	s (_        s // processus
+
+	atu) 	s (_        s		// stratus motus
+	ctu) 	s (_        s     // cactus
+	etu) 	s (_        s
+	aitu) 	s (_
+	itu) 	s (_        s
+	ltu) 	s (_        s     // altus
+	otu) 	s (_        s     // motus
+	Cutu) 	s (_        s
+
+	_tou) 	s (_        s
+
+		s (b         z 	// sbire
+		s (d         z
+		s (g         z
+		s (j         z
+		s (v         z
+
+// group s: English section
+		sh (_         _^_en
+		sh  (Ap          _^_en	   // shop, ship
+		sh  (At          _^_en		// shut, shot
+	_)	sky        _^_en
+	_)	smil        _^_en   // smile, smiley
+		spy         _^_en
+		sy (_      _^_en
+
+
+.group t
+		t           t	// bataille
+_)		t (_        te
+-)		t (-        t2
+	_)	t' (P2v      t
+		t (_        t2
+	A)	t (_
+	peti)	t (_        t2
+		t-         t2_
+	_)	th       t      // thon
+		ts (_S1     z2  // silent at end of word unless next word starts with a vowel
+	C)	t (_        t	// compost watt soft script malttact abrupt
+ ki)	t (_        t // kit
+ n)	t (_
+ Vn)	t (_        t2
+	r)	t (_        t2	// fort
+
+	aul)	t (_        	// Renault
+
+	_)	télé (@P4	tele
+	_)	thermo (@P6	tErmo
+
+		tt          t	// attitude
+
+	s) 	th (m 		// asthme
+		th          t	// théorie
+	hui)	t (_        t3	// huit
+
+	_)	t           t   // tien tiers
+	an) 	t (ia       t   // Santiago
+	C) 	t (ieu       s   // contentieux
+
+		t (io_      s 	// ratio
+
+	Ama)	t (ieX       s   // diplomatie
+	a)	t (ia       s   // spatial
+	en)	t (ia       s   // confidentialit�
+	lbu)	t (iA       s   // balbutiait
+	r)	t (ia       s   // impartial
+	ini)	t (i       s   // initier
+	p)	t (ia       s   // nuptial
+	an)	t (iat      s   // transsubstantiation
+
+
+		t (ion      s 	// programmation
+	V)	t (ion      t 	// verbes
+	ache)	t (ion      t 	// achetions, rachetions
+	ai)	t (ion      t 	// souhaitions, traitions
+	oi)	t (ion      t 	// boitions
+	si)	t (ion      s 	// position
+	chan)	t (ion      t 	// chantions, d�chantions
+	Cisi)	t (ion      t 	// visitions
+	ci)	t (ions      t 	// citions
+	comp)	t (ions      t 	// comptions, escomptions
+	CAnc)	t (ion      s 	// fonctionner, ponctionner
+	Ce)	t (ions      t 	// jetions, rejetions
+	Vec)	t (ion      t 	// respections
+	Vep)	t (ion      t 	// respections
+	éCi)	t (ions      t 	// hésitions, héritions
+	éti)	t (ion      s 	// pétition
+	Vé)	t (ion      t 	// répétions
+	habi)	t (ions      t 	// habitions
+	imi)	t (ions      t 	// imitions, limitions
+	Vu)	t (ion      t 	// ajoutions
+	Apor)	t (ion      t 	// emportions, exportions
+	opor)	t (ion      s 	// proportion
+	Cpor)	t (ion     t 	// emportions, exportions
+	sor)	t (ion     t 	// sortions
+	rê)	t (ion      t 	// arrêtions, apprêtions
+
+	s)	t (ion      t 	// gestion
+	_ta)	t (ion      t 	// tation
+	sen)	t (ion_      t 	// sentions, ressentions
+	t)	t (ion      t 	// combattions
+
+		t (iel      s 	// partiel
+		t (ieu      s 	// ambitieux
+		t (iAm      s  // patiemment
+
+ 	mar) 	t (ien      s	// martien vénitienne
+	a)	t (ien      s
+ 	i) 	t (ien      s
+ 	o) 	t (ien      s
+
+	nu) 	t (ieX      s	// minutie
+	ni) 	tien (t_     si
+	bu) 	tien (t_     si
+
+	cra) 	t (ieX      s	// démocratie
+
+	ner) 	t (ie     s	// inertie
+
+	_ce) 	t (_        t
+
+// group t: English section
+	C)	th (_      _^_en      // month
+	_)	th (eX      _^_en      // the, then
+	_)	th (aX      _^_en      // than, that
+	_)	time      _^_en
+		tle (_     _^_en
+		too      _^_en
+		ttl      _^_en
+		try (_     _^_en  // try, country
+	sCar)	t (_        _^_en	// smart, start
+	sCar)	t (er_        _^_en	// starter
+	_)	tun (AX        _^_en
+
+
+.group u
+		u           y	// cruel nuage brut
+		ui          w^i	// nuit, fuite
+		uin (K         yE~	// juin
+		uy (A         w^ij
+
+	_b)	usi       _^_en  // business, businessman
+	c)	ueill       Wj  // cueillir
+	c) 	ueil (_     Wj  // recueil
+	_c) 	ul (_     y
+	_)	ultra (P5       yltra
+	g)	ueill       Wj	// orgueilleux
+	g) 	ueil (_     Wj	// orgueil
+
+
+	C)	u (bX      W	// hub, club
+	C)	u (gX      W	// bug, mug
+		um (_       Om	// album
+	f) 	um (_     W~  // parfum
+		um (b       W~	// humble
+		um (p       W~
+		un (C       W~	// emprunt lundi
+	CC)	un (_       W~	// brun
+	uc)	un (_       W~n2	// aucun
+		un (_      W~n2	// un avion
+	_f)	un       @n	// fun
+	_g)	un       @n	// gun
+	_r)	un       @n	// run
+	_s)	un       @n	// sun, sunday
+
+	fl) 	ux (_		y		// flux, reflux
+	g) 	u (A		// fatigue
+	g) 	u (ï	    y	// ambiguïté
+	g) 	u (ë        y	// ambiguë
+
+// group u: English section
+	C)	ui  (ce        _^_en  // produice, juice
+		umber (_       _^_en
+		ump (_       _^_en
+		unch          _^_en
+		under          _^_en  // under, understand, thunder
+	_)	up  (C        _^_en  // upper, update
+	up  (_        _^_en  // setup
+		urn (X        _^_en  // burn, turn
+		ust (_        _^_en  // just, trust
+
+
+.group ü
+		ü 	y
+		üs (_	ys
+		üm (_	Om
+		ül (_	yll
+
+
+.group v
+		v           v
+		vers (_          vErz2
+
+// goup v: English section
+		voice  (X       _^_en
+		void  (_       _^_en
+		vy  (_       _^_en
+
+
+.group w
+		w           w
+		w (agon 	    v // wagon
+
+// group w: English section
+	A)	w           _^_en
+		wa (Ce_ 	    _^_en // hardware software wave
+	_)	wan  	    _^_en
+		wr 	  _^_en    // write
+		way 	  _^_en    // way, away
+	_)	wir 	  _^_en    // wire
+		winn 	  _^_en    // winner
+		wise 	  _^_en
+		wor 	  _^_en
+
+
+.group x
+		x           ks
+                xs          ks	// lexique lexicaux vox
+	_e) 	x (A        gz	// exagérer exemple
+	_e) 	x (h        gz	// exhumer
+
+	ai) 	x (_ 		// voix paix prix
+	oi) 	x (_
+	ri) 	x (_
+
+	_soi) 	x (A        s	// soixante
+
+	Au) 	x (_	    z2	// faux feux choux
+
+	_au) 	x (quel 	// auxquels
+
+	_di) 	x (_neuf z	// liaison: dix-neuf
+	_di)	x (_    z3
+	_si) 	x (_neu s	// liaison: six-neuf
+	_si)	x (_	z3
+
+	di) 	x (iè   z	// dixième
+	si) 	x (iè   z	// sixième
+	deu) 	x (iè   z	// deuxième
+
+
+.group y
+		y           i	// cryogénique myope
+	_)	y (A          _!i	// yak, yacht
+	_)	y (eu          i	// yeux
+
+	_)	yahoo (P5       ia'u
+		ym (b       E~	// symbolique
+		ym (p       E~	// tympan
+		ym (_       E~	// thym
+		y (nn       i
+		y (nA       i
+	pa)	ys (_       i
+	X)	ys (_       is
+		yx (_       iks
+
+		yn          E~	// laryngite
+
+
+.group z
+		z           z
+		zz          dz
+	t) 	z           s	// tzigane
+
+
+.group
+// accented characters, these could have their own groups if they need more rules
+		â           a:
+		ñ           n^
+
+	 	é           e		// été
+	 	ê           E		// fête
+		ñ           Ni		// niño
+		ö           O		// angström
+		œ           W
+		œu          W:          // sœur
+		û           y	// fûtes
+		ü           y	// bülcher
+
+
+// symbols that are normally spoken when reading text
+		, (D        pilk:u
+	!	Eksklamasj'O~
+	$	do2lar
+	@	arobaz
+	%	pursA~
+	&	_e
+	+	plys
+	~	tilde
+	€	@ro
+	¢	sEnt
+	¥	i;En
+	£	livr
+	°	d@gre
+   _n_) °	   // n°
+	±	pl'yz_'u_mw'E~
+	×	myltipli:'e_p'ar
+	÷	diviz'e_p'ar
+	¼	W~_k'ar
+	½	W~_d@m'i
+	¾	trw'a2 k'ar
+	©	_^_EN
+	®	m'ark_depos'e
+
+
+
+
+
+
+
+
+
+

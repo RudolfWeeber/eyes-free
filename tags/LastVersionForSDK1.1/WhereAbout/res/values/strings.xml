@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, WhereAbout</string>
+    <string name="locator">WhereAbout</string>
+    <string name="app_name">WhereAbout</string>
+    <string name="wifi_loc_prefix">You are approximately at </string>
+    <string name="nw_loc_prefix">You are in the vicinity of </string>
+    <string name="insersection_prefix">the intersection of </string>
+    <string name="abs_loc_prefix">You are at </string>
+    <string name="unknown_loc_prefix">Cannot determine latest location. </string>
+    <string name="prev_loc_prefix">Earlier you were at </string>
+    <string name="failed_intersection">Cannot determine intersection</string>
+    <string name="failed_abs">Cannot determine address</string>
+    <string name="progress_title">WhereAbout</string>
+    <string name="progress_msg">Obtaining street info. Please wait.</string>
+</resources>

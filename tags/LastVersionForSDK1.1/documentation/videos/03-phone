@@ -1,0 +1,42 @@
+# -*- mode: org -*-
+
+
+* [[http://www.youtube.com/watch%3Fv%3Dzsv6YfSWugc][Video: Talking Dialer: Eyes-Free Communication Device]]
+
+
+So now, let's use the stroke dialer for something practical ---
+let's make phone calls with our smart phone!
+Well, we know Marvin would disapprove if we /just/ made phone
+calls, so rest assured, we'll do a lot more later!
+
+Pressing the _call_ button on Android phones launches the
+built-in dialing application. When using the Marvin shell,
+pressing this button launches the /Talking Dialer/ application
+--- if you are not using Marvin as your home screen, you can
+launch this dialer as you would launch any Android application.
+
+The /Talking Dialer/ announces _dialing mode_ upon start up.
+You can start dialing using the technique  described in the
+[[./02-strokes.html][previous video on stroke dialer]] --- if you make a mistake, simply
+shake the phone to erase. Once you have finished dialing, press
+the _call_ button to initiate the call. The application speaks
+the number you're about to dial, and makes the call once you
+press the _call_ button to confirm.
+But you say 
+:Dialing phone numbers is so passe'!
+
+--- well, there is still hope for the /Talking Dialer/. In
+addition to _dialing mode_, the /Talking Dialer/ provides an easy
+to use /Talking Phonebook/ that provides eyes-free access to your
+contact list --- we will cover this in our [[./04-phonebook.html][video on the talking
+phonebook]].
+
+#+TITLE: Video: Talking Dialer: Eyes-Free Communication Device
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/

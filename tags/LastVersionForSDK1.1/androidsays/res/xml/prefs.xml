@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        
+        <ListPreference
+                android:key="speed_pref"
+                android:title="@string/speed_pref"
+                android:entries="@array/speed_entries"
+                android:defaultValue="-1"
+                android:entryValues="@array/speed_entryvalues"  />
+                
+        <ListPreference
+                android:key="game_mode_pref"
+                android:title="@string/game_mode_pref"
+                android:entries="@array/game_mode_entries"
+                android:defaultValue="1"
+                android:entryValues="@array/game_mode_entryvalues"  />
+                
+        <ListPreference
+                android:key="sequence_length_pref"
+                android:title="@string/sequence_length_pref"
+                android:entries="@array/sequence_length_entries"
+                android:defaultValue="1"
+                android:entryValues="@array/sequence_length_entryvalues"  />                
+
+</PreferenceScreen>

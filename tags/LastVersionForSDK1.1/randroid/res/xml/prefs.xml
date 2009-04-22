@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        
+        <ListPreference
+                android:key="speak_pref"
+                android:title="Speak Button Settings"
+                android:entries="@array/speak_entries"
+                android:defaultValue="Commentary"
+                android:entryValues="@array/speak_entries"  />
+                
+        <CheckBoxPreference
+                android:key="display_toast_pref"
+                android:title="Show comments visually"
+                android:summaryOn="(Default) Commentary will be displayed visually."
+                android:summaryOff="Commentary will not be displayed."
+                android:defaultValue="true"/>
+                
+       <Preference
+                android:key="tts_settings" 
+                android:title="Text-To-Speech Settings" />           
+
+</PreferenceScreen>

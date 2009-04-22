@@ -1,0 +1,94 @@
+# -*- mode: org -*-
+
+
+* [[http://www.youtube.com/watch%3Fv%3DUPIU2tj7dBI][Video: Talking Phonebook: Eyes-Free Communication Device]]
+
+Pressing the _menu_ button while in the /Talking Dialer/ toggles
+between _dialing mode_ and _phonebook_.
+When in _phonebook_, you get eyes-free access to your contacts
+with the ability to quickly move to the  contact  that you wish
+to call.
+
+When in the  _phonebook_, you can 
+scroll through your contacts  and press the _call_ button to call
+the /current/ contact.  In addition, you can use /stroke dialing/
+as explained below to quickly move to a specific contact.
+
+** Entering Letters Using Stroke dialing 
+
+We covered eyes-free input with the touch screen in the [[./02-strokes.html][earlier
+video on stroke dialing]]
+--- in that video, we illustrated the concept via a traditional
+phone keypad. Here, we  extend that technique
+to enable   textual input. 
+In the explanation below, we will use compass directions  to help
+with orientation.
+As before, we will use relative positioning i.e., for the rest of
+this explanation, you can start /anywhere/ on the touch-screen
+--- though we recommend (for reasons that  will become  evident)
+that you start somewhere close to the middle of the screen.
+
+** The Eight Compass Directions
+
+Defining the /center/ as where you first touch down on the
+screen, notice that  you can stroke in any one of the _8_ compass
+directions, and that  opposite pairs of compass directions e.g.,
+North and South, can be thought of as /opposites/.
+So we get _4_ pairs. We enumerate these below,
+associate them with the _4_ Google colors,  and  equate them
+to their equivalent strokes from the /stroke dialer/:
+
+
+  - Red: North-West and South-east _1_ and _9_.
+  - Blue: North and South  --- _2_ and _8_.
+  - Green: North-East and South-West --- _3_ and _7_.
+  - Yellow: East and West --- _4_ and _6_.
+
+Now, let's place the letters of the alphabet on these _4_ circles
+as follows:
+
+  - Red: _A_ ... _H_
+  - Blue: _I_ ... _P_
+  - Green: _Q_ ... _X_
+  - Yellow: _Y_ ... _Z_.
+
+To input a given letter, we /stroke/ to the circle containing the
+desired letter, trace along the circle till we hear the letter we
+want, and lift up the finger to make the selection. Letters are
+spoken in a female voice while moving along the selected circle;
+lifting up the finger speaks the selected letter in a male voice.
+
+Notice that conceptually, we have defined a fairly simple mapping
+from strokes to letters of the alphabet!
+** Skimming  The Contact List
+
+So to cut a long story short, you /dont need to/ scroll through
+the contact list. To quickly jump to a contact, use the technique
+described above to input the first letter from the contact's name
+--- the aplication jumps to contacts starting with that
+letter. At that point, you can either scroll, or enter additional
+letters to further filter the contact list.
+
+
+** Examples Of Using Strokes For Letters
+
+
+Notice from the mapping shown earlier that we can /enter/ each
+circle either at the _top_ or _bottom_. Thus, entering the red
+circle at the _top_ gets to _A_, while entering it at the
+_bottom_ gets us to _E_. This means that the _8_ letters on any
+given circle are no more than _3_ steps away --- for example, to
+enter _C_, one needs to trace clockwise from _A_, or
+counter-clockwise from _E_. As an example, _H_ is only _1_ step
+from _A_ on the red circle. similarly, _P_ is only _1_ step from
+_I_ on the blue circle.
+
+#+TITLE: Video: Talking Phonebook: Eyes-Free Communication Device
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/

@@ -1,0 +1,87 @@
+ 
+// This file is UTF8 encoded 
+// Spelling to phoneme words and exceptions for Tamil
+
+
+// letters (consonants)
+க்	ik
+ங்	iNg
+ச்	itS
+ஜ்	idZ
+ஞ்	in^
+ட்	it.
+ண்	in.
+த்	it
+ந்	in  // dental n
+ன்	in  // alveolar n
+ப்	ip
+ம்	im
+ய்	ij
+ர்	ir
+ற்	iR
+ல்	il
+ள்	il.
+ழ்	iz
+வ்	iv
+ஶ்	iS
+ஷ்	is.
+ஸ்	is
+ஹ்	iC
+U+b82	anUsvVRV
+ஃ	ah
+U+bcd	viRVmV
+
+// speak Latin letters as English
+a	e:j
+b	bi:
+c	si:
+d	di:
+e	i:
+f	Ef
+g	dZi:
+h	e:tS
+i	a:I
+j	dZe:j
+k	ke:j
+l	El
+m	Em
+n	En
+o	o:
+p	pi:
+q	kju:
+r	a:R
+s	Es
+t	ti:
+u	ju:
+v	vi:
+w	dVbVlju:
+x	Eks
+y	wa:j
+z	zEd
+
+// symbols
+_??	kuRij,i:d.U_
+_cap	kapit.Vl    // English
+_.	pul.l.i
+_,	kVma:
+_;	ka:RbUl.l.,i
+_:	arE:pp,Ul.l.V
+_?	ke:l.vikk,URi
+_!	a:ctS:Vr,ijVkk,URi
+%	sadVv,igid,Vm
+=	samVm
+U+bf9	ru:ba:j
+
+
+// numbers
+_0	pu:dZjam_   // ??
+_1	ondru_
+_2	irandu_
+_3	mo:ndru_
+_4	na:ngu_
+_5	aintu_
+_6	a:ru_
+_7	E:lu_	// aylu ??
+_8	et.:u_
+_9	onpatu_
+_10	pat:u_

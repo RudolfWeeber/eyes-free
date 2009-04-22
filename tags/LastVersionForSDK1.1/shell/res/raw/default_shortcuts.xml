@@ -1,0 +1,11 @@
+<shell>
+
+  <item gesture='1' label='Android Says' action='LAUNCH'>
+    <appInfo package='com.google.marvin.androidsays' class='com.google.marvin.androidsays.AndroidSays'/>
+  </item>
+
+  <item gesture='2' label='Compass' action='LAUNCH'>
+    <appInfo package='com.google.marvin.compass' class='com.google.marvin.compass.TalkingCompass'/>
+  </item>
+
+</shell>

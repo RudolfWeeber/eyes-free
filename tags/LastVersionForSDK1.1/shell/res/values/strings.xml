@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">Home</string>    
+    <string name="press_menu_to_unlock">Press menu to unlock</string>
+    <string name="airplane_mode">Airplane Mode</string>
+    <string name="you_have_new_voicemail">You have new voicemail.</string>    
+    <string name="application_not_installed">Application not installed.</string>
+    <string name="compass">Compass</string>
+    <string name="battery">Battery</string>    
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>    
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="midnight">midnight</string>
+    <string name="noon">noon</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <string name="enabled">enabled</string>
+    <string name="disabled">disabled</string>
+    <string name="applications">Applications</string>
+    <string name="shortcuts">Shortcuts</string>
+    <string name="voicemail">Voicemail</string>
+    <string name="marvin_intro_snd_">[marvin intro]</string>
+    <string name="charging">charging</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="gps">GPS</string>
+    <string name="no_data_network">No data network</string>
+    <string name="mobile_data_network">Mobile data network</string>
+    <string name="threeg_data_network">3G data network</string>
+    <string name="edge_data_network">EDGE data network</string>
+    <string name="bars">bars.</string>
+    <string name="signal">Signal</string>
+    <string name="location">Location</string>
+    <string name="wifi">WiFi</string>
+    
+    <!-- The following strings are displayed but never spoken  -->
+    <string name="app_name">Eyes-Free Shell</string>
+    <string name="time_and_date">Time &amp; Date</string>    
+</resources>

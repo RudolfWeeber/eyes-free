@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">mem</string>
+    <string name="settings">Settings</string>
+    <string name="speed_pref">Speed</string>
+    <string name="game_mode">Game Mode</string>
+    <string name="game_mode_pref">Mode</string>
+    <string name="sequence_length_pref">Initial Sequence Length</string>
+    
+
+<string name="themes">Themes</string>
+<string name="about">About</string>
+
+    <string name="success">All data has been downloaded successfully.</string>
+    <string name="download_again">Download again</string>
+
+    <string name="download_activity_title">Downloading</string>
+    <string name="download_activity_cancel">Cancel Download</string>
+    <string name="download_activity_progress">Progress:</string>
+    <string name="download_activity_time_remaining">Time Remaining:</string>
+    <string name="download_activity_time_remaining_unknown">unknown</string>
+    <string name="download_activity_time_remaining_minutes">minutes</string>
+    <string name="download_activity_time_remaining_seconds">seconds</string>
+    <string name="download_activity_time_remaining_hours">hours</string>
+    <string name="download_activity_time_remaining_days">days</string>
+    <string name="download_activity_download_stopped">Download stopped</string>
+    <string name="download_activity_retry">Retry</string>
+    <string name="download_activity_quit">Quit</string>
+<string name="hiscores">High Scores</string>
+</resources>

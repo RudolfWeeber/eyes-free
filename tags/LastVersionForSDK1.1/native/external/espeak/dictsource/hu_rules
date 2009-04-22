@@ -1,0 +1,354 @@
+// Hungarian translation rules
+// This file is UTF-8 encoded
+
+
+.replace
+//  allow o,u-circumflex for o,u-double-acute
+ ô	ő
+ û	ű
+
+
+.group a
+        a        A
+     _) a (_     %A
+
+.group á
+        á        a:
+
+.group b
+        b        b
+//        bb       b:
+
+        biz (A   b'iz,       // bizalmas  etc.
+	biedermeier  bi:dER2ma:jER2
+
+.group c
+        c        ts
+        cc       ts:
+        cs       tS
+        ccs      tS:
+     !) cz       ts         // in names which start with a capital letter
+
+  anar) ch (i    C
+hierar) ch (i    C
+    me) ch (a    C
+    te) ch (n    C
+  pszi) ch       C
+  pszy) ch       C
+   mün) ch (en   C
+  maso) ch (istA C
+ monar) ch (i    C
+   _pe) ch     C
+   szé) ch       tS
+   _zi) ch (y    tS
+
+        c (szín  tS
+
+    dA) c (sz    ts
+ kilen) c (sz    ts
+  kvar) c (sz    ts
+  mala) c (sá    ts
+  nyol) c (sz    ts
+   har) c (sz    ts
+   lán) c (sz    ts
+   per) c (sz    ts
+   pol) c (so    ts
+   por) c (sé    ts
+   por) c (sz    ts
+   rán) c (sz    ts
+   tán) c (sz    ts
+
+  _szé) che (ny   tSe:
+  _szé) ché (ny   tSe:
+  _sto) ck (holm  k
+
+     _) church   tSYR2tS
+
+
+.group d
+        d        d
+//        dd       d:
+        dz       dz
+     A) dz (A    d:z
+        dzs      dZ
+     A) dzs      dZ:
+
+     C) ds       tS
+        ds (C    tS
+     A) ds (A    tS:
+        dsz      ts
+        dsz (C   ts
+     A) dsz (A   ts:
+        dz       dz
+     C) dzs      dZ
+     A) dzs (A   dZ:
+     C) dj       J
+     A) dj (A    J:
+
+   ren) d (szer  d
+
+
+.group e
+        e        E
+  D_-_) es (_    %ES
+
+.group é
+        é        e:
+        éi (é    e::i:
+
+.group ë
+        ë        Y
+
+.group f
+        f        f
+
+.group g
+        g        g
+//        gg       g:
+        gy       J
+        ggy      J:
+
+        gys      tS
+     A) gys (A   tS:
+        gysz     Js
+     A) gysz (A  Js:
+     C) gyj      J
+     A) gyj (A   J:
+
+    _e) gy (es   J:
+    _e) gy (et_  J:
+    _e) gy (etlen  J:
+    _e) gy (ik   J:
+    _e) gy (üt   J:
+_minde) gy (ik   J:
+
+    na) gysz (a  Js
+
+     _) goethe   gY:tE
+     _) goethé   gY:te:
+
+
+.group h
+        h        h
+
+.group i
+        i        i
+
+.group í
+        í        i:
+
+.group j
+        j        j
+
+.group k
+        k        k
+        kk       k:
+        kk (C    kk
+     _) köz      kYz
+
+.group l
+        l        l
+        ly       j
+        lly      jj
+
+     A) lj (A    l^j
+
+     C) ly (_    li
+ _kéth) ly       li
+szamue) lly	 lli
+szamue) ly	 lli
+
+    mi) ll (i    l
+
+
+.group m
+        m        m
+
+    ko) mm (uni  m
+
+
+.group n
+        n        n
+        n (g     N
+        n (k     N
+        ny       n^
+        nny      n^n^
+        nj       n^n^
+
+
+     _) nem (-   n,Em       // has $alt2 attribute in hu_list, combine with the next word
+
+
+.group o
+        o        o
+
+    _r) oose (velt   u:z
+
+
+.group ó
+        ó        o:
+
+.group ö
+        ö        Y
+
+.group ő
+        ő        Y:
+
+.group p
+        p        p
+        pp       p:
+        pp (C    pp
+        p (v     p_
+
+     _) potsdam  potsda:m
+
+
+.group q
+        q        kv
+        qu       kv
+
+.group r
+        r        R2
+        rr       RR
+        rm       R2_m
+        r (cc    R
+
+     _) richa (rd R2iCa:
+     _) richá (rd R2iCa:
+
+
+.group s
+        s        S
+        sz       s
+        ssz      ss2
+
+        s (színű S
+   hel) s (inki  z
+    ki) s (ebb   SS
+   _má) s (szó   S
+_munká) s        S
+_nyílá) s        S
+    _o) slo      slo:
+    _o) sló      slo:
+  tojá) s        S
+
+        sz (öld  Sz
+    va) s (zabl  S||
+     _) semmelweiss  sEmmElvEjs
+     _) semmelweis  sEmmElvEjs
+     _) semmelweiß sEmmElvEjs
+ engel) s        s
+    mu) ss (olini ss2
+     _) saar     sa:R2
+
+   _wa) sh (ing  S
+
+
+.group t
+     _) t (_     te:
+     -) t (_     t
+        t        t
+        tt       t:
+        tt (C    tt
+        ty       c
+//     s) ty       c:    //
+//     z) ty       c:    // keztyű
+        ttj      tc:
+        tty      c:
+
+     C) tj       c
+     A) tj (A    c:
+     C) tyj      c
+     A) tyj (A   c:
+
+   _ka) ty (n    ti
+vörösmar) ty     ti
+
+
+.group u
+        u        u
+
+.group ú
+        ú        u:
+
+.group ü
+        ü        y
+
+.group ű
+        ű        y:
+
+.group v
+        v        v
+     _) versailles vER2sa:j
+
+.group w
+        w        v
+
+.group x
+        x        ks
+
+.group y
+     _) y        j
+        y        i
+     K) y (K     i
+
+.group z
+        z        z
+        zs       Z
+        zzs      Z:
+
+    gá) z (sz    z
+    gé) z (sz    z
+    ké) z (sz    z
+    há) z (so    z
+    há) z (sz    z
+    lá) z (sz    z
+    má) zc (sz   z
+    mé) zc (sz   z
+  nehé) z (sé    z
+   pén) z        z
+   szá) z (sz    z
+    tí) z (sz    z
+    tű) z (sz    z
+    ví) z (sz    z
+   tor) z (szülött z
+   tor) z (ság   z
+ _vité) z        z
+   _ví) z (s     z
+
+    ga) zs (ág     zS
+   _gá) zsz (ámla  zs:
+   _gá) zsz (ámlá  zs:
+   _ré) zs (ó      zS
+   _vá) zs (or     zS
+_szára) zs (ág     zS
+   _kö) zs (ég     zS
+ _nehé) zs (ely    zS
+
+     _) zürich     tsyR2iC
+
+
+.group
+        $       dolla:R2
+	ä	E
+	æ	E
+	ß	s
+	ç	tS
+	ñ	n^
+	ø	Y
+
+	%	sa:zAle:k
+	@	kukAts
+	€	EuR2o
+	+	plus
+	§	pAR2AgR2AfuS
+
+        .       pont
+        . (.     _:
+   \.)  .
+
+
+        *        tS'illAg    // asterisk
+    *)  * (*
+        **
+   **)  * (_     _::

@@ -1,0 +1,188 @@
+eSpeak 1.39
+
+Fix for crash with some SSML tags.
+
+Minor language improvements: French, English/US
+
+Fix missing phoneme translations for mbrola French voice.
+
+
+eSpeak 1.38
+
+Language improvements include:
+English/US, French, Afrikaans.
+
+Added support for mbrola Brazilian voices br1, br3, br4.
+
+Pitch changes now work for mbrola voices in SAPI5 version.
+
+Various minor bug fixes.
+
+
+eSpeak 1.37
+
+Added build options for pulseaudio and sada sound systems.
+
+Bug fixes:
+Fixed crash on some very long words.
+Fixed crash when saying "ligature A E".
+
+Added support for mbrola Spanish voices es1, es2.
+
+Fixed letter names lang=it 'v' 'x'
+
+
+eSpeak 1.36
+
+Windows SAPI5 version, allow top speed of 390 wpm.
+
+Improvements to Polish.
+Fix error with mbrola Croatian "cr1" voice.
+
+Fix: $textmode in *_list files, allow translation to a word which is also in the *_list file.
+
+
+eSpeak 1.35
+
+Fixed: Languages ru, el, zhy, not speaking English words.
+
+eSpeak 1.34
+
+Minor bug fixes.
+1. Fixed French word "à".
+2. Fixed byte-order problem with *_dict files on big-endian processors.
+
+eSpeak 1.33
+
+1. Bug fix: Prefixes containing non-ascii characters.
+
+2. Bug fix: *_dict file and mbrola translation files on big-endian processors.
+
+3. Add --voices=mbrola to list the mbrola voices.
+
+4. Reduce echo when announcing punctuation.
+
+5. Treat echo amplitude=0 as no echo, even if an echo delay is set.
+
+
+eSpeak 1.32
+
+1. Added languages:
+  ta (Tamil)
+  tr (Turkish)
+  ku (Kurdish)
+  es-la (Latin American Spanish variant)
+  id (Indonesian, no feedback yet).
+
+2. Improved languages including, Spanish, French, Mandarin
+
+3. Speak character; will speak the names of all accented letters up to Unicode U+17F, if the accent names are defined for the current language.
+
+4. Speak punctuation, and speak character, will speak the character name in English if it's not defined for the current language.  If it's not defined for English then it speaks its Unicode character number.
+
+5. espeak --voices; mbrola voices are listed only if a language is specified.
+
+6. Fixed bug in pronunciation of words which are defined in *_list files with $textmode (end-of-word indicator was missing).
+
+7. Fixed bad pitch intonation when speaking punctuation.
+
+8. Allow language switching during phoneme text input (eg. [[_^_EN hEloU _^_FR]] )
+
+9. Tone languages (Mandarin), indicate emphasis by increasing the pitch range.
+
+10. Fixed bug where the language remains changed if speech is cancelled while speaking a word in a temporary language.
+
+11. Removed punctuation pauses from the end of text, unless the espeakENDPAUSE flag is set in espeak_Synth().
+
+12. SSML. Don't speak text within <metadata> </metadata>.
+
+13. Fixes to SSML voice selection.
+
+14. SSML. Fixed crash when <voice name=""> has an unrecognised voice name.
+
+15. SSML. Fixed, &nnn; character codes could cause the following text to be mis-read.
+
+16. Fixed bug, to allow use with mbrola voices on big-endian processors.
+
+17. Fixed segfault when wordgap feature is used.
+
+18. "speak" program, don't terminate when an empty sentence is found.
+
+19. Fixed bug in *_rules files; letter-groups (eg .L01) were not correctly recognised.
+
+20. Event list callback: Fixed audio position of a vowel when it follows a voiced consonant.  Ensure that enough space is allocated for the event list when espeak_Initialize() is called with a small buffer size.  Fixed the word length information when multibyte characters are used.
+
+21. Added "consonants" attribute to voice files, to adjust the strength of consonants.
+
+22. RISC_OS version.  Implement --voices (list voices).  Disable "breath" attribute in voice files because it causes a floating-point crash.
+
+
+eSpeak 1.31
+
+1. Added language: jbo (Lojban).
+
+2. Added command line parameter: --split="<minutes>". Starts a new WAV output file every <minutes> minutes.
+
+3. Added command line parameter: --compile=debug. Includes source line numbers from the *_rules file which are shown when the -X option is used.
+
+4. Fixed bug in version 1.30.  Vowels had too strong attack.
+
+5. Fixed intonation bug for lang=es,pt.  Pitch drops until end-of-sentence, after an accented vowel.
+
+6. Mbrola voices.  Better intonation, by applying pitch changes over the first 80% of the mbrola phonemes.
+
+7. Linux: look for environment variable ESPEAK_DATA_PATH (if set) for the espeak-data directory.
+
+8. SSML tag <emphasis>. Fixed bug.  Also, reduce the previous stressed word to unstressed.
+
+9. Remove pause before <say-as> at the beginning of a sentence (fix needed by Speech Dispatcher).  Fix <say-as interpret-as="key">.
+
+10. SSML tag <audio src=""> now works in PLAYBACK modes, or if a UriCallback() function has not been set.
+
+11. Fix SSML tags, <break time="">, 
+
+12. lang=en-r: changes to phonemes.
+
+13. lang=es: improvents.  Added new phoneme [J^] voiced palatal frictive.
+
+14. Fix espeakEVENT_MARK events in AUDIO_OUPUT_PLAYBACK mode.
+
+
+eSpeak 1.30
+
+1. Added languages:
+  zh (Mandarin)
+  sr (Serbian)
+  grc (Ancient Greek).
+
+2. Use a different intonation for exclamation sentences.
+
+3. Add options for different intonation styles ("intonation" attribute in voice files).
+
+4. Reduced some glitches at low pitches.
+
+5. Increase the top speed from 370 to 390 wpm.
+
+6. Added option for gaps (pauses) between words.
+   -g option, and espeak_SetParameter(espeak_WORDGAP).
+
+7. *_list files can include pronounciations as text, as well as as phonemes ($textmode, $phonememode, $text).
+
+8. *_list files can include multiple words of up to 10 parts.
+
+9. *_rules files. .replace section for character substitution before *_rules and *_list are applied.
+
+10. Improved English [r].
+
+11. Allow echo to decay at the end of speech.
+
+12. Allow voice+variant names in SSML tags.
+
+13. Better intonation effect for <emphasis> tag.
+
+14. Remember the voice variant over <speak> tags.
+
+15. Fix problem with Mbrola voices stopping in Jaws screenreader.
+
+16. lang=vi, recognise combining accent characters.
+
