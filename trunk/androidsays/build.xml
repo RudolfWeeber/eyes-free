@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project name=".AndroidSays" default="help">
 
     <!-- The local.properties file is created and updated by the 'android' tool.
@@ -58,4 +58,7 @@
          targets are used.
     -->
     <setup />
+
+    <property name="external-libs" value="../commonlibs"/>
+
 </project>
