@@ -462,8 +462,6 @@ public class MarvinShell extends Activity implements GestureListener {
           items = MenuLoader.loadMenu(item.data);
           tts.playEarcon(TTSEarcon.TICK, 0, null);
         } else {
-          final String label = item.label;
-          final String data = item.data;
           // Write file and retry
           class createShortcutsFileThread implements Runnable {
             public void run() {
