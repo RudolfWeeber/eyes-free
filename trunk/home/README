@@ -1,5 +1,0 @@
-This is a stub that just starts the actual Marvin Shell
-activity. Replacing the HOME screen requires going through a picker
-dialog that has no audible feedback. The idea is that you can install
-this stub just once, and not have to worry about that dialog when you
-reinstall the Marvin Shell.
