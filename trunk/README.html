@@ -6,114 +6,178 @@ lang="en" xml:lang="en">
 <title>README For Project Eyes-Free</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2008-11-14 Fri"/>
-<meta name="author" content="T.V Raman"/>
+<meta name="generated" content="2009/04/23 15:09:02"/>
+<meta name="author" content="T.V Raman and Charles L. Chen"/>
 <style type="text/css">
-  html { font-family: Times, serif; font-size: 12pt; }
-  .title  { text-align: center; }
-  .todo   { color: red; }
-  .done   { color: green; }
-  .tag    { background-color:lightblue; font-weight:normal }
-  .target { }
+  html {
+	font-family: Times, serif;
+	font-size: 12pt;
+  }
+  .title { text-align: center; }
+  .todo  { color: red; }
+  .done { color: green; }
   .timestamp { color: grey }
   .timestamp-kwd { color: CadetBlue }
-  p.verse { margin-left: 3% }
+  .tag { background-color:lightblue; font-weight:normal }
+  .target { background-color: lavender; }
   pre {
 	border: 1pt solid #AEBDCC;
 	background-color: #F3F5F7;
 	padding: 5pt;
 	font-family: courier, monospace;
-        font-size: 90%;
-        overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
-  dt { font-weight: bold; }
-
-  .org-info-js_info-navigation { border-style:none; }
-  #org-info-js_console-label { font-size:10px; font-weight:bold;
-                               white-space:nowrap; }
-  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
-                                 font-weight:bold; }
-
+  td, th {
+	vertical-align: top;
+	<!--border: 1pt solid #ADB9CC;-->
+  }
 </style>
 </head><body>
 <h1 class="title">README For Project Eyes-Free</h1>
 
-
-<div id="outline-container-1" class="outline-2">
-<h2 id="sec-1">1 Introduction</h2>
-<div id="text-1">
+<h2>1 Introduction</h2>
 
 
 <p>
 This directory contains source code for various eyes-free
-applications for the Android platform &mdash; see
+applications for the Android platform --- see
 <a href="http://www.nytimes.com/2009/01/04/business/04blind.html?pagewanted=1&_r=1&ref=business">For The Blind, Technology Does What A Guide Dog Can't</a>, NYTimes,
 January 4, 2009. It will also contain supporting code and
 libraries for services such as Text-To-Speech
 <a href="http://en.wikipedia.org/wiki/Speech_synthesis">(TTS)</a>.
 </p>
-</div>
-
-</div>
-
-<div id="outline-container-2" class="outline-2">
-<h2 id="sec-2">2 Build Instructions</h2>
-<div id="text-2">
-
-
 <p>
-Each of these eyes-free applications can be built with a simple
-command-line of the form:
+<a href="http://www.youtube.com/eyesfreeandroid">For demos of various Eyes-Free projects, please visit our YouTube Channel.</a>
 </p>
 <p>
-<pre class="example">
-ant -Dsdk-folder=&lt;android-sdk-root&gt;
+Or better yet, go to Android Market on your G1 and try these apps out for
+yourself.
+</p>
+
+<h2>2 Initial Setup</h2>
+
+
+<ol>
+<li>
+<a href="http://developer.android.com/">Download and setup the Android SDK.</a>
+
+</li>
+<li>
+<a href="http://code.google.com/p/eyes-free/source/checkout">Checkout the source code for the Eyes-Free project.</a>
+
+</li>
+<li>
+If you are building with Eclipse:
+<ul>
+<li>
+File &gt; Import &gt; General &gt; Existing Projects into Workspace.
+</li>
+<li>
+With "Select root directory:" selected, browse to the root of your SVN
+directory.
+</li>
+<li>
+Select the Eyes-Free projects you wish to import into your Workspace.
+</li>
+<li>
+Click Finish.
+</li>
+<li>
+For each of the projects, right click, Properties &gt; Java Build Path &gt;
+Libraries and then fix any broken paths by pointing them at the
+"commonlibs" directory.
+
+</li>
+</ul>If you are building with Ant:
+<ul>
+<li>
+Go to the "tools" subdirectory of the Android SDK.
+</li>
+<li>
+For each project you wish to build, run this command:
+<pre>
+android update project --path /path/to/fooproject --target 1
+</pre>
+
+
+
+</li>
+</ul></li>
+</ol>
+
+<h2>3 Build Instructions</h2>
+
+
+<p>
+If you are building with Eclipse:
+These projects are built like any other Android project. Hit the run button,
+choose "Android Application" in the "Run As" screen, and you're done.
+</p>
+<p>
+If you are building with Ant:
+Each of these eyes-free applications can be built with a simple command-line
+of the form:
+</p>
+<p>
+<pre>
+ant &lt;build type&gt;
 </pre>
 </p>
 <p>
-Thus, to build the Talking Dialer, 
-<pre class="example">
+where &lt;build type&gt; is "debug", "release", "install", "reinstall", or 
+"uninstall" without quotes.
+</p>
+<p>
+The most common types are "reinstall" (build with debug key and automatically
+install on your device/emulator, overwriting any older version that may exist)
+and "release" (build an unsigned apk which you can sign with your own key and
+put on Market).
+</p>
+<p>
+Thus, to build the Talking Dialer and automatically install it, 
+<pre>
  cd talkingdialer
- ant-Dsdk-folder=&lt;android-sdk-root&gt;
+ ant reinstall
 </pre>
 </p>
 
-</div>
 
-</div>
-
-<div id="outline-container-3" class="outline-2">
-<h2 id="sec-3">3 List Of Eyes-Free Applications</h2>
-<div id="text-3">
+<h2>4 List Of Eyes-Free Applications</h2>
 
 
 <p>
 Each application is found in its own sub-directory.
 </p>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-<col align="left"></col><col align="left"></col><col align="left"></col>
+<COL align="left"><COL align="left"><COL align="left">
 <thead>
 <tr><th>Name</th><th>Description</th><th>Directory</th></tr>
 </thead>
 <tbody>
+<tr><td>mem</td><td>The Android Memory Game</td><td>androidsays</td></tr>
+<tr><td>Brailler</td><td>Demo of using the touchscreen for Braille input</td><td>brailler</td></tr>
+<tr><td>Common Library</td><td>Jars used by all applications</td><td>commonlibs</td></tr>
 <tr><td>Compass</td><td>Talking Compass</td><td>compass</td></tr>
-<tr><td>Mem</td><td>The Android Memory Game</td><td>androidsays</td></tr>
-<tr><td>TalkingDialer</td><td>Talking Dialer Using Stroke Input</td><td>talkingdialer</td></tr>
-<tr><td>Shell</td><td>Eyes-Free Shell</td><td>shell</td></tr>
-<tr><td>Common Library</td><td>Jars used by all applications</td><td>commonlib</td></tr>
-<tr><td>Third Party</td><td>Third Party Code</td><td>thirdparty</td></tr>
+<tr><td>Eyes-Free Config</td><td>Configuration manager for the Eyes-Free suite of applications</td><td>config</td></tr>
+<tr><td>Documentation</td><td>The documentation directory - contains example apps</td><td>documentation</td></tr>
+<tr><td>Native Code</td><td>The native code for the text-to-speech service</td><td>native</td></tr>
+<tr><td>Randroid</td><td>Random xkcd comic viewer that can read the comic aloud</td><td>randroid</td></tr>
+<tr><td>Remind Me</td><td>Talking alarm that uses stroke dialer input to set the time and the user's own voice note for the alarm</td><td>remindme</td></tr>
+<tr><td>Eyes-Free Shell</td><td>Alternative eyes-free homescreen</td><td>shell</td></tr>
+<tr><td>Slide Text</td><td>Demo of using stroke dialer for text entry</td><td>slidetext</td></tr>
+<tr><td>Talking Dialer</td><td>Talking dialer app that uses stroke dialing for eyes-free use</td><td>talkingdialer</td></tr>
+<tr><td>There</td><td>Location marking/way finding app</td><td>there</td></tr>
+<tr><td>Third Party</td><td>Third Party Code and Data</td><td>thirdparty</td></tr>
+<tr><td>Text-To-Speech Service</td><td>The text-to-speech service that generates synthesized speech</td><td>tts</td></tr>
+<tr><td>Utility Classes</td><td>Useful Java utility classes that can be reused by multiple projects</td><td>utils</td></tr>
+<tr><td>WhereAbout</td><td>Local information app</td><td>whereabout</td></tr>
 </tbody>
 </table>
 
 
-</div>
-</div>
-<div id="postamble"><p class="author"> Author: T.V Raman
+<p class="author"> Author: T.V Raman and Charles L. Chen
 <a href="mailto:raman@google.com">&lt;raman@google.com&gt;</a>
 </p>
-<p class="date"> Date: 2008-11-14 Fri</p>
-<p>HTML generated by org-mode 6.08c in emacs 23</p>
-</div></body>
+<p class="date"> Date: 2009/04/23 15:09:02</p>
+</body>
 </html>

@@ -10,16 +10,59 @@ January 4, 2009. It will also contain supporting code and
 libraries for services such as Text-To-Speech
 [[http://en.wikipedia.org/wiki/Speech_synthesis][(TTS)]].
 
+[[http://www.youtube.com/eyesfreeandroid][For demos of various Eyes-Free 
+projects, please visit our YouTube Channel.]]
+
+Or better yet, go to Android Market on your G1 and try these apps out for
+yourself.
+
+* Initial Setup
+
+1. [[http://developer.android.com/][Download and setup the Android SDK.]]
+
+2. [[http://code.google.com/p/eyes-free/source/checkout][Checkout the source 
+   code for the Eyes-Free project.]]
+
+3. If you are building with Eclipse:
+   - File > Import > General > Existing Projects into Workspace.
+   - With "Select root directory:" selected, browse to the root of your SVN
+     directory.
+   - Select the Eyes-Free projects you wish to import into your Workspace.
+   - Click Finish.
+   - For each of the projects, right click, Properties > Java Build Path >
+     Libraries and then fix any broken paths by pointing them at the
+     "commonlibs" directory.
+
+   If you are building with Ant:
+   - Go to the "tools" subdirectory of the Android SDK.
+   - For each project you wish to build, run this command:
+     :android update project --path /path/to/fooproject --target 1
+
+
+
 * Build Instructions
 
-Each of these eyes-free applications can be built with a simple
-command-line of the form:
+If you are building with Eclipse:
+These projects are built like any other Android project. Hit the run button,
+choose "Android Application" in the "Run As" screen, and you're done.
 
-:ant -Dsdk-folder=<android-sdk-root>
+If you are building with Ant:
+Each of these eyes-free applications can be built with a simple command-line
+of the form:
 
-Thus, to build the Talking Dialer, 
+:ant <build type>
+
+where <build type> is "debug", "release", "install", "reinstall", or 
+"uninstall" without quotes.
+
+The most common types are "reinstall" (build with debug key and automatically
+install on your device/emulator, overwriting any older version that may exist)
+and "release" (build an unsigned apk which you can sign with your own key and
+put on Market).
+
+Thus, to build the Talking Dialer and automatically install it, 
 : cd talkingdialer
-: ant-Dsdk-folder=<android-sdk-root>
+: ant reinstall
 
 
 * List Of Eyes-Free Applications
@@ -28,18 +71,29 @@ Each application is found in its own sub-directory.
 
 | Name           | Description                       | Directory     |
 |----------------+-----------------------------------+---------------|
+| mem            | The Android Memory Game           | androidsays   |
+| Brailler       | Demo of using the touchscreen for Braille input           | brailler   |
+| Common Library | Jars used by all applications     | commonlibs    |
 | Compass        | Talking Compass                   | compass       |
-| Mem            | The Android Memory Game           | androidsays   |
-| TalkingDialer  | Talking Dialer Using Stroke Input | talkingdialer |
-| Shell          | Eyes-Free Shell                   | shell         |
-| Common Library | Jars used by all applications     | commonlib     |
-| Third Party    | Third Party Code                  | thirdparty    |
+| Eyes-Free Config  | Configuration manager for the Eyes-Free suite of applications  | config   |
+| Documentation            | The documentation directory - contains example apps   | documentation   |
+| Native Code            | The native code for the text-to-speech service   | native   |
+| Randroid            | Random xkcd comic viewer that can read the comic aloud        | randroid   |
+| Remind Me            | Talking alarm that uses stroke dialer input to set the time and the user's own voice note for the alarm | remindme   |
+| Eyes-Free Shell            | Alternative eyes-free homescreen  | shell   |
+| Slide Text            | Demo of using stroke dialer for text entry   | slidetext   |
+| Talking Dialer            | Talking dialer app that uses stroke dialing for eyes-free use   | talkingdialer   |
+| There            | Location marking/way finding app       | there   |
+| Third Party    | Third Party Code and Data                  | thirdparty    |
+| Text-To-Speech Service            | The text-to-speech service that generates synthesized speech  | tts   |
+| Utility Classes            | Useful Java utility classes that can be reused by multiple projects    | utils   |
+| WhereAbout            | Local information app     | whereabout   |
 |----------------+-----------------------------------+---------------|
 
 #+TITLE:     README For Project Eyes-Free
-#+AUTHOR:    T.V Raman
+#+AUTHOR:    T.V Raman and Charles L. Chen
 #+EMAIL:     raman@google.com
-#+DATE:      2008-11-14 Fri
+#+DATE:      2009-04-23 Thu
 #+LANGUAGE:  en
 #+OPTIONS:   H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc
 #+LINK_HOME:  http://eyes-free.googlecode.com
