@@ -5,6 +5,11 @@ import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * Custom View that implements the Brailler
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class BraillerView extends View {
   private static final long[] PATTERN = {0, 1, 40, 41};
   private boolean dot1;
