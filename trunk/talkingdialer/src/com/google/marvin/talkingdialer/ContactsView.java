@@ -571,16 +571,12 @@ public class ContactsView extends TextView {
     float rTolerance = 25;
     double thetaTolerance = (Math.PI / 16);
 
-    boolean movedFar = false;
-
     double r = Math.sqrt(((downX - x) * (downX - x)) + ((downY - y) * (downY - y)));
 
     if (r < rTolerance) {
       return 5;
     }
-    if (r > 10 * rTolerance) {
-      movedFar = true;
-    }
+
     double theta = Math.atan2(downY - y, downX - x);
 
     if (Math.abs(theta - left) < thetaTolerance) {
@@ -653,8 +649,6 @@ public class ContactsView extends TextView {
       canvas.drawText("Press CALL twice to confirm.", x, y, paint);
     } else {
       int offset = 90;
-      int regSize = 50;
-      int selectedSize = regSize * 2;
 
       int x1 = (int) downX - offset;
       int y1 = (int) downY - offset;
