@@ -152,7 +152,6 @@ public class Guide implements Runnable, StreetLocatorListener {
     currentAddress = "";
     currentIntersection = "";
 
-    long currentTime = System.currentTimeMillis();
     if (triedGpsLastTime) {
       locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
           networkLocationListener);
@@ -183,26 +182,21 @@ public class Guide implements Runnable, StreetLocatorListener {
     lastLocateTime = System.currentTimeMillis();
     long gpsTimeAdvantage = 300000;
     currentLocation = null;
-    long time = 0;
     boolean usingGPS = false;
     if ((networkLoc == null) && (gpsLoc == null)) {
       parent.tts.speak("Unable to determine location. Please retry later.", 0, null);
       return;
     } else if ((networkLoc == null) && (gpsLoc != null)) {
       currentLocation = gpsLoc;
-      time = gpsLocLastUpdateTime;
       usingGPS = true;
     } else if ((networkLoc != null) && (gpsLoc == null)) {
       currentLocation = networkLoc;
-      time = networkLocLastUpdateTime;
     } else {
       if (gpsLocLastUpdateTime + gpsTimeAdvantage > networkLocLastUpdateTime) {
         currentLocation = gpsLoc;
-        time = gpsLocLastUpdateTime;
         usingGPS = true;
       } else {
         currentLocation = networkLoc;
-        time = networkLocLastUpdateTime;
       }
     }
 
