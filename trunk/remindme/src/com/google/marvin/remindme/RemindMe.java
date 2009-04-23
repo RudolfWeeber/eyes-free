@@ -17,7 +17,6 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
 
 /**
  * An eyes-free, talking reminder alarm
@@ -106,7 +105,8 @@ public class RemindMe extends Activity {
 
     confirmationView = new ConfirmationView(this);
     setContentView(confirmationView);
-    MediaPlayer mplayer = new MediaPlayer().create(this, Uri.parse("/sdcard/remindme/note00.amr"));
+    new MediaPlayer();
+	MediaPlayer mplayer = MediaPlayer.create(this, Uri.parse("/sdcard/remindme/note00.amr"));
     mplayer.setOnCompletionListener(new OnCompletionListener(){
       public void onCompletion(MediaPlayer arg0) {
         Calendar cal = Calendar.getInstance();
@@ -144,7 +144,8 @@ public class RemindMe extends Activity {
     numberEntryView = null;
   }
 
-  protected void onDestroy(){
+  @Override
+protected void onDestroy(){
     dismissViews();
     tts.shutdown();
     super.onDestroy();    

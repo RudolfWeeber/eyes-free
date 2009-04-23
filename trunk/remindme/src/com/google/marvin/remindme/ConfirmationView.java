@@ -17,22 +17,13 @@
 package com.google.marvin.remindme;
 
 
-import com.google.marvin.remindme.ShakeDetector.ShakeListener;
-import com.google.tts.TTSParams;
-
-import java.io.File;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.media.MediaRecorder;
 import android.os.Vibrator;
-import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -81,7 +72,6 @@ public class ConfirmationView extends TextView {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    boolean newNumberEntered = false;
     switch (keyCode) {
       case KeyEvent.KEYCODE_CALL:
         parent.tts.playEarcon("[tock]", 0, null);

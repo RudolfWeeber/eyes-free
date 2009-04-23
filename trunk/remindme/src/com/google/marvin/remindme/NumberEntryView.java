@@ -55,7 +55,6 @@ public class NumberEntryView extends TextView {
   private Vibrator vibe;
 
   private String dialedNumber;
-  private boolean confirmed;
 
   boolean screenIsBeingTouched = false;
   boolean screenVisible = true;
@@ -71,7 +70,6 @@ public class NumberEntryView extends TextView {
     dialedNumber = "";
     currentValue = "";
     vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    confirmed = false;
     setClickable(true);
     setFocusable(true);
     setFocusableInTouchMode(true);
@@ -92,7 +90,6 @@ public class NumberEntryView extends TextView {
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
-    confirmed = false; // Inputting a new number invalidates the confirmation
     int action = event.getAction();
     float x = event.getX();
     float y = event.getY();
@@ -239,12 +236,8 @@ public class NumberEntryView extends TextView {
       int y9 = (int) downY + offset;
 
 
-      int xStar = (int) downX - offset - offset;
-      int yStar = (int) downY + offset + offset;
       int x0 = (int) downX;
       int y0 = (int) downY + offset + offset;
-      int xPound = (int) downX + offset + offset;
-      int yPound = (int) downY + offset + offset;
 
 
       if (currentValue.equals("1")) {
@@ -386,7 +379,6 @@ public class NumberEntryView extends TextView {
         return true;
     }
     if (newNumberEntered) {
-      confirmed = false;
       KeyCharacterMap kmap = KeyCharacterMap.load(event.getDeviceId());
       currentValue = kmap.getNumber(keyCode) + "";
       parent.tts.speak(currentValue, 0, null);
@@ -394,12 +386,10 @@ public class NumberEntryView extends TextView {
       invalidate();
       return true;
     }
-    confirmed = false;
     return false;
   }
 
   private void deleteNumber() {
-    confirmed = false;
     String deletedNum;
     if (dialedNumber.length() > 0) {
       deletedNum = "" + dialedNumber.charAt(dialedNumber.length() - 1);
@@ -420,7 +410,6 @@ public class NumberEntryView extends TextView {
   }
 
   public void reset() {
-    confirmed = false;
     dialedNumber = "";
     parent.tts.speak("Please enter a valid time.", 0, null);
     currentValue = "";

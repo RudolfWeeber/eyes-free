@@ -3,16 +3,10 @@ package com.google.marvin.remindme;
 import android.app.Activity;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.DialogInterface.OnClickListener;
-import android.content.SharedPreferences.Editor;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-
-import com.google.tts.TTS;
 
 public class ReminderSpeakerActivity extends Activity {
 
@@ -27,13 +21,12 @@ public class ReminderSpeakerActivity extends Activity {
     super.onCreate(savedInstanceState);
     self = this;
     stopNow = false;
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    String reminderUriStr = prefs.getString("REMINDER", null);
     //if (reminderUriStr != null) {
       class AlarmPlayer implements Runnable {
         public void run() {
-          MediaPlayer mPlayer =
-              new MediaPlayer().create(self, Uri.parse("/sdcard/remindme/note00.amr"));
+          new MediaPlayer();
+		MediaPlayer mPlayer =
+              MediaPlayer.create(self, Uri.parse("/sdcard/remindme/note00.amr"));
           mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
               try {
