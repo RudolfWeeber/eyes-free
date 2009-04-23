@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="C:/eclipse/marvin/commonlibs/TTS_library_stub_1.3.2_Market.jar"/>
+	<classpathentry kind="lib" path="C:/cupcake_eclipse/marvin/commonlibs/TTS_library_stub_1.4_market.jar"/>
+	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
