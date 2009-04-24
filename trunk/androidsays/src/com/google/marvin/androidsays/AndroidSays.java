@@ -62,8 +62,8 @@ public class AndroidSays extends Activity {
   
   
   private ScoreNinjaAdapter scoreNinjaAdapter;
-  private String appId = "androidsays-0800200c9a66";
-  private String privateKey = "94A8C7321A86D435631D9A9B1B350FCE";
+  private String appId = "androidsays";
+  private String privateKey = "450CA446A7885E7F7B75F19E8F5A39E8";
 
 
 
@@ -291,10 +291,13 @@ public class AndroidSays extends Activity {
     gameMode = Integer.parseInt(modeStr);
     String sequenceLengthStr = prefs.getString("sequence_length_pref", "1");
     String scorePrefStr = "";
+    String subboard = " (" + sequenceLengthStr + ")";
     if (gameMode == 1) {
       scorePrefStr = "classic_";
+      subboard = "Classic Mode" + subboard;
     } else {
       scorePrefStr = "challenge_";
+      subboard = "Challenge Mode" + subboard;
     }
     scorePrefStr = scorePrefStr + sequenceLengthStr;
 
@@ -308,7 +311,7 @@ public class AndroidSays extends Activity {
       Toast.makeText(this, "You beat your old record by " + diff + "!", Toast.LENGTH_LONG).show();
     }
     
-    scoreNinjaAdapter.show(score);
+    scoreNinjaAdapter.show(score, "Top Scores for " + subboard, subboard);
   }
 
 
