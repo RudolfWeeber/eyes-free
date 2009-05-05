@@ -21,5 +21,5 @@ package com.google.tts;
  * @author clchen@google.com (Charles L. Chen)
  */
 public enum TTSEngine {
-  PRERECORDED_ONLY, PRERECORDED_WITH_ESPEAK, ESPEAK_ONLY
+  PRERECORDED_ONLY, PRERECORDED_WITH_TTS, TTS_ONLY
 }

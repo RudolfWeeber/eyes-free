@@ -16,6 +16,7 @@
 package com.google.tts;
 
 import com.google.tts.ITTS.Stub;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,8 @@ import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.IBinder;
+import android.os.RemoteCallbackList;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.TypedValue;
@@ -51,780 +54,911 @@ import javax.xml.parsers.FactoryConfigurationError;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class TTSService extends Service implements OnCompletionListener {
-  private class SpeechItem {
-    public String text;
-    public ArrayList<String> params;
-    public boolean isEarcon;
+	private class SpeechItem {
+		public String text;
+		public ArrayList<String> params;
+		public boolean isEarcon;
 
-    public SpeechItem(String text, ArrayList<String> params, boolean isEarcon) {
-      this.text = text;
-      this.params = params;
-      this.isEarcon = isEarcon;
-    }
-  }
+		public SpeechItem(String text, ArrayList<String> params,
+				boolean isEarcon) {
+			this.text = text;
+			this.params = params;
+			this.isEarcon = isEarcon;
+		}
+	}
 
-  private static final String ACTION = "android.intent.action.USE_TTS";
-  private static final String CATEGORY = "android.intent.category.TTS";
-  private static final String PKGNAME = "com.google.tts";
-  private static final String ESPEAK_SCRATCH_DIRECTORY = "/sdcard/espeak-data/scratch/";
+	private static final String ACTION = "android.intent.action.USE_TTS";
+	private static final String CATEGORY = "android.intent.category.TTS";
+	private static final String PKGNAME = "com.google.tts";
+	private static final String ESPEAK_SCRATCH_DIRECTORY = "/sdcard/espeak-data/scratch/";
 
-  private TTSEngine engine;
+	final RemoteCallbackList<ITTSCallback> mCallbacks = new RemoteCallbackList<ITTSCallback>();
 
-  private Boolean isSpeaking;
-  private ArrayList<SpeechItem> speechQueue;
-  private HashMap<String, SoundResource> earcons;
-  private HashMap<String, SoundResource> utterances;
-  private MediaPlayer player;
-  private TTSService self;
+	private TTSEngine engine;
 
-  private SharedPreferences prefs;
-  private int speechRate = 140;
-  private String language = "en-us";
+	private Boolean isSpeaking;
+	private ArrayList<SpeechItem> speechQueue;
+	private HashMap<String, SoundResource> earcons;
+	private HashMap<String, SoundResource> utterances;
+	private MediaPlayer player;
+	private TTSService self;
 
-  private final ReentrantLock speechQueueLock = new ReentrantLock();
-  private final ReentrantLock synthesizerLock = new ReentrantLock();
-  private SpeechSynthesis speechSynthesis = new SpeechSynthesis(language, 0, speechRate);
+	private SharedPreferences prefs;
+	private int speechRate = 140;
+	private String language = "en-us";
 
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    Log.i("TTS", "TTS starting");
-    // android.os.Debug.waitForDebugger();
-    self = this;
-    isSpeaking = false;
+	private final ReentrantLock speechQueueLock = new ReentrantLock();
+	private final ReentrantLock synthesizerLock = new ReentrantLock();
 
-    prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	private SpeechSynthesis nativeSynth = new SpeechSynthesis(language, 0,
+			speechRate);
 
-    earcons = new HashMap<String, SoundResource>();
-    utterances = new HashMap<String, SoundResource>();
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Log.i("TTS", "TTS starting");
 
-    speechQueue = new ArrayList<SpeechItem>();
-    player = null;
+		// android.os.Debug.waitForDebugger();
+		self = this;
+		isSpeaking = false;
 
-    if (espeakIsUsable()) {
-      setEngine(TTSEngine.PRERECORDED_WITH_ESPEAK);
-    } else {
-      setEngine(TTSEngine.PRERECORDED_ONLY);
-    }
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-    setLanguage(prefs.getString("lang_pref", "en-us"));
-    setSpeechRate(Integer.parseInt(prefs.getString("rate_pref", "140")));
-  }
+		earcons = new HashMap<String, SoundResource>();
+		utterances = new HashMap<String, SoundResource>();
 
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
+		speechQueue = new ArrayList<SpeechItem>();
+		player = null;
 
-    // Don't hog the media player
-    cleanUpPlayer();
-  }
+		boolean useExternalSynth = false; // TODO: Hardcoded for now, make this
+		// a
+		// pref
 
-  private void setSpeechRate(int rate) {
-    if (prefs.getBoolean("override_pref", false)) {
-      // This is set to the default here so that the preview in the prefs
-      // activity will show the change without a restart, even if apps are
-      // not allowed to change the defaults.
-      rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
-    }
-    speechRate = rate;
-    speechSynthesis.setSpeechRate(rate);
-  }
+		if (espeakIsUsable()) {
+			setEngine(TTSEngine.PRERECORDED_WITH_TTS);
+		} else {
+			setEngine(TTSEngine.PRERECORDED_ONLY);
+		}
 
-  private void setLanguage(String lang) {
-    if (prefs.getBoolean("override_pref", false)) {
-      // This is set to the default here so that the preview in the prefs
-      // activity will show the change without a restart, even if apps are
-      // not
-      // allowed to change the defaults.
-      lang = prefs.getString("lang_pref", "en-us");
-    }
-    language = lang;
+		setLanguage(prefs.getString("lang_pref", "en-us"));
+		setSpeechRate(Integer.parseInt(prefs.getString("rate_pref", "140")));
+	}
 
-    // The eSpeak documentation for Cantonese seems to be wrong.
-    // It seems like using "zhy" will cause all Chinese characters to be
-    // spoken as "symbol blah blah blah". The solution is to actually use
-    // zh and variant 3. In addition, "zhy" is not a standard IETF language
-    // tag; the standard IETF language tag is "zh-yue".
-    if (language.equals("zh-yue")) {
-      speechSynthesis.setLanguage("zh", 5);
-    } else {
-      speechSynthesis.setLanguage(lang, 0);
-    }
-  }
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// Don't hog the media player
+		cleanUpPlayer();
 
-  private void setEngine(TTSEngine selectedEngine) {
-    utterances = new HashMap<String, SoundResource>();
-    boolean fallbackToPrerecordedOnly = false;
-    if (selectedEngine == TTSEngine.ESPEAK_ONLY) {
-      if (!espeakIsUsable()) {
-        fallbackToPrerecordedOnly = true;
-      }
-      engine = selectedEngine;
-    } else if (selectedEngine == TTSEngine.PRERECORDED_WITH_ESPEAK) {
-      if (!espeakIsUsable()) {
-        fallbackToPrerecordedOnly = true;
-      }
-      loadUtterancesFromPropertiesFile();
-      engine = TTSEngine.PRERECORDED_WITH_ESPEAK;
-    } else {
-      fallbackToPrerecordedOnly = true;
-    }
-    if (fallbackToPrerecordedOnly) {
-      loadUtterancesFromPropertiesFile();
-      engine = TTSEngine.PRERECORDED_ONLY;
-    }
+		// TODO: Write cleanup code for plugin engines
 
-    // Deprecated - these should be earcons from now on!
-    // Leave this here for one more version before removing it completely.
-    utterances.put("[tock]", new SoundResource(PKGNAME, R.raw.tock_snd));
-    utterances.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
+		// Unregister all callbacks.
+		mCallbacks.kill();
+	}
 
-    // Load earcons
-    earcons.put(TTSEarcon.CANCEL.name(), new SoundResource(PKGNAME, R.raw.cancel_snd));
-    earcons.put(TTSEarcon.SILENCE.name(), new SoundResource(PKGNAME, R.raw.slnc_snd));
-    earcons.put(TTSEarcon.TICK.name(), new SoundResource(PKGNAME, R.raw.tick_snd));
-    earcons.put(TTSEarcon.TOCK.name(), new SoundResource(PKGNAME, R.raw.tock_snd));
-  }
+	private void setSpeechRate(int rate) {
+		if (prefs.getBoolean("override_pref", false)) {
+			// This is set to the default here so that the preview in the prefs
+			// activity will show the change without a restart, even if apps are
+			// not allowed to change the defaults.
+			rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
+		}
+		speechRate = rate;
+		nativeSynth.setSpeechRate(rate);
+	}
 
-  private void loadUtterancesFromPropertiesFile() {
-    Resources res = getResources();
-    InputStream fis = res.openRawResource(R.raw.soundsamples);
+	// TODO: Convert this to using the Android locale convention
+	// TODO: Change synth to only use the lang string and remove the Cantonese
+	// hack.
+	private void setLanguage(String lang) {
+		if (prefs.getBoolean("override_pref", false)) {
+			// This is set to the default here so that the preview in the prefs
+			// activity will show the change without a restart, even if apps are
+			// not
+			// allowed to change the defaults.
+			lang = prefs.getString("lang_pref", "en-us");
+		}
+		language = lang;
 
-    try {
-      Properties soundsamples = new Properties();
-      soundsamples.load(fis);
-      Enumeration<Object> textKeys = soundsamples.keys();
-      while (textKeys.hasMoreElements()) {
-        String text = textKeys.nextElement().toString();
-        String name = "com.google.tts:raw/" + soundsamples.getProperty(text);
-        TypedValue value = new TypedValue();
-        getResources().getValue(name, value, false);
-        utterances.put(text, new SoundResource(PKGNAME, value.resourceId));
-      }
-    } catch (FactoryConfigurationError e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (IllegalArgumentException e) {
-      e.printStackTrace();
-    } catch (SecurityException e) {
-      e.printStackTrace();
-    }
-  }
+		// The eSpeak documentation for Cantonese seems to be wrong.
+		// It seems like using "zhy" will cause all Chinese characters to be
+		// spoken as "symbol blah blah blah". The solution is to actually
+		// use
+		// zh and variant 3. In addition, "zhy" is not a standard IETF
+		// language
+		// tag; the standard IETF language tag is "zh-yue".
+		if (language.equals("zh-yue")) {
+			nativeSynth.setLanguage("zh", 5);
+		} else {
+			nativeSynth.setLanguage(lang, 0);
+		}
 
-  private boolean espeakIsUsable() {
-    if (!new File("/sdcard/").canWrite()) {
-      return false;
-    }
+	}
 
-    if (!ConfigurationManager.allFilesExist()) {
-      // This should have been taken care of when the TTS is launched
-      // by the check in the TTS.java wrapper.
-      return false;
-    }
-    clearScratchFiles();
-    return true;
-  }
+	private void setEngine(TTSEngine selectedEngine) {
+		utterances = new HashMap<String, SoundResource>();
+		boolean fallbackToPrerecordedOnly = false;
+		if (selectedEngine == TTSEngine.TTS_ONLY) {
+			if (!espeakIsUsable()) {
+				fallbackToPrerecordedOnly = true;
+			}
+			engine = selectedEngine;
+		} else if (selectedEngine == TTSEngine.PRERECORDED_WITH_TTS) {
+			if (!espeakIsUsable()) {
+				fallbackToPrerecordedOnly = true;
+			}
+			loadUtterancesFromPropertiesFile();
+			engine = selectedEngine;
+		} else {
+			fallbackToPrerecordedOnly = true;
+		}
+		if (fallbackToPrerecordedOnly) {
+			loadUtterancesFromPropertiesFile();
+			engine = TTSEngine.PRERECORDED_ONLY;
+		}
 
-  private void clearScratchFiles() {
-    File scratchDir = new File(ESPEAK_SCRATCH_DIRECTORY);
-    boolean directoryExists = scratchDir.isDirectory();
-    if (directoryExists) {
-      File[] scratchFiles = scratchDir.listFiles();
-      for (int i = 0; i < scratchFiles.length; i++) {
-        scratchFiles[i].delete();
-      }
-    } else {
-      scratchDir.mkdir();
-    }
-  }
+		// Load earcons
+		earcons.put(TTSEarcon.CANCEL.name(), new SoundResource(PKGNAME,
+				R.raw.cancel_snd));
+		earcons.put(TTSEarcon.SILENCE.name(), new SoundResource(PKGNAME,
+				R.raw.slnc_snd));
+		earcons.put(TTSEarcon.TICK.name(), new SoundResource(PKGNAME,
+				R.raw.tick_snd));
+		earcons.put(TTSEarcon.TOCK.name(), new SoundResource(PKGNAME,
+				R.raw.tock_snd));
+	}
 
-  /**
-   * Adds a sound resource to the TTS.
-   * 
-   * @param text The text that should be associated with the sound resource
-   * @param packageName The name of the package which has the sound resource
-   * @param resId The resource ID of the sound within its package
-   */
-  private void addSpeech(String text, String packageName, int resId) {
-    utterances.put(text, new SoundResource(packageName, resId));
-  }
+	private void loadUtterancesFromPropertiesFile() {
+		Resources res = getResources();
+		InputStream fis = res.openRawResource(R.raw.soundsamples);
 
-  /**
-   * Adds a sound resource to the TTS.
-   * 
-   * @param text The text that should be associated with the sound resource
-   * @param filename The filename of the sound resource. This must be a complete
-   *        path like: (/sdcard/mysounds/mysoundbite.mp3).
-   */
-  private void addSpeech(String text, String filename) {
-    utterances.put(text, new SoundResource(filename));
-  }
+		try {
+			Properties soundsamples = new Properties();
+			soundsamples.load(fis);
+			Enumeration<Object> textKeys = soundsamples.keys();
+			while (textKeys.hasMoreElements()) {
+				String text = textKeys.nextElement().toString();
+				String name = "com.google.tts:raw/"
+						+ soundsamples.getProperty(text);
+				TypedValue value = new TypedValue();
+				getResources().getValue(name, value, false);
+				utterances.put(text, new SoundResource(PKGNAME,
+						value.resourceId));
+			}
+		} catch (FactoryConfigurationError e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+	}
 
-  /**
-   * Adds a sound resource to the TTS as an earcon.
-   * 
-   * @param earcon The text that should be associated with the sound resource
-   * @param packageName The name of the package which has the sound resource
-   * @param resId The resource ID of the sound within its package
-   */
-  private void addEarcon(String earcon, String packageName, int resId) {
-    earcons.put(earcon, new SoundResource(packageName, resId));
-  }
+	// TODO: Make this generic for internal TTS
+	private boolean espeakIsUsable() {
+		if (!new File("/sdcard/").canWrite()) {
+			return false;
+		}
 
-  /**
-   * Adds a sound resource to the TTS as an earcon.
-   * 
-   * @param earcon The text that should be associated with the sound resource
-   * @param filename The filename of the sound resource. This must be a complete
-   *        path like: (/sdcard/mysounds/mysoundbite.mp3).
-   */
-  private void addEarcon(String earcon, String filename) {
-    earcons.put(earcon, new SoundResource(filename));
-  }
+		if (!ConfigurationManager.allFilesExist()) {
+			// This should have been taken care of when the TTS is launched
+			// by the check in the TTS.java wrapper.
+			return false;
+		}
+		clearScratchFiles();
+		return true;
+	}
 
+	// TODO: Make this generic for internal TTS
+	private void clearScratchFiles() {
+		File scratchDir = new File(ESPEAK_SCRATCH_DIRECTORY);
+		boolean directoryExists = scratchDir.isDirectory();
+		if (directoryExists) {
+			File[] scratchFiles = scratchDir.listFiles();
+			for (int i = 0; i < scratchFiles.length; i++) {
+				scratchFiles[i].delete();
+			}
+		} else {
+			scratchDir.mkdir();
+		}
+	}
 
+	/**
+	 * Adds a sound resource to the TTS.
+	 * 
+	 * @param text
+	 *            The text that should be associated with the sound resource
+	 * @param packageName
+	 *            The name of the package which has the sound resource
+	 * @param resId
+	 *            The resource ID of the sound within its package
+	 */
+	private void addSpeech(String text, String packageName, int resId) {
+		utterances.put(text, new SoundResource(packageName, resId));
+	}
 
-  /**
-   * Speaks the given text using the specified queueing mode and parameters.
-   * 
-   * @param text The text that should be spoken
-   * @param queueMode 0 for no queue (interrupts all previous utterances), 1 for
-   *        queued
-   * @param params An ArrayList of parameters. This is not implemented for all
-   *        engines.
-   */
-  private void speak(String text, int queueMode, ArrayList<String> params) {
-    if (queueMode == 0) {
-      stop();
-    }
-    speechQueue.add(new SpeechItem(text, params, false));
-    if (!isSpeaking) {
-      processSpeechQueue();
-    }
-  }
+	/**
+	 * Adds a sound resource to the TTS.
+	 * 
+	 * @param text
+	 *            The text that should be associated with the sound resource
+	 * @param filename
+	 *            The filename of the sound resource. This must be a complete
+	 *            path like: (/sdcard/mysounds/mysoundbite.mp3).
+	 */
+	private void addSpeech(String text, String filename) {
+		utterances.put(text, new SoundResource(filename));
+	}
 
-  /**
-   * Plays the earcon using the specified queueing mode and parameters.
-   * 
-   * @param earcon The earcon that should be played
-   * @param queueMode 0 for no queue (interrupts all previous utterances), 1 for
-   *        queued
-   * @param params An ArrayList of parameters. This is not implemented for all
-   *        engines.
-   */
-  private void playEarcon(String earcon, int queueMode, ArrayList<String> params) {
-    if (queueMode == 0) {
-      stop();
-    }
-    speechQueue.add(new SpeechItem(earcon, params, true));
-    if (!isSpeaking) {
-      processSpeechQueue();
-    }
-  }
+	/**
+	 * Adds a sound resource to the TTS as an earcon.
+	 * 
+	 * @param earcon
+	 *            The text that should be associated with the sound resource
+	 * @param packageName
+	 *            The name of the package which has the sound resource
+	 * @param resId
+	 *            The resource ID of the sound within its package
+	 */
+	private void addEarcon(String earcon, String packageName, int resId) {
+		earcons.put(earcon, new SoundResource(packageName, resId));
+	}
 
-  /**
-   * Stops all speech output and removes any utterances still in the queue.
-   */
-  private void stop() {
-    Log.i("TTS", "Stopping");
-    speechQueue.clear();
-    speechSynthesis.stop();
-    isSpeaking = false;
-    if (player != null) {
-      try {
-        player.stop();
-      } catch (IllegalStateException e) {
-        // Do nothing, the player is already stopped.
-      }
-    }
-    Log.i("TTS", "Stopped");
-  }
+	/**
+	 * Adds a sound resource to the TTS as an earcon.
+	 * 
+	 * @param earcon
+	 *            The text that should be associated with the sound resource
+	 * @param filename
+	 *            The filename of the sound resource. This must be a complete
+	 *            path like: (/sdcard/mysounds/mysoundbite.mp3).
+	 */
+	private void addEarcon(String earcon, String filename) {
+		earcons.put(earcon, new SoundResource(filename));
+	}
 
-  public void onCompletion(MediaPlayer arg0) {
-    if (speechQueue.size() > 0) {
-      processSpeechQueue();
-    } else {
-      isSpeaking = false;
-    }
-  }
+	/**
+	 * Speaks the given text using the specified queueing mode and parameters.
+	 * 
+	 * @param text
+	 *            The text that should be spoken
+	 * @param queueMode
+	 *            0 for no queue (interrupts all previous utterances), 1 for
+	 *            queued
+	 * @param params
+	 *            An ArrayList of parameters. This is not implemented for all
+	 *            engines.
+	 */
+	private void speak(String text, int queueMode, ArrayList<String> params) {
+		if (queueMode == 0) {
+			stop();
+		}
+		speechQueue.add(new SpeechItem(text, params, false));
+		if (!isSpeaking) {
+			processSpeechQueue();
+		}
+	}
 
-  private void speakWithChosenEngine(SpeechItem speechItem) {
-    if (engine == TTSEngine.PRERECORDED_WITH_ESPEAK) {
-      speakPrerecordedWithEspeak(speechItem.text, speechItem.params);
-    } else if (engine == TTSEngine.ESPEAK_ONLY) {
-      speakEspeakOnly(speechItem.text, speechItem.params);
-    } else {
-      speakPrerecordedOnly(speechItem.text, speechItem.params);
-    }
-  }
+	/**
+	 * Plays the earcon using the specified queueing mode and parameters.
+	 * 
+	 * @param earcon
+	 *            The earcon that should be played
+	 * @param queueMode
+	 *            0 for no queue (interrupts all previous utterances), 1 for
+	 *            queued
+	 * @param params
+	 *            An ArrayList of parameters. This is not implemented for all
+	 *            engines.
+	 */
+	private void playEarcon(String earcon, int queueMode,
+			ArrayList<String> params) {
+		if (queueMode == 0) {
+			stop();
+		}
+		speechQueue.add(new SpeechItem(earcon, params, true));
+		if (!isSpeaking) {
+			processSpeechQueue();
+		}
+	}
 
-  private void speakPrerecordedOnly(String text, ArrayList<String> params) {
-    if (!utterances.containsKey(text)) {
-      if (text.length() > 1) {
-        decomposedToNumbers(text, params);
-      }
-    }
-    processSpeechQueue();
-  }
+	/**
+	 * Stops all speech output and removes any utterances still in the queue.
+	 */
+	private void stop() {
+		Log.i("TTS", "Stopping");
+		speechQueue.clear();
 
-  private void speakPrerecordedWithEspeak(String text, ArrayList<String> params) {
-    if (!utterances.containsKey(text)) {
-      if ((text.length() > 1) && decomposedToNumbers(text, params)) {
-        processSpeechQueue();
-      } else {
-        speakEspeakOnly(text, params);
-      }
-    }
-  }
+		nativeSynth.stop();
+		isSpeaking = false;
+		if (player != null) {
+			try {
+				player.stop();
+			} catch (IllegalStateException e) {
+				// Do nothing, the player is already stopped.
+			}
+		}
+		Log.i("TTS", "Stopped");
+	}
 
+	public void onCompletion(MediaPlayer arg0) {
+		processSpeechQueue();
+	}
 
-  private void speakEspeakOnly(final String text, final ArrayList<String> params) {
-    class SynthThread implements Runnable {
-      public void run() {
-        boolean synthAvailable = false;
-        try {
-          synthAvailable = synthesizerLock.tryLock();
-          if (!synthAvailable) {
-            Thread.sleep(100);
-            Thread synth = (new Thread(new SynthThread()));
-            synth.setPriority(Thread.MIN_PRIORITY);
-            synth.start();
-            return;
-          }
-          speechSynthesis.speak(text);
-          if (speechQueue.size() > 0) {
-            processSpeechQueue();
-          } else {
-            isSpeaking = false;
-          }
-        } catch (InterruptedException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
-        } finally {
-          // This check is needed because finally will always run; even if the
-          // method returns somewhere in the try block.
-          if (synthAvailable) {
-            synthesizerLock.unlock();
-          }
-        }
-      }
-    }
-    Thread synth = (new Thread(new SynthThread()));
-    synth.setPriority(Thread.MIN_PRIORITY);
-    synth.start();
-  }
+	// TODO: Add commented out speech methods
+	private void speakWithChosenEngine(SpeechItem speechItem) {
+		Log.i("Selected engine: ", engine.toString());
+		if (engine == TTSEngine.PRERECORDED_WITH_TTS) {
+			speakPrerecordedWithInternal(speechItem.text, speechItem.params);
+		} else if (engine == TTSEngine.TTS_ONLY) {
+			speakInternalOnly(speechItem.text, speechItem.params);
+		} else {
+			speakPrerecordedOnly(speechItem.text, speechItem.params);
+		}
+	}
 
-  private SoundResource getSoundResource(SpeechItem speechItem) {
-    SoundResource sr = null;
-    String text = speechItem.text;
-    ArrayList<String> params = speechItem.params;
-    // If this is an earcon, just load that sound resource
-    if (speechItem.isEarcon) {
-      sr = earcons.get(text);
-      if (sr == null) {
-        // Invalid earcon requested; play the default [tock] sound.
-        sr = new SoundResource(PKGNAME, R.raw.tock_snd);
-      }
-    }
+	private void speakPrerecordedOnly(String text, ArrayList<String> params) {
+		if (!utterances.containsKey(text)) {
+			if (text.length() > 1) {
+				decomposedToNumbers(text, params);
+			}
+		}
+		processSpeechQueue();
+	}
 
-    // TODO: Cleanup special params system
-    if ((sr == null) && (engine != TTSEngine.ESPEAK_ONLY)) {
-      if ((params != null) && (params.size() > 0)) {
-        String textWithVoice = text;
-        if (params.get(0).equals(TTSParams.VOICE_ROBOT.toString())) {
-          textWithVoice = textWithVoice + "[robot]";
-        } else if (params.get(0).equals(TTSParams.VOICE_FEMALE.toString())) {
-          textWithVoice = textWithVoice + "[fem]";
-        }
-        if (utterances.containsKey(textWithVoice)) {
-          text = textWithVoice;
-        }
-      }
-      sr = utterances.get(text);
-    }
-    return sr;
-  }
+	private void speakPrerecordedWithInternal(String text,
+			ArrayList<String> params) {
+		if (!utterances.containsKey(text)) {
+			if ((text.length() > 1) && decomposedToNumbers(text, params)) {
+				processSpeechQueue();
+			} else {
+				speakInternalOnly(text, params);
+			}
+		}
+	}
 
-  // Special algorithm to decompose numbers into speakable parts.
-  // This will handle positive numbers up to 999.
-  private boolean decomposedToNumbers(String text, ArrayList<String> params) {
-    boolean speechQueueAvailable = false;
-    try {
-      speechQueueAvailable = speechQueueLock.tryLock();
-      if (!speechQueueAvailable || (speechQueue.size() < 1)) {
-        return false;
-      }
-      int number = Integer.parseInt(text);
-      ArrayList<SpeechItem> decomposedNumber = new ArrayList<SpeechItem>();
-      // Handle cases that are between 100 and 999, inclusive
-      if ((number > 99) && (number < 1000)) {
-        int remainder = number % 100;
-        number = number / 100;
-        decomposedNumber.add(new SpeechItem(Integer.toString(number), params, false));
-        decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-        decomposedNumber.add(new SpeechItem("hundred", params, false));
-        decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-        if (remainder > 0) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(remainder), params, false));
-        }
-        speechQueue.remove(0);
-        speechQueue.addAll(0, decomposedNumber);
-        return true;
-      }
+	private void speakInternalOnly(final String text,
+			final ArrayList<String> params) {
+		class SynthThread implements Runnable {
+			public void run() {
+				boolean synthAvailable = false;
+				try {
+					synthAvailable = synthesizerLock.tryLock();
+					if (!synthAvailable) {
+						Thread.sleep(100);
+						Thread synth = (new Thread(new SynthThread()));
+						synth.setPriority(Thread.MIN_PRIORITY);
+						synth.start();
+						return;
+					}
+					nativeSynth.speak(text);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					// This check is needed because finally will always run;
+					// even if the
+					// method returns somewhere in the try block.
+					if (synthAvailable) {
+						synthesizerLock.unlock();
+					}
+				}
+			}
+		}
+		Thread synth = (new Thread(new SynthThread()));
+		synth.setPriority(Thread.MIN_PRIORITY);
+		synth.start();
+	}
 
-      // Handle cases that are less than 100
-      int digit = 0;
-      if ((number > 20) && (number < 100)) {
-        if ((number > 20) && (number < 30)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(20), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 20;
-        } else if ((number > 30) && (number < 40)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(30), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 30;
-        } else if ((number > 40) && (number < 50)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(40), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 40;
-        } else if ((number > 50) && (number < 60)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(50), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 50;
-        } else if ((number > 60) && (number < 70)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(60), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 60;
-        } else if ((number > 70) && (number < 80)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(70), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 70;
-        } else if ((number > 80) && (number < 90)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(80), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 80;
-        } else if ((number > 90) && (number < 100)) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(90), params, false));
-          decomposedNumber.add(new SpeechItem("[slnc]", params, true));
-          digit = number - 90;
-        }
-        if (digit > 0) {
-          decomposedNumber.add(new SpeechItem(Integer.toString(digit), params, false));
-        }
-        speechQueue.remove(0);
-        speechQueue.addAll(0, decomposedNumber);
-        return true;
-      }
-      // Any other cases are either too large to handle
-      // or have an utterance that is directly mapped.
-      return false;
-    } catch (NumberFormatException nfe) {
-      return false;
-    } finally {
-      // This check is needed because finally will always run; even if the
-      // method returns somewhere in the try block.
-      if (speechQueueAvailable) {
-        speechQueueLock.unlock();
-      }
-    }
-  }
+	private SoundResource getSoundResource(SpeechItem speechItem) {
+		SoundResource sr = null;
+		String text = speechItem.text;
+		ArrayList<String> params = speechItem.params;
+		// If this is an earcon, just load that sound resource
+		if (speechItem.isEarcon) {
+			sr = earcons.get(text);
+			if (sr == null) {
+				// Invalid earcon requested; play the default [tock] sound.
+				sr = new SoundResource(PKGNAME, R.raw.tock_snd);
+			}
+		}
 
+		// TODO: Cleanup special params system
+		if ((sr == null) && (engine != TTSEngine.TTS_ONLY)) {
+			if ((params != null) && (params.size() > 0)) {
+				String textWithVoice = text;
+				if (params.get(0).equals(TTSParams.VOICE_ROBOT.toString())) {
+					textWithVoice = textWithVoice + "[robot]";
+				} else if (params.get(0).equals(
+						TTSParams.VOICE_FEMALE.toString())) {
+					textWithVoice = textWithVoice + "[fem]";
+				}
+				if (utterances.containsKey(textWithVoice)) {
+					text = textWithVoice;
+				}
+			}
+			sr = utterances.get(text);
+		}
+		return sr;
+	}
 
-  private void processSpeechQueue() {
-    boolean speechQueueAvailable = false;
-    try {
-      speechQueueAvailable = speechQueueLock.tryLock();
-      if (!speechQueueAvailable || (speechQueue.size() < 1)) {
-        return;
-      }
-      SpeechItem currentSpeechItem = speechQueue.get(0);
-      isSpeaking = true;
-      SoundResource sr = getSoundResource(currentSpeechItem);
-      // Synth speech as needed - synthesizer should call
-      // processSpeechQueue to continue running the queue
-      Log.i("TTS processing: ", currentSpeechItem.text);
-      if (sr == null) {
-        speakWithChosenEngine(currentSpeechItem);
-      } else {
-        cleanUpPlayer();
-        if (sr.sourcePackageName == PKGNAME) {
-          // Utterance is part of the TTS library
-          player = MediaPlayer.create(this, sr.resId);
-        } else if (sr.sourcePackageName != null) {
-          // Utterance is part of the app calling the library
-          Context ctx;
-          try {
-            ctx = this.createPackageContext(sr.sourcePackageName, 0);
-          } catch (NameNotFoundException e) {
-            e.printStackTrace();
-            speechQueue.remove(0); // Remove it from the queue and move on
-            isSpeaking = false;
-            return;
-          }
-          player = MediaPlayer.create(ctx, sr.resId);
-        } else {
-          // Utterance is coming from a file
-          player = MediaPlayer.create(this, Uri.parse(sr.filename));
-        }
+	// Special algorithm to decompose numbers into speakable parts.
+	// This will handle positive numbers up to 999.
+	private boolean decomposedToNumbers(String text, ArrayList<String> params) {
+		boolean speechQueueAvailable = false;
+		try {
+			speechQueueAvailable = speechQueueLock.tryLock();
+			if (!speechQueueAvailable || (speechQueue.size() < 1)) {
+				return false;
+			}
+			int number = Integer.parseInt(text);
+			ArrayList<SpeechItem> decomposedNumber = new ArrayList<SpeechItem>();
+			// Handle cases that are between 100 and 999, inclusive
+			if ((number > 99) && (number < 1000)) {
+				int remainder = number % 100;
+				number = number / 100;
+				decomposedNumber.add(new SpeechItem(Integer.toString(number),
+						params, false));
+				decomposedNumber.add(new SpeechItem("[slnc]", params, true));
+				decomposedNumber.add(new SpeechItem("hundred", params, false));
+				decomposedNumber.add(new SpeechItem("[slnc]", params, true));
+				if (remainder > 0) {
+					decomposedNumber.add(new SpeechItem(Integer
+							.toString(remainder), params, false));
+				}
+				speechQueue.remove(0);
+				speechQueue.addAll(0, decomposedNumber);
+				return true;
+			}
 
-        // Check if Media Server is dead; if it is, clear the queue and
-        // give up for now - hopefully, it will recover itself.
-        if (player == null) {
-          speechQueue.clear();
-          isSpeaking = false;
-          return;
-        }
-        player.setOnCompletionListener(this);
-        try {
-          player.start();
-        } catch (IllegalStateException e) {
-          speechQueue.clear();
-          isSpeaking = false;
-          cleanUpPlayer();
-          return;
-        }
-      }
-      if (speechQueue.size() > 0) {
-        speechQueue.remove(0);
-      }
-    } finally {
-      // This check is needed because finally will always run; even if the
-      // method returns somewhere in the try block.
-      if (speechQueueAvailable) {
-        speechQueueLock.unlock();
-      }
-    }
-  }
+			// Handle cases that are less than 100
+			int digit = 0;
+			if ((number > 20) && (number < 100)) {
+				if ((number > 20) && (number < 30)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(20),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 20;
+				} else if ((number > 30) && (number < 40)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(30),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 30;
+				} else if ((number > 40) && (number < 50)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(40),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 40;
+				} else if ((number > 50) && (number < 60)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(50),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 50;
+				} else if ((number > 60) && (number < 70)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(60),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 60;
+				} else if ((number > 70) && (number < 80)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(70),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 70;
+				} else if ((number > 80) && (number < 90)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(80),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 80;
+				} else if ((number > 90) && (number < 100)) {
+					decomposedNumber.add(new SpeechItem(Integer.toString(90),
+							params, false));
+					decomposedNumber
+							.add(new SpeechItem("[slnc]", params, true));
+					digit = number - 90;
+				}
+				if (digit > 0) {
+					decomposedNumber.add(new SpeechItem(
+							Integer.toString(digit), params, false));
+				}
+				speechQueue.remove(0);
+				speechQueue.addAll(0, decomposedNumber);
+				return true;
+			}
+			// Any other cases are either too large to handle
+			// or have an utterance that is directly mapped.
+			return false;
+		} catch (NumberFormatException nfe) {
+			return false;
+		} finally {
+			// This check is needed because finally will always run; even if the
+			// method returns somewhere in the try block.
+			if (speechQueueAvailable) {
+				speechQueueLock.unlock();
+			}
+		}
+	}
 
-  private void cleanUpPlayer() {
-    if (player != null) {
-      player.release();
-      player = null;
-    }
-  }
+	private void dispatchSpeechCompletedCallbacks(String mark) {
+		Log.i("TTS callback", "dispatch started");
+		// Broadcast to all clients the new value.
+		final int N = mCallbacks.beginBroadcast();
+		for (int i = 0; i < N; i++) {
+			try {
+				mCallbacks.getBroadcastItem(i).markReached(mark);
+			} catch (RemoteException e) {
+				// The RemoteCallbackList will take care of removing
+				// the dead object for us.
+			}
+		}
+		mCallbacks.finishBroadcast();
+		Log.i("TTS callback", "dispatch completed to " + N);
+	}
 
-  /**
-   * Synthesizes the given text using the specified queuing mode and parameters.
-   * 
-   * @param text The String of text that should be synthesized
-   * @param params An ArrayList of parameters. The first element of this array
-   *        controls the type of voice to use.
-   * @param filename The string that gives the full output filename; it should
-   *        be something like "/sdcard/myappsounds/mysound.wav".
-   * @return A boolean that indicates if the synthesis succeeded
-   */
-  private boolean synthesizeToFile(String text, ArrayList<String> params, String filename,
-      boolean calledFromApi) {
-    // Only stop everything if this is a call made by an outside app trying to
-    // use the API. Do NOT stop if this is a call from within the service as
-    // clearing the speech queue here would be a mistake.
-    if (calledFromApi) {
-      stop();
-    }
-    Log.i("TTS", "Synthesizing " + filename);
-    boolean synthAvailable = false;
-    try {
-      synthAvailable = synthesizerLock.tryLock();
-      if (!synthAvailable) {
-        return false;
-      }
-      // Don't allow a filename that is too long
-      if (filename.length() > 250) {
-        return false;
-      }
-      speechSynthesis.synthesizeToFile(text, filename);
-    } finally {
-      // This check is needed because finally will always run; even if the
-      // method returns somewhere in the try block.
-      if (synthAvailable) {
-        synthesizerLock.unlock();
-      }
-    }
-    Log.i("TTS", "Completed synthesis for " + filename);
-    return true;
-  }
+	private void processSpeechQueue() {
+		boolean speechQueueAvailable = false;
+		try {
+			speechQueueAvailable = speechQueueLock.tryLock();
+			if (!speechQueueAvailable) {
+				return;
+			}
+			if (speechQueue.size() < 1) {
+				isSpeaking = false;
+				// Dispatch a completion here as this is the
+				// only place where speech completes normally.
+				// Nothing left to say in the queue is a special case
+				// that is always a "mark" - associated text is null.
+				dispatchSpeechCompletedCallbacks("");
+				return;
+			}
 
-  @Override
-  public IBinder onBind(Intent intent) {
-    if (ACTION.equals(intent.getAction())) {
-      for (String category : intent.getCategories()) {
-        if (category.equals(CATEGORY)) {
-          return mBinder;
-        }
-      }
-    }
-    return null;
-  }
+			SpeechItem currentSpeechItem = speechQueue.get(0);
+			isSpeaking = true;
+			SoundResource sr = getSoundResource(currentSpeechItem);
+			// Synth speech as needed - synthesizer should call
+			// processSpeechQueue to continue running the queue
+			Log.i("TTS processing: ", currentSpeechItem.text);
+			if (sr == null) {
+				// TODO: Split text up into smaller chunks before accepting them
+				// for processing.
+				speakWithChosenEngine(currentSpeechItem);
+			} else {
+				cleanUpPlayer();
+				if (sr.sourcePackageName == PKGNAME) {
+					// Utterance is part of the TTS library
+					player = MediaPlayer.create(this, sr.resId);
+				} else if (sr.sourcePackageName != null) {
+					// Utterance is part of the app calling the library
+					Context ctx;
+					try {
+						ctx = this
+								.createPackageContext(sr.sourcePackageName, 0);
+					} catch (NameNotFoundException e) {
+						e.printStackTrace();
+						speechQueue.remove(0); // Remove it from the queue and
+						// move on
+						isSpeaking = false;
+						return;
+					}
+					player = MediaPlayer.create(ctx, sr.resId);
+				} else {
+					// Utterance is coming from a file
+					player = MediaPlayer.create(this, Uri.parse(sr.filename));
+				}
 
-  private final ITTS.Stub mBinder = new Stub() {
-    /**
-     * Speaks the given text using the specified queueing mode and parameters.
-     * 
-     * @param selectedEngine The TTS engine that should be used
-     */
-    public void setEngine(String selectedEngine) {
-      TTSEngine theEngine;
-      if (selectedEngine.equals(TTSEngine.ESPEAK_ONLY.toString())) {
-        theEngine = TTSEngine.ESPEAK_ONLY;
-      } else if (selectedEngine.equals(TTSEngine.PRERECORDED_ONLY.toString())) {
-        theEngine = TTSEngine.PRERECORDED_ONLY;
-      } else {
-        theEngine = TTSEngine.PRERECORDED_WITH_ESPEAK;
-      }
-      self.setEngine(theEngine);
-    }
+				// Check if Media Server is dead; if it is, clear the queue and
+				// give up for now - hopefully, it will recover itself.
+				if (player == null) {
+					speechQueue.clear();
+					isSpeaking = false;
+					return;
+				}
+				player.setOnCompletionListener(this);
+				try {
+					player.start();
+				} catch (IllegalStateException e) {
+					speechQueue.clear();
+					isSpeaking = false;
+					cleanUpPlayer();
+					return;
+				}
+			}
+			if (speechQueue.size() > 0) {
+				speechQueue.remove(0);
+			}
+		} finally {
+			// This check is needed because finally will always run; even if the
+			// method returns somewhere in the try block.
+			if (speechQueueAvailable) {
+				speechQueueLock.unlock();
+			}
+		}
+	}
 
-    /**
-     * Speaks the given text using the specified queueing mode and parameters.
-     * 
-     * @param text The text that should be spoken
-     * @param queueMode 0 for no queue (interrupts all previous utterances), 1
-     *        for queued
-     * @param params An ArrayList of parameters. The first element of this array
-     *        controls the type of voice to use.
-     */
-    public void speak(String text, int queueMode, String[] params) {
-      ArrayList<String> speakingParams = new ArrayList<String>();
-      if (params != null) {
-        speakingParams = new ArrayList<String>(Arrays.asList(params));
-      }
-      self.speak(text, queueMode, speakingParams);
-    }
+	private void cleanUpPlayer() {
+		if (player != null) {
+			player.release();
+			player = null;
+		}
+	}
 
-    /**
-     * Plays the earcon using the specified queueing mode and parameters.
-     * 
-     * @param earcon The earcon that should be played
-     * @param queueMode 0 for no queue (interrupts all previous utterances), 1
-     *        for queued
-     * @param params An ArrayList of parameters.
-     */
-    public void playEarcon(String earcon, int queueMode, String[] params) {
-      ArrayList<String> speakingParams = new ArrayList<String>();
-      if (params != null) {
-        speakingParams = new ArrayList<String>(Arrays.asList(params));
-      }
-      self.playEarcon(earcon, queueMode, speakingParams);
-    }
+	/**
+	 * Synthesizes the given text using the specified queuing mode and
+	 * parameters.
+	 * 
+	 * @param text
+	 *            The String of text that should be synthesized
+	 * @param params
+	 *            An ArrayList of parameters. The first element of this array
+	 *            controls the type of voice to use.
+	 * @param filename
+	 *            The string that gives the full output filename; it should be
+	 *            something like "/sdcard/myappsounds/mysound.wav".
+	 * @return A boolean that indicates if the synthesis succeeded
+	 */
+	private boolean synthesizeToFile(String text, ArrayList<String> params,
+			String filename, boolean calledFromApi) {
+		// Only stop everything if this is a call made by an outside app trying
+		// to
+		// use the API. Do NOT stop if this is a call from within the service as
+		// clearing the speech queue here would be a mistake.
+		if (calledFromApi) {
+			stop();
+		}
+		Log.i("TTS", "Synthesizing " + filename);
+		boolean synthAvailable = false;
+		try {
+			synthAvailable = synthesizerLock.tryLock();
+			if (!synthAvailable) {
+				return false;
+			}
+			// Don't allow a filename that is too long
+			if (filename.length() > 250) {
+				return false;
+			}
+			nativeSynth.synthesizeToFile(text, filename);
+		} finally {
+			// This check is needed because finally will always run; even if the
+			// method returns somewhere in the try block.
+			if (synthAvailable) {
+				synthesizerLock.unlock();
+			}
+		}
+		Log.i("TTS", "Completed synthesis for " + filename);
+		return true;
+	}
 
-    /**
-     * Stops all speech output and removes any utterances still in the queue.
-     */
-    public void stop() {
-      self.stop();
-    }
+	@Override
+	public IBinder onBind(Intent intent) {
+		if (ACTION.equals(intent.getAction())) {
+			for (String category : intent.getCategories()) {
+				if (category.equals(CATEGORY)) {
+					return mBinder;
+				}
+			}
+		}
+		return null;
+	}
 
-    /**
-     * Returns whether or not the TTS is speaking.
-     * 
-     * @return Boolean to indicate whether or not the TTS is speaking
-     */
-    public boolean isSpeaking() {
-      return (self.isSpeaking && (speechQueue.size() < 1));
-    }
+	private final ITTS.Stub mBinder = new Stub() {
 
-    /**
-     * Adds a sound resource to the TTS.
-     * 
-     * @param text The text that should be associated with the sound resource
-     * @param packageName The name of the package which has the sound resource
-     * @param resId The resource ID of the sound within its package
-     */
-    public void addSpeech(String text, String packageName, int resId) {
-      self.addSpeech(text, packageName, resId);
-    }
+		@SuppressWarnings("unused")
+		public void registerCallback(ITTSCallback cb) {
+			if (cb != null)
+				mCallbacks.register(cb);
+		}
 
-    /**
-     * Adds a sound resource to the TTS.
-     * 
-     * @param text The text that should be associated with the sound resource
-     * @param filename The filename of the sound resource. This must be a
-     *        complete path like: (/sdcard/mysounds/mysoundbite.mp3).
-     */
-    public void addSpeechFile(String text, String filename) {
-      self.addSpeech(text, filename);
-    }
+		@SuppressWarnings("unused")
+		public void unregisterCallback(ITTSCallback cb) {
+			if (cb != null)
+				mCallbacks.unregister(cb);
+		}
 
-    /**
-     * Adds a sound resource to the TTS as an earcon.
-     * 
-     * @param earcon The text that should be associated with the sound resource
-     * @param packageName The name of the package which has the sound resource
-     * @param resId The resource ID of the sound within its package
-     */
-    public void addEarcon(String earcon, String packageName, int resId) {
-      self.addEarcon(earcon, packageName, resId);
-    }
+		/**
+		 * Speaks the given text using the specified queueing mode and
+		 * parameters.
+		 * 
+		 * @param selectedEngine
+		 *            The TTS engine that should be used
+		 */
+		public void setEngine(String selectedEngine) {
+			TTSEngine theEngine;
+			if (selectedEngine.equals(TTSEngine.TTS_ONLY.toString())) {
+				theEngine = TTSEngine.TTS_ONLY;
+			} else if (selectedEngine.equals(TTSEngine.PRERECORDED_WITH_TTS
+					.toString())) {
+				theEngine = TTSEngine.PRERECORDED_WITH_TTS;
+			} else {
+				theEngine = TTSEngine.PRERECORDED_ONLY;
+			}
+			self.setEngine(theEngine);
+		}
 
-    /**
-     * Adds a sound resource to the TTS as an earcon.
-     * 
-     * @param earcon The text that should be associated with the sound resource
-     * @param filename The filename of the sound resource. This must be a
-     *        complete path like: (/sdcard/mysounds/mysoundbite.mp3).
-     */
-    public void addEarconFile(String earcon, String filename) {
-      self.addEarcon(earcon, filename);
-    }
+		/**
+		 * Speaks the given text using the specified queueing mode and
+		 * parameters.
+		 * 
+		 * @param text
+		 *            The text that should be spoken
+		 * @param queueMode
+		 *            0 for no queue (interrupts all previous utterances), 1 for
+		 *            queued
+		 * @param params
+		 *            An ArrayList of parameters. The first element of this
+		 *            array controls the type of voice to use.
+		 */
+		public void speak(String text, int queueMode, String[] params) {
+			ArrayList<String> speakingParams = new ArrayList<String>();
+			if (params != null) {
+				speakingParams = new ArrayList<String>(Arrays.asList(params));
+			}
+			self.speak(text, queueMode, speakingParams);
+		}
 
-    /**
-     * Sets the speech rate for the TTS. Note that this will only have an effect
-     * on synthesized speech; it will not affect pre-recorded speech.
-     * 
-     * @param speechRate The speech rate that should be used
-     */
-    public void setSpeechRate(int speechRate) {
-      self.setSpeechRate(speechRate);
-    }
+		/**
+		 * Plays the earcon using the specified queueing mode and parameters.
+		 * 
+		 * @param earcon
+		 *            The earcon that should be played
+		 * @param queueMode
+		 *            0 for no queue (interrupts all previous utterances), 1 for
+		 *            queued
+		 * @param params
+		 *            An ArrayList of parameters.
+		 */
+		public void playEarcon(String earcon, int queueMode, String[] params) {
+			ArrayList<String> speakingParams = new ArrayList<String>();
+			if (params != null) {
+				speakingParams = new ArrayList<String>(Arrays.asList(params));
+			}
+			self.playEarcon(earcon, queueMode, speakingParams);
+		}
 
-    /**
-     * Sets the speech rate for the TTS. Note that this will only have an effect
-     * on synthesized speech; it will not affect pre-recorded speech.
-     * 
-     * @param language The language to be used. The languages are specified by
-     *        their IETF language tags as defined by BCP 47. This is the same
-     *        standard used for the lang attribute in HTML. See:
-     *        http://en.wikipedia.org/wiki/IETF_language_tag
-     */
-    public void setLanguage(String language) {
-      self.setLanguage(language);
-    }
+		/**
+		 * Stops all speech output and removes any utterances still in the
+		 * queue.
+		 */
+		public void stop() {
+			self.stop();
+		}
 
-    /**
-     * Returns the version number of the TTS This version number is the
-     * versionCode in the AndroidManifest.xml
-     * 
-     * @return The version number of the TTS
-     */
-    public int getVersion() {
-      PackageInfo pInfo = new PackageInfo();
-      try {
-        PackageManager pm = self.getPackageManager();
-        pInfo = pm.getPackageInfo(self.getPackageName(), 0);
-      } catch (NameNotFoundException e) {
-        // Ignore this exception - the packagename is itself, can't fail here
-        e.printStackTrace();
-      }
-      return pInfo.versionCode;
-    }
+		/**
+		 * Returns whether or not the TTS is speaking.
+		 * 
+		 * @return Boolean to indicate whether or not the TTS is speaking
+		 */
+		public boolean isSpeaking() {
+			return (self.isSpeaking && (speechQueue.size() < 1));
+		}
 
-    /**
-     * Speaks the given text using the specified queueing mode and parameters.
-     * 
-     * @param text The String of text that should be synthesized
-     * @param params An ArrayList of parameters. The first element of this array
-     *        controls the type of voice to use.
-     * @param filename The string that gives the full output filename; it should
-     *        be something like "/sdcard/myappsounds/mysound.wav".
-     * @return A boolean that indicates if the synthesis succeeded
-     */
-    public boolean synthesizeToFile(String text, String[] params, String filename) {
-      ArrayList<String> speakingParams = new ArrayList<String>();
-      if (params != null) {
-        speakingParams = new ArrayList<String>(Arrays.asList(params));
-      }
-      return self.synthesizeToFile(text, speakingParams, filename, true);
-    }
-  };
+		/**
+		 * Adds a sound resource to the TTS.
+		 * 
+		 * @param text
+		 *            The text that should be associated with the sound resource
+		 * @param packageName
+		 *            The name of the package which has the sound resource
+		 * @param resId
+		 *            The resource ID of the sound within its package
+		 */
+		public void addSpeech(String text, String packageName, int resId) {
+			self.addSpeech(text, packageName, resId);
+		}
+
+		/**
+		 * Adds a sound resource to the TTS.
+		 * 
+		 * @param text
+		 *            The text that should be associated with the sound resource
+		 * @param filename
+		 *            The filename of the sound resource. This must be a
+		 *            complete path like: (/sdcard/mysounds/mysoundbite.mp3).
+		 */
+		public void addSpeechFile(String text, String filename) {
+			self.addSpeech(text, filename);
+		}
+
+		/**
+		 * Adds a sound resource to the TTS as an earcon.
+		 * 
+		 * @param earcon
+		 *            The text that should be associated with the sound resource
+		 * @param packageName
+		 *            The name of the package which has the sound resource
+		 * @param resId
+		 *            The resource ID of the sound within its package
+		 */
+		public void addEarcon(String earcon, String packageName, int resId) {
+			self.addEarcon(earcon, packageName, resId);
+		}
+
+		/**
+		 * Adds a sound resource to the TTS as an earcon.
+		 * 
+		 * @param earcon
+		 *            The text that should be associated with the sound resource
+		 * @param filename
+		 *            The filename of the sound resource. This must be a
+		 *            complete path like: (/sdcard/mysounds/mysoundbite.mp3).
+		 */
+		public void addEarconFile(String earcon, String filename) {
+			self.addEarcon(earcon, filename);
+		}
+
+		/**
+		 * Sets the speech rate for the TTS. Note that this will only have an
+		 * effect on synthesized speech; it will not affect pre-recorded speech.
+		 * 
+		 * @param speechRate
+		 *            The speech rate that should be used
+		 */
+		public void setSpeechRate(int speechRate) {
+			self.setSpeechRate(speechRate);
+		}
+
+		/**
+		 * Sets the speech rate for the TTS. Note that this will only have an
+		 * effect on synthesized speech; it will not affect pre-recorded speech.
+		 * 
+		 * @param language
+		 *            The language to be used. The languages are specified by
+		 *            their IETF language tags as defined by BCP 47. This is the
+		 *            same standard used for the lang attribute in HTML. See:
+		 *            http://en.wikipedia.org/wiki/IETF_language_tag
+		 */
+		public void setLanguage(String language) {
+			self.setLanguage(language);
+		}
+
+		/**
+		 * Returns the version number of the TTS This version number is the
+		 * versionCode in the AndroidManifest.xml
+		 * 
+		 * @return The version number of the TTS
+		 */
+		public int getVersion() {
+			PackageInfo pInfo = new PackageInfo();
+			try {
+				PackageManager pm = self.getPackageManager();
+				pInfo = pm.getPackageInfo(self.getPackageName(), 0);
+			} catch (NameNotFoundException e) {
+				// Ignore this exception - the packagename is itself, can't fail
+				// here
+				e.printStackTrace();
+			}
+			return pInfo.versionCode;
+		}
+
+		/**
+		 * Speaks the given text using the specified queueing mode and
+		 * parameters.
+		 * 
+		 * @param text
+		 *            The String of text that should be synthesized
+		 * @param params
+		 *            An ArrayList of parameters. The first element of this
+		 *            array controls the type of voice to use.
+		 * @param filename
+		 *            The string that gives the full output filename; it should
+		 *            be something like "/sdcard/myappsounds/mysound.wav".
+		 * @return A boolean that indicates if the synthesis succeeded
+		 */
+		public boolean synthesizeToFile(String text, String[] params,
+				String filename) {
+			ArrayList<String> speakingParams = new ArrayList<String>();
+			if (params != null) {
+				speakingParams = new ArrayList<String>(Arrays.asList(params));
+			}
+			return self.synthesizeToFile(text, speakingParams, filename, true);
+		}
+	};
+
 }

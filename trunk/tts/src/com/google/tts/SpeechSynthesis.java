@@ -17,6 +17,8 @@ package com.google.tts;
 
 import android.util.Log;
 import java.lang.ref.WeakReference;
+import java.nio.ByteBuffer;
+
 
 /**
  * The SpeechSynthesis class provides a high-level api to create and play
@@ -64,6 +66,12 @@ public class SpeechSynthesis {
    * Sets the speech rate
    */
   public native final void setSpeechRate(int speechRate);
+  
+
+  /**
+   * Plays the given audio buffer
+   */
+  public native final void playAudioBuffer(int bufferPointer, int bufferSize);
 
   //
   // Internal
@@ -83,5 +91,15 @@ public class SpeechSynthesis {
 
   protected void finalize() {
     native_finalize();
+  }
+  
+  /**
+   * Callback from the C layer
+   */
+  @SuppressWarnings("unused")
+  private static void postNativeSpeechSynthesizedInJava(Object tts_ref, int bufferPointer, int bufferSize){
+	  Log.i("TTS plugin debug", "bufferPointer: " + bufferPointer + " bufferSize: " + bufferSize);
+	  SpeechSynthesis nativeTTS = (SpeechSynthesis)((WeakReference)tts_ref).get();
+	  nativeTTS.playAudioBuffer(bufferPointer, bufferSize);	  
   }
 }
