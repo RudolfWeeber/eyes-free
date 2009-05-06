@@ -85,7 +85,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
 	private SharedPreferences prefs;
 	private int speechRate = 140;
-	private String language = "en-us";
+	private String language = "en-rUS";
 
 	private final ReentrantLock speechQueueLock = new ReentrantLock();
 	private final ReentrantLock synthesizerLock = new ReentrantLock();
@@ -156,23 +156,10 @@ public class TTSService extends Service implements OnCompletionListener {
 			// activity will show the change without a restart, even if apps are
 			// not
 			// allowed to change the defaults.
-			lang = prefs.getString("lang_pref", "en-us");
+			lang = prefs.getString("lang_pref", "en-rUS");
 		}
 		language = lang;
-
-		// The eSpeak documentation for Cantonese seems to be wrong.
-		// It seems like using "zhy" will cause all Chinese characters to be
-		// spoken as "symbol blah blah blah". The solution is to actually
-		// use
-		// zh and variant 3. In addition, "zhy" is not a standard IETF
-		// language
-		// tag; the standard IETF language tag is "zh-yue".
-		if (language.equals("zh-yue")) {
-			nativeSynth.setLanguage("zh", 5);
-		} else {
-			nativeSynth.setLanguage(lang, 0);
-		}
-
+		nativeSynth.setLanguage(lang, 0);
 	}
 
 	private void setEngine(TTSEngine selectedEngine) {

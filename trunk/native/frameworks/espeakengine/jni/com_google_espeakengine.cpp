@@ -48,22 +48,83 @@ synthDoneCB_t* ttsSynthDoneCBPointer;
 // 3166-1-alpha-2 language code in uppercase preceded by a lowercase "r".
 // Note that the "-rYY" portion may be omitted if the region is unimportant.
 //
-// TODO: write an actual conversion function here
 static void setLanguage(const char* language)
 {   
     espeak_VOICE voice;
-    memset( &voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
-    voice.languages = language;
+    memset(&voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
     voice.variant = 0;
-
-    // Convert from xx-rYY format to the eSpeak format of xx-yy if needed
-    if (strlen(language) > 2){
-      char espeakLangStr[6];
-      sprintf(espeakLangStr, "en-us");
-      voice.languages = espeakLangStr;
+    char espeakLangStr[6];
+    if ((strlen(language) != 2) && (strlen(language) != 6)){
+        LOGI("Error: Invalid language. Language must be in either xx or xx-rYY format.");
+        return;
     }
-
+    if (strcmp(language, "en-rUS") == 0){
+//      strcpy(espeakLangStr, "en-us");
+espeakLangStr[0] = 'e';
+espeakLangStr[1] = 'n';
+espeakLangStr[2] = '-';
+espeakLangStr[3] = 'u';
+espeakLangStr[4] = 's';
+espeakLangStr[5] = 0;
+LOGI("0");
+    } else if (strcmp(language, "en-rGB") == 0){
+      strcpy(espeakLangStr, "en-uk");
+    } else if (strcmp(language, "es-rMX") == 0){
+      strcpy(espeakLangStr, "es-la");
+    } else if (strcmp(language, "zh-rHK") == 0){
+      strcpy(espeakLangStr, "zh");
+      voice.variant = 5;
+    } else {
+      espeakLangStr[0] = language[0];
+      espeakLangStr[1] = language[1];
+      espeakLangStr[2] = 0;
+      // Bail out and do nothing if the language is not supported by eSpeak
+      if ((strcmp(language, "af") != 0) && 
+          (strcmp(language, "bs") != 0) && 
+          (strcmp(language, "zh") != 0) && 
+          (strcmp(language, "hr") != 0) && 
+          (strcmp(language, "cz") != 0) && 
+          (strcmp(language, "nl") != 0) && 
+          (strcmp(language, "en") != 0) && 
+          (strcmp(language, "eo") != 0) && 
+          (strcmp(language, "fi") != 0) && 
+          (strcmp(language, "fr") != 0) && 
+          (strcmp(language, "de") != 0) && 
+          (strcmp(language, "el") != 0) && 
+          (strcmp(language, "hi") != 0) && 
+          (strcmp(language, "hu") != 0) && 
+          (strcmp(language, "is") != 0) && 
+          (strcmp(language, "id") != 0) && 
+          (strcmp(language, "it") != 0) && 
+          (strcmp(language, "ku") != 0) && 
+          (strcmp(language, "la") != 0) && 
+          (strcmp(language, "mk") != 0) && 
+          (strcmp(language, "no") != 0) && 
+          (strcmp(language, "pl") != 0) && 
+          (strcmp(language, "pt") != 0) && 
+          (strcmp(language, "ro") != 0) && 
+          (strcmp(language, "ru") != 0) && 
+          (strcmp(language, "sr") != 0) && 
+          (strcmp(language, "sk") != 0) && 
+          (strcmp(language, "es") != 0) && 
+          (strcmp(language, "sw") != 0) && 
+          (strcmp(language, "sv") != 0) && 
+          (strcmp(language, "ta") != 0) && 
+          (strcmp(language, "tr") != 0) && 
+          (strcmp(language, "vi") != 0) && 
+          (strcmp(language, "cy") != 0) ){
+        LOGI("Error: Unsupported language.");
+        return;
+      }
+      // Use American English as the default English
+      if (strcmp(language, "en") == 0) {
+        strcpy(espeakLangStr, "en-us");
+      }
+    }
+LOGI("1");
+    voice.languages = espeakLangStr;
     espeak_ERROR err = espeak_SetVoiceByProperties(&voice);
+LOGI("2");
 }
 
 static void setSpeechRate(int speechRate)

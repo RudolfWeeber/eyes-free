@@ -5,13 +5,13 @@
 	<string name="homepage">Project Homepage</string>
 	<string name="af">haai</string>
 	<string name="bs">Zdravo</string>
-	<string name="zhyue">你好</string>
+	<string name="zhrHK">你好</string>
 	<string name="zh">你好</string>
 	<string name="hr">bok</string>
 	<string name="cz">ahoj</string>
 	<string name="nl">hallo</string>
-	<string name="enus">hello</string>
-	<string name="enuk">hello</string>
+	<string name="enrUS">hello</string>
+	<string name="enrGB">hello</string>
 	<string name="eo">saluton</string>
 	<string name="fi">hei</string>
 	<string name="fr">bonjour</string>
@@ -33,7 +33,7 @@
 	<string name="sr">здраво</string>
 	<string name="sk">ahoj</string>
 	<string name="es">hola</string>
-	<string name="esla">hola</string>
+	<string name="esrMX">hola</string>
 	<string name="sw">Jambo</string>
 	<string name="sv">hej</string>
 	<string name="ta">vanakkam</string>

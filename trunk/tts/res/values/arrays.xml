@@ -58,13 +58,13 @@
     <string-array name="language_values">
         <item>af</item>
         <item>bs</item>
-        <item>zh-yue</item>
+        <item>zh-rHK</item>
         <item>zh</item>
         <item>hr</item>
         <item>cz</item>
         <item>nl</item>
-        <item>en-us</item>
-        <item>en-uk</item>
+        <item>en-rUS</item>
+        <item>en-rGB</item>
         <item>eo</item>
         <item>fi</item>
         <item>fr</item>
@@ -86,7 +86,7 @@
         <item>sr</item>
         <item>sk</item>
         <item>es</item>
-        <item>es-la</item>
+        <item>es-rMX</item>
         <item>sw</item>
         <item>sv</item>
         <item>ta</item>

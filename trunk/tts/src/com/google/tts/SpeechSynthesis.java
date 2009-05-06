@@ -60,7 +60,7 @@ public class SpeechSynthesis {
   /**
    * Sets the language
    */
-  public native final void setLanguage(String language, int languageVariant);
+  public native final void setLanguage(String language, int variant);
 
   /**
    * Sets the speech rate

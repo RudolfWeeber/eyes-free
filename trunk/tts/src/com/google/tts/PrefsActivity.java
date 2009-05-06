@@ -45,13 +45,13 @@ public class PrefsActivity extends PreferenceActivity {
     hellos = new HashMap<String, Integer>();
     hellos.put("af", R.string.af);
     hellos.put("bs", R.string.bs);
-    hellos.put("zh-yue", R.string.zhyue);
+    hellos.put("zh-rHK", R.string.zhrHK);
     hellos.put("zh", R.string.zh);
     hellos.put("hr", R.string.hr);
     hellos.put("cz", R.string.cz);
     hellos.put("nl", R.string.nl);
-    hellos.put("en-us", R.string.enus);
-    hellos.put("en-uk", R.string.enuk);
+    hellos.put("en-rUS", R.string.enrUS);
+    hellos.put("en-rGB", R.string.enrGB);
     hellos.put("eo", R.string.eo);
     hellos.put("fi", R.string.fi);
     hellos.put("fr", R.string.fr);
@@ -73,7 +73,7 @@ public class PrefsActivity extends PreferenceActivity {
     hellos.put("sr", R.string.sr);
     hellos.put("sk", R.string.sk);
     hellos.put("es", R.string.es);
-    hellos.put("es-la", R.string.esla);
+    hellos.put("es-rMX", R.string.esrMX);
     hellos.put("sw", R.string.sw);
     hellos.put("sv", R.string.sv);
     hellos.put("ta", R.string.ta);
@@ -84,7 +84,7 @@ public class PrefsActivity extends PreferenceActivity {
 
   private void sayHello() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    String languageCode = prefs.getString("lang_pref", "en-us");
+    String languageCode = prefs.getString("lang_pref", "en-rUS");
     int rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
 
     myTts.setLanguage(languageCode);
