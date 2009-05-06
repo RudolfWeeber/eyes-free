@@ -2,7 +2,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	com_google_tts_SpeechSynthesis.cpp
+	com_google_espeakengine.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
@@ -12,7 +12,6 @@ LOCAL_C_INCLUDES += \
 	$(LOCAL_PATH)/../../include/ui \
 	$(LOCAL_PATH)/../../include/utils \
 	external/espeak/src \
-
 
 LOCAL_STATIC_LIBRARIES := \
 	libespeak
@@ -42,15 +41,7 @@ XLOCAL_SHARED_LIBRARIES := \
 	libicudata \
 	libwpa_client
 
-ifneq ($(TARGET_SIMULATOR),true)
-LOCAL_SHARED_LIBRARIES += \
-	libdl
-  # we need to access the private Bionic header
-  # <bionic_tls.h> in com_google_android_gles_jni_GLImpl.cpp
-  LOCAL_CFLAGS += -I$(LOCAL_PATH)/../../../../bionic/libc/private
-endif
-
-LOCAL_MODULE:= libspeechsynthesis
+LOCAL_MODULE:= libespeakengine
 
 LOCAL_ARM_MODE := arm
 
