@@ -22,14 +22,10 @@
 #include <utils/Log.h>
 #include <android_runtime/AndroidRuntime.h>
 #include <speak_lib.h>
+#include <tts/TtsSynthInterface.h>
+
 
 using namespace android;
-
-typedef unsigned int uint32;
-typedef unsigned short uint16;
-
-typedef void (synthDoneCB_t)(short *, int);  //Move this to a .h file
-
 
 // Callback to the TTS API
 //
@@ -59,72 +55,63 @@ static void setLanguage(const char* language)
         return;
     }
     if (strcmp(language, "en-rUS") == 0){
-//      strcpy(espeakLangStr, "en-us");
-espeakLangStr[0] = 'e';
-espeakLangStr[1] = 'n';
-espeakLangStr[2] = '-';
-espeakLangStr[3] = 'u';
-espeakLangStr[4] = 's';
-espeakLangStr[5] = 0;
-LOGI("0");
-    } else if (strcmp(language, "en-rGB") == 0){
-      strcpy(espeakLangStr, "en-uk");
-    } else if (strcmp(language, "es-rMX") == 0){
-      strcpy(espeakLangStr, "es-la");
-    } else if (strcmp(language, "zh-rHK") == 0){
-      strcpy(espeakLangStr, "zh");
-      voice.variant = 5;
-    } else {
-      espeakLangStr[0] = language[0];
-      espeakLangStr[1] = language[1];
-      espeakLangStr[2] = 0;
-      // Bail out and do nothing if the language is not supported by eSpeak
-      if ((strcmp(language, "af") != 0) && 
-          (strcmp(language, "bs") != 0) && 
-          (strcmp(language, "zh") != 0) && 
-          (strcmp(language, "hr") != 0) && 
-          (strcmp(language, "cz") != 0) && 
-          (strcmp(language, "nl") != 0) && 
-          (strcmp(language, "en") != 0) && 
-          (strcmp(language, "eo") != 0) && 
-          (strcmp(language, "fi") != 0) && 
-          (strcmp(language, "fr") != 0) && 
-          (strcmp(language, "de") != 0) && 
-          (strcmp(language, "el") != 0) && 
-          (strcmp(language, "hi") != 0) && 
-          (strcmp(language, "hu") != 0) && 
-          (strcmp(language, "is") != 0) && 
-          (strcmp(language, "id") != 0) && 
-          (strcmp(language, "it") != 0) && 
-          (strcmp(language, "ku") != 0) && 
-          (strcmp(language, "la") != 0) && 
-          (strcmp(language, "mk") != 0) && 
-          (strcmp(language, "no") != 0) && 
-          (strcmp(language, "pl") != 0) && 
-          (strcmp(language, "pt") != 0) && 
-          (strcmp(language, "ro") != 0) && 
-          (strcmp(language, "ru") != 0) && 
-          (strcmp(language, "sr") != 0) && 
-          (strcmp(language, "sk") != 0) && 
-          (strcmp(language, "es") != 0) && 
-          (strcmp(language, "sw") != 0) && 
-          (strcmp(language, "sv") != 0) && 
-          (strcmp(language, "ta") != 0) && 
-          (strcmp(language, "tr") != 0) && 
-          (strcmp(language, "vi") != 0) && 
-          (strcmp(language, "cy") != 0) ){
-        LOGI("Error: Unsupported language.");
-        return;
-      }
-      // Use American English as the default English
-      if (strcmp(language, "en") == 0) {
         strcpy(espeakLangStr, "en-us");
-      }
+    } else if (strcmp(language, "en-rGB") == 0){
+        strcpy(espeakLangStr, "en-uk");
+    } else if (strcmp(language, "es-rMX") == 0){
+        strcpy(espeakLangStr, "es-la");
+    } else if (strcmp(language, "zh-rHK") == 0){
+        strcpy(espeakLangStr, "zh");
+        voice.variant = 5;
+    } else {
+        espeakLangStr[0] = language[0];
+        espeakLangStr[1] = language[1];
+        espeakLangStr[2] = 0;
+        // Bail out and do nothing if the language is not supported by eSpeak
+        if ((strcmp(language, "af") != 0) && 
+            (strcmp(language, "bs") != 0) && 
+            (strcmp(language, "zh") != 0) && 
+            (strcmp(language, "hr") != 0) && 
+            (strcmp(language, "cz") != 0) && 
+            (strcmp(language, "nl") != 0) && 
+            (strcmp(language, "en") != 0) && 
+            (strcmp(language, "eo") != 0) && 
+            (strcmp(language, "fi") != 0) && 
+            (strcmp(language, "fr") != 0) && 
+            (strcmp(language, "de") != 0) && 
+            (strcmp(language, "el") != 0) && 
+            (strcmp(language, "hi") != 0) && 
+            (strcmp(language, "hu") != 0) && 
+            (strcmp(language, "is") != 0) && 
+            (strcmp(language, "id") != 0) && 
+            (strcmp(language, "it") != 0) && 
+            (strcmp(language, "ku") != 0) && 
+            (strcmp(language, "la") != 0) && 
+            (strcmp(language, "mk") != 0) && 
+            (strcmp(language, "no") != 0) && 
+            (strcmp(language, "pl") != 0) && 
+            (strcmp(language, "pt") != 0) && 
+            (strcmp(language, "ro") != 0) && 
+            (strcmp(language, "ru") != 0) && 
+            (strcmp(language, "sr") != 0) && 
+            (strcmp(language, "sk") != 0) && 
+            (strcmp(language, "es") != 0) && 
+            (strcmp(language, "sw") != 0) && 
+            (strcmp(language, "sv") != 0) && 
+            (strcmp(language, "ta") != 0) && 
+            (strcmp(language, "tr") != 0) && 
+            (strcmp(language, "vi") != 0) && 
+            (strcmp(language, "cy") != 0) ){
+            LOGI("Error: Unsupported language.");
+            return;
+        }
+        // Use American English as the default English
+        if (strcmp(language, "en") == 0) {
+            strcpy(espeakLangStr, "en-us");
+        }
     }
-LOGI("1");
     voice.languages = espeakLangStr;
     espeak_ERROR err = espeak_SetVoiceByProperties(&voice);
-LOGI("2");
 }
 
 static void setSpeechRate(int speechRate)
@@ -139,14 +126,14 @@ static void setSpeechRate(int speechRate)
 static int eSpeakCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {    
     LOGI("eSpeak callback received!");
-    ttsSynthDoneCBPointer(wav, numsamples);
+    ttsSynthDoneCBPointer(0, wav, numsamples); //TODO: fix hard coding here
     LOGI("eSpeak callback processed!");
     return 0;  // continue synthesis (1 is to abort)
 }
 
 
 // Initializes the TTS engine and returns whether initialization succeeded
-extern "C" bool init()
+tts_result TtsSynthInterface::init(synthDoneCB_t* synthDoneCBPtr)
 {
     // TODO Make sure that the speech data is loaded in 
     // the directory /sdcard/espeak-data before calling this.
@@ -155,7 +142,7 @@ extern "C" bool init()
 
     if (sampleRate <= 0) {
         LOGI("eSpeak initialization failed!");
-        return false;
+        return TTS_FAILURE;
     }
     espeak_SetSynthCallback(eSpeakCallback);
 
@@ -169,14 +156,15 @@ extern "C" bool init()
     voice.variant = 0;
     err = espeak_SetVoiceByProperties(&voice);
 
-    return true;
+    ttsSynthDoneCBPointer = synthDoneCBPtr;
+    return TTS_SUCCESS;
 }
 
 
 // Synthesizes the text. When synthesis completes, the engine should use a callback to notify the TTS API.
-extern "C" void synth(const char *text, synthDoneCB_t synthDoneCBPtr)
+// TODO: Use the code
+tts_result TtsSynthInterface::synth(const char *text, int code)
 {
-    ttsSynthDoneCBPointer = synthDoneCBPtr;
     espeak_SetSynthCallback(eSpeakCallback);
 
     unsigned int unique_identifier;
@@ -192,41 +180,52 @@ extern "C" void synth(const char *text, synthDoneCB_t synthDoneCBPtr)
                        0);
 
     err = espeak_Synchronize();
+    return TTS_SUCCESS;
 }
 
 // Synthesizes IPA text
-extern "C" void synthIPA(const char *text, synthDoneCB_t synthDoneCBPtr)
+// TODO: Use the code
+tts_result TtsSynthInterface::synthIPA(const char *text, int code)
 {
-        LOGI("Synth IPA not supported.");
+    LOGI("Synth IPA not supported.");
+    return TTS_FEATURE_UNSUPPORTED;
 }
 
 
 // Interrupts synthesis
 //
 // TODO: check if there is any stop synth call that should be made here
-extern "C" void stop()
+tts_result TtsSynthInterface::stop()
 {
-
+    return TTS_SUCCESS;
 }
 
 
 // Sets the property with the specified value
 //
 // TODO: add pitch property here
-extern "C" void set(const char *property, const char *value)
+tts_result TtsSynthInterface::set(const char *property, const char *value)
 {
-  if (strcmp(property, "language") == 0){
+    if (strcmp(property, "language") == 0){
         setLanguage(value);
-  } else if (strcmp(property, "rate") == 0){
+    } else if (strcmp(property, "rate") == 0){
         setSpeechRate(atoi(value));
-  } else {
+    } else {
         LOGI("Unknown property!");
-  }
+    }
+    return TTS_SUCCESS;
 }
 
 
 // Shutsdown the TTS engine
-extern "C" void shutdown()
+tts_result TtsSynthInterface::shutdown()
 {
     espeak_Terminate();
+    return TTS_SUCCESS;
+}
+
+
+TtsSynthInterface* getTtsSynth()
+{
+    return new TtsSynthInterface();
 }

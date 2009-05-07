@@ -27,13 +27,12 @@
 #include <android_runtime/AndroidRuntime.h>
 #include <speak_lib.h>
 #include <media/AudioTrack.h>
+#include <tts/TtsSynthInterface.h>
 
 #include <dlfcn.h>
 
 using namespace android;
 
-
-typedef void (synthDoneCB_t)(short *, int);  //Move this to a .h file!
 
 static struct fields_t {
     jfieldID    mNativeContext;
@@ -48,28 +47,13 @@ struct tts_callback_cookie {
 };
 
 
-typedef unsigned int uint32;
-typedef unsigned short uint16;
-
-
 static AudioTrack* audout;
 tts_callback_cookie mCallbackData;
-
-
-
-void * engine_lib_handle;
-bool (*engineInit)();
-void (*engineSynth)(const char *, synthDoneCB_t);
-void (*engineSynthIPA)(const char *, synthDoneCB_t);
-void (*engineSet)(const char *, const char *);
-void (*engineStop)();
-void (*engineShutdown)();
-
-
+TtsSynthInterface * nativeSynthInterface;
 
 
 /* Callback from espeak.  Directly speaks using AudioTrack. */
-static void ttsSynthDoneCBSpeak(short *wav, int numsamples) {
+static void ttsSynthDoneCBSpeak(int code, short *wav, int numsamples) {
     char buf[100];
     sprintf(buf, "ttsSynthDoneCallback: %d samples", numsamples);
     LOGI(buf);
@@ -126,52 +110,24 @@ com_google_tts_SpeechSynthesis_native_setup(
     }
 
     // TODO: Handle dynamically getting the filename for dlopen
-    engine_lib_handle = dlopen("/data/data/com.google.tts/lib/libespeakengine.so", RTLD_NOW | RTLD_LOCAL);
+    void *engine_lib_handle = dlopen("/data/data/com.google.tts/lib/libespeakengine.so", RTLD_NOW | RTLD_LOCAL);
 //    engine_lib_handle = dlopen("/data/data/com.google.marvin.espeak/lib/libespeakengine.so", RTLD_NOW | RTLD_LOCAL);
     if(engine_lib_handle==NULL) {
        LOGI("engine_lib_handle==NULL");
     }
 
+    TtsSynthInterface *(*get_TtsSynthInterface)() = reinterpret_cast<TtsSynthInterface* (*)()>(dlsym(engine_lib_handle, "getTtsSynth"));
+    nativeSynthInterface = (*get_TtsSynthInterface)();
 
-    engineInit = reinterpret_cast<bool (*)()>(dlsym(engine_lib_handle, "init"));
-    if(engineInit==NULL) {
-       LOGI("engineInit==NULL");
-    }
-    engineInit();
-
-    engineSynth = reinterpret_cast<void (*)(const char *, synthDoneCB_t)>(dlsym(engine_lib_handle, "synth"));
-    if(engineSynth==NULL) {
-       LOGI("engineSynth==NULL");
-    }
-
-    engineSynthIPA = reinterpret_cast<void (*)(const char *, synthDoneCB_t)>(dlsym(engine_lib_handle, "synthIPA"));
-    if(engineSynthIPA==NULL) {
-       LOGI("engineSynthIPA==NULL");
-    }
-
-    engineStop = reinterpret_cast<void (*)()>(dlsym(engine_lib_handle, "stop"));
-    if(engineStop==NULL) {
-       LOGI("engineStop==NULL");
-    }
-
-    engineSet = reinterpret_cast<void (*)(const char *, const char *)>(dlsym(engine_lib_handle, "set"));
-    if(engineSet==NULL) {
-       LOGI("engineSet==NULL");
-    }
-
-    engineShutdown = reinterpret_cast<void (*)()>(dlsym(engine_lib_handle, "shutdown"));
-    if(engineShutdown==NULL) {
-       LOGI("engineShutdown==NULL");
-    }
+    nativeSynthInterface->init(ttsSynthDoneCBSpeak);
 }
 
 // TODO: Remove the "variant" param
 static void
-com_google_tts_SpeechSynthesis_setLanguage(JNIEnv *env, jobject thiz, 
-                                           jstring language, int variant)
+com_google_tts_SpeechSynthesis_setLanguage(JNIEnv *env, jobject thiz, jstring language)
 {   
     const char *langNativeString = env->GetStringUTFChars(language, 0);
-    engineSet("language", langNativeString);
+    nativeSynthInterface->set("language", langNativeString);
     env->ReleaseStringUTFChars(language, langNativeString);
 }
 
@@ -181,14 +137,14 @@ com_google_tts_SpeechSynthesis_setSpeechRate(JNIEnv *env, jobject thiz,
 {
     char buffer [10];
     sprintf(buffer, "%d", speechRate);
-    engineSet("rate", buffer);
+    nativeSynthInterface->set("rate", buffer);
 }
 
 static void
 com_google_tts_SpeechSynthesis_native_finalize(JNIEnv *env,
 					       jobject thiz)
 {
-    engineShutdown();
+    nativeSynthInterface->shutdown();
     delete audout;
 }
 
@@ -300,7 +256,7 @@ com_google_tts_SpeechSynthesis_speak(JNIEnv *env, jobject thiz,
     audout->stop();
     audout->start();
     const char *textNativeString = env->GetStringUTFChars(textJavaString, 0);
-    engineSynth(textNativeString, ttsSynthDoneCBSpeak);
+    nativeSynthInterface->synth(textNativeString, 0);
     env->ReleaseStringUTFChars(textJavaString, textNativeString);
 }
 
@@ -308,7 +264,7 @@ com_google_tts_SpeechSynthesis_speak(JNIEnv *env, jobject thiz,
 static void
 com_google_tts_SpeechSynthesis_stop(JNIEnv *env, jobject thiz)
 {
-    engineStop();
+    nativeSynthInterface->stop();
     audout->stop();
 }
 
@@ -338,7 +294,7 @@ static JNINativeMethod gMethods[] = {
         (void*)com_google_tts_SpeechSynthesis_synthesizeToFile
     },
     {   "setLanguage",
-        "(Ljava/lang/String;I)V",
+        "(Ljava/lang/String;)V",
         (void*)com_google_tts_SpeechSynthesis_setLanguage
     },
     {   "setSpeechRate",
