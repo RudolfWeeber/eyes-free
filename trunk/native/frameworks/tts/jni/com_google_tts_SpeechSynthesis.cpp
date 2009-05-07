@@ -50,38 +50,37 @@ struct tts_callback_cookie {
 static AudioTrack* audout;
 tts_callback_cookie mCallbackData;
 TtsSynthInterface * nativeSynthInterface;
+FILE* targetFilePointer;
 
 
 /* Callback from espeak.  Directly speaks using AudioTrack. */
-static void ttsSynthDoneCBSpeak(int code, short *wav, int numsamples) {
+static void ttsSynthDoneCB(int code, short *wav, int numsamples) {
     char buf[100];
     sprintf(buf, "ttsSynthDoneCallback: %d samples", numsamples);
     LOGI(buf);
 
-    if (wav == NULL) {
-        LOGI("Null: speech has completed");
+    if (code == 0){
+        LOGI("Direct speech");
+        if (wav == NULL) {
+            LOGI("Null: speech has completed");
+        }
+        if (numsamples > 0){
+            int bufferSize = sizeof(short) * numsamples;
+            audout->write(wav, bufferSize);
+            sprintf(buf, "AudioTrack wrote: %d bytes", bufferSize);
+            LOGI(buf);
+        }
+    } if (code == 1){
+        LOGI("Save to file");
+        if (wav == NULL) {
+            LOGI("Null: speech has completed");
+        }
+        if (numsamples > 0){
+            fwrite(wav, sizeof(short), numsamples, targetFilePointer);
+        }
     }
-
-      if (numsamples > 0){
-        int bufferSize = sizeof(short) * numsamples;
-        audout->write(wav, bufferSize);
-        sprintf(buf, "AudioTrack wrote: %d bytes", bufferSize);
-        LOGI(buf);
-      }
-
     return;
 }
-
-// TODO: How do we get the user_data back here?
-static void ttsSynthDoneCBSave(short *wav, int numsamples) {
-    // The user data should contain the file pointer of the file to write to
-//    void* user_data = events->user_data;
-//    FILE* fp = static_cast<FILE *>(user_data);
-
-    // Write all of the samples
-//    fwrite(wav, sizeof(short), numsamples, fp);
-}
-
 
 static void
 com_google_tts_SpeechSynthesis_native_setup(
@@ -119,10 +118,10 @@ com_google_tts_SpeechSynthesis_native_setup(
     TtsSynthInterface *(*get_TtsSynthInterface)() = reinterpret_cast<TtsSynthInterface* (*)()>(dlsym(engine_lib_handle, "getTtsSynth"));
     nativeSynthInterface = (*get_TtsSynthInterface)();
 
-    nativeSynthInterface->init(ttsSynthDoneCBSpeak);
+    nativeSynthInterface->init(ttsSynthDoneCB);
 }
 
-// TODO: Remove the "variant" param
+
 static void
 com_google_tts_SpeechSynthesis_setLanguage(JNIEnv *env, jobject thiz, jstring language)
 {   
@@ -148,61 +147,27 @@ com_google_tts_SpeechSynthesis_native_finalize(JNIEnv *env,
     delete audout;
 }
 
-// TODO: Do something for synthing to file
+
 static void
 com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
 						jstring textJavaString,
 						jstring filenameJavaString)
 {
-/*
-    espeak_SetSynthCallback(AndroidEspeakSynthToFileCallback);
-    int sampleRate = (int)env->GetIntField(thiz, fields.mNativeContext);
+    const char *filenameNativeString = env->GetStringUTFChars(filenameJavaString, 0);
     const char *textNativeString = env->GetStringUTFChars(textJavaString, 0);
-    const char *filenameNativeString = env->GetStringUTFChars(
-        filenameJavaString, 0);
 
-    LOGI("text:::");
-    LOGI(textNativeString);
-    LOGI("filename:::");
-    LOGI(filenameNativeString);
 
-    FILE *fp = fopen(filenameNativeString, "wb");
+    targetFilePointer = fopen(filenameNativeString, "wb");
     // Write 44 blank bytes for WAV header, then come back and fill them in
     // after we've written the audio data
     char header[44];
-    fwrite(header, 1, 44, fp);
+    fwrite(header, 1, 44, targetFilePointer);
 
     unsigned int unique_identifier;
-    void* user_data = (void *)fp;
-    espeak_ERROR err;
 
-    LOGI("Calling synth");
+    nativeSynthInterface->synth(textNativeString, 1);
 
-    err = espeak_Synth(textNativeString,
-                       strlen(textNativeString),
-                       0,  // position
-                       POS_CHARACTER,
-                       0,  // end position (0 means no end position)
-                       espeakCHARS_UTF8,
-                       &unique_identifier,
-                       user_data);
-
-    char buf[100];
-    sprintf(buf, "synth err: %d\n", err);
-    LOGI(buf);
-
-    err = espeak_Synchronize();
-
-    sprintf(buf, "synchronize err: %d\n", err);
-    LOGI(buf);
-
-    LOGI("synth Done");
-
-    long filelen = ftell(fp);
-
-    sprintf(buf, "file len: %ld\n", filelen);
-    LOGI(buf);
-
+    long filelen = ftell(targetFilePointer);
 
     int samples = (((int)filelen) - 44) / 2;
     header[0] = 'R';
@@ -237,15 +202,14 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
     ((uint32 *)(&header[40]))[0] = samples * 2;  // size of data
 
     // Skip back to the beginning and rewrite the header
-    fseek(fp, 0, SEEK_SET);
-    fwrite(header, 1, 44, fp);
+    fseek(targetFilePointer, 0, SEEK_SET);
+    fwrite(header, 1, 44, targetFilePointer);
 
-    fflush(fp);
-    fclose(fp);
+    fflush(targetFilePointer);
+    fclose(targetFilePointer);
 
     env->ReleaseStringUTFChars(textJavaString, textNativeString);
     env->ReleaseStringUTFChars(filenameJavaString, filenameNativeString);
-*/
 }
 
 

@@ -28,8 +28,6 @@
 using namespace android;
 
 // Callback to the TTS API
-//
-// TODO: make this work for multiple callbacks
 synthDoneCB_t* ttsSynthDoneCBPointer;
 
 
@@ -126,7 +124,7 @@ static void setSpeechRate(int speechRate)
 static int eSpeakCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {    
     LOGI("eSpeak callback received!");
-    ttsSynthDoneCBPointer(0, wav, numsamples); //TODO: fix hard coding here
+    ttsSynthDoneCBPointer((int)events->user_data, wav, numsamples);
     LOGI("eSpeak callback processed!");
     return 0;  // continue synthesis (1 is to abort)
 }
@@ -162,7 +160,6 @@ tts_result TtsSynthInterface::init(synthDoneCB_t* synthDoneCBPtr)
 
 
 // Synthesizes the text. When synthesis completes, the engine should use a callback to notify the TTS API.
-// TODO: Use the code
 tts_result TtsSynthInterface::synth(const char *text, int code)
 {
     espeak_SetSynthCallback(eSpeakCallback);
@@ -177,14 +174,13 @@ tts_result TtsSynthInterface::synth(const char *text, int code)
                        0,  // end position (0 means no end position)
                        espeakCHARS_UTF8,
                        &unique_identifier,
-                       0);
+                       (void *)code);
 
     err = espeak_Synchronize();
     return TTS_SUCCESS;
 }
 
 // Synthesizes IPA text
-// TODO: Use the code
 tts_result TtsSynthInterface::synthIPA(const char *text, int code)
 {
     LOGI("Synth IPA not supported.");
@@ -193,10 +189,9 @@ tts_result TtsSynthInterface::synthIPA(const char *text, int code)
 
 
 // Interrupts synthesis
-//
-// TODO: check if there is any stop synth call that should be made here
 tts_result TtsSynthInterface::stop()
 {
+    espeak_Cancel();
     return TTS_SUCCESS;
 }
 
