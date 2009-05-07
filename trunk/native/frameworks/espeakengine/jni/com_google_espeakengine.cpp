@@ -124,7 +124,7 @@ static void setSpeechRate(int speechRate)
 static int eSpeakCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {    
     LOGI("eSpeak callback received!");
-    ttsSynthDoneCBPointer((int)events->user_data, wav, numsamples);
+    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, wav, numsamples);
     LOGI("eSpeak callback processed!");
     return 0;  // continue synthesis (1 is to abort)
 }
@@ -160,7 +160,7 @@ tts_result TtsSynthInterface::init(synthDoneCB_t* synthDoneCBPtr)
 
 
 // Synthesizes the text. When synthesis completes, the engine should use a callback to notify the TTS API.
-tts_result TtsSynthInterface::synth(const char *text, int code)
+tts_result TtsSynthInterface::synth(const char *text, void *userdata)
 {
     espeak_SetSynthCallback(eSpeakCallback);
 
@@ -174,14 +174,14 @@ tts_result TtsSynthInterface::synth(const char *text, int code)
                        0,  // end position (0 means no end position)
                        espeakCHARS_UTF8,
                        &unique_identifier,
-                       (void *)code);
+                       userdata);
 
     err = espeak_Synchronize();
     return TTS_SUCCESS;
 }
 
 // Synthesizes IPA text
-tts_result TtsSynthInterface::synthIPA(const char *text, int code)
+tts_result TtsSynthInterface::synthIPA(const char *text, void *userdata)
 {
     LOGI("Synth IPA not supported.");
     return TTS_FEATURE_UNSUPPORTED;

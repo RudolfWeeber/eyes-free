@@ -26,7 +26,6 @@
 #include <nativehelper/JNIHelp.h>
 #include <android_runtime/AndroidRuntime.h>
 #include <speak_lib.h>
-#include <media/AudioTrack.h>
 #include <tts/TtsSynthInterface.h>
 
 #include <dlfcn.h>
@@ -47,30 +46,60 @@ struct tts_callback_cookie {
 };
 
 
-static AudioTrack* audout;
 tts_callback_cookie mCallbackData;
 TtsSynthInterface * nativeSynthInterface;
 FILE* targetFilePointer;
 
+static AudioTrack* audout;
+uint32_t audioTrack_sampleRate;
+AudioSystem::audio_format audioTrack_format;
+int audioTrack_channelCount;
+
+void prepAudioTrack(uint32_t rate, AudioSystem::audio_format format, int channel)
+{   
+    // Don't bother creating a new audiotrack object if the current 
+    // object is already set.
+    if ( (rate == audioTrack_sampleRate) && 
+         (format == audioTrack_format) && 
+         (channel == audioTrack_channelCount) ){
+        return;
+    }
+    if (audout){
+        audout->stop();
+        delete audout;
+    }
+    audioTrack_sampleRate = rate;
+    audioTrack_format = format;
+    audioTrack_channelCount = channel;
+    audout = new AudioTrack(AudioSystem::MUSIC, rate, format, channel, 4096, 0, 0, 0, 0);
+    if (audout->initCheck() != NO_ERROR) {
+      LOGI("AudioTrack error");
+    } else {
+      LOGI("AudioTrack OK");
+      audout->start();
+      LOGI("AudioTrack started");
+    }
+}
 
 /* Callback from espeak.  Directly speaks using AudioTrack. */
-static void ttsSynthDoneCB(int code, short *wav, int numsamples) {
+static void ttsSynthDoneCB(void * userdata, uint32_t rate, AudioSystem::audio_format format, int channel, short *wav, int numsamples) {
     char buf[100];
     sprintf(buf, "ttsSynthDoneCallback: %d samples", numsamples);
     LOGI(buf);
 
-    if (code == 0){
+    if ((int)userdata == 0){
         LOGI("Direct speech");
         if (wav == NULL) {
             LOGI("Null: speech has completed");
         }
         if (numsamples > 0){
+            prepAudioTrack(rate, format, channel);
             int bufferSize = sizeof(short) * numsamples;
             audout->write(wav, bufferSize);
             sprintf(buf, "AudioTrack wrote: %d bytes", bufferSize);
             LOGI(buf);
         }
-    } if (code == 1){
+    } if ((int)userdata == 1){
         LOGI("Save to file");
         if (wav == NULL) {
             LOGI("Null: speech has completed");
@@ -98,15 +127,9 @@ com_google_tts_SpeechSynthesis_native_setup(
         LOGE("Can't find TTS.%s", "postNativeSpeechSynthesizedInJava");
         return;
     }
+    audout = NULL;
 
-    audout = new AudioTrack(AudioSystem::MUSIC, 22050, AudioSystem::PCM_16_BIT, 1, 4096, 0, 0, 0, 0);
-    if (audout->initCheck() != NO_ERROR) {
-      LOGI("AudioTrack error");
-    } else {
-      LOGI("AudioTrack OK");
-      audout->start();
-      LOGI("AudioTrack started");
-    }
+    prepAudioTrack(0, AudioSystem::PCM_16_BIT, 0);
 
     // TODO: Handle dynamically getting the filename for dlopen
     void *engine_lib_handle = dlopen("/data/data/com.google.tts/lib/libespeakengine.so", RTLD_NOW | RTLD_LOCAL);
@@ -165,7 +188,7 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
 
     unsigned int unique_identifier;
 
-    nativeSynthInterface->synth(textNativeString, 1);
+    nativeSynthInterface->synth(textNativeString, (void *)1);
 
     long filelen = ftell(targetFilePointer);
 
@@ -174,7 +197,7 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
     header[1] = 'I';
     header[2] = 'F';
     header[3] = 'F';
-    ((uint32 *)(&header[4]))[0] = filelen - 8;
+    ((uint32_t *)(&header[4]))[0] = filelen - 8;
     header[8] = 'W';
     header[9] = 'A';
     header[10] = 'V';
@@ -185,21 +208,21 @@ com_google_tts_SpeechSynthesis_synthesizeToFile(JNIEnv *env, jobject thiz,
     header[14] = 't';
     header[15] = ' ';
 
-    ((uint32 *)(&header[16]))[0] = 16;  // size of fmt
+    ((uint32_t *)(&header[16]))[0] = 16;  // size of fmt
 
-    ((uint16 *)(&header[20]))[0] = 1;  // format
-    ((uint16 *)(&header[22]))[0] = 1;  // channels
-    ((uint32 *)(&header[24]))[0] = 22050;  // samplerate
-    ((uint32 *)(&header[28]))[0] = 44100;  // byterate
-    ((uint16 *)(&header[32]))[0] = 2;  // block align
-    ((uint16 *)(&header[34]))[0] = 16;  // bits per sample
+    ((unsigned short *)(&header[20]))[0] = 1;  // format
+    ((unsigned short *)(&header[22]))[0] = 1;  // channels
+    ((uint32_t *)(&header[24]))[0] = 22050;  // samplerate
+    ((uint32_t *)(&header[28]))[0] = 44100;  // byterate
+    ((unsigned short *)(&header[32]))[0] = 2;  // block align
+    ((unsigned short *)(&header[34]))[0] = 16;  // bits per sample
 
     header[36] = 'd';
     header[37] = 'a';
     header[38] = 't';
     header[39] = 'a';
 
-    ((uint32 *)(&header[40]))[0] = samples * 2;  // size of data
+    ((uint32_t *)(&header[40]))[0] = samples * 2;  // size of data
 
     // Skip back to the beginning and rewrite the header
     fseek(targetFilePointer, 0, SEEK_SET);
@@ -220,7 +243,7 @@ com_google_tts_SpeechSynthesis_speak(JNIEnv *env, jobject thiz,
     audout->stop();
     audout->start();
     const char *textNativeString = env->GetStringUTFChars(textJavaString, 0);
-    nativeSynthInterface->synth(textNativeString, 0);
+    nativeSynthInterface->synth(textNativeString, (void *)0);
     env->ReleaseStringUTFChars(textJavaString, textNativeString);
 }
 

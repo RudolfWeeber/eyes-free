@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#include <media/AudioTrack.h>
 
 using namespace android;
 
-typedef unsigned int uint32; // that might have to go
-typedef unsigned short uint16;
-
-typedef void (synthDoneCB_t)(int, short *, int);
+// The callback for synthesis completed takes:
+//    void *       - The userdata pointer set in the original synth call
+//    uint32_t     - Track sampling rate in Hz
+//    audio_format - The AudioSystem::audio_format enum
+//    int          - The number of channels
+//    short *      - A buffer of audio data
+//    int          - The size of the buffer
+//    
+typedef void (synthDoneCB_t)(void *, uint32_t, AudioSystem::audio_format, int, short *, int);
 
 class TtsSynthInterface;
 extern "C" TtsSynthInterface* getTtsSynth();
@@ -44,9 +50,9 @@ public:
     // Sets a property for the the TTS engine
     virtual tts_result set(const char *property, const char *value);
     // Synthesizes the text. When synthesis completes, the engine must call the given callback to notify the TTS API.
-    virtual tts_result synth(const char *text, int code);
+    virtual tts_result synth(const char *text, void *userdata);
     // Synthesizes IPA text. When synthesis completes, the engine must call the given callback to notify the TTS API.
     // returns TTS_FEATURE_UNSUPPORTED if IPA is not supported, otherwise TTS_SUCCESS or TTS_FAILURE
-    virtual tts_result synthIPA(const char *text, int code);
+    virtual tts_result synthIPA(const char *text, void *userdata);
 };
 
