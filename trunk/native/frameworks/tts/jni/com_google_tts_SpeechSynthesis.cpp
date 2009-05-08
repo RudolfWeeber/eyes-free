@@ -27,6 +27,7 @@
 #include <android_runtime/AndroidRuntime.h>
 #include <speak_lib.h>
 #include <tts/TtsSynthInterface.h>
+#include <media/AudioTrack.h>
 
 #include <dlfcn.h>
 
@@ -82,9 +83,9 @@ void prepAudioTrack(uint32_t rate, AudioSystem::audio_format format, int channel
 }
 
 /* Callback from espeak.  Directly speaks using AudioTrack. */
-static void ttsSynthDoneCB(void * userdata, uint32_t rate, AudioSystem::audio_format format, int channel, short *wav, int numsamples) {
+static void ttsSynthDoneCB(void * userdata, uint32_t rate, AudioSystem::audio_format format, int channel, int8_t *wav, size_t bufferSize) {
     char buf[100];
-    sprintf(buf, "ttsSynthDoneCallback: %d samples", numsamples);
+    sprintf(buf, "ttsSynthDoneCallback: %d bytes", bufferSize);
     LOGI(buf);
 
     if ((int)userdata == 0){
@@ -92,9 +93,8 @@ static void ttsSynthDoneCB(void * userdata, uint32_t rate, AudioSystem::audio_fo
         if (wav == NULL) {
             LOGI("Null: speech has completed");
         }
-        if (numsamples > 0){
+        if (bufferSize > 0){
             prepAudioTrack(rate, format, channel);
-            int bufferSize = sizeof(short) * numsamples;
             audout->write(wav, bufferSize);
             sprintf(buf, "AudioTrack wrote: %d bytes", bufferSize);
             LOGI(buf);
@@ -104,8 +104,8 @@ static void ttsSynthDoneCB(void * userdata, uint32_t rate, AudioSystem::audio_fo
         if (wav == NULL) {
             LOGI("Null: speech has completed");
         }
-        if (numsamples > 0){
-            fwrite(wav, sizeof(short), numsamples, targetFilePointer);
+        if (bufferSize > 0){
+            fwrite(wav, 1, bufferSize, targetFilePointer);
         }
     }
     return;

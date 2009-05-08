@@ -124,7 +124,8 @@ static void setSpeechRate(int speechRate)
 static int eSpeakCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {    
     LOGI("eSpeak callback received!");
-    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, wav, numsamples);
+    size_t bufferSize = numsamples * sizeof(short);
+    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, (int8_t *)wav, bufferSize);
     LOGI("eSpeak callback processed!");
     return 0;  // continue synthesis (1 is to abort)
 }

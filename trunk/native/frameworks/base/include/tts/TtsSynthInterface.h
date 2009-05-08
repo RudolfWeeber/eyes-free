@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <media/AudioTrack.h>
+#include <media/AudioSystem.h>
 
 using namespace android;
 
@@ -22,10 +22,16 @@ using namespace android;
 //    uint32_t     - Track sampling rate in Hz
 //    audio_format - The AudioSystem::audio_format enum
 //    int          - The number of channels
-//    short *      - A buffer of audio data
-//    int          - The size of the buffer
-//    
-typedef void (synthDoneCB_t)(void *, uint32_t, AudioSystem::audio_format, int, short *, int);
+//    int8_t *     - A buffer of audio data
+//    size_t       - The size of the buffer
+// Note about memory management:
+//    the implementation of TtsSynthInterface is responsible for the management of the memory 
+//    it allocates to store the synthesized speech. After the execution of the callback
+//    to hand the synthesized data to the client of TtsSynthInterface, the TTS engine is
+//    free to reuse or free the previously allocated memory.
+//    In other words, the implementation of the "synthDoneCB" callback cannot use
+//    the pointer to the buffer of audio samples outside of the callback itself.
+typedef void (synthDoneCB_t)(void *, uint32_t, AudioSystem::audio_format, int, int8_t *, size_t);
 
 class TtsSynthInterface;
 extern "C" TtsSynthInterface* getTtsSynth();
