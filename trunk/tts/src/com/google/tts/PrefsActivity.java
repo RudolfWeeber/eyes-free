@@ -1,13 +1,19 @@
 package com.google.tts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -30,6 +36,7 @@ public class PrefsActivity extends PreferenceActivity {
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
       addPreferencesFromResource(R.xml.prefs);
+      loadEngines();
       loadHellos();
       Preference previewPref = findPreference("preview");
       previewPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -40,6 +47,26 @@ public class PrefsActivity extends PreferenceActivity {
       });
     }
   };
+  
+  private void loadEngines(){
+	  ListPreference enginesPref = (ListPreference) findPreference("engine_pref");
+	  
+	  Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+
+	  ResolveInfo[] enginesArray = new ResolveInfo[0];
+	  PackageManager pm = getPackageManager();
+	  enginesArray = pm.queryIntentActivities(intent, 0).toArray(enginesArray);
+	  
+	  CharSequence entries[] = new CharSequence[enginesArray.length];
+	  CharSequence values[] = new CharSequence[enginesArray.length];
+	  for (int i=0; i<enginesArray.length; i++){
+		  entries[i] = enginesArray[i].loadLabel(pm);
+		  ActivityInfo aInfo = enginesArray[i].activityInfo;
+		  values[i] = aInfo.packageName + "/" + aInfo.name;
+	  }
+	  enginesPref.setEntries(entries);
+	  enginesPref.setEntryValues(values);
+  }
 
   private void loadHellos() {
     hellos = new HashMap<String, Integer>();

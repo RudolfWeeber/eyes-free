@@ -113,8 +113,7 @@ static void ttsSynthDoneCB(void * userdata, uint32_t rate, AudioSystem::audio_fo
 
 static void
 com_google_tts_SpeechSynthesis_native_setup(
-    JNIEnv *env, jobject thiz, jobject weak_this, jstring language,
-    int languageVariant, int speechRate)
+    JNIEnv *env, jobject thiz, jobject weak_this, jstring nativeSoLib)
 {
     jclass clazz = env->GetObjectClass(thiz);
     mCallbackData.tts_class = (jclass)env->NewGlobalRef(clazz);
@@ -131,9 +130,9 @@ com_google_tts_SpeechSynthesis_native_setup(
 
     prepAudioTrack(0, AudioSystem::PCM_16_BIT, 0);
 
-    // TODO: Handle dynamically getting the filename for dlopen
-    void *engine_lib_handle = dlopen("/data/data/com.google.tts/lib/libespeakengine.so", RTLD_NOW | RTLD_LOCAL);
-//    engine_lib_handle = dlopen("/data/data/com.google.marvin.espeak/lib/libespeakengine.so", RTLD_NOW | RTLD_LOCAL);
+    const char *nativeSoLibNativeString = env->GetStringUTFChars(nativeSoLib, 0);
+
+    void *engine_lib_handle = dlopen(nativeSoLibNativeString, RTLD_NOW | RTLD_LOCAL);
     if(engine_lib_handle==NULL) {
        LOGI("engine_lib_handle==NULL");
     }
@@ -142,6 +141,7 @@ com_google_tts_SpeechSynthesis_native_setup(
     nativeSynthInterface = (*get_TtsSynthInterface)();
 
     nativeSynthInterface->init(ttsSynthDoneCB);
+LOGI("Setup complete");
 }
 
 
@@ -257,6 +257,13 @@ com_google_tts_SpeechSynthesis_stop(JNIEnv *env, jobject thiz)
 
 
 static void
+com_google_tts_SpeechSynthesis_shutdown(JNIEnv *env, jobject thiz)
+{
+    nativeSynthInterface->shutdown();
+}
+
+
+static void
 com_google_tts_SpeechSynthesis_playAudioBuffer(JNIEnv *env, jobject thiz, int bufferPointer, int bufferSize)
 {
         short* wav = (short*) bufferPointer;
@@ -264,6 +271,22 @@ com_google_tts_SpeechSynthesis_playAudioBuffer(JNIEnv *env, jobject thiz, int bu
         char buf[100];
         sprintf(buf, "AudioTrack wrote: %d bytes", bufferSize);
         LOGI(buf);
+}
+
+JNIEXPORT jstring JNICALL
+com_google_tts_SpeechSynthesis_getLanguage(JNIEnv *env, jobject thiz)
+{
+    char buf[100];
+    nativeSynthInterface->get("language", buf);
+    return env->NewStringUTF(buf);
+}
+
+JNIEXPORT int JNICALL
+com_google_tts_SpeechSynthesis_getRate(JNIEnv *env, jobject thiz)
+{
+    char buf[100];
+    nativeSynthInterface->get("rate", buf);
+    return atoi(buf);
 }
 
 // Dalvik VM type signatures
@@ -292,8 +315,20 @@ static JNINativeMethod gMethods[] = {
         "(II)V",
         (void*)com_google_tts_SpeechSynthesis_playAudioBuffer
     },
+    {   "getLanguage",             
+        "()Ljava/lang/String;",
+        (void*)com_google_tts_SpeechSynthesis_getLanguage
+    },
+    {   "getRate",             
+        "()I",
+        (void*)com_google_tts_SpeechSynthesis_getRate
+    },
+    {   "shutdown",             
+        "()V",
+        (void*)com_google_tts_SpeechSynthesis_shutdown
+    },
     {   "native_setup",
-        "(Ljava/lang/Object;Ljava/lang/String;II)V",
+        "(Ljava/lang/Object;Ljava/lang/String;)V",
         (void*)com_google_tts_SpeechSynthesis_native_setup
     },
     {   "native_finalize",     

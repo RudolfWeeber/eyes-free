@@ -3,6 +3,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
         
         <ListPreference
+                android:key="engine_pref"
+                android:title="Default Engine" />
+        
+        <ListPreference
                 android:key="lang_pref"
                 android:title="Default Language"
                 android:entries="@array/language_entries"

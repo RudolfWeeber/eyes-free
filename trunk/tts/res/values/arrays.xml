@@ -93,7 +93,7 @@
         <item>tr</item>
         <item>vi</item>
         <item>cy</item>
-    </string-array>    
+    </string-array>
 
     <string-array name="rate_entries">
         <item>Very slow</item>

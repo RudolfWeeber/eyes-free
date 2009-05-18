@@ -30,6 +30,9 @@ using namespace android;
 // Callback to the TTS API
 synthDoneCB_t* ttsSynthDoneCBPointer;
 
+char* currentLanguage = "en-rUS";
+char* currentRate = "140";
+
 
 /* Functions internal to the eSpeak engine wrapper */
 
@@ -110,6 +113,8 @@ static void setLanguage(const char* language)
     }
     voice.languages = espeakLangStr;
     espeak_ERROR err = espeak_SetVoiceByProperties(&voice);
+    currentLanguage = new char [strlen(language)];
+    strcpy(currentLanguage, language);
 }
 
 static void setSpeechRate(int speechRate)
@@ -206,8 +211,28 @@ tts_result TtsSynthInterface::set(const char *property, const char *value)
         setLanguage(value);
     } else if (strcmp(property, "rate") == 0){
         setSpeechRate(atoi(value));
+        currentRate = new char [strlen(value)];
+        strcpy(currentRate, value);
     } else {
         LOGI("Unknown property!");
+        return TTS_PROPERTY_UNSUPPORTED;
+    }
+    return TTS_SUCCESS;
+}
+
+
+// Sets the property with the specified value
+//
+// TODO: add pitch property here
+tts_result TtsSynthInterface::get(const char *property, char *value)
+{
+    if (strcmp(property, "language") == 0){
+        strcpy(value, currentLanguage);
+    } else if (strcmp(property, "rate") == 0){
+        strcpy(value, currentRate);
+    } else {
+        LOGI("Unknown property!");
+        return TTS_PROPERTY_UNSUPPORTED;
     }
     return TTS_SUCCESS;
 }

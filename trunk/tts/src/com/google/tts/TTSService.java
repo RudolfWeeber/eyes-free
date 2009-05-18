@@ -90,13 +90,15 @@ public class TTSService extends Service implements OnCompletionListener {
 	private final ReentrantLock speechQueueLock = new ReentrantLock();
 	private final ReentrantLock synthesizerLock = new ReentrantLock();
 
-	private SpeechSynthesis nativeSynth = new SpeechSynthesis(language, 0,
-			speechRate);
+	private SpeechSynthesis nativeSynth;
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.i("TTS", "TTS starting");
+		
+		// This should be changed to work using preferences
+		nativeSynth = new SpeechSynthesis("/data/data/com.google.marvin.espeak/lib/libespeakengine.so");
 
 		// android.os.Debug.waitForDebugger();
 		self = this;
@@ -110,9 +112,6 @@ public class TTSService extends Service implements OnCompletionListener {
 		speechQueue = new ArrayList<SpeechItem>();
 		player = null;
 
-		boolean useExternalSynth = false; // TODO: Hardcoded for now, make this
-		// a
-		// pref
 
 		if (espeakIsUsable()) {
 			setEngine(TTSEngine.PRERECORDED_WITH_TTS);
@@ -120,7 +119,7 @@ public class TTSService extends Service implements OnCompletionListener {
 			setEngine(TTSEngine.PRERECORDED_ONLY);
 		}
 
-		setLanguage(prefs.getString("lang_pref", "en-us"));
+		setLanguage(prefs.getString("lang_pref", "en-rUS"));
 		setSpeechRate(Integer.parseInt(prefs.getString("rate_pref", "140")));
 	}
 
@@ -130,7 +129,7 @@ public class TTSService extends Service implements OnCompletionListener {
 		// Don't hog the media player
 		cleanUpPlayer();
 
-		// TODO: Write cleanup code for plugin engines
+		nativeSynth.shutdown();
 
 		// Unregister all callbacks.
 		mCallbacks.kill();
@@ -145,21 +144,19 @@ public class TTSService extends Service implements OnCompletionListener {
 		}
 		speechRate = rate;
 		nativeSynth.setSpeechRate(rate);
+		Log.i("get test", "rate: " + nativeSynth.getRate());
 	}
 
-	// TODO: Convert this to using the Android locale convention
-	// TODO: Change synth to only use the lang string and remove the Cantonese
-	// hack.
 	private void setLanguage(String lang) {
 		if (prefs.getBoolean("override_pref", false)) {
 			// This is set to the default here so that the preview in the prefs
 			// activity will show the change without a restart, even if apps are
-			// not
-			// allowed to change the defaults.
+			// not allowed to change the defaults.
 			lang = prefs.getString("lang_pref", "en-rUS");
 		}
 		language = lang;
-		nativeSynth.setLanguage(lang, 0);
+		nativeSynth.setLanguage(lang);
+		Log.i("get test", nativeSynth.getLanguage());
 	}
 
 	private void setEngine(TTSEngine selectedEngine) {

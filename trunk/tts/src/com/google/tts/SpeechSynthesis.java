@@ -36,8 +36,8 @@ public class SpeechSynthesis {
   /**
    * Constructor; pass a language code such as "en" for English.
    */
-  public SpeechSynthesis(String language, int languageVariant, int speechRate) {
-    native_setup(new WeakReference<SpeechSynthesis>(this), language, languageVariant, speechRate);
+  public SpeechSynthesis(String nativeSoLib) {
+    native_setup(new WeakReference<SpeechSynthesis>(this), nativeSoLib);
   }
 
   /**
@@ -60,7 +60,7 @@ public class SpeechSynthesis {
   /**
    * Sets the language
    */
-  public native final void setLanguage(String language, int variant);
+  public native final void setLanguage(String language);
 
   /**
    * Sets the speech rate
@@ -72,6 +72,22 @@ public class SpeechSynthesis {
    * Plays the given audio buffer
    */
   public native final void playAudioBuffer(int bufferPointer, int bufferSize);
+  
+
+  /**
+   * Gets the currently set language
+   */
+  public native final String getLanguage();
+
+  /**
+   * Gets the currently set rate
+   */
+  public native final int getRate();
+
+  /**
+   * Shutsdown the native synthesizer
+   */
+  public native final void shutdown();
 
   //
   // Internal
@@ -85,7 +101,7 @@ public class SpeechSynthesis {
 
   private int mNativeContext; // accessed by native methods
 
-  private native final void native_setup(Object weak_this, String language, int languageVariant, int speechRate);
+  private native final void native_setup(Object weak_this, String nativeSoLib);
 
   private native final void native_finalize();
 
