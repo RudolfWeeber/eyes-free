@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="android.tts"
+          android:versionCode="10"
+          android:versionName="1.5">
+    <application android:icon="@drawable/tts" android:label="@string/app_name">
+	  <service android:enabled="true" 
+	    	android:name=".TtsService" 
+	    	android:label="@string/app_name" 
+	    	android:icon="@drawable/tts" >
+	    	<intent-filter>
+	    		<action android:name="android.intent.action.USE_TTS" />
+				  <category android:name="android.intent.category.TTS" />
+			  </intent-filter>
+		</service>
+		
+		<activity android:name=".ConfigurationManager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+		</activity>
+		
+		<activity android:name="PrefsActivity">
+    </activity>
+	</application>
+	
+  <uses-permission android:name="android.permission.INTERNET"/>
+</manifest> 

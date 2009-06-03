@@ -2,7 +2,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	com_google_tts_SpeechSynthesis.cpp
+	android_tts_SynthProxy.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
@@ -50,7 +50,7 @@ LOCAL_SHARED_LIBRARIES += \
   LOCAL_CFLAGS += -I$(LOCAL_PATH)/../../../../bionic/libc/private
 endif
 
-LOCAL_MODULE:= libspeechsynthesis
+LOCAL_MODULE:= libttssynthproxy
 
 LOCAL_ARM_MODE := arm
 

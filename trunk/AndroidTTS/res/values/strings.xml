@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">TTS Service</string>
+	<string name="tts_apps">Application Showcase</string>
+	<string name="homepage">Project Homepage</string>
+	<string name="af">haai</string>
+	<string name="bs">Zdravo</string>
+	<string name="zhrHK">你好</string>
+	<string name="zh">你好</string>
+	<string name="hr">bok</string>
+	<string name="cz">ahoj</string>
+	<string name="nl">hallo</string>
+	<string name="enrUS">hello</string>
+	<string name="enrGB">hello</string>
+	<string name="eo">saluton</string>
+	<string name="fi">hei</string>
+	<string name="fr">bonjour</string>
+	<string name="de">hallo</string>
+	<string name="el">γεια σου</string>
+	<string name="hi">नमस्ते</string>
+	<string name="hu">jo napot</string>
+	<string name="is">góðan dag</string>
+	<string name="id">halo</string>
+	<string name="it">ciao</string>
+	<string name="ku">roj bahsh</string>
+	<string name="la">salve</string>
+	<string name="mk">Zdravo</string>
+	<string name="no">hallo</string>
+	<string name="pl">witaj</string>
+	<string name="pt">Olá</string>
+	<string name="ro">salut</string>
+	<string name="ru">привет</string>
+	<string name="sr">здраво</string>
+	<string name="sk">ahoj</string>
+	<string name="es">hola</string>
+	<string name="esrMX">hola</string>
+	<string name="sw">Jambo</string>
+	<string name="sv">hej</string>
+	<string name="ta">vanakkam</string>
+	<string name="tr">merhaba</string>
+	<string name="vi">xin chao</string>
+	<string name="cy">shwmae</string>
+</resources>

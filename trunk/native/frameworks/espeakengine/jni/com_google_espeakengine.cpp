@@ -22,10 +22,10 @@
 #include <utils/Log.h>
 #include <android_runtime/AndroidRuntime.h>
 #include <speak_lib.h>
-#include <tts/TtsSynthInterface.h>
+#include <tts/TtsEngine.h>
 
 
-using namespace android;
+namespace android {
 
 // Callback to the TTS API
 synthDoneCB_t* ttsSynthDoneCBPointer;
@@ -35,6 +35,95 @@ char* currentRate = "140";
 
 
 /* Functions internal to the eSpeak engine wrapper */
+static void setSpeechRate(int speechRate)
+{
+    espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
+}
+
+
+/* Functions exposed to the TTS API */
+
+/* Callback from espeak.  Should call back to the TTS API */
+static int eSpeakCallback(short *wav, int numsamples,
+				      espeak_EVENT *events) {    
+    LOGI("eSpeak callback received!");
+    size_t bufferSize = numsamples * sizeof(short);
+    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, (int8_t *)wav, bufferSize);
+    LOGI("eSpeak callback processed!");
+    return 0;  // continue synthesis (1 is to abort)
+}
+
+
+// Initializes the TTS engine and returns whether initialization succeeded
+tts_result TtsEngine::init(synthDoneCB_t* synthDoneCBPtr)
+{
+    // TODO Make sure that the speech data is loaded in 
+    // the directory /sdcard/espeak-data before calling this.
+    int sampleRate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,
+                                       4096, "/sdcard", 0);
+
+    if (sampleRate <= 0) {
+        LOGI("eSpeak initialization failed!");
+        return TTS_FAILURE;
+    }
+    espeak_SetSynthCallback(eSpeakCallback);
+
+    int speechRate = 140;
+    espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
+
+    espeak_VOICE voice;
+    memset( &voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
+    const char *langNativeString = "en-us";   //Default to US English
+    voice.languages = langNativeString;
+    voice.variant = 0;
+    err = espeak_SetVoiceByProperties(&voice);
+
+    ttsSynthDoneCBPointer = synthDoneCBPtr;
+    return TTS_SUCCESS;
+}
+
+
+// Synthesizes the text. When synthesis completes, the engine should use a callback to notify the TTS API.
+tts_result TtsEngine::synthesizeText(const char *text, void *userdata)
+{
+    espeak_SetSynthCallback(eSpeakCallback);
+
+    unsigned int unique_identifier;
+    espeak_ERROR err;
+
+    err = espeak_Synth(text,
+                       strlen(text),
+                       0,  // position
+                       POS_CHARACTER,
+                       0,  // end position (0 means no end position)
+                       espeakCHARS_UTF8,
+                       &unique_identifier,
+                       userdata);
+
+    err = espeak_Synchronize();
+    return TTS_SUCCESS;
+}
+
+// Synthesizes IPA text
+tts_result TtsEngine::synthesizeIpa(const char *text, void *userdata)
+{
+    LOGI("Synth IPA not supported.");
+    return TTS_FEATURE_UNSUPPORTED;
+}
+
+
+// Interrupts synthesis
+tts_result TtsEngine::stop()
+{
+    espeak_Cancel();
+    return TTS_SUCCESS;
+}
+
+tts_result TtsEngine::loadLanguage(const char* language, const size_t size)
+{   
+    LOGI("loadLanguage not supported.");
+    return TTS_FEATURE_UNSUPPORTED;
+}
 
 // Language will be specified according to the Android conventions for 
 // localization as documented here: 
@@ -45,7 +134,7 @@ char* currentRate = "140";
 // 3166-1-alpha-2 language code in uppercase preceded by a lowercase "r".
 // Note that the "-rYY" portion may be omitted if the region is unimportant.
 //
-static void setLanguage(const char* language)
+tts_result TtsEngine::setLanguage(const char* language, const size_t size)
 {   
     espeak_VOICE voice;
     memset(&voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
@@ -53,7 +142,7 @@ static void setLanguage(const char* language)
     char espeakLangStr[6];
     if ((strlen(language) != 2) && (strlen(language) != 6)){
         LOGI("Error: Invalid language. Language must be in either xx or xx-rYY format.");
-        return;
+        return TTS_VALUE_INVALID;
     }
     if (strcmp(language, "en-rUS") == 0){
         strcpy(espeakLangStr, "en-us");
@@ -104,7 +193,7 @@ static void setLanguage(const char* language)
             (strcmp(language, "vi") != 0) && 
             (strcmp(language, "cy") != 0) ){
             LOGI("Error: Unsupported language.");
-            return;
+            return TTS_PROPERTY_UNSUPPORTED;
         }
         // Use American English as the default English
         if (strcmp(language, "en") == 0) {
@@ -115,103 +204,23 @@ static void setLanguage(const char* language)
     espeak_ERROR err = espeak_SetVoiceByProperties(&voice);
     currentLanguage = new char [strlen(language)];
     strcpy(currentLanguage, language);
-}
-
-static void setSpeechRate(int speechRate)
-{
-    espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
-}
-
-
-/* Functions exposed to the TTS API */
-
-/* Callback from espeak.  Should call back to the TTS API */
-static int eSpeakCallback(short *wav, int numsamples,
-				      espeak_EVENT *events) {    
-    LOGI("eSpeak callback received!");
-    size_t bufferSize = numsamples * sizeof(short);
-    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, (int8_t *)wav, bufferSize);
-    LOGI("eSpeak callback processed!");
-    return 0;  // continue synthesis (1 is to abort)
-}
-
-
-// Initializes the TTS engine and returns whether initialization succeeded
-tts_result TtsSynthInterface::init(synthDoneCB_t* synthDoneCBPtr)
-{
-    // TODO Make sure that the speech data is loaded in 
-    // the directory /sdcard/espeak-data before calling this.
-    int sampleRate = espeak_Initialize(AUDIO_OUTPUT_SYNCHRONOUS,
-                                       4096, "/sdcard", 0);
-
-    if (sampleRate <= 0) {
-        LOGI("eSpeak initialization failed!");
-        return TTS_FAILURE;
-    }
-    espeak_SetSynthCallback(eSpeakCallback);
-
-    int speechRate = 140;
-    espeak_ERROR err = espeak_SetParameter(espeakRATE, speechRate, 0);
-
-    espeak_VOICE voice;
-    memset( &voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
-    const char *langNativeString = "en-us";   //Default to US English
-    voice.languages = langNativeString;
-    voice.variant = 0;
-    err = espeak_SetVoiceByProperties(&voice);
-
-    ttsSynthDoneCBPointer = synthDoneCBPtr;
     return TTS_SUCCESS;
 }
 
-
-// Synthesizes the text. When synthesis completes, the engine should use a callback to notify the TTS API.
-tts_result TtsSynthInterface::synth(const char *text, void *userdata)
+tts_result TtsEngine::getLanguage(char *value, size_t *iosize)
 {
-    espeak_SetSynthCallback(eSpeakCallback);
-
-    unsigned int unique_identifier;
-    espeak_ERROR err;
-
-    err = espeak_Synth(text,
-                       strlen(text),
-                       0,  // position
-                       POS_CHARACTER,
-                       0,  // end position (0 means no end position)
-                       espeakCHARS_UTF8,
-                       &unique_identifier,
-                       userdata);
-
-    err = espeak_Synchronize();
+    strcpy(value, currentLanguage);
     return TTS_SUCCESS;
 }
-
-// Synthesizes IPA text
-tts_result TtsSynthInterface::synthIPA(const char *text, void *userdata)
-{
-    LOGI("Synth IPA not supported.");
-    return TTS_FEATURE_UNSUPPORTED;
-}
-
-
-// Interrupts synthesis
-tts_result TtsSynthInterface::stop()
-{
-    espeak_Cancel();
-    return TTS_SUCCESS;
-}
-
 
 // Sets the property with the specified value
 //
 // TODO: add pitch property here
-tts_result TtsSynthInterface::set(const char *property, const char *value)
+tts_result TtsEngine::setProperty(const char *property, const char *value, const size_t size)
 {
-    if (strcmp(property, "language") == 0){
-        setLanguage(value);
-    } else if (strcmp(property, "rate") == 0){
+    if (strcmp(property, "rate") == 0){
         setSpeechRate(atoi(value));
-        currentRate = new char [strlen(value)];
+        currentRate = new char [size];
         strcpy(currentRate, value);
     } else {
         LOGI("Unknown property!");
@@ -224,7 +233,7 @@ tts_result TtsSynthInterface::set(const char *property, const char *value)
 // Sets the property with the specified value
 //
 // TODO: add pitch property here
-tts_result TtsSynthInterface::get(const char *property, char *value)
+tts_result TtsEngine::getProperty(const char *property, char *value, size_t *iosize)
 {
     if (strcmp(property, "language") == 0){
         strcpy(value, currentLanguage);
@@ -239,14 +248,16 @@ tts_result TtsSynthInterface::get(const char *property, char *value)
 
 
 // Shutsdown the TTS engine
-tts_result TtsSynthInterface::shutdown()
+tts_result TtsEngine::shutdown()
 {
     espeak_Terminate();
     return TTS_SUCCESS;
 }
 
 
-TtsSynthInterface* getTtsSynth()
+TtsEngine* getTtsEngine()
 {
-    return new TtsSynthInterface();
+    return new TtsEngine();
 }
+
+}; // namespace android
