@@ -10,15 +10,17 @@ public class AppEntry {
   private String title;
   private String packageName;
   private String className;
+  private String scriptName;
   private Drawable icon;
   private ArrayList<Param> params;
   private ResolveInfo rInfo;
 
-  AppEntry(String appTitle, String appPackageName, String appClassName, Drawable appIcon,
+  AppEntry(String appTitle, String appPackageName, String appClassName, String appScriptName, Drawable appIcon,
       ArrayList<Param> parameters) {
     title = appTitle;
     packageName = appPackageName;
     className = appClassName;
+    scriptName = appScriptName;
     icon = appIcon;
     params = parameters;
   }
@@ -48,6 +50,13 @@ public class AppEntry {
       return className;
     }
     return rInfo.activityInfo.name;
+  }
+
+  String getScriptName() {
+    if (scriptName != null) {
+      return scriptName;
+    }
+    return "";
   }
 
   Drawable getIcon(PackageManager pm) {

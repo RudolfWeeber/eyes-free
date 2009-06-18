@@ -1,5 +1,7 @@
 package com.google.marvin.shell;
 
+import android.util.Log;
+
 import com.google.marvin.shell.Param;
 import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
 
@@ -43,11 +45,10 @@ public class MenuLoader {
             data = dataAttrNode.getNodeValue();
           }
           AppEntry appInfo = null;
-          if (action.equalsIgnoreCase("launch")) {
+          if (action.equalsIgnoreCase("launch") || action.equalsIgnoreCase("ase")) {
             Node appInfoNode = null;
             ArrayList<Param> params = new ArrayList<Param>();
             NodeList nodes = items.item(i).getChildNodes();
-
             for (int j = 0; j < nodes.getLength(); j++) {
               Node currentNode = nodes.item(j);
               String tagName = currentNode.getNodeName();
@@ -65,11 +66,23 @@ public class MenuLoader {
               }
             }
             NamedNodeMap appInfoAttr = appInfoNode.getAttributes();
-            String packageName = appInfoAttr.getNamedItem("package").getNodeValue();
-            String className = appInfoAttr.getNamedItem("class").getNodeValue();
-            appInfo = new AppEntry(null, packageName, className, null, params);
+            String packageName = "";
+            Node packageAttrNode = appInfoAttr.getNamedItem("package");
+            if (packageAttrNode != null){
+            	packageName = packageAttrNode.getNodeValue();
+            }
+            String className = "";
+            Node classAttrNode = appInfoAttr.getNamedItem("class");
+            if (classAttrNode != null){
+            	className = classAttrNode.getNodeValue();
+            }
+            String scriptName = "";
+            Node scriptAttrNode = appInfoAttr.getNamedItem("script");
+            if (scriptAttrNode != null){
+            	scriptName = scriptAttrNode.getNodeValue();
+            }            
+            appInfo = new AppEntry(null, packageName, className, scriptName, null, params);
           }
-
 
           menu.put(g, new MenuItem(label, action, data, appInfo));
         }
