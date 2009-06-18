@@ -351,7 +351,7 @@ public class MarvinShell extends Activity implements GestureListener {
         .setClassName(packageName, className);
   }
 
-  private void launchApplication(AppEntry appInfo) {
+  public void launchApplication(AppEntry appInfo) {
     Intent intent = makeClassLaunchIntent(
         appInfo.getPackageName(), appInfo.getClassName());
     ArrayList<Param> params = appInfo.getParams();
@@ -653,16 +653,6 @@ public class MarvinShell extends Activity implements GestureListener {
     mainFrameLayout.requestFocus();
     appLauncherActive = false;
     announceCurrentMenu();
-  }
-
-  public void launchApp(AppEntry theApp) {
-    Intent intent = makeClassLaunchIntent(
-        theApp.getPackageName(), theApp.getClassName());
-    try {
-      startActivity(intent);
-    } catch (ActivityNotFoundException e) {
-      tts.speak(getString(R.string.application_not_installed), 0, null);
-    }
   }
 
   private void shutdown() {
