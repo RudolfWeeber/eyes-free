@@ -17,10 +17,14 @@ import android.widget.Toast;
 public class WidgetGameService extends Service {
 
     private WidgetGameService self;
-    
+
     private boolean needReset = true;
 
     private Vibrator vibe;
+
+    private long[] pattern = {
+            0, 1, 40, 41
+    };
 
     private int currentIndex;
 
@@ -32,15 +36,18 @@ public class WidgetGameService extends Service {
 
     // These are timings used to control pauses between actions
     // All times are specified in ms
-    private int initialWaitTime = 500;
+    private int initialWaitTime = 550;
 
     private int waitTimeBetweenTones = 310;
+
     private int flashDuration = 250;
 
     // Used for locking the screen
     private boolean screenActive;
 
     private int inputCount;
+    
+    
 
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
@@ -59,13 +66,22 @@ public class WidgetGameService extends Service {
             currentIndex = 0;
             screenActive = false;
             score = 0;
+            inputCount = 0;
             needReset = false;
+            sfx.play("Android says:", 0);
             playSequence();
         } else {
-            String input = intent.getStringExtra("input");
-            input = input.replaceAll("com.google.marvin.androidsays.0", "");
-            sfx.play("[" + input + "]", 0);
-            evalInput(Integer.parseInt(input));
+            if (screenActive) {
+                inputCount++;
+                if (inputCount >= sequence.size()) {
+                  screenActive = false;
+                }
+                String input = intent.getStringExtra("input");
+                input = input.replaceAll("com.google.marvin.androidsays.0", "");
+                sfx.play("[" + input + "]", 0);
+                vibe.vibrate(pattern, -1);
+                evalInput(Integer.parseInt(input));
+            }
         }
     }
 
@@ -92,7 +108,6 @@ public class WidgetGameService extends Service {
                         playSequence();
                     }
                 } else {
-                    screenActive = true;
                     sfx.play("[wrong]", 1);
                     gameOver();
                 }
@@ -156,23 +171,23 @@ public class WidgetGameService extends Service {
                 }
 
                 Log.e("SequencePlayer", sequence.get(i) + "");
-                
+
                 Intent flashIntent;
                 if (sequence.get(i) == 0) {
                     flashIntent = new Intent("com.google.marvin.androidsays.flash.00");
-                    sfx.play("[0]", 1);                    
-                } else if (sequence.get(i) == 1){
+                    sfx.play("[0]", 1);
+                } else if (sequence.get(i) == 1) {
                     flashIntent = new Intent("com.google.marvin.androidsays.flash.01");
-                    sfx.play("[1]", 1);                    
-                } else if (sequence.get(i) == 2){
+                    sfx.play("[1]", 1);
+                } else if (sequence.get(i) == 2) {
                     flashIntent = new Intent("com.google.marvin.androidsays.flash.02");
-                    sfx.play("[2]", 1);                    
+                    sfx.play("[2]", 1);
                 } else {
                     flashIntent = new Intent("com.google.marvin.androidsays.flash.03");
-                    sfx.play("[3]", 1);                    
-                }                
+                    sfx.play("[3]", 1);
+                }
                 self.sendBroadcast(flashIntent);
-               
+
                 try {
                     Thread.sleep(flashDuration);
                 } catch (InterruptedException e) {
@@ -181,23 +196,23 @@ public class WidgetGameService extends Service {
                 }
                 Intent unflashIntent = new Intent("com.google.marvin.androidsays.unflash");
                 self.sendBroadcast(unflashIntent);
- 
+
             }
             inputCount = 0;
             screenActive = true;
         }
     }
-    
-    
+
     private void gameOver() {
         String scoreStr = Integer.toString(score);
         sfx.play("Game over. Your score is:", 1);
         sfx.play(scoreStr, 1);
         Intent showScoreIntent = new Intent("com.google.marvin.androidsays.showScore");
         showScoreIntent.putExtra("score", scoreStr);
-        self.sendBroadcast(showScoreIntent);        
+        self.sendBroadcast(showScoreIntent);
         needReset = true;
-      }
+        screenActive = true;
+    }
 
     @Override
     public IBinder onBind(Intent arg0) {
