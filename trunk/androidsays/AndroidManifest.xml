@@ -35,6 +35,63 @@
       </intent-filter>
     </activity>
     
+            <!-- Broadcast Receiver that will process AppWidget updates -->
+        <receiver android:name=".WidgetInterface" android:label="mini mem">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.flash.00" />
+            </intent-filter> 
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.flash.01" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.flash.02" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.flash.03" />
+            </intent-filter> 
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.unflash" />
+            </intent-filter> 
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.showScore" />
+            </intent-filter> 
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_2x2" />
+        </receiver>
+        
+        <service android:name=".WidgetInterface$UpdateService">
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.update" />
+            </intent-filter>
+        </service>
+        
+        <service android:name=".WidgetGameService">
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.runWidgetGame" />
+            </intent-filter>
+        </service>
+        
+        <activity android:name=".WidgetGlueActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.00" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.01" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.02" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.marvin.androidsays.03" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+    
   </application>
   
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.VIBRATE"/>
