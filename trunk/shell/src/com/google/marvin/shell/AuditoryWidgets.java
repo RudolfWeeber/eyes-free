@@ -115,11 +115,6 @@ public class AuditoryWidgets {
 	}
 
 	public void announceConnectivity() {
-		if (airplaneModeEnabled()) {
-			tts.speak(parent.getString(R.string.airplane_mode), 0, null);
-			return;
-		}
-
 		String bluetooth = "";
 		String gps = "";
 		try {
@@ -208,38 +203,6 @@ public class AuditoryWidgets {
 		tts.speak(Integer.toString(day), 1, null);
 	}
 
-	public void toggleAirplaneMode() {
-		boolean setAirPlaneMode = !airplaneModeEnabled();
-		if (!setAirPlaneMode) {
-			tts.speak(parent.getString(R.string.disabled), 1, null);
-		} else {
-			tts.speak(parent.getString(R.string.enabled), 1, null);
-		}
-		Settings.System.putInt(parent.getContentResolver(),
-				Settings.System.AIRPLANE_MODE_ON, setAirPlaneMode ? 1 : 0);
-		Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-		intent.putExtra("state", setAirPlaneMode);
-		parent.sendBroadcast(intent);
-	}
-
-	public boolean airplaneModeEnabled() {
-		ContentResolver cr = parent.getContentResolver();
-		int x;
-		try {
-			x = Settings.System.getInt(cr, Settings.System.AIRPLANE_MODE_ON);
-			if (x == 1) {
-				return true;
-			}
-		} catch (SettingNotFoundException e) {
-			// This setting is always there as it is part of the Android
-			// framework;
-			// therefore, this exception is not reachable and nothing special
-			// needs
-			// to be done here.
-			e.printStackTrace();
-		}
-		return false;
-	}
 
 	public void callVoiceMail() {
 		Uri phoneNumberURI = Uri.parse("tel:"

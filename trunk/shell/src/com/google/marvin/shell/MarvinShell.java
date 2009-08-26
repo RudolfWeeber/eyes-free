@@ -301,9 +301,7 @@ public class MarvinShell extends Activity implements GestureListener {
       // Only announce airplane mode and voicemails
       // if the user is on the home screen.
       if (currentMenu.title.equals(getString(R.string.home))) {
-        if (widgets.airplaneModeEnabled()) {
-          message = getString(R.string.airplane_mode);
-        } else if (messageWaiting) {
+        if (messageWaiting) {
           message = getString(R.string.you_have_new_voicemail);
         }
       }
@@ -383,18 +381,11 @@ public class MarvinShell extends Activity implements GestureListener {
   }
 
   private void updateStatusText() {
-    if (widgets.airplaneModeEnabled()) {
-      statusText.setText(getString(R.string.airplane_mode));
-    } else {
       statusText.setText("");
-    }
   }
 
   private void runWidget(String widgetName) {
-    if (widgetName.equals("AIRPLANE_MODE_TOGGLE")) {
-      widgets.toggleAirplaneMode();
-      updateStatusText();
-    } else if (widgetName.equals("TIME_DATE")) {
+    if (widgetName.equals("TIME_DATE")) {
       widgets.announceTime();
     } else if (widgetName.equals("BATTERY")) {
       widgets.announceBattery();
