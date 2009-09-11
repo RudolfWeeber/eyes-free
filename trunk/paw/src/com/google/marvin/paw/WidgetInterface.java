@@ -56,8 +56,15 @@ public class WidgetInterface extends AppWidgetProvider {
             ComponentName thisWidget = new ComponentName(context, WidgetInterface.class);
             AppWidgetManager manager = AppWidgetManager.getInstance(context);
             manager.updateAppWidget(thisWidget, myViews);
-        } else if (intent.getAction().indexOf("com.google.marvin.androidsays.showScore") != -1){            
-            Toast.makeText(context, "Your score is: " + intent.getStringExtra("score"), 1).show();
+        } else if (intent.getAction().indexOf("com.google.marvin.paw.sleep") != -1){            
+            RemoteViews myViews = buildUpdate(context);
+            Resources res = context.getResources();
+
+            myViews.setImageViewResource(R.id.image, R.drawable.sleep_anim);
+            
+            ComponentName thisWidget = new ComponentName(context, WidgetInterface.class);
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            manager.updateAppWidget(thisWidget, myViews);
         }
     }
 

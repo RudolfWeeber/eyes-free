@@ -2,6 +2,7 @@
 package com.google.marvin.paw;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.Service;
 import android.content.Context;
@@ -20,6 +21,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class WidgetService extends Service {
+    private static final int TIMEOUT_LIMIT = 300;
+    private static final long DOUBLE_TAP_THRESHOLD = 500;
 
     private WidgetService self;
 
@@ -40,6 +43,9 @@ public class WidgetService extends Service {
     private long[] pattern = {
             0, 1, 40, 41
     };
+        
+    private int idleTimeout = TIMEOUT_LIMIT;
+    
 
     private SensorEventListener accelerometerListener = new SensorEventListener() {
         private final double deletionForce = 1;
@@ -94,12 +100,12 @@ public class WidgetService extends Service {
         }
 
     };
+    
+    long lastTapTime = 0;
 
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         this.setForeground(true);
-
-        Toast.makeText(this, "Widget Service started!", 1).show();
 
         if (needReset) {
             self = this;
@@ -115,13 +121,22 @@ public class WidgetService extends Service {
 
             isTalking = false;
             isDizzy = false;
-
+            
             audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
+            idleTimeout = TIMEOUT_LIMIT;
+            
+            Intent updateAnimIntent = new Intent("com.google.marvin.paw.idle");
+            sendBroadcast(updateAnimIntent);
             
             (new Thread(new animationUpdater())).start();
         } else {
-
+            Calendar cal = Calendar.getInstance();
+            if ((cal.getTimeInMillis() - lastTapTime) < DOUBLE_TAP_THRESHOLD) {
+//TODO: Do something interesting here!
+                //    Toast.makeText(this, "Double tap detected!", 0).show();
+            }
+            lastTapTime = cal.getTimeInMillis();
         }
     }
 
@@ -153,18 +168,29 @@ public class WidgetService extends Service {
         String currentState = "";
         if (isTalking) {
             Log.e("paw", "I'm talking!");
+            idleTimeout = TIMEOUT_LIMIT;
         } else if (audioManager.isMusicActive()) {
             currentState = "com.google.marvin.paw.dance";
+            idleTimeout = TIMEOUT_LIMIT;
         } else if (isDizzy) {
             currentState = "com.google.marvin.paw.dizzy";
+            idleTimeout = TIMEOUT_LIMIT;
         } else {
             currentState = "com.google.marvin.paw.idle";
+            idleTimeout = idleTimeout - 1;
         }
         if (!lastState.equals(currentState)){
             Intent updateAnimIntent = new Intent(currentState);
             sendBroadcast(updateAnimIntent);
             lastState = currentState;
         }
+        if (idleTimeout < 1){
+            needReset = true;
+            Intent sleepIntent = new Intent("com.google.marvin.paw.sleep");
+            sendBroadcast(sleepIntent);
+            return;
+        }
+        (new Thread(new animationUpdater())).start();
     }
 
     class animationUpdater implements Runnable {
@@ -175,7 +201,6 @@ public class WidgetService extends Service {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            (new Thread(new animationUpdater())).start();
         }
     }
 }
