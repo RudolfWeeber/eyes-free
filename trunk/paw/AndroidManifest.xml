@@ -46,7 +46,13 @@
                 <action android:name="com.google.marvin.paw.startService" />
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-
+        </activity>
+        
+        <activity android:name=".RecoInvokerActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.google.marvin.paw.doReco" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
 
 

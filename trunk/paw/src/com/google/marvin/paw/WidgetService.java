@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 public class WidgetService extends Service {
     private static final int TIMEOUT_LIMIT = 300;
-    private static final long DOUBLE_TAP_THRESHOLD = 500;
+    private static final long DOUBLE_TAP_THRESHOLD = 1000;
 
     private WidgetService self;
 
@@ -133,8 +133,9 @@ public class WidgetService extends Service {
         } else {
             Calendar cal = Calendar.getInstance();
             if ((cal.getTimeInMillis() - lastTapTime) < DOUBLE_TAP_THRESHOLD) {
-//TODO: Do something interesting here!
-                //    Toast.makeText(this, "Double tap detected!", 0).show();
+                Intent recoIntent = new Intent("com.google.marvin.paw.doReco");
+                recoIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(recoIntent);
             }
             lastTapTime = cal.getTimeInMillis();
         }
@@ -188,6 +189,7 @@ public class WidgetService extends Service {
             needReset = true;
             Intent sleepIntent = new Intent("com.google.marvin.paw.sleep");
             sendBroadcast(sleepIntent);
+            this.stopSelf();
             return;
         }
         (new Thread(new animationUpdater())).start();
