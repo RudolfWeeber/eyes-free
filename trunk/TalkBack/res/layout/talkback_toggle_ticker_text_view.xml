@@ -1,0 +1,39 @@
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TableLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1">
+
+        <TableRow>
+
+            <LinearLayout
+                android:layout_column="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/talkback_toggle_ticker_text_title"
+                    android:textSize="22sp"/>
+
+                <TextView android:id="@+id/talkback_toogle_ticker_text_summary_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/talkback_toggle_ticker_text_summary_enable"
+                    android:textSize="16sp"/>
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/toggle_ticker_text_checkbox_id"
+                android:gravity="right"
+                android:padding="3dip" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>

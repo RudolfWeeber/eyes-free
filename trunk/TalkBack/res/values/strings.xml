@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Setting up the user interface speech feedback service -->
+    <string name="talkback_setup_title">TalkBack</string>
+    <!-- Setting checkbox for whether the user interface speech feedback is enabled -->
+    <string name="talkback_toggle_title">Enable TalkBack</string>
+    <!-- Setting checkbox summary on for enabling the user interface speech feedback -->
+    <string name="talkback_toggle_summary_enable">Turn on user interface speech feedback</string>
+    <!-- Setting checkbox summary on for disabling the user interface speech feedback -->
+    <string name="talkback_toggle_summary_disable">Turn off user interface speech feedback</string>
+
+    <!-- Setting up the announcement of SMS ticker text -->
+    <string name="talkback_toggle_ticker_text_title">SMS ticker text</string>
+    <!-- Setting checkbox for whether the announcement of SMS ticker text is enabled -->
+    <string name="talkback_toggle_ticker_text_summary_enable">Enable announcement of SMS ticker text</string>
+    <!-- Setting checkbox for whether the announcement of SMS ticker text is disabled -->
+    <string name="talkback_toggle_ticker_text_summary_disable">Disable announcement of SMS ticker text</string>
+
+    <!--  Notification status -->
+
+    <!-- Summary title -->
+    <string name="talkback_summary_title">Notification summary</string>
+    <!-- Summary content no pending notifications -->
+    <string name="talkback_summary_no_notifications">No pending notifications</string>
+
+    <!-- TEMPLATES -->
+
+    <!-- Current item template -->
+    <string name="current_item_template">&quot;{0} of {1}.&quot;</string>
+
+    <!-- Announce value template -->
+    <string name="announce_value_template">&quot;{0}.&quot;</string>
+
+    <!-- Start activity template -->
+    <string name="activity_started_template">&quot;{0} .&quot;</string>
+
+    <!-- Button -->
+
+    <!-- Button clicked template -->
+    <string name="button_clicked_template">" {0} clicked."</string>
+    <!-- Button focused template -->
+    <string name="button_focused_template">" {0} ."</string>
+    <!-- Button selected template -->
+    <string name="button_selected_template">" {0} selected."</string>
+
+    <!-- CompoundButton -->
+
+    <!-- CompoundButton clicked template -->
+    <string name="compound_button_clicked_template">&quot;Button {0} clicked. State {1}.&quot;</string>
+    <!-- CompoundButton focused template -->
+    <string name="compound_button_focused_template">&quot;Button {0} focused. State {1}.&quot;</string>
+    <!-- CompoundButton selected template -->  
+    <string name="compound_button_selected_template">&quot; {0}  {1}.&quot;</string>
+
+    <!-- CheckBox -->
+
+    <!-- CheckBox selected template -->
+    <string name="checkbox_selected_template">&quot;{0} .&quot;</string>
+
+    <!-- Radio Button -->
+
+    <!-- RadioButton selected template -->
+    <string name="radio_button_selected_template">&quot;{0}. State {1}.&quot;</string>
+
+    <!-- ToggleButton -->
+
+    <!-- ToggleButton selected template -->
+    <string name="toggle_button_selected_template">&quot;Toggle  {0}.   {1}.&quot;</string> 
+
+    <!-- View -->
+
+    <!-- View clicked template -->
+    <string name="view_clicked_template">&quot;{0} clicked.&quot;</string>
+
+    <!-- View focused template -->
+    <string name="view_focused_or_selected_template">&quot;{0}.&quot;</string>
+
+    <!-- ImageView focused -->
+
+    <string name="image_view_focused_template">"Image"</string>
+
+    <!-- HandleView focused -->
+    <string name="handle_view_focused_template">&quot;Sliding drawer handle&quot;</string>
+
+    <!-- CheckedTextView -->
+
+    <string name="checked_text_view_selected_template">&quot;{0} Radio button {1}.&quot;</string>
+
+    <!-- EditText -->
+
+    <!-- EditText focused template -->
+    <string name="edit_text_focused_template">&quot;Edit box. {0}.&quot;</string>
+    <!-- EditText empty template -->
+    <string name="edit_text_empty_template">"Blank"</string>
+
+    <!-- Notification -->
+
+    <!-- Short message template -->
+    <string name="notification_short_message_template">". {0}"</string>
+
+    <!-- Alert dialog template -->
+    <string name="notification_alert_dialog_template">"Alert  {0}"</string>
+
+    <!-- Status bar notification template -->
+    <string name="notification_status_bar_template">"{0} {1}"</string>
+
+    <!-- Popup window notification -->
+    <string name="notification_popup_template">"Popup {0}"</string>
+
+    <!-- Auto completion popup window notification shown -->
+    <string name="notification_auto_completion_shown_template">"Auto completion "</string>
+    
+    <!-- Auto completion popup window notification hidden -->
+    <string name="notification_auto_completion_hidden_template">"Auto completion hidden"</string>
+
+    <!-- SlidingDrawer opened -->
+    <string name="notification_sliding_drawer_opened_template">"Sliding drawer opened"</string>
+
+    <!-- SlidingDrawer closed -->
+    <string name="notification_sliding_drawer_closed_template">"Sliding drawer closed"</string>
+
+    <!-- Input method shown -->
+    <string name="notification_input_method_shown_template">"Input method shown"</string>
+
+    <!-- Input method hidden -->
+    <string name="notification_input_method_hidden_template">"Input method hidden"</string>
+
+    <!-- StatusBar shown -->
+    <string name="notification_status_bar_opened_template">"Status bar "</string>
+
+    <!-- StatusBar hidden -->
+    <string name="notification_status_bar_closed_template">"Status bar closed"</string>
+
+    <!-- Options menu opened -->
+    <string name="notification_options_menu_open_template">"Options "</string>
+
+    <!-- Options menu closed -->
+    <string name="notification_options_menu_closed_template">"Options closed"</string>
+
+    <!-- Status bar notification types -->
+
+    <!-- SMS -->
+    <string name="notification_text_message">"Text message"</string>
+
+    <!-- SMS failed -->
+    <string name="notification_failed_text_message">"Not sent text message"</string>
+
+    <!-- USB connected -->
+    <string name="notification_usb_connected">"USB connected"</string>
+
+    <!-- Missed call -->
+    <string name="notification_missed_call">"Missed call"</string>
+
+    <!-- Status message -->
+    <string name="notification_status_message">"Status "</string>
+
+    <!-- Mute -->
+    <string name="notification_status_mute">"Mute"</string>
+
+    <!-- Chat -->
+    <string name="notification_status_chat">"Chat"</string>
+
+    <!-- More -->
+    <string name="notification_status_more">"More"</string>
+
+    <!-- SD card -->
+    <string name="notification_status_sdcard">"SD card"</string>
+
+    <!-- SD card USB -->
+    <string name="notification_status_sdcard_usb">"SD card USB"</string>
+
+    <!-- Sync -->
+    <string name="notification_status_sync">"Sync"</string>
+
+    <!-- Sync no anim -->
+    <string name="notification_status_sync_noanim">"Sync  "</string>
+
+    <!-- Voicemail -->
+    <string name="notification_status_voicemail">"Voicemail"</string>
+
+    <!-- Error -->
+    <string name="notification_status_error">"Error"</string>
+
+    <!-- Play -->
+    <string name="notification_status_play">"Playing"</string>
+
+    <!-- Character -->
+
+    <!-- Single character typed template -->
+    <string name="single_character_text_added_template">&quot;{0}.&quot;</string>
+    <!-- Single character deleted template -->
+    <string name="single_character_text_removed_template">&quot;{0} deleted.&quot;</string>
+    <!-- Multiple characters added template -->
+    <string name="text_added_template">&quot;{0} .&quot;</string>
+    <!-- Multiple characters deleted template -->
+    <string name="text_removed_template">&quot;{0} deleted.&quot;</string>
+    <!-- Multiple characters replaced template -->
+    <string name="multiple_characters_replaced_template">&quot;{0} replaced with {1}.&quot;</string>
+
+    <!-- Notification types -->
+
+    <!-- Text message -->
+    <string name="notification_type_text_message">&quot;text message&quot;</string>
+    <!-- Text message failed -->
+    <string name="notification_type_text_message_failed">"text message not sent "</string>
+    <!-- Missed call -->
+    <string name="notification_type_missed_call">"missed call"</string>
+    <!-- Status notification -->
+    <string name="notification_type_status_notification">""</string>
+    <!-- USB connected -->
+    <string name="notification_type_usb_connected">"USB connected"</string>
+    <!-- Alert dialog -->
+    <string name="notification_type_alert_dialog">"alert "</string>
+    <!-- Short message -->
+    <string name="notification_type_short_message">"short message"</string>
+    <!-- Popup message -->
+    <string name="notification_type_popup">"popup"</string>
+
+    <!-- Compound button states -->
+    <!-- Checked -->
+    <string name="compound_button_checked">&quot;checked&quot;</string>
+    <!-- Not checked -->
+    <string name="compound_button_not_checked">"not checked"</string>
+    
+    <!-- Values -->
+    
+    <!-- Blank -->
+    <string name="value_blank">"blank"</string>
+    <!-- Password -->
+    <string name="value_password">"password"</string>
+    <!-- None -->
+    <string name="value_none">"none"</string>
+    <!-- Disabled -->
+    <string name="value_disabled">"disabled"</string>
+
+    <!-- Compound button states -->
+
+    <!-- Title for the selected state of a CompoundButton. -->
+    <string name="accessibility_compound_button_selected">pressed</string>
+    <!-- Title for the unselected state of a CompoundButton. -->
+    <string name="accessibility_compound_button_unselected">not pressed</string>
+    
+    <!-- Permissions -->
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack">Send intent commands to TalkBack</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Allows an application or service to drive TalkBack
+        via intent broadcasts and potentially obtain information about the TlakBack state for example the cached notifications.</string>
+
+</resources>

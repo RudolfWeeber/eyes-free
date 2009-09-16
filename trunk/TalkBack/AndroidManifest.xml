@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.android.marvin.talkback"
+    android:sharedUserId="com.google.android.marvin.feedback"    
+    android:versionCode="1"
+    android:versionName="1.0.0">
+
+    <uses-sdk android:minSdkVersion="4" />
+
+    <!-- Allows third party applications to send Intent broadcast commands to TalkBack. -->
+    <permission android:name="android.permission.TALKBACK_AS_NOTIFICATION_STATE"
+        android:protectionLevel="dangerous"
+        android:label="@string/permlab_sendIntentBroadcastCommandsToTalkBack"
+        android:description="@string/permdesc_sendIntentBroadcastCommandsToTalkBack" />
+
+    <application android:label="@string/talkback_setup_title" android:icon="@drawable/icon" android:process="com.google.android.marvin.feedback">
+
+        <service android:name=".TalkBackService">
+             <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <action android:name="com.google.android.marvin.talkback.ACTION_TALKBACK_AS_NOTIFICATION_STATE" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+</manifest>
