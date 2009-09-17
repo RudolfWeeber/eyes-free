@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<languages version="3">
+    <language size="825 KB" file="bul.zip" iso6391="bg" iso6392="bul" name="Bulgarian"/>
+    <language size="969 KB" file="cat.zip" iso6391="ca" iso6392="cat" name="Catalan"/>
+    <language size="1.0 MB" file="ces.zip" iso6391="cs" iso6392="ces" name="Czech"/>
+    <language size="19 MB" file="chi_sim.zip" iso6391="zh-CN" iso6392="chi_sim" name="Chinese (Simplified)" hidden="true"/>
+    <language size="26 MB" file="chi_tra.zip" iso6391="zh-TW" iso6392="chi_tra" name="Chinese (Traditional)" hidden="true"/>
+    <language size="937 KB" file="dan.zip" iso6391="da" iso6392="dan" name="Danish"/>
+    <language size="944 KB" file="deu.zip" iso6391="de" iso6392="deu" name="German"/>
+    <language size="921 KB" file="ell.zip" iso6391="el" iso6392="ell" name="Greek (Modern)"/>
+    <language size="722 KB" file="eng.zip" iso6391="en" iso6392="eng" name="English"/>
+    <language size="937 KB" file="fin.zip" iso6391="fi" iso6392="fin" name="Finnish"/>
+    <language size="908 KB" file="fra.zip" iso6391="fr" iso6392="fra" name="French"/>
+    <language size="985 KB" file="hun.zip" iso6391="hu" iso6392="hun" name="Hungarian"/>
+    <language size="816 KB" file="ind.zip" iso6391="id" iso6392="ind" name="Indonesian"/>
+    <language size="913 KB" file="ita.zip" iso6391="it" iso6392="ita" name="Italian"/>
+    <language size="14 MB" file="jpn.zip" iso6391="ja" iso6392="jpn" name="Japanese" hidden="true"/>
+    <language size="5.7 MB" file="kor.zip" iso6391="ko" iso6392="kor" name="Korean" hidden="true"/>
+    <language size="991 KB" file="lav.zip" iso6391="lv" iso6392="lav" name="Latvian"/>
+    <language size="986 KB" file="lit.zip" iso6391="lt" iso6392="lit" name="Lithuanian"/>
+    <language size="932 KB" file="nld.zip" iso6391="nl" iso6392="nld" name="Dutch"/>
+    <language size="929 KB" file="nor.zip" iso6391="no" iso6392="nor" name="Norwegian"/>
+    <language size="1.0 MB" file="pol.zip" iso6391="pl" iso6392="pol" name="Polish"/>
+    <language size="886 KB" file="por.zip" iso6391="pt-PT" iso6392="por" name="Portuguese"/>
+    <language size="904 KB" file="ron.zip" iso6391="ro" iso6392="ron" name="Romanian"/>
+    <language size="823 KB" file="rus.zip" iso6391="ru" iso6392="rus" name="Russian"/>
+    <language size="1.0 MB" file="slk.zip" iso6391="sk" iso6392="slk" name="Slovak"/>
+    <language size="904 KB" file="slv.zip" iso6391="sl" iso6392="slv" name="Slovenian"/>
+    <language size="885 KB" file="spa.zip" iso6391="es" iso6392="spa" name="Spanish"/>
+    <language size="949 KB" file="srp.zip" iso6391="sr" iso6392="srp" name="Serbian"/>
+    <language size="937 KB" file="swe.zip" iso6391="sv" iso6392="swe" name="Swedish"/>
+    <language size="956 KB" file="tgl.zip" iso6391="tl" iso6392="tgl" name="Tagalog"/>
+    <language size="908 KB" file="tur.zip" iso6391="tr" iso6392="tur" name="Turkish"/>
+    <language size="904 KB" file="ukr.zip" iso6391="uk" iso6392="ukr" name="Ukranian"/>
+    <language size="1.5 MB" file="vie.zip" iso6391="vi" iso6392="vie" name="Vietnamese"/>
+</languages>
