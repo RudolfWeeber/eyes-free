@@ -10,7 +10,7 @@
                 android:key="lang_pref"
                 android:title="Default Language"
                 android:entries="@array/language_entries"
-                android:defaultValue="en-us"
+                android:defaultValue="eng-USA"
                 android:entryValues="@array/language_values"  />
         
         <ListPreference

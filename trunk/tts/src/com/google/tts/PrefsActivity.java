@@ -18,6 +18,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -70,52 +71,55 @@ public class PrefsActivity extends PreferenceActivity {
 
   private void loadHellos() {
     hellos = new HashMap<String, Integer>();
-    hellos.put("af", R.string.af);
-    hellos.put("bs", R.string.bs);
-    hellos.put("zh-rHK", R.string.zhrHK);
-    hellos.put("zh", R.string.zh);
-    hellos.put("hr", R.string.hr);
-    hellos.put("cz", R.string.cz);
-    hellos.put("nl", R.string.nl);
-    hellos.put("en-rUS", R.string.enrUS);
-    hellos.put("en-rGB", R.string.enrGB);
-    hellos.put("eo", R.string.eo);
-    hellos.put("fi", R.string.fi);
-    hellos.put("fr", R.string.fr);
-    hellos.put("de", R.string.de);
-    hellos.put("el", R.string.el);
-    hellos.put("hi", R.string.hi);
-    hellos.put("hu", R.string.hu);
-    hellos.put("is", R.string.is);
-    hellos.put("id", R.string.id);
-    hellos.put("it", R.string.it);
-    hellos.put("ku", R.string.ku);
-    hellos.put("la", R.string.la);
-    hellos.put("mk", R.string.mk);
-    hellos.put("no", R.string.no);
-    hellos.put("pl", R.string.pl);
-    hellos.put("pt", R.string.pt);
-    hellos.put("ro", R.string.ro);
-    hellos.put("ru", R.string.ru);
-    hellos.put("sr", R.string.sr);
-    hellos.put("sk", R.string.sk);
-    hellos.put("es", R.string.es);
-    hellos.put("es-rMX", R.string.esrMX);
-    hellos.put("sw", R.string.sw);
-    hellos.put("sv", R.string.sv);
-    hellos.put("ta", R.string.ta);
-    hellos.put("tr", R.string.tr);
-    hellos.put("vi", R.string.vi);
-    hellos.put("cy", R.string.cy);
+    hellos.put("afr", R.string.af);
+    hellos.put("bos", R.string.bs);
+    hellos.put("yue", R.string.zhrHK);
+    hellos.put("cmn", R.string.zh);
+    hellos.put("hrv", R.string.hr);
+    hellos.put("ces", R.string.cz);
+    hellos.put("nld", R.string.nl);
+    hellos.put("eng-USA", R.string.enrUS);
+    hellos.put("eng-GBR", R.string.enrGB);
+    hellos.put("epo", R.string.eo);
+    hellos.put("fin", R.string.fi);
+    hellos.put("fra", R.string.fr);
+    hellos.put("deu", R.string.de);
+    hellos.put("ell", R.string.el);
+    hellos.put("hin", R.string.hi);
+    hellos.put("hun", R.string.hu);
+    hellos.put("isl", R.string.is);
+    hellos.put("ind", R.string.id);
+    hellos.put("ita", R.string.it);
+    hellos.put("kur", R.string.ku);
+    hellos.put("lat", R.string.la);
+    hellos.put("mkd", R.string.mk);
+    hellos.put("nor", R.string.no);
+    hellos.put("pol", R.string.pl);
+    hellos.put("por", R.string.pt);
+    hellos.put("ron", R.string.ro);
+    hellos.put("rus", R.string.ru);
+    hellos.put("srp", R.string.sr);
+    hellos.put("slk", R.string.sk);
+    hellos.put("spa", R.string.es);
+    hellos.put("spa-MEX", R.string.esrMX);
+    hellos.put("swe", R.string.sw);
+    hellos.put("swe", R.string.sv);
+    hellos.put("tam", R.string.ta);
+    hellos.put("tur", R.string.tr);
+    hellos.put("vie", R.string.vi);
+    hellos.put("cym", R.string.cy);
   }
 
   private void sayHello() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    String languageCode = prefs.getString("lang_pref", "en-rUS");
+    String languageCode = prefs.getString("lang_pref", "eng-USA");
     int rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
 
     myTts.setLanguage(languageCode);
     myTts.setSpeechRate(rate);
+    if (!hellos.containsKey(languageCode)){
+    	languageCode = "eng-USA";
+    }
     String hello = getString(hellos.get(languageCode));
     myTts.speak(hello, 0, null);
   }

@@ -40,7 +40,7 @@ import android.util.Log;
 public class TTS {
 	// This is the minimum version of the TTS service that is needed by this
 	// version of the library stub.
-	private final static int MIN_VER = 9;
+	private final static int MIN_VER = 10;
 
 	/**
 	 * Called when the TTS has initialized
@@ -165,11 +165,14 @@ public class TTS {
 	}
 
 	private void initTts() {
+        Log.e("debug", "-2");
 		started = false;
 
 		// Initialize the TTS, run the callback after the binding is successful
 		serviceConnection = new ServiceConnection() {
 			public void onServiceConnected(ComponentName name, IBinder service) {
+
+		        Log.e("debug", "-1");
 				itts = ITTS.Stub.asInterface(service);
 				try {
 					version = itts.getVersion();
@@ -180,6 +183,7 @@ public class TTS {
 					// library stub as the newer library may reference methods
 					// which are
 					// unavailable and cause a crash.
+			        Log.e("debug", "0");
 					if (version < MIN_VER) {
 						if (showInstaller) {
 							if (versionAlert != null) {
@@ -191,6 +195,7 @@ public class TTS {
 						}
 						return;
 					}
+			        Log.e("debug", "1");
 
 					ittscallback = new ITTSCallback.Stub() {
 						@Override
@@ -202,6 +207,7 @@ public class TTS {
 						}
 					};
 					itts.registerCallback(ittscallback);
+			        Log.e("debug", "2");
 
 				} catch (RemoteException e) {
 					initTts();
@@ -216,7 +222,9 @@ public class TTS {
 				// nothing - the error handling from the speaking calls will
 				// kick in
 				// and force a proper restart of the TTS.
+		        Log.e("debug", "3");
 				if (cb != null) {
+			        Log.e("debug", "4");
 					cb.onInit(version);
 				}
 			}
@@ -230,6 +238,7 @@ public class TTS {
 
 		Intent intent = new Intent("android.intent.action.USE_TTS");
 		intent.addCategory("android.intent.category.TTS");
+        Log.e("debug", "-3");
 		// Binding will fail only if the TTS doesn't exist;
 		// the TTSVersionAlert will give users a chance to install
 		// the needed TTS.
@@ -243,6 +252,7 @@ public class TTS {
 				}
 			}
 		}
+        Log.e("debug", "-4");
 	}
 
 	/**
