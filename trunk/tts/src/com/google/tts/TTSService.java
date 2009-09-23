@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -37,14 +38,21 @@ import com.google.tts.TTS;
 
 import android.tts.SynthProxy;
 import android.util.Log;
+import android.util.TypedValue;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.TimeUnit;
+
+import javax.xml.parsers.FactoryConfigurationError;
 
 /**
  * @hide Synthesizes speech from text. This is implemented as a service so that
@@ -213,7 +221,6 @@ public class TTSService extends Service implements OnCompletionListener {
 
 	@Override
 	public void onCreate() {
-		Log.e("TTSService.java", "0");
 		super.onCreate();
 		Log.v("TtsService", "TtsService.onCreate()");
 
@@ -239,7 +246,46 @@ public class TTSService extends Service implements OnCompletionListener {
 		mKillList = new HashMap<SpeechItem, Boolean>();
 
 		setDefaultSettings();
-		Log.e("TTSService.java", "1");
+
+		// Standalone library only - include a set of default earcons
+		// and pre-recorded audio.
+		// These are not in the framework due to concerns about the size.
+		Resources res = getResources();
+		InputStream fis = res.openRawResource(R.raw.soundsamples);
+		try {
+
+			Properties soundsamples = new Properties();
+			soundsamples.load(fis);
+			Enumeration<Object> textKeys = soundsamples.keys();
+			while (textKeys.hasMoreElements()) {
+				String text = textKeys.nextElement().toString();
+				String name = "com.google.tts:raw/"
+						+ soundsamples.getProperty(text);
+				TypedValue value = new TypedValue();
+				getResources().getValue(name, value, false);
+				mUtterances.put(text, new SoundResource(PKGNAME,
+						value.resourceId));
+			}
+
+		} catch (FactoryConfigurationError e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+
+		// Deprecated - these should be earcons from now on!
+		// Leave this here for one more version before removing it completely.
+		mUtterances.put("[tock]", new SoundResource(PKGNAME, R.raw.tock_snd));
+		mUtterances.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
+
+		mEarcons.put("[tock]", new SoundResource(PKGNAME, R.raw.tock_snd));
+		mEarcons.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
+		
+		Log.e("TTSService", "onCreate completed.");
 	}
 
 	@Override
@@ -293,7 +339,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
 	private String getDefaultLanguage() {
 		String defaultLang = PreferenceManager
-				.getDefaultSharedPreferences(this).getString("lang_pref", null);
+				.getDefaultSharedPreferences(this).getString("lang_pref", "");
 
 		if ((defaultLang.length() != 3) && (defaultLang.length() != 7)) {
 			defaultLang = null;
@@ -318,7 +364,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
 	private String getDefaultCountry() {
 		String defaultCountry = PreferenceManager.getDefaultSharedPreferences(
-				this).getString("lang_pref", null);
+				this).getString("lang_pref", "");
 
 		if (defaultCountry.length() != 7) {
 			defaultCountry = null;
@@ -341,15 +387,15 @@ public class TTSService extends Service implements OnCompletionListener {
 	}
 
 	private String getDefaultLocVariant() {
-		String defaultVar = PreferenceManager.getDefaultSharedPreferences(
-				this).getString("lang_pref", null);
+		String defaultVar = PreferenceManager.getDefaultSharedPreferences(this)
+				.getString("lang_pref", "");
 
 		if (defaultVar.length() < 9) {
 			defaultVar = null;
 		} else {
 			defaultVar = defaultVar.substring(8);
 		}
-		
+
 		// In the framework, use the Secure settings instead by doing:
 		//       	          	
 		// String defaultVar =
@@ -1499,9 +1545,15 @@ public class TTSService extends Service implements OnCompletionListener {
 		public void speak(String text, int queueMode, String[] params) {
 			ArrayList<String> speakingParams = new ArrayList<String>();
 			if (params != null) {
-				speakingParams = new ArrayList<String>(Arrays.asList(params));
+				if (text.length() == 1){
+					if (params[0].equals(TTSParams.VOICE_FEMALE.toString())){
+						text = text + "[fem]";
+					}
+					if (params[0].equals(TTSParams.VOICE_ROBOT.toString())){
+						text = text + "[robot]";
+					}
+				}
 			}
-			// TODO: Make sure speakingParams makes sense
 			mSelf.speak("DEPRECATED", text, queueMode, speakingParams);
 		}
 
@@ -1619,15 +1671,16 @@ public class TTSService extends Service implements OnCompletionListener {
 		 *            http://en.wikipedia.org/wiki/IETF_language_tag
 		 */
 		public void setLanguage(String language) {
-			if (language.length() == 3){
+			if (language.length() == 3) {
 				mSelf.setLanguage("DEPRECATED", language, "", "");
 				return;
 			}
-			if (language.length() == 7){
-				mSelf.setLanguage("DEPRECATED", language.substring(0, 3), language.substring(4, 7), "");
+			if (language.length() == 7) {
+				mSelf.setLanguage("DEPRECATED", language.substring(0, 3),
+						language.substring(4, 7), "");
 				return;
 			}
-			
+
 			String isoLocale = langRegionToLocale.get(language);
 			String lang = "";
 			String country = "";
