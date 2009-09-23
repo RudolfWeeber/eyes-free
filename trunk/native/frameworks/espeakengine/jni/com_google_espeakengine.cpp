@@ -48,14 +48,16 @@ static int eSpeakCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {    
     LOGI("eSpeak callback received!");
     size_t bufferSize = numsamples * sizeof(short);
-    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, (int8_t *)wav, bufferSize);
+    int8_t * castedWav = (int8_t *)wav;
+//    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, (int8_t *)wav, bufferSize, TTS_SYNTH_DONE);
+    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, castedWav, bufferSize, TTS_SYNTH_DONE);
     LOGI("eSpeak callback processed!");
     return 0;  // continue synthesis (1 is to abort)
 }
 
 
 // Initializes the TTS engine and returns whether initialization succeeded
-tts_result TtsEngine::init(synthDoneCB_t* synthDoneCBPtr)
+tts_result TtsEngine::init(synthDoneCB_t synthDoneCBPtr)
 {
     // TODO Make sure that the speech data is loaded in 
     // the directory /sdcard/espeak-data before calling this.
@@ -83,9 +85,18 @@ tts_result TtsEngine::init(synthDoneCB_t* synthDoneCBPtr)
 }
 
 
-// Synthesizes the text. When synthesis completes, the engine should use a callback to notify the TTS API.
-tts_result TtsEngine::synthesizeText(const char *text, void *userdata)
+/** synthesizeText
+ *  Synthesizes a text string.
+ *  The text string could be annotated with SSML tags.
+ *  @text     - text to synthesize
+ *  @buffer   - buffer which will receive generated samples
+ *  @bufferSize - size of buffer
+ *  @userdata - pointer to user data which will be passed back to callback function
+ *  return tts_result
+*/
+tts_result TtsEngine::synthesizeText( const char * text, int8_t * buffer, size_t bufferSize, void * userdata )
 {
+    // TODO: Make sure this still works
     espeak_SetSynthCallback(eSpeakCallback);
 
     unsigned int unique_identifier;
@@ -105,10 +116,11 @@ tts_result TtsEngine::synthesizeText(const char *text, void *userdata)
 }
 
 // Synthesizes IPA text
-tts_result TtsEngine::synthesizeIpa(const char *text, void *userdata)
+tts_result TtsEngine::synthesizeIpa( const char * ipa, int8_t * buffer, size_t bufferSize, void * userdata )
 {
-    LOGI("Synth IPA not supported.");
-    return TTS_FEATURE_UNSUPPORTED;
+    // deprecated call
+    return TTS_FAILURE;
+
 }
 
 
@@ -119,10 +131,9 @@ tts_result TtsEngine::stop()
     return TTS_SUCCESS;
 }
 
-tts_result TtsEngine::loadLanguage(const char* language, const size_t size)
+tts_result TtsEngine::loadLanguage(const char *lang, const char *country, const char *variant)
 {   
-    LOGI("loadLanguage not supported.");
-    return TTS_FEATURE_UNSUPPORTED;
+    return TTS_FAILURE;
 }
 
 // Language will be specified according to the Android conventions for 
@@ -134,8 +145,11 @@ tts_result TtsEngine::loadLanguage(const char* language, const size_t size)
 // 3166-1-alpha-2 language code in uppercase preceded by a lowercase "r".
 // Note that the "-rYY" portion may be omitted if the region is unimportant.
 //
-tts_result TtsEngine::setLanguage(const char* language, const size_t size)
-{   
+tts_result TtsEngine::setLanguage( const char * lang, const char * country, const char * variant )
+{ 
+    // TODO: Fix this
+    return TTS_SUCCESS;  
+/*
     espeak_VOICE voice;
     memset(&voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
     voice.variant = 0;
@@ -205,11 +219,32 @@ tts_result TtsEngine::setLanguage(const char* language, const size_t size)
     currentLanguage = new char [strlen(language)];
     strcpy(currentLanguage, language);
     return TTS_SUCCESS;
+*/
 }
 
-tts_result TtsEngine::getLanguage(char *value, size_t *iosize)
+tts_support_result TtsEngine::isLanguageAvailable(const char *lang, const char *country,
+            const char *variant) {
+    // TODO: Fix this!
+    return TTS_LANG_NOT_SUPPORTED;
+}
+
+tts_result TtsEngine::getLanguage(char *language, char *country, char *variant)
 {
-    strcpy(value, currentLanguage);
+    // TODO: Fix this!
+    return TTS_SUCCESS;
+}
+
+/** setAudioFormat
+ * sets the audio format to use for synthesis, returns what is actually used.
+ * @encoding - reference to encoding format
+ * @rate - reference to sample rate
+ * @channels - reference to number of channels
+ * return tts_result
+ * */
+tts_result TtsEngine::setAudioFormat(AudioSystem::audio_format& encoding, uint32_t& rate,
+            int& channels)
+{
+    // TODO: Fix this!
     return TTS_SUCCESS;
 }
 
@@ -248,7 +283,7 @@ tts_result TtsEngine::getProperty(const char *property, char *value, size_t *ios
 
 
 // Shutsdown the TTS engine
-tts_result TtsEngine::shutdown()
+tts_result TtsEngine::shutdown( void )
 {
     espeak_Terminate();
     return TTS_SUCCESS;
