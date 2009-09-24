@@ -27,6 +27,83 @@
 
 namespace android {
 
+const char * supportedLangIso3[] = {
+"afr",
+"bos",
+"yue",
+"cmn",
+"hrv",
+"ces",
+"nld",
+"eng",
+"epo",
+"fin",
+"fra",
+"deu",
+"ell",
+"hin",
+"hun",
+"isl",
+"ind",
+"ita",
+"kur",
+"lat",
+"mkd",
+"nor",
+"pol",
+"por",
+"ron",
+"rus",
+"srp",
+"slk",
+"spa",
+"swa",
+"swe",
+"tam",
+"tur",
+"vie",
+"cym"
+ };
+
+
+const char * supportedLang[] = { 
+"af",
+"bs",
+"zh-rHK",
+"zh",
+"hr",
+"cz",
+"nl",
+"en",
+"eo",
+"fi",
+"fr",
+"de",
+"el",
+"hi",
+"hu",
+"is",
+"id",
+"it",
+"ku",
+"la",
+"mk",
+"no",
+"pl",
+"pt",
+"ro",
+"ru",
+"sr",
+"sk",
+"es",
+"sw",
+"sv",
+"ta",
+"tu",
+"vi",
+"cy"
+ };
+
 // Callback to the TTS API
 synthDoneCB_t* ttsSynthDoneCBPointer;
 
@@ -46,7 +123,11 @@ static void setSpeechRate(int speechRate)
 /* Callback from espeak.  Should call back to the TTS API */
 static int eSpeakCallback(short *wav, int numsamples,
 				      espeak_EVENT *events) {    
-    LOGI("eSpeak callback received!");
+    if (numsamples < 1){
+      // Abort if there are no samples.
+      return 1;
+    }
+    LOGI("eSpeak callback received! Sample count: %d", numsamples);
     size_t bufferSize = numsamples * sizeof(short);
     int8_t * castedWav = (int8_t *)wav;
 //    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, (int8_t *)wav, bufferSize, TTS_SYNTH_DONE);
@@ -84,52 +165,13 @@ tts_result TtsEngine::init(synthDoneCB_t synthDoneCBPtr)
     return TTS_SUCCESS;
 }
 
-
-/** synthesizeText
- *  Synthesizes a text string.
- *  The text string could be annotated with SSML tags.
- *  @text     - text to synthesize
- *  @buffer   - buffer which will receive generated samples
- *  @bufferSize - size of buffer
- *  @userdata - pointer to user data which will be passed back to callback function
- *  return tts_result
-*/
-tts_result TtsEngine::synthesizeText( const char * text, int8_t * buffer, size_t bufferSize, void * userdata )
+// Shutsdown the TTS engine
+tts_result TtsEngine::shutdown( void )
 {
-    // TODO: Make sure this still works
-    espeak_SetSynthCallback(eSpeakCallback);
-
-    unsigned int unique_identifier;
-    espeak_ERROR err;
-
-    err = espeak_Synth(text,
-                       strlen(text),
-                       0,  // position
-                       POS_CHARACTER,
-                       0,  // end position (0 means no end position)
-                       espeakCHARS_UTF8,
-                       &unique_identifier,
-                       userdata);
-
-    err = espeak_Synchronize();
+    espeak_Terminate();
     return TTS_SUCCESS;
 }
 
-// Synthesizes IPA text
-tts_result TtsEngine::synthesizeIpa( const char * ipa, int8_t * buffer, size_t bufferSize, void * userdata )
-{
-    // deprecated call
-    return TTS_FAILURE;
-
-}
-
-
-// Interrupts synthesis
-tts_result TtsEngine::stop()
-{
-    espeak_Cancel();
-    return TTS_SUCCESS;
-}
 
 tts_result TtsEngine::loadLanguage(const char *lang, const char *country, const char *variant)
 {   
@@ -147,9 +189,44 @@ tts_result TtsEngine::loadLanguage(const char *lang, const char *country, const 
 //
 tts_result TtsEngine::setLanguage( const char * lang, const char * country, const char * variant )
 { 
-    // TODO: Fix this
-    return TTS_SUCCESS;  
-/*
+    LOGE("lang input param: %s   country input param: %s", lang, country);
+
+    char language[10];
+    int langIndex = -1;
+    for (int i = 0; i < 33; i ++)
+        {
+        if (strcmp(lang, supportedLangIso3[i]) == 0)
+            {
+            langIndex = i;
+            break;
+            }
+        }
+    if (langIndex < 0)
+        {
+        /* The language isn't supported.    */
+        LOGE("TtsEngine::setLanguage called with unsupported language");
+        return TTS_FAILURE;
+        }
+    strcpy(language, supportedLang[langIndex]);
+
+    if (strcmp(language, "en") == 0){
+      if (strcmp(country, "USA") == 0){
+        strcpy(language, "en-rUS");
+      }
+      if (strcmp(country, "GBR") == 0){
+        strcpy(language, "en-rGB");
+      }
+    }
+
+    if (strcmp(language, "es") == 0){
+      if (strcmp(country, "MEX") == 0){
+        strcpy(language, "es-rMX");
+      }
+    }
+
+    LOGE("Language: %s", language);
+
+
     espeak_VOICE voice;
     memset(&voice, 0, sizeof(espeak_VOICE)); // Zero out the voice first
     voice.variant = 0;
@@ -219,13 +296,14 @@ tts_result TtsEngine::setLanguage( const char * lang, const char * country, cons
     currentLanguage = new char [strlen(language)];
     strcpy(currentLanguage, language);
     return TTS_SUCCESS;
-*/
 }
+
 
 tts_support_result TtsEngine::isLanguageAvailable(const char *lang, const char *country,
             const char *variant) {
     // TODO: Fix this!
-    return TTS_LANG_NOT_SUPPORTED;
+    return TTS_LANG_AVAILABLE;
+//    return TTS_LANG_NOT_SUPPORTED;
 }
 
 tts_result TtsEngine::getLanguage(char *language, char *country, char *variant)
@@ -233,6 +311,7 @@ tts_result TtsEngine::getLanguage(char *language, char *country, char *variant)
     // TODO: Fix this!
     return TTS_SUCCESS;
 }
+
 
 /** setAudioFormat
  * sets the audio format to use for synthesis, returns what is actually used.
@@ -253,15 +332,38 @@ tts_result TtsEngine::setAudioFormat(AudioSystem::audio_format& encoding, uint32
 // TODO: add pitch property here
 tts_result TtsEngine::setProperty(const char *property, const char *value, const size_t size)
 {
-    if (strcmp(property, "rate") == 0){
-        setSpeechRate(atoi(value));
-        currentRate = new char [size];
-        strcpy(currentRate, value);
-    } else {
-        LOGI("Unknown property!");
+LOGE("setProperty called for %s and value %s", property, value);
+    int rate;
+    int pitch;
+    int volume;
+
+    /* Set a specific property for the engine.
+       Supported properties include: language (locale), rate, pitch, volume.    */
+    /* Sanity check */
+    if (property == NULL) {
+        LOGE("setProperty called with property NULL");
         return TTS_PROPERTY_UNSUPPORTED;
     }
-    return TTS_SUCCESS;
+
+    if (value == NULL) {
+        LOGE("setProperty called with value NULL");
+        return TTS_VALUE_INVALID;
+    }
+
+    if (strncmp(property, "language", 8) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    } else if (strncmp(property, "rate", 4) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    } else if (strncmp(property, "pitch", 5) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    } else if (strncmp(property, "volume", 6) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    }
+    return TTS_PROPERTY_UNSUPPORTED;
 }
 
 
@@ -270,28 +372,91 @@ tts_result TtsEngine::setProperty(const char *property, const char *value, const
 // TODO: add pitch property here
 tts_result TtsEngine::getProperty(const char *property, char *value, size_t *iosize)
 {
-    if (strcmp(property, "language") == 0){
-        strcpy(value, currentLanguage);
-    } else if (strcmp(property, "rate") == 0){
-        strcpy(value, currentRate);
-    } else {
-        LOGI("Unknown property!");
+    /* Get the property for the engine.
+       This property was previously set by setProperty or by default.       */
+    /* sanity check */
+    if (property == NULL) {
+        LOGE("getProperty called with property NULL");
         return TTS_PROPERTY_UNSUPPORTED;
     }
-    return TTS_SUCCESS;
+
+    if (value == NULL) {
+        LOGE("getProperty called with value NULL");
+        return TTS_VALUE_INVALID;
+    }
+
+    if (strncmp(property, "language", 8) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    } else if (strncmp(property, "rate", 4) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    } else if (strncmp(property, "pitch", 5) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    } else if (strncmp(property, "volume", 6) == 0) {
+        // TODO: Fix this
+        return TTS_SUCCESS;
+    }
+
+    /* Unknown property */
+    LOGE("Unsupported property");
+    return TTS_PROPERTY_UNSUPPORTED;
 }
 
-
-// Shutsdown the TTS engine
-tts_result TtsEngine::shutdown( void )
+/** synthesizeText
+ *  Synthesizes a text string.
+ *  The text string could be annotated with SSML tags.
+ *  @text     - text to synthesize
+ *  @buffer   - buffer which will receive generated samples
+ *  @bufferSize - size of buffer
+ *  @userdata - pointer to user data which will be passed back to callback function
+ *  return tts_result
+*/
+tts_result TtsEngine::synthesizeText( const char * text, int8_t * buffer, size_t bufferSize, void * userdata )
 {
-    espeak_Terminate();
+LOGE("0");
+    // TODO: Make sure this still works
+    espeak_SetSynthCallback(eSpeakCallback);
+
+    unsigned int unique_identifier;
+    espeak_ERROR err;
+
+    err = espeak_Synth(text,
+                       strlen(text),
+                       0,  // position
+                       POS_CHARACTER,
+                       0,  // end position (0 means no end position)
+                       espeakCHARS_UTF8,
+                       &unique_identifier,
+                       userdata);
+
+    err = espeak_Synchronize();
+LOGE("1");
     return TTS_SUCCESS;
 }
+
+// Synthesizes IPA text
+tts_result TtsEngine::synthesizeIpa( const char * ipa, int8_t * buffer, size_t bufferSize, void * userdata )
+{
+    // deprecated call
+    return TTS_FAILURE;
+
+}
+
+
+// Interrupts synthesis
+tts_result TtsEngine::stop()
+{
+    espeak_Cancel();
+    return TTS_SUCCESS;
+}
+
 
 
 TtsEngine* getTtsEngine()
 {
+LOGE("getTtsEngine called");
     return new TtsEngine();
 }
 
