@@ -110,6 +110,10 @@ synthDoneCB_t* ttsSynthDoneCBPointer;
 char* currentLanguage = "en-rUS";
 char* currentRate = "140";
 
+char currentLang[10];
+char currentCountry[10];
+char currentVariant[10];
+
 
 /* Functions internal to the eSpeak engine wrapper */
 static void setSpeechRate(int speechRate)
@@ -207,6 +211,11 @@ tts_result TtsEngine::setLanguage( const char * lang, const char * country, cons
         LOGE("TtsEngine::setLanguage called with unsupported language");
         return TTS_FAILURE;
         }
+
+    
+    strcpy(currentLang, lang);
+    strcpy(currentCountry, country);
+
     strcpy(language, supportedLang[langIndex]);
 
     if (strcmp(language, "en") == 0){
@@ -301,14 +310,22 @@ tts_result TtsEngine::setLanguage( const char * lang, const char * country, cons
 
 tts_support_result TtsEngine::isLanguageAvailable(const char *lang, const char *country,
             const char *variant) {
-    // TODO: Fix this!
-    return TTS_LANG_AVAILABLE;
-//    return TTS_LANG_NOT_SUPPORTED;
+    // TODO: Make this account for data files!
+    for (int i = 0; i < 33; i ++)
+        {
+        if (strcmp(lang, supportedLangIso3[i]) == 0)
+            {
+            return TTS_LANG_AVAILABLE;
+            }
+        }
+    return TTS_LANG_NOT_SUPPORTED;
 }
 
 tts_result TtsEngine::getLanguage(char *language, char *country, char *variant)
 {
-    // TODO: Fix this!
+    strcpy(language, currentLang);
+    strcpy(country, currentCountry);
+    strcpy(variant, "");
     return TTS_SUCCESS;
 }
 
@@ -415,8 +432,6 @@ tts_result TtsEngine::getProperty(const char *property, char *value, size_t *ios
 */
 tts_result TtsEngine::synthesizeText( const char * text, int8_t * buffer, size_t bufferSize, void * userdata )
 {
-LOGE("0");
-    // TODO: Make sure this still works
     espeak_SetSynthCallback(eSpeakCallback);
 
     unsigned int unique_identifier;
@@ -432,7 +447,6 @@ LOGE("0");
                        userdata);
 
     err = espeak_Synchronize();
-LOGE("1");
     return TTS_SUCCESS;
 }
 
@@ -441,7 +455,6 @@ tts_result TtsEngine::synthesizeIpa( const char * ipa, int8_t * buffer, size_t b
 {
     // deprecated call
     return TTS_FAILURE;
-
 }
 
 
