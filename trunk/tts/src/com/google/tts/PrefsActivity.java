@@ -67,6 +67,7 @@ public class PrefsActivity extends PreferenceActivity {
 	  }
 	  enginesPref.setEntries(entries);
 	  enginesPref.setEntryValues(values);
+	  
   }
 
   private void loadHellos() {
@@ -112,6 +113,14 @@ public class PrefsActivity extends PreferenceActivity {
 
   private void sayHello() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    String engine = prefs.getString("engine_pref", "pico");
+    if (engine.toLowerCase().contains("espeak")){
+    	myTts.setEngine(TTSEngine.ESPEAK);
+    } else {
+    	myTts.setEngine(TTSEngine.PICO);
+    }
+    
     String languageCode = prefs.getString("lang_pref", "eng-USA");
     int rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
 

@@ -67,8 +67,7 @@ public class TTS {
 		public void onSpeechCompleted();
 	}
 
-	private ServiceConnection serviceConnection; // Connection needed for the
-	// TTS
+	private ServiceConnection serviceConnection; // Connection needed for the TTS
 	private ITTS itts;
 	private Context ctx;
 	private InitListener cb = null;

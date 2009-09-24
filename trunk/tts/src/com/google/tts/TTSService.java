@@ -218,6 +218,9 @@ public class TTSService extends Service implements OnCompletionListener {
 	private final ReentrantLock synthesizerLock = new ReentrantLock();
 
 	private static SynthProxy sNativeSynth = null;
+	
+
+	private String currentSpeechEngineSOFile = "";
 
 	@Override
 	public void onCreate() {
@@ -225,12 +228,22 @@ public class TTSService extends Service implements OnCompletionListener {
 		Log.v("TtsService", "TtsService.onCreate()");
 
 		mResolver = getContentResolver();
-
+			
 		// String soLibPath = "/data/data/com.google.tts/lib/libttspico.so";
 		// Use this path when building in the framework:
-		String soLibPath = "/system/lib/libttspico.so";
-		if (sNativeSynth == null) {
-			sNativeSynth = new SynthProxy(soLibPath);
+		// setEngine("/system/lib/libttspico.so");
+		// setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
+		// setEngine("/data/data/com.google.tts/lib/libttspico.so");
+
+		// TODO: Clean this up - this is hacky and relies on knowing the two
+		// existing engines.
+		currentSpeechEngineSOFile = "";
+		String preferredEngine = PreferenceManager.getDefaultSharedPreferences(
+				this).getString("engine_pref", "pico");
+		if (preferredEngine.toLowerCase().contains("espeak")) {
+			setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
+		} else {
+			setEngine("/system/lib/libttspico.so");
 		}
 
 		mSelf = this;
@@ -284,7 +297,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
 		mEarcons.put("[tock]", new SoundResource(PKGNAME, R.raw.tock_snd));
 		mEarcons.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
-		
+
 		Log.e("TTSService", "onCreate completed.");
 	}
 
@@ -306,6 +319,24 @@ public class TTSService extends Service implements OnCompletionListener {
 		mCallbacks.kill();
 
 		Log.v(SERVICE_TAG, "onDestroy() completed");
+	}
+
+
+	// TODO: Make this return something sensible
+	private int setEngine(String soLibFilename) {
+		if (currentSpeechEngineSOFile.equals(soLibFilename)){
+			return 0;
+		}
+		if (sNativeSynth != null) {
+			// Should really be a stopSync here, but that is not available in Donut...
+			// sNativeSynth.stopSync();
+			sNativeSynth.stop();
+			sNativeSynth.shutdown();
+			sNativeSynth = null;
+		}
+		sNativeSynth = new SynthProxy(soLibFilename);
+		currentSpeechEngineSOFile = soLibFilename;
+		return 0;
 	}
 
 	private void setDefaultSettings() {
@@ -1517,16 +1548,24 @@ public class TTSService extends Service implements OnCompletionListener {
 		public void setEngine(String selectedEngine) {
 			TTSEngine theEngine;
 			if (selectedEngine.equals(TTSEngine.TTS_ONLY.toString())) {
-				theEngine = TTSEngine.TTS_ONLY;
+				// Deprecated, this case now does nothing!
+				// theEngine = TTSEngine.TTS_ONLY;
 			} else if (selectedEngine.equals(TTSEngine.PRERECORDED_WITH_TTS
 					.toString())) {
-				theEngine = TTSEngine.PRERECORDED_WITH_TTS;
+				// Deprecated, this case now does nothing!
+				// theEngine = TTSEngine.PRERECORDED_WITH_TTS;
+			} else if (selectedEngine.equals(TTSEngine.PRERECORDED_WITH_TTS
+					.toString())) {
+				// Deprecated, this case now does nothing!
+				// theEngine = TTSEngine.PRERECORDED_ONLY;
 			} else {
-				theEngine = TTSEngine.PRERECORDED_ONLY;
+				if (selectedEngine.equals(TTSEngine.ESPEAK
+						.toString())) {
+					mSelf.setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
+				} else {
+					mSelf.setEngine("/system/lib/libttspico.so");
+				}
 			}
-			// TODO: Fix this - create a special case for this deprecated
-			// version!
-			// mSelf.setEngine(theEngine);
 		}
 
 		/**
@@ -1545,11 +1584,11 @@ public class TTSService extends Service implements OnCompletionListener {
 		public void speak(String text, int queueMode, String[] params) {
 			ArrayList<String> speakingParams = new ArrayList<String>();
 			if (params != null) {
-				if (text.length() == 1){
-					if (params[0].equals(TTSParams.VOICE_FEMALE.toString())){
+				if (text.length() == 1) {
+					if (params[0].equals(TTSParams.VOICE_FEMALE.toString())) {
 						text = text + "[fem]";
 					}
-					if (params[0].equals(TTSParams.VOICE_ROBOT.toString())){
+					if (params[0].equals(TTSParams.VOICE_ROBOT.toString())) {
 						text = text + "[robot]";
 					}
 				}
@@ -1671,11 +1710,19 @@ public class TTSService extends Service implements OnCompletionListener {
 		 *            http://en.wikipedia.org/wiki/IETF_language_tag
 		 */
 		public void setLanguage(String language) {
+			Locale loc;
 			if (language.length() == 3) {
+				loc = new Locale(language);
+				// mSelf.setLanguage("DEPRECATED", loc.getISO3Language(), "",
+				// "");
 				mSelf.setLanguage("DEPRECATED", language, "", "");
 				return;
 			}
 			if (language.length() == 7) {
+				loc = new Locale(language.substring(0, 3), language.substring(
+						4, 7));
+				// mSelf.setLanguage("DEPRECATED", loc.getISO3Language(),
+				// loc.getISO3Country(), "");
 				mSelf.setLanguage("DEPRECATED", language.substring(0, 3),
 						language.substring(4, 7), "");
 				return;
@@ -1698,6 +1745,10 @@ public class TTSService extends Service implements OnCompletionListener {
 			if (isoLocale.length() > 8) {
 				variant = isoLocale.substring(8);
 			}
+
+			loc = new Locale(lang, country, variant);
+			// mSelf.setLanguage("DEPRECATED", loc.getISO3Language(),
+			// loc.getISO3Country(), loc.getVariant());
 			mSelf.setLanguage("DEPRECATED", lang, country, variant);
 		}
 
