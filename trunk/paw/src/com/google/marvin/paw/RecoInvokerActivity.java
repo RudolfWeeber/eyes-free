@@ -24,7 +24,13 @@ public class RecoInvokerActivity extends Activity {
             finish();
             return;
         }
-        ArrayList<String> results = data.getExtras().getStringArrayList(RecognizerIntent.EXTRA_RESULTS);  
+        ArrayList<String> results = data.getExtras().getStringArrayList(RecognizerIntent.EXTRA_RESULTS);
+        
+        // TODO: make this take the reco result
+        Intent queryIntent = new Intent("com.google.marvin.paw.action.websearch");
+        queryIntent.putExtra("query", results.get(0));
+        sendBroadcast(queryIntent);
+        
         Toast.makeText(this, results.get(0), 1).show();
         
         finish();

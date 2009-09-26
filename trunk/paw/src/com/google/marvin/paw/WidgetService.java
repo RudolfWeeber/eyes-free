@@ -13,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -205,4 +206,8 @@ public class WidgetService extends Service {
             }
         }
     }
+    
+
+    
+    
 }
