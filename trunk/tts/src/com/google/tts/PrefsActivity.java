@@ -48,26 +48,26 @@ public class PrefsActivity extends PreferenceActivity {
       });
     }
   };
-  
-  private void loadEngines(){
-	  ListPreference enginesPref = (ListPreference) findPreference("engine_pref");
-	  
-	  Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
 
-	  ResolveInfo[] enginesArray = new ResolveInfo[0];
-	  PackageManager pm = getPackageManager();
-	  enginesArray = pm.queryIntentActivities(intent, 0).toArray(enginesArray);
-	  
-	  CharSequence entries[] = new CharSequence[enginesArray.length];
-	  CharSequence values[] = new CharSequence[enginesArray.length];
-	  for (int i=0; i<enginesArray.length; i++){
-		  entries[i] = enginesArray[i].loadLabel(pm);
-		  ActivityInfo aInfo = enginesArray[i].activityInfo;
-		  values[i] = aInfo.packageName + "/" + aInfo.name;
-	  }
-	  enginesPref.setEntries(entries);
-	  enginesPref.setEntryValues(values);
-	  
+  private void loadEngines() {
+    ListPreference enginesPref = (ListPreference) findPreference("engine_pref");
+
+    Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+
+    ResolveInfo[] enginesArray = new ResolveInfo[0];
+    PackageManager pm = getPackageManager();
+    enginesArray = pm.queryIntentActivities(intent, 0).toArray(enginesArray);
+
+    CharSequence entries[] = new CharSequence[enginesArray.length];
+    CharSequence values[] = new CharSequence[enginesArray.length];
+    for (int i = 0; i < enginesArray.length; i++) {
+      entries[i] = enginesArray[i].loadLabel(pm);
+      ActivityInfo aInfo = enginesArray[i].activityInfo;
+      values[i] = aInfo.packageName + "/" + aInfo.name;
+    }
+    enginesPref.setEntries(entries);
+    enginesPref.setEntryValues(values);
+
   }
 
   private void loadHellos() {
@@ -115,19 +115,19 @@ public class PrefsActivity extends PreferenceActivity {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     String engine = prefs.getString("engine_pref", "pico");
-    if (engine.toLowerCase().contains("espeak")){
-    	myTts.setEngine(TTSEngine.ESPEAK);
+    if (engine.toLowerCase().contains("espeak")) {
+      myTts.setEngine(TTSEngine.ESPEAK);
     } else {
-    	myTts.setEngine(TTSEngine.PICO);
+      myTts.setEngine(TTSEngine.PICO);
     }
-    
+
     String languageCode = prefs.getString("lang_pref", "eng-USA");
     int rate = Integer.parseInt(prefs.getString("rate_pref", "140"));
 
     myTts.setLanguage(languageCode);
     myTts.setSpeechRate(rate);
-    if (!hellos.containsKey(languageCode)){
-    	languageCode = "eng-USA";
+    if (!hellos.containsKey(languageCode)) {
+      languageCode = "eng-USA";
     }
     String hello = getString(hellos.get(languageCode));
     myTts.speak(hello, 0, null);
