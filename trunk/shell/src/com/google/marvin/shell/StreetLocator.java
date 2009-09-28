@@ -42,7 +42,7 @@ public class StreetLocator {
     public void onIntersectionLocated(String[] streetnames);
 
     public void onAddressLocated(String address);
-    
+
     public void onFrontBackLocated(String[] streetsFront, String[] streetsBack);
   }
 
@@ -98,8 +98,6 @@ public class StreetLocator {
     (new Thread(new IntersectionThread())).start();
   }
 
-
-
   /**
    * Queries the map server and obtains the reverse geocoded address of the
    * specified location.
@@ -112,12 +110,14 @@ public class StreetLocator {
     final double longitude = lon;
     class AddressThread implements Runnable {
       public void run() {
-        cb.onAddressLocated(getAddress(latitude, longitude));
+        String address = getAddress(latitude, longitude);
+        if (address != null) {
+          cb.onAddressLocated(address);
+        }
       }
     }
     (new Thread(new AddressThread())).start();
   }
-
 
   /**
    * Queries the map server and obtains the street names at the specified
@@ -132,7 +132,8 @@ public class StreetLocator {
     HashSet<String> streets = new HashSet<String>();
     try {
       for (int i = 0; i < 5; i++) {
-        // Find street address at lat-lon x meters to the N, S, E and W of
+        // Find street address at lat-lon x meters to the N, S, E and W
+        // of
         // the given lat-lon
         String street = parseStreetName(getResult(makeNavURL(lat, lon, lat, lon)));
         if (street != null) {
@@ -160,8 +161,6 @@ public class StreetLocator {
     return st;
   }
 
-
-
   /**
    * Queries the map server and obtains the street names at the specified
    * location. This is done by obtaining street name at specified location, and
@@ -173,7 +172,8 @@ public class StreetLocator {
   public void getStreetsInFrontAndBack(double lat, double lon, double heading) {
     HashSet<String> streetsFront = new HashSet<String>();
     HashSet<String> streetsBack = new HashSet<String>();
-    double searchDistance = 15; // 15m (? - is there really a factor of 10 here)
+    double searchDistance = 15; // 15m (? - is there really a factor of 10
+    // here)
 
     try {
       // Get the current street
@@ -183,7 +183,7 @@ public class StreetLocator {
         streetsBack.add(street);
       }
       Log.i("Current street", "lat: " + Double.toString(lat) + ", lon: " + Double.toString(lon));
-            
+
       // Get the street in front of the current street
       Location nextLoc = endLocation(lat, lon, heading, searchDistance);
       lat = nextLoc.getLatitude();
@@ -194,10 +194,9 @@ public class StreetLocator {
       }
       Log.i("Front street", "lat: " + Double.toString(lat) + ", lon: " + Double.toString(lon));
 
-
       // Get the street behind the current street
       heading = heading + 180;
-      if (heading >= 360){
+      if (heading >= 360) {
         heading = heading - 360;
       }
       nextLoc = endLocation(lat, lon, heading, searchDistance);
@@ -219,7 +218,7 @@ public class StreetLocator {
       i = 0;
       for (String s : streetsBack) {
         sb[i++] = s;
-      }      
+      }
       cb.onFrontBackLocated(sf, sb);
     } catch (MalformedURLException e) {
       // TODO Auto-generated catch block
@@ -232,8 +231,6 @@ public class StreetLocator {
       e.printStackTrace();
     }
   }
-
-
 
   /**
    * Queries the map server and obtains the reverse geocoded address of the
