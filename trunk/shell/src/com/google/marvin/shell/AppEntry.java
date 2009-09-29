@@ -15,8 +15,8 @@ public class AppEntry {
   private ArrayList<Param> params;
   private ResolveInfo rInfo;
 
-  AppEntry(String appTitle, String appPackageName, String appClassName, String appScriptName, Drawable appIcon,
-      ArrayList<Param> parameters) {
+  AppEntry(String appTitle, String appPackageName, String appClassName, String appScriptName,
+      Drawable appIcon, ArrayList<Param> parameters) {
     title = appTitle;
     packageName = appPackageName;
     className = appClassName;

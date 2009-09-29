@@ -68,19 +68,19 @@ public class MenuLoader {
             NamedNodeMap appInfoAttr = appInfoNode.getAttributes();
             String packageName = "";
             Node packageAttrNode = appInfoAttr.getNamedItem("package");
-            if (packageAttrNode != null){
-            	packageName = packageAttrNode.getNodeValue();
+            if (packageAttrNode != null) {
+              packageName = packageAttrNode.getNodeValue();
             }
             String className = "";
             Node classAttrNode = appInfoAttr.getNamedItem("class");
-            if (classAttrNode != null){
-            	className = classAttrNode.getNodeValue();
+            if (classAttrNode != null) {
+              className = classAttrNode.getNodeValue();
             }
             String scriptName = "";
             Node scriptAttrNode = appInfoAttr.getNamedItem("script");
-            if (scriptAttrNode != null){
-            	scriptName = scriptAttrNode.getNodeValue();
-            }            
+            if (scriptAttrNode != null) {
+              scriptName = scriptAttrNode.getNodeValue();
+            }
             appInfo = new AppEntry(null, packageName, className, scriptName, null, params);
           }
 
