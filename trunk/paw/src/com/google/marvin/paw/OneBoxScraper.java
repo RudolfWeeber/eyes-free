@@ -2,6 +2,8 @@ package com.google.marvin.paw;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.htmlparser.parserapplications.StringExtractor;
 import org.htmlparser.util.ParserException;
@@ -29,6 +31,7 @@ public class OneBoxScraper {
           int endIndex = results.indexOf("%", indexOfHumidity);
           if (endIndex != -1) {
             processedResult = results.substring(0, endIndex + 1);
+            //Log.e("PAW Debug", "Weather: " + processedResult);
           }
         }
       }
@@ -38,6 +41,7 @@ public class OneBoxScraper {
         int indexOfFlightTracker = results.indexOf("www.flightstats.com", indexOfTrackStatus);
         if (indexOfFlightTracker != -1) {
           processedResult = results.substring(indexOfTrackStatus, indexOfFlightTracker);
+          //Log.e("PAW Debug", "Flight tracker: " + processedResult);
         }
       }
       // Calculator
@@ -45,6 +49,7 @@ public class OneBoxScraper {
         String firstLine = results.substring(0, results.indexOf("\n"));
         if (firstLine.indexOf(" = ") != -1) {
           processedResult = firstLine;
+          //Log.e("PAW Debug", "Calculator: " + processedResult);
         }
       }
       // Finance
@@ -64,6 +69,7 @@ public class OneBoxScraper {
           int thirdLineBreak = results.indexOf("\n", secondLineBreak + 1);
           String thirdLine = results.substring(secondLineBreak + 1, thirdLineBreak);
           processedResult = processedResult + thirdLine;
+          //Log.e("PAW Debug", "Finance: " + processedResult);
         }
       }
       if ((processedResult.length() < 1) && (results.indexOf("\n") != -1)) {
@@ -82,6 +88,7 @@ public class OneBoxScraper {
           int thirdLineBreak = results.indexOf("\n", secondLineBreak + 1);
           String thirdLine = results.substring(secondLineBreak + 1, thirdLineBreak);
           processedResult = processedResult + thirdLine;
+          //Log.e("PAW Debug", "Finance: " + processedResult);
         }
       }
       // Dictionary
@@ -95,6 +102,7 @@ public class OneBoxScraper {
           int secondLineBreak = results.indexOf("\n", firstLineBreak + 1);
           String secondLine = results.substring(firstLineBreak + 1, secondLineBreak);
           processedResult = processedResult + secondLine + "\n";
+          //Log.e("PAW Debug", "Dictionary: " + processedResult);
         }
       }
       // Time
@@ -104,20 +112,28 @@ public class OneBoxScraper {
         if ((firstLine.indexOf(":") != -1)
             && ((firstLine.indexOf("am ") != -1) || (firstLine.indexOf("pm ") != -1))) {
           processedResult = firstLine;
+          //Log.e("PAW Debug", "Time: " + processedResult);
         }
       }
       // Sports
-      /*
       if ((processedResult.length() < 1) && (results.indexOf("\n") != -1)) {
         int firstLineBreak = results.indexOf("\n");
         String firstLine = results.substring(0, firstLineBreak);
-        if ((firstLine.indexOf("News results for") == -1)
-            && (firstLine.toLowerCase().indexOf(query.toLowerCase()) != -1)) {
-          
-          processedResult = firstLine;
+
+        Pattern vsScorePattern = Pattern.compile("[a-zA-Z ]+[0-9]+ - [a-zA-Z ]+[0-9]+");
+        Pattern recordScorePattern = Pattern.compile("[a-zA-Z ]+ \\([0-9]+-[0-9]+\\)");
+        Matcher vsScoreMatcher = vsScorePattern.matcher(firstLine);
+        Matcher recordScoreMatcher = recordScorePattern.matcher(firstLine);
+        
+        if (vsScoreMatcher.find()) {          
+          processedResult = vsScoreMatcher.group();
+          //Log.e("PAW Debug", "Sports: " + processedResult);
+        } else if (recordScoreMatcher.find()) {          
+          processedResult = recordScoreMatcher.group();
+          //Log.e("PAW Debug", "Sports: " + processedResult);
         }
       }
-      */
+     
       /* The following will result in a special action that is not speech */
       // Local search
       if ((processedResult.length() < 1) && (results.indexOf("\n") != -1)) {
