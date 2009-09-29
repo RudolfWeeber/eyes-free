@@ -36,7 +36,6 @@ import com.google.tts.ITtsBeta.Stub;
 import com.google.tts.ITTSCallback;
 import com.google.tts.TTS;
 
-import android.tts.SynthProxy;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -217,7 +216,7 @@ public class TTSService extends Service implements OnCompletionListener {
   private final ReentrantLock speechQueueLock = new ReentrantLock();
   private final ReentrantLock synthesizerLock = new ReentrantLock();
 
-  private static SynthProxy sNativeSynth = null;
+  private static SynthProxyBeta sNativeSynth = null;
 
 
   private String currentSpeechEngineSOFile = "";
@@ -332,7 +331,7 @@ public class TTSService extends Service implements OnCompletionListener {
       sNativeSynth.shutdown();
       sNativeSynth = null;
     }
-    sNativeSynth = new SynthProxy(soLibFilename);
+    sNativeSynth = new SynthProxyBeta(soLibFilename);
     currentSpeechEngineSOFile = soLibFilename;
     return 0;
   }
@@ -663,7 +662,9 @@ public class TTSService extends Service implements OnCompletionListener {
 
         // clear the current speech item
         if (mCurrentSpeechItem != null) {
-          result = sNativeSynth.stopSync();
+          // Should be a stopSync - only using a stop for Donut compatibility
+          // result = sNativeSynth.stopSync();
+          result = sNativeSynth.stop();
           mKillList.put(mCurrentSpeechItem, true);
           mIsSpeaking = false;
 

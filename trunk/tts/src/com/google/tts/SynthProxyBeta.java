@@ -1,21 +1,4 @@
 /*
- * Copyright (C) 2008 Google Inc.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-package android.tts;
-
-/*
  * Copyright (C) 2009 Google Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -30,11 +13,11 @@ package android.tts;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-import android.media.AudioManager;
+package com.google.tts;
+
+import android.media.AudioManager; // import android.media.AudioSystem;
 import android.util.Log;
 import java.lang.ref.WeakReference;
-
-import com.google.tts.TTSService;
 
 /**
  * @hide
@@ -46,7 +29,7 @@ import com.google.tts.TTSService;
  * 
  */
 @SuppressWarnings("unused")
-public class SynthProxy {
+public class SynthProxyBeta {
 
   //
   // External API
@@ -55,9 +38,9 @@ public class SynthProxy {
   /**
    * Constructor; pass the location of the native TTS .so to use.
    */
-  public SynthProxy(String nativeSoLib) {
-    // Log.v(TTSService.SERVICE_TAG, "TTS is loading " + nativeSoLib);
-    native_setup(new WeakReference<SynthProxy>(this), nativeSoLib);
+  public SynthProxyBeta(String nativeSoLib) {
+    Log.e("TTS is loading", nativeSoLib);
+    native_setup(new WeakReference<SynthProxyBeta>(this), nativeSoLib);
   }
 
   /**
@@ -65,18 +48,6 @@ public class SynthProxy {
    */
   public int stop() {
     return native_stop(mJniData);
-  }
-
-  /**
-   * Synchronous stop of the synthesizer. This method returns when the synth has
-   * completed the stop procedure and doesn't use any of the resources it was
-   * using while synthesizing.
-   * 
-   * @return {@link android.speech.TextToSpeechBeta.TextToSpeech.SUCCESS} or
-   *         {@link android.speech.TextToSpeechBeta.TextToSpeech.ERROR}
-   */
-  public int stopSync() {
-    return native_stopSync(mJniData);
   }
 
   /**
@@ -172,7 +143,8 @@ public class SynthProxy {
   }
 
   static {
-    System.loadLibrary("ttssynthproxy");
+    //System.loadLibrary("ttssynthproxy");
+    System.loadLibrary("ttssynthproxybeta");
   }
 
   private final static String TAG = "SynthProxy";
@@ -187,8 +159,6 @@ public class SynthProxy {
   private native final void native_finalize(int jniData);
 
   private native final int native_stop(int jniData);
-
-  private native final int native_stopSync(int jniData);
 
   private native final int native_speak(int jniData, String text, int streamType);
 
@@ -223,7 +193,7 @@ public class SynthProxy {
 
     Log.i("TTS plugin debug", "bufferPointer: " + bufferPointer + " bufferSize: " + bufferSize);
 
-    SynthProxy nativeTTS = (SynthProxy) ((WeakReference) tts_ref).get();
+    SynthProxyBeta nativeTTS = (SynthProxyBeta) ((WeakReference) tts_ref).get();
     // TODO notify TTS service of synthesis/playback completion,
     // method definition to be changed.
   }
