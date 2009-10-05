@@ -36,6 +36,7 @@ import android.util.Log;
  * no-ops.
  * 
  * @author clchen@google.com (Charles L. Chen)
+ * @deprecated - Use TextToSpeechBeta instead
  */
 public class TTS {
   // This is the minimum version of the TTS service that is needed by this

@@ -196,8 +196,6 @@ public class TTSService extends Service implements OnCompletionListener {
   private final RemoteCallbackList<ITTSCallback> mCallbacksOld =
       new RemoteCallbackList<ITTSCallback>();
 
-  private HashMap<String, ITTSCallback> mCallbacksMapOld;
-
   private Boolean mIsSpeaking;
   private ArrayList<SpeechItem> mSpeechQueue;
   private HashMap<String, SoundResource> mEarcons;
@@ -209,7 +207,6 @@ public class TTSService extends Service implements OnCompletionListener {
   // are killed when stop is used.
   private TTSService mSelf;
 
-  private ContentResolver mResolver;
 
   // lock for the speech queue (mSpeechQueue) and the current speech item
   // (mCurrentSpeechItem)
@@ -226,7 +223,6 @@ public class TTSService extends Service implements OnCompletionListener {
     super.onCreate();
     Log.v("TtsService", "TtsService.onCreate()");
 
-    mResolver = getContentResolver();
 
     // String soLibPath = "/data/data/com.google.tts/lib/libttspico.so";
     // Use this path when building in the framework:
@@ -318,11 +314,15 @@ public class TTSService extends Service implements OnCompletionListener {
     Log.v(SERVICE_TAG, "onDestroy() completed");
   }
 
-
-  // TODO: Make this return something sensible
+  
   private int setEngine(String soLibFilename) {
     if (currentSpeechEngineSOFile.equals(soLibFilename)) {
-      return 0;
+      return TextToSpeechBeta.SUCCESS;
+    }
+    File f = new File(soLibFilename);
+    // TODO: Do we want something stronger than just an existence check here?
+    if (!f.exists()){
+      return TextToSpeechBeta.ERROR;
     }
     if (sNativeSynth != null) {
       // Should really be a stopSync here, but that is not available in Donut...
@@ -333,7 +333,7 @@ public class TTSService extends Service implements OnCompletionListener {
     }
     sNativeSynth = new SynthProxyBeta(soLibFilename);
     currentSpeechEngineSOFile = soLibFilename;
-    return 0;
+    return TextToSpeechBeta.SUCCESS;
   }
 
   private void setDefaultSettings() {
@@ -1432,13 +1432,13 @@ public class TTSService extends Service implements OnCompletionListener {
       } else if (selectedEngine.equals(TTSEngine.PRERECORDED_WITH_TTS.toString())) {
         // Deprecated, this case now does nothing!
         // theEngine = TTSEngine.PRERECORDED_WITH_TTS;
-      } else if (selectedEngine.equals(TTSEngine.PRERECORDED_WITH_TTS.toString())) {
+      } else if (selectedEngine.equals(TTSEngine.PRERECORDED_ONLY.toString())) {
         // Deprecated, this case now does nothing!
         // theEngine = TTSEngine.PRERECORDED_ONLY;
       } else {
         if (selectedEngine.equals(TTSEngine.ESPEAK.toString())) {
           mSelf.setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
-        } else {
+        } else if (selectedEngine.equals(TTSEngine.PICO.toString())){
           mSelf.setEngine("/system/lib/libttspico.so");
         }
       }
@@ -1478,10 +1478,10 @@ public class TTSService extends Service implements OnCompletionListener {
      */
     public void playEarcon(String earcon, int queueMode, String[] params) {
       ArrayList<String> speakingParams = new ArrayList<String>();
-      if (params != null) {
-        speakingParams = new ArrayList<String>(Arrays.asList(params));
-      }
-      // TODO: Make sure speakingParams makes sense
+      // TODO: Make sure speakingParams makes sense - until then, just ignore params
+      //if (params != null) {
+      //  speakingParams = new ArrayList<String>(Arrays.asList(params));
+      //}
       mSelf.playEarcon("DEPRECATED", earcon, queueMode, speakingParams);
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">TTS Service</string>
+	<string name="app_name">TTS Service Extended</string>
 	<string name="tts_apps">Application Showcase</string>
 	<string name="homepage">Project Homepage</string>
 	<string name="af">haai</string>

@@ -191,7 +191,6 @@ public class ConfigurationManager extends Activity {
         }
       }
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   }

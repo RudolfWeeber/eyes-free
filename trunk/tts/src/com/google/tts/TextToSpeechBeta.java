@@ -24,9 +24,14 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -46,7 +51,11 @@ import java.util.Locale;
  * TextToSpeech engine.
  * 
  */
-public class TextToSpeechBeta {
+public class TextToSpeechBeta extends TextToSpeech {
+  public static final String USING_PLATFORM_TTS =
+      "TextToSpeechBeta not installed - defaulting to basic platform TextToSpeech for ";
+  public static final String NOT_ON_PLATFORM_TTS =
+      "TextToSpeechBeta not installed - basic platform TextToSpeech does not support ";
 
   /**
    * Denotes a successful operation.
@@ -118,8 +127,11 @@ public class TextToSpeechBeta {
      * 
      * @param status {@link TextToSpeechBeta#SUCCESS} or
      *        {@link TextToSpeechBeta#ERROR}.
+     * 
+     * @param version The version of TextToSpeechBeta Service that the user has
+     *        installed, or -1 if the user does not have it installed.
      */
-    public void onInit(int status);
+    public void onInit(int status, int version);
   }
 
   /**
@@ -359,7 +371,7 @@ public class TextToSpeechBeta {
   private ITtsCallbackBeta mITtscallback = null;
   private Context mContext = null;
   private String mPackageName = "";
-  private OnInitListener mInitListener = null;
+  private static OnInitListener mInitListener = null;
   private boolean mStarted = false;
   private final Object mStartLock = new Object();
   /**
@@ -367,6 +379,19 @@ public class TextToSpeechBeta {
    * to the TTS service.
    */
   private String[] mCachedParams;
+
+
+  static boolean ttsBetaInstalled = false;
+  static TextToSpeech.OnInitListener platformOnInitListener = new TextToSpeech.OnInitListener() {
+    @Override
+    public void onInit(int status) {
+      if (!ttsBetaInstalled) {
+        if (mInitListener != null) {
+          mInitListener.onInit(status, -1);
+        }
+      }
+    }
+  };
 
   /**
    * The constructor for the TextToSpeech class. This will also initialize the
@@ -377,30 +402,35 @@ public class TextToSpeechBeta {
    *        called when the TextToSpeech engine has initialized.
    */
   public TextToSpeechBeta(Context context, OnInitListener listener) {
-    mContext = context;
-    mPackageName = mContext.getPackageName();
+    super(context, platformOnInitListener);
+    ttsBetaInstalled = isInstalled(context);
     mInitListener = listener;
+    if (ttsBetaInstalled) {
+      super.shutdown();
+      mContext = context;
+      mPackageName = mContext.getPackageName();
 
-    mCachedParams = new String[2 * Engine.NB_CACHED_PARAMS]; // store key and
-                                                             // value
-    mCachedParams[Engine.PARAM_POSITION_RATE] = Engine.KEY_PARAM_RATE;
-    mCachedParams[Engine.PARAM_POSITION_LANGUAGE] = Engine.KEY_PARAM_LANGUAGE;
-    mCachedParams[Engine.PARAM_POSITION_COUNTRY] = Engine.KEY_PARAM_COUNTRY;
-    mCachedParams[Engine.PARAM_POSITION_VARIANT] = Engine.KEY_PARAM_VARIANT;
-    mCachedParams[Engine.PARAM_POSITION_STREAM] = Engine.KEY_PARAM_STREAM;
-    mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID] = Engine.KEY_PARAM_UTTERANCE_ID;
+      mCachedParams = new String[2 * Engine.NB_CACHED_PARAMS]; // store key and
+      // value
+      mCachedParams[Engine.PARAM_POSITION_RATE] = Engine.KEY_PARAM_RATE;
+      mCachedParams[Engine.PARAM_POSITION_LANGUAGE] = Engine.KEY_PARAM_LANGUAGE;
+      mCachedParams[Engine.PARAM_POSITION_COUNTRY] = Engine.KEY_PARAM_COUNTRY;
+      mCachedParams[Engine.PARAM_POSITION_VARIANT] = Engine.KEY_PARAM_VARIANT;
+      mCachedParams[Engine.PARAM_POSITION_STREAM] = Engine.KEY_PARAM_STREAM;
+      mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID] = Engine.KEY_PARAM_UTTERANCE_ID;
 
-    mCachedParams[Engine.PARAM_POSITION_RATE + 1] = String.valueOf(Engine.DEFAULT_RATE);
-    // initialize the language cached parameters with the current Locale
-    Locale defaultLoc = Locale.getDefault();
-    mCachedParams[Engine.PARAM_POSITION_LANGUAGE + 1] = defaultLoc.getISO3Language();
-    mCachedParams[Engine.PARAM_POSITION_COUNTRY + 1] = defaultLoc.getISO3Country();
-    mCachedParams[Engine.PARAM_POSITION_VARIANT + 1] = defaultLoc.getVariant();
+      mCachedParams[Engine.PARAM_POSITION_RATE + 1] = String.valueOf(Engine.DEFAULT_RATE);
+      // initialize the language cached parameters with the current Locale
+      Locale defaultLoc = Locale.getDefault();
+      mCachedParams[Engine.PARAM_POSITION_LANGUAGE + 1] = defaultLoc.getISO3Language();
+      mCachedParams[Engine.PARAM_POSITION_COUNTRY + 1] = defaultLoc.getISO3Country();
+      mCachedParams[Engine.PARAM_POSITION_VARIANT + 1] = defaultLoc.getVariant();
 
-    mCachedParams[Engine.PARAM_POSITION_STREAM + 1] = String.valueOf(Engine.DEFAULT_STREAM);
-    mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID + 1] = "";
+      mCachedParams[Engine.PARAM_POSITION_STREAM + 1] = String.valueOf(Engine.DEFAULT_STREAM);
+      mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID + 1] = "";
 
-    initTts();
+      initTts();
+    }
   }
 
 
@@ -414,8 +444,13 @@ public class TextToSpeechBeta {
           mITts = ITtsBeta.Stub.asInterface(service);
           mStarted = true;
           if (mInitListener != null) {
-            // TODO manage failures and missing resources
-            mInitListener.onInit(SUCCESS);
+            try {
+              PackageManager pm = mContext.getPackageManager();
+              PackageInfo info = pm.getPackageInfo("com.google.tts", 0);
+              mInitListener.onInit(SUCCESS, info.versionCode);
+            } catch (NameNotFoundException e) {
+              e.printStackTrace();
+            }
           }
         }
       }
@@ -444,6 +479,11 @@ public class TextToSpeechBeta {
    * so the TextToSpeech engine can be cleanly stopped.
    */
   public void shutdown() {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "shutdown");
+      super.shutdown();
+      return;
+    }
     try {
       mContext.unbindService(mServiceConnection);
     } catch (IllegalArgumentException e) {
@@ -479,6 +519,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int addSpeech(String text, String packagename, int resourceId) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "addSpeech");
+      return super.addSpeech(text, packagename, resourceId);
+    }
     synchronized (mStartLock) {
       if (!mStarted) {
         return ERROR;
@@ -525,6 +569,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int addSpeech(String text, String filename) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "addSpeech");
+      return super.addSpeech(text, filename);
+    }
     synchronized (mStartLock) {
       if (!mStarted) {
         return ERROR;
@@ -580,6 +628,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int addEarcon(String earcon, String packagename, int resourceId) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "addEarcon");
+      return super.addEarcon(earcon, packagename, resourceId);
+    }
     synchronized (mStartLock) {
       if (!mStarted) {
         return ERROR;
@@ -625,6 +677,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int addEarcon(String earcon, String filename) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "addEarcon");
+      return super.addEarcon(earcon, filename);
+    }
     synchronized (mStartLock) {
       if (!mStarted) {
         return ERROR;
@@ -672,6 +728,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int speak(String text, int queueMode, HashMap<String, String> params) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "speak");
+      return super.speak(text, queueMode, params);
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       Log.i("TTS received: ", text);
@@ -730,6 +790,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int playEarcon(String earcon, int queueMode, HashMap<String, String> params) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "playEarcon");
+      return super.playEarcon(earcon, queueMode, params);
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       if (!mStarted) {
@@ -786,6 +850,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int playSilence(long durationInMs, int queueMode, HashMap<String, String> params) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "playSilence");
+      return super.playSilence(durationInMs, queueMode, params);
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       if (!mStarted) {
@@ -830,6 +898,10 @@ public class TextToSpeechBeta {
    * @return Whether or not the TextToSpeech engine is busy speaking.
    */
   public boolean isSpeaking() {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "isSpeaking");
+      return super.isSpeaking();
+    }
     synchronized (mStartLock) {
       if (!mStarted) {
         return false;
@@ -868,6 +940,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int stop() {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "stop");
+      return super.stop();
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       if (!mStarted) {
@@ -914,6 +990,11 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int setSpeechRate(float speechRate) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta",
+          "TextToSpeechBeta not installed - defaulting to basic platform TextToSpeech");
+      return super.setSpeechRate(speechRate);
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       if (!mStarted) {
@@ -964,6 +1045,11 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int setPitch(float pitch) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta",
+          "TextToSpeechBeta not installed - defaulting to basic platform TextToSpeech");
+      return super.setPitch(pitch);
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       if (!mStarted) {
@@ -1013,6 +1099,10 @@ public class TextToSpeechBeta {
    *         {@link #LANG_NOT_SUPPORTED}.
    */
   public int setLanguage(Locale loc) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "setLanguage");
+      return super.setLanguage(loc);
+    }
     synchronized (mStartLock) {
       int result = LANG_NOT_SUPPORTED;
       if (!mStarted) {
@@ -1065,6 +1155,10 @@ public class TextToSpeechBeta {
    *         failed.
    */
   public Locale getLanguage() {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "getLanguage");
+      return super.getLanguage();
+    }
     synchronized (mStartLock) {
       if (!mStarted) {
         return null;
@@ -1111,6 +1205,10 @@ public class TextToSpeechBeta {
    *         {@link #LANG_NOT_SUPPORTED}.
    */
   public int isLanguageAvailable(Locale loc) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "isLanguageAvailable");
+      return super.isLanguageAvailable(loc);
+    }
     synchronized (mStartLock) {
       int result = LANG_NOT_SUPPORTED;
       if (!mStarted) {
@@ -1159,6 +1257,10 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int synthesizeToFile(String text, HashMap<String, String> params, String filename) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "synthesizeToFile");
+      return super.synthesizeToFile(text, params, filename);
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       if (!mStarted) {
@@ -1206,6 +1308,10 @@ public class TextToSpeechBeta {
    * values if they are not persistent between calls to the service.
    */
   private void resetCachedParams() {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", NOT_ON_PLATFORM_TTS + "resetCachedParams");
+      return;
+    }
     mCachedParams[Engine.PARAM_POSITION_STREAM + 1] = String.valueOf(Engine.DEFAULT_STREAM);
     mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID + 1] = "";
   }
@@ -1220,6 +1326,17 @@ public class TextToSpeechBeta {
    *         {@link #SUCCESS}.
    */
   public int setOnUtteranceCompletedListener(final OnUtteranceCompletedListener listener) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "setOnUtteranceCompletedListener");
+      TextToSpeech.OnUtteranceCompletedListener platformUtteranceCompletedListener =
+          new TextToSpeech.OnUtteranceCompletedListener() {
+            @Override
+            public void onUtteranceCompleted(String utteranceId) {
+              listener.onUtteranceCompleted(utteranceId);
+            }
+          };
+      return super.setOnUtteranceCompletedListener(platformUtteranceCompletedListener);
+    }
     synchronized (mStartLock) {
       int result = ERROR;
       if (!mStarted) {
@@ -1256,6 +1373,26 @@ public class TextToSpeechBeta {
         return result;
       }
     }
+  }
+
+
+
+  /**
+   * Standalone TTS ONLY!
+   * 
+   * Checks if the TTS service is installed or not
+   * 
+   * @return A boolean that indicates whether the TTS service is installed
+   */
+  public static boolean isInstalled(Context ctx) {
+    PackageManager pm = ctx.getPackageManager();
+    Intent intent = new Intent("com.google.intent.action.START_TTS_SERVICE_BETA");
+    intent.addCategory("com.google.intent.category.TTS_BETA");
+    ResolveInfo info = pm.resolveService(intent, 0);
+    if (info == null) {
+      return false;
+    }
+    return true;
   }
 
 }
