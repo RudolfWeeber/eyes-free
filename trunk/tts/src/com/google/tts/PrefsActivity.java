@@ -63,7 +63,11 @@ public class PrefsActivity extends PreferenceActivity {
     for (int i = 0; i < enginesArray.length; i++) {
       entries[i] = enginesArray[i].loadLabel(pm);
       ActivityInfo aInfo = enginesArray[i].activityInfo;
-      values[i] = aInfo.packageName + "/" + aInfo.name;
+      // Determine the TTS engine's binary filename from the information in the 
+      // TTS engine's manifest.
+      String soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
+      soFilename = soFilename.toLowerCase();
+      values[i] = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;
     }
     enginesPref.setEntries(entries);
     enginesPref.setEntryValues(values);
@@ -113,13 +117,10 @@ public class PrefsActivity extends PreferenceActivity {
 
   private void sayHello() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-    String engine = prefs.getString("engine_pref", "pico");
-    if (engine.toLowerCase().contains("espeak")) {
-      myTts.setEngine(TTSEngine.ESPEAK);
-    } else {
-      myTts.setEngine(TTSEngine.PICO);
-    }
+    // Change this to the system/lib path when in the framework
+    String DEFAULT_TTS_BINARY = "/data/data/com.google.tts/lib/libttspico.so";
+    String engine = prefs.getString("engine_pref", DEFAULT_TTS_BINARY);
+    myTts.setEngine(engine);
 
     String languageCode = prefs.getString("lang_pref", "eng-USA");
     int rate = Integer.parseInt(prefs.getString("rate_pref", "140"));

@@ -480,6 +480,21 @@ public class TTS {
       initTts();
     }
   }
+  
+  public void setEngine(String ttsEngineBinary) {
+    if (!started) {
+      return;
+    }
+    try {
+      itts.setEngine(ttsEngineBinary);
+    } catch (RemoteException e) {
+      // TTS died; restart it.
+      started = false;
+      initTts();
+    }
+  }
+  
+  
 
   /**
    * Sets the speech rate for the TTS engine.

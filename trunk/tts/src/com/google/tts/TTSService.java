@@ -186,6 +186,9 @@ public class TTSService extends Service implements OnCompletionListener {
   private static final String BETA_ACTION = "com.google.intent.action.START_TTS_SERVICE_BETA";
   private static final String BETA_CATEGORY = "com.google.intent.category.TTS_BETA";
   private static final String PKGNAME = "android.tts";
+  // Change this to the system/lib path when in the framework
+  private static final String DEFAULT_TTS_BINARY = "/data/data/com.google.tts/lib/libttspico.so";
+  
   protected static final String SERVICE_TAG = "TtsService";
 
   private final RemoteCallbackList<ITtsCallbackBeta> mCallbacks =
@@ -229,17 +232,11 @@ public class TTSService extends Service implements OnCompletionListener {
     // setEngine("/system/lib/libttspico.so");
     // setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
     // setEngine("/data/data/com.google.tts/lib/libttspico.so");
-
-    // TODO: Clean this up - this is hacky and relies on knowing the two
-    // existing engines.
+    // Also, switch to using the system settings in the framework.
     currentSpeechEngineSOFile = "";
     String preferredEngine =
-        PreferenceManager.getDefaultSharedPreferences(this).getString("engine_pref", "pico");
-    if (preferredEngine.toLowerCase().contains("espeak")) {
-      setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
-    } else {
-      setEngine("/system/lib/libttspico.so");
-    }
+        PreferenceManager.getDefaultSharedPreferences(this).getString("engine_pref", DEFAULT_TTS_BINARY);
+    setEngine(preferredEngine);
 
     mSelf = this;
     mIsSpeaking = false;
@@ -291,7 +288,7 @@ public class TTSService extends Service implements OnCompletionListener {
     mEarcons.put("[tock]", new SoundResource(PKGNAME, R.raw.tock_snd));
     mEarcons.put("[slnc]", new SoundResource(PKGNAME, R.raw.slnc_snd));
 
-    Log.e("TTSService", "onCreate completed.");
+    Log.e(SERVICE_TAG, "onCreate completed.");
   }
 
   @Override
@@ -316,12 +313,19 @@ public class TTSService extends Service implements OnCompletionListener {
 
   
   private int setEngine(String soLibFilename) {
+    // The SVOX TTS is an exception to how the TTS packaging scheme works because
+    // it is part of the system and not a 3rd party add-on; thus its binary is
+    // actually located under /system/lib/
+    if (soLibFilename.endsWith("/data/data/com.svox.pico/lib/libttspico.so")){
+      soLibFilename = DEFAULT_TTS_BINARY;
+    }
     if (currentSpeechEngineSOFile.equals(soLibFilename)) {
       return TextToSpeechBeta.SUCCESS;
     }
     File f = new File(soLibFilename);
     // TODO: Do we want something stronger than just an existence check here?
     if (!f.exists()){
+      Log.e(SERVICE_TAG, "Invalid TTS Binary: " + soLibFilename);
       return TextToSpeechBeta.ERROR;
     }
     if (sNativeSynth != null) {
@@ -1440,6 +1444,8 @@ public class TTSService extends Service implements OnCompletionListener {
           mSelf.setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
         } else if (selectedEngine.equals(TTSEngine.PICO.toString())){
           mSelf.setEngine("/system/lib/libttspico.so");
+        } else {
+          mSelf.setEngine(selectedEngine);
         }
       }
     }
@@ -1587,7 +1593,7 @@ public class TTSService extends Service implements OnCompletionListener {
       String country = "";
       String variant = "";
       if (isoLocale == null) {
-        Log.e("TTSService", "Error: " + language + " not supported.");
+        Log.e(SERVICE_TAG, "Error: " + language + " not supported.");
         return;
       }
       if (isoLocale.length() > 2) {
