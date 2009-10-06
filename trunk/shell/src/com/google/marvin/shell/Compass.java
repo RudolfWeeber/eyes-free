@@ -49,7 +49,7 @@ public class Compass {
       return "";
     }
     if (!sensorOk) {
-      return "";
+      return "Please calibrate the compass by shaking your handset.";
     }
     int index = (int) ((currentHeading * 100 + 1125) / 2250);
     return DIRECTION_NAMES[index];

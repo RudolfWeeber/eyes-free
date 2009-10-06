@@ -37,7 +37,6 @@ public class AuditoryWidgets {
   public AuditoryWidgets(TTS theTts, MarvinShell shell) {
     tts = theTts;
     parent = shell;
-    guide = new Guide(parent);
     voiceSignalStrength = 0;
     TelephonyManager tm = (TelephonyManager) parent.getSystemService(Context.TELEPHONY_SERVICE);
     tm.listen(new PhoneStateListener() {
@@ -137,15 +136,19 @@ public class AuditoryWidgets {
         int rawlevel = intent.getIntExtra("level", -1);
         int scale = intent.getIntExtra("scale", -1);
         int status = intent.getIntExtra("status", -1);
+        String message = "";
         if (rawlevel >= 0 && scale > 0) {
           int batteryLevel = (rawlevel * 100) / scale;
-          tts.speak(Integer.toString(batteryLevel), 0, null);
-          tts.speak("%", 1, null);
+          message = Integer.toString(batteryLevel) + "%";
+          //tts.speak(Integer.toString(batteryLevel), 0, null);
+          //tts.speak("%", 1, null);
         }
         if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-          parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-          tts.speak(parent.getString(R.string.charging), 1, null);
+          //parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+          //tts.speak(parent.getString(R.string.charging), 1, null);
+          message = message + " " + parent.getString(R.string.charging);
         }
+        tts.speak(message, 0, null);
       }
     };
     IntentFilter battFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -171,7 +174,12 @@ public class AuditoryWidgets {
     } else {
       ampm = parent.getString(R.string.am);
     }
+    
+    String timeStr = Integer.toString(hour) + " " + Integer.toString(minutes) + " " + ampm;
 
+    tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), 0, null);
+
+    /*
     tts.speak(Integer.toString(hour), 0, null);
     tts.playEarcon(TTSEarcon.SILENCE, 1, null);
     tts.playEarcon(TTSEarcon.SILENCE, 1, null);
@@ -189,6 +197,7 @@ public class AuditoryWidgets {
     tts.playEarcon(TTSEarcon.SILENCE, 1, null);
     tts.playEarcon(TTSEarcon.SILENCE, 1, null);
     tts.speak(Integer.toString(day), 1, null);
+    */
   }
 
 
@@ -199,6 +208,7 @@ public class AuditoryWidgets {
   }
 
   public void speakLocation() {
+    guide = new Guide(parent);
     guide.speakLocation();
   }
 

@@ -129,14 +129,15 @@ public class MarvinShell extends Activity implements GestureListener {
     justStarted = true;
     if (checkTtsRequirements()) {
       initMarvinShell();
+      testInit();
     }
   }
 
   private void initMarvinShell() {
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-        0);
+    //am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+    //    0);
     self = this;
     gestureOverlay = null;
     tts = new TTS(this, ttsInitListener, true);
@@ -258,9 +259,36 @@ public class MarvinShell extends Activity implements GestureListener {
     tts.addSpeech(getString(R.string.shortcuts), pkgName, R.raw.shortcuts);
     tts.addSpeech(getString(R.string.wifi), pkgName, R.raw.wifi);
   }
+  
+  
+  private void testInit(){
+    setContentView(R.layout.main);
+    mainText = (TextView) self.findViewById(R.id.mainText);
+    statusText = (TextView) self.findViewById(R.id.statusText);
+    widgets = new AuditoryWidgets(tts, self);
+    
+    loadHomeMenu();
+
+    updateStatusText();
+
+    mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+    vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    gestureOverlay = new TouchGestureControlOverlay(self, self);
+    mainFrameLayout.addView(gestureOverlay);
+
+    currentGesture = null;
+    (new Thread(new ActionMonitor())).start();
+
+    new ProcessTask().execute();
+  }
+  
 
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
+      resetTTS();
+      tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
+      ttsStartedSuccessfully = true;
+      /*
       resetTTS();
       tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
 
@@ -284,6 +312,7 @@ public class MarvinShell extends Activity implements GestureListener {
       ttsStartedSuccessfully = true;
 
       new ProcessTask().execute();
+      */
     }
   };
 
@@ -542,6 +571,13 @@ public class MarvinShell extends Activity implements GestureListener {
           }
           new Thread(new QuitCommandWatcher()).start();
         }
+        return true;
+
+      case KeyEvent.KEYCODE_SEARCH:
+        AppEntry aLynx =
+            new AppEntry(null, "com.google.marvin.alynx",
+                "com.google.marvin.alynx.ALynx", "", null, null);
+        launchApplication(aLynx);
         return true;
     }
     return false;

@@ -25,9 +25,13 @@ public class Guide implements Runnable, StreetLocatorListener {
       try {
         Thread.sleep(15000);
         if (!gotResponse) {
-          unregisterLocationServices();
-          parent.tts.speak("Unable to determine location at this time. Please try again later.", 0,
+          String heading = compass.getCurrentHeading();
+          if (heading.length() > 1) {
+            parent.tts.speak(heading, 0, null);
+          }
+          parent.tts.speak("Unable to determine location at this time. Please try again later.", 1,
               null);
+          self.shutdown();
         }
         giveUpTimerThread = null;
       } catch (InterruptedException e) {
@@ -205,11 +209,6 @@ public class Guide implements Runnable, StreetLocatorListener {
           gpsLocationListener);
       triedGpsLastTime = true;
     }
-
-    String heading = compass.getCurrentHeading();
-    if (heading.length() > 1) {
-      parent.tts.speak(heading, 0, null);
-    }
   }
 
   public synchronized void run() {
@@ -242,6 +241,11 @@ public class Guide implements Runnable, StreetLocatorListener {
       }
     }
 
+    String heading = compass.getCurrentHeading();
+    if (heading.length() > 1) {
+      parent.tts.speak(heading, 0, null);
+    }
+
     if (usingGPS) {
       parent.tts.speak("G P S", 1, null);
     } else {
@@ -252,6 +256,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     } else {
       if (currentIntersection.length() + currentAddress.length() < 1) {
         parent.tts.speak("Unable to determine location. Please try again later.", 1, null);
+        self.shutdown();
       }
     }
 
@@ -310,6 +315,8 @@ public class Guide implements Runnable, StreetLocatorListener {
         locator.getStreetsInFrontAndBackAsync(currentLocation.getLatitude(), currentLocation
             .getLongitude(), compass.getCurrentHeadingValue());
       }
+    } else {
+      self.shutdown();
     }
   }
 
@@ -333,6 +340,7 @@ public class Guide implements Runnable, StreetLocatorListener {
       parent.tts.speak("Unable to determine address from lat long. Please try again later.", 1,
           null);
     }
+    self.shutdown();
   }
 
   public void onFrontBackLocated(String[] streetsFront, String[] streetsBack) {
@@ -368,6 +376,8 @@ public class Guide implements Runnable, StreetLocatorListener {
     if (!spokeSomething) {
       locator.getStreetIntersectionAsync(currentLocation.getLatitude(), currentLocation
           .getLongitude());
+    } else {
+      self.shutdown();      
     }
   }
 
