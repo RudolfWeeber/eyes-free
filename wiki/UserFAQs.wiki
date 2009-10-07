@@ -1,0 +1,15 @@
+#summary FAQs for users of eyes-free applications
+
+= Introduction =
+
+There's far more code than documentation, so here's an attempt to provide some general answers to some of the questions we've received. These answers are aimed at the end-users of the applications. Developer FAQs to follow.
+
+= Details =
+
+== Loading the eyes-free shell automatically on Android ==
+The eyes-free-config application allows you to configure your device so the eyes-free-shell will load automatically when your phone turns on. If you don't have it installed, you can download it from the Market.
+
+The 'home' button will then go to the eyes-free shell. If you want to return to the default, graphical shell, press and hold the 'back' key for a long time (about 6 seconds should be enough).
+
+== Bootstrapping the text-to-speech applications ==
+To work, the applications need the text-to-speech library installed and the speech data. These can be downloaded from Market if they're not already installed.
