@@ -9,7 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
-import android.util.Log;
 
 /**
  * Guide uses the magnetic compass, GPS/Network location provider, and the
@@ -23,7 +22,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     @Override
     public void run() {
       try {
-        Thread.sleep(15000);
+        Thread.sleep(10000);
         if (!gotResponse) {
           String heading = compass.getCurrentHeading();
           if (heading.length() > 1) {
@@ -113,24 +112,8 @@ public class Guide implements Runnable, StreetLocatorListener {
             networkLocationListener);
       }
     }
-
   };
 
-  private LocationListener dummyLocationListener = new LocationListener() {
-    public void onLocationChanged(Location arg0) {
-    }
-
-    public void onProviderDisabled(String arg0) {
-    }
-
-    public void onProviderEnabled(String arg0) {
-    }
-
-    public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-    }
-  };
-
-  private boolean triedGpsLastTime = false;
 
   private long networkLocLastUpdateTime = -1;
 
@@ -166,19 +149,10 @@ public class Guide implements Runnable, StreetLocatorListener {
     self = this;
     parent = parentActivity;
     locator = new StreetLocator(this);
-    LocationManager locationManager =
-        (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
-    // Run the dummy listener a bit more often than once per hour to ensure
-    // that
-    // the GPS ephemeris data is fresh so that when the location is trying
-    // to be
-    // determined, a GPS fix can be acquired quickly.
-    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000000, 0,
-        dummyLocationListener);
     compass = new Compass(parent);
   }
 
-  public void speakLocation() {
+  public void speakLocation(boolean useGps) {
     if (giveUpTimerThread != null) {
       parent.tts.speak("Determining your location.", 0, null);
       return;
@@ -200,14 +174,12 @@ public class Guide implements Runnable, StreetLocatorListener {
     currentAddress = "";
     currentIntersection = "";
 
-    if (triedGpsLastTime) {
-      locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-          networkLocationListener);
-      triedGpsLastTime = false;
-    } else {
+    if (useGps) {
       locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
           gpsLocationListener);
-      triedGpsLastTime = true;
+    } else {
+      locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
+          networkLocationListener);
     }
   }
 
@@ -226,6 +198,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     boolean usingGPS = false;
     if ((networkLoc == null) && (gpsLoc == null)) {
       parent.tts.speak("Unable to determine location. Please retry later.", 0, null);
+      self.shutdown();
       return;
     } else if ((networkLoc == null) && (gpsLoc != null)) {
       currentLocation = gpsLoc;
@@ -272,16 +245,13 @@ public class Guide implements Runnable, StreetLocatorListener {
   }
 
   public void shutdown() {
-    LocationManager locationManager =
-        (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
-    locationManager.removeUpdates(dummyLocationListener);
     unregisterLocationServices();
     compass.shutdown();
   }
 
   private void log(String tag, String message) {
     // Comment out the following line to turn off logging.
-    Log.i(tag, message);
+    // Log.i(tag, message);
   }
 
   private Location currentLocation;
@@ -309,12 +279,12 @@ public class Guide implements Runnable, StreetLocatorListener {
 
       parent.tts.speak("Near " + currentAddress, 1, null);
     }
+
+    // If there was no location, just give up.
+    // Otherwise, try to get the intersection.
     if (currentLocation != null) {
-      double heading = compass.getCurrentHeadingValue();
-      if (heading != -1) {
-        locator.getStreetsInFrontAndBackAsync(currentLocation.getLatitude(), currentLocation
-            .getLongitude(), compass.getCurrentHeadingValue());
-      }
+      locator.getStreetIntersectionAsync(currentLocation.getLatitude(), currentLocation
+          .getLongitude());
     } else {
       self.shutdown();
     }
@@ -322,6 +292,9 @@ public class Guide implements Runnable, StreetLocatorListener {
 
   public void onIntersectionLocated(String[] streetnames) {
     if (streetnames.length == 0) {
+      // No intersection, try to get front/back streets
+      locator.getStreetsInFrontAndBackAsync(currentLocation.getLatitude(), currentLocation
+          .getLongitude(), compass.getCurrentHeadingValue());
       return;
     }
     currentIntersection = "";
@@ -334,18 +307,17 @@ public class Guide implements Runnable, StreetLocatorListener {
       currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
       currentIntersection = " Nearby streets are: " + currentIntersection;
       parent.tts.speak(currentIntersection, 1, null);
-
+      self.shutdown();
+    } else {
+      // No intersection, try to get front/back streets
+      locator.getStreetsInFrontAndBackAsync(currentLocation.getLatitude(), currentLocation
+          .getLongitude(), compass.getCurrentHeadingValue());
     }
-    if (currentIntersection.length() + currentAddress.length() < 1) {
-      parent.tts.speak("Unable to determine address from lat long. Please try again later.", 1,
-          null);
-    }
-    self.shutdown();
   }
+
 
   public void onFrontBackLocated(String[] streetsFront, String[] streetsBack) {
     String currentIntersection = "";
-    boolean spokeSomething = false;
     if (streetsFront.length > 0) {
       for (String ad : streetsFront) {
         if (currentAddress.indexOf(ad) == -1) {
@@ -355,7 +327,6 @@ public class Guide implements Runnable, StreetLocatorListener {
       if (currentIntersection.length() > 5) {
         currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
         parent.tts.speak("Ahead. " + currentIntersection, 1, null);
-        spokeSomething = true;
       }
     }
 
@@ -369,16 +340,9 @@ public class Guide implements Runnable, StreetLocatorListener {
       if (currentIntersection.length() > 5) {
         currentIntersection = currentIntersection.substring(0, currentIntersection.length() - 4);
         parent.tts.speak("Behind. " + currentIntersection, 1, null);
-        spokeSomething = true;
       }
     }
-
-    if (!spokeSomething) {
-      locator.getStreetIntersectionAsync(currentLocation.getLatitude(), currentLocation
-          .getLongitude());
-    } else {
-      self.shutdown();      
-    }
+    self.shutdown();
   }
 
 }

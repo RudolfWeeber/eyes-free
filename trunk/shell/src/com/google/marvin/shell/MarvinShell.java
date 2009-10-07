@@ -31,8 +31,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,7 +49,6 @@ import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -136,8 +133,9 @@ public class MarvinShell extends Activity implements GestureListener {
   private void initMarvinShell() {
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
     AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    //am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-    //    0);
+    // am.setStreamVolume(AudioManager.STREAM_MUSIC,
+    // am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
+    // 0);
     self = this;
     gestureOverlay = null;
     tts = new TTS(this, ttsInitListener, true);
@@ -259,14 +257,14 @@ public class MarvinShell extends Activity implements GestureListener {
     tts.addSpeech(getString(R.string.shortcuts), pkgName, R.raw.shortcuts);
     tts.addSpeech(getString(R.string.wifi), pkgName, R.raw.wifi);
   }
-  
-  
-  private void testInit(){
+
+
+  private void testInit() {
     setContentView(R.layout.main);
     mainText = (TextView) self.findViewById(R.id.mainText);
     statusText = (TextView) self.findViewById(R.id.statusText);
     widgets = new AuditoryWidgets(tts, self);
-    
+
     loadHomeMenu();
 
     updateStatusText();
@@ -281,7 +279,7 @@ public class MarvinShell extends Activity implements GestureListener {
 
     new ProcessTask().execute();
   }
-  
+
 
   private TTS.InitListener ttsInitListener = new TTS.InitListener() {
     public void onInit(int version) {
@@ -289,30 +287,27 @@ public class MarvinShell extends Activity implements GestureListener {
       tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
       ttsStartedSuccessfully = true;
       /*
-      resetTTS();
-      tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
-
-      setContentView(R.layout.main);
-      mainText = (TextView) self.findViewById(R.id.mainText);
-      statusText = (TextView) self.findViewById(R.id.statusText);
-
-      widgets = new AuditoryWidgets(tts, self);
-      loadHomeMenu();
-
-      updateStatusText();
-
-      mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
-      vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-      gestureOverlay = new TouchGestureControlOverlay(self, self);
-      mainFrameLayout.addView(gestureOverlay);
-
-      currentGesture = null;
-      (new Thread(new ActionMonitor())).start();
-
-      ttsStartedSuccessfully = true;
-
-      new ProcessTask().execute();
-      */
+       * resetTTS(); tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
+       * 
+       * setContentView(R.layout.main); mainText = (TextView)
+       * self.findViewById(R.id.mainText); statusText = (TextView)
+       * self.findViewById(R.id.statusText);
+       * 
+       * widgets = new AuditoryWidgets(tts, self); loadHomeMenu();
+       * 
+       * updateStatusText();
+       * 
+       * mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+       * vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+       * gestureOverlay = new TouchGestureControlOverlay(self, self);
+       * mainFrameLayout.addView(gestureOverlay);
+       * 
+       * currentGesture = null; (new Thread(new ActionMonitor())).start();
+       * 
+       * ttsStartedSuccessfully = true;
+       * 
+       * new ProcessTask().execute();
+       */
     }
   };
 
@@ -575,8 +570,8 @@ public class MarvinShell extends Activity implements GestureListener {
 
       case KeyEvent.KEYCODE_SEARCH:
         AppEntry aLynx =
-            new AppEntry(null, "com.google.marvin.alynx",
-                "com.google.marvin.alynx.ALynx", "", null, null);
+            new AppEntry(null, "com.google.marvin.alynx", "com.google.marvin.alynx.ALynx", "",
+                null, null);
         launchApplication(aLynx);
         return true;
     }

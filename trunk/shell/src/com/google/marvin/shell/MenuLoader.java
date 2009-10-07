@@ -1,7 +1,5 @@
 package com.google.marvin.shell;
 
-import android.util.Log;
-
 import com.google.marvin.shell.Param;
 import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
 

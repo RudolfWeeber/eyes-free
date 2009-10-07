@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
-import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.speech.RecognizerIntent;
 import android.telephony.PhoneStateListener;
@@ -19,8 +18,6 @@ import android.telephony.TelephonyManager;
 import android.provider.Settings.System;
 
 import com.google.tts.TTS;
-import com.google.tts.TTSEarcon;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -31,12 +28,14 @@ public class AuditoryWidgets {
   private TTS tts;
   private MarvinShell parent;
   private Guide guide;
+  private boolean useGpsThisTime;
 
   private int voiceSignalStrength;
 
   public AuditoryWidgets(TTS theTts, MarvinShell shell) {
     tts = theTts;
     parent = shell;
+    useGpsThisTime = true;
     voiceSignalStrength = 0;
     TelephonyManager tm = (TelephonyManager) parent.getSystemService(Context.TELEPHONY_SERVICE);
     tm.listen(new PhoneStateListener() {
@@ -140,12 +139,12 @@ public class AuditoryWidgets {
         if (rawlevel >= 0 && scale > 0) {
           int batteryLevel = (rawlevel * 100) / scale;
           message = Integer.toString(batteryLevel) + "%";
-          //tts.speak(Integer.toString(batteryLevel), 0, null);
-          //tts.speak("%", 1, null);
+          // tts.speak(Integer.toString(batteryLevel), 0, null);
+          // tts.speak("%", 1, null);
         }
         if (status == BatteryManager.BATTERY_STATUS_CHARGING) {
-          //parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-          //tts.speak(parent.getString(R.string.charging), 1, null);
+          // parent.tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+          // tts.speak(parent.getString(R.string.charging), 1, null);
           message = message + " " + parent.getString(R.string.charging);
         }
         tts.speak(message, 0, null);
@@ -174,30 +173,28 @@ public class AuditoryWidgets {
     } else {
       ampm = parent.getString(R.string.am);
     }
-    
+
     String timeStr = Integer.toString(hour) + " " + Integer.toString(minutes) + " " + ampm;
 
     tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), 0, null);
 
     /*
-    tts.speak(Integer.toString(hour), 0, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.speak(Integer.toString(minutes), 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.speak(ampm, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.speak(monthStr, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-    tts.speak(Integer.toString(day), 1, null);
-    */
+     * tts.speak(Integer.toString(hour), 0, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.speak(Integer.toString(minutes), 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null); tts.speak(ampm, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null); tts.speak(monthStr, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
+     * tts.speak(Integer.toString(day), 1, null);
+     */
   }
 
 
@@ -209,7 +206,8 @@ public class AuditoryWidgets {
 
   public void speakLocation() {
     guide = new Guide(parent);
-    guide.speakLocation();
+    guide.speakLocation(useGpsThisTime);
+    useGpsThisTime = !useGpsThisTime;
   }
 
   public void startAppLauncher() {
@@ -220,7 +218,7 @@ public class AuditoryWidgets {
     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
         RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-    parent.startActivityForResult(intent, parent.voiceRecoCode);
+    parent.startActivityForResult(intent, MarvinShell.voiceRecoCode);
   }
 
 }

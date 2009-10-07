@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 import org.htmlparser.parserapplications.StringExtractor;
 import org.htmlparser.util.ParserException;
 
-import android.util.Log;
-
 public class OneBoxScraper {
 
   public static String processGoogleResults(String query) {
