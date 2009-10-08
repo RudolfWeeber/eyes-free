@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.example.placeholdertts" android:versionCode="1"
+	android:versionName="1.0">
+	<uses-sdk android:minSdkVersion="2" />
+	<application android:icon="@drawable/icon" android:label="@string/app_name">
+		<activity android:name=".PlaceholderConfig" android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:enabled="true" android:name=".PlaceholderEngine"
+			android:label="@string/app_name" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+			<intent-filter>
+				<action android:name="android.intent.action.START_TTS_ENGINE" />
+				<category android:name="android.intent.category.tts_engine.ESPEAK" />
+				<category android:name="android.intent.category.tts_lang.af" />
+				<category android:name="android.intent.category.tts_lang.bs" />
+				<category android:name="android.intent.category.tts_lang.zh" />
+				<category android:name="android.intent.category.tts_lang.zh.HK" />
+				<category android:name="android.intent.category.tts_lang.hr" />
+				<category android:name="android.intent.category.tts_lang.cz" />
+				<category android:name="android.intent.category.tts_lang.nl" />
+				<category android:name="android.intent.category.tts_lang.en" />
+				<category android:name="android.intent.category.tts_lang.en.US" />
+				<category android:name="android.intent.category.tts_lang.en.GB" />
+				<category android:name="android.intent.category.tts_lang.eo" />
+				<category android:name="android.intent.category.tts_lang.fi" />
+				<category android:name="android.intent.category.tts_lang.fr" />
+				<category android:name="android.intent.category.tts_lang.de" />
+				<category android:name="android.intent.category.tts_lang.el" />
+				<category android:name="android.intent.category.tts_lang.hi" />
+				<category android:name="android.intent.category.tts_lang.hu" />
+				<category android:name="android.intent.category.tts_lang.is" />
+				<category android:name="android.intent.category.tts_lang.id" />
+				<category android:name="android.intent.category.tts_lang.it" />
+				<category android:name="android.intent.category.tts_lang.ku" />
+				<category android:name="android.intent.category.tts_lang.la" />
+				<category android:name="android.intent.category.tts_lang.mk" />
+				<category android:name="android.intent.category.tts_lang.no" />
+				<category android:name="android.intent.category.tts_lang.pl" />
+				<category android:name="android.intent.category.tts_lang.pt" />
+				<category android:name="android.intent.category.tts_lang.ro" />
+				<category android:name="android.intent.category.tts_lang.ru" />
+				<category android:name="android.intent.category.tts_lang.sr" />
+				<category android:name="android.intent.category.tts_lang.sk" />
+				<category android:name="android.intent.category.tts_lang.es" />
+				<category android:name="android.intent.category.tts_lang.es.MX" />
+				<category android:name="android.intent.category.tts_lang.sw" />
+				<category android:name="android.intent.category.tts_lang.sv" />
+				<category android:name="android.intent.category.tts_lang.ta" />
+				<category android:name="android.intent.category.tts_lang.tr" />
+				<category android:name="android.intent.category.tts_lang.vi" />
+				<category android:name="android.intent.category.tts_lang.cy" />
+			</intent-filter>
+		</activity>
+	</application>
+</manifest> 
