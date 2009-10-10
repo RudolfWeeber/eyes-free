@@ -17,12 +17,15 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class PrefsActivity extends PreferenceActivity {
+  private static final int TTS_VOICE_DATA_CHECK_CODE = 42;
+  private static final int TTS_VOICE_DATA_INSTALL_CODE = 43;
   private TTS myTts;
   private HashMap<String, Integer> hellos;
 
@@ -71,7 +74,23 @@ public class PrefsActivity extends PreferenceActivity {
     }
     enginesPref.setEntries(entries);
     enginesPref.setEntryValues(values);
-
+    
+    // This is somewhat hacky because the eSpeak engine isn't fully ported
+    // over yet. In addition, the framework has an Install Data option, so the
+    // workflow is different. Therefore, do NOT take this into the framework!
+    enginesPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+      @Override
+      public boolean onPreferenceChange(Preference preference, Object newValue) {
+        String chosenEngine = newValue.toString();
+        if (chosenEngine.equals("/data/data/com.svox.pico/lib/libttspico.so")){
+          Intent intent = new Intent();
+          intent.setAction(TextToSpeechBeta.Engine.ACTION_CHECK_TTS_DATA);
+          intent.setClassName("com.svox.pico", "com.svox.pico.CheckVoiceData");
+          startActivityForResult(intent, TTS_VOICE_DATA_CHECK_CODE);
+        }
+        return true;
+      }
+    });
   }
 
   private void loadHellos() {
@@ -167,6 +186,17 @@ public class PrefsActivity extends PreferenceActivity {
     return super.onOptionsItemSelected(item);
   }
 
+  // TODO: This should be generic, not hardcoded to the SVOX installer.
+  public void onActivityResult(int requestCode, int resultCode, Intent data){
+    if (requestCode == TTS_VOICE_DATA_CHECK_CODE){
+      if (resultCode != TextToSpeechBeta.Engine.CHECK_VOICE_DATA_PASS){
+        Intent intent = new Intent();
+        intent.setAction(TextToSpeechBeta.Engine.ACTION_INSTALL_TTS_DATA);
+        intent.setClassName("com.svox.pico", "com.svox.pico.DownloadVoiceData");
+        startActivityForResult(intent, TTS_VOICE_DATA_INSTALL_CODE);
+      }
+    }
+  }
 
   @Override
   protected void onDestroy() {
