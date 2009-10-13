@@ -23,8 +23,6 @@ import com.google.marvin.widget.TouchGestureControlOverlay.GestureListener;
 import com.google.tts.ConfigurationManager;
 import com.google.tts.TTS;
 import com.google.tts.TTSEarcon;
-import com.google.tts.TTSEngine;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -197,8 +195,6 @@ public class MarvinShell extends Activity implements GestureListener {
   }
 
   private void resetTTS() {
-    tts.setEngine(TTSEngine.PRERECORDED_WITH_ESPEAK);
-
     String pkgName = MarvinShell.class.getPackage().getName();
     tts.addSpeech(getString(R.string.marvin_intro_snd_), pkgName, R.raw.marvin_intro);
     tts.addSpeech(getString(R.string.home), pkgName, R.raw.home);
