@@ -65,12 +65,7 @@ public class PrefsActivity extends PreferenceActivity {
     CharSequence values[] = new CharSequence[enginesArray.length];
     for (int i = 0; i < enginesArray.length; i++) {
       entries[i] = enginesArray[i].loadLabel(pm);
-      ActivityInfo aInfo = enginesArray[i].activityInfo;
-      // Determine the TTS engine's binary filename from the information in the 
-      // TTS engine's manifest.
-      String soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
-      soFilename = soFilename.toLowerCase();
-      values[i] = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;
+      values[i] = enginesArray[i].activityInfo.packageName;
     }
     enginesPref.setEntries(entries);
     enginesPref.setEntryValues(values);

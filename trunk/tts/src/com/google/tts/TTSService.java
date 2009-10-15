@@ -20,8 +20,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.media.AudioManager;
@@ -46,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.locks.ReentrantLock;
@@ -187,8 +190,8 @@ public class TTSService extends Service implements OnCompletionListener {
   private static final String BETA_CATEGORY = "com.google.intent.category.TTS_BETA";
   private static final String PKGNAME = "android.tts";
   // Change this to the system/lib path when in the framework
-  private static final String DEFAULT_TTS_BINARY = "/data/data/com.google.tts/lib/libttspico.so";
-  
+  private static final String DEFAULT_SYNTH = "com.svox.pico";
+
   protected static final String SERVICE_TAG = "TtsService";
 
   private final RemoteCallbackList<ITtsCallbackBeta> mCallbacks =
@@ -224,7 +227,7 @@ public class TTSService extends Service implements OnCompletionListener {
   @Override
   public void onCreate() {
     super.onCreate();
-    Log.v("TtsService", "TtsService.onCreate()");
+    Log.v(SERVICE_TAG, "TtsService.onCreate()");
 
 
     // String soLibPath = "/data/data/com.google.tts/lib/libttspico.so";
@@ -235,8 +238,11 @@ public class TTSService extends Service implements OnCompletionListener {
     // Also, switch to using the system settings in the framework.
     currentSpeechEngineSOFile = "";
     String preferredEngine =
-        PreferenceManager.getDefaultSharedPreferences(this).getString("engine_pref", DEFAULT_TTS_BINARY);
-    setEngine(preferredEngine);
+        PreferenceManager.getDefaultSharedPreferences(this).getString("engine_pref", DEFAULT_SYNTH);
+    if (setEngine(preferredEngine) != TextToSpeechBeta.SUCCESS){
+      Log.e(SERVICE_TAG, "Unable to start up with " + preferredEngine + ". Falling back to the default TTS engine.");
+      setEngine(DEFAULT_SYNTH);
+    }
 
     mSelf = this;
     mIsSpeaking = false;
@@ -311,21 +317,40 @@ public class TTSService extends Service implements OnCompletionListener {
     Log.v(SERVICE_TAG, "onDestroy() completed");
   }
 
-  
-  private int setEngine(String soLibFilename) {
-    // The SVOX TTS is an exception to how the TTS packaging scheme works because
+
+  private int setEngine(String enginePackageName) {
+    String soFilename = "";
+    // The SVOX TTS is an exception to how the TTS packaging scheme works
+    // because
     // it is part of the system and not a 3rd party add-on; thus its binary is
     // actually located under /system/lib/
-    if (soLibFilename.endsWith("/data/data/com.svox.pico/lib/libttspico.so")){
-      soLibFilename = DEFAULT_TTS_BINARY;
+    if (enginePackageName.equals("com.svox.pico")) {
+      soFilename = "/system/lib/libttspico.so";
+    } else {
+      // Find the package
+      Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+      intent.setPackage(enginePackageName);
+      ResolveInfo[] enginesArray = new ResolveInfo[0];
+      PackageManager pm = getPackageManager();
+      List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+      if ((resolveInfos == null) || resolveInfos.isEmpty()) {
+        Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
+        return TextToSpeechBeta.ERROR;
+      }
+      enginesArray = resolveInfos.toArray(enginesArray);
+      // Generate the TTS .so filename from the package
+      ActivityInfo aInfo = enginesArray[0].activityInfo;
+      soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
+      soFilename = soFilename.toLowerCase();
+      soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;
     }
-    if (currentSpeechEngineSOFile.equals(soLibFilename)) {
+
+    if (currentSpeechEngineSOFile.equals(soFilename)) {
       return TextToSpeechBeta.SUCCESS;
     }
-    File f = new File(soLibFilename);
-    // TODO: Do we want something stronger than just an existence check here?
-    if (!f.exists()){
-      Log.e(SERVICE_TAG, "Invalid TTS Binary: " + soLibFilename);
+    File f = new File(soFilename);
+    if (!f.exists()) {
+      Log.e(SERVICE_TAG, "Invalid TTS Binary: " + soFilename);
       return TextToSpeechBeta.ERROR;
     }
     if (sNativeSynth != null) {
@@ -335,8 +360,8 @@ public class TTSService extends Service implements OnCompletionListener {
       sNativeSynth.shutdown();
       sNativeSynth = null;
     }
-    sNativeSynth = new SynthProxyBeta(soLibFilename);
-    currentSpeechEngineSOFile = soLibFilename;
+    sNativeSynth = new SynthProxyBeta(soFilename);
+    currentSpeechEngineSOFile = soFilename;
     return TextToSpeechBeta.SUCCESS;
   }
 
@@ -1442,7 +1467,7 @@ public class TTSService extends Service implements OnCompletionListener {
       } else {
         if (selectedEngine.equals(TTSEngine.ESPEAK.toString())) {
           mSelf.setEngine("/data/data/com.google.tts/lib/libespeakengine.so");
-        } else if (selectedEngine.equals(TTSEngine.PICO.toString())){
+        } else if (selectedEngine.equals(TTSEngine.PICO.toString())) {
           mSelf.setEngine("/system/lib/libttspico.so");
         } else {
           mSelf.setEngine(selectedEngine);
@@ -1484,10 +1509,11 @@ public class TTSService extends Service implements OnCompletionListener {
      */
     public void playEarcon(String earcon, int queueMode, String[] params) {
       ArrayList<String> speakingParams = new ArrayList<String>();
-      // TODO: Make sure speakingParams makes sense - until then, just ignore params
-      //if (params != null) {
-      //  speakingParams = new ArrayList<String>(Arrays.asList(params));
-      //}
+      // TODO: Make sure speakingParams makes sense - until then, just ignore
+      // params
+      // if (params != null) {
+      // speakingParams = new ArrayList<String>(Arrays.asList(params));
+      // }
       mSelf.playEarcon("DEPRECATED", earcon, queueMode, speakingParams);
     }
 
