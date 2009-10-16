@@ -38,6 +38,7 @@ import com.google.tts.ITtsBeta.Stub;
 import com.google.tts.ITTSCallback;
 import com.google.tts.TTS;
 
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -239,8 +240,9 @@ public class TTSService extends Service implements OnCompletionListener {
     currentSpeechEngineSOFile = "";
     String preferredEngine =
         PreferenceManager.getDefaultSharedPreferences(this).getString("engine_pref", DEFAULT_SYNTH);
-    if (setEngine(preferredEngine) != TextToSpeechBeta.SUCCESS){
-      Log.e(SERVICE_TAG, "Unable to start up with " + preferredEngine + ". Falling back to the default TTS engine.");
+    if (setEngine(preferredEngine) != TextToSpeechBeta.SUCCESS) {
+      Log.e(SERVICE_TAG, "Unable to start up with " + preferredEngine
+          + ". Falling back to the default TTS engine.");
       setEngine(DEFAULT_SYNTH);
     }
 
@@ -319,30 +321,49 @@ public class TTSService extends Service implements OnCompletionListener {
 
 
   private int setEngine(String enginePackageName) {
+    // This is a hack to force eSpeak if the user
+    // is on Cupcake
+    try {
+      Context myContext = this.createPackageContext("com.svox.pico", 0);
+    } catch (NameNotFoundException e) {
+      enginePackageName = "com.google.tts";
+    }
+    
+
     String soFilename = "";
     // The SVOX TTS is an exception to how the TTS packaging scheme works
     // because
     // it is part of the system and not a 3rd party add-on; thus its binary is
     // actually located under /system/lib/
     if (enginePackageName.equals("com.svox.pico")) {
-      soFilename = "/system/lib/libttspico.so";
+      // This is the path to use when this is integrated with the framework
+      // soFilename = "/system/lib/libttspico.so";
+      soFilename = "/data/data/com.google.tts/lib/libttspico.so";
     } else {
       // Find the package
-      Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
-      intent.setPackage(enginePackageName);
-      ResolveInfo[] enginesArray = new ResolveInfo[0];
-      PackageManager pm = getPackageManager();
-      List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
-      if ((resolveInfos == null) || resolveInfos.isEmpty()) {
-        Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
-        return TextToSpeechBeta.ERROR;
-      }
-      enginesArray = resolveInfos.toArray(enginesArray);
-      // Generate the TTS .so filename from the package
-      ActivityInfo aInfo = enginesArray[0].activityInfo;
-      soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
-      soFilename = soFilename.toLowerCase();
-      soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;
+      // This is the correct way to do this; but it won't work in Cupcake. :(
+
+      // Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+      // intent.setPackage(enginePackageName);
+      // ResolveInfo[] enginesArray = new ResolveInfo[0];
+      // PackageManager pm = getPackageManager();
+      // List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+      // if ((resolveInfos == null) || resolveInfos.isEmpty()) {
+      // Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
+      // return TextToSpeechBeta.ERROR;
+      // }
+      // enginesArray = resolveInfos.toArray(enginesArray);
+      // // Generate the TTS .so filename from the package
+      // ActivityInfo aInfo = enginesArray[0].activityInfo;
+      // soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
+      // soFilename = soFilename.toLowerCase();
+      // soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" +
+      // soFilename;
+
+
+      /* Start of hacky way of doing this */
+      soFilename = "/data/data/com.google.tts/lib/libttsespeak.so";
+      /* End of hacky way of doing this */
     }
 
     if (currentSpeechEngineSOFile.equals(soFilename)) {
@@ -1672,7 +1693,34 @@ public class TTSService extends Service implements OnCompletionListener {
       if (params != null) {
         speakingParams = new ArrayList<String>(Arrays.asList(params));
       }
-      return mSelf.synthesizeToFile("DEPRECATED", text, speakingParams, filename);
+      boolean success = mSelf.synthesizeToFile("DEPRECATED", text, speakingParams, filename);
+      boolean isOnCupcake = false;
+      try {
+        Context myContext = mSelf.createPackageContext("com.svox.pico", 0);
+      } catch (NameNotFoundException e) {
+        isOnCupcake = true;
+      }
+      // Simulate the blocking behavior from before
+      if (success && isOnCupcake){
+        int sleepLoops = 20;
+        while (sleepLoops > 0){
+          File outputFile = new File(filename);
+          if (outputFile.exists() && outputFile.length() > 0){
+            sleepLoops = 0;
+            Log.e("TTS debug", "File length: " + outputFile.length());
+            Log.e("TTS debug", "Remaining sleep count: " + sleepLoops);            
+          } else {
+            try {
+              Thread.sleep(100);
+            } catch (InterruptedException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+            sleepLoops = sleepLoops - 1;
+          }
+        }
+      }
+      return success;
     }
   };
 }
