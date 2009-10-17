@@ -126,16 +126,20 @@ static void setSpeechRate(int speechRate)
 
 /* Callback from espeak.  Should call back to the TTS API */
 static int eSpeakCallback(short *wav, int numsamples,
-				      espeak_EVENT *events) {    
+				      espeak_EVENT *events) {
+    int8_t * castedWav = (int8_t *)wav;
+    size_t bufferSize = 0;
     if (numsamples < 1){
-      // Abort if there are no samples.
+      size_t silenceBufferSize = 2;
+      int8_t *silence = new int8_t[silenceBufferSize]; // TODO: This will be a small memory leak, but do it this way for now because passing in an empty buffer can cause a crash.
+      silence[0] = 0;
+      silence[1] = 0;
+      ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, silence, silenceBufferSize, TTS_SYNTH_DONE);
       return 1;
     }
     LOGI("eSpeak callback received! Sample count: %d", numsamples);
-    size_t bufferSize = numsamples * sizeof(short);
-    int8_t * castedWav = (int8_t *)wav;
-//    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, (int8_t *)wav, bufferSize, TTS_SYNTH_DONE);
-    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, castedWav, bufferSize, TTS_SYNTH_DONE);
+    bufferSize = numsamples * sizeof(short);    
+    ttsSynthDoneCBPointer(events->user_data, 22050, AudioSystem::PCM_16_BIT, 1, castedWav, bufferSize, TTS_SYNTH_PENDING);
     LOGI("eSpeak callback processed!");
     return 0;  // continue synthesis (1 is to abort)
 }
@@ -349,7 +353,6 @@ tts_result TtsEngine::setAudioFormat(AudioSystem::audio_format& encoding, uint32
 // TODO: add pitch property here
 tts_result TtsEngine::setProperty(const char *property, const char *value, const size_t size)
 {
-LOGE("setProperty called for %s and value %s", property, value);
     int rate;
     int pitch;
     int volume;
@@ -371,7 +374,9 @@ LOGE("setProperty called for %s and value %s", property, value);
         // TODO: Fix this
         return TTS_SUCCESS;
     } else if (strncmp(property, "rate", 4) == 0) {
-        // TODO: Fix this
+        rate = atoi(value);
+        espeak_SetParameter(espeakRATE, rate, 0);
+        // TODO: Fix this - use the return value here, don't just automatically return success!
         return TTS_SUCCESS;
     } else if (strncmp(property, "pitch", 5) == 0) {
         // TODO: Fix this
@@ -469,7 +474,6 @@ tts_result TtsEngine::stop()
 
 TtsEngine* getTtsEngine()
 {
-LOGE("getTtsEngine called");
     return new TtsEngine();
 }
 
