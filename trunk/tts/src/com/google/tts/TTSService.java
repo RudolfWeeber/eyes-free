@@ -224,6 +224,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
 
   private String currentSpeechEngineSOFile = "";
+  private boolean deprecatedKeepBlockingFlag = false;
 
   @Override
   public void onCreate() {
@@ -1013,6 +1014,7 @@ public class TTSService extends Service implements OnCompletionListener {
           if (synthAvailable) {
             synthesizerLock.unlock();
           }
+          deprecatedKeepBlockingFlag = false;
           processSpeechQueue();
         }
       }
@@ -1694,31 +1696,21 @@ public class TTSService extends Service implements OnCompletionListener {
         speakingParams = new ArrayList<String>(Arrays.asList(params));
       }
       boolean success = mSelf.synthesizeToFile("DEPRECATED", text, speakingParams, filename);
+
+      speakingParams.add(TextToSpeechBeta.Engine.KEY_PARAM_UTTERANCE_ID);
+      speakingParams.add("DEPRECATED BLOCKING SIMULATOR");
       // Simulate the blocking behavior from before
       if (success) {
-        int sleepLoops = 1;
-        long previousFileLength = 0;
-        while (sleepLoops > 0) {
-          File outputFile = new File(filename);
-          if (outputFile.exists() && outputFile.length() > 0) {
-            if (previousFileLength == outputFile.length()) {
-              sleepLoops = 0;
-            } else {
-              previousFileLength = outputFile.length();
-              sleepLoops = sleepLoops + 1;
-            }
-          }
+        deprecatedKeepBlockingFlag = true;
+        while (deprecatedKeepBlockingFlag)
           try {
             Thread.sleep(500);
           } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
           }
-          if ((sleepLoops > 5) && !outputFile.exists()){
-            sleepLoops = 0;
-          }
         }
-      }
+    
       return success;
     }
   };
