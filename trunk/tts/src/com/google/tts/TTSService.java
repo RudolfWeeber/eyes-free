@@ -328,7 +328,7 @@ public class TTSService extends Service implements OnCompletionListener {
     } catch (NameNotFoundException e) {
       enginePackageName = "com.google.tts";
     }
-    
+
 
     String soFilename = "";
     // The SVOX TTS is an exception to how the TTS packaging scheme works
@@ -1694,29 +1694,28 @@ public class TTSService extends Service implements OnCompletionListener {
         speakingParams = new ArrayList<String>(Arrays.asList(params));
       }
       boolean success = mSelf.synthesizeToFile("DEPRECATED", text, speakingParams, filename);
-      boolean isOnCupcake = false;
-      try {
-        Context myContext = mSelf.createPackageContext("com.svox.pico", 0);
-      } catch (NameNotFoundException e) {
-        isOnCupcake = true;
-      }
       // Simulate the blocking behavior from before
-      if (success && isOnCupcake){
-        int sleepLoops = 20;
-        while (sleepLoops > 0){
+      if (success) {
+        int sleepLoops = 1;
+        long previousFileLength = 0;
+        while (sleepLoops > 0) {
           File outputFile = new File(filename);
-          if (outputFile.exists() && outputFile.length() > 0){
-            sleepLoops = 0;
-            Log.e("TTS debug", "File length: " + outputFile.length());
-            Log.e("TTS debug", "Remaining sleep count: " + sleepLoops);            
-          } else {
-            try {
-              Thread.sleep(100);
-            } catch (InterruptedException e) {
-              // TODO Auto-generated catch block
-              e.printStackTrace();
+          if (outputFile.exists() && outputFile.length() > 0) {
+            if (previousFileLength == outputFile.length()) {
+              sleepLoops = 0;
+            } else {
+              previousFileLength = outputFile.length();
+              sleepLoops = sleepLoops + 1;
             }
-            sleepLoops = sleepLoops - 1;
+          }
+          try {
+            Thread.sleep(500);
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          if ((sleepLoops > 5) && !outputFile.exists()){
+            sleepLoops = 0;
           }
         }
       }
