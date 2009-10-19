@@ -16,7 +16,7 @@
 
 package com.google.marvin.talkingdialer;
 
-import com.google.tts.TTS;
+import com.google.tts.TextToSpeechBeta;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -44,19 +44,19 @@ public class SlideDial extends Activity {
 
   private SlideDialView mView;
   private ContactsView contactsView;
-  public TTS tts;
+  public TextToSpeechBeta tts;
 
   @Override
   public void onCreate(Bundle icicle) {
     super.onCreate(icicle);
   //   android.os.Debug.waitForDebugger();
     setVolumeControlStream(AudioManager.STREAM_MUSIC);
-    tts = new TTS(this, ttsInitListener, true);
+    tts = new TextToSpeechBeta(this, ttsInitListener);
 
   }
 
-  private TTS.InitListener ttsInitListener = new TTS.InitListener() {
-    public void onInit(int version) {
+  private TextToSpeechBeta.OnInitListener ttsInitListener = new TextToSpeechBeta.OnInitListener() {
+    public void onInit(int status, int version) {
       String pkgName = "com.google.marvin.talkingdialer";
 
       tts.addSpeech("You are about to dial", pkgName, R.raw.you_are_about_to_dial);
@@ -68,6 +68,7 @@ public class SlideDial extends Activity {
       tts.addSpeech("cell", pkgName, R.raw.cell);
       tts.addSpeech("work", pkgName, R.raw.work);
       tts.addSpeech("[honk]", pkgName, R.raw.honk);
+      tts.addSpeech("[tock]", pkgName, R.raw.tock_snd);
 
 
       switchToDialingView();

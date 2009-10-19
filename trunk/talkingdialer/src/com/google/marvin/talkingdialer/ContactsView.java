@@ -119,6 +119,7 @@ public class ContactsView extends TextView {
         null, // no selection args
         PeopleColumns.NAME + " ASC"); // Order-by clause.
     boolean moveSucceeded = managedCursor.moveToFirst();
+        
     ArrayList<String> contactNames = new ArrayList<String>();
     while (moveSucceeded) {
       contactNames.add(managedCursor.getString(NAME));
@@ -256,6 +257,20 @@ public class ContactsView extends TextView {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     String input = "";
     switch (keyCode) {
+      case KeyEvent.KEYCODE_DPAD_DOWN:
+        nextContact();
+        currentString = "";
+        return true;
+      case KeyEvent.KEYCODE_DPAD_UP:
+        prevContact();
+        currentString = "";
+        return true;
+      case KeyEvent.KEYCODE_ENTER:
+        dialActionHandler();
+        return true;
+      case KeyEvent.KEYCODE_SEARCH:
+        dialActionHandler();
+        return true;
       case KeyEvent.KEYCODE_CALL:
         dialActionHandler();
         return true;
@@ -435,7 +450,7 @@ public class ContactsView extends TextView {
         } else {
           String[] params = new String[1];
           params[0] = TTSParams.VOICE_FEMALE.toString();
-          parent.tts.speak(currentCharacter, 0, params);
+          parent.tts.speak(currentCharacter, 0, null); // TODO: Fix this!
         }
       }
       vibe.vibrate(PATTERN, -1);
@@ -759,7 +774,8 @@ public class ContactsView extends TextView {
       currentString = currentString.substring(0, currentString.length() - 1);
     }
     if (!deletedCharacter.equals("")) {
-      parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
+      parent.tts.speak(deletedCharacter + " deleted.", 0, null);
+      //parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
     } else {
       parent.tts.speak("[tock]", 0, null);
       parent.tts.speak("[tock]", 1, null);

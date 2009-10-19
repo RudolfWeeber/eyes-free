@@ -356,6 +356,19 @@ public class SlideDialView extends TextView {
         parent.switchToContactsView();
         return true;
 
+      case KeyEvent.KEYCODE_SEARCH:
+        if (!confirmed) {
+          parent.tts.speak("You are about to dial", 1, null);
+          for (int i = 0; i < dialedNumber.length(); i++) {
+            String digit = dialedNumber.charAt(i) + "";
+            parent.tts.speak(digit, 1, null);
+          }
+          confirmed = true;
+          return true;
+        } else {
+          parent.returnResults(dialedNumber);
+          return true;
+        }
       case KeyEvent.KEYCODE_CALL:
         if (!confirmed) {
           parent.tts.speak("You are about to dial", 1, null);
