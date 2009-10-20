@@ -324,13 +324,16 @@ public class TTSService extends Service implements OnCompletionListener {
   private int setEngine(String enginePackageName) {
     // This is a hack to force eSpeak if the user
     // is on Cupcake
+    int sdkInt = 4;
     try {
-      Context myContext = this.createPackageContext("com.svox.pico", 0);
-    } catch (NameNotFoundException e) {
+      sdkInt = Integer.parseInt(android.os.Build.VERSION.SDK);
+    } catch (NumberFormatException e){
+      Log.e(SERVICE_TAG, "Unable to parse SDK version: " + android.os.Build.VERSION.SDK);
+    }
+    if (sdkInt < 4){
       enginePackageName = "com.google.tts";
     }
-
-
+    
     String soFilename = "";
     // The SVOX TTS is an exception to how the TTS packaging scheme works
     // because
@@ -343,33 +346,53 @@ public class TTSService extends Service implements OnCompletionListener {
     } else {
       // Find the package
       // This is the correct way to do this; but it won't work in Cupcake. :(
-
-      // Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
-      // intent.setPackage(enginePackageName);
-      // ResolveInfo[] enginesArray = new ResolveInfo[0];
-      // PackageManager pm = getPackageManager();
-      // List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
-      // if ((resolveInfos == null) || resolveInfos.isEmpty()) {
-      // Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
-      // return TextToSpeechBeta.ERROR;
-      // }
-      // enginesArray = resolveInfos.toArray(enginesArray);
-      // // Generate the TTS .so filename from the package
-      // ActivityInfo aInfo = enginesArray[0].activityInfo;
-      // soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
-      // soFilename = soFilename.toLowerCase();
-      // soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" +
-      // soFilename;
-
-
+//      Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+//      intent.setPackage(enginePackageName);
+//      ResolveInfo[] enginesArray = new ResolveInfo[0];
+//      PackageManager pm = getPackageManager();
+//      List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+//      if ((resolveInfos == null) || resolveInfos.isEmpty()) {
+//      Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
+//        return TextToSpeechBeta.ERROR;
+//      }
+//      enginesArray = resolveInfos.toArray(enginesArray);  
+//      // Generate the TTS .so filename from the package
+//      ActivityInfo aInfo = enginesArray[0].activityInfo;
+      
       /* Start of hacky way of doing this */
-      soFilename = "/data/data/com.google.tts/lib/libttsespeak.so";
+      // Using a loop since we can't set the package name for the intent in Cupcake
+      Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+      ResolveInfo[] enginesArray = new ResolveInfo[0];
+      PackageManager pm = getPackageManager();
+      List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+      enginesArray = resolveInfos.toArray(enginesArray);
+      ActivityInfo aInfo = null;
+      for (int i = 0; i<enginesArray.length; i++){
+        if (enginesArray[i].activityInfo.packageName.equals(enginePackageName)){
+          aInfo = enginesArray[i].activityInfo;
+          break;
+        }
+      }
+      if (aInfo == null){
+        Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
+        return TextToSpeechBeta.ERROR;
+      }
       /* End of hacky way of doing this */
+      
+      soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
+      soFilename = soFilename.toLowerCase();
+      soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;      
     }
-
+    
+    // Hack for eclair compatibility - use an eclair compatible binary
+    if (sdkInt > 4){
+      soFilename = soFilename.replace(".so", "_eclair.so");
+    }
+    
     if (currentSpeechEngineSOFile.equals(soFilename)) {
       return TextToSpeechBeta.SUCCESS;
     }
+    
     File f = new File(soFilename);
     if (!f.exists()) {
       Log.e(SERVICE_TAG, "Invalid TTS Binary: " + soFilename);
