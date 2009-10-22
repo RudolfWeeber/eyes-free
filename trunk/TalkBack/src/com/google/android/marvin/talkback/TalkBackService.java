@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern; 
+import java.util.regex.Pattern;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
@@ -62,10 +62,15 @@ import android.widget.ToggleButton;
  */
 public class TalkBackService extends AccessibilityService {
     private static final String MAGIC_SPLITTER = "____";
-    
+
+    // Earcons
+    private static final String PROGRESS_EARCON = "[PROGRESS]";
+
     // To account for SVox camel-case trouble:
     private static final Pattern CamelCasePrefixPattern = Pattern.compile("([a-z0-9])([A-Z])");
+
     private static final Pattern CamelCaseSuffixPattern = Pattern.compile("([A-Z])([a-z0-9])");
+
     static final int INTERRUPTIBLE = 1;
 
     /**
@@ -171,8 +176,14 @@ public class TalkBackService extends AccessibilityService {
     @Override
     public void onCreate() {
         lastMessage = new ArrayList<String>();
-        
-        mTts = new TextToSpeech(getApplicationContext(), null);
+
+        mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                mTts.addEarcon(PROGRESS_EARCON, "com.google.android.marvin.talkback",
+                        R.raw.progress);
+            }
+        });
 
         mNotificationCache = new NotificationCache(this);
 
@@ -203,11 +214,33 @@ public class TalkBackService extends AccessibilityService {
 
     @Override
     public synchronized void onAccessibilityEvent(AccessibilityEvent event) {
-        if (event == null){
+        if (event == null) {
             Log.e(LOG_TAG, "Received null accessibility event.");
             return;
         }
         int eventType = event.getEventType();
+
+        //Log.e("DEBUG", event.getEventType() + ", " + event.getPackageName() + ", " + event.getClassName() + ", " + event.getText());
+        
+        // Special case for voice search
+        // This is to prevent voice reco from trying to do
+        // reco on the synthesized "Speak Now" prompt
+        if ((eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
+                && (event.getPackageName().equals("com.google.android.voicesearch"))
+                && (event.getClassName().equals("com.google.android.voicesearch.IntentApiActivity"))) {
+            // This is the startup message that says "Voice Search".
+            // Sometimes this can be picked up by the reco depending on
+            // timing/system load so it is best to be safe and just do nothing
+            // here.
+            return;
+        }
+        if ((eventType == AccessibilityEvent.TYPE_VIEW_FOCUSED) && (event.getPackageName().equals("com.google.android.voicesearch"))
+                && (event.getClassName().equals("android.widget.TextView"))) {
+            // This is the "Speak Now" prompt. This almost always gets reco'd if
+            // it is spoken, so replace it with an earcon to avoid this problem.
+            mTts.playEarcon(PROGRESS_EARCON, 0, null);
+            return;
+        }
 
         switch (eventType) {
             case AccessibilityEvent.TYPE_VIEW_FOCUSED:
@@ -521,7 +554,7 @@ public class TalkBackService extends AccessibilityService {
      */
     private void announceNotification(AccessibilityEvent event) {
         // If the user is in a call, do NOT announce any status notifications!
-        TelephonyManager tm = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE));
+        TelephonyManager tm = ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE));
         if (tm.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
             return;
         }
@@ -531,7 +564,7 @@ public class TalkBackService extends AccessibilityService {
             return;
         }
 
-        int icon = ((Notification)parcelable).icon;
+        int icon = ((Notification) parcelable).icon;
         NotificationType type = null;
 
         switch (icon) {
@@ -1017,7 +1050,7 @@ public class TalkBackService extends AccessibilityService {
                 while ((lastSpeechRequestTime + waitTime) > System.currentTimeMillis()) {
                     Thread.sleep(sleepTime);
                 }
-                ArrayList<String> messages = (ArrayList<String>)lastMessage.clone();
+                ArrayList<String> messages = (ArrayList<String>) lastMessage.clone();
 
                 for (int i = 0; i < messages.size(); i++) {
                     String msg = messages.get(i);
@@ -1038,9 +1071,9 @@ public class TalkBackService extends AccessibilityService {
     // Workaround for SVOX TTS pronounciation problems
     private String cleanUpString(String text) {
         Matcher camelCasePrefix = CamelCasePrefixPattern.matcher(text);
-        text =camelCasePrefix.replaceAll("$1 $2");
+        text = camelCasePrefix.replaceAll("$1 $2");
         Matcher camelCaseSuffix = CamelCaseSuffixPattern.matcher(text);
-        text =camelCaseSuffix.replaceAll(" $1$2");
+        text = camelCaseSuffix.replaceAll(" $1$2");
         return text.replaceAll(" & ", " and ");
     }
 
