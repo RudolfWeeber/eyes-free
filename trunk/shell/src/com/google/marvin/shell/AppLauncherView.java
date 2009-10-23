@@ -192,6 +192,20 @@ public class AppLauncherView extends TextView {
   public boolean onKeyDown(int keyCode, KeyEvent event) {
     String input = "";
     switch (keyCode) {
+      case KeyEvent.KEYCODE_DPAD_DOWN:
+        nextApp();
+        currentString = "";
+        return true;
+      case KeyEvent.KEYCODE_DPAD_UP:
+        prevApp();
+        currentString = "";
+        return true;
+      case KeyEvent.KEYCODE_ENTER:
+        startActionHandler();
+        return true;
+      case KeyEvent.KEYCODE_SEARCH:
+        startActionHandler();
+        return true;
       case KeyEvent.KEYCODE_CALL:
         startActionHandler();
         return true;
@@ -291,11 +305,11 @@ public class AppLauncherView extends TextView {
       invalidate();
       if (prevVal != currentValue) {
         if (currentCharacter.equals("")) {
-          parent.tts.playEarcon(TTSEarcon.TOCK, 0, null);
+          parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
         } else {
           String[] params = new String[1];
           params[0] = TTSParams.VOICE_FEMALE.toString();
-          parent.tts.speak(currentCharacter, 0, params);
+          parent.tts.speak(currentCharacter, 0, null); //TODO: Fix me!
         }
       }
       vibe.vibrate(PATTERN, -1);
@@ -613,10 +627,11 @@ public class AppLauncherView extends TextView {
       currentString = currentString.substring(0, currentString.length() - 1);
     }
     if (!deletedCharacter.equals("")) {
-      parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
+      //parent.tts.speak(deletedCharacter, 0, new String[] {TTSParams.VOICE_ROBOT.toString()});
+      parent.tts.speak(deletedCharacter + " deleted.", 0, null);
     } else {
-      parent.tts.playEarcon(TTSEarcon.TOCK, 0, null);
-      parent.tts.playEarcon(TTSEarcon.TOCK, 1, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 1, null);
     }
     if (currentString.length() > 0) {
       jumpToFirstMatchingApp();

@@ -21,7 +21,7 @@ import com.google.marvin.widget.TouchGestureControlOverlay;
 import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
 import com.google.marvin.widget.TouchGestureControlOverlay.GestureListener;
 import com.google.tts.ConfigurationManager;
-import com.google.tts.TTS;
+import com.google.tts.TextToSpeechBeta;
 import com.google.tts.TTSEarcon;
 import java.io.BufferedReader;
 import java.io.File;
@@ -75,7 +75,7 @@ public class MarvinShell extends Activity implements GestureListener {
   private AppLauncherView appLauncherView;
   private boolean appLauncherActive;
 
-  public TTS tts;
+  public TextToSpeechBeta tts;
   private boolean ttsStartedSuccessfully;
   public boolean isFocused;
   private MarvinShell self;
@@ -124,7 +124,24 @@ public class MarvinShell extends Activity implements GestureListener {
     justStarted = true;
     if (checkTtsRequirements()) {
       initMarvinShell();
-      testInit();
+      setContentView(R.layout.main);
+      mainText = (TextView) self.findViewById(R.id.mainText);
+      statusText = (TextView) self.findViewById(R.id.statusText);
+      widgets = new AuditoryWidgets(tts, self);
+
+      loadHomeMenu();
+
+      updateStatusText();
+
+      mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+      vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+      gestureOverlay = new TouchGestureControlOverlay(self, self);
+      mainFrameLayout.addView(gestureOverlay);
+
+      currentGesture = null;
+      (new Thread(new ActionMonitor())).start();
+
+      new ProcessTask().execute();
     }
   }
 
@@ -136,7 +153,7 @@ public class MarvinShell extends Activity implements GestureListener {
     // 0);
     self = this;
     gestureOverlay = null;
-    tts = new TTS(this, ttsInitListener, true);
+    tts = new TextToSpeechBeta(this, ttsInitListener);
     isFocused = true;
     messageWaiting = false;
     menus = new ArrayList<Menu>();
@@ -255,55 +272,11 @@ public class MarvinShell extends Activity implements GestureListener {
   }
 
 
-  private void testInit() {
-    setContentView(R.layout.main);
-    mainText = (TextView) self.findViewById(R.id.mainText);
-    statusText = (TextView) self.findViewById(R.id.statusText);
-    widgets = new AuditoryWidgets(tts, self);
-
-    loadHomeMenu();
-
-    updateStatusText();
-
-    mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
-    vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-    gestureOverlay = new TouchGestureControlOverlay(self, self);
-    mainFrameLayout.addView(gestureOverlay);
-
-    currentGesture = null;
-    (new Thread(new ActionMonitor())).start();
-
-    new ProcessTask().execute();
-  }
-
-
-  private TTS.InitListener ttsInitListener = new TTS.InitListener() {
-    public void onInit(int version) {
+  private TextToSpeechBeta.OnInitListener ttsInitListener = new TextToSpeechBeta.OnInitListener() {
+    public void onInit(int status, int version) {
       resetTTS();
       tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
       ttsStartedSuccessfully = true;
-      /*
-       * resetTTS(); tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
-       * 
-       * setContentView(R.layout.main); mainText = (TextView)
-       * self.findViewById(R.id.mainText); statusText = (TextView)
-       * self.findViewById(R.id.statusText);
-       * 
-       * widgets = new AuditoryWidgets(tts, self); loadHomeMenu();
-       * 
-       * updateStatusText();
-       * 
-       * mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
-       * vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-       * gestureOverlay = new TouchGestureControlOverlay(self, self);
-       * mainFrameLayout.addView(gestureOverlay);
-       * 
-       * currentGesture = null; (new Thread(new ActionMonitor())).start();
-       * 
-       * ttsStartedSuccessfully = true;
-       * 
-       * new ProcessTask().execute();
-       */
     }
   };
 
@@ -352,14 +325,14 @@ public class MarvinShell extends Activity implements GestureListener {
     items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "WIDGET", "APPLAUNCHER",
         null));
 
-    items.put(Gesture.DOWNRIGHT, new MenuItem("Voice Search", "WIDGET", "VOICE_SEARCH", null));
+    items.put(Gesture.DOWNRIGHT, new MenuItem("Search", "WIDGET", "VOICE_SEARCH", null));
 
     menus.add(new Menu(getString(R.string.home), ""));
     mainText.setText(menus.get(menus.size() - 1).title);
   }
 
   private Intent makeClassLaunchIntent(String packageName, String className) {
-    return new Intent().setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    return new Intent("android.intent.action.MAIN").addCategory("android.intent.category.LAUNCHER").setFlags(Intent.FLAG_ACTIVITY_NEW_TASK + Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
         .setClassName(packageName, className);
   }
 
@@ -372,7 +345,7 @@ public class MarvinShell extends Activity implements GestureListener {
         intent.putExtra(params.get(i).name, keyValue);
       }
     }
-    tts.playEarcon(TTSEarcon.TICK, 0, null);
+    tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
     try {
       startActivity(intent);
     } catch (ActivityNotFoundException e) {
@@ -383,7 +356,7 @@ public class MarvinShell extends Activity implements GestureListener {
   public void runAseScript(String scriptName) {
     Intent intent = makeClassLaunchIntent("com.google.ase", "com.google.ase.terminal.Terminal");
     intent.putExtra("com.google.ase.extra.SCRIPT_NAME", scriptName);
-    tts.playEarcon(TTSEarcon.TICK, 0, null);
+    tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
     try {
       startActivity(intent);
     } catch (ActivityNotFoundException e) {
@@ -401,10 +374,10 @@ public class MarvinShell extends Activity implements GestureListener {
     } else if (widgetName.equals("BATTERY")) {
       widgets.announceBattery();
     } else if (widgetName.equals("VOICEMAIL")) {
-      tts.playEarcon(TTSEarcon.TICK, 0, null);
+      tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
       widgets.callVoiceMail();
     } else if (widgetName.equals("LOCATION")) {
-      tts.playEarcon(TTSEarcon.TICK, 0, null);
+      tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
       widgets.speakLocation();
     } else if (widgetName.equals("CONNECTIVITY")) {
       widgets.announceConnectivity();
@@ -481,7 +454,7 @@ public class MarvinShell extends Activity implements GestureListener {
         if (new File(item.data).isFile()) {
           menus.add(new Menu(item.label, item.data));
           items = MenuLoader.loadMenu(item.data);
-          tts.playEarcon(TTSEarcon.TICK, 0, null);
+          tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
         } else {
           // Write file and retry
           class createShortcutsFileThread implements Runnable {
@@ -533,6 +506,12 @@ public class MarvinShell extends Activity implements GestureListener {
       case KeyEvent.KEYCODE_MENU:
         announceCurrentMenu();
         return true;
+      case KeyEvent.KEYCODE_SEARCH:
+        AppEntry talkingDialer1 =
+            new AppEntry(null, "com.google.marvin.talkingdialer",
+                "com.google.marvin.talkingdialer.TalkingDialer", "", null, null);
+        launchApplication(talkingDialer1);
+        return true;
       case KeyEvent.KEYCODE_CALL:
         AppEntry talkingDialer =
             new AppEntry(null, "com.google.marvin.talkingdialer",
@@ -563,13 +542,14 @@ public class MarvinShell extends Activity implements GestureListener {
           new Thread(new QuitCommandWatcher()).start();
         }
         return true;
-
+      /*
       case KeyEvent.KEYCODE_SEARCH:
         AppEntry aLynx =
             new AppEntry(null, "com.google.marvin.alynx", "com.google.marvin.alynx.ALynx", "",
                 null, null);
         launchApplication(aLynx);
         return true;
+       */
     }
     return false;
   }
@@ -600,29 +580,34 @@ public class MarvinShell extends Activity implements GestureListener {
 
   /** Checks to make sure that all the requirements for the TTS are there */
   private boolean checkTtsRequirements() {
+    // Disable TTS check for now
+    /*
     if (!TTS.isInstalled(this)) {
       Uri marketUri = Uri.parse("market://search?q=pname:com.google.tts");
       Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
       startActivityForResult(marketIntent, ttsCheckCode);
       return false;
     }
+    */
+    /*
     if (!ConfigurationManager.allFilesExist()) {
       Intent intent =
           makeClassLaunchIntent("com.google.tts", "com.google.tts.ConfigurationManager");
       startActivityForResult(intent, ttsCheckCode);
       return false;
     }
+    */
     return true;
   }
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == ttsCheckCode) {
-      if (TTS.isInstalled(this)) {
+     // if (TTS.isInstalled(this)) {
         initMarvinShell();
-      } else {
-        displayTTSMissing();
-      }
+    //  } else {
+    //    displayTTSMissing();
+    //  }
     }
     if (requestCode == voiceRecoCode) {
       if (resultCode == Activity.RESULT_OK) {
@@ -732,7 +717,7 @@ public class MarvinShell extends Activity implements GestureListener {
       if (contents.length() > 0) {
         if (contents.indexOf("PAW_YOUTUBE:") == 0) {
           Intent ytIntent = new Intent("android.intent.action.VIEW");
-          ytIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+          ytIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK + Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
           ytIntent.setClassName("com.google.android.youtube",
               "com.google.android.youtube.PlayerActivity");
           ytIntent.setData(Uri.parse(contents.substring(12)));

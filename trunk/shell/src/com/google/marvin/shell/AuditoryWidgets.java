@@ -18,6 +18,8 @@ import android.telephony.TelephonyManager;
 import android.provider.Settings.System;
 
 import com.google.tts.TTS;
+import com.google.tts.TextToSpeechBeta;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -25,14 +27,14 @@ import java.util.Calendar;
 // http://android.git.kernel.org/?p=platform/frameworks/base.git;a=blob_plain;f=services/java/com/android/server/status/StatusBarPolicy.java
 
 public class AuditoryWidgets {
-  private TTS tts;
+  private TextToSpeechBeta tts;
   private MarvinShell parent;
   private Guide guide;
   private boolean useGpsThisTime;
 
   private int voiceSignalStrength;
 
-  public AuditoryWidgets(TTS theTts, MarvinShell shell) {
+  public AuditoryWidgets(TextToSpeechBeta theTts, MarvinShell shell) {
     tts = theTts;
     parent = shell;
     useGpsThisTime = true;
@@ -56,7 +58,9 @@ public class AuditoryWidgets {
   }
 
   public void shutdown() {
-    guide.shutdown();
+    if (guide != null) {
+      guide.shutdown();
+    }
     try {
       TelephonyManager tm = (TelephonyManager) parent.getSystemService(Context.TELEPHONY_SERVICE);
       tm.listen(new PhoneStateListener() {}, PhoneStateListener.LISTEN_NONE);
