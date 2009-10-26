@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        
+        <ListPreference
+                android:key="source_pref"
+                android:title="Default Source Language"
+                android:defaultValue="No languages installed" />
+        
+        <ListPreference
+                android:key="target_pref"
+                android:title="Default Target Language"
+                android:defaultValue="No languages installed" />
+
+</PreferenceScreen>

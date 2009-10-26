@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+  <ProgressBar android:id="@+id/progress_t"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_centerInParent="true"
+    android:indeterminate="true"
+    android:minHeight="80sp"
+    android:minWidth="80sp" />
+  
+  <TextView android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_below="@+id/progress_t"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="10sp"
+    android:text="Translating text..."
+    android:textSize="20sp" />
+    
+  <TextView android:id="@+id/translate"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:textColor="#666666"
+    android:textSize="14sp"/>
+    
+  <Button android:id="@+id/cancelTranslate" 
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentBottom="true"
+    android:text="&lt; Cancel" />
+  
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2009 Google Inc.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <string name="app_name">OCR Service</string>
+    <string name="err_sd_card">Could not write to SD card. Make sure you have one inserted.</string>
+    <string name="uninstall_confirm">Are you sure you want to remove the %s language pack?</string>
+    <string name="uninstall_completed">%s language pack removed</string>
+    <string name="uninstall_failed">%s language pack could not be removed</string>
+    <string name="install_completed">%s language pack has been installed</string>
+    <string name="install_canceled">%s language pack installation canceled</string>
+    <string name="install_failed">%s language pack could not be installed</string>
+    <string name="installed">Installed</string>
+    <string name="not_installed">Not Installed</string>
+    <string name="extracting">Extracting %s from %s...</string>
+    <string name="downloading">Downloading %s from %s...</string>
+    <string name="cleaning">Cleaning up...</string>
+    <string name="percent">%d%%</string>
+    <string name="ratio">%d/%d</string>
+    <string name="recognize_title">Text Recognition</string>
+    <string name="capture_title">Image Capture</string>
+    <string name="capture_hint">Take a picture of the text you want to scan</string>
+    <string name="test_title">OCR Service Tests</string>
+    <string name="prefs_title">OCR Preferences</string>
+    <string name="languages_title">Manage Language Packs</string>
+    <string name="languages_hint">Tap language to install or remove</string>
+    <string name="languages_error">Could not download list of available languages.</string>
+    <string name="languages_loading">Downloading list of available languages...</string>
+    <string name="languages_alert">Please install at least one language pack.</string>
+
+</resources>
