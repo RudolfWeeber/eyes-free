@@ -1,0 +1,40 @@
+# -*- mode: org -*-
+
+
+*Video: Introducing TalkBack, An Open Source Screenreader 
+
+
+
+We briefly introduced TalkBack in the previous video while enabling /Accessibility/ from the settings menu.
+Here, we show off some of this screenreader's features.
+
+TalkBack is designed to be a simple, non-obtrusive
+screenreader. What this means in practice is that you interact
+directly with your applications, and not with
+TalkBack. TalkBack's job is to remain in the background and
+provide the spoken feedback that you need.
+
+TalkBack works with all of Android's native user interface
+controls. This means you can configure all aspects of the Android
+user interface with TalkBack providing appropriate spoken
+feedback. What is more, you can use most native Android
+applications --- including those downloaded from the Android
+Market with TalkBack providing spoken feedback.
+
+Here are some examples of Android applications (both from Google as well as third-party applications available onmarket) that  work with TalkBack:
+
+
+  - Google Maps: Perform searches, and listen to directions.
+  - YouTube: Search, browse categories and play.
+  - Simple Weather: Listen to local weather forecasts.
+  - Facebook: Moving around on the social Web.
+
+#+TITLE: Video: Introducing TalkBack, An Open Source Screenreader
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/

@@ -1,0 +1,40 @@
+# -*- mode: org -*-
+
+
+*Video: Introducing The Android Accessibility Framework
+
+
+Starting with Android 1.6 --- fondly known as Donut ---the
+platform includes an Accessibility API that makes it easy to
+implement adaptive technology such as screenreaders. Android 1.6
+comes with a built-in screenreader called TalkBack that provides
+spoken feedback when using Android applications written in Java.
+
+The next few videos will progressively introduce TalkBack,
+SoundBack and KickBack, a suite of programs that augment the
+Android user interface with alternative output. 
+
+All of these special utilities are available through option
+/Accessibility/ in the Android Settings menu. Once activated, the
+accessibility settings are persistent across reboots, i.e., you
+need enable these tools only once.
+
+
+Notice that because I have accessibility  enabled on my phone,
+all user actions produce relevant auditory feedback. Thus, each
+item is spoken as I
+move through the various options in the settings menu. The spoken
+feedback also indicates the state of an item as appropriate.
+
+Activating SoundBack produces non-spoken auditory feedback;
+KickBack produces haptic feedback.
+
+#+TITLE: Video: Introducing The Android Accessibility Framework
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/
