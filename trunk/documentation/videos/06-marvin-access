@@ -1,0 +1,42 @@
+# -*- mode: org -*-
+
+
+*Video: Connecting  The Dots: Marvin And Android Access 
+
+When we first launched project eyes-free in early spring 2009, we
+promised to post frequent video updates to the eyes-free
+channel. Well, sadly, we have been remiss in keeping that promise
+--- but all in a good cause --- we were busy building out the
+needed accessibility APIs in the core Android framework.
+
+We're now returning with a fresh set of video updates that
+demonstrate   the new accessibility framework in Android, and how
+these access related tools mesh with the Eyes-Free shell  shown
+earlier.
+
+To summarize:
+
+  1. All of the eyes-free utilities from project Marvin continue
+     to be developed in order to provide fluent eyes-free interaction.
+  2. The Marvin shell, and the application launcher demonstrated
+     in anearlier video continues to be my own prefered way o
+     flaunching applications fast.
+  3. But with the launch of the Accessibility API  in Android
+     1.6, and the accompanying Open Source TalkBack screenreader,
+     I can now launch *any* Android application, e.g., Google
+     Maps or YouTube.
+  4.  TalkBack provides spoken feedback for native Android
+      applications, including the settings menu.
+
+We'll demonstrate these, and a variety of other new cool
+enhancements in these forthcoming videos, stay tuned!
+
+#+TITLE: Video: Connecting The Dots: Marvin And Android Access
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/
