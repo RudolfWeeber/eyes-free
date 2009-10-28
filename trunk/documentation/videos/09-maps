@@ -1,0 +1,38 @@
+# -*- mode: org -*-
+
+
+*Video: TalkBack And Google Maps 
+
+TalkBack provides spoken feedback as you use Google Maps.
+In this video, we will demonstrate typical maps tasks such as:
+
+  
+     1. Launch Google Maps using the Marvin application launcher.
+     2. From within the Maps application, press the _menu_ key.
+     3. Select /Search/ and type a query into the search field.
+     4. Notice that I can type a partial query and have
+        auto-completion based on previous searches.
+     5. Press _Enter_ to perform the search.
+     6. Bring up the result list in /ListView/ by touching the
+        bottom left of the screen.
+     7. Scroll through this list using the track ball.
+     8. Click with the trackball to select a business.
+     9. Scroll through available options, and click /Get Directions/.
+     10.Click the /Go/ button to get directions.
+     11. Scroll with the trackball to hear  the directions spoken.
+In addition, you can also use Google Latitude to locate your
+friends.
+
+Note that other Map tools such as Google Latitude are accessible
+from within the set of options that appear when you press the
+_menu_ key.
+  
+#+TITLE: Video: TalkBack And Google Maps 
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/
