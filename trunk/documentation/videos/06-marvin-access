@@ -18,15 +18,20 @@ To summarize:
 
   1. All of the eyes-free utilities from project Marvin continue
      to be developed in order to provide fluent eyes-free interaction.
-  2. The Marvin shell, and the application launcher demonstrated
-     in anearlier video continues to be my own prefered way o
-     flaunching applications fast.
-  3. But with the launch of the Accessibility API  in Android
+  2. The Marvin shell that we demonstrated last time continues to
+     be my default home screen.
+  3. We have added an application launcher on the Marvin screen
+     that can be launched by stroking _8_.
+  4. This launcher uses stroke dialing to quickly navigate and
+     launch applications.
+  5. With the launch of the Accessibility API  in Android
      1.6, and the accompanying Open Source TalkBack screenreader,
      I can now launch *any* Android application, e.g., Google
      Maps or YouTube.
-  4.  TalkBack provides spoken feedback for native Android
+  6.  TalkBack provides spoken feedback for native Android
       applications, including the settings menu.
+  7. You can use Android Market to install third-party
+     applications, many of these work *outof the box* with TalkBack.
 
 We'll demonstrate these, and a variety of other new cool
 enhancements in these forthcoming videos, stay tuned!
