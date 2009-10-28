@@ -45,7 +45,9 @@ by not viewing the visual component.
      means for end-users and developers.
   8.    [[./08-talkback.html][TalkBack]]  demonstrates using the TalkBack screenreader
      --- an Open Source tool that runs in the background to turn
-     native Android applications into talking applications.
+     native Android applications into talking applications. Shows
+     use of the Android Alarm-clock application.
+
   
 
 

@@ -29,6 +29,19 @@ Here are some examples of Android applications (both from Google as well as thir
   - Simple Weather: Listen to local weather forecasts.
   - Facebook: Moving around on the social Web.
 
+But in this video, we'll demonstrate the use of a very simple but
+useful Android application --- the Android Alarm clock.
+
+  -  Launch: I launch the alarm clock from  Marvin's eyes-free application launcher.
+  - TalkBack: TalkBack takes over and starts speaking.
+  - Navigate: Navigating  with the trackball speaks the alarm
+    under focus.
+  - Activate: Activating with the trackball produces appropriate feedback.
+  - Navigate: Selected alarm displays its settings in a list-view which speaks as we navigate.
+  
+
+
+
 #+TITLE: Video: Introducing TalkBack, An Open Source Screenreader
 #+AUTHOR: T.V Raman
 #+EMAIL: raman@google.com
