@@ -32,9 +32,23 @@ by not viewing the visual component.
   5. [[./05-eyes-free-home.html][Eyes-Free Shell]] Demonstrates the /Home/ screen  that
      supports eyes-free access to oft-used tasks. Uses stroke
      dialer for rapid access.
-  6. [[./06-mini-apps.html][Talking Mini-Applications]] Demonstrates useful talking
+  This video  also Demonstrates useful talking
       mini-applications that provide single-touch access to
       useful information.
+  1.  [[./06-marvin-access.html][Marvin And Accessibility]] connects the dots while giving a
+     first glimpse at the new Android Access tools in Android
+     1.6. Discusses how eyes-free applications from Marvin work
+     hand-in-hand with a built-in screenreader to provide
+     efficient eyes-free interaction.
+  2. [[./07-accessible.html][Introducing Android Access]] briefly reviews the newly
+     introduced accessibility framework and describes what this
+     means for end-users and developers.
+  8.    [[./08-talkback.html][TalkBack]]  demonstrates using the TalkBack screenreader
+     --- an Open Source tool that runs in the background to turn
+     native Android applications into talking applications.
+  
+
+
 
 
 
