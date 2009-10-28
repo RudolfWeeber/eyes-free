@@ -29,24 +29,26 @@ by not viewing the visual component.
      interaction. Concludes with a teaser --- talking phonebook.
   4. [[./04-phonebook.html][Talking Phonebook]] Demonstrates how we use strokes for rapid
      access to contacts in the phone book.
-  5. [[./05-eyes-free-home.html][Eyes-Free Shell]] Demonstrates the /Home/ screen  that
-     supports eyes-free access to oft-used tasks. Uses stroke
-     dialer for rapid access.
-  This video  also Demonstrates useful talking
-      mini-applications that provide single-touch access to
-      useful information.
-  1.  [[./06-marvin-access.html][Marvin And Accessibility]] connects the dots while giving a
-     first glimpse at the new Android Access tools in Android
-     1.6. Discusses how eyes-free applications from Marvin work
-     hand-in-hand with a built-in screenreader to provide
-     efficient eyes-free interaction.
-  2. [[./07-accessible.html][Introducing Android Access]] briefly reviews the newly
+  5. [[./05-eyes-free-home.html][Eyes-Free Shell]] Demonstrates the /Home/ screen that supports
+     eyes-free access to oft-used tasks. Uses stroke dialer for
+     rapid access. This video also Demonstrates useful talking
+     mini-applications that provide single-touch access to useful
+     information.
+  6. [[./06-marvin-access.html][Marvin And Accessibility]] connects the dots while giving a
+     first glimpse at the new Android Access tools in
+     Android-1.6. Discusses how eyes-free applications from
+     Marvin work hand-in-hand with a built-in screenreader to
+     provide efficient eyes-free interaction.
+  7. [[./07-accessible.html][Introducing Android Access]] briefly reviews the newly
      introduced accessibility framework and describes what this
      means for end-users and developers.
   8.    [[./08-talkback.html][TalkBack]]  demonstrates using the TalkBack screenreader
      --- an Open Source tool that runs in the background to turn
      native Android applications into talking applications. Shows
      use of the Android Alarm-clock application.
+  9.  [[./09-maps.html][Demonstrates using TalkBack with the Google Maps application.]]
+  10.[[./10-youtube.html][YouTube]]  Demonstrates using TalkBack with the standard
+  YouTube application for Android.
 
   
 

@@ -1,0 +1,31 @@
+# -*- mode: org -*-
+
+
+*Video: TalkBack And YouTube
+ 
+
+This video demonstrates searching for and playing YouTube videos with TalkBack providing spoken feedback at each step in the interaction.
+
+  1.  Launch YouTube from the Marvin Application launcher.
+  2. The trackball can be used here to move through the list of videos.
+  3. Pressing down on the trackball launches the  selected video.
+  4.  Press _menu_ key to enter the YouTube application menu.
+  5. Click on /Search/ with the trackball.
+  6. Type a query into the edit field. TalkBack speaks as you type.
+  7. Press _Enter_ to perform the search.
+  8. Scroll the results list with the track-ball.
+  9. Click  a desired result to start playing the video.
+
+
+
+
+#+TITLE: Video: TalkBack And YouTube
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/
+
