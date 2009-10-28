@@ -1,0 +1,35 @@
+# -*- mode: org -*-
+
+
+*Video: 1Vox --- Your Query Is Our Command!
+
+
+Speech interface designers often express surprize at the the fact
+that the average blind user rarely if ever uses spoken input. But
+when you come down to it, this is not too surprizing --- given
+that the eyes-free user has speech output active, the  overall system ends up talking to itself!
+
+To show that these conflicts can be avoided by careful user-interface design,
+we  demonstrate 1Vox --- our voice-search wizard for the Marvin Shell.
+
+  1. You activate 1Vox by  stroke _9_ on the Marvin screen.
+  2. You hear a spoekn prompt /Search/
+  3. You hear a little auditory icon when  the system is ready
+     for you.
+  4. You speak oft-used queries e.g., /Weather Mountain View/.
+  5. You hear a short spoken snippet in response.
+
+We called this widget 1Vox --- in honor of the Google 1Box  found
+on the  Google Results page.
+
+
+#+TITLE: Video: 1Vox --- Your Query Is Our Command 
+#+AUTHOR: T.V Raman
+#+EMAIL: raman@google.com
+#+DATE: 2009-03-30 Mon
+#+LANGUAGE: en
+#+OPTIONS: H:3 num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t
+#TeX:t LaTeX:nil skip:nil d:nil tags:not-in-toc +LINK_UP:
+#http://eyes-free.googlecode.com/svn/trunk/documentation/videos/index.html
+#+LINK_HOME: http://eyes-free.googlecode.com/
+
