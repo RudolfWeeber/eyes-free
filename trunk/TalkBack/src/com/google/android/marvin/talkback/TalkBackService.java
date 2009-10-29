@@ -348,14 +348,11 @@ public class TalkBackService extends AccessibilityService {
      * @param event The event to process.
      */
     private void processAccessibilityEventViewFocusedType(AccessibilityEvent event) {
-
         Class<?> clazz = loadAccessibilityEventSourceClass(event);
         if (clazz == null) {
             return;
         }
-
         // announceCurrentItemPosition(event);
-
         if (CompoundButton.class.isAssignableFrom(clazz)) {
             announceCompoundButtonFocused(event, clazz);
         } else if (Button.class.isAssignableFrom(clazz)) {
@@ -370,6 +367,9 @@ public class TalkBackService extends AccessibilityService {
             announceFrameLayoutOrTextViewOrWebViewFocused(event);
         } else if (FrameLayout.class.isAssignableFrom(clazz)) {
             announceFrameLayoutOrTextViewOrWebViewFocused(event);
+        } else {
+            // Default catch-all so that the user at least gets something.
+            announceFrameLayoutOrTextViewOrWebViewFocused(event); 
         }
     }
 
