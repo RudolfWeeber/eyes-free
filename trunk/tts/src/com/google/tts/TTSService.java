@@ -316,24 +316,26 @@ public class TTSService extends Service implements OnCompletionListener {
 
     // Unregister all callbacks.
     mCallbacks.kill();
+    mCallbacksOld.kill();
 
     Log.v(SERVICE_TAG, "onDestroy() completed");
   }
 
 
   private int setEngine(String enginePackageName) {
-    // This is a hack to force eSpeak if the user
-    // is on Cupcake
+    // This is a hack to prevent the user from trying to run the Pico
+    // engine if they are on Cupcake since the Pico auto-install only works on
+    // Donut or higher and no equivalent has not been backported.
     int sdkInt = 4;
     try {
       sdkInt = Integer.parseInt(android.os.Build.VERSION.SDK);
-    } catch (NumberFormatException e){
+    } catch (NumberFormatException e) {
       Log.e(SERVICE_TAG, "Unable to parse SDK version: " + android.os.Build.VERSION.SDK);
     }
-    if (sdkInt < 4){
+    if ((sdkInt < 4) && enginePackageName.equals("com.svox.pico")) {
       enginePackageName = "com.google.tts";
     }
-    
+
     String soFilename = "";
     // The SVOX TTS is an exception to how the TTS packaging scheme works
     // because
@@ -342,57 +344,70 @@ public class TTSService extends Service implements OnCompletionListener {
     if (enginePackageName.equals("com.svox.pico")) {
       // This is the path to use when this is integrated with the framework
       // soFilename = "/system/lib/libttspico.so";
-      soFilename = "/data/data/com.google.tts/lib/libttspico.so";
+      if (sdkInt == 5) {
+        soFilename = "/data/data/com.google.tts/lib/libttspico_5.so";
+      } else {
+        soFilename = "/data/data/com.google.tts/lib/libttspico.so";
+      }
     } else {
       // Find the package
       // This is the correct way to do this; but it won't work in Cupcake. :(
-//      Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
-//      intent.setPackage(enginePackageName);
-//      ResolveInfo[] enginesArray = new ResolveInfo[0];
-//      PackageManager pm = getPackageManager();
-//      List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
-//      if ((resolveInfos == null) || resolveInfos.isEmpty()) {
-//      Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
-//        return TextToSpeechBeta.ERROR;
-//      }
-//      enginesArray = resolveInfos.toArray(enginesArray);  
-//      // Generate the TTS .so filename from the package
-//      ActivityInfo aInfo = enginesArray[0].activityInfo;
-      
+      // Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+      // intent.setPackage(enginePackageName);
+      // ResolveInfo[] enginesArray = new ResolveInfo[0];
+      // PackageManager pm = getPackageManager();
+      // List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+      // if ((resolveInfos == null) || resolveInfos.isEmpty()) {
+      // Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
+      // return TextToSpeechBeta.ERROR;
+      // }
+      // enginesArray = resolveInfos.toArray(enginesArray);
+      // // Generate the TTS .so filename from the package
+      // ActivityInfo aInfo = enginesArray[0].activityInfo;
+      // soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
+      // soFilename = soFilename.toLowerCase();
+      // soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" +
+      // soFilename;
+
       /* Start of hacky way of doing this */
-      // Using a loop since we can't set the package name for the intent in Cupcake
+      // Using a loop since we can't set the package name for the intent in
+      // Cupcake
       Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
       ResolveInfo[] enginesArray = new ResolveInfo[0];
       PackageManager pm = getPackageManager();
-      List <ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+      List<ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
       enginesArray = resolveInfos.toArray(enginesArray);
       ActivityInfo aInfo = null;
-      for (int i = 0; i<enginesArray.length; i++){
-        if (enginesArray[i].activityInfo.packageName.equals(enginePackageName)){
+      for (int i = 0; i < enginesArray.length; i++) {
+        if (enginesArray[i].activityInfo.packageName.equals(enginePackageName)) {
           aInfo = enginesArray[i].activityInfo;
           break;
         }
       }
-      if (aInfo == null){
+      if (aInfo == null) {
         Log.e(SERVICE_TAG, "Invalid TTS Engine Package: " + enginePackageName);
         return TextToSpeechBeta.ERROR;
       }
-      /* End of hacky way of doing this */
-      
-      soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
+
+      // Try to get a platform SDK specific binary
+      soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + "_" + sdkInt + ".so";
       soFilename = soFilename.toLowerCase();
-      soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;      
+      soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;
+      File f = new File(soFilename);
+      // If no such binary is available, default to a generic binary
+      if (!f.exists()) {
+        soFilename = aInfo.name.replace(aInfo.packageName + ".", "") + ".so";
+        soFilename = soFilename.toLowerCase();
+        soFilename = "/data/data/" + aInfo.packageName + "/lib/libtts" + soFilename;
+      }
+
+      /* End of hacky way of doing this */
     }
-    
-    // Hack for eclair compatibility - use an eclair compatible binary
-    if (sdkInt > 4){
-      soFilename = soFilename.replace(".so", "_eclair.so");
-    }
-    
+
     if (currentSpeechEngineSOFile.equals(soFilename)) {
       return TextToSpeechBeta.SUCCESS;
     }
-    
+
     File f = new File(soFilename);
     if (!f.exists()) {
       Log.e(SERVICE_TAG, "Invalid TTS Binary: " + soFilename);
@@ -1066,6 +1081,26 @@ public class TTSService extends Service implements OnCompletionListener {
   }
 
   private void dispatchUtteranceCompletedCallback(String utteranceId, String packageName) {
+    /* Legacy support for TTS */
+    final int oldN = mCallbacksOld.beginBroadcast();
+    Log.e("Debug", oldN + "");
+    for (int i = 0; i < oldN; i++) {
+      try {
+        mCallbacksOld.getBroadcastItem(i).markReached("");
+      } catch (RemoteException e) {
+        // The RemoteCallbackList will take care of removing
+        // the dead object for us.
+      }
+    }
+    try {
+      mCallbacks.finishBroadcast();
+    } catch (IllegalStateException e) {
+      // May get an illegal state exception here if there is only
+      // one app running and it is trying to quit on completion.
+      // This is the exact scenario triggered by MakeBagel
+      return;
+    }
+    /* End of legacy support for TTS */
     ITtsCallbackBeta cb = mCallbacksMap.get(packageName);
     if (cb == null) {
       return;
@@ -1484,12 +1519,12 @@ public class TTSService extends Service implements OnCompletionListener {
   // that are using the old version of the standalone TTS library.
   private final ITTS.Stub mBinderOld = new ITTS.Stub() {
 
-    @SuppressWarnings("unused")
+
     public void registerCallback(ITTSCallback cb) {
       if (cb != null) mCallbacksOld.register(cb);
     }
 
-    @SuppressWarnings("unused")
+
     public void unregisterCallback(ITTSCallback cb) {
       if (cb != null) mCallbacksOld.unregister(cb);
     }
@@ -1542,6 +1577,8 @@ public class TTSService extends Service implements OnCompletionListener {
           }
         }
       }
+      speakingParams.add(TextToSpeechBeta.Engine.KEY_PARAM_UTTERANCE_ID);
+      speakingParams.add("DEPRECATED");
       mSelf.speak("DEPRECATED", text, queueMode, speakingParams);
     }
 
@@ -1555,11 +1592,8 @@ public class TTSService extends Service implements OnCompletionListener {
      */
     public void playEarcon(String earcon, int queueMode, String[] params) {
       ArrayList<String> speakingParams = new ArrayList<String>();
-      // TODO: Make sure speakingParams makes sense - until then, just ignore
-      // params
-      // if (params != null) {
-      // speakingParams = new ArrayList<String>(Arrays.asList(params));
-      // }
+      speakingParams.add(TextToSpeechBeta.Engine.KEY_PARAM_UTTERANCE_ID);
+      speakingParams.add("DEPRECATED");
       mSelf.playEarcon("DEPRECATED", earcon, queueMode, speakingParams);
     }
 
@@ -1719,9 +1753,6 @@ public class TTSService extends Service implements OnCompletionListener {
         speakingParams = new ArrayList<String>(Arrays.asList(params));
       }
       boolean success = mSelf.synthesizeToFile("DEPRECATED", text, speakingParams, filename);
-
-      speakingParams.add(TextToSpeechBeta.Engine.KEY_PARAM_UTTERANCE_ID);
-      speakingParams.add("DEPRECATED BLOCKING SIMULATOR");
       // Simulate the blocking behavior from before
       if (success) {
         deprecatedKeepBlockingFlag = true;
@@ -1732,8 +1763,8 @@ public class TTSService extends Service implements OnCompletionListener {
             // TODO Auto-generated catch block
             e.printStackTrace();
           }
-        }
-    
+      }
+
       return success;
     }
   };
