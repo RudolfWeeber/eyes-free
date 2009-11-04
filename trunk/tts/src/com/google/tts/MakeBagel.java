@@ -33,6 +33,9 @@ public class MakeBagel extends Activity {
     String language = this.getIntent().getStringExtra("language") + "";
     String country = this.getIntent().getStringExtra("country") + "";
     String variant = this.getIntent().getStringExtra("variant") + "";
+    Locale loc = new Locale(language, country, variant);
+    language = loc.getISO3Language();
+    country = loc.getISO3Country();
     langRegionString = "";
     if (language.length() == 3) {
       if (country.length() == 3) {
