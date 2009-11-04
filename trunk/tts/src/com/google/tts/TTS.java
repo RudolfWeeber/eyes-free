@@ -38,6 +38,7 @@ import android.util.Log;
  * @author clchen@google.com (Charles L. Chen)
  * @deprecated - Use TextToSpeechBeta instead
  */
+@Deprecated
 public class TTS {
   // This is the minimum version of the TTS service that is needed by this
   // version of the library stub.
@@ -480,7 +481,7 @@ public class TTS {
       initTts();
     }
   }
-  
+
   public void setEngine(String ttsEngineBinary) {
     if (!started) {
       return;
@@ -493,8 +494,8 @@ public class TTS {
       initTts();
     }
   }
-  
-  
+
+
 
   /**
    * Sets the speech rate for the TTS engine.

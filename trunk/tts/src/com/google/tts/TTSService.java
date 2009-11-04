@@ -16,10 +16,8 @@
 package com.google.tts;
 
 import android.app.Service;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -34,11 +32,7 @@ import android.os.IBinder;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import com.google.tts.ITtsBeta.Stub;
 import com.google.tts.ITTSCallback;
-import com.google.tts.TTS;
-
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.TypedValue;
 
@@ -346,6 +340,8 @@ public class TTSService extends Service implements OnCompletionListener {
       // soFilename = "/system/lib/libttspico.so";
       if (sdkInt == 5) {
         soFilename = "/data/data/com.google.tts/lib/libttspico_5.so";
+      } else if (sdkInt == 6) {
+        soFilename = "/data/data/com.google.tts/lib/libttspico_5.so"; // 5 and 6 can use the same binary
       } else {
         soFilename = "/data/data/com.google.tts/lib/libttspico.so";
       }
@@ -1083,7 +1079,6 @@ public class TTSService extends Service implements OnCompletionListener {
   private void dispatchUtteranceCompletedCallback(String utteranceId, String packageName) {
     /* Legacy support for TTS */
     final int oldN = mCallbacksOld.beginBroadcast();
-    Log.e("Debug", oldN + "");
     for (int i = 0; i < oldN; i++) {
       try {
         mCallbacksOld.getBroadcastItem(i).markReached("");
@@ -1093,7 +1088,7 @@ public class TTSService extends Service implements OnCompletionListener {
       }
     }
     try {
-      mCallbacks.finishBroadcast();
+      mCallbacksOld.finishBroadcast();
     } catch (IllegalStateException e) {
       // May get an illegal state exception here if there is only
       // one app running and it is trying to quit on completion.
@@ -1510,6 +1505,11 @@ public class TTSService extends Service implements OnCompletionListener {
         speakingParams = new ArrayList<String>(Arrays.asList(params));
       }
       return mSelf.synthesizeToFile(callingApp, text, speakingParams, filename);
+    }
+
+
+    public int setEngineByPackageName(String packageName) {
+      return mSelf.setEngine(packageName);
     }
 
   };

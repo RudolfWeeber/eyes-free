@@ -1376,6 +1376,42 @@ public class TextToSpeechBeta extends TextToSpeech {
   }
 
 
+  public int setEngineByPackageName(String enginePackageName) {
+    if (!ttsBetaInstalled) {
+      Log.d("TextToSpeechBeta", this.NOT_ON_PLATFORM_TTS + "setEngineByPackageName");
+      return TextToSpeechBeta.ERROR;
+    }
+    synchronized (mStartLock) {
+      int result = TextToSpeechBeta.ERROR;
+      if (!mStarted) {
+        return result;
+      }
+      try {
+        result = mITts.setEngineByPackageName(enginePackageName);
+      } catch (RemoteException e) {
+        // TTS died; restart it.
+        Log.e("TextToSpeech.java - setEngineByPackageName", "RemoteException");
+        e.printStackTrace();
+        mStarted = false;
+        initTts();
+      } catch (NullPointerException e) {
+        // TTS died; restart it.
+        Log.e("TextToSpeech.java - setEngineByPackageName", "NullPointerException");
+        e.printStackTrace();
+        mStarted = false;
+        initTts();
+      } catch (IllegalStateException e) {
+        // TTS died; restart it.
+        Log.e("TextToSpeech.java - setEngineByPackageName", "IllegalStateException");
+        e.printStackTrace();
+        mStarted = false;
+        initTts();
+      } finally {
+        return result;
+      }
+    }
+  }
+
 
   /**
    * Standalone TTS ONLY!

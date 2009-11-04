@@ -137,21 +137,22 @@ public class SynthProxyBeta {
   // Internal
   //
 
+  @Override
   protected void finalize() {
     native_finalize(mJniData);
     mJniData = 0;
   }
 
   static {
-    //System.loadLibrary("ttssynthproxy");
+    // System.loadLibrary("ttssynthproxy");
     String proxyBinaryFilename = "ttssynthproxybeta";
     int sdkInt = 4;
     try {
       sdkInt = Integer.parseInt(android.os.Build.VERSION.SDK);
-    } catch (NumberFormatException e){
+    } catch (NumberFormatException e) {
       Log.e("SynthProxyBeta", "Unable to parse SDK version: " + android.os.Build.VERSION.SDK);
     }
-    if (sdkInt > 4){
+    if (sdkInt > 4) {
       proxyBinaryFilename = "ttssynthproxybeta_eclair";
     }
     System.loadLibrary(proxyBinaryFilename);

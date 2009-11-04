@@ -1,13 +1,9 @@
 package com.google.tts;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
@@ -19,7 +15,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -69,15 +64,15 @@ public class PrefsActivity extends PreferenceActivity {
     }
     enginesPref.setEntries(entries);
     enginesPref.setEntryValues(values);
-    
+
     // This is somewhat hacky because the eSpeak engine isn't fully ported
     // over yet. In addition, the framework has an Install Data option, so the
     // workflow is different. Therefore, do NOT take this into the framework!
-    enginesPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener(){
+    enginesPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
       @Override
       public boolean onPreferenceChange(Preference preference, Object newValue) {
         String chosenEngine = newValue.toString();
-        if (chosenEngine.equals("/data/data/com.svox.pico/lib/libttspico.so")){
+        if (chosenEngine.equals("com.svox.pico")) {
           Intent intent = new Intent();
           intent.setAction(TextToSpeechBeta.Engine.ACTION_CHECK_TTS_DATA);
           intent.setClassName("com.svox.pico", "com.svox.pico.CheckVoiceData");
@@ -132,7 +127,7 @@ public class PrefsActivity extends PreferenceActivity {
   private void sayHello() {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     // Change this to the system/lib path when in the framework
-    String DEFAULT_TTS_BINARY = "/data/data/com.google.tts/lib/libttspico.so";
+    String DEFAULT_TTS_BINARY = "com.svox.pico";
     String engine = prefs.getString("engine_pref", DEFAULT_TTS_BINARY);
     myTts.setEngine(engine);
 
@@ -182,9 +177,10 @@ public class PrefsActivity extends PreferenceActivity {
   }
 
   // TODO: This should be generic, not hardcoded to the SVOX installer.
-  public void onActivityResult(int requestCode, int resultCode, Intent data){
-    if (requestCode == TTS_VOICE_DATA_CHECK_CODE){
-      if (resultCode != TextToSpeechBeta.Engine.CHECK_VOICE_DATA_PASS){
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == TTS_VOICE_DATA_CHECK_CODE) {
+      if (resultCode != TextToSpeechBeta.Engine.CHECK_VOICE_DATA_PASS) {
         Intent intent = new Intent();
         intent.setAction(TextToSpeechBeta.Engine.ACTION_INSTALL_TTS_DATA);
         intent.setClassName("com.svox.pico", "com.svox.pico.DownloadVoiceData");
