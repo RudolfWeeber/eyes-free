@@ -220,7 +220,7 @@ public class TalkBackService extends AccessibilityService {
         }
         int eventType = event.getEventType();
 
-        //Log.e("DEBUG", event.getEventType() + ", " + event.getPackageName() + ", " + event.getClassName() + ", " + event.getText());
+        Log.e("DEBUG", event.getEventType() + ", " + event.getPackageName() + ", " + event.getClassName() + ", " + event.getText());
         
         // Special case for voice search
         // This is to prevent voice reco from trying to do
@@ -292,7 +292,7 @@ public class TalkBackService extends AccessibilityService {
             announceTextViewOrAdapterViewClicked(event);
         } else if (AdapterView.class.isAssignableFrom(clazz)) {
             announceTextViewOrAdapterViewClicked(event);
-        }
+        } 
     }
 
     /**
@@ -500,12 +500,7 @@ public class TalkBackService extends AccessibilityService {
         if (clazz == null) {
             return;
         }
-
-        if (AdapterView.class.isAssignableFrom(clazz)) {
-            announceListViewOrWebViewSelected(event);
-        } else if (WebView.class.isAssignableFrom(clazz)) {
-            announceListViewOrWebViewSelected(event);
-        }
+        announceListViewOrWebViewSelected(event);
     }
 
     /**
