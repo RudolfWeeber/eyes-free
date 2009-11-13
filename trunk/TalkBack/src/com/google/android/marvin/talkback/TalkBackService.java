@@ -220,7 +220,7 @@ public class TalkBackService extends AccessibilityService {
         }
         int eventType = event.getEventType();
 
-        Log.e("DEBUG", event.getEventType() + ", " + event.getPackageName() + ", " + event.getClassName() + ", " + event.getText());
+        // Log.e("DEBUG", event.getEventType() + ", " + event.getPackageName() + ", " + event.getClassName() + ", " + event.getText());
         
         // Special case for voice search
         // This is to prevent voice reco from trying to do
