@@ -1,26 +1,21 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.google.android.marvin.talkback;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
@@ -53,6 +48,13 @@ import android.widget.RadioButton;
 import android.widget.SlidingDrawer;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * {@link AccessibilityService} that provides spoken feedback.
@@ -151,6 +153,23 @@ public class TalkBackService extends AccessibilityService {
 
     private static final String SPACE = " ";
 
+    // This table will force the TTS to speak out the punctuation.
+    // Using a String as the key because CharSequence cannot be used as the key
+    // for a HashMap.
+    private static final HashMap<String, CharSequence> spokenEquivalentsMap = new HashMap<String, CharSequence>();
+    static {
+        spokenEquivalentsMap.put("?", "question mark");
+        spokenEquivalentsMap.put(" ", "space");
+        spokenEquivalentsMap.put(",", "comma");
+        spokenEquivalentsMap.put(".", "dot");
+        spokenEquivalentsMap.put("!", "exclamation");
+        spokenEquivalentsMap.put("(", "open paren");
+        spokenEquivalentsMap.put(")", "close paren");
+        spokenEquivalentsMap.put("\"", "double quote");
+        spokenEquivalentsMap.put(";", "semi-colon");
+        spokenEquivalentsMap.put(":", "colon");
+    }
+
     private String mCompoundButtonSelected;
 
     private String mCompoundButtonNotSelected;
@@ -220,8 +239,9 @@ public class TalkBackService extends AccessibilityService {
         }
         int eventType = event.getEventType();
 
-        // Log.e("DEBUG", event.getEventType() + ", " + event.getPackageName() + ", " + event.getClassName() + ", " + event.getText());
-        
+        // Log.e("DEBUG", event.getEventType() + ", " + event.getPackageName() +
+        // ", " + event.getClassName() + ", " + event.getText());
+
         // Special case for voice search
         // This is to prevent voice reco from trying to do
         // reco on the synthesized "Speak Now" prompt
@@ -234,7 +254,8 @@ public class TalkBackService extends AccessibilityService {
             // here.
             return;
         }
-        if ((eventType == AccessibilityEvent.TYPE_VIEW_FOCUSED) && (event.getPackageName().equals("com.google.android.voicesearch"))
+        if ((eventType == AccessibilityEvent.TYPE_VIEW_FOCUSED)
+                && (event.getPackageName().equals("com.google.android.voicesearch"))
                 && (event.getClassName().equals("android.widget.TextView"))) {
             // This is the "Speak Now" prompt. This almost always gets reco'd if
             // it is spoken, so replace it with an earcon to avoid this problem.
@@ -292,7 +313,7 @@ public class TalkBackService extends AccessibilityService {
             announceTextViewOrAdapterViewClicked(event);
         } else if (AdapterView.class.isAssignableFrom(clazz)) {
             announceTextViewOrAdapterViewClicked(event);
-        } 
+        }
     }
 
     /**
@@ -369,7 +390,7 @@ public class TalkBackService extends AccessibilityService {
             announceFrameLayoutOrTextViewOrWebViewFocused(event);
         } else {
             // Default catch-all so that the user at least gets something.
-            announceFrameLayoutOrTextViewOrWebViewFocused(event); 
+            announceFrameLayoutOrTextViewOrWebViewFocused(event);
         }
     }
 
@@ -804,27 +825,47 @@ public class TalkBackService extends AccessibilityService {
         String messageToBeSpoken = "";
         if (addedCount == 1 && removedCount == 0) {
             resourceId = R.string.single_character_text_added_template;
-            CharSequence added = text.subSequence(fromIndex, fromIndex + addedCount);
+            CharSequence added = symbolsToSpokenEquivalents(text.subSequence(fromIndex, fromIndex
+                    + addedCount));
             messageToBeSpoken = generateTemplatedUtterance(resourceId, added);
         } else if (addedCount > 1 && removedCount == 0) {
             resourceId = R.string.text_added_template;
-            CharSequence added = text.subSequence(fromIndex, fromIndex + addedCount);
+            CharSequence added = symbolsToSpokenEquivalents(text.subSequence(fromIndex, fromIndex
+                    + addedCount));
             messageToBeSpoken = generateTemplatedUtterance(resourceId, added);
         } else if (addedCount == 0 && removedCount > 0) {
             resourceId = R.string.text_removed_template;
             CharSequence beforeText = uiEvent.getBeforeText();
-            CharSequence removed = beforeText.subSequence(fromIndex, fromIndex + removedCount);
+            CharSequence removed = symbolsToSpokenEquivalents(beforeText.subSequence(fromIndex,
+                    fromIndex + removedCount));
             messageToBeSpoken = generateTemplatedUtterance(resourceId, removed);
         } else if (addedCount > 0 && removedCount > 0) {
             resourceId = R.string.multiple_characters_replaced_template;
             CharSequence beforeText = uiEvent.getBeforeText();
-            CharSequence removed = beforeText.subSequence(fromIndex, fromIndex + removedCount);
-            CharSequence added = text.subSequence(fromIndex, fromIndex + addedCount);
+            CharSequence removed = symbolsToSpokenEquivalents(beforeText.subSequence(fromIndex,
+                    fromIndex + removedCount));
+            CharSequence added = symbolsToSpokenEquivalents(text.subSequence(fromIndex, fromIndex
+                    + addedCount));
             messageToBeSpoken = generateTemplatedUtterance(resourceId, removed, added);
         }
         ArrayList<String> messageArrayList = new ArrayList<String>();
         messageArrayList.add(messageToBeSpoken);
         speakDelayed(messageArrayList);
+    }
+
+    /**
+     * Returns the spoken equivalent for a character. Use this to make TalkBack
+     * work better when typing.
+     * 
+     * @param CharSequence A character that should be spoken, ie "?"
+     * @return The spoken equivalent, ie "question mark"
+     */
+    private CharSequence symbolsToSpokenEquivalents(CharSequence symbol) {
+        CharSequence spokenVersion = symbol;
+        if (spokenEquivalentsMap.containsKey(symbol.toString())) {
+            spokenVersion = spokenEquivalentsMap.get(symbol.toString());
+        }
+        return spokenVersion;
     }
 
     /**
@@ -1046,7 +1087,8 @@ public class TalkBackService extends AccessibilityService {
                     Thread.sleep(sleepTime);
                 }
                 ArrayList<String> messages = (ArrayList<String>) lastMessage.clone();
-
+                // Interrupt anything else that might be speaking here.
+                mTts.speak(" ", 2, null);
                 for (int i = 0; i < messages.size(); i++) {
                     String msg = messages.get(i);
                     if (msg != null) {
