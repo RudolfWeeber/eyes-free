@@ -320,7 +320,7 @@ public class SoftKeyboard extends InputMethodService implements
             List<String> stringList = new ArrayList<String>();
             for (int i = 0; i < (completions != null ? completions.length : 0); i++) {
                 CompletionInfo ci = completions[i];
-                if (ci != null)
+                if ((ci != null) && (ci.getText() != null))
                     stringList.add(ci.getText().toString());
             }
             setSuggestions(stringList, true, true);
@@ -708,15 +708,29 @@ public class SoftKeyboard extends InputMethodService implements
     public void onRelease(int primaryCode) {
     }
 
+    /*
     public void onComputeInsets(Insets outInsets) {
         View decor = getWindow().getWindow().getDecorView();
-        outInsets.visibleTopInsets = 0;
-        outInsets.contentTopInsets = decor.getHeight();
+        outInsets.visibleTopInsets = decor.getHeight(); //0;
+        outInsets.contentTopInsets = 0; //decor.getHeight();
         outInsets.touchableInsets = Insets.TOUCHABLE_INSETS_FRAME;
     }
+    */
+    
 
     public int getVisibleBottomOfScreen() {
         return getWindow().getWindow().getDecorView().getHeight();
+    }
+    
+    @Override
+    public boolean onEvaluateFullscreenMode(){
+        return true;
+    }
+    
+    @Override
+    public void  onUpdateExtractingVisibility  (EditorInfo ei){
+        setExtractViewShown(false);
+        ei.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
     }
 
 }

@@ -19,5 +19,5 @@
 -->
 
 <resources>
-    <dimen name="key_height">700dip</dimen>
+    <dimen name="key_height">450dip</dimen>
 </resources>
