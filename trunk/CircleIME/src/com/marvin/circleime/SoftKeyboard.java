@@ -18,6 +18,7 @@ package com.marvin.circleime;
 
 import com.google.tts.TextToSpeechBeta;
 
+import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
@@ -718,8 +719,11 @@ public class SoftKeyboard extends InputMethodService implements
     */
     
 
-    public int getVisibleBottomOfScreen() {
-        return getWindow().getWindow().getDecorView().getHeight();
+    public boolean isLandscape() {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            return true;
+        }
+        return false;
     }
     
     @Override
@@ -731,6 +735,11 @@ public class SoftKeyboard extends InputMethodService implements
     public void  onUpdateExtractingVisibility  (EditorInfo ei){
         setExtractViewShown(false);
         ei.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+    }
+    
+    @Override
+    public void onWindowHidden(){
+        this.stopSelf();
     }
 
 }

@@ -324,11 +324,15 @@ public class CircleGestureView extends KeyboardView {
         imeStatusPaint.setTextSize(20);
         Paint imeBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         imeBgPaint.setColor(Color.BLACK);
-        int fudgeFactor = 120;
-        int startY = parent.getVisibleBottomOfScreen() - fudgeFactor;
+        int fudgeFactor = 50; 
+        int startY = 386;
+        if (parent.isLandscape()){
+            fudgeFactor = 50; 
+            startY = 270;
+        }
+
         canvas.drawRect(0, startY, getWidth(), startY + fudgeFactor, imeBgPaint);
         canvas.drawText("IME Active", 10, startY + 20, imeStatusPaint);
-        Log.e("debug", startY + "");
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.WHITE);
