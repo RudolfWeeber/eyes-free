@@ -57,6 +57,9 @@
         <item android:id="@+id/preferences_menu_id"
             android:title="@string/menu_preferences"
             android:alphabeticShortcut="p" />
+        <item android:id="@+id/scripts_menu_id"
+            android:title="Scripts"
+            android:alphabeticShortcut="q" />            
         <!-- followings are debug only -->
         <item android:id="@+id/dump_nav_menu_id"
             android:title="@string/dump_nav"

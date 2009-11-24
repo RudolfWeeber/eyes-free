@@ -92,7 +92,23 @@ function compareLineages(lina, linb){
   return i;
 }
 
+function hasTagInLineage(elem, tag){
+  var node = elem;
+  while(node){
+    if (node.tagName && node.tagName == tag){
+      return true;
+    }
+    node = node.parentNode;
+  }
+  return false;
+}
 
+function getText(elem){
+  if (elem.tagName && elem.tagName == 'IMG'){
+    return elem.alt;
+  }
+  return elem.textContent;
+}
 
 function getInfoOnCurrentElem(){
   var currentLineage = getLineage(currentElem);
@@ -122,28 +138,40 @@ function getInfoOnCurrentElem(){
 
 function readNext(){
   getNextLeafNode();
-  while (!containsText(currentElem.textContent)){
+  var textContent = getText(currentElem);
+  while (!containsText(textContent)){
     getNextLeafNode();
     if (currentElem === null){
       speak("End of document", 0, null);
       return;
     }
+    textContent = getText(currentElem);
   }
-  speak(getInfoOnCurrentElem() + ' ' + currentElem.textContent, 0, null);
-  scrollToElem(currentElem);
+  if (hasTagInLineage(currentElem, 'SCRIPT')){
+    readNext();
+  } else {
+    speak(getInfoOnCurrentElem() + ' ' + textContent, 0, null);
+    scrollToElem(currentElem);
+  }
 }
 
 function readPrev(){
   getPrevLeafNode();
-  while (!containsText(currentElem.textContent)){
+  var textContent = getText(currentElem);
+  while (!containsText(textContent)){
     getPrevLeafNode();
     if (currentElem === null){
       speak("Beginning of document", 0, null);
       return;
     }
+    textContent = getText(currentElem);
   }
-  speak(getInfoOnCurrentElem() + ' ' + currentElem.textContent, 0, null);
-  scrollToElem(currentElem);
+  if (hasTagInLineage(currentElem, 'SCRIPT')){
+    readPrev();
+  } else {
+    speak(getInfoOnCurrentElem() + ' ' + textContent, 0, null);
+    scrollToElem(currentElem);
+  }
 }
 
 function scrollToElem(targetNode){
@@ -217,7 +245,10 @@ function blurHandler(evt){
   return true;
 }
 
-if (document.location.toString().indexOf('http://www.google.com/search?') != 0){
+if (document.location.toString().indexOf('http://www.google.com/m?') === 0){
+  var searchUrl = document.location.toString().replace('http://www.google.com/m?', 'http://www.google.com/search?');
+  document.location = searchUrl;
+} else if (document.location.toString().indexOf('http://www.google.com/search?') != 0){
   document.addEventListener('keypress', keyPressHandler, true);
   document.addEventListener('keydown', keyDownHandler, true);
   document.addEventListener('focus', focusHandler, true);

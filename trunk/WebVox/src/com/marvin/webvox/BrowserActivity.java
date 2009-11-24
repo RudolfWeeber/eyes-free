@@ -1612,6 +1612,12 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
                         BrowserPreferencesPage.class);
                 startActivityForResult(intent, PREFERENCES_PAGE);
                 break;
+                
+            case R.id.scripts_menu_id:
+                Intent scriptsIntent = new Intent(this,
+                        ScriptListActivity.class);
+                startActivity(scriptsIntent);
+                break;                
 
             case R.id.find_menu_id:
                 if (null == mFindDialog) {
@@ -2248,9 +2254,13 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
         if (mMenuIsDown) return true;
 
         switch(keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                return super.onKeyDown(keyCode, event); 
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                return super.onKeyDown(keyCode, event);
             case KeyEvent.KEYCODE_MENU:
                 mMenuIsDown = true;
-                break;
+                return super.onKeyDown(keyCode, event); 
             case KeyEvent.KEYCODE_SPACE:
                 // WebView/WebTextView handle the keys in the KeyDown. As
                 // the Activity's shortcut keys are only handled when WebView
