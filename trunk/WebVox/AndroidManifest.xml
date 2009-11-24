@@ -179,7 +179,8 @@
         <!-- Makes .BrowserActivity the search target for any activity in Browser -->
         <meta-data android:name="android.app.default_searchable" android:value=".BrowserActivity" />
 
-
+    <activity android:name=".ScriptListActivity" android:label="@string/app_scripts" android:configChanges="orientation|keyboardHidden">
+    </activity>
 
     </application>
 

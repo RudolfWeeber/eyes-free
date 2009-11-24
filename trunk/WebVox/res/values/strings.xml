@@ -766,4 +766,19 @@
     <string name="error_console_eval_text_hint" translatable="false">Evaluate JavaScript</string>
     <string name="error_console_eval_button_text" translatable="false">Evaluate</string>
 
+  <string name="app_scripts">Scripts list</string>
+  <string name="install_title">Found userscript</string>
+  <string name="install_message">This looks like a userscript, would you like to install it?  You should only install scripts from trusted sources.</string>
+
+  <string name="manage_find">Find new scripts</string>
+  <string name="manage_import">Import script</string>
+  <string name="manage_empty">No scripts found, tap menu\nto find online or import.</string>
+  
+  <string name="manage_delete">Delete script</string>
+  
+  <string name="manage_pick">Pick script to import:</string>
+  <string name="manage_pick_error">Couldn\'t find SD card to load files from.</string>
+  
+  <string name="manage_import_success">Script imported successfully</string>
+  <string name="manage_import_fail">Problem while trying to import script</string>
 </resources>

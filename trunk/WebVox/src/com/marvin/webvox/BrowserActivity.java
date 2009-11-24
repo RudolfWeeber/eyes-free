@@ -82,6 +82,7 @@ import android.provider.ContactsContract.Intents.Insert;
 //import android.provider.Downloads;
 import android.provider.MediaStore;
 //import android.text.IClipboard;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 //import android.text.util.Regex;
@@ -145,6 +146,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -297,6 +299,10 @@ public class BrowserActivity extends Activity
     private FrameLayout mBrowserFrameLayout;
 
     @Override public void onCreate(Bundle icicle) {
+        mTts = new TextToSpeech(this, null);
+        scriptdb = new ScriptDatabase(this);
+        scriptdb.onUpgrade(scriptdb.getWritableDatabase(), -10, 10);
+        
         if (LOGV_ENABLED) {
             Log.v(LOGTAG, this + " onStart");
         }
@@ -2233,6 +2239,7 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
         }
     }
 
+    
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // The default key mode is DEFAULT_KEYS_SEARCH_LOCAL. As the MENU is
@@ -2264,8 +2271,12 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
                     return true;
                 }
                 break;
+            case KeyEvent.KEYCODE_SEARCH:
+                return super.onKeyDown(keyCode, event);        
         }
-        return super.onKeyDown(keyCode, event);
+        
+        //return super.onKeyDown(keyCode, event);
+        return true;
     }
 
     @Override
@@ -2635,6 +2646,7 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
 
             // Update the lock icon image only once we are done loading
             updateLockIconToLatest();
+            
 /*
             // Performance probe
             if (false) {
@@ -2730,6 +2742,26 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
                     }
                 }
             }
+            
+            // Inject the script
+            view.addJavascriptInterface(new TtsHelper(), "ttsHelper");
+            
+            if (scriptdb == null) {
+                Log.e("Greasemonkey", "ScriptDatabase wasn't ready for finished page");
+                return;
+              }
+
+              // for each finished page, try looking for active scripts
+              List<String> active = scriptdb.getActive(url);
+              Log.d("Greasemonkey", String.format("Found %d active scripts on url=%s", active.size(), url));
+              if (active.size() == 0) return;
+
+              // inject each applicable script into page
+              for (String script : active) {
+                script = BrowserActivity.this.prepareScript(script);
+                view.loadUrl(script);
+              }
+            
         }
 
         // return true if want to hijack the url to let another app to handle it
@@ -4354,6 +4386,27 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
         return null;
     }
 
+    
+    
+    
+    final class TtsHelper {
+
+        public void speak(String message, int queueMode) {
+          mTts.speak(message, queueMode, null);
+        }
+
+        public boolean isSpeaking() {
+          return mTts.isSpeaking();
+        }
+
+        public int stop() {
+          return mTts.stop();
+        }
+
+
+      }
+    
+    
 
     // get window count
 
@@ -4464,6 +4517,9 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
     private int mLockIconType = LOCK_ICON_UNSECURE;
     private int mPrevLockType = LOCK_ICON_UNSECURE;
 
+    private TextToSpeech mTts;
+    private ScriptDatabase scriptdb = null;
+    
     private BrowserSettings mSettings;
     private TabControl      mTabControl;
     private ContentResolver mResolver;
@@ -4686,4 +4742,19 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
     }
 
     /* package */ static final UrlData EMPTY_URL_DATA = new UrlData(null);
+    
+    
+    private String prepareScript(String script) {
+        String jsonlib = "";
+        try {
+          jsonlib = Util.getRawString(getResources(), R.raw.json2);
+        } catch (Exception e) {
+          Log.e("Greasemonkey", "Problem loading raw json library", e);
+        }
+
+        script = String.format("javascript:(function() { %s %s })();", jsonlib, script);
+
+        return script;
+
+      }
 }

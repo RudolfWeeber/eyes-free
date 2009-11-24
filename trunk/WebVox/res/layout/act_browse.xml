@@ -1,0 +1,81 @@
+<!-- 
+	Copyright (C) 2008 Jeffrey Sharkey, http://jsharkey.org/
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+	
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<!-- 
+	<LinearLayout
+		android:id="@+id/browse_install"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:orientation="vertical"
+		android:padding="10dip"
+		android:background="#fccf"
+		>
+		
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/install_title"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="#f000"
+			android:paddingBottom="5dip"
+			/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/install_warn"
+			android:textStyle="bold"
+			android:paddingBottom="5dip"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="#f000"
+			/>
+		
+		<Button
+			android:id="@android:id/button1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_horizontal"
+			android:text="@string/install_action"
+			android:textColor="#f000"
+			android:paddingLeft="10dip"
+			android:paddingRight="10dip"
+			/>
+		
+	
+	</LinearLayout>
+	 -->
+	<WebView
+		android:id="@+id/browse_webview"
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		/>
+		
+	<FrameLayout
+		android:id="@+id/browse_zoom"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		/>
+	
+</RelativeLayout>
+
