@@ -69,6 +69,7 @@ public class ScriptDatabase extends SQLiteOpenHelper {
 
 		// populate database with a few example scripts 
 		try {
+	      this.insertScript(db, Util.getRawString(res, R.raw.mgws));
 		  this.insertScript(db, Util.getRawString(res, R.raw.gws));
 		  this.insertScript(db, Util.getRawString(res, R.raw.basic));
 			//this.insertScript(db, Util.getRawString(res, R.raw.email));

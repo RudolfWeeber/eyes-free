@@ -3495,13 +3495,14 @@ if (  ACCEPTED_URI_SCHEMA.matcher(url).matches()
          * @param callback The callback to call once the user has set the
          *     Geolocation permission state.
          */
+        /*        
         @Override
         public void onGeolocationPermissionsShowPrompt(String origin,
                 GeolocationPermissions.Callback callback) {
             mTabControl.getCurrentTab().getGeolocationPermissionsPrompt().show(
                     origin, callback);
         }
-
+*/
         /**
          * Instructs the browser to hide the Geolocation permissions prompt.
          */

@@ -110,6 +110,75 @@ function getText(elem){
   return elem.textContent;
 }
 
+var readingMode = 1; // 0 = detailed, 1 = skim, 2 = headings only
+
+function isSkippable(elem){
+  if (hasTagInLineage(elem, 'SCRIPT')){
+    return true;
+  }
+  if (readingMode === 0){
+    return false;
+  } else if (readingMode == 1){
+    if (hasTagInLineage(elem, 'P')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H1')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H2')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H3')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H4')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H5')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H6')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'OL')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'UL')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'DL')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'BLOCKQUOTE')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'DIV')){
+      return false;
+    }
+    return true;
+  } else if (readingMode == 2) {
+    if (hasTagInLineage(elem, 'H1')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H2')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H3')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H4')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H5')){
+      return false;
+    }
+    if (hasTagInLineage(elem, 'H6')){
+      return false;
+    }
+    return true;
+  }  
+}
+
 function getInfoOnCurrentElem(){
   var currentLineage = getLineage(currentElem);
   var divergence = compareLineages(getLineage(prevElem), currentLineage);
@@ -143,15 +212,16 @@ function readNext(){
     getNextLeafNode();
     if (currentElem === null){
       speak("End of document", 0, null);
-      return;
+      return false;
     }
     textContent = getText(currentElem);
   }
-  if (hasTagInLineage(currentElem, 'SCRIPT')){
-    readNext();
+  if (isSkippable(currentElem)){
+    return readNext();
   } else {
     speak(getInfoOnCurrentElem() + ' ' + textContent, 0, null);
     scrollToElem(currentElem);
+    return true;
   }
 }
 
@@ -162,15 +232,16 @@ function readPrev(){
     getPrevLeafNode();
     if (currentElem === null){
       speak("Beginning of document", 0, null);
-      return;
+      return false;
     }
     textContent = getText(currentElem);
   }
-  if (hasTagInLineage(currentElem, 'SCRIPT')){
-    readPrev();
+  if (isSkippable(currentElem)){
+    return readPrev();
   } else {
     speak(getInfoOnCurrentElem() + ' ' + textContent, 0, null);
     scrollToElem(currentElem);
+    return true;
   }
 }
 
@@ -195,12 +266,32 @@ function speak(textStr, queueMode, paramsArray){
   //alert(textStr);
 }
 
+function isSpeaking(){
+  return window.ttsHelper.isSpeaking();
+}
+
+var keepGoing = true;
+
+function autoRead(){  
+  if (!isSpeaking()){
+    keepGoing = readNext();
+  }
+  if (keepGoing){
+    window.setTimeout(autoRead, 1000);
+  }
+}
+
 //TODO: Come up with a working escape sequence!
 function keyPressHandler(evt){
   var keyCode = evt.keyCode;
   if (inputFocused){
     return true;
   }
+  if (keyCode == 97) { // a
+    keepGoing = true;
+    autoRead();
+    return false;
+  }  
   if (keyCode == 106) { // j
     readNext();
     return false;
@@ -208,11 +299,26 @@ function keyPressHandler(evt){
   if (keyCode == 107) { // k
     readPrev();
     return false;
-  }  
+  } 
+  if (keyCode == 104) { // h
+    readingMode++;
+    if (readingMode > 2){
+      readingMode = 0;
+    }
+    if (readingMode == 0){
+      speak("All", 0, null);
+    } else if (readingMode == 1){
+      speak("Quick", 0, null);
+    } else if (readingMode == 2){
+      speak("Headings", 0, null);
+    } 
+    return false;
+  }   
   return true;
 }
 
 function keyDownHandler(evt){
+  keepGoing = false;
   window.ttsHelper.stop();
   var keyCode = evt.keyCode;
   if (inputFocused){
@@ -246,9 +352,9 @@ function blurHandler(evt){
 }
 
 if (document.location.toString().indexOf('http://www.google.com/m?') === 0){
-  var searchUrl = document.location.toString().replace('http://www.google.com/m?', 'http://www.google.com/search?');
-  document.location = searchUrl;
-} else if (document.location.toString().indexOf('http://www.google.com/search?') != 0){
+  // Do nothing, rely on mgws script
+} else 
+if (document.location.toString().indexOf('http://www.google.com/search?') != 0){
   document.addEventListener('keypress', keyPressHandler, true);
   document.addEventListener('keydown', keyDownHandler, true);
   document.addEventListener('focus', focusHandler, true);
