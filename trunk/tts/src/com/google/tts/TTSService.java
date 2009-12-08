@@ -338,10 +338,8 @@ public class TTSService extends Service implements OnCompletionListener {
     if (enginePackageName.equals("com.svox.pico")) {
       // This is the path to use when this is integrated with the framework
       // soFilename = "/system/lib/libttspico.so";
-      if (sdkInt == 5) {
-        soFilename = "/data/data/com.google.tts/lib/libttspico_5.so";
-      } else if (sdkInt == 6) {
-        soFilename = "/data/data/com.google.tts/lib/libttspico_5.so"; // 5 and 6 can use the same binary
+      if (sdkInt < 5) {
+        soFilename = "/data/data/com.google.tts/lib/libttspico_4.so";
       } else {
         soFilename = "/data/data/com.google.tts/lib/libttspico.so";
       }
