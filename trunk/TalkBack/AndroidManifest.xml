@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.marvin.talkback"
     android:sharedUserId="com.google.android.marvin.feedback"    
-    android:versionCode="4"
-    android:versionName="1.0.3">
+    android:versionCode="5"
+    android:versionName="2.0.0">
 
     <uses-sdk android:minSdkVersion="4" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <!-- Allows third party applications to send Intent broadcast commands to TalkBack. -->
     <permission android:name="android.permission.TALKBACK_AS_NOTIFICATION_STATE"

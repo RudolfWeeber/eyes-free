@@ -16,8 +16,6 @@
 
 package com.google.android.marvin.talkback;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,30 +23,26 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class is a cache for notifications. It supports adding, reading, removing of
- * notifications as well as formatting these notification for presentation to the user.
+ * This class is a cache for notifications. It supports adding, reading,
+ * removing of notifications as well as formatting these notification for
+ * presentation to the user.
  * 
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
- *
  */
 public class NotificationCache {
-    private Context mContext = null;
 
-    private Map<NotificationType, List<String>> mTypeToMessageMap =
-        new HashMap<NotificationType, List<String>>();
+    private Map<NotificationType, List<String>> mTypeToMessageMap = new HashMap<NotificationType, List<String>>();
 
     /**
      * Creates a new instance.
-     *
-     * @param context The client {@link Context}.
      */
-    NotificationCache(Context context) {
-        mContext = context;
+    NotificationCache() {
+        /* do nothing */
     }
 
     /**
      * Adds a notifications for a given {@link NotificationType}.
-     *
+     * 
      * @param type The {@link NotificationType}.
      * @param notification The notification message.
      * @return True if the notification was added , false otherwise.
@@ -64,7 +58,7 @@ public class NotificationCache {
 
     /**
      * Removes a notification from a given type.
-     *
+     * 
      * @param type The {@link NotificationType}.
      * @param notification The notification message.
      * @return True if removed, false otherwise.
@@ -75,7 +69,7 @@ public class NotificationCache {
 
     /**
      * Gets all notifications form a given {@link NotificationType}.
-     *
+     * 
      * @param type The {@link NotificationType}.
      * @return The notifications as a list. If no notifications exist an empty
      *         list is returned.
@@ -90,17 +84,17 @@ public class NotificationCache {
 
     /**
      * Remove all notifications of a given type.
-     *
+     * 
      * @param type The {@link NotificationType}.
      * @return True if notifications are removed, false otherwise.
      */
     public boolean removeNotificationsForType(NotificationType type) {
-        return (mTypeToMessageMap.remove(type) != null);  
+        return (mTypeToMessageMap.remove(type) != null);
     }
 
     /**
      * Returns all notifications.
-     *
+     * 
      * @return All notifications.
      */
     public List<String> getNotificationsAll() {
@@ -120,7 +114,7 @@ public class NotificationCache {
 
     /**
      * Returns all notifications for a given type.
-     *
+     * 
      * @param type The {@link NotificationType}.
      * @return The formatted string.
      */
@@ -128,7 +122,7 @@ public class NotificationCache {
         StringBuilder formatted = new StringBuilder();
         List<String> notifications = getNotificationsForType(type);
         for (String notification : notifications) {
-            formatted.append(getStringForresourceId(type.getValue()));
+            formatted.append(getStringForResourceId(type.getValue()));
             formatted.append(" ");
             formatted.append(notification);
             formatted.append(" ");
@@ -138,7 +132,7 @@ public class NotificationCache {
 
     /**
      * Returns all notifications formatted for presentation.
-     *
+     * 
      * @return The formatted string.
      */
     public String getFormattedAll() {
@@ -151,7 +145,7 @@ public class NotificationCache {
 
     /**
      * returns a summary of the notifications.
-     *
+     * 
      * @return The summary.
      */
     public String getFormattedSummary() {
@@ -161,7 +155,7 @@ public class NotificationCache {
             if (count > 0) {
                 summary.append(count);
                 summary.append(" ");
-                summary.append(getStringForresourceId(entry.getKey().getValue()));
+                summary.append(getStringForResourceId(entry.getKey().getValue()));
                 if (count > 1) {
                     summary.append("s");
                 }
@@ -173,11 +167,11 @@ public class NotificationCache {
 
     /**
      * Returns a string for a resource id.
-     *
+     * 
      * @param resourceId The resource id.
      * @return the string.
      */
-    private String getStringForresourceId(int resourceId) {
-        return mContext.getResources().getString(resourceId);
+    private String getStringForResourceId(int resourceId) {
+        return TalkBackService.asContext().getResources().getString(resourceId);
     }
 }

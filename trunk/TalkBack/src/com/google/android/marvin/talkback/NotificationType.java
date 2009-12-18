@@ -21,28 +21,25 @@ import android.os.Parcelable;
 
 /**
  * Type safe enumeration for various notification types.
- *
+ * 
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
- *
  */
 public enum NotificationType implements Parcelable {
     TEXT_MESSAGE(R.string.notification_type_text_message),
-    TEXT_MESSAGE_FAILED(R.string.notification_type_text_message_failed),
+    TEXT_MESSAGE_FAILED(R.string.notification_type_failed_text_message),
     MISSED_CALL(R.string.notification_type_missed_call),
-    STATUS_NOTIFICATION(R.string.notification_type_status_notification),
     USB_CONNECTED(R.string.notification_type_usb_connected),
-    ALERT_DIALOG(R.string.notification_type_alert_dialog),
-    SHORT_MESSAGE(R.string.notification_type_short_message),
-    MUTE(R.string.notification_status_mute),
-    CHAT(R.string.notification_status_chat),
-    MORE(R.string.notification_status_more),
-    SDCARD(R.string.notification_status_sdcard),
-    SDCARD_USB(R.string.notification_status_sdcard_usb),
+    MUTE(R.string.notification_type_status_mute),
+    CHAT(R.string.notification_type_status_chat),
+    ERROR(R.string.notification_type_status_error),
+    MORE(R.string.notification_type_status_more),
+    SDCARD(R.string.notification_type_status_sdcard),
+    SDCARD_USB(R.string.notification_type_status_sdcard_usb),
     SYNC(R.string.notification_status_sync),
-    SYNC_NOANIM(R.string.notification_status_sync_noanim),
-    VOICEMAIL(R.string.notification_status_voicemail),
-    ERROR(R.string.notification_status_error),
-    PLAY(R.string.notification_status_play);
+    SYNC_NOANIM(R.string.notification_type_status_sync_noanim),
+    VOICEMAIL(R.string.notification_type_status_voicemail),
+    PLAY(R.string.notification_status_play),
+    STATUS_NOTIFICATION(R.string.notification_type_status_notification);
 
     private int mValue;
 
@@ -70,7 +67,7 @@ public enum NotificationType implements Parcelable {
 
     /**
      * Gets an enumeration member for value.
-     *
+     * 
      * @param value The value.
      * @return The enumeration member.
      */
@@ -86,8 +83,7 @@ public enum NotificationType implements Parcelable {
     /**
      * @see Parcelable.Creator
      */
-    public static final Parcelable.Creator<NotificationType> CREATOR
-            = new Parcelable.Creator<NotificationType>() {
+    public static final Parcelable.Creator<NotificationType> CREATOR = new Parcelable.Creator<NotificationType>() {
         public NotificationType createFromParcel(Parcel parcel) {
             int value = parcel.readInt();
             return getMemberForValue(value);
@@ -98,4 +94,3 @@ public enum NotificationType implements Parcelable {
         }
     };
 }
-
