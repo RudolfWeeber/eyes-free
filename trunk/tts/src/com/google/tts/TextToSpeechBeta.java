@@ -330,6 +330,12 @@ public class TextToSpeechBeta extends TextToSpeech {
      * @see TextToSpeechBeta#synthesizeToFile(String, HashMap, String)
      */
     public static final String KEY_PARAM_UTTERANCE_ID = "utteranceId";
+    /**
+     * Parameter key to specify the synthesis engine 
+     * 
+     * @see TextToSpeechBeta#setEngineByPackageName(String)
+     */
+    public static final String KEY_PARAM_ENGINE = "engine";
 
     // key positions in the array of cached parameters
     /**
@@ -359,7 +365,11 @@ public class TextToSpeechBeta extends TextToSpeech {
     /**
      * {@hide}
      */
-    protected static final int NB_CACHED_PARAMS = 6;
+    protected static final int PARAM_POSITION_ENGINE = 12;
+    /**
+     * {@hide}
+     */
+    protected static final int NB_CACHED_PARAMS = 7;
   }
 
   /**
@@ -418,6 +428,7 @@ public class TextToSpeechBeta extends TextToSpeech {
       mCachedParams[Engine.PARAM_POSITION_VARIANT] = Engine.KEY_PARAM_VARIANT;
       mCachedParams[Engine.PARAM_POSITION_STREAM] = Engine.KEY_PARAM_STREAM;
       mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID] = Engine.KEY_PARAM_UTTERANCE_ID;
+      mCachedParams[Engine.PARAM_POSITION_ENGINE] = Engine.KEY_PARAM_ENGINE;
 
       mCachedParams[Engine.PARAM_POSITION_RATE + 1] = String.valueOf(Engine.DEFAULT_RATE);
       // initialize the language cached parameters with the current Locale
@@ -428,6 +439,8 @@ public class TextToSpeechBeta extends TextToSpeech {
 
       mCachedParams[Engine.PARAM_POSITION_STREAM + 1] = String.valueOf(Engine.DEFAULT_STREAM);
       mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID + 1] = "";
+      
+      mCachedParams[Engine.PARAM_POSITION_ENGINE + 1] = Engine.DEFAULT_SYNTH;
 
       initTts();
     }
@@ -747,6 +760,10 @@ public class TextToSpeechBeta extends TextToSpeech {
           extra = params.get(Engine.KEY_PARAM_UTTERANCE_ID);
           if (extra != null) {
             mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID + 1] = extra;
+          }
+          extra = params.get(Engine.KEY_PARAM_ENGINE);
+          if (extra != null) {
+            mCachedParams[Engine.PARAM_POSITION_ENGINE + 1] = extra;
           }
         }
         result = mITts.speak(mPackageName, text, queueMode, mCachedParams);
@@ -1272,6 +1289,10 @@ public class TextToSpeechBeta extends TextToSpeech {
           String extra = params.get(Engine.KEY_PARAM_UTTERANCE_ID);
           if (extra != null) {
             mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID + 1] = extra;
+          }
+          extra = params.get(Engine.KEY_PARAM_ENGINE);
+          if (extra != null) {
+            mCachedParams[Engine.PARAM_POSITION_ENGINE + 1] = extra;
           }
         }
         if (mITts.synthesizeToFile(mPackageName, text, mCachedParams, filename)) {
