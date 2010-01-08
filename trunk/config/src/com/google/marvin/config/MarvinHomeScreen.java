@@ -16,7 +16,7 @@
 package com.google.marvin.config;
 
 import com.google.tts.ConfigurationManager;
-import com.google.tts.TTS;
+import com.google.tts.TextToSpeechBeta;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -39,6 +39,12 @@ public class MarvinHomeScreen extends Activity {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     String packageName = "com.android.launcher";
     String className = "com.android.launcher.Launcher";
+    // There are two possible launchers - use the one that exists on the device
+    // com.android.launcher (most devices) and com.android.launcher2 (Nexus-1)
+    if (!Utils.applicationInstalled(this, packageName)){
+        packageName = "com.android.launcher2";
+        className = "com.android.launcher2.Launcher";
+    }
     if (prefs.getBoolean("use_shell", false)
         && Utils.applicationInstalled(this, "com.google.marvin.shell")
         && ttsChecksAllPassed() ) {
@@ -46,12 +52,14 @@ public class MarvinHomeScreen extends Activity {
       className = "com.google.marvin.shell.MarvinShell";
     }
     Intent homeIntent = Utils.getAppStartIntent(this, packageName, className);
+        
     startActivity(homeIntent);
     finish();
   }
   
   
   private boolean ttsChecksAllPassed(){
-    return TTS.isInstalled(this) && ConfigurationManager.allFilesExist();
+    //return TTS.isInstalled(this) && ConfigurationManager.allFilesExist();
+    return ConfigurationManager.allFilesExist();
   }
 }

@@ -1,7 +1,7 @@
 package com.google.marvin.config;
 
 import com.google.tts.ConfigurationManager;
-import com.google.tts.TTS;
+import com.google.tts.TextToSpeechBeta;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -38,13 +38,13 @@ public class CoreComponentsCheckActivity extends Activity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == ttsCheckCode) {
-      if (TTS.isInstalled(this)) {
+      //if (TTS.isInstalled(this)) {
         if (checkShell(this)) {
           startConfig();
         }
-      } else {
-        displayMissingComponentError("Text-To-Speech Library");
-      }
+     // } else {
+     //   displayMissingComponentError("Text-To-Speech Library");
+     // }
     } else if (requestCode == shellCheckCode) {
       if (shellInstalled()) {
         startConfig();
@@ -58,10 +58,10 @@ public class CoreComponentsCheckActivity extends Activity {
 
   /** Checks to make sure that all the requirements for the TTS are there */
   private boolean checkTtsRequirements(Activity activity) {
-    if (!TTS.isInstalled(activity)) {
-      activity.startActivityForResult(Utils.getMarketIntent(ttsPackageName), ttsCheckCode);
-      return false;
-    }
+   // if (!TTS.isInstalled(activity)) {
+   //   activity.startActivityForResult(Utils.getMarketIntent(ttsPackageName), ttsCheckCode);
+  //    return false;
+  //  }
     if (!ConfigurationManager.allFilesExist()) {
       Intent intent =
           Utils.getAppStartIntent(this, ttsPackageName, "com.google.tts.ConfigurationManager");
