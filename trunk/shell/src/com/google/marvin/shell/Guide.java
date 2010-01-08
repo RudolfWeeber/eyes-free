@@ -4,6 +4,7 @@ import com.google.marvin.shell.StreetLocator.StreetLocatorListener;
 import com.google.tts.TTSEarcon;
 
 import android.content.Context;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -28,8 +29,7 @@ public class Guide implements Runnable, StreetLocatorListener {
           if (heading.length() > 1) {
             parent.tts.speak(heading, 0, null);
           }
-          parent.tts.speak("Unable to determine location at this time. Please try again later.", 1,
-              null);
+          parent.tts.speak("Location not found.", 1, null);
           self.shutdown();
         }
         giveUpTimerThread = null;
@@ -102,6 +102,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     }
 
     public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+        /*
       if (arg1 != LocationProvider.AVAILABLE) {
         unregisterLocationServices();
         gpsLoc = null;
@@ -111,9 +112,16 @@ public class Guide implements Runnable, StreetLocatorListener {
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
             networkLocationListener);
       }
+      */
     }
   };
 
+  // This is a fix for the Droid - the status listener must be set or GPS will not work right.
+  GpsStatus.Listener dummyGpsStatusListener = new GpsStatus.Listener(){
+      @Override
+      public void onGpsStatusChanged(int event) {          
+      }        
+  };
 
   private long networkLocLastUpdateTime = -1;
 
@@ -150,6 +158,8 @@ public class Guide implements Runnable, StreetLocatorListener {
     parent = parentActivity;
     locator = new StreetLocator(this);
     compass = new Compass(parent);
+    LocationManager locationManager =
+        (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
   }
 
   public void speakLocation(boolean useGps) {
@@ -197,7 +207,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     currentLocation = null;
     boolean usingGPS = false;
     if ((networkLoc == null) && (gpsLoc == null)) {
-      parent.tts.speak("Unable to determine location. Please retry later.", 0, null);
+      parent.tts.speak("Location not found.", 1, null);
       self.shutdown();
       return;
     } else if ((networkLoc == null) && (gpsLoc != null)) {
@@ -228,7 +238,7 @@ public class Guide implements Runnable, StreetLocatorListener {
       locator.getAddressAsync(currentLocation.getLatitude(), currentLocation.getLongitude());
     } else {
       if (currentIntersection.length() + currentAddress.length() < 1) {
-        parent.tts.speak("Unable to determine location. Please try again later.", 1, null);
+        parent.tts.speak("Location not found.", 1, null);
         self.shutdown();
       }
     }
@@ -240,6 +250,7 @@ public class Guide implements Runnable, StreetLocatorListener {
         (LocationManager) parent.getSystemService(Context.LOCATION_SERVICE);
     locationManager.removeUpdates(networkLocationListener);
     locationManager.removeUpdates(gpsLocationListener);
+    locationManager.removeGpsStatusListener(dummyGpsStatusListener);
     gpsFixCount = 0;
     networkFixCount = 0;
   }
