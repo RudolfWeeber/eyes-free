@@ -374,6 +374,13 @@ public class SoftKeyboard extends InputMethodService implements
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
+            // Use search as an alternate enter key
+            case KeyEvent.KEYCODE_SEARCH:
+                this.sendDefaultEditorAction(false);
+                return true;
+                
+            // TODO: Use menu as a "safer" way to dismiss the IME
+                            
             case KeyEvent.KEYCODE_BACK:
                 // The InputMethodService already takes care of the back
                 // key for us, to dismiss the input method if it is shown.
@@ -737,14 +744,14 @@ public class SoftKeyboard extends InputMethodService implements
     public void  onUpdateExtractingVisibility  (EditorInfo ei){
         ei.imeOptions = EditorInfo.TYPE_NULL;
 //        ei.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
-    //    setExtractViewShown(false);
+        setExtractViewShown(false);
     }
     
     @Override
     public void onUpdateExtractingViews(EditorInfo ei){
         ei.imeOptions = EditorInfo.TYPE_NULL;
         // EditorInfo.IME_FLAG_NO_EXTRACT_UI;
-        //    setExtractViewShown(false);
+            setExtractViewShown(false);
     }
     
     @Override
@@ -758,13 +765,6 @@ public class SoftKeyboard extends InputMethodService implements
     public void onWindowHidden(){
         this.stopSelf();
     }
-    
-    @Override
-    public boolean  onTrackballEvent  (MotionEvent event){
-        this.stopSelf();
-        return false;
-    }
-    
-    
+
 
 }
