@@ -26,11 +26,13 @@ import android.text.method.MetaKeyKeyListener;
 import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -733,13 +735,36 @@ public class SoftKeyboard extends InputMethodService implements
     
     @Override
     public void  onUpdateExtractingVisibility  (EditorInfo ei){
-        setExtractViewShown(false);
-        ei.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+        ei.imeOptions = EditorInfo.TYPE_NULL;
+//        ei.imeOptions = EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+    //    setExtractViewShown(false);
+    }
+    
+    @Override
+    public void onUpdateExtractingViews(EditorInfo ei){
+        ei.imeOptions = EditorInfo.TYPE_NULL;
+        // EditorInfo.IME_FLAG_NO_EXTRACT_UI;
+        //    setExtractViewShown(false);
+    }
+    
+    @Override
+    public View onCreateExtractTextView  (){
+        View extractTextView = super.onCreateExtractTextView();
+        extractTextView.setVisibility(View.GONE);
+        return extractTextView;
     }
     
     @Override
     public void onWindowHidden(){
         this.stopSelf();
     }
+    
+    @Override
+    public boolean  onTrackballEvent  (MotionEvent event){
+        this.stopSelf();
+        return false;
+    }
+    
+    
 
 }

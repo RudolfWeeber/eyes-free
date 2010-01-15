@@ -12,6 +12,7 @@ import android.inputmethodservice.KeyboardView;
 import android.os.Vibrator;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,6 +43,11 @@ public class CircleGestureView extends KeyboardView {
     private static final int Y = 4;
 
     private static final int NONE = 5;
+
+    private static final int NUM0 = 6;
+    
+    private static final int NUM1 = 7;
+    
 
     private final double left = 0;
 
@@ -258,6 +264,52 @@ public class CircleGestureView extends KeyboardView {
                     default:
                         return "";
                 }
+            case NUM0:
+                switch (value) {
+                    case 1:
+                        return "0";
+                    case 2:
+                        return "1";
+                    case 3:
+                        return "2"; // return "MODE";
+                    case 4:
+                        return "3";
+                    case 5:
+                        return "";
+                    case 6:
+                        return "4";
+                    case 7:
+                        return "5";
+                    case 8:
+                        return "6";
+                    case 9:
+                        return "7";
+                    default:
+                        return "";
+                } 
+            case NUM1:
+                switch (value) {
+                    case 1:
+                        return "8";
+                    case 2:
+                        return "9";
+                    case 3:
+                        return "<-";
+                    case 4:
+                        return "*";
+                    case 5:
+                        return "";
+                    case 6:
+                        return "@";
+                    case 7:
+                        return "&";
+                    case 8:
+                        return "#";
+                    case 9:
+                        return "$";
+                    default:
+                        return "%";
+                }                 
             default:
                 return "";
         }
@@ -515,5 +567,31 @@ public class CircleGestureView extends KeyboardView {
         // Off by more than the threshold, so it doesn't count
         return -1;
     }
+    
+    
+    private int keyboardMode = 0;
+    
+    private void toggleKeyboardMode(){
+        if (keyboardMode == 0){
+            keyboardMode = 1;
+            parent.mTts.speak("Numbers", 2, null);
+        } else {
+            keyboardMode = 0;
+            parent.mTts.speak("Alpha", 2, null);
+        }
+    }
+    
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+      String input = "";
+      switch (keyCode) {        
+        case KeyEvent.KEYCODE_MENU:
+          toggleKeyboardMode();
+          return true;
+      }
+      return false;
+    }
+    
 
 }
