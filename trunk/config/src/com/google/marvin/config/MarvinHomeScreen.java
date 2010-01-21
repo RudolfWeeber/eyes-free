@@ -21,8 +21,12 @@ import com.google.tts.TextToSpeechBeta;
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 
 /**
  * Alternate home screen that dispatches to the actual shell home screen
@@ -37,14 +41,28 @@ public class MarvinHomeScreen extends Activity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    
     String packageName = "com.android.launcher";
     String className = "com.android.launcher.Launcher";
-    // There are two possible launchers - use the one that exists on the device
-    // com.android.launcher (most devices) and com.android.launcher2 (Nexus-1)
-    if (!Utils.applicationInstalled(this, packageName)){
-        packageName = "com.android.launcher2";
-        className = "com.android.launcher2.Launcher";
+    
+    Intent intent = new Intent("android.intent.action.MAIN");
+    intent.addCategory("android.intent.category.HOME");
+
+    ResolveInfo[] homeAppsArray = new ResolveInfo[0];
+    PackageManager pm = getPackageManager();
+    homeAppsArray = pm.queryIntentActivities(intent, 0).toArray(homeAppsArray);
+
+    for (int i = 0; i < homeAppsArray.length; i++) {
+        ActivityInfo aInfo = homeAppsArray[i].activityInfo;
+        if (!aInfo.packageName.equals("com.google.marvin.config")){
+            packageName = aInfo.packageName;
+            className = aInfo.name;
+            break;
+        }
     }
+    
+    
+    
     if (prefs.getBoolean("use_shell", false)
         && Utils.applicationInstalled(this, "com.google.marvin.shell")
         && ttsChecksAllPassed() ) {
