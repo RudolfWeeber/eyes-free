@@ -28,6 +28,7 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -142,6 +143,8 @@ public class SoftKeyboard extends InputMethodService implements
         mInputView = (KeyboardView) getLayoutInflater().inflate(R.layout.input, null);
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setKeyboard(mQwertyKeyboard);
+        //LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+        //mInputView.setLayoutParams(params);
         return mInputView;
     }
 
@@ -379,7 +382,10 @@ public class SoftKeyboard extends InputMethodService implements
                 this.sendDefaultEditorAction(false);
                 return true;
                 
-            // TODO: Use menu as a "safer" way to dismiss the IME
+            // TODO: Use menu as a "safer" way to dismiss the IME                            
+            case KeyEvent.KEYCODE_MENU:
+                Log.e("menu hit", "0");
+                return true;
                             
             case KeyEvent.KEYCODE_BACK:
                 // The InputMethodService already takes care of the back
@@ -756,9 +762,10 @@ public class SoftKeyboard extends InputMethodService implements
     
     @Override
     public View onCreateExtractTextView  (){
-        View extractTextView = super.onCreateExtractTextView();
-        extractTextView.setVisibility(View.GONE);
-        return extractTextView;
+        return null;
+        //View extractTextView = super.onCreateExtractTextView();
+        //extractTextView.setVisibility(View.GONE);
+        //return extractTextView;
     }
     
     @Override

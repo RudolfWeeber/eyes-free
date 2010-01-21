@@ -376,8 +376,8 @@ public class CircleGestureView extends KeyboardView {
         imeStatusPaint.setTextSize(20);
         Paint imeBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         imeBgPaint.setColor(Color.BLACK);
-        int fudgeFactor = 50; 
-        int startY = 386;
+        int fudgeFactor = 25; 
+        int startY = 470;
         if (parent.isLandscape()){
             fudgeFactor = 50; 
             startY = 270;
