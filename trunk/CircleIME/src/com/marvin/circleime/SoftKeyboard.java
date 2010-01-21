@@ -143,8 +143,6 @@ public class SoftKeyboard extends InputMethodService implements
         mInputView = (KeyboardView) getLayoutInflater().inflate(R.layout.input, null);
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setKeyboard(mQwertyKeyboard);
-        //LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
-        //mInputView.setLayoutParams(params);
         return mInputView;
     }
 
@@ -154,9 +152,7 @@ public class SoftKeyboard extends InputMethodService implements
      */
     @Override
     public View onCreateCandidatesView() {
-        mCandidateView = new CandidateView(this);
-        mCandidateView.setService(this);
-        return mCandidateView;
+        return null;
     }
 
     /**

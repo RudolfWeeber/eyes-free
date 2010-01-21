@@ -373,18 +373,15 @@ public class CircleGestureView extends KeyboardView {
         // Draw an indication that the IME is up - doing a border for now
         Paint imeStatusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         imeStatusPaint.setColor(Color.RED);
-        imeStatusPaint.setTextSize(20);
+        imeStatusPaint.setTextSize(14);
+        imeStatusPaint.setTypeface(Typeface.DEFAULT_BOLD);
         Paint imeBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         imeBgPaint.setColor(Color.BLACK);
-        int fudgeFactor = 25; 
-        int startY = 470;
-        if (parent.isLandscape()){
-            fudgeFactor = 50; 
-            startY = 270;
-        }
+        int fudgeFactor = 15; 
+        int startY = 0;
 
         canvas.drawRect(0, startY, getWidth(), startY + fudgeFactor, imeBgPaint);
-        canvas.drawText("IME Active", 10, startY + 20, imeStatusPaint);
+        canvas.drawText("IME Active", 10, startY + 13, imeStatusPaint);
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.WHITE);
