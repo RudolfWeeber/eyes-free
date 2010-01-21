@@ -50,6 +50,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -135,11 +136,14 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private BroadcastReceiver screenStateOnReceiver;
 
     private ProximitySensor proximitySensor;
+    
+    private AudioManager audioManager;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         appLauncherActive = false;
         pm = getPackageManager();
         ttsStartedSuccessfully = false;
@@ -214,6 +218,13 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     public void onWindowFocusChanged(boolean hasFocus) {
         isFocused = hasFocus;
         if (hasFocus) {
+            if (widgets != null){
+                int callState = widgets.getCallState();
+                if (callState == TelephonyManager.CALL_STATE_OFFHOOK){
+                    audioManager.setSpeakerphoneOn(true);                    
+                }
+            }
+            
             if (gestureOverlay != null) {
                 if (isReturningFromTask) {
                     isReturningFromTask = false;
@@ -759,9 +770,9 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     public void onProximityChanged(float proximity) {
         if (proximity == 0) {
             if (tts != null) {
-                tts.speak(" ", 2, null);
+                tts.speak("", 2, null);
             }
         }
     }
-
+    
 }

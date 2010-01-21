@@ -39,6 +39,8 @@ public class AuditoryWidgets {
     private boolean useGpsThisTime;
 
     private int voiceSignalStrength;
+    
+    private int callState = TelephonyManager.CALL_STATE_IDLE;
 
     public AuditoryWidgets(TextToSpeechBeta theTts, MarvinShell shell) {
         tts = theTts;
@@ -74,7 +76,12 @@ public class AuditoryWidgets {
                     voiceSignalStrength = 1;
                 }
             }
-        }, PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE);
+            
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber){
+                callState = state;
+            }
+        }, PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE | PhoneStateListener.LISTEN_CALL_STATE);
     }
 
     public void shutdown() {
@@ -249,6 +256,10 @@ public class AuditoryWidgets {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         parent.startActivityForResult(intent, MarvinShell.voiceRecoCode);
+    }
+    
+    public int getCallState(){
+        return callState;
     }
 
 }
