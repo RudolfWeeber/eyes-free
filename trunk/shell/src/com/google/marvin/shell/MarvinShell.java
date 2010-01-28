@@ -229,10 +229,9 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                 if (isReturningFromTask) {
                     isReturningFromTask = false;
                     resetTTS();
-                } else {
+                } 
                     menus = new ArrayList<Menu>();
                     loadHomeMenu();
-                }
             }
             announceCurrentMenu();
         }
