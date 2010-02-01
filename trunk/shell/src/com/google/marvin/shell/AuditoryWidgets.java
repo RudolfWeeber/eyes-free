@@ -215,24 +215,6 @@ public class AuditoryWidgets {
         String timeStr = Integer.toString(hour) + " " + Integer.toString(minutes) + " " + ampm;
 
         tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), 0, null);
-
-        /*
-         * tts.speak(Integer.toString(hour), 0, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.speak(Integer.toString(minutes), 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null); tts.speak(ampm, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null); tts.speak(monthStr, 1,
-         * null); tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.playEarcon(TTSEarcon.SILENCE, 1, null);
-         * tts.speak(Integer.toString(day), 1, null);
-         */
     }
 
     public void callVoiceMail() {

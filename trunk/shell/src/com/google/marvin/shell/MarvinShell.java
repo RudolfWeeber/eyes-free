@@ -16,13 +16,11 @@
 
 package com.google.marvin.shell;
 
-import com.google.marvin.shell.Param;
 import com.google.marvin.shell.ProximitySensor.ProximityChangeListener;
 import com.google.marvin.utils.UserTask;
 import com.google.marvin.widget.TouchGestureControlOverlay;
 import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
 import com.google.marvin.widget.TouchGestureControlOverlay.GestureListener;
-import com.google.tts.ConfigurationManager;
 import com.google.tts.TextToSpeechBeta;
 import com.google.tts.TTSEarcon;
 import java.io.BufferedReader;
@@ -50,7 +48,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -444,7 +441,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             (new Thread(new ActionMonitor())).start();
@@ -494,7 +490,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
                 } else {
                     // Write file and retry
-                    class createShortcutsFileThread implements Runnable {
+                    class CreateShortcutsFileThread implements Runnable {
                         public void run() {
                             try {
                                 String efDirStr = "/sdcard/eyesfree/";
@@ -522,7 +518,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                             }
                         }
                     }
-                    new Thread(new createShortcutsFileThread()).start();
+                    new Thread(new CreateShortcutsFileThread()).start();
                 }
             }
         }
@@ -571,7 +567,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                                     finish();
                                 }
                             } catch (InterruptedException e) {
-                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
                         }
@@ -579,12 +574,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     new Thread(new QuitCommandWatcher()).start();
                 }
                 return true;
-                /*
-                 * case KeyEvent.KEYCODE_SEARCH: AppEntry aLynx = new
-                 * AppEntry(null, "com.google.marvin.alynx",
-                 * "com.google.marvin.alynx.ALynx", "", null, null);
-                 * launchApplication(aLynx); return true;
-                 */
         }
         return false;
     }
@@ -644,7 +633,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             if (resultCode == Activity.RESULT_OK) {
                 ArrayList<String> results = data.getExtras().getStringArrayList(
                         RecognizerIntent.EXTRA_RESULTS);
-                new Thread(new oneVoxSpeaker(results.get(0))).start();
+                new Thread(new OneVoxSpeaker(results.get(0))).start();
             }
         }
     }
@@ -718,14 +707,14 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                 appList.add(entry);
             }
 
-            class appEntrySorter implements Comparator {
+            class AppEntrySorter implements Comparator {
                 public int compare(Object arg0, Object arg1) {
                     String title0 = ((AppEntry) arg0).getTitle().toLowerCase();
                     String title1 = ((AppEntry) arg1).getTitle().toLowerCase();
                     return title0.compareTo(title1);
                 }
             }
-            Collections.sort(appList, new appEntrySorter());
+            Collections.sort(appList, new AppEntrySorter());
 
             // now that app tree is built, pass along to adapter
             return appList;
@@ -737,10 +726,10 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         }
     }
 
-    class oneVoxSpeaker implements Runnable {
+    class OneVoxSpeaker implements Runnable {
         String q;
 
-        public oneVoxSpeaker(String query) {
+        public OneVoxSpeaker(String query) {
             q = query;
         }
 
