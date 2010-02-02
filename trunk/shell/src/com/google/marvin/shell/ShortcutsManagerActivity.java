@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.marvin.utils.UserTask;
 import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
@@ -197,6 +198,7 @@ public class ShortcutsManagerActivity extends Activity {
             // Bring up dialog box
             final Button button = (Button) view;
             AlertDialog.Builder builder = new AlertDialog.Builder(self);
+
             builder.setAdapter(aa, new DialogInterface.OnClickListener() {
               @Override
               public void onClick(DialogInterface arg0, int index) {
@@ -220,7 +222,10 @@ public class ShortcutsManagerActivity extends Activity {
                 }
               }
             });
-            builder.create().show();
+            
+            AlertDialog dialog = builder.create();
+            dialog.getListView().setTextFilterEnabled(true);
+            dialog.show();
           }
         }
       });
