@@ -21,19 +21,9 @@ import com.google.marvin.utils.UserTask;
 import com.google.marvin.widget.TouchGestureControlOverlay;
 import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
 import com.google.marvin.widget.TouchGestureControlOverlay.GestureListener;
-import com.google.tts.TextToSpeechBeta;
 import com.google.tts.TTSEarcon;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import com.google.tts.TextToSpeechBeta;
+import com.google.tts.TextToSpeechBeta.OnInitListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -60,6 +50,18 @@ import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * Shell An alternate home screen that is designed to be friendly for eyes-free
  * use
@@ -69,7 +71,7 @@ import android.widget.TextView;
 public class MarvinShell extends Activity implements GestureListener, ProximityChangeListener {
     private static final int ttsCheckCode = 42;
 
-    public static final int voiceRecoCode = 777;
+    public static final int VOICE_RECO_CODE = 777;
 
     private PackageManager pm;
 
@@ -133,7 +135,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private BroadcastReceiver screenStateOnReceiver;
 
     private ProximitySensor proximitySensor;
-    
+
     private AudioManager audioManager;
 
     /** Called when the activity is first created. */
@@ -215,20 +217,20 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     public void onWindowFocusChanged(boolean hasFocus) {
         isFocused = hasFocus;
         if (hasFocus) {
-            if (widgets != null){
+            if (widgets != null) {
                 int callState = widgets.getCallState();
-                if (callState == TelephonyManager.CALL_STATE_OFFHOOK){
-                    audioManager.setSpeakerphoneOn(true);                    
+                if (callState == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    audioManager.setSpeakerphoneOn(true);
                 }
             }
-            
+
             if (gestureOverlay != null) {
                 if (isReturningFromTask) {
                     isReturningFromTask = false;
                     resetTTS();
-                } 
-                    menus = new ArrayList<Menu>();
-                    loadHomeMenu();
+                }
+                menus = new ArrayList<Menu>();
+                loadHomeMenu();
             }
             announceCurrentMenu();
         }
@@ -245,32 +247,12 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         String pkgName = MarvinShell.class.getPackage().getName();
         tts.addSpeech(getString(R.string.marvin_intro_snd_), pkgName, R.raw.marvin_intro);
         tts.addSpeech(getString(R.string.home), pkgName, R.raw.home);
-        tts
-                .addSpeech(getString(R.string.press_menu_to_unlock), pkgName,
+        tts.addSpeech(getString(R.string.press_menu_to_unlock), pkgName,
                         R.raw.press_menu_to_unlock);
         tts.addSpeech(getString(R.string.compass), pkgName, R.raw.compass);
         tts.addSpeech(getString(R.string.battery), pkgName, R.raw.battery);
         tts.addSpeech(getString(R.string.application_not_installed), pkgName,
                 R.raw.application_not_installed);
-        tts.addSpeech(getString(R.string.january), pkgName, R.raw.january);
-        tts.addSpeech(getString(R.string.february), pkgName, R.raw.february);
-        tts.addSpeech(getString(R.string.march), pkgName, R.raw.march);
-        tts.addSpeech(getString(R.string.april), pkgName, R.raw.april);
-        tts.addSpeech(getString(R.string.may), pkgName, R.raw.may);
-        tts.addSpeech(getString(R.string.june), pkgName, R.raw.june);
-        tts.addSpeech(getString(R.string.july), pkgName, R.raw.july);
-        tts.addSpeech(getString(R.string.august), pkgName, R.raw.august);
-        tts.addSpeech(getString(R.string.september), pkgName, R.raw.september);
-        tts.addSpeech(getString(R.string.october), pkgName, R.raw.october);
-        tts.addSpeech(getString(R.string.november), pkgName, R.raw.november);
-        tts.addSpeech(getString(R.string.december), pkgName, R.raw.december);
-        tts.addSpeech(getString(R.string.midnight), pkgName, R.raw.midnight);
-        tts.addSpeech(getString(R.string.noon), pkgName, R.raw.noon);
-        tts.addSpeech(getString(R.string.am), pkgName, R.raw.am);
-        tts.addSpeech(getString(R.string.pm), pkgName, R.raw.pm);
-        tts.addSpeech(getString(R.string.airplane_mode), pkgName, R.raw.airplane_mode);
-        tts.addSpeech(getString(R.string.enabled), pkgName, R.raw.enabled);
-        tts.addSpeech(getString(R.string.disabled), pkgName, R.raw.disabled);
         tts.addSpeech(getString(R.string.applications), pkgName, R.raw.applications);
         tts.addSpeech(getString(R.string.you_have_new_voicemail), pkgName,
                 R.raw.you_have_new_voicemail);
@@ -299,10 +281,9 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         tts.addSpeech(getString(R.string.bluetooth), pkgName, R.raw.bluetooth);
         tts.addSpeech(getString(R.string.location), pkgName, R.raw.location);
         tts.addSpeech(getString(R.string.shortcuts), pkgName, R.raw.shortcuts);
-        tts.addSpeech(getString(R.string.wifi), pkgName, R.raw.wifi);
     }
 
-    private TextToSpeechBeta.OnInitListener ttsInitListener = new TextToSpeechBeta.OnInitListener() {
+    private OnInitListener ttsInitListener = new OnInitListener() {
         public void onInit(int status, int version) {
             resetTTS();
             tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
@@ -490,6 +471,10 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
                 } else {
                     // Write file and retry
+                    /**
+                     * Class for asynchronously writing out the shortcuts.xml
+                     * file.
+                     */
                     class CreateShortcutsFileThread implements Runnable {
                         public void run() {
                             try {
@@ -629,7 +614,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             // displayTTSMissing();
             // }
         }
-        if (requestCode == voiceRecoCode) {
+        if (requestCode == VOICE_RECO_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 ArrayList<String> results = data.getExtras().getStringArrayList(
                         RecognizerIntent.EXTRA_RESULTS);
@@ -726,6 +711,10 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         }
     }
 
+    /**
+     * Class for asynchronously doing a search, scraping the one box, and
+     * speaking it.
+     */
     class OneVoxSpeaker implements Runnable {
         String q;
 
@@ -762,5 +751,5 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             }
         }
     }
-    
+
 }

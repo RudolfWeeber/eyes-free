@@ -1,5 +1,21 @@
-
+/*
+ * Copyright (C) 2010 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.google.marvin.shell;
+
+import com.google.tts.TextToSpeechBeta;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -13,15 +29,11 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.provider.Settings.SettingNotFoundException;
+import android.provider.Settings.System;
 import android.speech.RecognizerIntent;
 import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.telephony.ServiceState;
-import android.util.Log;
-import android.provider.Settings.System;
-
-import com.google.tts.TTS;
-import com.google.tts.TextToSpeechBeta;
+import android.telephony.TelephonyManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,6 +41,11 @@ import java.util.Calendar;
 // Most of the logic for determining strength levels is based on the code here:
 // http://android.git.kernel.org/?p=platform/frameworks/base.git;a=blob_plain;f=services/java/com/android/server/status/StatusBarPolicy.java
 
+/**
+ * Collection of one shot speech widgets for the home screen
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class AuditoryWidgets {
     private TextToSpeechBeta tts;
 
@@ -39,7 +56,7 @@ public class AuditoryWidgets {
     private boolean useGpsThisTime;
 
     private int voiceSignalStrength;
-    
+
     private int callState = TelephonyManager.CALL_STATE_IDLE;
 
     public AuditoryWidgets(TextToSpeechBeta theTts, MarvinShell shell) {
@@ -76,12 +93,13 @@ public class AuditoryWidgets {
                     voiceSignalStrength = 1;
                 }
             }
-            
+
             @Override
-            public void onCallStateChanged(int state, String incomingNumber){
+            public void onCallStateChanged(int state, String incomingNumber) {
                 callState = state;
             }
-        }, PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE | PhoneStateListener.LISTEN_CALL_STATE);
+        }, PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE
+                | PhoneStateListener.LISTEN_CALL_STATE);
     }
 
     public void shutdown() {
@@ -119,11 +137,10 @@ public class AuditoryWidgets {
                     info = parent.getString(R.string.edge_data_network);
                 }
             } else if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                tts.speak(parent.getString(R.string.wifi), 1, null);
                 WifiManager wManager = (WifiManager) parent.getSystemService(Context.WIFI_SERVICE);
                 WifiInfo wInfo = wManager.getConnectionInfo();
                 int wifiSignalStrength = WifiManager.calculateSignalLevel(wInfo.getRssi(), 4);
-                info = wInfo.getSSID() + " " + wifiSignalStrength + " "
+                info = parent.getString(R.string.wifi) + wInfo.getSSID() + " " + wifiSignalStrength + " "
                         + parent.getString(R.string.bars);
             }
         }
@@ -237,10 +254,10 @@ public class AuditoryWidgets {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-        parent.startActivityForResult(intent, MarvinShell.voiceRecoCode);
+        parent.startActivityForResult(intent, MarvinShell.VOICE_RECO_CODE);
     }
-    
-    public int getCallState(){
+
+    public int getCallState() {
         return callState;
     }
 

@@ -67,9 +67,10 @@ public class ProximitySensor {
 
     /**
      * Constructor for ProximitySensor
-     *
+     * 
      * @param ctx The Context of the app using the proximity sensor
-     * @param proximityChangeListener Callback that will be invoked when a change is detected.
+     * @param proximityChangeListener Callback that will be invoked when a
+     *            change is detected.
      */
     public ProximitySensor(Context ctx, ProximityChangeListener proximityChangeListener) {
         callback = proximityChangeListener;
@@ -84,7 +85,7 @@ public class ProximitySensor {
 
     /**
      * Checks if something is close to the proximity sensor
-     *
+     * 
      * @return True if there is something close to the proximity sensor
      */
     public boolean isClose() {
@@ -92,7 +93,8 @@ public class ProximitySensor {
     }
 
     /**
-     * The app using the ProximitySensor must shut it down when it is done using it.
+     * The app using the ProximitySensor must shut it down when it is done using
+     * it.
      */
     public void shutdown() {
         if (pSensor != null) {
