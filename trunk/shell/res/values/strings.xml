@@ -33,10 +33,11 @@
     <string name="button7_prompt">Application for button 7</string>      
     <string name="button8_prompt">Application for button 8</string>
     <string name="button9_prompt">Application for button 9</string>
-    <string name="confirm">Confirm</string>      
+    <string name="confirm">Confirm</string>     
+    <string name="time">Time</string>    
+    <string name="search">Search</string>     
     
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>
     <string name="shortcutsManager">Shortcuts Manager for Eyes-Free Shell</string>
-    <string name="time_and_date">Time</string>    
 </resources>

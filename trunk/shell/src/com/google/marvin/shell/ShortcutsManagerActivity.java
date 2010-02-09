@@ -224,16 +224,22 @@ public class ShortcutsManagerActivity extends Activity {
                                 // Update stored selection
                                 selectedIndices[buttonIndex] = index;
 
-                                if (index == 0) {
+                                String name = aa.getItem(index).toString();
+                                if ((index == 0) && name.equals("(none)")) {
                                     // Remove item from menu
                                     menu.remove(indexToGestureMapping.get(buttonIndex));
                                 } else {
                                     // Create item and add to menu
-                                    // We use "index-1" because the dialog has
-                                    // its first choice as "none"
-                                    MenuItem menuItem = new MenuItem(aa.getItem(index).toString(),
-                                            "LAUNCH", "", launchableApps.get(index - 1));
-                                    menu.put(indexToGestureMapping.get(buttonIndex), menuItem);
+                                    // Do a search to accomodate for the index changing because of users typing and filtering down the list.
+                                    MenuItem menuItem = null;
+                                    for (int i=0; i<launchableApps.size(); i++){
+                                        if (launchableApps.get(i).getTitle().equals(name)){
+                                            menuItem = new MenuItem(name, "LAUNCH", "", launchableApps.get(i));
+                                        }
+                                    }
+                                    if (menuItem != null){
+                                        menu.put(indexToGestureMapping.get(buttonIndex), menuItem);
+                                    }
                                 }
                             }
                         });

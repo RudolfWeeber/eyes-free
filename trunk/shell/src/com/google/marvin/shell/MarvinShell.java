@@ -164,9 +164,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             gestureOverlay = new TouchGestureControlOverlay(self, self);
             mainFrameLayout.addView(gestureOverlay);
 
-            currentGesture = null;
-            (new Thread(new ActionMonitor())).start();
-
             new ProcessTask().execute();
         }
     }
@@ -174,9 +171,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private void initMarvinShell() {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        // am.setStreamVolume(AudioManager.STREAM_MUSIC,
-        // am.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
-        // 0);
+
         self = this;
         gestureOverlay = null;
         tts = new TextToSpeechBeta(this, ttsInitListener);
@@ -281,6 +276,8 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         tts.addSpeech(getString(R.string.bluetooth), pkgName, R.raw.bluetooth);
         tts.addSpeech(getString(R.string.location), pkgName, R.raw.location);
         tts.addSpeech(getString(R.string.shortcuts), pkgName, R.raw.shortcuts);
+        tts.addSpeech(getString(R.string.time), pkgName, R.raw.time);
+        tts.addSpeech(getString(R.string.search), pkgName, R.raw.search);
     }
 
     private OnInitListener ttsInitListener = new OnInitListener() {
@@ -319,7 +316,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
         items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.signal), "WIDGET",
                 "CONNECTIVITY", null));
-        items.put(Gesture.UP, new MenuItem(getString(R.string.time_and_date), "WIDGET",
+        items.put(Gesture.UP, new MenuItem(getString(R.string.time), "WIDGET",
                 "TIME_DATE", null));
         items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY",
                 null));
@@ -336,7 +333,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "WIDGET",
                 "APPLAUNCHER", null));
 
-        items.put(Gesture.DOWNRIGHT, new MenuItem("Search", "WIDGET", "VOICE_SEARCH", null));
+        items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.search), "WIDGET", "VOICE_SEARCH", null));
 
         menus.add(new Menu(getString(R.string.home), ""));
         mainText.setText(menus.get(menus.size() - 1).title);
@@ -401,60 +398,27 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         }
     }
 
-    private class ActionMonitor implements Runnable {
-        public void run() {
-            if (((System.currentTimeMillis() - currentGestureTime) > 250)
-                    && (currentGesture != null) && (confirmedGesture == null)) {
-                confirmedGesture = currentGesture;
-                MenuItem item = items.get(confirmedGesture);
-                if (item != null) {
-                    String label = item.label;
-                    if (label.equals(getString(R.string.voicemail)) && messageWaiting) {
-                        tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
-                    } else {
-                        tts.speak(label, 0, null);
-                    }
-                } else {
-                    String titleText = menus.get(menus.size() - 1).title;
-                    tts.speak(titleText, 0, null);
-                }
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            (new Thread(new ActionMonitor())).start();
-        }
-    }
-
-    private Gesture currentGesture = Gesture.CENTER;
-
-    private long currentGestureTime = 0;
-
-    private Gesture confirmedGesture = null;
-
     public void onGestureChange(Gesture g) {
-        confirmedGesture = null;
-        currentGesture = g;
-        currentGestureTime = System.currentTimeMillis();
         MenuItem item = items.get(g);
         if (item != null) {
             String label = item.label;
             mainText.setText(label);
+            if (label.equals(getString(R.string.voicemail)) && messageWaiting) {
+                tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
+            } else {
+                tts.speak(label, 0, null);
+            }
         } else {
             String titleText = menus.get(menus.size() - 1).title;
             mainText.setText(titleText);
+            tts.speak(titleText, 0, null);
         }
         vibe.vibrate(VIBE_PATTERN, -1);
     }
 
+
     public void onGestureFinish(Gesture g) {
-        Gesture acceptedGesture = Gesture.CENTER;
-        if (confirmedGesture != null) {
-            acceptedGesture = confirmedGesture;
-        }
-        MenuItem item = items.get(acceptedGesture);
+        MenuItem item = items.get(g);
         if (item != null) {
             if (item.action.equals("LAUNCH")) {
                 launchApplication(item.appInfo);
@@ -511,10 +475,9 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     }
 
     public void onGestureStart(Gesture g) {
-        confirmedGesture = null;
-        currentGesture = g;
         vibe.vibrate(VIBE_PATTERN, -1);
     }
+    
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
