@@ -18,7 +18,10 @@ package com.google.android.marvin.talkback;
 
 import android.app.Notification;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+
+import java.util.List;
 
 /**
  * This class contains custom formatters used by TalkBack.
@@ -29,6 +32,13 @@ public final class CustomFormatters {
 
     private static final String SPACE = " ";
 
+    private static final String VALUE_PASSWORD_CHARACTER_TYPED = "@com.google.android.marvin.talkback:string/value_cpassword_character_typed";
+
+    /**
+     * Creates a new instance.
+     */
+    private CustomFormatters() { /* hide constructor */ }
+
     /**
      * Formatter that returns an utterance to announce text addition.
      */
@@ -36,10 +46,15 @@ public final class CustomFormatters {
 
         @Override
         public void format(AccessibilityEvent event, Utterance utterance) {
-            StringBuilder text = SpeechRule.getEventText(event);
-            int begIndex = event.getFromIndex();
-            int endIndex = begIndex + event.getAddedCount();
-            utterance.getText().append(text.subSequence(begIndex, endIndex));
+            if (event.isPassword()) {
+                String message = SpeechRule.getStringResource(VALUE_PASSWORD_CHARACTER_TYPED);
+                utterance.getText().append(message);
+            } else {
+                StringBuilder text = SpeechRule.getEventText(event);
+                int begIndex = event.getFromIndex();
+                int endIndex = begIndex + event.getAddedCount();
+                utterance.getText().append(text.subSequence(begIndex, endIndex));
+            }
         }
     }
 
@@ -48,17 +63,21 @@ public final class CustomFormatters {
      */
     public static final class RemovedTextFormatter implements Formatter {
 
-        private static final String TEXT_REMOVED = "@com.google.android.marvin.talkback:string/value_text_removed";
+        private static final String VALUE_TEXT_REMOVED = "@com.google.android.marvin.talkback:string/value_text_removed";
 
         @Override
         public void format(AccessibilityEvent event, Utterance utterance) {
-            CharSequence beforeText = event.getBeforeText();
-            int begIndex = event.getFromIndex();
-            int endIndex = begIndex + event.getRemovedCount();
-            StringBuilder utteranceText = utterance.getText();
-            utteranceText.append(beforeText.subSequence(begIndex, endIndex));
-            utteranceText.append(SPACE);
-            utteranceText.append(SpeechRule.getStringResource(TEXT_REMOVED));
+            if (event.isPassword()) {
+                utterance.getText().append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
+            } else {
+                CharSequence beforeText = event.getBeforeText();
+                int begIndex = event.getFromIndex();
+                int endIndex = begIndex + event.getRemovedCount();
+                StringBuilder utteranceText = utterance.getText();
+                utteranceText.append(beforeText.subSequence(begIndex, endIndex));
+                utteranceText.append(SPACE);
+                utteranceText.append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
+            }
         }
     }
 
@@ -67,25 +86,82 @@ public final class CustomFormatters {
      */
     public static final class ReplacedTextFormatter implements Formatter {
 
-        private static final String TEXT_REPLACED = "@com.google.android.marvin.talkback:string/template_text_replaced";
+        private static final String TEMPLATE_TEXT_REPLACED = "@com.google.android.marvin.talkback:string/temlate_text_replaced";
+
+        private static final String TEMPLATE_REPLACED_CHARACTERS = "@com.google.android.marvin.talkback:string/template_replaced_characters";
+
+        private static final String VALUE_TEXT_REMOVED = "@com.google.android.marvin.talkback:string/value_text_removed";
 
         @Override
         public void format(AccessibilityEvent event, Utterance utterance) {
             StringBuilder utteranceText = utterance.getText();
 
-            CharSequence removedText = event.getBeforeText();
-            int beforeBegIndex = event.getFromIndex();
-            int beforeEndIndex = beforeBegIndex + event.getRemovedCount();
-            utteranceText.append(removedText.subSequence(beforeBegIndex, beforeEndIndex));
+            if (event.isPassword()) {
+                String template = SpeechRule.getStringResource(TEMPLATE_REPLACED_CHARACTERS);
+                String populatedTemplate = String.format(template, event.getRemovedCount(), event
+                        .getAddedCount());
+                utteranceText.append(populatedTemplate);
+            } else {
+                String text = SpeechRule.getEventText(event).toString();
+                String beforeText = event.getBeforeText().toString();
 
-            utteranceText.append(SPACE);
-            utteranceText.append(SpeechRule.getStringResource(TEXT_REPLACED));
-            utteranceText.append(SPACE);
+                if (isTypedCharacter(text, beforeText)) {
+                    // This happens if the application replaces the entire text
+                    // while the user is typing. This logic leads to missing
+                    // the very rare case of the user replacing text with the
+                    // same text plus a single character but handles the much
+                    // more frequent case mentioned above.
+                    int begIndex = text.length() - 1;
+                    int endIndex = begIndex + 1;
+                    utteranceText.append(text.subSequence(begIndex, endIndex));
+                } else if (isRemovedCharacter(text, beforeText)) {
+                    // This happens if the application replaces the entire text
+                    // while the user is typing. This logic leads to missing
+                    // the very rare case of the user replacing text with the
+                    // same text minus a single character but handles the much
+                    // more frequent case mentioned above.
+                    int begIndex = beforeText.length() - 1;
+                    int endIndex = begIndex + 1;
+                    utteranceText.append(beforeText.subSequence(begIndex, endIndex));
+                    utteranceText.append(SPACE);
+                    utteranceText.append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
+                } else {
+                    int beforeBegIndex = event.getFromIndex();
+                    int beforeEndIndex = beforeBegIndex + event.getRemovedCount();
+                    CharSequence removedText = beforeText.subSequence(beforeBegIndex,
+                            beforeEndIndex);
 
-            StringBuilder addedText = SpeechRule.getEventText(event);
-            int addedBegIndex = event.getFromIndex();
-            int addedEndIndex = addedBegIndex + event.getAddedCount();
-            utteranceText.append(addedText.subSequence(addedBegIndex, addedEndIndex));
+                    int addedBegIndex = event.getFromIndex();
+                    int addedEndIndex = addedBegIndex + event.getAddedCount();
+                    CharSequence addedText = text.subSequence(addedBegIndex, addedEndIndex);
+
+                    String template = SpeechRule.getStringResource(TEMPLATE_TEXT_REPLACED);
+                    String populatedTemplate = String.format(template, removedText, addedText);
+                    utteranceText.append(populatedTemplate);
+                }
+            }
+        }
+
+        /**
+         * Returns if a character is added to the event <code>text</code> given
+         * the event <code>beforeText</code>.
+         */
+        private boolean isTypedCharacter(String text, String beforeText) {
+            if (text.length() != beforeText.length() + 1) {
+                return false;
+            }
+            return text.startsWith(beforeText);
+        }
+
+        /**
+         * Returns if a character is removed from the event <code>text</code>
+         * given the event <code>beforeText</code>.
+         */
+        private boolean isRemovedCharacter(String text, String beforeText) {
+            if (text.length() + 1 != beforeText.length()) {
+                return false;
+            }
+            return beforeText.startsWith(text);
         }
     }
 
@@ -94,16 +170,27 @@ public final class CustomFormatters {
      */
     public static final class NotificationFormatter implements Formatter {
 
+        // tag used for logging messages from this class
+        private static final String LOG_TAG = "CustomFormatters.NotificationFormatter";
+
         // NOT INCLUDED in android.jar (NOT accessible via API)
+        // Please keep track of the icon number for various releases
+        // and add a comment for which resource file contains the icon
+
+        // com.android.mms.R#stat_notify_sms
+        private static final int ICON_SMS_DONUT = 0x7F020036;
+
+        private static final int ICON_SMS_ECLAIR = 0x7f02003d;
 
         // com.android.mms.R#stat_notify_sms_failed
-        private static final int ICON_SMS = 0x7F020036;
+        private static final int ICON_SMS_FAILED_DONUT = 0x7f020035;
 
-        // com.android.mms.R#stat_notify_sms_failed
-        private static final int ICON_SMS_FAILED = 0x7f020035;
+        private static final int ICON_SMS_FAILED_ECLAIR = 0x7f02003e;
 
-        // com.android.mms.R#stat_notify_sms_failed
-        private static final int ICON_PLAY = 0x7F020042;
+        // com.android.music.R#stat_notify_musicplayer
+        private static final int ICON_PLAY_DONUT = 0x7F020042;
+
+        private static final int ICON_PLAY_ECLAIR = 0x7f02004e;
 
         // com.android.mms.R#stat_notify_sms_failed
         private static final int ICON_USB = 0x01080239;
@@ -145,24 +232,21 @@ public final class CustomFormatters {
             // call is in progress which the user is already aware of
             int icon = ((Notification) parcelable).icon;
             if (icon == ICON_PHONE_CALL) {
-                return;  // ignore this notification
+                return; // ignore this notification
             }
 
             StringBuilder utteranceText = utterance.getText();
 
-            // use the event text if such otherwise use the icon
-            if (!event.getText().isEmpty()) {
-                utteranceText.append(SpeechRule.getEventText(event));
-                return;
-            }
-
+            StringBuilder eventText = SpeechRule.getEventText(event);
             NotificationType type = null;
 
             switch (icon) {
-                case ICON_SMS:
+                case ICON_SMS_DONUT:
+                case ICON_SMS_ECLAIR:
                     type = NotificationType.TEXT_MESSAGE;
                     break;
-                case ICON_SMS_FAILED:
+                case ICON_SMS_FAILED_DONUT:
+                case ICON_SMS_FAILED_ECLAIR:
                     type = NotificationType.TEXT_MESSAGE_FAILED;
                     break;
                 case ICON_USB:
@@ -198,19 +282,95 @@ public final class CustomFormatters {
                 case ICON_VOICEMAIL:
                     type = NotificationType.VOICEMAIL;
                     break;
-                case ICON_PLAY:
+                case ICON_PLAY_DONUT:
+                case ICON_PLAY_ECLAIR:
                     type = NotificationType.PLAY;
                     break;
                 default:
-                    type = NotificationType.STATUS_NOTIFICATION;
+                    Log.w(LOG_TAG, "Unknown notification " + icon);
             }
 
-            CharSequence typeText = TalkBackService.asContext().getResources().getString(
-                    type.getValue());
+            if (type != null) {
+                CharSequence typeText = TalkBackService.asContext().getResources().getString(
+                        type.getValue());
+                utteranceText.append(typeText);
+                utteranceText.append(SPACE);
+            }
+            utteranceText.append(eventText);
+        }
+    }
 
-            utteranceText.append(SpeechRule.getEventText(event));
+    /**
+     * Formatter that returns an utterance to announce the incoming call screen.
+     */
+    public static final class InCallScreenFormatter implements Formatter {
+
+        // Indices of the text elements for a in-call-screen event
+        private static final int INDEX_UPPER_TITLE = 1;
+
+        private static final int INDEX_PHOTO = 2;
+
+        private static final int INDEX_NAME = 4;
+
+        private static final int INDEX_LABEL = 6;
+
+        private static final int INDEX_SOCIAL_STATUS = 7;
+
+        @Override
+        public void format(AccessibilityEvent event, Utterance utterance) {
+            List<CharSequence> eventText = event.getText();
+            StringBuilder utteranceText = utterance.getText();
+
+            // guard against old version of the phone application
+            if (eventText.size() == 1) {
+                utteranceText.append(eventText.get(0));
+                return;
+            }
+
+            CharSequence title = eventText.get(INDEX_UPPER_TITLE);
+            if (title != null) {
+                utteranceText.append(title);
+                utteranceText.append(SPACE);
+            }
+
+            CharSequence name = eventText.get(INDEX_NAME);
+            if (name == null) {
+                return;
+            }
+
+            utteranceText.append(name);
             utteranceText.append(SPACE);
-            utteranceText.append(typeText);
+
+            if (!isPhoneNumber(name.toString())) {
+                CharSequence label = eventText.get(INDEX_LABEL);
+                if (label != null) {
+                    utteranceText.append(label);
+                    utteranceText.append(SPACE);
+                }
+                CharSequence photo = eventText.get(INDEX_PHOTO);
+                if (photo != null) {
+                    utteranceText.append(photo);
+                    utteranceText.append(SPACE);
+                }
+                CharSequence socialStatus = eventText.get(INDEX_SOCIAL_STATUS);
+                if (socialStatus != null) {
+                    utteranceText.append(socialStatus);
+                    utteranceText.append(SPACE);
+                }
+            }
+        }
+
+        /**
+         * Returns if a <code>value</code> is a phone number.
+         */
+        private boolean isPhoneNumber(String value) {
+            String valueNoDeshes = value.replaceAll("-", "");
+            try {
+                Long.parseLong(valueNoDeshes);
+                return true;
+            } catch (IllegalArgumentException iae) {
+                return false;
+            }
         }
     }
 }

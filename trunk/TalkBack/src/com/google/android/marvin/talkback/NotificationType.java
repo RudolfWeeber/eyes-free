@@ -38,8 +38,7 @@ public enum NotificationType implements Parcelable {
     SYNC(R.string.notification_status_sync),
     SYNC_NOANIM(R.string.notification_type_status_sync_noanim),
     VOICEMAIL(R.string.notification_type_status_voicemail),
-    PLAY(R.string.notification_status_play),
-    STATUS_NOTIFICATION(R.string.notification_type_status_notification);
+    PLAY(R.string.notification_status_play);
 
     private int mValue;
 

@@ -2,20 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.marvin.talkback"
     android:sharedUserId="com.google.android.marvin.feedback"    
-    android:versionCode="5"
-    android:versionName="2.0.0">
+    android:versionCode="6"
+    android:versionName="2.1.0">
 
     <uses-sdk android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <!-- Allows third party applications to send Intent broadcast commands to TalkBack. -->
-    <permission android:name="android.permission.TALKBACK_AS_NOTIFICATION_STATE"
-        android:protectionLevel="dangerous"
-        android:label="@string/permlab_sendIntentBroadcastCommandsToTalkBack"
-        android:description="@string/permdesc_sendIntentBroadcastCommandsToTalkBack" />
+    <permission android:name="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK"
+            android:protectionLevel="dangerous"
+            android:label="@string/permlab_sendIntentBroadcastCommandsToTalkBack"
+            android:description="@string/permdesc_sendIntentBroadcastCommandsToTalkBack" />
 
     <application android:label="@string/talkback_setup_title" android:icon="@drawable/icon" android:process="com.google.android.marvin.feedback">
+
+        <receiver android:name=".TalkBackService$CommandInterfaceBroadcastReceiver"
+                android:permission="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK">
+            <intent-filter>
+                <action android:name="com.google.android.marvin.talkback.ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND"/>
+                <action android:name="com.google.android.marvin.talkback.ACTION_QUERY_TALKBACK_ENABLED_COMMAND"/>
+            </intent-filter>
+        </receiver>
 
         <service android:name=".TalkBackService">
              <intent-filter>

@@ -122,6 +122,10 @@ public class SpeechRule {
      */
     private static Context sContext;
 
+    // this is need as a workaround for the adding of CompoundButton state by the framework
+    private static String sValueChecked;
+    private static String sValueNotChecked;
+
     /**
      *  Mapping from event type name to its type.
      */
@@ -435,6 +439,8 @@ public class SpeechRule {
 
         if (document != null) {
             sContext = context;
+            sValueChecked = sContext.getString(R.string.value_checked);
+            sValueNotChecked = sContext.getString(R.string.value_not_checked);
 
             NodeList children = document.getDocumentElement().getChildNodes();
             for (int i = 0, count = children.getLength(); i < count; i++) {
@@ -534,12 +540,37 @@ public class SpeechRule {
      */
     static StringBuilder getEventText(AccessibilityEvent event) {
         StringBuilder aggregator = new StringBuilder();
-        for (CharSequence text : event.getText()) {
-            aggregator.append(text);
-            aggregator.append(SPACE);
+        List<CharSequence> eventText = event.getText();
+
+        // here we have a special case since the framework is adding
+        // the string for the state of a CompoundButton
+        int stateStringIndex = -1;
+        for (int i = 0, count = eventText.size(); i < count; i++) {
+            CharSequence next = eventText.get(i);
+            if (sValueChecked.equals(next) || sValueNotChecked.equals(next)) {
+                stateStringIndex = i;
+                break;
+            }
         }
+
+        for (int i = 0, count = eventText.size(); i < count; i++) {
+            if (i == 1 && stateStringIndex > -1) {
+                aggregator.append(eventText.get(stateStringIndex));
+                aggregator.append(SPACE);
+            }
+            if (i != stateStringIndex) {
+                aggregator.append(eventText.get(i));
+                aggregator.append(SPACE);
+            }
+        }
+
         if (aggregator.length() > 0) {
             aggregator.deleteCharAt(aggregator.length() - 1);
+        } else { // use content description if no text
+            CharSequence contentDescription = event.getContentDescription();
+            if (contentDescription != null) {
+              aggregator.append(contentDescription);
+            }
         }
         return aggregator;
     }

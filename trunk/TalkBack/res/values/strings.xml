@@ -42,9 +42,9 @@
 
     <!-- TEMPLATES -->
 
-    <string name="template_compound_button_selected">%1$s selected</string>
+    <string name="template_compound_button_checked">%1$s checked</string>
 
-    <string name="template_compound_button_not_selected">%1$s not selected</string>
+    <string name="template_compound_button_not_checked">%1$s not checked</string>
 
     <string name="template_announce_value">%1$s</string>
 
@@ -52,11 +52,11 @@
 
     <string name="template_search_box">Search box. %1$s</string>
 
-    <string name="template_clicked">%1$s clicked</string>
-
     <string name="template_alert_dialog_template">Alert  %1$s</string>
 
-    <string name="template_text_replaced">replaced with</string>
+    <string name="temlate_text_replaced">%1$s replaced with %2$s</string>
+
+    <string name="template_replaced_characters">%1$s characters replaced with %2$s characters</string>
 
     <!-- VALUES -->
 
@@ -75,6 +75,16 @@
     <string name="value_text_removed">deleted</string>
 
     <string name="value_notification_summary">Notification summary</string>
+
+    <string name="value_cpassword_character_typed">.</string>
+
+    <string name="value_checked">checked</string>
+
+    <string name="value_not_checked">not checked</string>
+
+    <string name="value_clicked">clicked</string>
+
+    <string name="value_screen_locked">Screen locked</string>
 
     <!-- PERMISSIONS -->
 
