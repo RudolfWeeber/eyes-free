@@ -46,6 +46,7 @@ import android.speech.RecognizerIntent;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -130,6 +131,8 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
     private boolean messageWaiting;
 
+    private int currentCallState;
+    
     public String voiceMailNumber = "";
 
     private BroadcastReceiver screenStateOnReceiver;
@@ -179,6 +182,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         messageWaiting = false;
         menus = new ArrayList<Menu>();
         isReturningFromTask = false;
+        currentCallState = TelephonyManager.CALL_STATE_IDLE;
 
         // Watch for voicemails
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -187,12 +191,23 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             public void onMessageWaitingIndicatorChanged(boolean mwi) {
                 messageWaiting = mwi;
             }
-        }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR);
+            
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber){
+                currentCallState = state;
+            }
+        }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR | PhoneStateListener.LISTEN_CALL_STATE);
         voiceMailNumber = PhoneNumberUtils.extractNetworkPortion(tm.getVoiceMailNumber());
 
         screenStateOnReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.e("currentCallState", currentCallState + "");
+                // If the phone is ringing or the user is talking,
+                // don't try do anything else.
+                if (currentCallState != TelephonyManager.CALL_STATE_IDLE){
+                    return;
+                }
                 if (!isFocused && (tts != null)) {
                     tts.speak(getString(R.string.press_menu_to_unlock), 0, null);
                 }

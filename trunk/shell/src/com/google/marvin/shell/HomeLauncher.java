@@ -16,17 +16,11 @@
 
 package com.google.marvin.shell;
 
-import com.google.tts.ConfigurationManager;
-import com.google.tts.TextToSpeechBeta;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
