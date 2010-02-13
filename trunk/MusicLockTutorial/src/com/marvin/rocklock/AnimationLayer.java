@@ -33,7 +33,7 @@ public class AnimationLayer extends View {
         int w = canvas.getWidth();
         int h = canvas.getHeight();
         int cx = w / 2;
-        int cy = h / 2;
+        int cy = (h * 2) / 3;
 
         paint.setColor(Color.WHITE);
         

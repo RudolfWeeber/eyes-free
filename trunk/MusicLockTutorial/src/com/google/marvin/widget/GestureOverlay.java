@@ -52,7 +52,7 @@ public class GestureOverlay extends View {
   private double downX;
   private double downY;
   private int currentGesture;
-  private int radiusThreshold = 25;
+  private int radiusThreshold = 30;
 
   public GestureOverlay(Context context, GestureListener callback) {
     super(context);

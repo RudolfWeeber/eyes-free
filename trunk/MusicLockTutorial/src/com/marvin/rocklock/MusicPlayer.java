@@ -30,6 +30,13 @@ public class MusicPlayer {
         }
     }
 
+    public boolean isPlaying(){
+        if (player != null) {
+            return player.isPlaying();
+        }
+        return false;
+    }
+    
     public void stop() {
         if (player != null) {
             player.release();
@@ -45,38 +52,38 @@ public class MusicPlayer {
     }
 
     public void nextTrack() {
-        picker.nextTrack();
+        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void prevTrack() {
-        picker.prevTrack();
+        picker.goPrevTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void nextAlbum() {
-        picker.nextAlbum();
-        picker.nextTrack();
+        picker.goNextAlbum();
+        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void prevAlbum() {
-        picker.prevAlbum();
-        picker.nextTrack();
+        picker.goPrevAlbum();
+        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void nextArtist() {
-        picker.nextArtist();
-        picker.nextAlbum();
-        picker.nextTrack();
+        picker.goNextArtist();
+        picker.goNextAlbum();
+        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void prevArtist() {
-        picker.prevArtist();
-        picker.nextAlbum();
-        picker.nextTrack();
+        picker.goPrevArtist();
+        picker.goNextAlbum();
+        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
@@ -91,6 +98,34 @@ public class MusicPlayer {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    
+    public String getNextArtistName(){
+        return picker.peekNextArtist();
+    }
+    
+    public String getPrevArtistName(){
+        return picker.peekPrevArtist();
+    }
+    
+    public String getNextAlbumName(){
+        return picker.peekNextAlbum();
+    }
+    
+    public String getPrevAlbumName(){
+        return picker.peekPrevAlbum();
+    }
+    
+    public String getNextTrackName(){
+        return picker.peekNextTrack();
+    }
+    
+    public String getPrevTrackName(){
+        return picker.peekPrevTrack();
+    }
+
+    public String getCurrentSongInfo(){
+        return picker.getCurrentSongInfo();
     }
 
 }

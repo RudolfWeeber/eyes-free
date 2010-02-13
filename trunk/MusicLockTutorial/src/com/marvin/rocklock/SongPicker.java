@@ -1,6 +1,8 @@
+
 package com.marvin.rocklock;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -9,167 +11,186 @@ public class SongPicker {
     private class DirectoryFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
-            if (pathname.isDirectory()){
+            if (pathname.isDirectory()) {
                 return true;
             }
             return false;
-        }        
+        }
     }
 
-    private String currentArtist;
+    private class MP3Filter implements FileFilter {
+        @Override
+        public boolean accept(File pathname) {
+            if (pathname.isFile() && pathname.toString().endsWith(".mp3")) {
+                return true;
+            }
+            return false;
+        }
+    }
 
-    private String currentAlbum;
+    private String currentArtistFullPath;
 
-    private String currentTrack;
-    
+    private String currentAlbumFullPath;
+
+    private String currentTrackFullPath;
+
     public SongPicker() {
-        currentArtist = "";
-        currentAlbum = "";
-        currentTrack = "";
-        nextArtist();
-        nextAlbum();
-        nextTrack();
+        currentArtistFullPath = "";
+        currentAlbumFullPath = "";
+        currentTrackFullPath = "";
+        goNextArtist();
+        goNextAlbum();
+        goNextTrack();
     }
-    
-    public String nextArtist(){
+
+    private String filePathToName(final String filePath) {
+        String name = filePath;
+        int startIndex = name.lastIndexOf("/") + 1;
+        int endIndex = name.lastIndexOf(".");
+        if (endIndex > startIndex) {
+            return name.substring(startIndex, endIndex);
+        } else {
+            return name.substring(startIndex);
+        }
+    }
+
+    public String peekNextArtist() {
+        String artist = "";
         File musicDir = new File(Environment.getExternalStorageDirectory() + "/music");
         File[] artists = musicDir.listFiles(new DirectoryFilter());
         java.util.Arrays.sort(artists);
-        if (currentArtist.length() > 1){
+        if (currentArtistFullPath.length() > 1) {
             boolean moved = false;
-            for (int i=0; i<artists.length-1; i++){
-                if (currentArtist.equals(artists[i].getAbsolutePath())){
-                    currentArtist = artists[i+1].getAbsolutePath();
-                    moved = true;
-                    break;
+            for (int i = 0; i < artists.length - 1; i++) {
+                if (currentArtistFullPath.equals(artists[i].getAbsolutePath())) {
+                    return filePathToName(artists[i + 1].getAbsolutePath());
                 }
             }
-            if (moved == false){
-              currentArtist = artists[0].getAbsolutePath();
-            }
-        } else {
-            currentArtist = artists[0].getAbsolutePath();
         }
-        currentAlbum = "";
-        currentTrack = "";
-        return currentArtist.substring(currentArtist.lastIndexOf("/"));
+        return filePathToName(artists[0].getAbsolutePath());
     }
-    
-    public String prevArtist(){
+
+    public String peekPrevArtist() {
+        String artist = "";
         File musicDir = new File(Environment.getExternalStorageDirectory() + "/music");
         File[] artists = musicDir.listFiles(new DirectoryFilter());
         java.util.Arrays.sort(artists);
-        if (currentArtist.length() > 1){
+        if (currentArtistFullPath.length() > 1) {
             boolean moved = false;
-            for (int i=artists.length-1; i>0; i--){
-                if (currentArtist.equals(artists[i].getAbsolutePath())){
-                    currentArtist = artists[i-1].getAbsolutePath();
-                    moved = true;
-                    break;
+            for (int i = artists.length - 1; i > 0; i--) {
+                if (currentArtistFullPath.equals(artists[i].getAbsolutePath())) {
+                    return filePathToName(artists[i - 1].getAbsolutePath());
                 }
             }
-            if (moved == false){
-              currentArtist = artists[artists.length-1].getAbsolutePath();
-            }
-        } else {
-            currentArtist = artists[artists.length-1].getAbsolutePath();
         }
-        currentAlbum = "";
-        currentTrack = "";
-        return currentArtist.substring(currentArtist.lastIndexOf("/"));
+        return filePathToName(artists[artists.length - 1].getAbsolutePath());
     }
-    
-    public String nextAlbum(){
-        File artistDir = new File(currentArtist);
+
+    public String goNextArtist() {
+        File musicDir = new File(Environment.getExternalStorageDirectory() + "/music");
+        currentArtistFullPath = musicDir + "/" + peekNextArtist();
+        currentAlbumFullPath = "";
+        currentTrackFullPath = "";
+        return filePathToName(currentArtistFullPath);
+    }
+
+    public String goPrevArtist() {
+        File musicDir = new File(Environment.getExternalStorageDirectory() + "/music");
+        currentArtistFullPath = musicDir + "/" + peekPrevArtist();
+        currentAlbumFullPath = "";
+        currentTrackFullPath = "";
+        return filePathToName(currentArtistFullPath);
+    }
+
+    public String peekNextAlbum() {
+        File artistDir = new File(currentArtistFullPath);
         File[] albums = artistDir.listFiles(new DirectoryFilter());
         java.util.Arrays.sort(albums);
-        if (currentAlbum.length() > 1){
+        if (currentAlbumFullPath.length() > 1) {
             boolean moved = false;
-            for (int i=0; i<albums.length-1; i++){
-                if (currentAlbum.equals(albums[i].getAbsolutePath())){
-                    currentAlbum = albums[i+1].getAbsolutePath();
-                    moved = true;
-                    break;
+            for (int i = 0; i < albums.length - 1; i++) {
+                if (currentAlbumFullPath.equals(albums[i].getAbsolutePath())) {
+                    return filePathToName(albums[i + 1].getAbsolutePath());
                 }
             }
-            if (moved == false){
-                currentAlbum = albums[0].getAbsolutePath();
-            }
-        } else {
-            currentAlbum = albums[0].getAbsolutePath();
         }
-        currentTrack = "";
-        return currentAlbum.substring(currentAlbum.lastIndexOf("/"));
+        return filePathToName(albums[0].getAbsolutePath());
     }
-    
-    public String prevAlbum(){
-        File artistDir = new File(currentArtist);
+
+    public String goNextAlbum() {
+        currentAlbumFullPath = currentArtistFullPath + "/" + peekNextAlbum();
+        Log.e("debug", currentAlbumFullPath);
+        currentTrackFullPath = "";
+        return filePathToName(currentAlbumFullPath);
+    }
+
+    public String peekPrevAlbum() {
+        File artistDir = new File(currentArtistFullPath);
         File[] albums = artistDir.listFiles(new DirectoryFilter());
         java.util.Arrays.sort(albums);
-        if (currentAlbum.length() > 1){
+        if (currentAlbumFullPath.length() > 1) {
             boolean moved = false;
-            for (int i=albums.length-1; i>0; i--){
-                if (currentAlbum.equals(albums[i].getAbsolutePath())){
-                    currentAlbum = albums[i-1].getAbsolutePath();
-                    moved = true;
-                    break;
+            for (int i = albums.length - 1; i > 0; i--) {
+                if (currentAlbumFullPath.equals(albums[i].getAbsolutePath())) {
+                    return filePathToName(albums[i - 1].getAbsolutePath());
                 }
             }
-            if (moved == false){
-                currentAlbum = albums[albums.length-1].getAbsolutePath();
-            }
-        } else {
-            currentAlbum = albums[albums.length-1].getAbsolutePath();
         }
-        currentTrack = "";
-        return currentAlbum.substring(currentAlbum.lastIndexOf("/"));        
+        return filePathToName(albums[albums.length - 1].getAbsolutePath());
     }
-    
-    public String nextTrack(){
-        File trackDir = new File(currentAlbum);
-        File[] tracks = trackDir.listFiles();
+
+    public String goPrevAlbum() {
+        currentAlbumFullPath = currentArtistFullPath + "/" + peekPrevAlbum();
+        currentTrackFullPath = "";
+        return filePathToName(currentAlbumFullPath);
+    }
+
+    public String peekNextTrack() {
+        File trackDir = new File(currentAlbumFullPath);
+        File[] tracks = trackDir.listFiles(new MP3Filter());
         java.util.Arrays.sort(tracks);
-        if (currentTrack.length() > 1){
+        if (currentTrackFullPath.length() > 1) {
             boolean moved = false;
-            for (int i=0; i<tracks.length-1; i++){
-                if (currentTrack.equals(tracks[i].getAbsolutePath())){
-                    currentTrack = tracks[i+1].getAbsolutePath();
-                    moved = true;
-                    break;
+            for (int i = 0; i < tracks.length - 1; i++) {
+                if (currentTrackFullPath.equals(tracks[i].getAbsolutePath())) {
+                    return filePathToName(tracks[i + 1].getAbsolutePath());
                 }
             }
-            if (moved == false){
-                currentTrack = tracks[0].getAbsolutePath();
-            }
-        } else {
-            currentTrack = tracks[0].getAbsolutePath();
         }
-        return currentTrack.substring(currentTrack.lastIndexOf("/"), currentTrack.lastIndexOf("."));
+        return filePathToName(tracks[0].getAbsolutePath());
     }
-    
-    public String prevTrack(){
-        File trackDir = new File(currentAlbum);
-        File[] tracks = trackDir.listFiles();
+
+    public String goNextTrack() {
+        currentTrackFullPath = currentAlbumFullPath + "/" + peekNextTrack() + ".mp3";
+        return filePathToName(currentTrackFullPath);
+    }
+
+    public String peekPrevTrack() {
+        File trackDir = new File(currentAlbumFullPath);
+        File[] tracks = trackDir.listFiles(new MP3Filter());
         java.util.Arrays.sort(tracks);
-        if (currentTrack.length() > 1){
+        if (currentTrackFullPath.length() > 1) {
             boolean moved = false;
-            for (int i=tracks.length-1; i>0; i--){
-                if (currentTrack.equals(tracks[i].getAbsolutePath())){
-                    currentTrack = tracks[i-1].getAbsolutePath();
-                    moved = true;
-                    break;
+            for (int i = tracks.length - 1; i > 0; i--) {
+                if (currentTrackFullPath.equals(tracks[i].getAbsolutePath())) {
+                    return filePathToName(tracks[i - 1].getAbsolutePath());
                 }
             }
-            if (moved == false){
-                currentTrack = tracks[tracks.length-1].getAbsolutePath();
-            }
-        } else {
-            currentTrack = tracks[tracks.length-1].getAbsolutePath();
         }
-        return currentTrack.substring(currentTrack.lastIndexOf("/"), currentTrack.lastIndexOf("."));
+        return filePathToName(tracks[tracks.length - 1].getAbsolutePath());
     }
-    
-    public String getCurrentSongFile(){
-        return currentTrack;
+
+    public String goPrevTrack() {
+        currentTrackFullPath = currentAlbumFullPath + "/" + peekPrevTrack() + ".mp3";
+        return filePathToName(currentTrackFullPath);
+    }
+
+    public String getCurrentSongFile() {
+        return currentTrackFullPath;
+    }
+
+    public String getCurrentSongInfo() {
+        return filePathToName(currentArtistFullPath) + "\n" + filePathToName(currentAlbumFullPath)
+                + "\n" + filePathToName(currentTrackFullPath);
     }
 }

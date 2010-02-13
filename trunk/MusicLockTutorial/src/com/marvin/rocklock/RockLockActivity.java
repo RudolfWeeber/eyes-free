@@ -55,11 +55,12 @@ public class RockLockActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
+        // Need to use FLAG_TURN_SCREEN_ON to make sure that the status bar
+        // stays locked
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         setContentView(R.layout.main);
 
@@ -100,6 +101,42 @@ public class RockLockActivity extends Activity {
             public void onGestureChange(int g) {
                 vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(g);
+
+                switch (g) {
+                    case Gesture.UPLEFT:
+                        statusText.setText("Previous Artist");
+                        infoText.setText(mp.getPrevArtistName());
+                        break;
+                    case Gesture.UP:
+                        statusText.setText("Previous Album");
+                        infoText.setText(mp.getPrevAlbumName());
+                        break;
+                    case Gesture.UPRIGHT:
+                        statusText.setText("Next Artist");
+                        infoText.setText(mp.getNextArtistName());
+                        break;
+                    case Gesture.LEFT:
+                        statusText.setText("Previous Track");
+                        infoText.setText(mp.getPrevTrackName());
+                        break;
+                    case Gesture.CENTER:
+                        if (mp.isPlaying()) {
+                            statusText.setText("Pause");
+                            infoText.setText(mp.getCurrentSongInfo());
+                        } else {
+                            statusText.setText("Play");
+                            infoText.setText(mp.getCurrentSongInfo());
+                        }
+                        break;
+                    case Gesture.RIGHT:
+                        statusText.setText("Next Track");
+                        infoText.setText(mp.getNextTrackName());
+                        break;
+                    case Gesture.DOWN:
+                        statusText.setText("Next Album");
+                        infoText.setText(mp.getNextAlbumName());
+                        break;
+                }
             }
 
             @Override
@@ -129,7 +166,13 @@ public class RockLockActivity extends Activity {
                         mp.nextAlbum();
                         break;
                 }
-
+                if (mp.isPlaying()) {
+                    statusText.setText("PLAYING");
+                    infoText.setText(mp.getCurrentSongInfo());
+                } else {
+                    statusText.setText("ROCK LOCK");
+                    infoText.setText("The lock that rocks!");
+                }
             }
 
             @Override
@@ -155,7 +198,6 @@ public class RockLockActivity extends Activity {
         Log.e("onResume", "keyguard disabled");
     }
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
@@ -164,21 +206,6 @@ public class RockLockActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        int patternsetting = 1;
-//        try {
-//            patternsetting = android.provider.Settings.System.getInt(getContentResolver(),
-//                    android.provider.Settings.System.LOCK_PATTERN_ENABLED, 0);
-//        } finally {
-//            if (patternsetting == 1) {
-//                keyguard.reenableKeyguard();
-//                Log.e("onPause", "keyguard reenabled");
-//            }
-//        }
-//    }
 
     @Override
     public void onDestroy() {
