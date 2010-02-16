@@ -23,6 +23,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class RockLockActivity extends Activity {
     private static final long[] VIBE_PATTERN = {
             0, 10, 70, 80
@@ -40,16 +43,22 @@ public class RockLockActivity extends Activity {
 
     private MusicPlayer mp;
 
+    private boolean isSeeking = false;
+
+    private boolean seekingStopped = true;
+
     private GestureOverlay gestureOverlay;
 
     private AnimationLayer uiAnimation;
+
+    private TextView dateText;
 
     private TextView statusText;
 
     private TextView infoText;
 
     private Vibrator vibe;
-    
+
     private TextToSpeech tts;
 
     /** Called when the activity is first created. */
@@ -102,6 +111,7 @@ public class RockLockActivity extends Activity {
 
             @Override
             public void onGestureChange(int g) {
+                isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(g);
 
@@ -140,16 +150,29 @@ public class RockLockActivity extends Activity {
                         infoText.setText(mp.getNextTrackName());
                         tts.speak(mp.getNextTrackName(), 0, null);
                         break;
+                    case Gesture.DOWNLEFT:
+                        if (seekingStopped) {
+                            isSeeking = true;
+                            new Thread(new Seeker(-1)).start();
+                        }
+                        break;
                     case Gesture.DOWN:
                         statusText.setText("Next Album");
                         infoText.setText(mp.getNextAlbumName());
                         tts.speak(mp.getNextAlbumName(), 0, null);
+                        break;
+                    case Gesture.DOWNRIGHT:
+                        if (seekingStopped) {
+                            isSeeking = true;
+                            new Thread(new Seeker(1)).start();
+                        }
                         break;
                 }
             }
 
             @Override
             public void onGestureFinish(int g) {
+                isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(-1);
                 tts.stop();
@@ -176,17 +199,12 @@ public class RockLockActivity extends Activity {
                         mp.nextAlbum();
                         break;
                 }
-                if (mp.isPlaying()) {
-                    statusText.setText("PLAYING");
-                    infoText.setText(mp.getCurrentSongInfo());
-                } else {
-                    statusText.setText("ROCK LOCK");
-                    infoText.setText("The lock that rocks!");
-                }
+                updateUi();
             }
 
             @Override
             public void onGestureStart(int g) {
+                isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
             }
 
@@ -195,6 +213,7 @@ public class RockLockActivity extends Activity {
         contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
         contentFrame.addView(uiAnimation);
         View textLayer = this.getLayoutInflater().inflate(R.layout.textlayer, null);
+        dateText = (TextView) textLayer.findViewById(R.id.dateText);
         statusText = (TextView) textLayer.findViewById(R.id.statusText);
         infoText = (TextView) textLayer.findViewById(R.id.infoText);
         contentFrame.addView(textLayer);
@@ -206,6 +225,12 @@ public class RockLockActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        Calendar cal = Calendar.getInstance();
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");
+        String monthStr = monthFormat.format(cal.getTime());
+        int year = cal.get(Calendar.YEAR);
+        dateText.setText(monthStr + " " + Integer.toString(day) + ", " + year);
         keyguard.disableKeyguard();
         Log.e("onResume", "keyguard disabled");
     }
@@ -223,7 +248,44 @@ public class RockLockActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         mp.stop();
+        tts.shutdown();
         keyguardManager.exitKeyguardSecurely(null);
+    }
+    
+    public void updateUi(){
+        if (mp.isPlaying()) {
+            statusText.setText("PLAYING");
+            infoText.setText(mp.getCurrentSongInfo());
+        } else {
+            statusText.setText("ROCK LOCK");
+            infoText.setText("The lock that rocks!");
+        }
+    }
+
+    private class Seeker implements Runnable {
+        private int seekMode = 0;
+
+        public Seeker(int seekDirection) {
+            seekMode = seekDirection;
+        }
+
+        @Override
+        public void run() {
+            while (isSeeking) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                if (seekMode == 1) {
+                    mp.seekForward();
+                } else if (seekMode == -1) {
+                    mp.seekBackward();
+                }
+            }
+            seekingStopped = true;
+        }
     }
 
 }

@@ -3,9 +3,9 @@
   android:orientation="vertical" android:layout_width="fill_parent"
   android:layout_height="fill_parent">
 
-  <TextView android:layout_width="fill_parent"
+  <TextView android:id="@+id/dateText" android:layout_width="fill_parent"
     android:textStyle="bold" android:textSize="16dip"
-    android:layout_height="wrap_content" android:text="Friday - February 12, 2010" />
+    android:layout_height="wrap_content" android:text="" />
 
   <TextView android:layout_width="fill_parent"
     android:textStyle="bold" android:textSize="20dip" android:gravity="center"

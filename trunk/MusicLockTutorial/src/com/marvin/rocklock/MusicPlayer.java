@@ -3,6 +3,7 @@ package com.marvin.rocklock;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 
 public class MusicPlayer {
@@ -11,10 +12,10 @@ public class MusicPlayer {
 
     private SongPicker picker;
 
-    private Context parent;
+    private RockLockActivity parent;
 
     public MusicPlayer(Context ctx) {
-        parent = ctx;
+        parent = (RockLockActivity) ctx;
         picker = new SongPicker();
     }
 
@@ -40,6 +41,18 @@ public class MusicPlayer {
     public void stop() {
         if (player != null) {
             player.release();
+        }
+    }
+    
+    public void seekForward(){
+        if (player != null) {
+            player.seekTo(player.getCurrentPosition() + 3000);
+        }
+    }
+    
+    public void seekBackward(){
+        if (player != null) {
+            player.seekTo(player.getCurrentPosition() - 3000);
         }
     }
 
@@ -93,6 +106,13 @@ public class MusicPlayer {
                 player.release();
             }
             player = MediaPlayer.create(parent, Uri.parse(filename));
+            player.setOnCompletionListener(new OnCompletionListener(){
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    nextTrack();
+                    parent.updateUi();
+                }
+            });
             player.start();
         } catch (IllegalStateException e) {
             // TODO Auto-generated catch block
@@ -127,5 +147,4 @@ public class MusicPlayer {
     public String getCurrentSongInfo(){
         return picker.getCurrentSongInfo();
     }
-
 }
