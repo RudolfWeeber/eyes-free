@@ -11,6 +11,7 @@ import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -48,6 +49,8 @@ public class RockLockActivity extends Activity {
     private TextView infoText;
 
     private Vibrator vibe;
+    
+    private TextToSpeech tts;
 
     /** Called when the activity is first created. */
     @Override
@@ -74,9 +77,9 @@ public class RockLockActivity extends Activity {
         tm.listen(new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
-                // If the phone is ringing, immediately quit and let the default
-                // lock screen handle it.
-                if (state == 1) {
+                // If the phone is not idle, immediately quit and let the
+                // default lock screen handle it.
+                if (state != TelephonyManager.CALL_STATE_IDLE) {
                     finish();
                     return;
                 }
@@ -106,18 +109,22 @@ public class RockLockActivity extends Activity {
                     case Gesture.UPLEFT:
                         statusText.setText("Previous Artist");
                         infoText.setText(mp.getPrevArtistName());
+                        tts.speak(mp.getPrevArtistName(), 0, null);
                         break;
                     case Gesture.UP:
                         statusText.setText("Previous Album");
                         infoText.setText(mp.getPrevAlbumName());
+                        tts.speak(mp.getPrevAlbumName(), 0, null);
                         break;
                     case Gesture.UPRIGHT:
                         statusText.setText("Next Artist");
                         infoText.setText(mp.getNextArtistName());
+                        tts.speak(mp.getNextArtistName(), 0, null);
                         break;
                     case Gesture.LEFT:
                         statusText.setText("Previous Track");
                         infoText.setText(mp.getPrevTrackName());
+                        tts.speak(mp.getPrevTrackName(), 0, null);
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
@@ -131,10 +138,12 @@ public class RockLockActivity extends Activity {
                     case Gesture.RIGHT:
                         statusText.setText("Next Track");
                         infoText.setText(mp.getNextTrackName());
+                        tts.speak(mp.getNextTrackName(), 0, null);
                         break;
                     case Gesture.DOWN:
                         statusText.setText("Next Album");
                         infoText.setText(mp.getNextAlbumName());
+                        tts.speak(mp.getNextAlbumName(), 0, null);
                         break;
                 }
             }
@@ -143,6 +152,7 @@ public class RockLockActivity extends Activity {
             public void onGestureFinish(int g) {
                 vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(-1);
+                tts.stop();
                 switch (g) {
                     case Gesture.UPLEFT:
                         mp.prevArtist();
@@ -189,6 +199,8 @@ public class RockLockActivity extends Activity {
         infoText = (TextView) textLayer.findViewById(R.id.infoText);
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
+
+        tts = new TextToSpeech(this, null);
     }
 
     @Override
