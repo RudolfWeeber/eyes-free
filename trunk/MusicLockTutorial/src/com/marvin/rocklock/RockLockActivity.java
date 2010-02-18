@@ -8,7 +8,10 @@ import com.google.marvin.widget.GestureOverlay.GestureListener;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
@@ -32,6 +35,27 @@ public class RockLockActivity extends Activity {
     };
 
     private RockLockActivity self;
+
+    private boolean poked = false;
+
+    private BroadcastReceiver mediaButtonReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context ctx, Intent data) {
+            this.abortBroadcast();
+            KeyEvent event = data.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+            int keyCode = event.getKeyCode();
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                if ((keyCode == KeyEvent.KEYCODE_HEADSETHOOK)
+                        || (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)) {
+                    mp.togglePlayPause();
+                } else if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
+                    mp.nextTrack();
+                } else if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
+                    mp.prevTrack();
+                }
+            }
+        }
+    };
 
     private KeyguardManager keyguardManager;
 
@@ -66,6 +90,10 @@ public class RockLockActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        self = this;
+        keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
+        keyguard = keyguardManager.newKeyguardLock("RockLock");
+
         requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
         // Need to use FLAG_TURN_SCREEN_ON to make sure that the status bar
         // stays locked
@@ -73,14 +101,10 @@ public class RockLockActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                         | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-
+        
         setContentView(R.layout.main);
 
-        self = this;
         mp = new MusicPlayer(this);
-
-        keyguardManager = (KeyguardManager) this.getSystemService(Context.KEYGUARD_SERVICE);
-        keyguard = keyguardManager.newKeyguardLock("RockLock");
 
         final TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(new PhoneStateListener() {
@@ -102,6 +126,11 @@ public class RockLockActivity extends Activity {
                 finish();
             }
         });
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_MEDIA_BUTTON);
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        registerReceiver(mediaButtonReceiver, filter);
 
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -204,6 +233,7 @@ public class RockLockActivity extends Activity {
 
             @Override
             public void onGestureStart(int g) {
+                poked = true;
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
             }
@@ -225,6 +255,7 @@ public class RockLockActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
+        poked = false;
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DAY_OF_MONTH);
         SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM");
@@ -232,7 +263,13 @@ public class RockLockActivity extends Activity {
         int year = cal.get(Calendar.YEAR);
         dateText.setText(monthStr + " " + Integer.toString(day) + ", " + year);
         keyguard.disableKeyguard();
-        Log.e("onResume", "keyguard disabled");
+        new Thread(new PokeWatcher()).start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        keyguard.reenableKeyguard();
     }
 
     @Override
@@ -249,10 +286,11 @@ public class RockLockActivity extends Activity {
         super.onDestroy();
         mp.stop();
         tts.shutdown();
+        unregisterReceiver(mediaButtonReceiver);
         keyguardManager.exitKeyguardSecurely(null);
     }
-    
-    public void updateUi(){
+
+    public void updateUi() {
         if (mp.isPlaying()) {
             statusText.setText("PLAYING");
             infoText.setText(mp.getCurrentSongInfo());
@@ -288,4 +326,18 @@ public class RockLockActivity extends Activity {
         }
     }
 
+    private class PokeWatcher implements Runnable {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (!poked && (mp != null) && !mp.isPlaying()) {
+                keyguard.reenableKeyguard();
+                finish();
+            }
+        }
+    }
 }

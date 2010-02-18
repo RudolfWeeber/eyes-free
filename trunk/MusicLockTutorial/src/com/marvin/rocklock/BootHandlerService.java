@@ -9,7 +9,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 
-public class BootHandlerService extends Service {
+public class BootHandlerService extends Service {    
     private BroadcastReceiver screenwakeup = new BroadcastReceiver() {
 
         public static final String TAG = "screen wakeup";

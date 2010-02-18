@@ -119,7 +119,6 @@ public class SongPicker {
 
     public String goNextAlbum() {
         currentAlbumFullPath = currentArtistFullPath + "/" + peekNextAlbum();
-        Log.e("debug", currentAlbumFullPath);
         currentTrackFullPath = "";
         return filePathToName(currentAlbumFullPath);
     }
