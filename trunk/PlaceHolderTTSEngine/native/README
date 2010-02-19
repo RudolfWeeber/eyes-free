@@ -1,0 +1,30 @@
+This directory contains an example of how to define a TTS provider.
+
+This examples consists of two parts.
+The native code part, which resides in Application.mk and project/...,
+must be built with the Android NDK:
+
+   unzip android-ndk-1.6_r1.zip
+   cd android-ndk-1.6_r1
+
+   cd apps
+   ln -s ../../eyes-free/PlaceHolderTTSEngine PlaceHolderTTSEngine
+   cd ..
+
+   # Bug work-around: change "==" to "=" in line 119 of build/host-setup.sh
+   sed -i.bak 's/"$result" == "Pass"/"$result" = "Pass"/' build/host-setup.sh
+
+   ./build/host-setup.sh
+
+   make APP=PlaceHolderTTSEngine
+
+This will generate a file
+
+   project/libs/armeabi/libPlaceHolderTTSEngine.so
+
+which should be copied to
+
+   libs/armeabi/libttsplaceholder.so
+
+The Java part, which resides in AndroidManifest.xml and in src/...,
+must be built according to the instructions in ../README.
