@@ -20,7 +20,7 @@
       </intent-filter>
     </receiver>
 
-    <service android:name=".BootHandlerService">
+    <service android:name=".ScreenOnHandlerService">
     </service>
 
   </application>

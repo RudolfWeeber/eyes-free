@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (C) 2010 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.marvin.rocklock;
 
 import com.google.marvin.widget.GestureOverlay;
@@ -29,6 +43,18 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/**
+ * The main Rock Lock application that runs as an alternate lock screen which
+ * enables the user to use stroke gestures to play music.
+ * 
+ * If there is no lock pattern, Rock Lock will replace the lock screen entirely;
+ * dismissing Rock Lock will unlock the phone.
+ * 
+ * If there is a lock pattern, Rock Lock will put up the default pattern locked
+ * screen when the user dismisses Rock Lock.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
 
@@ -96,7 +122,7 @@ public class RockLockActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // Start the service in case it is not already running
-        startService(new Intent(this, BootHandlerService.class));
+        startService(new Intent(this, ScreenOnHandlerService.class));
 
         self = this;
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);

@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (C) 2010 Google Inc.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.marvin.rocklock;
 
 import android.app.Activity;
@@ -10,6 +24,15 @@ import android.preference.PreferenceManager;
 import java.io.File;
 import java.io.FileFilter;
 
+/**
+ * SongPicker implementation that uses the directory structure to organize the
+ * music instead of using the tags in the music files.
+ * 
+ * For music to be picked up, it has to be put in the /sdcard/RockLock/.music
+ * directory.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ */
 public class DirectoryStructuredSongPicker implements SongPicker {
     private static final String PREF_ARTIST = "DIR_ARTIST";
 
