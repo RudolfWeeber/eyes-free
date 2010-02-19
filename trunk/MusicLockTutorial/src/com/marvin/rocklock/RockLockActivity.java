@@ -17,7 +17,6 @@ import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -101,7 +100,7 @@ public class RockLockActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
                         | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-        
+
         setContentView(R.layout.main);
 
         mp = new MusicPlayer(this);
@@ -282,10 +281,10 @@ public class RockLockActivity extends Activity {
             mp.stop();
             int songPickerType = mp.cycleSongPicker();
             String songPicker = "";
-            if (songPickerType == mp.ROCKLOCK_PLAYLIST){
+            if (songPickerType == MusicPlayer.ROCKLOCK_PLAYLIST) {
                 songPicker = "Rock Lock Playlist";
             } else {
-                songPicker = "Tagged Music Playlist";                
+                songPicker = "Tagged Music Playlist";
             }
             statusText.setText("ROCK LOCK");
             infoText.setText(songPicker);

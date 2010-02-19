@@ -1,3 +1,4 @@
+
 package com.marvin.rocklock;
 
 import android.content.Context;
@@ -9,7 +10,9 @@ import android.view.View;
 
 public class AnimationLayer extends View {
     private int dir = 5;
+
     private Path arrow = new Path();
+
     private Paint paint = new Paint();
 
     public AnimationLayer(Context context) {
@@ -21,11 +24,11 @@ public class AnimationLayer extends View {
         arrow.close();
     }
 
-    public void setDirection(int direction){
+    public void setDirection(int direction) {
         dir = direction;
         invalidate();
     }
-    
+
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawColor(Color.BLACK);
@@ -36,9 +39,9 @@ public class AnimationLayer extends View {
         int cy = (h * 2) / 3;
 
         paint.setColor(Color.WHITE);
-        
+
         canvas.translate(cx, cy);
-        switch (dir){
+        switch (dir) {
             case 1:
                 canvas.rotate(-45);
                 break;
@@ -67,10 +70,10 @@ public class AnimationLayer extends View {
                 canvas.rotate(135);
                 break;
         }
-        
-        if ((dir >= 0) && (dir != 5)){
+
+        if ((dir >= 0) && (dir != 5)) {
             canvas.drawPath(arrow, paint);
         }
     }
-    
+
 }

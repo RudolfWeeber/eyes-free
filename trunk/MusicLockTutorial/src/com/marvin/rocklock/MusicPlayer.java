@@ -2,50 +2,74 @@
 package com.marvin.rocklock;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
 public class MusicPlayer {
+    private static final String PREF_PLAYLIST = "LAST_PLAYLIST";
+
     public static final int ROCKLOCK_PLAYLIST = 0;
+
     public static final int TAGGED_PLAYLIST = 1;
 
     private MediaPlayer player;
 
     private SongPicker picker;
+
     private DirectoryStructuredSongPicker dPicker;
+
     private TagStructuredSongPicker tPicker;
+
     private int songPickerType;
 
     private RockLockActivity parent;
 
+    private Editor editor;
+
     public MusicPlayer(Context ctx) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        editor = prefs.edit();
+
         parent = (RockLockActivity) ctx;
-        dPicker = new DirectoryStructuredSongPicker();
+        dPicker = new DirectoryStructuredSongPicker(parent);
         tPicker = new TagStructuredSongPicker(parent);
-        if (dPicker.peekNextAlbum().length() < 1){
-            picker = tPicker;
-            songPickerType = TAGGED_PLAYLIST;  
-        } else {
+
+        if (prefs.getInt(PREF_PLAYLIST, ROCKLOCK_PLAYLIST) == ROCKLOCK_PLAYLIST) {
             picker = dPicker;
-            songPickerType = ROCKLOCK_PLAYLIST;            
+            songPickerType = ROCKLOCK_PLAYLIST;
+        } else {
+            picker = tPicker;
+            songPickerType = TAGGED_PLAYLIST;
         }
-        
+
+        if (dPicker.peekNextAlbum().length() < 1) {
+            picker = tPicker;
+            songPickerType = TAGGED_PLAYLIST;
+            editor.putInt(PREF_PLAYLIST, TAGGED_PLAYLIST);
+            editor.commit();
+        }
+
     }
-    
-    public int cycleSongPicker(){
-        if (songPickerType == ROCKLOCK_PLAYLIST){
+
+    public int cycleSongPicker() {
+        if (songPickerType == ROCKLOCK_PLAYLIST) {
             picker = tPicker;
             songPickerType = TAGGED_PLAYLIST;
         } else {
-            picker = dPicker;  
-            songPickerType = ROCKLOCK_PLAYLIST;          
+            picker = dPicker;
+            songPickerType = ROCKLOCK_PLAYLIST;
         }
         // Don't use the directory based player if there is nothing there
-        if (dPicker.peekNextAlbum().length() < 1){
+        if (dPicker.peekNextAlbum().length() < 1) {
             picker = tPicker;
-            songPickerType = TAGGED_PLAYLIST;  
-        } 
+            songPickerType = TAGGED_PLAYLIST;
+        }
+        editor.putInt(PREF_PLAYLIST, songPickerType);
+        editor.commit();
         return songPickerType;
     }
 
@@ -61,27 +85,27 @@ public class MusicPlayer {
         }
     }
 
-    public boolean isPlaying(){
+    public boolean isPlaying() {
         if (player != null) {
             return player.isPlaying();
         }
         return false;
     }
-    
+
     public void stop() {
         if (player != null) {
             player.release();
             player = null;
         }
     }
-    
-    public void seekForward(){
+
+    public void seekForward() {
         if (player != null) {
             player.seekTo(player.getCurrentPosition() + 3000);
         }
     }
-    
-    public void seekBackward(){
+
+    public void seekBackward() {
         if (player != null) {
             player.seekTo(player.getCurrentPosition() - 3000);
         }
@@ -131,7 +155,7 @@ public class MusicPlayer {
                 player.release();
             }
             player = MediaPlayer.create(parent, Uri.parse(filename));
-            player.setOnCompletionListener(new OnCompletionListener(){
+            player.setOnCompletionListener(new OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     nextTrack();
@@ -144,32 +168,32 @@ public class MusicPlayer {
             e.printStackTrace();
         }
     }
-    
-    public String getNextArtistName(){
+
+    public String getNextArtistName() {
         return picker.peekNextArtist();
     }
-    
-    public String getPrevArtistName(){
+
+    public String getPrevArtistName() {
         return picker.peekPrevArtist();
     }
-    
-    public String getNextAlbumName(){
+
+    public String getNextAlbumName() {
         return picker.peekNextAlbum();
     }
-    
-    public String getPrevAlbumName(){
+
+    public String getPrevAlbumName() {
         return picker.peekPrevAlbum();
     }
-    
-    public String getNextTrackName(){
+
+    public String getNextTrackName() {
         return picker.peekNextTrack();
     }
-    
-    public String getPrevTrackName(){
+
+    public String getPrevTrackName() {
         return picker.peekPrevTrack();
     }
 
-    public String getCurrentSongInfo(){
+    public String getCurrentSongInfo() {
         return picker.getCurrentSongInfo();
     }
 }

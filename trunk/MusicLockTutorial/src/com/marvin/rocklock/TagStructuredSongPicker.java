@@ -2,44 +2,71 @@
 package com.marvin.rocklock;
 
 import android.app.Activity;
-import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
-import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
+import android.provider.MediaStore.Audio.AudioColumns;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileFilter;
-
 public class TagStructuredSongPicker implements SongPicker {
-    private static int ARTIST = 0;
+    private static final String PREF_ARTIST = "TAG_ARTIST";
 
-    private static int ALBUM = 1;
+    private static final String PREF_ALBUM = "TAG_ALBUM";
 
-    private static int TRACK = 2;
+    private static final String PREF_TRACK = "TAG_TRACK";
 
-    private static int FILEPATH = 3;
+    private static final int ARTIST = 0;
 
-    Cursor musicCursor;
+    private static final int ALBUM = 1;
 
-    String currentArtist = "";
+    private static final int TRACK = 2;
 
-    String currentAlbum = "";
+    private static final int FILEPATH = 3;
 
-    String currentTrack = "";
+    private Cursor musicCursor;
+
+    private String currentArtist = "";
+
+    private String currentAlbum = "";
+
+    private String currentTrack = "";
+
+    private Editor editor;
 
     public TagStructuredSongPicker(Activity parentActivity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        editor = prefs.edit();
+
         String[] proj = {
-                MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA
+                AudioColumns.ARTIST, AudioColumns.ALBUM, MediaColumns.TITLE, MediaColumns.DATA
         };
         musicCursor = parentActivity.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 proj, null, null, null);
 
+        if (!restoreFromPrefs(prefs)) {
+            musicCursor.moveToFirst();
+            currentArtist = musicCursor.getString(ARTIST);
+            currentAlbum = musicCursor.getString(ALBUM);
+            currentTrack = musicCursor.getString(TRACK);
+        }
+    }
+
+    private boolean restoreFromPrefs(SharedPreferences prefs) {
         musicCursor.moveToFirst();
-        currentArtist = musicCursor.getString(ARTIST);
-        currentAlbum = musicCursor.getString(ALBUM);
-        currentTrack = musicCursor.getString(TRACK);
+        currentArtist = prefs.getString(PREF_ARTIST, "");
+        currentAlbum = prefs.getString(PREF_ALBUM, "");
+        currentTrack = prefs.getString(PREF_TRACK, "");
+        while (musicCursor.moveToNext()) {
+            if (musicCursor.getString(ARTIST).equals(currentArtist)
+                    && musicCursor.getString(ALBUM).equals(currentAlbum)
+                    && musicCursor.getString(TRACK).equals(currentTrack)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String peekNextArtist() {
@@ -99,7 +126,7 @@ public class TagStructuredSongPicker implements SongPicker {
                 musicCursor.moveToPosition(initialPosition);
                 return artist;
             }
-           musicCursor.moveToPrevious();
+            musicCursor.moveToPrevious();
         }
         return musicCursor.getString(ARTIST);
     }
@@ -319,6 +346,13 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String getCurrentSongFile() {
+        currentArtist = musicCursor.getString(ARTIST);
+        currentAlbum = musicCursor.getString(ALBUM);
+        currentTrack = musicCursor.getString(TRACK);
+        editor.putString(PREF_ARTIST, currentArtist);
+        editor.putString(PREF_ALBUM, currentAlbum);
+        editor.putString(PREF_TRACK, currentTrack);
+        editor.commit();
         return musicCursor.getString(FILEPATH);
     }
 

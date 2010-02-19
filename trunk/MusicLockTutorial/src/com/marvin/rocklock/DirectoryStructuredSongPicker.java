@@ -1,15 +1,24 @@
 
 package com.marvin.rocklock;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Environment;
-import android.util.Log;
+import android.preference.PreferenceManager;
 
 import java.io.File;
 import java.io.FileFilter;
 
 public class DirectoryStructuredSongPicker implements SongPicker {
+    private static final String PREF_ARTIST = "DIR_ARTIST";
+
+    private static final String PREF_ALBUM = "DIR_ALBUM";
+
+    private static final String PREF_TRACK = "DIR_TRACK";
+
     private static final String baseDir = "/RockLock/.music";
-    
+
     private class DirectoryFilter implements FileFilter {
         @Override
         public boolean accept(File pathname) {
@@ -30,21 +39,38 @@ public class DirectoryStructuredSongPicker implements SongPicker {
         }
     }
 
+    private Editor editor;
+
     private String currentArtistFullPath;
 
     private String currentAlbumFullPath;
 
     private String currentTrackFullPath;
 
-    public DirectoryStructuredSongPicker() {
+    public DirectoryStructuredSongPicker(Activity parentActivity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        editor = prefs.edit();
         File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
-        if (!musicDir.exists()){
+        if (!musicDir.exists()) {
             musicDir.mkdirs();
         }
-        currentArtistFullPath = "";
-        currentAlbumFullPath = "";
-        currentTrackFullPath = "";
-        goNextArtist();
+        if (!restoreFromPrefs(prefs)) {
+            currentArtistFullPath = "";
+            currentAlbumFullPath = "";
+            currentTrackFullPath = "";
+            goNextArtist();
+        }
+    }
+
+    private boolean restoreFromPrefs(SharedPreferences prefs) {
+        currentArtistFullPath = prefs.getString(PREF_ARTIST, "");
+        currentAlbumFullPath = prefs.getString(PREF_ALBUM, "");
+        currentTrackFullPath = prefs.getString(PREF_TRACK, "");
+        if (new File(currentArtistFullPath).exists() && new File(currentAlbumFullPath).exists()
+                && new File(currentTrackFullPath).exists()) {
+            return true;
+        }
+        return false;
     }
 
     private String filePathToName(final String filePath) {
@@ -62,7 +88,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
         String artist = "";
         File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
         File[] artists = musicDir.listFiles(new DirectoryFilter());
-        if ((artists == null) || (artists.length == 0)){
+        if ((artists == null) || (artists.length == 0)) {
             return "";
         }
         java.util.Arrays.sort(artists);
@@ -81,9 +107,9 @@ public class DirectoryStructuredSongPicker implements SongPicker {
         String artist = "";
         File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
         File[] artists = musicDir.listFiles(new DirectoryFilter());
-        if ((artists == null) || (artists.length == 0)){
+        if ((artists == null) || (artists.length == 0)) {
             return "";
-        }        
+        }
         java.util.Arrays.sort(artists);
         if (currentArtistFullPath.length() > 1) {
             boolean moved = false;
@@ -119,7 +145,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     public String peekNextAlbum() {
         File artistDir = new File(currentArtistFullPath);
         File[] albums = artistDir.listFiles(new DirectoryFilter());
-        if ((albums == null) || (albums.length == 0)){
+        if ((albums == null) || (albums.length == 0)) {
             return "";
         }
         java.util.Arrays.sort(albums);
@@ -144,7 +170,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     public String peekPrevAlbum() {
         File artistDir = new File(currentArtistFullPath);
         File[] albums = artistDir.listFiles(new DirectoryFilter());
-        if ((albums == null) || (albums.length == 0)){
+        if ((albums == null) || (albums.length == 0)) {
             return "";
         }
         java.util.Arrays.sort(albums);
@@ -169,7 +195,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     public String peekNextTrack() {
         File trackDir = new File(currentAlbumFullPath);
         File[] tracks = trackDir.listFiles(new MP3Filter());
-        if ((tracks == null) || (tracks.length == 0)){
+        if ((tracks == null) || (tracks.length == 0)) {
             return "";
         }
         java.util.Arrays.sort(tracks);
@@ -192,7 +218,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     public String peekPrevTrack() {
         File trackDir = new File(currentAlbumFullPath);
         File[] tracks = trackDir.listFiles(new MP3Filter());
-        if ((tracks == null) || (tracks.length == 0)){
+        if ((tracks == null) || (tracks.length == 0)) {
             return "";
         }
         java.util.Arrays.sort(tracks);
@@ -213,6 +239,10 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     }
 
     public String getCurrentSongFile() {
+        editor.putString(PREF_ARTIST, currentArtistFullPath);
+        editor.putString(PREF_ALBUM, currentAlbumFullPath);
+        editor.putString(PREF_TRACK, currentTrackFullPath);
+        editor.commit();
         return currentTrackFullPath;
     }
 
