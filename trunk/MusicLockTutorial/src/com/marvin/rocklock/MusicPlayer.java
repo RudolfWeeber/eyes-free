@@ -23,8 +23,14 @@ public class MusicPlayer {
         parent = (RockLockActivity) ctx;
         dPicker = new DirectoryStructuredSongPicker();
         tPicker = new TagStructuredSongPicker(parent);
-        picker = dPicker;
-        songPickerType = 0;
+        if (dPicker.peekNextAlbum().length() < 1){
+            picker = tPicker;
+            songPickerType = TAGGED_PLAYLIST;  
+        } else {
+            picker = dPicker;
+            songPickerType = ROCKLOCK_PLAYLIST;            
+        }
+        
     }
     
     public int cycleSongPicker(){
@@ -35,6 +41,11 @@ public class MusicPlayer {
             picker = dPicker;  
             songPickerType = ROCKLOCK_PLAYLIST;          
         }
+        // Don't use the directory based player if there is nothing there
+        if (dPicker.peekNextAlbum().length() < 1){
+            picker = tPicker;
+            songPickerType = TAGGED_PLAYLIST;  
+        } 
         return songPickerType;
     }
 
@@ -96,27 +107,21 @@ public class MusicPlayer {
 
     public void nextAlbum() {
         picker.goNextAlbum();
-        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void prevAlbum() {
         picker.goPrevAlbum();
-        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void nextArtist() {
         picker.goNextArtist();
-        picker.goNextAlbum();
-        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void prevArtist() {
         picker.goPrevArtist();
-        picker.goNextAlbum();
-        picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
