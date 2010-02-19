@@ -7,16 +7,35 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 
 public class MusicPlayer {
+    public static final int ROCKLOCK_PLAYLIST = 0;
+    public static final int TAGGED_PLAYLIST = 1;
 
     private MediaPlayer player;
 
     private SongPicker picker;
+    private DirectoryStructuredSongPicker dPicker;
+    private TagStructuredSongPicker tPicker;
+    private int songPickerType;
 
     private RockLockActivity parent;
 
     public MusicPlayer(Context ctx) {
         parent = (RockLockActivity) ctx;
-        picker = new SongPicker();
+        dPicker = new DirectoryStructuredSongPicker();
+        tPicker = new TagStructuredSongPicker(parent);
+        picker = dPicker;
+        songPickerType = 0;
+    }
+    
+    public int cycleSongPicker(){
+        if (songPickerType == ROCKLOCK_PLAYLIST){
+            picker = tPicker;
+            songPickerType = TAGGED_PLAYLIST;
+        } else {
+            picker = dPicker;  
+            songPickerType = ROCKLOCK_PLAYLIST;          
+        }
+        return songPickerType;
     }
 
     public void togglePlayPause() {
@@ -41,6 +60,7 @@ public class MusicPlayer {
     public void stop() {
         if (player != null) {
             player.release();
+            player = null;
         }
     }
     

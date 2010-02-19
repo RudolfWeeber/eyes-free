@@ -278,6 +278,20 @@ public class RockLockActivity extends Activity {
             finish();
             return true;
         }
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            mp.stop();
+            int songPickerType = mp.cycleSongPicker();
+            String songPicker = "";
+            if (songPickerType == mp.ROCKLOCK_PLAYLIST){
+                songPicker = "Rock Lock Playlist";
+            } else {
+                songPicker = "Tagged Music Playlist";                
+            }
+            statusText.setText("ROCK LOCK");
+            infoText.setText(songPicker);
+            tts.speak(songPicker, 0, null);
+            return true;
+        }
         return super.onKeyDown(keyCode, event);
     }
 
