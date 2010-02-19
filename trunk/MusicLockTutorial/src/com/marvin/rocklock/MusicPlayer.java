@@ -22,7 +22,11 @@ public class MusicPlayer {
 
     private DirectoryStructuredSongPicker dPicker;
 
+    private boolean dPickerAvailable;
+
     private TagStructuredSongPicker tPicker;
+
+    boolean tPickerAvailable;
 
     private int songPickerType;
 
@@ -46,16 +50,31 @@ public class MusicPlayer {
             songPickerType = TAGGED_PLAYLIST;
         }
 
+        dPickerAvailable = true;
+        tPickerAvailable = true;
         if (dPicker.peekNextAlbum().length() < 1) {
+            dPickerAvailable = false;
+        }
+        if (tPicker.peekNextAlbum().length() < 1) {
+            tPickerAvailable = false;
+        }
+        if (tPickerAvailable && !dPickerAvailable) {
             picker = tPicker;
             songPickerType = TAGGED_PLAYLIST;
             editor.putInt(PREF_PLAYLIST, TAGGED_PLAYLIST);
             editor.commit();
+        } else if (!tPickerAvailable && dPickerAvailable) {
+            picker = dPicker;
+            songPickerType = TAGGED_PLAYLIST;
+            editor.putInt(PREF_PLAYLIST, TAGGED_PLAYLIST);
+            editor.commit();
         }
-
     }
 
     public int cycleSongPicker() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return -1;
+        }
         if (songPickerType == ROCKLOCK_PLAYLIST) {
             picker = tPicker;
             songPickerType = TAGGED_PLAYLIST;
@@ -63,10 +82,12 @@ public class MusicPlayer {
             picker = dPicker;
             songPickerType = ROCKLOCK_PLAYLIST;
         }
-        // Don't use the directory based player if there is nothing there
-        if (dPicker.peekNextAlbum().length() < 1) {
+        if (tPickerAvailable && !dPickerAvailable) {
             picker = tPicker;
             songPickerType = TAGGED_PLAYLIST;
+        } else if (!tPickerAvailable && dPickerAvailable) {
+            picker = dPicker;
+            songPickerType = ROCKLOCK_PLAYLIST;
         }
         editor.putInt(PREF_PLAYLIST, songPickerType);
         editor.commit();
@@ -74,6 +95,9 @@ public class MusicPlayer {
     }
 
     public void togglePlayPause() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         if (player != null) {
             if (player.isPlaying()) {
                 player.pause();
@@ -86,6 +110,9 @@ public class MusicPlayer {
     }
 
     public boolean isPlaying() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return false;
+        }
         if (player != null) {
             return player.isPlaying();
         }
@@ -93,6 +120,9 @@ public class MusicPlayer {
     }
 
     public void stop() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         if (player != null) {
             player.release();
             player = null;
@@ -100,12 +130,18 @@ public class MusicPlayer {
     }
 
     public void seekForward() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         if (player != null) {
             player.seekTo(player.getCurrentPosition() + 3000);
         }
     }
 
     public void seekBackward() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         if (player != null) {
             player.seekTo(player.getCurrentPosition() - 3000);
         }
@@ -120,36 +156,57 @@ public class MusicPlayer {
     }
 
     public void nextTrack() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         picker.goNextTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void prevTrack() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         picker.goPrevTrack();
         play(picker.getCurrentSongFile());
     }
 
     public void nextAlbum() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         picker.goNextAlbum();
         play(picker.getCurrentSongFile());
     }
 
     public void prevAlbum() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         picker.goPrevAlbum();
         play(picker.getCurrentSongFile());
     }
 
     public void nextArtist() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         picker.goNextArtist();
         play(picker.getCurrentSongFile());
     }
 
     public void prevArtist() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         picker.goPrevArtist();
         play(picker.getCurrentSongFile());
     }
 
     private void play(String filename) {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return;
+        }
         try {
             if (player != null) {
                 player.release();
@@ -170,30 +227,51 @@ public class MusicPlayer {
     }
 
     public String getNextArtistName() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return "";
+        }
         return picker.peekNextArtist();
     }
 
     public String getPrevArtistName() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return "";
+        }
         return picker.peekPrevArtist();
     }
 
     public String getNextAlbumName() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return "";
+        }
         return picker.peekNextAlbum();
     }
 
     public String getPrevAlbumName() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return "";
+        }
         return picker.peekPrevAlbum();
     }
 
     public String getNextTrackName() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return "";
+        }
         return picker.peekNextTrack();
     }
 
     public String getPrevTrackName() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return "";
+        }
         return picker.peekPrevTrack();
     }
 
     public String getCurrentSongInfo() {
+        if (!tPickerAvailable && !dPickerAvailable) {
+            return "";
+        }
         return picker.getCurrentSongInfo();
     }
 }

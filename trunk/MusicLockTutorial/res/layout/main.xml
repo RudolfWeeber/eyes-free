@@ -12,7 +12,7 @@
     android:id="@+id/bottom_controls">
     <Button android:id="@+id/unlockButton" android:layout_gravity="bottom"
       android:layout_width="fill_parent" android:layout_height="wrap_content"
-      android:text="Unlock" />
+      android:text="Exit" />
   </LinearLayout>
   
 </RelativeLayout>

@@ -44,7 +44,6 @@ public class BootHandlerService extends Service {
 
         IntentFilter onfilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         this.registerReceiver(screenwakeup, onfilter);
-        Log.e("BootHandlerService", "0");
     }
 
 }

@@ -13,7 +13,7 @@
     
   <TextView android:id="@+id/statusText" android:layout_width="fill_parent"
     android:textStyle="bold" android:textSize="35dip" android:gravity="center"
-    android:layout_height="wrap_content" android:text="Rock Lock" />
+    android:layout_height="wrap_content" android:text="ROCK LOCK" />
     
   <TextView android:layout_width="fill_parent"
     android:textStyle="bold" android:textSize="15dip" android:gravity="center"

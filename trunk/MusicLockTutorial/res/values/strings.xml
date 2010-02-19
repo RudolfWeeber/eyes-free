@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, MusicLockActivity!</string>
     <string name="app_name">Rock Lock</string>
+    <string name="previous_artist">Previous Artist</string>
+    <string name="previous_album">Previous Album</string>
+    <string name="next_artist">Next Artist</string>
+    <string name="previous_track">Previous Track</string>
+    <string name="pause">Pause</string>
+    <string name="play">Play</string>
+    <string name="next_track">Next Track</string>
+    <string name="rewind">Rewind</string>
+    <string name="next_album">Next Album</string>
+    <string name="fast_forward">Fast Forward</string>
+    <string name="rock_lock_playlist">Rock Lock Playlist</string>
+    <string name="tagged_music_playlist">Tagged Music Playlist</string>
+    <string name="playing">Playing</string>
+    <string name="the_lock_that_rocks">The lock that rocks!</string>
 </resources>

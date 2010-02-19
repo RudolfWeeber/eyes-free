@@ -35,6 +35,8 @@ public class TagStructuredSongPicker implements SongPicker {
     private String currentTrack = "";
 
     private Editor editor;
+    
+    private boolean taggedMusicAvailable = true;
 
     public TagStructuredSongPicker(Activity parentActivity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(parentActivity);
@@ -43,9 +45,17 @@ public class TagStructuredSongPicker implements SongPicker {
         String[] proj = {
                 AudioColumns.ARTIST, AudioColumns.ALBUM, MediaColumns.TITLE, MediaColumns.DATA
         };
+        taggedMusicAvailable = true;
         musicCursor = parentActivity.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 proj, null, null, null);
-
+        if (musicCursor == null){
+            taggedMusicAvailable = false;
+            return;
+        }
+        taggedMusicAvailable = musicCursor.moveToFirst();
+        if (!taggedMusicAvailable){
+            return;
+        }
         if (!restoreFromPrefs(prefs)) {
             musicCursor.moveToFirst();
             currentArtist = musicCursor.getString(ARTIST);
@@ -70,6 +80,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekNextArtist() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToNext()) {
             if (!musicCursor.getString(ARTIST).equals(currentArtist)) {
@@ -91,6 +104,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goNextArtist() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToNext()) {
             if (!musicCursor.getString(ARTIST).equals(currentArtist)) {
@@ -111,6 +127,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekPrevArtist() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToPrevious()) {
             if (!musicCursor.getString(ARTIST).equals(currentArtist)) {
@@ -132,6 +151,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goPrevArtist() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToPrevious()) {
             if (!musicCursor.getString(ARTIST).equals(currentArtist)) {
@@ -152,6 +174,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekNextAlbum() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToNext()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -175,6 +200,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goNextAlbum() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToNext()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -197,6 +225,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekPrevAlbum() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToPrevious()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -220,6 +251,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goPrevAlbum() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToPrevious()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -242,7 +276,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekNextTrack() {
-        Log.e("peek start", musicCursor.getPosition() + " " + getCurrentSongInfo());
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToNext()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -271,7 +307,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goNextTrack() {
-        Log.e("go", musicCursor.getPosition() + " " + getCurrentSongInfo());
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToNext()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -296,7 +334,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekPrevTrack() {
-        Log.e("debug", getCurrentSongInfo());
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToPrevious()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -322,6 +362,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goPrevTrack() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         int initialPosition = musicCursor.getPosition();
         while (musicCursor.moveToPrevious()) {
             if (musicCursor.getString(ARTIST).equals(currentArtist)
@@ -346,6 +389,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String getCurrentSongFile() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         currentArtist = musicCursor.getString(ARTIST);
         currentAlbum = musicCursor.getString(ALBUM);
         currentTrack = musicCursor.getString(TRACK);
@@ -357,6 +403,9 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String getCurrentSongInfo() {
+        if (!taggedMusicAvailable){
+            return "";
+        }
         currentArtist = musicCursor.getString(ARTIST);
         currentAlbum = musicCursor.getString(ALBUM);
         currentTrack = musicCursor.getString(TRACK);
