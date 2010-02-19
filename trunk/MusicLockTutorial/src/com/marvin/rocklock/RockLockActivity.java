@@ -31,7 +31,7 @@ import java.util.Calendar;
 
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
-    
+
     private static final long[] VIBE_PATTERN = {
             0, 10, 70, 80
     };
@@ -94,7 +94,7 @@ public class RockLockActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // Start the service in case it is not already running
         startService(new Intent(this, BootHandlerService.class));
 
@@ -279,12 +279,6 @@ public class RockLockActivity extends Activity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        keyguard.reenableKeyguard();
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
             finish();
@@ -296,7 +290,7 @@ public class RockLockActivity extends Activity {
             int songPickerTextId = R.string.tagged_music_playlist;
             if (songPickerType == MusicPlayer.ROCKLOCK_PLAYLIST) {
                 songPickerTextId = R.string.rock_lock_playlist;
-            } 
+            }
             statusText.setText(R.string.app_name);
             infoText.setText(songPickerTextId);
             tts.speak(getString(songPickerTextId), 0, null);
