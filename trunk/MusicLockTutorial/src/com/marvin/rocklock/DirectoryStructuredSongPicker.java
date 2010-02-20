@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.marvin.rocklock;
 
 import android.app.Activity;
@@ -26,10 +27,8 @@ import java.io.FileFilter;
 
 /**
  * SongPicker implementation that uses the directory structure to organize the
- * music instead of using the tags in the music files.
- * 
- * For music to be picked up, it has to be put in the /sdcard/RockLock/.music
- * directory.
+ * music instead of using the tags in the music files. For music to be picked
+ * up, it has to be put in the /sdcard/RockLock/.music directory.
  * 
  * @author clchen@google.com (Charles L. Chen)
  */

@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.marvin.rocklock;
 
 /**
- * Interface for traversing through the songs on the device.
- * Individual implementations can handle traversal differently - for example,
- * traversal through tagged content vs directory structure vs playlists. 
+ * Interface for traversing through the songs on the device. Individual
+ * implementations can handle traversal differently - for example, traversal
+ * through tagged content vs directory structure vs playlists.
  * 
  * @author clchen@google.com (Charles L. Chen)
  */

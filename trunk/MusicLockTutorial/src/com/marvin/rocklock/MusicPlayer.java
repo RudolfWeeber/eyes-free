@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.marvin.rocklock;
 
 import android.content.Context;
@@ -24,8 +25,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 /**
- * Music player abstraction that takes care of using the MediaPlayer and 
- * the SongPickers.
+ * Music player abstraction that takes care of using the MediaPlayer and the
+ * SongPickers.
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
@@ -232,14 +233,14 @@ public class MusicPlayer {
                 player.release();
             }
             player = MediaPlayer.create(parent, Uri.parse(filename));
-            if (player == null){
+            if (player == null) {
                 return;
             }
             player.setOnCompletionListener(new OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     nextTrack();
-                    parent.updateUi();
+                    parent.updateDisplayText(null, null, false);
                 }
             });
             player.start();

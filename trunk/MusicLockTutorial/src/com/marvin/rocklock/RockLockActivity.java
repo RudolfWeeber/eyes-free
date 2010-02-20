@@ -56,6 +56,7 @@ import java.util.Calendar;
  */
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
+
     public static final String TICK_EARCON = "[TICK]";
 
     private static final long[] VIBE_PATTERN = {
@@ -65,28 +66,6 @@ public class RockLockActivity extends Activity {
     private RockLockActivity self;
 
     private boolean poked = false;
-
-    private BroadcastReceiver mediaButtonReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context ctx, Intent data) {
-            this.abortBroadcast();
-            KeyEvent event = data.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-            int keyCode = event.getKeyCode();
-            if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                if ((keyCode == KeyEvent.KEYCODE_HEADSETHOOK)
-                        || (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)) {
-                    mp.togglePlayPause();
-                    updateUi();
-                } else if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
-                    mp.nextTrack();
-                    updateUi();
-                } else if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
-                    mp.prevTrack();
-                    updateUi();
-                }
-            }
-        }
-    };
 
     private KeyguardManager keyguardManager;
 
@@ -115,6 +94,35 @@ public class RockLockActivity extends Activity {
     private Vibrator vibe;
 
     private TextToSpeech tts;
+
+    // Catch media button events so that controls from plugged in headsets and
+    // BlueTooth headsets will work.
+    //
+    // Note that this only works if there are NO other apps that are trying to
+    // consume the media button events and aborting the broadcasts; otherwise,
+    // whether it works or not is a function of the order in which the
+    // broadcasts are sent.
+    private BroadcastReceiver mediaButtonReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context ctx, Intent data) {
+            this.abortBroadcast();
+            KeyEvent event = data.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+            int keyCode = event.getKeyCode();
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                if ((keyCode == KeyEvent.KEYCODE_HEADSETHOOK)
+                        || (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)) {
+                    mp.togglePlayPause();
+                    updateDisplayText(null, null, false);
+                } else if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
+                    mp.nextTrack();
+                    updateDisplayText(null, null, false);
+                } else if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
+                    mp.prevTrack();
+                    updateDisplayText(null, null, false);
+                }
+            }
+        }
+    };
 
     // Don't send any accessibility events since this is a fully self voicing
     // app.
@@ -187,56 +195,50 @@ public class RockLockActivity extends Activity {
 
                 switch (g) {
                     case Gesture.UPLEFT:
-                        statusText.setText(R.string.previous_artist);
-                        infoText.setText(mp.getPrevArtistName());
-                        tts.speak(mp.getPrevArtistName(), 0, null);
+                        updateDisplayText(getString(R.string.previous_artist), mp
+                                .getPrevArtistName(), true);
                         break;
                     case Gesture.UP:
-                        statusText.setText(R.string.previous_album);
-                        infoText.setText(mp.getPrevAlbumName());
-                        tts.speak(mp.getPrevAlbumName(), 0, null);
+                        updateDisplayText(getString(R.string.previous_album),
+                                mp.getPrevAlbumName(), true);
                         break;
                     case Gesture.UPRIGHT:
-                        statusText.setText(R.string.next_artist);
-                        infoText.setText(mp.getNextArtistName());
-                        tts.speak(mp.getNextArtistName(), 0, null);
+                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(),
+                                true);
                         break;
                     case Gesture.LEFT:
-                        statusText.setText(R.string.next_track);
-                        infoText.setText(mp.getPrevTrackName());
-                        tts.speak(mp.getPrevTrackName(), 0, null);
+                        updateDisplayText(getString(R.string.previous_track),
+                                mp.getPrevTrackName(), true);
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
-                            statusText.setText(R.string.pause);
-                            infoText.setText(mp.getCurrentSongInfo());
+                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo(),
+                                    false);
                         } else {
-                            statusText.setText(R.string.play);
-                            infoText.setText(mp.getCurrentSongInfo());
+                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo(),
+                                    false);
                         }
                         break;
                     case Gesture.RIGHT:
-                        statusText.setText(R.string.next_track);
-                        infoText.setText(mp.getNextTrackName());
-                        tts.speak(mp.getNextTrackName(), 0, null);
+                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName(),
+                                true);
                         break;
                     case Gesture.DOWNLEFT:
                         if (seekingStopped) {
-                            statusText.setText(R.string.rewind);
-                            infoText.setText(mp.getCurrentSongInfo());
+                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(),
+                                    false);
                             isSeeking = true;
                             new Thread(new Seeker(-1)).start();
                         }
                         break;
                     case Gesture.DOWN:
-                        statusText.setText(R.string.next_album);
-                        infoText.setText(mp.getNextAlbumName());
-                        tts.speak(mp.getNextAlbumName(), 0, null);
+                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(),
+                                true);
                         break;
                     case Gesture.DOWNRIGHT:
                         if (seekingStopped) {
-                            statusText.setText(R.string.fast_forward);
-                            infoText.setText(mp.getCurrentSongInfo());
+                            updateDisplayText(getString(R.string.fast_forward), mp
+                                    .getCurrentSongInfo(), false);
                             isSeeking = true;
                             new Thread(new Seeker(1)).start();
                         }
@@ -249,7 +251,6 @@ public class RockLockActivity extends Activity {
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(-1);
-                tts.stop();
                 switch (g) {
                     case Gesture.UPLEFT:
                         mp.prevArtist();
@@ -266,17 +267,15 @@ public class RockLockActivity extends Activity {
                     case Gesture.CENTER:
                         mp.togglePlayPause();
                         break;
-                    case Gesture.RIGHT:                        
+                    case Gesture.RIGHT:
                         mp.nextTrack();
                         break;
                     case Gesture.DOWN:
                         mp.nextAlbum();
                         break;
                 }
-                if (tts != null){
-                    tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
-                }
-                updateUi();
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
+                updateDisplayText(null, null, false);
             }
 
             @Override
@@ -297,7 +296,7 @@ public class RockLockActivity extends Activity {
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
 
-        tts = new TextToSpeech(this, new OnInitListener(){
+        tts = new TextToSpeech(this, new OnInitListener() {
             @Override
             public void onInit(int arg0) {
                 tts.addEarcon(TICK_EARCON, self.getPackageName(), R.raw.tick_snd);
@@ -318,9 +317,7 @@ public class RockLockActivity extends Activity {
         dateText.setText(monthStr + " " + Integer.toString(day) + ", " + year);
         keyguard.disableKeyguard();
         new Thread(new PokeWatcher()).start();
-        if (tts != null){
-            tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
-        }
+        tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     @Override
@@ -332,13 +329,11 @@ public class RockLockActivity extends Activity {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             mp.stop();
             int songPickerType = mp.cycleSongPicker();
-            int songPickerTextId = R.string.tagged_music_playlist;
+            int songPickerTextResId = R.string.tagged_music_playlist;
             if (songPickerType == MusicPlayer.ROCKLOCK_PLAYLIST) {
-                songPickerTextId = R.string.rock_lock_playlist;
+                songPickerTextResId = R.string.rock_lock_playlist;
             }
-            statusText.setText(R.string.app_name);
-            infoText.setText(songPickerTextId);
-            tts.speak(getString(songPickerTextId), 0, null);
+            updateDisplayText(getString(R.string.app_name), getString(songPickerTextResId), true);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -353,13 +348,21 @@ public class RockLockActivity extends Activity {
         keyguardManager.exitKeyguardSecurely(null);
     }
 
-    public void updateUi() {
-        if (mp.isPlaying()) {
-            statusText.setText(R.string.playing);
-            infoText.setText(mp.getCurrentSongInfo());
-        } else {
-            statusText.setText(R.string.app_name);
-            infoText.setText("The lock that rocks!");
+    public void updateDisplayText(String status, String info, boolean speak) {
+        if ((status == null) || (info == null)) {
+            if (mp.isPlaying()) {
+                statusText.setText(R.string.playing);
+                infoText.setText(mp.getCurrentSongInfo());
+            } else {
+                statusText.setText(R.string.app_name);
+                infoText.setText("The lock that rocks!");
+            }
+            return;
+        }
+        statusText.setText(status);
+        infoText.setText(info);
+        if (speak) {
+            tts.speak(info, TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 

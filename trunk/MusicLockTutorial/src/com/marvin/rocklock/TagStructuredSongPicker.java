@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.marvin.rocklock;
 
 import android.app.Activity;
@@ -55,7 +56,7 @@ public class TagStructuredSongPicker implements SongPicker {
     private String currentTrack = "";
 
     private Editor editor;
-    
+
     private boolean taggedMusicAvailable = true;
 
     public TagStructuredSongPicker(Activity parentActivity) {
@@ -68,12 +69,12 @@ public class TagStructuredSongPicker implements SongPicker {
         taggedMusicAvailable = true;
         musicCursor = parentActivity.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 proj, null, null, null);
-        if (musicCursor == null){
+        if (musicCursor == null) {
             taggedMusicAvailable = false;
             return;
         }
         taggedMusicAvailable = musicCursor.moveToFirst();
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return;
         }
         if (!restoreFromPrefs(prefs)) {
@@ -100,7 +101,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekNextArtist() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -124,7 +125,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goNextArtist() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -147,7 +148,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekPrevArtist() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -171,7 +172,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goPrevArtist() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -194,7 +195,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekNextAlbum() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -220,7 +221,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goNextAlbum() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -245,7 +246,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekPrevAlbum() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -271,7 +272,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goPrevAlbum() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -296,7 +297,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekNextTrack() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -327,7 +328,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goNextTrack() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -354,7 +355,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String peekPrevTrack() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -382,7 +383,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String goPrevTrack() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         int initialPosition = musicCursor.getPosition();
@@ -409,7 +410,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String getCurrentSongFile() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         currentArtist = musicCursor.getString(ARTIST);
@@ -423,7 +424,7 @@ public class TagStructuredSongPicker implements SongPicker {
     }
 
     public String getCurrentSongInfo() {
-        if (!taggedMusicAvailable){
+        if (!taggedMusicAvailable) {
             return "";
         }
         currentArtist = musicCursor.getString(ARTIST);
