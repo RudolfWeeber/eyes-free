@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.marvin.rocklock;
 
 import com.google.marvin.widget.GestureOverlay;
@@ -29,13 +30,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -45,18 +47,16 @@ import java.util.Calendar;
 
 /**
  * The main Rock Lock application that runs as an alternate lock screen which
- * enables the user to use stroke gestures to play music.
- * 
- * If there is no lock pattern, Rock Lock will replace the lock screen entirely;
- * dismissing Rock Lock will unlock the phone.
- * 
- * If there is a lock pattern, Rock Lock will put up the default pattern locked
- * screen when the user dismisses Rock Lock.
+ * enables the user to use stroke gestures to play music. If there is no lock
+ * pattern, Rock Lock will replace the lock screen entirely; dismissing Rock
+ * Lock will unlock the phone. If there is a lock pattern, Rock Lock will put up
+ * the default pattern locked screen when the user dismisses Rock Lock.
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
+    public static final String TICK_EARCON = "[TICK]";
 
     private static final long[] VIBE_PATTERN = {
             0, 10, 70, 80
@@ -115,6 +115,13 @@ public class RockLockActivity extends Activity {
     private Vibrator vibe;
 
     private TextToSpeech tts;
+
+    // Don't send any accessibility events since this is a fully self voicing
+    // app.
+    @Override
+    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent evt) {
+        return true;
+    }
 
     /** Called when the activity is first created. */
     @Override
@@ -259,12 +266,15 @@ public class RockLockActivity extends Activity {
                     case Gesture.CENTER:
                         mp.togglePlayPause();
                         break;
-                    case Gesture.RIGHT:
+                    case Gesture.RIGHT:                        
                         mp.nextTrack();
                         break;
                     case Gesture.DOWN:
                         mp.nextAlbum();
                         break;
+                }
+                if (tts != null){
+                    tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
                 }
                 updateUi();
             }
@@ -287,7 +297,13 @@ public class RockLockActivity extends Activity {
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
 
-        tts = new TextToSpeech(this, null);
+        tts = new TextToSpeech(this, new OnInitListener(){
+            @Override
+            public void onInit(int arg0) {
+                tts.addEarcon(TICK_EARCON, self.getPackageName(), R.raw.tick_snd);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
     }
 
     @Override
@@ -302,6 +318,9 @@ public class RockLockActivity extends Activity {
         dateText.setText(monthStr + " " + Integer.toString(day) + ", " + year);
         keyguard.disableKeyguard();
         new Thread(new PokeWatcher()).start();
+        if (tts != null){
+            tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
+        }
     }
 
     @Override

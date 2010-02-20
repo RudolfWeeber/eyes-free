@@ -139,7 +139,7 @@ public class MusicPlayer {
         return false;
     }
 
-    public void stop() {
+    public synchronized void stop() {
         if (!tPickerAvailable && !dPickerAvailable) {
             return;
         }
@@ -223,7 +223,7 @@ public class MusicPlayer {
         play(picker.getCurrentSongFile());
     }
 
-    private void play(String filename) {
+    private synchronized void play(String filename) {
         if (!tPickerAvailable && !dPickerAvailable) {
             return;
         }
@@ -232,6 +232,9 @@ public class MusicPlayer {
                 player.release();
             }
             player = MediaPlayer.create(parent, Uri.parse(filename));
+            if (player == null){
+                return;
+            }
             player.setOnCompletionListener(new OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
