@@ -39,7 +39,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
 
     private static final String PREF_TRACK = "DIR_TRACK";
 
-    private static final String baseDir = "/RockLock/.music";
+    private static final File musicDir = new File(Environment.getExternalStorageDirectory() + "/RockLock/.music");
 
     private class DirectoryFilter implements FileFilter {
         @Override
@@ -72,7 +72,6 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     public DirectoryStructuredSongPicker(Activity parentActivity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(parentActivity);
         editor = prefs.edit();
-        File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
         if (!musicDir.exists()) {
             musicDir.mkdirs();
         }
@@ -108,7 +107,6 @@ public class DirectoryStructuredSongPicker implements SongPicker {
 
     public String peekNextArtist() {
         String artist = "";
-        File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
         File[] artists = musicDir.listFiles(new DirectoryFilter());
         if ((artists == null) || (artists.length == 0)) {
             return "";
@@ -127,7 +125,6 @@ public class DirectoryStructuredSongPicker implements SongPicker {
 
     public String peekPrevArtist() {
         String artist = "";
-        File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
         File[] artists = musicDir.listFiles(new DirectoryFilter());
         if ((artists == null) || (artists.length == 0)) {
             return "";
@@ -145,7 +142,6 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     }
 
     public String goNextArtist() {
-        File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
         currentArtistFullPath = musicDir + "/" + peekNextArtist();
         currentAlbumFullPath = "";
         goNextAlbum();
@@ -155,7 +151,6 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     }
 
     public String goPrevArtist() {
-        File musicDir = new File(Environment.getExternalStorageDirectory() + baseDir);
         currentArtistFullPath = musicDir + "/" + peekPrevArtist();
         currentAlbumFullPath = "";
         goNextAlbum();
