@@ -58,6 +58,8 @@
 
     <string name="template_replaced_characters">%1$s characters replaced with %2$s characters</string>
 
+    <string name="template_ringer_volume">Ringer %1$s percent.</string>
+
     <!-- VALUES -->
 
     <string name="value_password">password</string>
@@ -84,7 +86,17 @@
 
     <string name="value_clicked">clicked</string>
 
-    <string name="value_screen_locked">Screen locked</string>
+    <string name="value_ringer_vibrate">Ringer vibrate.</string>
+
+    <string name="value_ringer_silent">Ringer silent.</string>
+
+    <string name="value_ringer_normal">Ringer normal.</string>
+
+    <string name="value_screen_on">Screen on.</string>
+
+    <string name="value_screen_off">Screen off.</string>
+
+    <string name="value_phone_unlocked">Phone unlocked.</string>
 
     <!-- PERMISSIONS -->
 

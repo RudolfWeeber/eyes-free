@@ -26,14 +26,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.EditText;
@@ -47,7 +44,7 @@ import java.util.regex.Pattern;
 
 /**
  * {@link AccessibilityService} that provides spoken feedback.
- *
+ * 
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  * @author clchen@google.com (Charles L. Chen)
  */
@@ -55,30 +52,28 @@ public class TalkBackService extends AccessibilityService {
 
     /**
      * {@link Intent} broadcast action for announcing the notifications state.
-     * </p>
-     * Note: Sending intent broadcast commands to TalkBack must be performed
-     *       through {@link Context#sendBroadcast(Intent, String)}
+     * </p> Note: Sending intent broadcast commands to TalkBack must be
+     * performed through {@link Context#sendBroadcast(Intent, String)}
      */
     public static final String ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND = "com.google.android.marvin.talkback.ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND";
 
     /**
-     * {@link Intent} broadcast action for querying the state of TalkBack.
-     * </p>
+     * {@link Intent} broadcast action for querying the state of TalkBack. </p>
      * Note: Sending intent broadcast commands to TalkBack must be performed
-     *       through {@link Context#sendBroadcast(Intent, String)}
+     * through {@link Context#sendBroadcast(Intent, String)}
      */
     public static final String ACTION_QUERY_TALKBACK_ENABLED_COMMAND = "com.google.android.marvin.talkback.ACTION_QUERY_TALKBACK_ENABLED_COMMAND";
 
     /**
      * Result that TalkBack is enabled.
-     *
+     * 
      * @see #ACTION_QUERY_TALKBACK_ENABLED_COMMAND
      */
     public static final int RESULT_TALKBACK_ENABLED = 0x00000001;
-    
+
     /**
      * Result that TalkBack is disabled.
-     *
+     * 
      * @see #ACTION_QUERY_TALKBACK_ENABLED_COMMAND
      */
     public static final int RESULT_TALKBACK_DISABLED = 0x00000002;
@@ -86,85 +81,86 @@ public class TalkBackService extends AccessibilityService {
     /**
      * Permission to send {@link Intent} broadcast commands to TalkBack.
      */
-    private static final String PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK = "com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK";
+    public static final String PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK = "com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK";
 
     /**
-     *  Tag for logging.
+     * Tag for logging.
      */
     private static final String LOG_TAG = "TalkBackService";
 
     /**
-     *  To account for SVox camel-case trouble.
+     * To account for SVox camel-case trouble.
      */
     private static final Pattern sCamelCasePrefixPattern = Pattern.compile("([a-z0-9])([A-Z])");
 
     /**
-     *  To account for SVox camel-case trouble.
+     * To account for SVox camel-case trouble.
      */
     private static final Pattern sCamelCaseSuffixPattern = Pattern.compile("([A-Z])([a-z0-9])");
 
     /**
-     *  Manages the pending notifications.
+     * Manages the pending notifications.
      */
     private static final NotificationCache sNotificationCache = new NotificationCache();
 
     /**
-     *  Timeout for waiting the events to settle down before speaking
+     * Timeout for waiting the events to settle down before speaking
      */
     private static final long EVENT_TIMEOUT = 200;
 
     /**
-     *  Timeout for waiting the events to settle down before speaking
+     * Timeout for waiting the events to settle down before speaking
      */
     private static final long EVENT_TIMEOUT_IN_CALL_SCREEN = 3000;
 
     /**
-     * The class name of the in-call screen. 
+     * The class name of the in-call screen.
      */
     private static final String CLASS_NAME_IN_CALL_SCREEN = "com.android.phone.InCallScreen";
 
     /**
-     *  Speak action.
+     * Speak action.
      */
     private static final int WHAT_SPEAK = 1;
 
     /**
-     *  Speak while the phone is ringing action.
+     * Speak while the phone is ringing action.
      */
     private static final int WHAT_SPEAK_WHILE_IN_CALL = 2;
 
     /**
-     *  Stop speaking action.
+     * Stop speaking action.
      */
     private static final int WHAT_STOP_ALL_SPEAKING = 3;
-    
+
     /**
-     *  Start the TTS service.
+     * Start the TTS service.
      */
     private static final int WHAT_START_TTS = 4;
 
     /**
-     *  Stop the TTS service.
+     * Stop the TTS service.
      */
     private static final int WHAT_SHUTDOWN_TTS = 5;
 
     /**
-     *  Space string constant.
+     * Space string constant.
      */
     private static final String SPACE = " ";
 
     /**
-     *  Opening bracket character constant.
+     * Opening bracket character constant.
      */
     private static final char OPEN_SQUARE_BRACKET = '[';
 
     /**
-     *  Closing bracket character constant.
+     * Closing bracket character constant.
      */
     private static final char CLOSE_SQUARE_BRACKET = ']';
 
     /**
-     * The name of the contacts package used to fix a specific behavior in Dialer
+     * The name of the contacts package used to fix a specific behavior in
+     * Dialer
      */
     private static final String PACKAGE_NAME_CONTACTS = "com.android.contacts";
 
@@ -174,8 +170,8 @@ public class TalkBackService extends AccessibilityService {
     private static final String KEY_SPEAK_COMPLETE_CALLBACK = "key_speak_complete_callback";
 
     /**
-     *  {@link IntentFilter} with all commands that can be executed by third party
-     *  applications or services via intent broadcasting.
+     * {@link IntentFilter} with all commands that can be executed by third
+     * party applications or services via intent broadcasting.
      */
     private static final IntentFilter sCommandInterfaceIntentFilter = new IntentFilter();
     static {
@@ -187,8 +183,8 @@ public class TalkBackService extends AccessibilityService {
     // to internationalization problems. Refactor this while internationalizing.
 
     /**
-     *  This table will force the TTS to speak out the punctuation by
-     *  mapping punctuation to its spoken equivalent.
+     * This table will force the TTS to speak out the punctuation by mapping
+     * punctuation to its spoken equivalent.
      */
     private static final HashMap<String, String> sSpokenEquivalentsMap = new HashMap<String, String>();
     static {
@@ -205,31 +201,35 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
-     *  TalkBackService exposes package level convenience access to the context.
+     * Queuing mode - undefined.
      */
-    private static Context sContext;
+    public static final int QUEUING_MODE_UNDEFINED = 0;
 
     /**
-     *  Queuing mode - queue the utterance to be spoken.
+     * Queuing mode - queue the utterance to be spoken.
      */
     public static final int QUEUING_MODE_QUEUE = 1;
 
     /**
-     *  Queuing mode - interrupt the spoken before speaking.
+     * Queuing mode - interrupt the spoken before speaking.
      */
     public static final int QUEUING_MODE_INTERRUPT = 2;
 
     /**
-     *  The maximal size to the queue of cached events.
+     * The maximal size to the queue of cached events.
      */
     private static final int EVENT_QUEUE_MAX_SIZE = 2;
 
     /**
-     *  We keep the accessibility events to be processed. If a received event
-     *  is the same type as the previous one it replaces the latter, otherwise
-     *  it is added to the queue. All events in this queue are processed while
-     *  we speak and this occurs after a certain timeout since the last
-     *  received event.
+     * Flag if the infrastructure has been initialized.
+     */
+    static boolean mInfrastructureInitialized;
+
+    /**
+     * We keep the accessibility events to be processed. If a received event is
+     * the same type as the previous one it replaces the latter, otherwise it is
+     * added to the queue. All events in this queue are processed while we speak
+     * and this occurs after a certain timeout since the last received event.
      */
     private final EventQueue mEventQueue = new EventQueue();
 
@@ -242,32 +242,27 @@ public class TalkBackService extends AccessibilityService {
      * Flag if a notification is currently spoken.
      */
     private boolean mSpeakingNotification;
-    
+
     /**
-     *  The TTS engine
+     * The TTS engine
      */
     private TextToSpeech mTts;
 
     /**
-     *  Proximity sensor for implementing "shut up" functionality.
+     * Proximity sensor for implementing "shut up" functionality.
      */
     private ProximitySensor mProximitySensor;
 
     /**
-     *  processor for {@link AccessibilityEvent}s that populates {@link Utterance}s.
+     * processor for {@link AccessibilityEvent}s that populates
+     * {@link Utterance}s.
      */
     private SpeechRuleProcessor mSpeechRuleProcessor;
 
     /**
-     *  The last event - used to auto-determine the speech queue mode.
+     * The last event - used to auto-determine the speech queue mode.
      */
     private int mLastEventType;
-
-    /**
-     *  Watches the call state to controls speaking, thus we speak
-     *  only when appropriate.    
-     */
-    private InCallWatcher mInCallWatcher;
 
     /**
      * The audio manager used for changing the ringer volume for incoming calls.
@@ -275,12 +270,23 @@ public class TalkBackService extends AccessibilityService {
     private AudioManager mAudioManager;
 
     /**
-     * Flag if the infrastructure has been initialized.
+     * {@link BroadcastReceiver} for tracking the phone state.
      */
-    static boolean mInfrastructureInitialized;
+    private BroadcastReceiver mPhoneStateBroadcastReceiver;
 
     /**
-     * Static handle to TalkBack so CommandInterfaceBroadcastReceiver can access it.
+     * The current ringer mode of the device.
+     */
+    private int mRingerMode;
+
+    /**
+     * The override for the queue mode of the next event.
+     */
+    private int mNextEventQueueMode;
+
+    /**
+     * Static handle to TalkBack so CommandInterfaceBroadcastReceiver can access
+     * it.
      */
     static TalkBackService sInstance;
 
@@ -304,15 +310,13 @@ public class TalkBackService extends AccessibilityService {
             return;
         }
 
-        TelephonyManager telephonyManager = ((TelephonyManager) TalkBackService.asContext()
-                .getSystemService(Context.TELEPHONY_SERVICE));
-        telephonyManager.listen(mInCallWatcher, PhoneStateListener.LISTEN_NONE);
-
-        if (mProximitySensor != null){
+        if (mProximitySensor != null) {
             mProximitySensor.shutdown();
         }
 
         mSpeechHandler.obtainMessage(WHAT_SHUTDOWN_TTS).sendToTarget();
+
+        unregisterReceiver(mPhoneStateBroadcastReceiver);
 
         mInfrastructureInitialized = false;
     }
@@ -321,10 +325,11 @@ public class TalkBackService extends AccessibilityService {
     public void onServiceConnected() {
         setServiceInfo();
         initializeInfrastructure();
-    }    
+    }
 
     /**
-     * Sets the {@link AccessibilityService} for configuring how the system handles TalkBack.
+     * Sets the {@link AccessibilityService} for configuring how the system
+     * handles TalkBack.
      */
     public void setServiceInfo() {
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
@@ -336,11 +341,9 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
-     * Initializes the infrastructure like TTS broadcast receiver, in-call watcher,
-     * proximity sensor etc.
+     * Initializes the infrastructure.
      */
     private void initializeInfrastructure() {
-        sContext = this;
 
         // start the TTS service
         mSpeechHandler.obtainMessage(WHAT_START_TTS).sendToTarget();
@@ -348,24 +351,36 @@ public class TalkBackService extends AccessibilityService {
         // create a speech processor for generating utterances
         mSpeechRuleProcessor = new SpeechRuleProcessor(this, R.raw.speechstrategy);
 
-        // create and register a watcher for the phone state
-        mInCallWatcher = new InCallWatcher();
-        TelephonyManager telephonyManager = ((TelephonyManager) TalkBackService.asContext()
-                .getSystemService(Context.TELEPHONY_SERVICE));
-        telephonyManager.listen(mInCallWatcher, PhoneStateListener.LISTEN_CALL_STATE);
-
         // create and register in a proximity sensor for stopping speech
-        mProximitySensor = new ProximitySensor(this, new ProximityChangeListener(){
+        mProximitySensor = new ProximitySensor(this, new ProximityChangeListener() {
             @Override
             public void onProximityChanged(float proximity) {
                 if (proximity == 0) {
-                    // Stop all speech if the user is touching the proximity sensor
+                    // Stop all speech if the user is touching the proximity
+                    // sensor
                     if (mTts != null) {
                         mSpeechHandler.obtainMessage(WHAT_STOP_ALL_SPEAKING).sendToTarget();
                     }
                 }
             }
         });
+
+        // Create a filter with the phone state broadcast intents we are interested in
+        mPhoneStateBroadcastReceiver = new PhoneStateBroadcastReceiver();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        // register for broadcasts of interest
+        registerReceiver(mPhoneStateBroadcastReceiver, filter, null, null);
+
+        // get the AudioManager and configure according the current ring mode
+        mAudioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
+
+        // get the ringer mode on start
+        mRingerMode = mAudioManager.getRingerMode();
 
         mInfrastructureInitialized = true;
     }
@@ -377,30 +392,11 @@ public class TalkBackService extends AccessibilityService {
             return;
         }
 
-        int phoneState = mInCallWatcher.mPhoneState;
-
         synchronized (mEventQueue) {
-            if (phoneState == TelephonyManager.CALL_STATE_IDLE) {
-                // not in call and not ringing - process all events
-                enqueueEventLocked(event);
-                sendSpeakMessageLocked(WHAT_SPEAK, EVENT_TIMEOUT);
-            } else if (phoneState == TelephonyManager.CALL_STATE_RINGING) {
-                // not in call but ringing - process only the in-call activity
-                // event
-                if (isSourceInCallScreenActivity(event)) {
-                    enqueueEventLocked(event);
-                    sendSpeakMessageLocked(WHAT_SPEAK_WHILE_IN_CALL, EVENT_TIMEOUT_IN_CALL_SCREEN);
-                }
-            } else {
-                // in call - cache notifications
-                if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
-                    enqueueEventLocked(event);
-                } else if (isSourceInCallScreenActivity(event)) {
-                    // we are dialing to someone so speak that
-                    enqueueEventLocked(event);
-                    sendSpeakMessageLocked(WHAT_SPEAK, EVENT_TIMEOUT_IN_CALL_SCREEN);
-                }
-            }
+            enqueueEventLocked(event);
+            long eventTimeout = isSourceInCallScreenActivity(event) ? EVENT_TIMEOUT_IN_CALL_SCREEN
+                    : EVENT_TIMEOUT;
+            sendSpeakMessageLocked(WHAT_SPEAK, eventTimeout);
         }
 
         return;
@@ -420,13 +416,11 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
-     * Enqueues the an <code>event</code>. The queuing operates as follows:
-     * </p>
+     * Enqueues the an <code>event</code>. The queuing operates as follows: </p>
      * 1. Events within the event timeout with type same as the last event
      * replace the latter if they are not notification with different icon.
-     * </br>
-     * 2. All other events are enqueued.
-     *
+     * </br> 2. All other events are enqueued.
+     * 
      * @param event The event to enqueue.
      */
     private void enqueueEventLocked(AccessibilityEvent event) {
@@ -451,9 +445,11 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
-     * Returns if the <code>currentEvent</code> has different type from the <code>lastEvent</code>
-     * or if they are {@link AccessibilityEvent#TYPE_NOTIFICATION_STATE_CHANGED} if the
-     * {@link Notification} instances they carry do not have the same icon and ticker text.
+     * Returns if the <code>currentEvent</code> has different type from the
+     * <code>lastEvent</code> or if they are
+     * {@link AccessibilityEvent#TYPE_NOTIFICATION_STATE_CHANGED} if the
+     * {@link Notification} instances they carry do not have the same icon and
+     * ticker text.
      */
     private boolean isSameEventTypeAndSameNotificationIconAndTickerText(
             AccessibilityEvent currentEvent, AccessibilityEvent lastEvent) {
@@ -492,27 +488,26 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
-     * Returns if a given <code>event</code> is fired by the dialer input
-     * which contains the currently dialed number.
-     * </p>
-     * Note: The Android framework adds hyphens between the dialed number digits
-     * which fires accessibility events. Since TalkBackService processes only the
-     * last event of a given type in a given time frame the original event is
-     * replaced by a more recent hyphen adding event.
-     *
+     * Returns if a given <code>event</code> is fired by the dialer input which
+     * contains the currently dialed number. </p> Note: The Android framework
+     * adds hyphens between the dialed number digits which fires accessibility
+     * events. Since TalkBackService processes only the last event of a given
+     * type in a given time frame the original event is replaced by a more
+     * recent hyphen adding event.
+     * 
      * @param event The event we are checking.
-     * @return True if the event comes from the dialer input box, false ohterwise.
+     * @return True if the event comes from the dialer input box, false
+     *         ohterwise.
      */
     private boolean isFromDialerInput(AccessibilityEvent event) {
-        return (PACKAGE_NAME_CONTACTS.equals(event.getPackageName()) &&
-                EditText.class.getCanonicalName().equals(event.getClassName()));
+        return (PACKAGE_NAME_CONTACTS.equals(event.getPackageName()) && EditText.class
+                .getCanonicalName().equals(event.getClassName()));
     }
 
     /**
-     * Sends {@link #WHAT_SPEAK} to the speech handler. This
-     * method cancels the old message (if such exists) since it is
-     * no longer relevant.
-     *
+     * Sends {@link #WHAT_SPEAK} to the speech handler. This method cancels the
+     * old message (if such exists) since it is no longer relevant.
+     * 
      * @param action The action to perform with the message.
      * @param timeout The timeout after which to send the message.
      */
@@ -527,13 +522,12 @@ public class TalkBackService extends AccessibilityService {
      * Processes an <code>event</code> by asking the {@link SpeechRuleProcessor}
      * to match it against its rules and in case an utterance is generated it is
      * spoken. This method is responsible for recycling of the processed event.
-     *
+     * 
      * @param event The event to process.
      * @param queueMode The queuing mode to use while processing events.
      * @param action The action to perform with the message.
      */
-    private void processAndRecycleEvent(AccessibilityEvent event, int queueMode,
-            int action) {
+    private void processAndRecycleEvent(AccessibilityEvent event, int queueMode, int action) {
         Log.d(LOG_TAG, "Processing event: " + event);
 
         Utterance utterance = Utterance.obtain();
@@ -551,30 +545,37 @@ public class TalkBackService extends AccessibilityService {
                 return;
             }
 
-            if (!speakingNotification && metadata.containsKey(Utterance.KEY_METADATA_QUEUING)) {
-                // speech rules queue mode overrides the default TalkBack behavior
-                // the case is safe since SpeechRule did the preprocessing
-                queueMode = (Integer) metadata.get(Utterance.KEY_METADATA_QUEUING);
-            } else {
-                // we never interrupt notification events
-                if (mSpeakingNotification) {
-                    queueMode = QUEUING_MODE_QUEUE;
-                } else {
-                    // if event type is the same as the last we interrupt
-                    queueMode = (mLastEventType == event.getEventType() ? QUEUING_MODE_INTERRUPT
-                        : QUEUING_MODE_QUEUE);
-                }
-            }
-
             if (isEarcon(utterance)) {
                 String earcon = utterance.getText().toString();
                 // earcons always use QUEUING_MODE_QUEUE
                 mTts.playEarcon(earcon, QUEUING_MODE_QUEUE, null);
-            } else {               
-                mLastEventType = event.getEventType();
-                cleanUpAndSpeak(utterance, queueMode, action,
-                        event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);
+                return;
             }
+
+            // we let ourselves to override the queue mode for the next event
+            if (mNextEventQueueMode != QUEUING_MODE_UNDEFINED) {
+                queueMode = mNextEventQueueMode;
+                mNextEventQueueMode = QUEUING_MODE_UNDEFINED;
+            } else {
+                if (!speakingNotification && metadata.containsKey(Utterance.KEY_METADATA_QUEUING)) {
+                    // speech rules queue mode overrides the default TalkBack behavior
+                    // the case is safe since SpeechRule did the preprocessing
+                    queueMode = (Integer) metadata.get(Utterance.KEY_METADATA_QUEUING);
+                } else {
+                    // we never interrupt notification events
+                    if (mSpeakingNotification) {
+                        queueMode = QUEUING_MODE_QUEUE;
+                    } else {
+                        // if event type is the same as the last we interrupt
+                        queueMode = (mLastEventType == event.getEventType() ? QUEUING_MODE_INTERRUPT
+                                : QUEUING_MODE_QUEUE);
+                    }
+                }
+            }
+
+            mLastEventType = event.getEventType();
+            cleanUpAndSpeak(utterance, queueMode, action,
+                    event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);
 
             utterance.recycle();
             event.recycle();
@@ -588,7 +589,7 @@ public class TalkBackService extends AccessibilityService {
      * @return The context.
      */
     static Context asContext() {
-        return sContext;
+        return sInstance;
     }
 
     /**
@@ -654,13 +655,11 @@ public class TalkBackService extends AccessibilityService {
         if (action == WHAT_SPEAK_WHILE_IN_CALL) {
             manageRingerVolume();
             parameters.clear();
-            parameters.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
-                KEY_SPEAK_COMPLETE_CALLBACK);
+            parameters.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, KEY_SPEAK_COMPLETE_CALLBACK);
         } else if (isNotification) {
             manageSpeakingNotification();
             parameters.clear();
-            parameters.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
-                KEY_SPEAK_COMPLETE_CALLBACK);
+            parameters.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, KEY_SPEAK_COMPLETE_CALLBACK);
         }
 
         if (text.equals("")) {
@@ -680,12 +679,12 @@ public class TalkBackService extends AccessibilityService {
             }
         }
 
-        mTts.speak(text, QUEUING_MODE_QUEUE /*queueMode*/, parameters);
+        mTts.speak(text, QUEUING_MODE_QUEUE /* queueMode */, parameters);
     }
 
     /**
-     * Decreases the ringer volume and registers a listener for the event of completing
-     * to speak which restores the volume to its previous level.
+     * Decreases the ringer volume and registers a listener for the event of
+     * completing to speak which restores the volume to its previous level.
      */
     private void manageRingerVolume() {
         final TextToSpeech tts = mTts;
@@ -724,12 +723,12 @@ public class TalkBackService extends AccessibilityService {
 
     /**
      * Gets the {@link AudioManager} instance.
-     *
+     * 
      * @return The audio manager.
      */
     private AudioManager getAudioManager() {
         if (mAudioManager == null) {
-          mAudioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);    
+            mAudioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
         }
         return mAudioManager;
     }
@@ -738,7 +737,7 @@ public class TalkBackService extends AccessibilityService {
      * Cleans up <code>text</text> by separating camel case words with space
      * to compensate for the not robust pronounciation of the SVOX TTS engine
      * and replacing the text with predefined strings.
-     *
+     * 
      * TODO(svetoslavganov): Hard coding a dependency on a TTS engine behavior
      *      is wrong. We have to move engine specific rules in a configuration
      *      file.
@@ -772,8 +771,8 @@ public class TalkBackService extends AccessibilityService {
     private boolean isEarcon(Utterance utterance) {
         StringBuilder text = utterance.getText();
         if (text.length() > 0) {
-            return (text.charAt(0) == OPEN_SQUARE_BRACKET &&
-                    text.charAt(text.length() - 1) == CLOSE_SQUARE_BRACKET);
+            return (text.charAt(0) == OPEN_SQUARE_BRACKET
+                    && text.charAt(text.length() - 1) == CLOSE_SQUARE_BRACKET);
         } else {
             return false;
         }
@@ -784,7 +783,7 @@ public class TalkBackService extends AccessibilityService {
         @Override
         public void handleMessage(Message message) {
             switch (message.what) {
-                case WHAT_SPEAK :
+                case WHAT_SPEAK:
                 case WHAT_SPEAK_WHILE_IN_CALL:
                     ArrayList<AccessibilityEvent> eventQueue = mEventQueue;
                     while (true) {
@@ -801,7 +800,7 @@ public class TalkBackService extends AccessibilityService {
                     mTts.speak("", QUEUING_MODE_INTERRUPT, null);
                     return;
                 case WHAT_START_TTS:
-                    mTts = new TextToSpeech(sContext, new TextToSpeech.OnInitListener() {
+                    mTts = new TextToSpeech(sInstance, new TextToSpeech.OnInitListener() {
                         @Override
                         public void onInit(int status) {
                             mTts.addEarcon(getString(R.string.earcon_progress),
@@ -815,6 +814,46 @@ public class TalkBackService extends AccessibilityService {
             }
         }
     };
+
+    /**
+     * Appends the ringer state announcement to an {@link Utterance}.
+     *
+     * @param ringerMode the device ringer mode.
+     * @param utterance The utterance to append to.
+     */
+    private void appendRingerStateAnouncement(int ringerMode, Utterance utterance) {
+        switch (ringerMode) {
+            case  AudioManager.RINGER_MODE_SILENT:
+                String silentText = getString(R.string.value_ringer_silent);
+                utterance.getText().append(silentText);
+                return;
+            case AudioManager.RINGER_MODE_VIBRATE:
+                String vibrateText = getString(R.string.value_ringer_vibrate);
+                utterance.getText().append(vibrateText);
+                return;
+            case AudioManager.RINGER_MODE_NORMAL:
+                String template = getString(R.string.template_ringer_volume);
+
+                // format the template with the ringer percentage
+                int currentRingerVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
+                int maxRingerVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+                int volumePercent = (100 / maxRingerVolume) * currentRingerVolume;
+
+                // let us round to five so it sounds better
+                int adjustment = volumePercent % 10;
+                if (adjustment < 5) {
+                    volumePercent -= adjustment;
+                } else if (adjustment > 5) {
+                    volumePercent += (10 - adjustment);
+                }
+
+                String populatedTemplate = String.format(template, volumePercent);
+                utterance.getText().append(populatedTemplate);
+                return;
+            default:
+                throw new IllegalArgumentException("Unknown ringer mode: " + ringerMode);
+        }
+    }
 
     /**
      * This receives commands send as {@link Intent} broadcasts. This is useful
@@ -832,8 +871,6 @@ public class TalkBackService extends AccessibilityService {
          */
         @Override
         public void onReceive(Context context, Intent intent) {
-            verifyCallerPermission(context, PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK);
-
             String intentAction = intent.getAction();
             if (ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND.equals(intentAction)) {
                 // TalkBack is not running so for now we fail silently
@@ -842,11 +879,8 @@ public class TalkBackService extends AccessibilityService {
                 }
 
                 Utterance utterance = Utterance.obtain();
-                utterance.getMetadata().put("temper", "RUDE");
-
                 StringBuilder utteranceBuilder = utterance.getText();
-                utteranceBuilder.append(context.getResources().getString(
-                        R.string.value_notification_summary));
+                utteranceBuilder.append(context.getString(R.string.value_notification_summary));
                 utteranceBuilder.append(SPACE);
                 utteranceBuilder.append(sNotificationCache.getFormattedSummary());
 
@@ -861,58 +895,53 @@ public class TalkBackService extends AccessibilityService {
             abortBroadcast();
             // other intent commands go here ...
         }
-
-        /**
-         * Verifies if the context of a caller has a certain permission.
-         *
-         * @param context the {@link Context}.
-         * @param permissionName The permission name.
-         */
-        private void verifyCallerPermission(Context context, String permissionName) {
-            int permissionState = context.checkPermission(permissionName, android.os.Process
-                    .myPid(), 0);
-            if (permissionState != PackageManager.PERMISSION_GRANTED) {
-                String message = "Permission denied - " + permissionName;
-                Log.e(LOG_TAG, message);
-                throw new SecurityException(message);
-            }
-        }
     }
 
     /**
-     * This class listens for the state of the {@link TelephonyManager} to
-     * determine when to speak so speaking during a phone call is disabled.
-     * Events received while speaking is not allowed are cached and as soon
-     * as speaking is allowed these events are processed.
+     * {@link BroadcastReceiver} for receiving updates for our context - device state
      */
-    class InCallWatcher extends PhoneStateListener {
-        int mPhoneState;
+    class PhoneStateBroadcastReceiver extends BroadcastReceiver {
 
         @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            mPhoneState = state;
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
 
-            if (state != TelephonyManager.CALL_STATE_IDLE) {
-                // a call has started, so interrupt all the stuff that
-                // speaks and stuff scheduled for speaking
-                mSpeechHandler.obtainMessage(WHAT_STOP_ALL_SPEAKING).sendToTarget();
-                mSpeechHandler.removeMessages(WHAT_SPEAK);
+            if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(action)) {
+                mRingerMode = intent.getIntExtra(AudioManager.EXTRA_RINGER_MODE,
+                        AudioManager.RINGER_MODE_NORMAL);
+                Utterance utterance = Utterance.obtain();
+                appendRingerStateAnouncement(mRingerMode, utterance);
+                cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                Utterance utterance = Utterance.obtain();
+                String screenState = getString(R.string.value_screen_on);
+                utterance.getText().append(screenState);
+                appendRingerStateAnouncement(mRingerMode, utterance);
+                cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                Utterance utterance = Utterance.obtain();
+                String screenState = getString(R.string.value_screen_off);
+                utterance.getText().append(screenState);
+                appendRingerStateAnouncement(mRingerMode, utterance);
+                cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
+            } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
+                // we want the phone unlock message to be uninterruptible
+                mNextEventQueueMode = QUEUING_MODE_QUEUE;
+                Utterance utterance = Utterance.obtain();
+                String screenState = getString(R.string.value_phone_unlocked);
+                utterance.getText().append(screenState);
+                cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
             } else {
-                // we can speak now so announce all cached events with
-                // no interruption
-                synchronized (mSpeechHandler) {
-                    if (!mEventQueue.isEmpty()) {
-                        sendSpeakMessageLocked(WHAT_SPEAK, EVENT_TIMEOUT);
-                    }
-                }
+                Log.w(LOG_TAG, "Registered for but not handling action " + action);
             }
         }
     }
 
     /**
-     * This class is an event queue which keeps track of relevant events. Such events
-     * do not have {@link AccessibilityEvent#TYPE_NOTIFICATION_STATE_CHANGED}. We
-     * treat such events in a special manner.
+     * This class is an event queue which keeps track of relevant events. Such
+     * events do not have
+     * {@link AccessibilityEvent#TYPE_NOTIFICATION_STATE_CHANGED}. We treat such
+     * events in a special manner.
      */
     class EventQueue extends ArrayList<AccessibilityEvent> {
         private int mRelevantEventCount;
@@ -972,16 +1001,17 @@ public class TalkBackService extends AccessibilityService {
         private int relevantEventCount() {
             return mRelevantEventCount;
         }
-        
+
         /**
          * Enforces that the event queue is not more than
-         * {@link #EVENT_QUEUE_MAX_SIZE}. The excessive events are
-         * pruned through a FIFO strategy i.e. removing the oldest event first.
+         * {@link #EVENT_QUEUE_MAX_SIZE}. The excessive events are pruned
+         * through a FIFO strategy i.e. removing the oldest event first.
          */
         public void enforceRelevantEventSize() {
             while (relevantEventCount() > EVENT_QUEUE_MAX_SIZE) {
                 AccessibilityEvent bottom = get(0);
-                // do not consider notifications since we always speak queued notifications
+                // do not consider notifications since we always speak queued
+                // notifications
                 if (!isNotificationEvent(bottom)) {
                     remove(0);
                 }
@@ -989,7 +1019,8 @@ public class TalkBackService extends AccessibilityService {
         }
 
         /**
-         * Returns if an event type is AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED.
+         * Returns if an event type is
+         * AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED.
          */
         private boolean isNotificationEvent(AccessibilityEvent event) {
             return (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);
