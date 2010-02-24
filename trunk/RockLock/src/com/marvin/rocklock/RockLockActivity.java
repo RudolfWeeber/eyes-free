@@ -342,6 +342,7 @@ public class RockLockActivity extends Activity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        poked = true;
         mp.stop();
         tts.shutdown();
         unregisterReceiver(mediaButtonReceiver);
