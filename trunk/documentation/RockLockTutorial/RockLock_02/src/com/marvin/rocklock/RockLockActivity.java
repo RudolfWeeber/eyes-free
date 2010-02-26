@@ -71,6 +71,8 @@ public class RockLockActivity extends Activity {
     private boolean seekingStopped = true;
     
     private GestureOverlay gestureOverlay;
+    
+    private AnimationLayer uiAnimation;
 
     private TextView dateText;
 
@@ -163,12 +165,14 @@ public class RockLockActivity extends Activity {
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         registerReceiver(mediaButtonReceiver, filter);
 
+        uiAnimation = new AnimationLayer(this);
+
         gestureOverlay = new GestureOverlay(this, new GestureListener() {
 
             @Override
             public void onGestureChange(int g) {
                 isSeeking = false;
-
+                uiAnimation.setDirection(g);                
                 switch (g) {
                     case Gesture.UPLEFT:
                         updateDisplayText(getString(R.string.previous_artist), mp
@@ -219,6 +223,7 @@ public class RockLockActivity extends Activity {
             @Override
             public void onGestureFinish(int g) {
                 isSeeking = false;
+                uiAnimation.setDirection(-1);
                 switch (g) {
                     case Gesture.UPLEFT:
                         mp.prevArtist();
@@ -258,6 +263,7 @@ public class RockLockActivity extends Activity {
         dateText = (TextView) textLayer.findViewById(R.id.dateText);
         statusText = (TextView) textLayer.findViewById(R.id.statusText);
         infoText = (TextView) textLayer.findViewById(R.id.infoText);
+        contentFrame.addView(uiAnimation);
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
     }
