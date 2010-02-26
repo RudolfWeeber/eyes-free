@@ -265,7 +265,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     }
 
     public String getCurrentSongInfo() {
-        return filePathToName(currentArtistFullPath) + " - " + filePathToName(currentAlbumFullPath)
-                + " - " + filePathToName(currentTrackFullPath);
+        return filePathToName(currentArtistFullPath) + "\n" + filePathToName(currentAlbumFullPath)
+                + "\n" + filePathToName(currentTrackFullPath);
     }
 }
