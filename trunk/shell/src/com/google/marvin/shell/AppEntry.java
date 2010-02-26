@@ -101,9 +101,9 @@ public class AppEntry {
     }
 
     /**
-     * Returns a string xml representation of this appInfo element.
+     * Returns a String xml representation of this appInfo element.
      * 
-     * @return
+     * @return String xml representation of this appInfo object
      */
     public String toXml() {
         String xmlStr = "    <appInfo";

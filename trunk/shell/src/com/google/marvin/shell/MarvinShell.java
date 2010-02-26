@@ -18,9 +18,9 @@ package com.google.marvin.shell;
 
 import com.google.marvin.shell.ProximitySensor.ProximityChangeListener;
 import com.google.marvin.utils.UserTask;
-import com.google.marvin.widget.TouchGestureControlOverlay;
-import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
-import com.google.marvin.widget.TouchGestureControlOverlay.GestureListener;
+import com.google.marvin.widget.GestureOverlay;
+import com.google.marvin.widget.GestureOverlay.Gesture;
+import com.google.marvin.widget.GestureOverlay.GestureListener;
 import com.google.tts.TTSEarcon;
 import com.google.tts.TextToSpeechBeta;
 import com.google.tts.TextToSpeechBeta.OnInitListener;
@@ -92,7 +92,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
     private AuditoryWidgets widgets;
 
-    private HashMap<Gesture, MenuItem> items;
+    private HashMap<Integer, MenuItem> items;
 
     private ArrayList<Menu> menus;
 
@@ -123,7 +123,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             0, 10, 70, 80
     };
 
-    private TouchGestureControlOverlay gestureOverlay;
+    private GestureOverlay gestureOverlay;
 
     private TextView mainText;
 
@@ -164,7 +164,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
             mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
             vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            gestureOverlay = new TouchGestureControlOverlay(self, self);
+            gestureOverlay = new GestureOverlay(self, self);
             mainFrameLayout.addView(gestureOverlay);
 
             new ProcessTask().execute();
@@ -214,7 +214,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             }
         };
         IntentFilter screenOnFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        registerReceiver(screenStateOnReceiver, screenOnFilter);
+//        registerReceiver(screenStateOnReceiver, screenOnFilter);
     }
 
     @Override
@@ -327,7 +327,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     }
 
     private void loadHomeMenu() {
-        items = new HashMap<Gesture, MenuItem>();
+        items = new HashMap<Integer, MenuItem>();
 
         items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.signal), "WIDGET",
                 "CONNECTIVITY", null));
@@ -413,7 +413,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         }
     }
 
-    public void onGestureChange(Gesture g) {
+    public void onGestureChange(int g) {
         MenuItem item = items.get(g);
         if (item != null) {
             String label = item.label;
@@ -432,7 +432,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     }
 
 
-    public void onGestureFinish(Gesture g) {
+    public void onGestureFinish(int g) {
         MenuItem item = items.get(g);
         if (item != null) {
             if (item.action.equals("LAUNCH")) {
@@ -489,7 +489,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         mainText.setText(menus.get(menus.size() - 1).title);
     }
 
-    public void onGestureStart(Gesture g) {
+    public void onGestureStart(int g) {
         vibe.vibrate(VIBE_PATTERN, -1);
     }
     
@@ -729,5 +729,4 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             }
         }
     }
-
 }

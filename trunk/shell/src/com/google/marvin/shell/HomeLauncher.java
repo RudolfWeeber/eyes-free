@@ -17,7 +17,6 @@
 package com.google.marvin.shell;
 
 import android.app.Activity;
-import android.os.Bundle;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +24,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
 
 /**
  * Launches the Eyes-Free Shell if the user has Talkback enabled; otherwise, it

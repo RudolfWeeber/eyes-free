@@ -17,7 +17,7 @@
 package com.google.marvin.shell;
 
 import com.google.marvin.utils.UserTask;
-import com.google.marvin.widget.TouchGestureControlOverlay.Gesture;
+import com.google.marvin.widget.GestureOverlay.Gesture;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -75,8 +75,8 @@ public class ShortcutsManagerActivity extends Activity {
      * Maps from directional gesture to index of button in shortcuts manager
      * list (0 to 7)
      */
-    private static final HashMap<Gesture, Integer> gestureToIndexMapping =
-        new HashMap<Gesture, Integer>();
+    private static final HashMap<Integer, Integer> gestureToIndexMapping =
+        new HashMap<Integer, Integer>();
     static {
         gestureToIndexMapping.put(Gesture.UPLEFT, 0);
         gestureToIndexMapping.put(Gesture.UP, 1);
@@ -92,8 +92,8 @@ public class ShortcutsManagerActivity extends Activity {
      * Maps from index of button in shortcuts manager list (0 to 7) to
      * directional gesture
      */
-    private static final HashMap<Integer, Gesture> indexToGestureMapping =
-        new HashMap<Integer, Gesture>();
+    private static final HashMap<Integer, Integer> indexToGestureMapping =
+        new HashMap<Integer, Integer>();
     static {
         indexToGestureMapping.put(0, Gesture.UPLEFT);
         indexToGestureMapping.put(1, Gesture.UP);
@@ -109,7 +109,7 @@ public class ShortcutsManagerActivity extends Activity {
 
     private ArrayList<AppEntry> launchableApps;
 
-    private HashMap<Gesture, MenuItem> menu;
+    private HashMap<Integer, MenuItem> menu;
 
     private Button[] buttons;
 
@@ -167,10 +167,10 @@ public class ShortcutsManagerActivity extends Activity {
 
         // Load shortcuts.xml file
         menu = MenuLoader.loadMenu(filename);
-        Iterator<Map.Entry<Gesture, MenuItem>> it = menu.entrySet().iterator();
+        Iterator<Map.Entry<Integer, MenuItem>> it = menu.entrySet().iterator();
 
         while (it.hasNext()) {
-            Map.Entry<Gesture, MenuItem> entry = it.next();
+            Map.Entry<Integer, MenuItem> entry = it.next();
             MenuItem item = entry.getValue();
             int buttonIndex = gestureToIndexMapping.get(entry.getKey());
             Log.e("debug", String.valueOf(buttonIndex));
@@ -265,13 +265,13 @@ public class ShortcutsManagerActivity extends Activity {
                     // Sort gestures by button number ordering
                     class GestureSorter implements Comparator {
                         public int compare(Object arg0, Object arg1) {
-                            return ((Gesture) arg0).ordinal() - ((Gesture) arg1).ordinal();
+                            return ((Integer) arg0) - ((Integer) arg1);
                         }
                     }
 
-                    ArrayList<Gesture> keyList = new ArrayList<Gesture>(menu.keySet());
+                    ArrayList<Integer> keyList = new ArrayList<Integer>(menu.keySet());
                     Collections.sort(keyList, new GestureSorter());
-                    Iterator<Gesture> it = keyList.iterator();
+                    Iterator<Integer> it = keyList.iterator();
 
                     String shellTag = "<shell>\n";
                     String shellCloseTag = "</shell>";
@@ -279,7 +279,7 @@ public class ShortcutsManagerActivity extends Activity {
                     outputStreamWriter.write(shellTag);
 
                     while (it.hasNext()) {
-                        Gesture gesture = it.next();
+                        int gesture = it.next();
                         MenuItem item = menu.get(gesture);
                         outputStreamWriter.write(item.toXml(gesture));
                     }
