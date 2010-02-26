@@ -373,7 +373,7 @@ public class RockLockActivity extends Activity {
         @Override
         public void run() {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
