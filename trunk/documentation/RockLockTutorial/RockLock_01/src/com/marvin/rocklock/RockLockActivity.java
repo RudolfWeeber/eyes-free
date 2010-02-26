@@ -31,11 +31,9 @@ import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -71,7 +69,7 @@ public class RockLockActivity extends Activity {
     private boolean isSeeking = false;
 
     private boolean seekingStopped = true;
-    
+
     private GestureOverlay gestureOverlay;
 
     private TextView dateText;
@@ -177,15 +175,13 @@ public class RockLockActivity extends Activity {
                                 .getPrevArtistName());
                         break;
                     case Gesture.UP:
-                        updateDisplayText(getString(R.string.previous_album),
-                                mp.getPrevAlbumName());
+                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName());
                         break;
                     case Gesture.UPRIGHT:
                         updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName());
                         break;
                     case Gesture.LEFT:
-                        updateDisplayText(getString(R.string.previous_track),
-                                mp.getPrevTrackName());
+                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName());
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
@@ -254,7 +250,7 @@ public class RockLockActivity extends Activity {
             }
 
         });
-        
+
         contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
         View textLayer = this.getLayoutInflater().inflate(R.layout.textlayer, null);
         dateText = (TextView) textLayer.findViewById(R.id.dateText);
