@@ -81,9 +81,9 @@ public class RockLockActivity extends Activity {
     private AnimationLayer uiAnimation;
 
     private Vibrator vibe;
-    
+
     private TextToSpeech tts;
-    
+
     private TextView dateText;
 
     private TextView statusText;
@@ -176,7 +176,7 @@ public class RockLockActivity extends Activity {
         registerReceiver(mediaButtonReceiver, filter);
 
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        
+
         uiAnimation = new AnimationLayer(this);
 
         gestureOverlay = new GestureOverlay(this, new GestureListener() {
@@ -192,33 +192,41 @@ public class RockLockActivity extends Activity {
                                 .getPrevArtistName(), true);
                         break;
                     case Gesture.UP:
-                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName(), true);
+                        updateDisplayText(getString(R.string.previous_album),
+                                mp.getPrevAlbumName(), true);
                         break;
                     case Gesture.UPRIGHT:
-                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(), true);
+                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(),
+                                true);
                         break;
                     case Gesture.LEFT:
-                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName(), true);
+                        updateDisplayText(getString(R.string.previous_track),
+                                mp.getPrevTrackName(), true);
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
-                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo(), true);
+                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo(),
+                                    true);
                         } else {
-                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo(), true);
+                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo(),
+                                    true);
                         }
                         break;
                     case Gesture.RIGHT:
-                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName(), true);
+                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName(),
+                                true);
                         break;
                     case Gesture.DOWNLEFT:
                         if (seekingStopped) {
-                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(), false);
+                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(),
+                                    false);
                             isSeeking = true;
                             new Thread(new Seeker(-1)).start();
                         }
                         break;
                     case Gesture.DOWN:
-                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(), true);
+                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(),
+                                true);
                         break;
                     case Gesture.DOWNRIGHT:
                         if (seekingStopped) {
@@ -279,7 +287,7 @@ public class RockLockActivity extends Activity {
         contentFrame.addView(uiAnimation);
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
-        
+
         tts = new TextToSpeech(this, null);
     }
 
