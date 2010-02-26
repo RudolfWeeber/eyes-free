@@ -232,7 +232,7 @@ public class MusicPlayer {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     nextTrack();
-                    parent.updateDisplayText(null, null);
+                    parent.updateDisplayText(null, null, false);
                 }
             });
             player.start();
