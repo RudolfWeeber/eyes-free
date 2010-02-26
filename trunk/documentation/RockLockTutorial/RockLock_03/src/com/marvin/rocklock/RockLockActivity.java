@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -54,6 +55,10 @@ import java.util.Calendar;
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
 
+    private static final long[] VIBE_PATTERN = {
+            0, 10, 70, 80
+    };
+
     private boolean poked = false;
 
     private KeyguardManager keyguardManager;
@@ -69,11 +74,13 @@ public class RockLockActivity extends Activity {
     private boolean isSeeking = false;
 
     private boolean seekingStopped = true;
-    
+
     private GestureOverlay gestureOverlay;
-    
+
     private AnimationLayer uiAnimation;
 
+    private Vibrator vibe;
+    
     private TextView dateText;
 
     private TextView statusText;
@@ -165,6 +172,8 @@ public class RockLockActivity extends Activity {
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         registerReceiver(mediaButtonReceiver, filter);
 
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        
         uiAnimation = new AnimationLayer(this);
 
         gestureOverlay = new GestureOverlay(this, new GestureListener() {
@@ -172,22 +181,21 @@ public class RockLockActivity extends Activity {
             @Override
             public void onGestureChange(int g) {
                 isSeeking = false;
-                uiAnimation.setDirection(g);                
+                vibe.vibrate(VIBE_PATTERN, -1);
+                uiAnimation.setDirection(g);
                 switch (g) {
                     case Gesture.UPLEFT:
                         updateDisplayText(getString(R.string.previous_artist), mp
                                 .getPrevArtistName());
                         break;
                     case Gesture.UP:
-                        updateDisplayText(getString(R.string.previous_album),
-                                mp.getPrevAlbumName());
+                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName());
                         break;
                     case Gesture.UPRIGHT:
                         updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName());
                         break;
                     case Gesture.LEFT:
-                        updateDisplayText(getString(R.string.previous_track),
-                                mp.getPrevTrackName());
+                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName());
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
@@ -223,6 +231,7 @@ public class RockLockActivity extends Activity {
             @Override
             public void onGestureFinish(int g) {
                 isSeeking = false;
+                vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(-1);
                 switch (g) {
                     case Gesture.UPLEFT:
@@ -254,10 +263,11 @@ public class RockLockActivity extends Activity {
             public void onGestureStart(int g) {
                 poked = true;
                 isSeeking = false;
+                vibe.vibrate(VIBE_PATTERN, -1);
             }
 
         });
-        
+
         contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
         View textLayer = this.getLayoutInflater().inflate(R.layout.textlayer, null);
         dateText = (TextView) textLayer.findViewById(R.id.dateText);
