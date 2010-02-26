@@ -56,14 +56,12 @@ import java.util.Calendar;
  */
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
-
+    
     public static final String TICK_EARCON = "[TICK]";
-
+    
     private static final long[] VIBE_PATTERN = {
             0, 10, 70, 80
     };
-
-    private RockLockActivity self;
 
     private boolean poked = false;
 
@@ -85,15 +83,15 @@ public class RockLockActivity extends Activity {
 
     private AnimationLayer uiAnimation;
 
+    private Vibrator vibe;
+    
+    private TextToSpeech tts;
+    
     private TextView dateText;
 
     private TextView statusText;
 
     private TextView infoText;
-
-    private Vibrator vibe;
-
-    private TextToSpeech tts;
 
     // Catch media button events so that controls from plugged in headsets and
     // BlueTooth headsets will work.
@@ -139,7 +137,6 @@ public class RockLockActivity extends Activity {
         // Start the service in case it is not already running
         startService(new Intent(this, ScreenOnHandlerService.class));
 
-        self = this;
         keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         keyguard = keyguardManager.newKeyguardLock("RockLock");
 
@@ -182,58 +179,50 @@ public class RockLockActivity extends Activity {
         registerReceiver(mediaButtonReceiver, filter);
 
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
+        
         uiAnimation = new AnimationLayer(this);
 
-        gestureOverlay = new GestureOverlay(self, new GestureListener() {
+        gestureOverlay = new GestureOverlay(this, new GestureListener() {
 
             @Override
             public void onGestureChange(int g) {
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
                 uiAnimation.setDirection(g);
-
                 switch (g) {
                     case Gesture.UPLEFT:
                         updateDisplayText(getString(R.string.previous_artist), mp
                                 .getPrevArtistName(), true);
                         break;
                     case Gesture.UP:
-                        updateDisplayText(getString(R.string.previous_album),
-                                mp.getPrevAlbumName(), true);
+                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName(), true);
                         break;
                     case Gesture.UPRIGHT:
-                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(),
-                                true);
+                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(), true);
                         break;
                     case Gesture.LEFT:
-                        updateDisplayText(getString(R.string.previous_track),
-                                mp.getPrevTrackName(), true);
+                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName(), true);
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
-                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo(),
-                                    false);
+                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo(), true);
                         } else {
-                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo(),
-                                    false);
+                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo(), true);
                         }
                         break;
                     case Gesture.RIGHT:
-                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName(),
-                                true);
+                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName(), true);
                         break;
                     case Gesture.DOWNLEFT:
                         if (seekingStopped) {
-                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(),
-                                    false);
+                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(), false);
                             isSeeking = true;
                             new Thread(new Seeker(-1)).start();
                         }
                         break;
                     case Gesture.DOWN:
-                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(),
-                                true);
+                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(), true);
                         break;
                     case Gesture.DOWNRIGHT:
                         if (seekingStopped) {
@@ -250,6 +239,7 @@ public class RockLockActivity extends Activity {
             public void onGestureFinish(int g) {
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
                 uiAnimation.setDirection(-1);
                 switch (g) {
                     case Gesture.UPLEFT:
@@ -274,7 +264,6 @@ public class RockLockActivity extends Activity {
                         mp.nextAlbum();
                         break;
                 }
-                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
                 updateDisplayText(null, null, false);
             }
 
@@ -283,19 +272,22 @@ public class RockLockActivity extends Activity {
                 poked = true;
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
             }
 
         });
 
         contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
-        contentFrame.addView(uiAnimation);
         View textLayer = this.getLayoutInflater().inflate(R.layout.textlayer, null);
         dateText = (TextView) textLayer.findViewById(R.id.dateText);
         statusText = (TextView) textLayer.findViewById(R.id.statusText);
         infoText = (TextView) textLayer.findViewById(R.id.infoText);
+        contentFrame.addView(uiAnimation);
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
-
+        
+        final RockLockActivity self = this;
+        
         tts = new TextToSpeech(this, new OnInitListener() {
             @Override
             public void onInit(int arg0) {
@@ -317,7 +309,6 @@ public class RockLockActivity extends Activity {
         dateText.setText(monthStr + " " + Integer.toString(day) + ", " + year);
         keyguard.disableKeyguard();
         new Thread(new PokeWatcher()).start();
-        tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     @Override
@@ -380,7 +371,6 @@ public class RockLockActivity extends Activity {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 if (seekMode == 1) {

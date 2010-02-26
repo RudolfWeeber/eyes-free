@@ -4,7 +4,7 @@
   <application android:icon="@drawable/icon" android:label="@string/app_name">
 
     <activity android:name=".RockLockActivity" android:label="@string/app_name"
-      android:excludeFromRecents="true" android:theme="@android:style/Theme.Wallpaper"
+      android:excludeFromRecents="true"
       android:launchMode="singleInstance" android:taskAffinity=""
       android:configChanges="orientation|keyboardHidden|keyboard|navigation"
       android:screenOrientation="portrait">
@@ -24,7 +24,7 @@
     </service>
 
   </application>
-  <uses-sdk android:minSdkVersion="4" />
+  <uses-sdk android:minSdkVersion="6" />
 
 
   <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />

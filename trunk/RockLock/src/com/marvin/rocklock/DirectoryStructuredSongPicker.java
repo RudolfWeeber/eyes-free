@@ -39,7 +39,8 @@ public class DirectoryStructuredSongPicker implements SongPicker {
 
     private static final String PREF_TRACK = "DIR_TRACK";
 
-    private static final File musicDir = new File(Environment.getExternalStorageDirectory() + "/RockLock/.music");
+    private static final File musicDir = new File(Environment.getExternalStorageDirectory()
+            + "/RockLock/.music");
 
     private class DirectoryFilter implements FileFilter {
         @Override

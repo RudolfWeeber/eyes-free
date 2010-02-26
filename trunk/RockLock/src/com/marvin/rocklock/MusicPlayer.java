@@ -168,14 +168,6 @@ public class MusicPlayer {
         }
     }
 
-    public void lowerMediaVolume() {
-        // TODO: implement this!
-    }
-
-    public void restoreMediaVolume() {
-        // TODO: implement this!
-    }
-
     public void nextTrack() {
         if (!tPickerAvailable && !dPickerAvailable) {
             return;
