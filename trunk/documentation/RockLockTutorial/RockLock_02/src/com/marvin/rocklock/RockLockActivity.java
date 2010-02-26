@@ -69,9 +69,9 @@ public class RockLockActivity extends Activity {
     private boolean isSeeking = false;
 
     private boolean seekingStopped = true;
-    
+
     private GestureOverlay gestureOverlay;
-    
+
     private AnimationLayer uiAnimation;
 
     private TextView dateText;
@@ -172,22 +172,20 @@ public class RockLockActivity extends Activity {
             @Override
             public void onGestureChange(int g) {
                 isSeeking = false;
-                uiAnimation.setDirection(g);                
+                uiAnimation.setDirection(g);
                 switch (g) {
                     case Gesture.UPLEFT:
                         updateDisplayText(getString(R.string.previous_artist), mp
                                 .getPrevArtistName());
                         break;
                     case Gesture.UP:
-                        updateDisplayText(getString(R.string.previous_album),
-                                mp.getPrevAlbumName());
+                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName());
                         break;
                     case Gesture.UPRIGHT:
                         updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName());
                         break;
                     case Gesture.LEFT:
-                        updateDisplayText(getString(R.string.previous_track),
-                                mp.getPrevTrackName());
+                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName());
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
@@ -257,7 +255,7 @@ public class RockLockActivity extends Activity {
             }
 
         });
-        
+
         contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
         View textLayer = this.getLayoutInflater().inflate(R.layout.textlayer, null);
         dateText = (TextView) textLayer.findViewById(R.id.dateText);
