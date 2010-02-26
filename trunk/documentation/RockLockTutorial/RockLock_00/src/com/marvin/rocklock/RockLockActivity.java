@@ -52,8 +52,6 @@ import java.util.Calendar;
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
 
-    public static final String TICK_EARCON = "[TICK]";
-
     private boolean poked = false;
 
     private KeyguardManager keyguardManager;
