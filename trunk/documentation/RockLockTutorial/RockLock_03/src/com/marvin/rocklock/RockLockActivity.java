@@ -80,7 +80,7 @@ public class RockLockActivity extends Activity {
     private AnimationLayer uiAnimation;
 
     private Vibrator vibe;
-    
+
     private TextView dateText;
 
     private TextView statusText;
@@ -173,7 +173,7 @@ public class RockLockActivity extends Activity {
         registerReceiver(mediaButtonReceiver, filter);
 
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        
+
         uiAnimation = new AnimationLayer(this);
 
         gestureOverlay = new GestureOverlay(this, new GestureListener() {
