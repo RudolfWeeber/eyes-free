@@ -28,15 +28,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -74,6 +71,8 @@ public class RockLockActivity extends Activity {
     private boolean seekingStopped = true;
     
     private GestureOverlay gestureOverlay;
+    
+    private AnimationLayer uiAnimation;
 
     private TextView dateText;
 
@@ -166,12 +165,14 @@ public class RockLockActivity extends Activity {
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         registerReceiver(mediaButtonReceiver, filter);
 
+        uiAnimation = new AnimationLayer(this);
+
         gestureOverlay = new GestureOverlay(this, new GestureListener() {
 
             @Override
             public void onGestureChange(int g) {
                 isSeeking = false;
-
+                uiAnimation.setDirection(g);                
                 switch (g) {
                     case Gesture.UPLEFT:
                         updateDisplayText(getString(R.string.previous_artist), mp
@@ -222,6 +223,7 @@ public class RockLockActivity extends Activity {
             @Override
             public void onGestureFinish(int g) {
                 isSeeking = false;
+                uiAnimation.setDirection(-1);
                 switch (g) {
                     case Gesture.UPLEFT:
                         mp.prevArtist();
@@ -261,6 +263,7 @@ public class RockLockActivity extends Activity {
         dateText = (TextView) textLayer.findViewById(R.id.dateText);
         statusText = (TextView) textLayer.findViewById(R.id.statusText);
         infoText = (TextView) textLayer.findViewById(R.id.infoText);
+        contentFrame.addView(uiAnimation);
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
     }
