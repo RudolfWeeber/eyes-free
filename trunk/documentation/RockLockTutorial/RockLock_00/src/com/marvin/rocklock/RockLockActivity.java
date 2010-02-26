@@ -93,13 +93,13 @@ public class RockLockActivity extends Activity {
                 if ((keyCode == KeyEvent.KEYCODE_HEADSETHOOK)
                         || (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)) {
                     mp.togglePlayPause();
-                    updateDisplayText(null, null, false);
+                    updateDisplayText(null, null);
                 } else if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
                     mp.nextTrack();
-                    updateDisplayText(null, null, false);
+                    updateDisplayText(null, null);
                 } else if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
                     mp.prevTrack();
-                    updateDisplayText(null, null, false);
+                    updateDisplayText(null, null);
                 }
             }
         }
@@ -173,7 +173,7 @@ public class RockLockActivity extends Activity {
             public void onClick(View arg0) {
                 poked = true;
                 mp.prevArtist();
-                updateDisplayText(null, null, false);
+                updateDisplayText(null, null);
             }
         });
 
@@ -183,7 +183,7 @@ public class RockLockActivity extends Activity {
             public void onClick(View arg0) {
                 poked = true;
                 mp.prevAlbum();
-                updateDisplayText(null, null, false);
+                updateDisplayText(null, null);
             }
         });
 
@@ -193,7 +193,7 @@ public class RockLockActivity extends Activity {
             public void onClick(View arg0) {
                 poked = true;
                 mp.nextArtist();
-                updateDisplayText(null, null, false);
+                updateDisplayText(null, null);
             }
         });
 
@@ -203,7 +203,7 @@ public class RockLockActivity extends Activity {
             public void onClick(View arg0) {
                 poked = true;
                 mp.prevTrack();
-                updateDisplayText(null, null, false);
+                updateDisplayText(null, null);
             }
         });
 
@@ -213,7 +213,7 @@ public class RockLockActivity extends Activity {
             public void onClick(View arg0) {
                 poked = true;
                 mp.nextTrack();
-                updateDisplayText(null, null, false);
+                updateDisplayText(null, null);
             }
         });
 
@@ -224,14 +224,13 @@ public class RockLockActivity extends Activity {
                 poked = true;
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     if (seekingStopped) {
-                        updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(),
-                                false);
+                        updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo());
                         isSeeking = true;
                         new Thread(new Seeker(-1)).start();
                     }
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     isSeeking = false;
-                    updateDisplayText(null, null, false);
+                    updateDisplayText(null, null);
                 }
                 return true;
             }
@@ -243,7 +242,7 @@ public class RockLockActivity extends Activity {
             public void onClick(View arg0) {
                 poked = true;
                 mp.nextAlbum();
-                updateDisplayText(null, null, false);
+                updateDisplayText(null, null);
             }
         });
 
@@ -254,14 +253,13 @@ public class RockLockActivity extends Activity {
                 poked = true;
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     if (seekingStopped) {
-                        updateDisplayText(getString(R.string.fast_forward),
-                                mp.getCurrentSongInfo(), false);
+                        updateDisplayText(getString(R.string.fast_forward), mp.getCurrentSongInfo());
                         isSeeking = true;
                         new Thread(new Seeker(1)).start();
                     }
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     isSeeking = false;
-                    updateDisplayText(null, null, false);
+                    updateDisplayText(null, null);
                 }
                 return true;
             }
@@ -273,7 +271,7 @@ public class RockLockActivity extends Activity {
             public void onClick(View arg0) {
                 poked = true;
                 mp.togglePlayPause();
-                updateDisplayText(null, null, false);
+                updateDisplayText(null, null);
             }
         });
 
@@ -307,7 +305,7 @@ public class RockLockActivity extends Activity {
             if (songPickerType == MusicPlayer.ROCKLOCK_PLAYLIST) {
                 songPickerTextResId = R.string.rock_lock_playlist;
             }
-            updateDisplayText(getString(R.string.app_name), getString(songPickerTextResId), true);
+            updateDisplayText(getString(R.string.app_name), getString(songPickerTextResId));
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -322,7 +320,7 @@ public class RockLockActivity extends Activity {
         keyguardManager.exitKeyguardSecurely(null);
     }
 
-    public void updateDisplayText(String status, String info, boolean speak) {
+    public void updateDisplayText(String status, String info) {
         if ((status == null) || (info == null)) {
             if (mp.isPlaying()) {
                 statusText.setText(R.string.playing);
