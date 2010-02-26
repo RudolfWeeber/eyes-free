@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -81,6 +82,8 @@ public class RockLockActivity extends Activity {
 
     private Vibrator vibe;
     
+    private TextToSpeech tts;
+    
     private TextView dateText;
 
     private TextView statusText;
@@ -104,13 +107,13 @@ public class RockLockActivity extends Activity {
                 if ((keyCode == KeyEvent.KEYCODE_HEADSETHOOK)
                         || (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE)) {
                     mp.togglePlayPause();
-                    updateDisplayText(null, null);
+                    updateDisplayText(null, null, false);
                 } else if (keyCode == KeyEvent.KEYCODE_MEDIA_NEXT) {
                     mp.nextTrack();
-                    updateDisplayText(null, null);
+                    updateDisplayText(null, null, false);
                 } else if (keyCode == KeyEvent.KEYCODE_MEDIA_PREVIOUS) {
                     mp.prevTrack();
-                    updateDisplayText(null, null);
+                    updateDisplayText(null, null, false);
                 }
             }
         }
@@ -186,41 +189,41 @@ public class RockLockActivity extends Activity {
                 switch (g) {
                     case Gesture.UPLEFT:
                         updateDisplayText(getString(R.string.previous_artist), mp
-                                .getPrevArtistName());
+                                .getPrevArtistName(), true);
                         break;
                     case Gesture.UP:
-                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName());
+                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName(), true);
                         break;
                     case Gesture.UPRIGHT:
-                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName());
+                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(), true);
                         break;
                     case Gesture.LEFT:
-                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName());
+                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName(), true);
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
-                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo());
+                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo(), true);
                         } else {
-                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo());
+                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo(), true);
                         }
                         break;
                     case Gesture.RIGHT:
-                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName());
+                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName(), true);
                         break;
                     case Gesture.DOWNLEFT:
                         if (seekingStopped) {
-                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo());
+                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(), false);
                             isSeeking = true;
                             new Thread(new Seeker(-1)).start();
                         }
                         break;
                     case Gesture.DOWN:
-                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName());
+                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(), true);
                         break;
                     case Gesture.DOWNRIGHT:
                         if (seekingStopped) {
                             updateDisplayText(getString(R.string.fast_forward), mp
-                                    .getCurrentSongInfo());
+                                    .getCurrentSongInfo(), false);
                             isSeeking = true;
                             new Thread(new Seeker(1)).start();
                         }
@@ -256,7 +259,7 @@ public class RockLockActivity extends Activity {
                         mp.nextAlbum();
                         break;
                 }
-                updateDisplayText(null, null);
+                updateDisplayText(null, null, false);
             }
 
             @Override
@@ -276,6 +279,8 @@ public class RockLockActivity extends Activity {
         contentFrame.addView(uiAnimation);
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
+        
+        tts = new TextToSpeech(this, null);
     }
 
     @Override
@@ -305,7 +310,7 @@ public class RockLockActivity extends Activity {
             if (songPickerType == MusicPlayer.ROCKLOCK_PLAYLIST) {
                 songPickerTextResId = R.string.rock_lock_playlist;
             }
-            updateDisplayText(getString(R.string.app_name), getString(songPickerTextResId));
+            updateDisplayText(getString(R.string.app_name), getString(songPickerTextResId), true);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -316,11 +321,12 @@ public class RockLockActivity extends Activity {
         super.onDestroy();
         poked = true;
         mp.stop();
+        tts.shutdown();
         unregisterReceiver(mediaButtonReceiver);
         keyguardManager.exitKeyguardSecurely(null);
     }
 
-    public void updateDisplayText(String status, String info) {
+    public void updateDisplayText(String status, String info, boolean speak) {
         if ((status == null) || (info == null)) {
             if (mp.isPlaying()) {
                 statusText.setText(R.string.playing);
@@ -333,6 +339,9 @@ public class RockLockActivity extends Activity {
         }
         statusText.setText(status);
         infoText.setText(info);
+        if (speak) {
+            tts.speak(info, TextToSpeech.QUEUE_FLUSH, null);
+        }
     }
 
     private class Seeker implements Runnable {
