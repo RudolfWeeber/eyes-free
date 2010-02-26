@@ -16,6 +16,10 @@
 
 package com.marvin.rocklock;
 
+import com.google.marvin.widget.GestureOverlay;
+import com.google.marvin.widget.GestureOverlay.Gesture;
+import com.google.marvin.widget.GestureOverlay.GestureListener;
+
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -27,11 +31,9 @@ import android.os.Bundle;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -67,6 +69,8 @@ public class RockLockActivity extends Activity {
     private boolean isSeeking = false;
 
     private boolean seekingStopped = true;
+
+    private GestureOverlay gestureOverlay;
 
     private TextView dateText;
 
@@ -159,121 +163,101 @@ public class RockLockActivity extends Activity {
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         registerReceiver(mediaButtonReceiver, filter);
 
+        gestureOverlay = new GestureOverlay(this, new GestureListener() {
+
+            @Override
+            public void onGestureChange(int g) {
+                isSeeking = false;
+
+                switch (g) {
+                    case Gesture.UPLEFT:
+                        updateDisplayText(getString(R.string.previous_artist), mp
+                                .getPrevArtistName());
+                        break;
+                    case Gesture.UP:
+                        updateDisplayText(getString(R.string.previous_album), mp.getPrevAlbumName());
+                        break;
+                    case Gesture.UPRIGHT:
+                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName());
+                        break;
+                    case Gesture.LEFT:
+                        updateDisplayText(getString(R.string.previous_track), mp.getPrevTrackName());
+                        break;
+                    case Gesture.CENTER:
+                        if (mp.isPlaying()) {
+                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo());
+                        } else {
+                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo());
+                        }
+                        break;
+                    case Gesture.RIGHT:
+                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName());
+                        break;
+                    case Gesture.DOWNLEFT:
+                        if (seekingStopped) {
+                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo());
+                            isSeeking = true;
+                            new Thread(new Seeker(-1)).start();
+                        }
+                        break;
+                    case Gesture.DOWN:
+                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName());
+                        break;
+                    case Gesture.DOWNRIGHT:
+                        if (seekingStopped) {
+                            updateDisplayText(getString(R.string.fast_forward), mp
+                                    .getCurrentSongInfo());
+                            isSeeking = true;
+                            new Thread(new Seeker(1)).start();
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public void onGestureFinish(int g) {
+                isSeeking = false;
+                switch (g) {
+                    case Gesture.UPLEFT:
+                        mp.prevArtist();
+                        break;
+                    case Gesture.UP:
+                        mp.prevAlbum();
+                        break;
+                    case Gesture.UPRIGHT:
+                        mp.nextArtist();
+                        break;
+                    case Gesture.LEFT:
+                        mp.prevTrack();
+                        break;
+                    case Gesture.CENTER:
+                        mp.togglePlayPause();
+                        break;
+                    case Gesture.RIGHT:
+                        mp.nextTrack();
+                        break;
+                    case Gesture.DOWN:
+                        mp.nextAlbum();
+                        break;
+                }
+                updateDisplayText(null, null);
+            }
+
+            @Override
+            public void onGestureStart(int g) {
+                poked = true;
+                isSeeking = false;
+            }
+
+        });
+
         contentFrame = (FrameLayout) findViewById(R.id.contentFrame);
-        View buttonLayer = this.getLayoutInflater().inflate(R.layout.buttonlayer, null);
-        dateText = (TextView) buttonLayer.findViewById(R.id.dateText);
-        statusText = (TextView) buttonLayer.findViewById(R.id.statusText);
-        infoText = (TextView) buttonLayer.findViewById(R.id.infoText);
-
-        Button prevArtistButton = (Button) buttonLayer.findViewById(R.id.prevArtistButton);
-        prevArtistButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                poked = true;
-                mp.prevArtist();
-                updateDisplayText(null, null);
-            }
-        });
-
-        Button prevAlbumButton = (Button) buttonLayer.findViewById(R.id.prevAlbumButton);
-        prevAlbumButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                poked = true;
-                mp.prevAlbum();
-                updateDisplayText(null, null);
-            }
-        });
-
-        Button nextArtistButton = (Button) buttonLayer.findViewById(R.id.nextArtistButton);
-        nextArtistButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                poked = true;
-                mp.nextArtist();
-                updateDisplayText(null, null);
-            }
-        });
-
-        Button prevTrackButton = (Button) buttonLayer.findViewById(R.id.prevTrackButton);
-        prevTrackButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                poked = true;
-                mp.prevTrack();
-                updateDisplayText(null, null);
-            }
-        });
-
-        Button nextTrackButton = (Button) buttonLayer.findViewById(R.id.nextTrackButton);
-        nextTrackButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                poked = true;
-                mp.nextTrack();
-                updateDisplayText(null, null);
-            }
-        });
-
-        Button rewButton = (Button) buttonLayer.findViewById(R.id.rewButton);
-        rewButton.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                poked = true;
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (seekingStopped) {
-                        updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo());
-                        isSeeking = true;
-                        new Thread(new Seeker(-1)).start();
-                    }
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    isSeeking = false;
-                    updateDisplayText(null, null);
-                }
-                return true;
-            }
-        });
-
-        Button nextAlbumButton = (Button) buttonLayer.findViewById(R.id.nextAlbumButton);
-        nextAlbumButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                poked = true;
-                mp.nextAlbum();
-                updateDisplayText(null, null);
-            }
-        });
-
-        Button ffButton = (Button) buttonLayer.findViewById(R.id.ffButton);
-        ffButton.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                poked = true;
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (seekingStopped) {
-                        updateDisplayText(getString(R.string.fast_forward), mp.getCurrentSongInfo());
-                        isSeeking = true;
-                        new Thread(new Seeker(1)).start();
-                    }
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    isSeeking = false;
-                    updateDisplayText(null, null);
-                }
-                return true;
-            }
-        });
-
-        Button playPauseButton = (Button) buttonLayer.findViewById(R.id.playPauseButton);
-        playPauseButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                poked = true;
-                mp.togglePlayPause();
-                updateDisplayText(null, null);
-            }
-        });
-
-        contentFrame.addView(buttonLayer);
+        View textLayer = this.getLayoutInflater().inflate(R.layout.textlayer, null);
+        dateText = (TextView) textLayer.findViewById(R.id.dateText);
+        statusText = (TextView) textLayer.findViewById(R.id.statusText);
+        infoText = (TextView) textLayer.findViewById(R.id.infoText);
+        contentFrame.addView(textLayer);
+        contentFrame.addView(gestureOverlay);
     }
 
     @Override
