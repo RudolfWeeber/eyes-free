@@ -32,6 +32,7 @@ const char * supportedLangIso3[] = {
 "bos",
 "yue",
 "cmn",
+"zho",
 "hrv",
 "ces",
 "nld",
@@ -71,6 +72,7 @@ const char * supportedLang[] = {
 "bs",
 "zh-rHK",
 "zh",
+"zh",
 "hr",
 "cz",
 "nl",
@@ -103,6 +105,8 @@ const char * supportedLang[] = {
 "vi",
 "cy"
  };
+
+int languageCount = 36;
 
 // Callback to the TTS API
 synthDoneCB_t* ttsSynthDoneCBPointer;
@@ -201,7 +205,7 @@ tts_result TtsEngine::setLanguage( const char * lang, const char * country, cons
 
     char language[10];
     int langIndex = -1;
-    for (int i = 0; i < 33; i ++)
+    for (int i = 0; i < languageCount; i ++)
         {
         if (strcmp(lang, supportedLangIso3[i]) == 0)
             {
@@ -315,7 +319,7 @@ tts_result TtsEngine::setLanguage( const char * lang, const char * country, cons
 tts_support_result TtsEngine::isLanguageAvailable(const char *lang, const char *country,
             const char *variant) {
     // TODO: Make this account for data files!
-    for (int i = 0; i < 33; i ++)
+    for (int i = 0; i < languageCount; i ++)
         {
         if (strcmp(lang, supportedLangIso3[i]) == 0)
             {
