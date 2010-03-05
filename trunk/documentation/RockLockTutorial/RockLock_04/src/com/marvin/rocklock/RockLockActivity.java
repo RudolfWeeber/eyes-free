@@ -21,8 +21,6 @@ import com.google.marvin.widget.GestureOverlay.Gesture;
 import com.google.marvin.widget.GestureOverlay.GestureListener;
 
 import android.app.Activity;
-import android.app.KeyguardManager;
-import android.app.KeyguardManager.KeyguardLock;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -60,10 +58,6 @@ public class RockLockActivity extends Activity {
     };
 
     private boolean poked = false;
-
-    private KeyguardManager keyguardManager;
-
-    private KeyguardLock keyguard;
 
     private FrameLayout contentFrame;
 
@@ -131,16 +125,8 @@ public class RockLockActivity extends Activity {
         // Start the service in case it is not already running
         startService(new Intent(this, ScreenOnHandlerService.class));
 
-        keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-        keyguard = keyguardManager.newKeyguardLock("RockLock");
-
         requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
-        // Need to use FLAG_TURN_SCREEN_ON to make sure that the status bar
-        // stays locked
-        getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
         setContentView(R.layout.main);
 
@@ -163,7 +149,7 @@ public class RockLockActivity extends Activity {
         unlockButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                finish();
+                dismissSlideUnlockScreen();
             }
         });
 
@@ -288,14 +274,13 @@ public class RockLockActivity extends Activity {
         String monthStr = monthFormat.format(cal.getTime());
         int year = cal.get(Calendar.YEAR);
         dateText.setText(monthStr + " " + Integer.toString(day) + ", " + year);
-        keyguard.disableKeyguard();
         new Thread(new PokeWatcher()).start();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
-            finish();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            dismissSlideUnlockScreen();
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_MENU) {
@@ -317,7 +302,6 @@ public class RockLockActivity extends Activity {
         poked = true;
         mp.stop();
         unregisterReceiver(mediaButtonReceiver);
-        keyguardManager.exitKeyguardSecurely(null);
     }
 
     public void updateDisplayText(String status, String info) {
@@ -369,9 +353,20 @@ public class RockLockActivity extends Activity {
                 e.printStackTrace();
             }
             if (!poked && (mp != null) && !mp.isPlaying()) {
-                keyguard.reenableKeyguard();
                 finish();
             }
         }
+    }
+    
+    private void dismissSlideUnlockScreen() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        // finish() must be called in another thread or else the addFlags
+        // call in the previous line will not take effect.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }).start();
     }
 }
