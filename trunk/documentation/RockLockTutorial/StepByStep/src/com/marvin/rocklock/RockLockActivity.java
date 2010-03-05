@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -52,6 +53,10 @@ import java.util.Calendar;
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
 
+    private static final long[] VIBE_PATTERN = {
+            0, 10, 70, 80
+    };
+
     private boolean poked = false;
 
     private FrameLayout contentFrame;
@@ -67,6 +72,8 @@ public class RockLockActivity extends Activity {
     private GestureOverlay gestureOverlay;
 
     private AnimationLayer uiAnimation;
+
+    private Vibrator vibe;
 
     private TextView dateText;
 
@@ -151,6 +158,8 @@ public class RockLockActivity extends Activity {
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         registerReceiver(mediaButtonReceiver, filter);
 
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         uiAnimation = new AnimationLayer(this);
 
         gestureOverlay = new GestureOverlay(this, new GestureListener() {
@@ -158,6 +167,7 @@ public class RockLockActivity extends Activity {
             @Override
             public void onGestureChange(int g) {
                 isSeeking = false;
+                vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(g);
                 switch (g) {
                     case Gesture.UPLEFT:
@@ -207,6 +217,7 @@ public class RockLockActivity extends Activity {
             @Override
             public void onGestureFinish(int g) {
                 isSeeking = false;
+                vibe.vibrate(VIBE_PATTERN, -1);
                 uiAnimation.setDirection(-1);
                 switch (g) {
                     case Gesture.UPLEFT:
@@ -238,6 +249,7 @@ public class RockLockActivity extends Activity {
             public void onGestureStart(int g) {
                 poked = true;
                 isSeeking = false;
+                vibe.vibrate(VIBE_PATTERN, -1);
             }
 
         });
