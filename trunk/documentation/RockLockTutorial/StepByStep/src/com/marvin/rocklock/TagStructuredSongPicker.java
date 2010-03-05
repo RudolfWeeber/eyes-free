@@ -430,6 +430,6 @@ public class TagStructuredSongPicker implements SongPicker {
         currentArtist = musicCursor.getString(ARTIST);
         currentAlbum = musicCursor.getString(ALBUM);
         currentTrack = musicCursor.getString(TRACK);
-        return currentArtist + " - " + currentAlbum + " - " + currentTrack;
+        return currentArtist + "\n" + currentAlbum + "\n" + currentTrack;
     }
 }
