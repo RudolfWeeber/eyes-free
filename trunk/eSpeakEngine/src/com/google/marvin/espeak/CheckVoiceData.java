@@ -35,11 +35,11 @@ public class CheckVoiceData extends Activity {
 
     // The following constants are the same path constants as the ones defined
     // in external/svox/pico/tts/com_svox_picottsengine.cpp
-    private final static String ESPEAK_DATA_PATH =
-            Environment.getExternalStorageDirectory() + "/espeak-data/";
+    private final static String ESPEAK_DATA_PATH = Environment.getExternalStorageDirectory()
+            + "/espeak-data/";
 
-    private final static String[] baseDataFiles =
-        {"af_dict", "config", "cs_dict", "cy_dict", "de_dict", "el_dict", "en_dict", "eo_dict",
+    private final static String[] baseDataFiles = {
+            "af_dict", "config", "cs_dict", "cy_dict", "de_dict", "el_dict", "en_dict", "eo_dict",
             "es_dict", "fi_dict", "fr_dict", "grc_dict", "hbs_dict", "hi_dict", "hu_dict",
             "id_dict", "is_dict", "it_dict", "jbo_dict", "ku_dict", "la_dict", "mk_dict",
             "nl_dict", "no_dict", "phondata", "phonindex", "phontab", "pl_dict", "pt_dict",
@@ -75,9 +75,8 @@ public class CheckVoiceData extends Activity {
             "voices/mb/mb-it3", "voices/mb/mb-it4", "voices/mb/mb-la1", "voices/mb/mb-nl2",
             "voices/mb/mb-nl2-en", "voices/mb/mb-pl1", "voices/mb/mb-pl1-en", "voices/mb/mb-ro1",
             "voices/mb/mb-ro1-en", "voices/mb/mb-sw1", "voices/mb/mb-sw1-en", "voices/mb/mb-sw2",
-            "voices/mb/mb-sw2-en", "voices/mb/mb-us1", "voices/mb/mb-us2", "voices/mb/mb-us3"};
-
-    
+            "voices/mb/mb-sw2-en", "voices/mb/mb-us1", "voices/mb/mb-us2", "voices/mb/mb-us3"
+    };
 
     private final static String[] dataFiles = {
             "de-DE_gl0_sg.bin", "de-DE_ta.bin", "en-GB_kh0_sg.bin", "en-GB_ta.bin",
@@ -86,76 +85,18 @@ public class CheckVoiceData extends Activity {
     };
 
     private final static String[] dataFilesInfo = {
-        "deu-DEU", "deu-DEU", "eng-GBR", "eng-GBR", "eng-USA", "eng-USA",
-        "spa-ESP", "spa-ESP", "fra-FRA", "fra-FRA", "ita-ITA", "ita-ITA"
+            "deu-DEU", "deu-DEU", "eng-GBR", "eng-GBR", "eng-USA", "eng-USA", "spa-ESP", "spa-ESP",
+            "fra-FRA", "fra-FRA", "ita-ITA", "ita-ITA"
     };
 
     private final static String[] supportedLanguages = {
-        "afr", "bos", "zho", "cmn", "yue", "hrv", "ces", "nld", "eng", "eng-USA", "eng-GBR", "epo", "fin", "fra", "deu", "ell", "hin", "hun", "isl", "ind", "ita", "kur", "lat", "mkd", "nor", "pol", "por", "ron", "rus", "srp", "slk", "spa", "spa-MEX", "swa", "swe", "tam", "tur", "vie", "cym"
+            "afr", "bos", "zho", "cmn", "yue", "hrv", "ces", "nld", "eng", "eng-USA", "eng-GBR",
+            "epo", "fin", "fra", "deu", "ell", "hin", "hun", "isl", "ind", "ita", "kur", "lat",
+            "mkd", "nor", "pol", "por", "ron", "rus", "srp", "slk", "spa", "spa-MEX", "swa", "swe",
+            "tam", "tur", "vie", "cym"
     };
 
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        int result = TextToSpeech.Engine.CHECK_VOICE_DATA_PASS;
-        boolean foundMatch = false;
-
-        ArrayList<String> available = new ArrayList<String>();
-        ArrayList<String> unavailable = new ArrayList<String>();
-
-        HashMap<String, Boolean> languageCountry = new HashMap<String, Boolean>();
-
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
-            // TODO (clchen): Add this intent to TextToSpeech.Engine
-            ArrayList<String> langCountryVars = bundle.getStringArrayList(
-                    "TextToSpeech.Engine.EXTRA_CHECK_VOICE_DATA_FOR");
-            if (langCountryVars != null){
-                for (int i = 0; i < langCountryVars.size(); i++){
-                    if (langCountryVars.get(i).length() > 0){
-                        languageCountry.put(langCountryVars.get(i), true);
-                    }
-                }
-            }
-        }
-
-        // Check for files
-        for (int i = 0; i < supportedLanguages.length; i++){
-            if ((languageCountry.size() < 1) ||
-                (languageCountry.containsKey(supportedLanguages[i]))){
-                if (!fileExists(dataFiles[2 * i]) ||
-                    !fileExists(dataFiles[(2 * i) + 1])){
-                    result = TextToSpeech.Engine.CHECK_VOICE_DATA_MISSING_DATA;
-                    unavailable.add(supportedLanguages[i]);
-                } else {
-                    available.add(supportedLanguages[i]);
-                    foundMatch = true;
-                }
-            }
-        }
-        
-        available.add("--FEMALE");
-
-        if ((languageCountry.size() > 0) && !foundMatch){
-            result = TextToSpeech.Engine.CHECK_VOICE_DATA_FAIL;
-        }
-
-        // Put the root directory for the sd card data + the data filenames
-        Intent returnData = new Intent();
-        returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_ROOT_DIRECTORY, PICO_LINGWARE_PATH);
-        returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_FILES, dataFiles);
-        returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_FILES_INFO, dataFilesInfo);
-
-        // TODO (clchen): Add these intents to TextToSpeech.Engine
-        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES", available);
-        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_UNAVAILABLE_VOICES", unavailable);
-        setResult(result, returnData);
-        finish();
-    }
-    */
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,21 +105,38 @@ public class CheckVoiceData extends Activity {
         returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_ROOT_DIRECTORY, ESPEAK_DATA_PATH);
         returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_FILES, dataFiles);
         returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_FILES_INFO, dataFilesInfo);
-        
+
         ArrayList<String> available = new ArrayList<String>();
         ArrayList<String> unavailable = new ArrayList<String>();
-        
-        for (int i=0; i<supportedLanguages.length; i++){
-            available.add(supportedLanguages[i]);
+
+        // TODO (clchen): Check each language INDIVIDUALLY
+        boolean passedAllChecks = true;
+
+        for (int i = 0; i < baseDataFiles.length; i++) {
+            if (!fileExists(baseDataFiles[i])) {
+                passedAllChecks = false;
+                break;
+            }
         }
-        
+
+        if (passedAllChecks) {
+            for (int i = 0; i < supportedLanguages.length; i++) {
+                available.add(supportedLanguages[i]);
+            }
+        } else {
+            for (int i = 0; i < supportedLanguages.length; i++) {
+                unavailable.add(supportedLanguages[i]);
+            }
+        }
+
         returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES", available);
-        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_UNAVAILABLE_VOICES", unavailable);
+        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_UNAVAILABLE_VOICES",
+                unavailable);
         setResult(result, returnData);
         finish();
     }
 
-    private boolean fileExists(String filename){
+    private boolean fileExists(String filename) {
         File tempFile = new File(ESPEAK_DATA_PATH + filename);
         File tempFileSys = new File(ESPEAK_DATA_PATH + filename);
         if ((!tempFile.exists()) && (!tempFileSys.exists())) {
