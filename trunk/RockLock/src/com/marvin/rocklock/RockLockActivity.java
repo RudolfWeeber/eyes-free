@@ -388,7 +388,7 @@ public class RockLockActivity extends Activity {
             }
         }
     }
-
+    
     private void dismissSlideUnlockScreen() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         // finish() must be called in another thread or else the addFlags
