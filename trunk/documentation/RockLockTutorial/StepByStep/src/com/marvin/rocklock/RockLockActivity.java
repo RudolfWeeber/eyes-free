@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
@@ -53,6 +54,8 @@ import java.util.Calendar;
  */
 public class RockLockActivity extends Activity {
     public static final String EXTRA_STARTED_BY_SERVICE = "STARTED_BY_SERVICE";
+
+    public static final String TICK_EARCON = "[TICK]";
 
     private static final long[] VIBE_PATTERN = {
             0, 10, 70, 80
@@ -171,6 +174,7 @@ public class RockLockActivity extends Activity {
             public void onGestureChange(int g) {
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
                 uiAnimation.setDirection(g);
                 switch (g) {
                     case Gesture.UPLEFT:
@@ -229,6 +233,7 @@ public class RockLockActivity extends Activity {
             public void onGestureFinish(int g) {
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
                 uiAnimation.setDirection(-1);
                 switch (g) {
                     case Gesture.UPLEFT:
@@ -261,6 +266,7 @@ public class RockLockActivity extends Activity {
                 poked = true;
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
             }
 
         });
@@ -274,7 +280,15 @@ public class RockLockActivity extends Activity {
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
 
-        tts = new TextToSpeech(this, null);
+        final RockLockActivity self = this;
+
+        tts = new TextToSpeech(this, new OnInitListener() {
+            @Override
+            public void onInit(int arg0) {
+                tts.addEarcon(TICK_EARCON, self.getPackageName(), R.raw.tick_snd);
+                tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
     }
 
     @Override
