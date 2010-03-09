@@ -6,4 +6,16 @@
     <!-- Setting up the user interface vibration feedback service -->
     <string name="clockback_setup_title">ClockBack</string>
 
+    <!-- String value for announcing the plus buttons -->
+    <string name="value_plus">plus</string>
+
+    <!-- String value for announcing the minus buttons -->
+    <string name="value_minus">minus</string>
+
+    <!-- String value for announcing the hours input -->
+    <string name="value_hours">hours</string>
+
+    <!-- String value for announcing the minutes input -->
+    <string name="value_minutes">minutes</string>
+
 </resources>
