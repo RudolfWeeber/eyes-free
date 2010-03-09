@@ -18,4 +18,12 @@
     <!-- String value for announcing the minutes input -->
     <string name="value_minutes">minutes</string>
 
+    <!-- TEMPLATES -->
+
+    <!-- String template for announcing the screen on -->
+    <string name="template_screen_on">Screen on. Volume %1$s percent.</string>
+
+    <!-- String template for announcing the screen off -->
+    <string name="template_screen_off">Screen off. Volume %1$s percent.</string>
+
 </resources>

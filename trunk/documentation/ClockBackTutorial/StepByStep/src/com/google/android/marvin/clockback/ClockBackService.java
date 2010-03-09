@@ -18,8 +18,12 @@ package com.google.android.marvin.clockback;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
@@ -86,6 +90,14 @@ public class ClockBackService extends AccessibilityService {
     /** Stop the TTS service */
     private static final int WHAT_SHUTDOWN_TTS = 4;
 
+     //screen state broadcast related constants
+    
+    /** Feedback mapping index used as a key for the screen on broadcast */
+    private static final int INDEX_SCREEN_ON = 0x00000100;
+
+    /** Feedback mapping index used as a key for the screen off broadcast */
+    private static final int INDEX_SCREEN_OFF = 0x00000200;
+
     // speech related constants
 
     /**
@@ -145,6 +157,9 @@ public class ClockBackService extends AccessibilityService {
     /** The {@link TextToSpeech} used for speaking */
     private TextToSpeech mTts;
 
+    /** The {@link AudioManager} for detecting ringer state */
+    private AudioManager mAudioManager;
+
     /** Flag if the infrastructure is initialized */
     private boolean isInfrastructureInitialized;
 
@@ -161,7 +176,14 @@ public class ClockBackService extends AccessibilityService {
                     mTts.stop();
                     return;
                 case WHAT_START_TTS:
-                    mTts = new TextToSpeech(mContext, null);
+                    mTts = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+                        @Override
+                        public void onInit(int status) {
+                            // register here since to add earcons the TTS must be initialized
+                            // the receiver is called immediately with the current ringer mode
+                            registerBroadCastReceiver();
+                        }
+                    });
                     return;
                 case WHAT_SHUTDOWN_TTS:
                     mTts.shutdown();
@@ -169,7 +191,38 @@ public class ClockBackService extends AccessibilityService {
             }
         }
     };
-    
+
+    /**
+     * {@link BroadcastReceiver} for receiving updates for our context - device
+     * state
+     */
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                provideScreenStateChangeFeedback(INDEX_SCREEN_ON);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                provideScreenStateChangeFeedback(INDEX_SCREEN_OFF);
+            } else {
+                Log.w(LOG_TAG, "Registered for but not handling action " + action);
+            }
+        }
+
+        /**
+         * Provides feedback to announce the screen state change. Such a change
+         * is turning the screen on or off.
+         * 
+         * @param feedbackIndex The index of the feedback in the statically
+         *            mapped feedback resources.
+         */
+        private void provideScreenStateChangeFeedback(int feedbackIndex) {
+            String utterance = generateScreenOnOrOffUtternace(feedbackIndex);
+            mHandler.obtainMessage(WHAT_SPEAK, utterance).sendToTarget();
+        }
+    };
+
     @Override
     public void onServiceConnected() {
         if (isInfrastructureInitialized) {
@@ -180,6 +233,16 @@ public class ClockBackService extends AccessibilityService {
 
         // send a message to start the TTS
         mHandler.sendEmptyMessage(WHAT_START_TTS);
+
+        //Create a filter with the broadcast intents we are interested in
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        // register for broadcasts of interest
+        registerReceiver(mBroadcastReceiver, filter, null, null);
+
+        // get the AudioManager and configure according the current ring mode
+        mAudioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
         setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 
@@ -193,10 +256,56 @@ public class ClockBackService extends AccessibilityService {
             // stop the TTS service
             mHandler.sendEmptyMessage(WHAT_SHUTDOWN_TTS);
 
+            // unregister the intent broadcast receiver
+            if (mBroadcastReceiver != null) {
+                unregisterReceiver(mBroadcastReceiver);
+            }
+
             // we are not in an initialized state anymore
             isInfrastructureInitialized = false;
         }
         return false;
+    }
+
+    /**
+     * Registers the phone state observing broadcast receiver.
+     */
+    private void registerBroadCastReceiver() {
+      //Create a filter with the broadcast intents we are interested in
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        // register for broadcasts of interest
+        registerReceiver(mBroadcastReceiver, filter, null, null);
+    }
+
+    /**
+     * Generates an utterance for announcing screen on and screen off.
+     * 
+     * @param feedbackIndex The feedback index for looking up feedback value.
+     * @return The utterance.
+     */
+    private String generateScreenOnOrOffUtternace(int feedbackIndex) {
+        // get the announce template
+        int resourceId = (feedbackIndex == INDEX_SCREEN_ON) ? R.string.template_screen_on
+                : R.string.template_screen_off;
+        String template = mContext.getString(resourceId);
+
+        // format the template with the ringer percentage
+        int currentRingerVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
+        int maxRingerVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
+        int volumePercent = (100 / maxRingerVolume) * currentRingerVolume;
+
+        // let us round to five so it sounds better
+        int adjustment = volumePercent % 10;
+        if (adjustment < 5) {
+            volumePercent -= adjustment;
+        } else if (adjustment > 5) {
+            volumePercent += (10 - adjustment);
+        }
+
+        return String.format(template, volumePercent);
     }
     
     /**
