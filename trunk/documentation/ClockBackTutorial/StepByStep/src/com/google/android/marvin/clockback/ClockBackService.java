@@ -24,6 +24,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.accessibility.AccessibilityEvent;
 
 import java.util.List;
@@ -96,6 +97,39 @@ public class ClockBackService extends AccessibilityService {
     /** The empty string constant */
     private static final String SPACE = " ";
 
+    /**
+     * The class name of the number picker buttons with no text we want to
+     * announce in the Clock application.
+     */
+    private static final String CLASS_NAME_NUMBER_PICKER_BUTTON_CLOCK = "android.widget.NumberPickerButton";
+
+    /**
+     * The class name of the number picker buttons with no text we want to
+     * announce in the AlarmClock application.
+     */
+    private static final String CLASS_NAME_NUMBER_PICKER_BUTTON_ALARM_CLOCK = "com.android.internal.widget.NumberPickerButton";
+
+    /**
+     * The class name of the edit text box for hours and minutes we want to
+     * better announce
+     */
+    private static final String CLASS_NAME_EDIT_TEXT = "android.widget.EditText";
+
+    /**
+     * Mapping from integer to string resource id where the keys are generated
+     * from the {@link AccessibilityEvent#getItemCount()} and
+     * {@link AccessibilityEvent#getCurrentItemIndex()} properties.
+     */
+    private static final SparseArray<Integer> sPositionMappedStringResourceIds = new SparseArray<Integer>();
+    static {
+        sPositionMappedStringResourceIds.put(11, R.string.value_plus);
+        sPositionMappedStringResourceIds.put(114, R.string.value_plus);
+        sPositionMappedStringResourceIds.put(112, R.string.value_minus);
+        sPositionMappedStringResourceIds.put(116, R.string.value_minus);
+        sPositionMappedStringResourceIds.put(111, R.string.value_hours);
+        sPositionMappedStringResourceIds.put(115, R.string.value_minutes);
+    }
+
     // auxiliary fields
 
     /**
@@ -135,7 +169,7 @@ public class ClockBackService extends AccessibilityService {
             }
         }
     };
-
+    
     @Override
     public void onServiceConnected() {
         if (isInfrastructureInitialized) {
@@ -164,7 +198,7 @@ public class ClockBackService extends AccessibilityService {
         }
         return false;
     }
-
+    
     /**
      * Sets the {@link AccessibilityServiceInfo} which informs the system how to
      * handle this {@link AccessibilityService}.
@@ -219,6 +253,19 @@ public class ClockBackService extends AccessibilityService {
                 utterance.append(SPACE);
             }
 
+            // here we do a bit of enhancement of the UI presentation by using the semantic
+            // of the event source in the context of the Clock application
+            if (CLASS_NAME_EDIT_TEXT.equals(event.getClassName())) {
+                // if the source is an edit text box and we have a mapping based on
+                // its position in the items of the container parent of the event source
+                // we append that value as well. We say "XX hours" and "XX minutes".
+                String resourceValue = getPositionMappedStringResource(event.getItemCount(),
+                        event.getCurrentItemIndex());
+                if (resourceValue != null) {
+                    utterance.append(resourceValue);
+                }
+            }
+
             return utterance.toString();
         }
 
@@ -230,6 +277,54 @@ public class ClockBackService extends AccessibilityService {
             return utterance.toString();
         }
 
+        // No text and content description for the plus and minus buttons, so we lookup
+        // custom values based on the event's itemCount and currentItemIndex properties.
+        CharSequence className = event.getClassName();
+        if (CLASS_NAME_NUMBER_PICKER_BUTTON_ALARM_CLOCK.equals(className)
+                || CLASS_NAME_NUMBER_PICKER_BUTTON_CLOCK.equals(className)) {
+            String resourceValue = getPositionMappedStringResource(event.getItemCount(),
+                    event.getCurrentItemIndex());
+            utterance.append(resourceValue);
+        }
+
         return utterance.toString();
+    }
+
+    /**
+     * Returns a string resource mapped for a given position based on
+     * {@link AccessibilityEvent#getItemCount()} and
+     * {@link AccessibilityEvent#getCurrentItemIndex()} properties.
+     * 
+     * @param itemCount The value of {@link AccessibilityEvent#getItemCount()}.
+     * @param currentItemIndex The value of
+     *            {@link AccessibilityEvent#getCurrentItemIndex()}.
+     * @return The mapped string if such exists, null otherwise.
+     */
+    private String getPositionMappedStringResource(int itemCount, int currentItemIndex) {
+        int lookupIndex = computeLookupIndex(itemCount, currentItemIndex);
+        int resourceId = sPositionMappedStringResourceIds.get(lookupIndex);
+        return getString(resourceId);
+    }
+
+    /**
+     * Computes an index for looking up the custom text for views with neither
+     * text not content description. The index is computed based on
+     * {@link AccessibilityEvent#getItemCount()} and
+     * {@link AccessibilityEvent#getCurrentItemIndex()} properties.
+     * 
+     * @param itemCount The number of all items in the event source.
+     * @param currentItemIndex The index of the item source of the event.
+     * @return The lookup index.
+     */
+    private int computeLookupIndex(int itemCount, int currentItemIndex) {
+        int lookupIndex = itemCount;
+        int divided = currentItemIndex;
+
+        while (divided > 0) {
+            lookupIndex *= 10;
+            divided /= 10;
+        }
+
+        return (lookupIndex += currentItemIndex);
     }
 }
