@@ -162,6 +162,12 @@ public class ClockBackService extends AccessibilityService {
     /** Mapping from integers to raw sound resource ids */
     private static SparseArray<Integer> sSoundsResourceIds = new SparseArray<Integer>();
     static {
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_CLICKED, R.raw.sound1);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_SELECTED, R.raw.sound2);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_VIEW_FOCUSED, R.raw.sound2);
+        sSoundsResourceIds.put(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED, R.raw.sound3);
+        sSoundsResourceIds.put(INDEX_SCREEN_ON, R.raw.sound4);
+        sSoundsResourceIds.put(INDEX_SCREEN_OFF, R.raw.sound5);
         sSoundsResourceIds.put(INDEX_RINGER_SILENT, R.raw.sound6);
         sSoundsResourceIds.put(INDEX_RINGER_VIBRATE, R.raw.sound7);
         sSoundsResourceIds.put(INDEX_RINGER_NORMAL, R.raw.sound8);
@@ -178,6 +184,9 @@ public class ClockBackService extends AccessibilityService {
      * Handle to this service to enable inner classes to access the {@link Context}
      */
     private Context mContext;
+
+    /** The feedback this service is currently providing */
+    private int mProvidedFeedbackType;
 
     /** Reusable instance for building utterances */
     private final StringBuilder mUtterance = new StringBuilder();
@@ -259,11 +268,22 @@ public class ClockBackService extends AccessibilityService {
          *            mapped feedback resources.
          */
         private void provideScreenStateChangeFeedback(int feedbackIndex) {
-            String utterance = generateScreenOnOrOffUtternace(feedbackIndex);
-            mHandler.obtainMessage(WHAT_SPEAK, utterance).sendToTarget();
+            // we take a specific action depending on the feedback we currently provide
+            switch (mProvidedFeedbackType) {
+                case AccessibilityServiceInfo.FEEDBACK_SPOKEN:
+                    String utterance = generateScreenOnOrOffUtternace(feedbackIndex);
+                    mHandler.obtainMessage(WHAT_SPEAK, utterance).sendToTarget();
+                    return;
+                case AccessibilityServiceInfo.FEEDBACK_AUDIBLE:
+                    mHandler.obtainMessage(WHAT_PLAY_EARCON, feedbackIndex, 0).sendToTarget();
+                    return;
+                default:
+                    throw new IllegalStateException("Unexpected feedback type "
+                            + mProvidedFeedbackType);
+            }
         }
     };
-
+    
     @Override
     public void onServiceConnected() {
         if (isInfrastructureInitialized) {
@@ -343,18 +363,58 @@ public class ClockBackService extends AccessibilityService {
     }
 
     /**
-     * Configures the service according to a ringer mode.
+     * Configures the service according to a ringer mode. Possible
+     * configurations:
+     * </p>
+     *   1. {@link AudioManager#RINGER_MODE_SILENT}</br>
+     *   Goal:     For now same as the case below.</br>
+     *   Approach: For now same as the case below.
+     * </p>
+     *   2. {@link AudioManager#RINGER_MODE_VIBRATE}</br>
+     *   Goal:     Provide custom audible and default haptic feedback.</p>
+     *   Approach: Take over the audible feedback and provide custom one.</p>
+     *             Take over the spoken feedback but do not provide such.</br>
+     *             Let some other service provide haptic feedback (KickBack).
+     * </p>
+     *   3. {@link AudioManager#RINGER_MODE_NORMAL}</p>
+     *   Goal:     Provide custom spoken, default audible and default haptic feedback.</br>
+     *   Approach: Take over the spoken feedback and provide custom one.</br>
+     *             Let some other services provide audible feedback (SounBack) and haptic
+     *             feedback (KickBack).
+     * </p>
+     * Note: In the above description an assumption is made that all default feedback
+     *       services are enabled. Such services are TalkBack, SoundBack, and KickBack.
+     *       Also the feature of defining a service as the default for a given feedback
+     *       type will be available in Froyo and after. For previous releases the package
+     *       specific accessibility service must be registered first i.e. checked in the
+     *       settings.
      *
      * @param ringerMode The device ringer mode.
      */
     private void configureForRingerMode(int ringerMode) {
         if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+
+            // for now we handle this case as ringer vibrate
+
             // use only an earcon to announce ringer state change
             mHandler.obtainMessage(WHAT_PLAY_EARCON, INDEX_RINGER_SILENT, 0).sendToTarget();
         } else if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+            // when the ringer is vibrating we want to provide only audible
+            // feedback
+            mProvidedFeedbackType = AccessibilityServiceInfo.FEEDBACK_AUDIBLE;
+
+            // take over the spoken feedback so no spoken feedback is provided
+            setServiceInfo(AccessibilityServiceInfo.FEEDBACK_AUDIBLE
+                    | AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+
             // use only an earcon to announce ringer state change
             mHandler.obtainMessage(WHAT_PLAY_EARCON, INDEX_RINGER_VIBRATE, 0).sendToTarget();
         } else if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+            // when the ringer is ringing we want to provide spoken feedback
+            // overriding the default spoken feedback
+            mProvidedFeedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
+            setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+
             // use only an earcon to announce ringer state change
             mHandler.obtainMessage(WHAT_PLAY_EARCON, INDEX_RINGER_NORMAL, 0).sendToTarget();
         }
@@ -383,14 +443,28 @@ public class ClockBackService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        Log.i(LOG_TAG, event.toString());
+        Log.i(LOG_TAG, mProvidedFeedbackType + " " + event.toString());
 
-        mHandler.obtainMessage(WHAT_SPEAK, formatUtterance(event)).sendToTarget();
+        // here we act according to the feedback type we are currently providing
+        if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_SPOKEN) {
+            mHandler.obtainMessage(WHAT_SPEAK, formatUtterance(event)).sendToTarget();
+        } else if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_AUDIBLE) {
+            mHandler.obtainMessage(WHAT_PLAY_EARCON, event.getEventType(), 0).sendToTarget();
+        } else {
+            throw new IllegalStateException("Unexpected feedback type " + mProvidedFeedbackType);
+        }
     }
 
     @Override
     public void onInterrupt() {
-        mHandler.obtainMessage(WHAT_STOP_SPEAK);
+        // here we act according to the feedback type we are currently providing
+        if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_SPOKEN) {
+          mHandler.obtainMessage(WHAT_STOP_SPEAK);
+        } else if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_AUDIBLE) {
+          mHandler.obtainMessage(WHAT_STOP_PLAY_EARCON);
+        } else {
+            throw new IllegalStateException("Unexpected feedback type " + mProvidedFeedbackType);
+        }
     }
 
     /**
