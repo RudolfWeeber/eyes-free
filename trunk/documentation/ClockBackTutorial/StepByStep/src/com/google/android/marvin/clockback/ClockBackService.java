@@ -90,13 +90,30 @@ public class ClockBackService extends AccessibilityService {
     /** Stop the TTS service */
     private static final int WHAT_SHUTDOWN_TTS = 4;
 
-     //screen state broadcast related constants
+    /** Play an earcon */
+    private static final int WHAT_PLAY_EARCON = 5;
+
+    /** Stop playing an earcon */
+    private static final int WHAT_STOP_PLAY_EARCON = 6;
+
+    //screen state broadcast related constants
     
     /** Feedback mapping index used as a key for the screen on broadcast */
     private static final int INDEX_SCREEN_ON = 0x00000100;
 
     /** Feedback mapping index used as a key for the screen off broadcast */
     private static final int INDEX_SCREEN_OFF = 0x00000200;
+
+    // ringer mode change related constants
+
+    /** Feedback mapping index used as a key for normal ringer mode */
+    private static final int INDEX_RINGER_NORMAL = 0x00000400;
+
+    /** Feedback mapping index used as a key for vibration ringer mode */
+    private static final int INDEX_RINGER_VIBRATE = 0x00000800;
+
+    /** Feedback mapping index used as a key for silent ringer mode */
+    private static final int INDEX_RINGER_SILENT = 0x00001000;
 
     // speech related constants
 
@@ -141,6 +158,19 @@ public class ClockBackService extends AccessibilityService {
         sPositionMappedStringResourceIds.put(111, R.string.value_hours);
         sPositionMappedStringResourceIds.put(115, R.string.value_minutes);
     }
+
+    /** Mapping from integers to raw sound resource ids */
+    private static SparseArray<Integer> sSoundsResourceIds = new SparseArray<Integer>();
+    static {
+        sSoundsResourceIds.put(INDEX_RINGER_SILENT, R.raw.sound6);
+        sSoundsResourceIds.put(INDEX_RINGER_VIBRATE, R.raw.sound7);
+        sSoundsResourceIds.put(INDEX_RINGER_NORMAL, R.raw.sound8);
+    }
+
+    // sound pool related member fields
+
+    /** Mapping from integers to earcon names - dynamically populated. */
+    private final SparseArray<String> mEarconNames = new SparseArray<String>();
 
     // auxiliary fields
 
@@ -188,6 +218,13 @@ public class ClockBackService extends AccessibilityService {
                 case WHAT_SHUTDOWN_TTS:
                     mTts.shutdown();
                     return;
+                case WHAT_PLAY_EARCON:
+                    int resourceId = message.arg1;
+                    playEarcon(resourceId);
+                    return;
+                case WHAT_STOP_PLAY_EARCON:
+                    mTts.stop();
+                    return;
             }
         }
     };
@@ -201,7 +238,11 @@ public class ClockBackService extends AccessibilityService {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            if (Intent.ACTION_SCREEN_ON.equals(action)) {
+            if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(action)) {
+                int ringerMode = intent.getIntExtra(AudioManager.EXTRA_RINGER_MODE,
+                        AudioManager.RINGER_MODE_NORMAL);
+                configureForRingerMode(ringerMode);
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 provideScreenStateChangeFeedback(INDEX_SCREEN_ON);
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                 provideScreenStateChangeFeedback(INDEX_SCREEN_OFF);
@@ -264,8 +305,9 @@ public class ClockBackService extends AccessibilityService {
      * Registers the phone state observing broadcast receiver.
      */
     private void registerBroadCastReceiver() {
-      //Create a filter with the broadcast intents we are interested in
+        //Create a filter with the broadcast intents we are interested in
         IntentFilter filter = new IntentFilter();
+        filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         // register for broadcasts of interest
@@ -299,7 +341,25 @@ public class ClockBackService extends AccessibilityService {
 
         return String.format(template, volumePercent);
     }
-    
+
+    /**
+     * Configures the service according to a ringer mode.
+     *
+     * @param ringerMode The device ringer mode.
+     */
+    private void configureForRingerMode(int ringerMode) {
+        if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+            // use only an earcon to announce ringer state change
+            mHandler.obtainMessage(WHAT_PLAY_EARCON, INDEX_RINGER_SILENT, 0).sendToTarget();
+        } else if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+            // use only an earcon to announce ringer state change
+            mHandler.obtainMessage(WHAT_PLAY_EARCON, INDEX_RINGER_VIBRATE, 0).sendToTarget();
+        } else if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+            // use only an earcon to announce ringer state change
+            mHandler.obtainMessage(WHAT_PLAY_EARCON, INDEX_RINGER_NORMAL, 0).sendToTarget();
+        }
+    }
+
     /**
      * Sets the {@link AccessibilityServiceInfo} which informs the system how to
      * handle this {@link AccessibilityService}.
@@ -427,5 +487,23 @@ public class ClockBackService extends AccessibilityService {
         }
 
         return (lookupIndex += currentItemIndex);
+    }
+    
+    /**
+     * Plays an earcon given its id.
+       *
+     * @param earconId The id of the earcon to be played.
+     */
+    private void playEarcon(int earconId) {
+        String earconName = mEarconNames.get(earconId);
+        if (earconName == null) {
+            // we do not know the sound id, hence we need to load the sound
+            int resourceId = sSoundsResourceIds.get(earconId);
+            earconName = "[" + earconId + "]";
+            mTts.addEarcon(earconName, getPackageName(), resourceId);
+            mEarconNames.put(earconId, earconName);
+        }
+
+        mTts.playEarcon(earconName, QUEUING_MODE_INTERRUPT, null);
     }
 }
