@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- VALUES -->
+
+    <!-- Setting up the user interface vibration feedback service -->
+    <string name="clockback_setup_title">ClockBack</string>
+
+</resources>

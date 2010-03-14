@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.google.android.marvin.clockback"
+      android:versionCode="1"
+      android:versionName="1.0.0">
+
+    <application android:label="@string/clockback_setup_title">
+
+        <!-- We declare our service here -->
+        <service android:name=".ClockBackService">
+            <!-- This intent filter is a clue for the system that this is an accessibility service -->
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+        </service>
+
+    </application>
+
+    <!-- Accessibility API appeared in SDK version 4 (Android 1.6) -->
+    <uses-sdk android:minSdkVersion="4" />
+
+</manifest>
