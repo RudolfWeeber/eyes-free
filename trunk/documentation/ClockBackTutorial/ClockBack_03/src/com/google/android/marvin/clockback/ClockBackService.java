@@ -277,8 +277,8 @@ public class ClockBackService extends AccessibilityService {
 
         // get the AudioManager and configure according the current ring mode
         mAudioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
-        int ringerMode = mAudioManager.getRingerMode();
-        configureForRingerMode(ringerMode);
+
+        setServiceInfo(AccessibilityServiceInfo.FEEDBACK_AUDIBLE);
 
         // we are in an initialized state now
         isInfrastructureInitialized = true;
