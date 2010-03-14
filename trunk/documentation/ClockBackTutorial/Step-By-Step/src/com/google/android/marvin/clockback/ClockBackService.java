@@ -26,6 +26,7 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.SparseArray;
@@ -96,6 +97,12 @@ public class ClockBackService extends AccessibilityService {
     /** Stop playing an earcon */
     private static final int WHAT_STOP_PLAY_EARCON = 6;
 
+    /** Vibrate a pattern */
+    private static final int WHAT_VIBRATE = 7;
+
+    /** Stop vibrating */
+    private static final int WHAT_STOP_VIBRATE = 8;
+
     //screen state broadcast related constants
     
     /** Feedback mapping index used as a key for the screen on broadcast */
@@ -159,6 +166,29 @@ public class ClockBackService extends AccessibilityService {
         sPositionMappedStringResourceIds.put(115, R.string.value_minutes);
     }
 
+    /** Mapping from integers to vibration patterns for haptic feedback */
+    private static final SparseArray<long[]> sVibrationPatterns = new SparseArray<long[]>();
+    static {
+        sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_CLICKED, new long[] {
+                0L, 100L
+        });
+        sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_SELECTED, new long[] {
+                0L, 15L, 10L, 15L
+        });
+        sVibrationPatterns.put(AccessibilityEvent.TYPE_VIEW_FOCUSED, new long[] {
+                0L, 15L, 10L, 15L
+        });
+        sVibrationPatterns.put(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED, new long[] {
+                0L, 25L, 50L, 25L, 50L, 25L
+        });
+        sVibrationPatterns.put(INDEX_SCREEN_ON, new long[] {
+                0L, 10L, 10L, 20L, 20L, 30L
+        });
+        sVibrationPatterns.put(INDEX_SCREEN_OFF, new long[] {
+                0L, 30L, 20L, 20L, 10L, 10L
+        });
+    }
+
     /** Mapping from integers to raw sound resource ids */
     private static SparseArray<Integer> sSoundsResourceIds = new SparseArray<Integer>();
     static {
@@ -199,6 +229,9 @@ public class ClockBackService extends AccessibilityService {
     /** The {@link AudioManager} for detecting ringer state */
     private AudioManager mAudioManager;
 
+    /** Vibrator for providing haptic feedback */
+    private Vibrator mVibrator;
+
     /** Flag if the infrastructure is initialized */
     private boolean isInfrastructureInitialized;
 
@@ -233,6 +266,14 @@ public class ClockBackService extends AccessibilityService {
                     return;
                 case WHAT_STOP_PLAY_EARCON:
                     mTts.stop();
+                    return;
+                case WHAT_VIBRATE:
+                    int key = message.arg1;
+                    long[] pattern = sVibrationPatterns.get(key);
+                    mVibrator.vibrate(pattern, -1);
+                    return;
+                case WHAT_STOP_VIBRATE:
+                    mVibrator.cancel();
                     return;
             }
         }
@@ -277,6 +318,9 @@ public class ClockBackService extends AccessibilityService {
                 case AccessibilityServiceInfo.FEEDBACK_AUDIBLE:
                     mHandler.obtainMessage(WHAT_PLAY_EARCON, feedbackIndex, 0).sendToTarget();
                     return;
+                case AccessibilityServiceInfo.FEEDBACK_HAPTIC:
+                    mHandler.obtainMessage(WHAT_VIBRATE, feedbackIndex, 0).sendToTarget();
+                    return;
                 default:
                     throw new IllegalStateException("Unexpected feedback type "
                             + mProvidedFeedbackType);
@@ -294,6 +338,9 @@ public class ClockBackService extends AccessibilityService {
 
         // send a message to start the TTS
         mHandler.sendEmptyMessage(WHAT_START_TTS);
+
+        // get the vibrator service
+        mVibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
 
         // get the AudioManager and configure according the current ring mode
         mAudioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
@@ -367,8 +414,14 @@ public class ClockBackService extends AccessibilityService {
      * configurations:
      * </p>
      *   1. {@link AudioManager#RINGER_MODE_SILENT}</br>
-     *   Goal:     For now same as the case below.</br>
-     *   Approach: For now same as the case below.
+     *   Goal:     Provide only custom haptic feedback.</br>
+     *   Approach: Take over the haptic feedback by configuring this service to to provide
+     *             such and do so. This way the system will not call the default haptic
+     *             feedback service KickBack.</br> 
+     *             Take over the audible and spoken feedback by configuring this
+     *             service to provide such feedback but not doing so. This way the system
+     *             will not call the default spoken feedback service TalkBack and the
+     *             default audible feedback service SoundBack.
      * </p>
      *   2. {@link AudioManager#RINGER_MODE_VIBRATE}</br>
      *   Goal:     Provide custom audible and default haptic feedback.</p>
@@ -393,8 +446,13 @@ public class ClockBackService extends AccessibilityService {
      */
     private void configureForRingerMode(int ringerMode) {
         if (ringerMode == AudioManager.RINGER_MODE_SILENT) {
+            // when the ringer is silent we want to provide only haptic feedback
+            mProvidedFeedbackType = AccessibilityServiceInfo.FEEDBACK_HAPTIC;
 
-            // for now we handle this case as ringer vibrate
+            // take over the spoken and sound feedback so no such feedback is provided
+            setServiceInfo(AccessibilityServiceInfo.FEEDBACK_HAPTIC
+                    | AccessibilityServiceInfo.FEEDBACK_SPOKEN
+                    | AccessibilityServiceInfo.FEEDBACK_AUDIBLE);
 
             // use only an earcon to announce ringer state change
             mHandler.obtainMessage(WHAT_PLAY_EARCON, INDEX_RINGER_SILENT, 0).sendToTarget();
@@ -450,6 +508,8 @@ public class ClockBackService extends AccessibilityService {
             mHandler.obtainMessage(WHAT_SPEAK, formatUtterance(event)).sendToTarget();
         } else if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_AUDIBLE) {
             mHandler.obtainMessage(WHAT_PLAY_EARCON, event.getEventType(), 0).sendToTarget();
+        } else if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_HAPTIC) {
+            mHandler.obtainMessage(WHAT_VIBRATE, event.getEventType(), 0).sendToTarget();
         } else {
             throw new IllegalStateException("Unexpected feedback type " + mProvidedFeedbackType);
         }
@@ -459,9 +519,11 @@ public class ClockBackService extends AccessibilityService {
     public void onInterrupt() {
         // here we act according to the feedback type we are currently providing
         if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_SPOKEN) {
-          mHandler.obtainMessage(WHAT_STOP_SPEAK);
+            mHandler.obtainMessage(WHAT_STOP_SPEAK);
         } else if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_AUDIBLE) {
-          mHandler.obtainMessage(WHAT_STOP_PLAY_EARCON);
+            mHandler.obtainMessage(WHAT_STOP_PLAY_EARCON);
+        } else if (mProvidedFeedbackType == AccessibilityServiceInfo.FEEDBACK_HAPTIC) {
+            mHandler.obtainMessage(WHAT_STOP_VIBRATE);
         } else {
             throw new IllegalStateException("Unexpected feedback type " + mProvidedFeedbackType);
         }
