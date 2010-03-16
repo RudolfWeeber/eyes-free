@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+<table cellspacing="0">
+  <tbody>
+    <tr>
+      <td>
+      <div dir="ltr">
+      <span dir="ltr">Utilizing Android Accessibility APIs to Provide
+      Alternative and Complementary UI Feedback</span></h3>
+      <h2><b>Objective/Description:</b></h2>
+      This code lab demonstrates how to use the <a
+        href="http://developer.android.com/reference/android/view/accessibility/package-summary.html"
+        target="_blank">Android accessibility APIs</a> to write an <a
+        href="http://developer.android.com/reference/android/accessibilityservice/AccessibilityService.html"
+        target="_blank">accessibility service</a> that provides custom feedback
+      for the Clock application which comes with Android devices. At the end of
+      this exercise, you will have built "ClockBack" which handles only <a
+        href="http://developer.android.com/reference/android/view/accessibility/AccessibilityEvent.html"
+        target="_blank">accessibility events</a> from a specific package,
+      changes the provided feedback type based on the device state, utilizes
+      application domain knowledge to enhance the spoken feedback, and
+      demonstrates how the accessibility APIs can be utilized to provide both
+      alternative and complementary UI feedback.<br />
+      <h2><b>Requirements:</b></h2>
+      The requirements for this codelab is a basic understanding of Android. You
+      should have your <a href="http://developer.android.com/sdk/index.html"
+        target="_blank">Android development environment setup</a> and understand
+      the <a href="http://developer.android.com/guide/index.html"
+        target="_blank">basic concepts</a> of Android development. If you are
+      unfamiliar with Android, we highly recommend that you look at the <a
+        href="http://developer.android.com/" target="_blank">Android
+      developer website</a> and familiarize yourself with developing on Android by
+      trying out the <a
+        href="http://developer.android.com/resources/samples/index.html"
+        target="_blank">code samples</a> there.<br />
+      <h2><b><b>Background:</b></b></h2>
+      The accessibility APIs are light-weight with no performance impact if
+      accessibility is disabled and are available since release 1.6 of the
+      Android platform. On Android devices each application runs in a separate
+      process. Hence, the applications a user is interacting with and the
+      accessibility services which provide feedback based on that user's actions
+      run in separate processes.<br />
+      <br />
+      Therefore, to propagate the information of user interactions to interested
+      accessibility services the Android UI layer is instrumented to fire
+      accessibility events if something interesting happens (say clicking a
+      button). These events are dispatched by the system to the accessibility
+      services which are registered as such and managed by the system. Enabling
+      or disabling an accessibility service happens only upon an explicit user
+      action in the settings menu.<br />
+      <br />
+      Accessibility services send an<a
+        href="http://raventhorn.is-into-anime.com/webshare/Drivers/Motorola%20Cell/android-sdk-windows/docs/reference/android/accessibilityservice/AccessibilityServiceInfo.html"
+        target="_blank" rel="nofollow"> accessibility service info</a> to the
+      system with information about how they would like to be handled. An
+      accessibility service can provide a specific feedback type and the system
+      invokes only one accessibility service per feedback type, thus avoiding
+      two accessibility services speaking at the same time. Android devices come
+      with three accessibility services: TalkBack - provides spoken feedback;
+      KickBack - provides haptic feedback; SoundBack - provides audible
+      feedback. <br />
+      <h2><b>Code-Walk</b>:</h2>
+      <h3>I. Introduction</h3>
+      This code-walk guides you through the process of building an accessibility
+      service which utilizes all the features of the Android accessibility APIs.
+      The exercise is organized in small, incremental steps each exploring a new
+      dimension of functionality that allows you to enhance a provided feedback
+      type as well as to enrich the palette of provided feedback types. The
+      code-walk also gives an example of using the platform APIs to obtain
+      deveice state information and use it to dynamically change the provided
+      feedback. Each step leads you to a running version of "ClockBack",
+      therefore you can go through the process of refining the alternatice and
+      complementary feedback.<br />
+      <br />
+      <b>Note</b>: Each of the steps in this code-walk provides a URL to a SVN
+      revision at Google Code. While the code is commented in detail, each
+      revision has review comments which provide a higher level perspective.
+      Since there is rarely a best solution in programming we encourage you to
+      not only try writing the code of each step yourself but also to explore
+      ways of achieving the goals in more optimal and original manner.<br />
+      <h3> II. Create an Eclipse project form SVN:<br />
+      </h3>
+      <b>Create an Eclipse project from SVN:</b><br />
+      <ol>
+        <li>Install <a
+          href="http://www.eclipse.org/subversive/downloads.php" target="_blank"
+          rel="nofollow">Subversive</a>.<br />
+        </li>
+        <li>Create a new Eclipse project form SVN using as a repository URL
+        (no user name and password needed):
+        http://eyes-free.googlecode.com/svn/trunk/documentation/ClockBackTutorial/Step-By-Step</li>
+        <li>Press "Next" and then "Finish" (Click "Date" and then "Head
+        Revision" to make "Finish" enabled - looks like a minor bug).</li>
+        <li>Select "Checkout as a project configured using the New Project
+        Wizard" and select "Finish"<br />
+        </li>
+        <li>Select "Android"-&gt;"Android project" and press "Next"</li>
+        <li>Enter "ClockBack" as the "Project name" and "Application name".</li>
+        <li>Select "Android 1.6" for "Build Target."</li>
+        <li>Enter "com.google.android.marvin.clockback" as "Package name".<br />
+        </li>
+        <li>Uncheck "Create Activity".</li>
+        <li>Enter "4" as "Min SDK Version" and press "Finish".</li>
+        <li>Right click on the project, select "Team"-&gt;"Synchronize with
+        repository" (For some reason Eclipse does not create the project with
+        all the SVN data).<br />
+        </li>
+        <li>Right click on the project, select "Override and update..." and
+        press "Yes"</li>
+        <li>Go back to the "Java" perspective go to "Project"-&gt;"Android"
+        and select "Android 1.6" (While forcing the update Eclipse forgot our
+        configuration).</li>
+        <li>Clean you project and you are ready to go :)<br />
+        </li>
+      </ol>
+      <b>Read me:</b> <i> Now you have checked out the latest version of the
+      project and for each step in the tutorial just have to get the content of
+      a given revision by right clicking<br />
+      on the project-&gt;Team-&gt;Show History-&gt;right click on a given
+      revision(look at the revision number of the left) -&gt;Update to-&gt;Yes.</i>
+      <h3>III. Step 0 - spoken feedback
+      for the Clock application<br />
+      </h3>
+      <b>Update to revision:</b> 574 and visit <a
+        href="http://code.google.com/p/eyes-free/source/detail?r=574"
+        target="_blank">the revision URL</a> to see the code delta and read the
+      review comments.<b><br />
+      <br />
+      Step description:</b> This step demonstrates how to write a basic
+      accessibility service which provides spoken feedback for a specific
+      application.<br />
+      <br />
+      <b>How to try:</b><br />
+      <ol>
+        <li>Install "ClockBack" on the device.</li>
+        <li>Enable accessibility:
+        Settings-&gt;Accessibility-&gt;Accessibility.</li>
+        <li>Enable "ClockBack": Settings-&gt;Accessibility-&gt;ClockBack.</li>
+        <li>Poke around <u>with the track ball</u> and then go to and
+        explore the Clock application.</li>
+        <li>Try to change the time of an alarm and visit the plus and minus
+        buttons and the hour and minute input fields.</li>
+      </ol>
+      <b>What to expect</b>: Spoken feedback is provided only for the Clock
+      application. However, the plus and minus buttons are not spoken and the
+      hour and minute input fields are not announced as such.<br />
+      <h3> IV. Step 1
+      - enhance the spoken feedback for the Clock application with domain
+      knowledge<br />
+      </h3>
+      <b>Update to revision:</b> 575 and visit <a
+        href="http://code.google.com/p/eyes-free/source/detail?r=575"
+        target="_blank">the revision URL</a> to see the code delta and read the
+      review comments.<br />
+      <br />
+      <b>Step description:</b> This step demonstrates how to enhance the spoken
+      feedback utilizing domain knowledge. As a result we are properly
+      announcing the plus and minus buttons and the hour and minute input fields
+      in the edit alarm dialog.<br />
+      <br />
+      <b>How to try:</b><br />
+      <ol>
+        <li>Install "ClockBack" on the device.</li>
+        <li>Enable accessibility:
+        Settings-&gt;Accessibility-&gt;Accessibility.</li>
+        <li>Enable "ClockBack": Settings-&gt;Accessibility-&gt;ClockBack.</li>
+        <li>Try to change the time of an alarm and visit the plus and minus
+        buttons and the hour and minute input fields.</li>
+      </ol>
+      <b>What to expect</b>: The plus and minus buttons and the hour and minute
+      fields are properly spoken.<br />
+      <h3> V. Step 2
+      - enhance the spoken feedback by announcing context changes - screen
+      on/off<br />
+      </h3>
+      <b>Update to revision:</b> 576 and visit <a
+        href="http://code.google.com/p/eyes-free/source/detail?r=576"
+        target="_blank">the revision URL</a> to see the code delta and read the
+      review comments.<br />
+      <br />
+      <b>Step description:</b> This step demonstrates how to enhance the spoken
+      feedback by announcing context changes, in our case the screen on/off
+      events.<br />
+      <br />
+      <b>How to try:</b><br />
+      <ol>
+        <li>Install "ClockBack" on the device.</li>
+        <li>Press the Power button on the device to turn the screen on and
+        off</li>
+      </ol>
+      <b>Note:</b> The screen on/off announcement is enabled for all
+      applications since the default accessibility service that provides spoken
+      feedback TalkBack (the version we were developing against) was lacking
+      (the latest TalkBack provides such feedback) this feature.<br />
+      <br />
+      <b>What to expect</b>: The screen on and off events are announced
+      including the ringer volume.<br />
+      <h4><a name="TOC-2.-Create-a-simple-UI-to-show-what-"></a></h4>
+      <h3> VI. Step 3
+      - adding audible feedback to announce ringer mode changes<br />
+      </h3>
+      <b>Update to revision:</b> 577 and visit <a
+        href="http://code.google.com/p/eyes-free/source/detail?r=577"
+        target="_blank">the revision URL</a> to see the code delta and read the
+      review comments.<br />
+      <br />
+      <b>Step description:</b> This step demonstrates how to enhance the spoken
+      feedback by announcing changes in the ringer mode (normal/vibrate/silent).<br />
+      <br />
+      <b>How to try:</b><br />
+      <ol>
+        <li>Install "ClockBack" on the device.</li>
+        <li>Use the ringer volume keys to change the ringer mode.<br />
+        </li>
+      </ol>
+      <b>Note:</b> The audible feedback for ringer mode change is enabled for
+      all applications since the default accessibility support (at the time we
+      were developing) does not provide such.<br />
+      <br />
+      <b>What to expect</b>: A ringer mode specific earcon (short sound) is
+      played upon switching to a given ringer mode.<br />
+      <h3> VII. Step
+      4 - providing spoken feedback for normal ringer mode and auditory feedback
+      for other ringer modes<br />
+      </h3>
+      <b>Update to revision:</b> 578 and visit <a
+        href="http://code.google.com/p/eyes-free/source/detail?r=578"
+        target="_blank">the revision URL</a> to see the code delta and read the
+      review comments.<br />
+
+      <br />
+      <b>Step description:</b> This step demonstrates how to dynamically change
+      the provided feedback type depending on the ringer mode.<br />
+      <br />
+      <b>How to try:</b><br />
+      <ol>
+        <li>Install "ClockBack" on the device.</li>
+        <li>Enable accessibility:
+        Settings-&gt;Accessibility-&gt;Accessibility.</li>
+        <li>Enable "ClockBack": Settings-&gt;Accessibility-&gt;ClockBack.</li>
+        <li>Enable "TalkBack": Settings-&gt;Accessibility-&gt;TalkBack.</li>
+        <li>Enable "TalkKick": Settings-&gt;Accessibility-&gt;KickBack.</li>
+        <li>Enable "TalkSound": Settings-&gt;Accessibility-&gt;SoundBack.</li>
+        <li>Make sure you ringer mode is normal (ringer volume not zero).</li>
+        <li>Poke around in the Clock application.</li>
+        <li>Change the ringer volume to either vibrate or silent.</li>
+        <li>Poke around in the Clock application.</li>
+        <li>Poke around outside of the Clock application.</li>
+      </ol>
+
+      <b>Note:</b> Make sure you start accessibility services in the specified
+      order (application specific ones i.e. ClockBack first). Beginning from the
+      next Android release the default accessibility services will be invoked as
+      fall-back in case no application specific ones exist and the oder of
+      starting services will be irrelevant. <br />
+      <br />
+      <b>What to expect</b>: When the ringer mode is normal the feedback in the
+      Clock application is spoken enhanced with domain knowledge (try the change
+      alarm time dialog) and for other ringer modes the feedback is auditory
+      (complementing the visual). However, going outside the application we
+      receive the system wide default feedback.<br />
+      <h3> VIII. Step
+      5 - providing spoken feedback for normal ringer mode, auditory feedback
+      for vibrate ringer mode, and haptic feedback for ringer silent mode<br />
+      </h3>
+      <b>Update to revision:</b> 579 and visit <a
+        href="http://code.google.com/p/eyes-free/source/detail?r=579"
+        target="_blank">the revision URL</a> to see the code delta and read the
+      review comments.<br />
+      <br />
+
+      <b>Step description:</b> This step demonstrates how to dynamically change
+      the ringer mode depending on the context and use haptic feedback for the
+      silent ringer mode.<br />
+      <br />
+      <b>How to try:</b><br />
+      <ol>
+        <li>Install "ClockBack" on the device.</li>
+        <li>Enable accessibility:
+        Settings-&gt;Accessibility-&gt;Accessibility.</li>
+        <li>Enable "ClockBack": Settings-&gt;Accessibility-&gt;ClockBack.</li>
+        <li>Enable "TalkBack": Settings-&gt;Accessibility-&gt;TalkBack.</li>
+        <li>Enable "TalkKick": Settings-&gt;Accessibility-&gt;KickBack.</li>
+        <li>Enable "TalkSound": Settings-&gt;Accessibility-&gt;SoundBack.</li>
+        <li>Make sure you ringer mode is normal (ringer volume not zero).</li>
+        <li>Poke around in the Clock application.</li>
+        <li>Change the ringer volume to vibrate.</li>
+        <li>Poke around in the Clock application.</li>
+        <li>Change the ringer volume to silent.</li>
+        <li>Poke around in the Clock application.</li>
+      </ol>
+
+      <b>Note:</b> Make sure you start accessibility services in the specified
+      order (application specific i.e. ClockBack first). Beginning from the next
+      Android release the default accessibility services will be invoked as
+      fall-back in case no applciation specific ones exist and the oder of
+      starting services will be irrelevant. <br />
+      <br />
+      <b>What to expect</b>: When the ringer mode is normal the feedback in the
+      Clock application is spoken enhanced with domain knowledge (try the change
+      alarm time dialog). If the ringer mode is vibrate the provided feedback is
+      auditory and for ringer mode silent the feedback is haptic.<br />
+      <h3> IX. Step 6
+      - you write a cool accessibility service and we give you win one of our
+      awesome prizes :)</h3>
+      10-x!<br />
+      <br />
+      </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
