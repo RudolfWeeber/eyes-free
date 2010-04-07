@@ -43,7 +43,7 @@ interface ITtsBeta {
 
     String[] getLanguage();
 
-    int isLanguageAvailable(in String language, in String country, in String variant);
+    int isLanguageAvailable(in String language, in String country, in String variant, in String[] params);
 
     int setLanguage(in String callingApp, in String language, in String country, in String variant);
 
@@ -62,4 +62,8 @@ interface ITtsBeta {
     int playSilence(in String callingApp, in long duration, in int queueMode, in String[] params);
     
     int setEngineByPackageName(in String enginePackageName);
+
+    String getDefaultEngine();
+
+    boolean areDefaultsEnforced();
 }

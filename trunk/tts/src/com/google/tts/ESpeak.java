@@ -28,7 +28,7 @@ import android.os.Bundle;
  * /data/data/com.svox.pico/lib/libttspico.so
  */
 
-public class ESpeak extends Activity {
+public class eSpeak extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

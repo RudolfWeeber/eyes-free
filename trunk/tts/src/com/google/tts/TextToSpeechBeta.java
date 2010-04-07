@@ -336,6 +336,8 @@ public class TextToSpeechBeta extends TextToSpeech {
      * @see TextToSpeechBeta#setEngineByPackageName(String)
      */
     public static final String KEY_PARAM_ENGINE = "engine";
+    
+    public static final String KEY_PARAM_PITCH = "pitch";
 
     // key positions in the array of cached parameters
     /**
@@ -1137,7 +1139,7 @@ public class TextToSpeechBeta extends TextToSpeech {
         result =
             mITts.isLanguageAvailable(mCachedParams[Engine.PARAM_POSITION_LANGUAGE + 1],
                 mCachedParams[Engine.PARAM_POSITION_COUNTRY + 1],
-                mCachedParams[Engine.PARAM_POSITION_VARIANT + 1]);
+                mCachedParams[Engine.PARAM_POSITION_VARIANT + 1], mCachedParams);
       } catch (RemoteException e) {
         // TTS died; restart it.
         Log.e("TextToSpeech.java - setLanguage", "RemoteException");
@@ -1234,7 +1236,7 @@ public class TextToSpeechBeta extends TextToSpeech {
       try {
         result =
             mITts
-                .isLanguageAvailable(loc.getISO3Language(), loc.getISO3Country(), loc.getVariant());
+                .isLanguageAvailable(loc.getISO3Language(), loc.getISO3Country(), loc.getVariant(), mCachedParams);
       } catch (RemoteException e) {
         // TTS died; restart it.
         Log.e("TextToSpeech.java - isLanguageAvailable", "RemoteException");
