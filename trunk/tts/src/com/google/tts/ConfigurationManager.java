@@ -45,7 +45,7 @@ public class ConfigurationManager extends Activity {
       setContentView(R.layout.downloading);
       (new Thread(new dataDownloader())).start();
     } else {
-      Intent intent = new Intent(this, PrefsActivity.class);
+      Intent intent = new Intent(this, TextToSpeechSettings.class);
       startActivityForResult(intent, 42);
       finish();
     }

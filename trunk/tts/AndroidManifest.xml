@@ -27,7 +27,7 @@
       </intent-filter>
     </activity>
 
-    <activity android:name="PrefsActivity">
+    <activity android:name="TextToSpeechSettings">
     </activity>
 
     <activity android:name=".MakeBagel" android:label="@string/app_name"

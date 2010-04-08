@@ -89,11 +89,11 @@ public class CheckVoiceData extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int result = TextToSpeech.Engine.CHECK_VOICE_DATA_PASS;
+        int result = TextToSpeechBeta.Engine.CHECK_VOICE_DATA_PASS;
         Intent returnData = new Intent();
-        returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_ROOT_DIRECTORY, ESPEAK_DATA_PATH);
-        returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_FILES, baseDataFiles);
-        returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_FILES_INFO, baseDataFiles);
+        returnData.putExtra(TextToSpeechBeta.Engine.EXTRA_VOICE_DATA_ROOT_DIRECTORY, ESPEAK_DATA_PATH);
+        returnData.putExtra(TextToSpeechBeta.Engine.EXTRA_VOICE_DATA_FILES, baseDataFiles);
+        returnData.putExtra(TextToSpeechBeta.Engine.EXTRA_VOICE_DATA_FILES_INFO, baseDataFiles);
 
         ArrayList<String> available = new ArrayList<String>();
         ArrayList<String> unavailable = new ArrayList<String>();
@@ -118,9 +118,8 @@ public class CheckVoiceData extends Activity {
             }
         }
 
-        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES", available);
-        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_UNAVAILABLE_VOICES",
-                unavailable);
+        returnData.putStringArrayListExtra("availableVoices", available);
+        returnData.putStringArrayListExtra("unavailableVoices", unavailable);
         setResult(result, returnData);
         finish();
     }
