@@ -259,7 +259,7 @@ public class TTSService extends Service implements OnCompletionListener {
         // Also, switch to using the system settings in the framework.
         currentSpeechEngineSOFile = "";
         String preferredEngine = PreferenceManager.getDefaultSharedPreferences(this).getString(
-                "engine_pref", DEFAULT_SYNTH);
+                "tts_default_synth", DEFAULT_SYNTH);
         if (setEngine(preferredEngine) != TextToSpeechBeta.SUCCESS) {
             Log.e(SERVICE_TAG, "Unable to start up with " + preferredEngine
                     + ". Falling back to the default TTS engine.");
@@ -479,7 +479,7 @@ public class TTSService extends Service implements OnCompletionListener {
         // In the framework, use the Secure settings instead by doing:
         // String defaultEngine = android.provider.Settings.Secure.getString(mResolver,
         // android.provider.Settings.Secure.TTS_DEFAULT_SYNTH);
-        String defaultEngine = PreferenceManager.getDefaultSharedPreferences(this).getString("engine_pref", DEFAULT_SYNTH);
+        String defaultEngine = PreferenceManager.getDefaultSharedPreferences(this).getString("tts_default_synth", DEFAULT_SYNTH);
         if (defaultEngine == null) {
             return TextToSpeechBeta.Engine.DEFAULT_SYNTH;
         } else {

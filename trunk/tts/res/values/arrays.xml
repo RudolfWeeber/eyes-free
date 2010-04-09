@@ -1,59 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
- * Copyright (C) 2009 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- -->
+  <!--
+    * Copyright (C) 2009 Google Inc. * * Licensed under the Apache License,
+    Version 2.0 (the "License"); * you may not use this file except in
+    compliance with the License. * You may obtain a copy of the License at * *
+    http://www.apache.org/licenses/LICENSE-2.0 * * Unless required by applicable
+    law or agreed to in writing, software * distributed under the License is
+    distributed on an "AS IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. * See the License for the specific language
+    governing permissions and * limitations under the License.
+  -->
 
-<resources  xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Default language choices -->
-    <string-array name="tts_lang_entries">
-        <item>American English</item>
-        <item>British English</item>
-        <item>French</item>
-        <item>German</item>
-        <item>Italian</item>
-        <item>Spanish</item>
-    </string-array>
-    <!-- Do not translate. -->
-    <string-array name="tts_lang_values">
-        <item>eng-USA</item>
-        <item>eng-GBR</item>
-        <item>fra-FRA</item>
-        <item>deu-DEU</item>
-        <item>ita-ITA</item>
-        <item>spa-ESP</item>
-    </string-array>
-    <string-array name="tts_rate_entries">
-        <item>Very slow</item>
-        <item>Slow</item>
-        <item>Normal</item>
-        <item>Fast</item>
-        <item>Very fast</item>
-    </string-array>
-    <string-array name="tts_rate_values">
-        <item>60</item>
-        <item>100</item>
-        <item>140</item>
-        <item>180</item>
-        <item>220</item>
-    </string-array>
-    <string-array name="tts_demo_strings">
-        <item>This is an example of speech synthesis in English.</item>
-        <item>This is an example of speech synthesis in English.</item>
-        <item>Voici un échantillon de synthèse vocale en français.</item>
-        <item>Dies ist ein Beispiel für Sprachsynthese in Deutsch.</item>
-        <item>Questo è un esempio di sintesi vocale in italiano.</item>
-        <item>Este es un ejemplo de síntesis de voz en español.</item>
-    </string-array>    
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Default language choices -->
+  <string-array name="tts_lang_entries">
+    <item>American English</item>
+    <item>British English</item>
+    <item>French</item>
+    <item>German</item>
+    <item>Italian</item>
+    <item>Spanish</item>
+  </string-array>
+  <!-- Do not translate. -->
+  <string-array name="tts_lang_values">
+    <item>eng-USA</item>
+    <item>eng-GBR</item>
+    <item>fra-FRA</item>
+    <item>deu-DEU</item>
+    <item>ita-ITA</item>
+    <item>spa-ESP</item>
+  </string-array>
+  <string-array name="tts_rate_entries">
+    <item>Very slow</item>
+    <item>Slow</item>
+    <item>Normal</item>
+    <item>Fast</item>
+    <item>Very fast</item>
+  </string-array>
+  <string-array name="tts_rate_values">
+    <item>60</item>
+    <item>100</item>
+    <item>140</item>
+    <item>180</item>
+    <item>220</item>
+  </string-array>
+  <string-array name="tts_demo_strings">
+    <item>This is an example of speech synthesis in English.</item>
+    <item>This is an example of speech synthesis in English.</item>
+    <item>Voici un échantillon de synthèse vocale en français.</item>
+    <item>Dies ist ein Beispiel für Sprachsynthese in Deutsch.</item>
+    <item>Questo è un esempio di sintesi vocale in italiano.</item>
+    <item>Este es un ejemplo de síntesis de voz en español.</item>
+  </string-array>
+  <!-- Do not translate. -->
+  <string-array name="tts_engine_entries">
+    <item>Pico TTS</item>
+  </string-array>
+  <!-- Do not translate. -->
+  <string-array name="tts_engine_values">
+    <item>com.svox.pico</item>
+  </string-array>
 </resources>

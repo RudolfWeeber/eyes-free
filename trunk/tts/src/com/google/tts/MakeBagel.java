@@ -16,7 +16,6 @@ public class MakeBagel extends Activity {
   private MakeBagel self;
 
   SpeechCompletedListener completionListener = new SpeechCompletedListener() {
-    @Override
     public void onSpeechCompleted() {
       mTts.shutdown();
       self.setResult(Activity.RESULT_OK);
@@ -46,7 +45,6 @@ public class MakeBagel extends Activity {
     }
 
     mTts = new TTS(this, new InitListener() {
-      @Override
       public void onInit(int status) {
         mTts.setOnSpeechCompletedListener(completionListener);
         if (langRegionString.length() > 0) {

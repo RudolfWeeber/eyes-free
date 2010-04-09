@@ -183,7 +183,6 @@ public class TTS {
           }
 
           ittscallback = new ITTSCallback.Stub() {
-            @Override
             public void markReached(String mark) throws RemoteException {
               if (speechCompletedCallback != null) {
                 speechCompletedCallback.onSpeechCompleted();
