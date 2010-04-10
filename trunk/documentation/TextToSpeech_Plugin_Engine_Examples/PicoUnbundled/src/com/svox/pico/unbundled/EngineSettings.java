@@ -47,8 +47,8 @@ public class EngineSettings extends PreferenceActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == VOICE_DATA_CHECK_CODE){
-            ArrayList<String> available = data.getStringArrayListExtra("TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES");
-            ArrayList<String> unavailable = data.getStringArrayListExtra("TextToSpeech.Engine.EXTRA_UNAVAILABLE_VOICES");
+            ArrayList<String> available = data.getStringArrayListExtra("availableVoices");
+            ArrayList<String> unavailable = data.getStringArrayListExtra("unavailableVoices");
 
             addPreferencesFromResource(R.xml.voices_list);
             
@@ -72,7 +72,6 @@ public class EngineSettings extends PreferenceActivity {
                 pref.setSummary(R.string.not_installed);
                 pref.setEnabled(true);
                 pref.setOnPreferenceClickListener(new OnPreferenceClickListener(){
-                    @Override
                     public boolean onPreferenceClick(Preference preference) {
                         Uri marketUri = Uri.parse(MARKET_URI_START + unavailableLang.toLowerCase().replace("-", "."));
                         Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);

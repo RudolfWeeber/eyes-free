@@ -105,8 +105,8 @@ public class CheckVoiceData extends Activity {
         returnData.putExtra(TextToSpeech.Engine.EXTRA_VOICE_DATA_FILES_INFO, dataFilesInfo);
 
         // TODO (clchen): Add these intents to TextToSpeech.Engine
-        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES", available);
-        returnData.putStringArrayListExtra("TextToSpeech.Engine.EXTRA_UNAVAILABLE_VOICES", unavailable);
+        returnData.putStringArrayListExtra("availableVoices", available);
+        returnData.putStringArrayListExtra("unavailableVoices", unavailable);
         setResult(result, returnData);
         finish();
     }
