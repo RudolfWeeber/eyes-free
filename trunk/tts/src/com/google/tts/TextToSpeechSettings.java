@@ -34,8 +34,6 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.preference.CheckBoxPreference;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
@@ -364,7 +362,7 @@ public class TextToSpeechSettings extends PreferenceActivity implements
             }
             initDefaultSettings();
             mTts.setLanguage(new Locale(mDefaultLanguage, mDefaultCountry, mDefaultLocVariant));
-            mTts.setSpeechRate((float) (mDefaultRate / 100.0f));
+            mTts.setSpeechRate((mDefaultRate / 100.0f));
             mTts.setEngineByPackageName(mDefaultEng);
             initClickers();
             updateWidgetState();
@@ -381,6 +379,7 @@ public class TextToSpeechSettings extends PreferenceActivity implements
     /**
      * Called when voice data integrity check returns
      */
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == VOICE_DATA_INTEGRITY_CHECK) {
             if (data == null) {
@@ -494,7 +493,7 @@ public class TextToSpeechSettings extends PreferenceActivity implements
                 prefsEditor.putInt(KEY_TTS_DEFAULT_RATE, mDefaultRate);
                 prefsEditor.commit();
                 if (mTts != null) {
-                    mTts.setSpeechRate((float) (mDefaultRate / 100.0f));
+                    mTts.setSpeechRate((mDefaultRate / 100.0f));
                 }
                 Log.i(TAG, "TTS default rate is " + mDefaultRate);
             } catch (NumberFormatException e) {
