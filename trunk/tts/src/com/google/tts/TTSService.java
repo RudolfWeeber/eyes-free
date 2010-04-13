@@ -342,6 +342,10 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     private int setEngine(String enginePackageName) {
+        if (isDefaultEnforced()){
+            enginePackageName = getDefaultEngine();
+        }
+        
         // This is a hack to prevent the user from trying to run the Pico
         // engine if they are on Cupcake since the Pico auto-install only works
         // on
@@ -465,8 +469,8 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     private boolean isDefaultEnforced() {
-        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean("override_pref",
-                false);
+        return (PreferenceManager.getDefaultSharedPreferences(this).getInt("toggle_use_default_tts_settings",
+                0) == 1);
         // In the framework, use the Secure settings instead by doing:
         //
         // return (android.provider.Settings.Secure.getInt(mResolver,
