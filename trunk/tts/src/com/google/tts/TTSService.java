@@ -507,76 +507,35 @@ public class TTSService extends Service implements OnCompletionListener {
     }
 
     private String getDefaultLanguage() {
-        String defaultLang = PreferenceManager.getDefaultSharedPreferences(this).getString(
-                "lang_pref", "");
-
-        if ((defaultLang.length() != 3) && (defaultLang.length() != 7)) {
-            defaultLang = null;
-        } else {
-            defaultLang = defaultLang.substring(0, 3);
-        }
+        return PreferenceManager.getDefaultSharedPreferences(this).getString(
+                "tts_default_lang", Locale.getDefault().getISO3Language());
 
         // In the framework, use the Secure settings instead by doing:
         //       	
         // String defaultLang =
         // android.provider.Settings.Secure.getString(mResolver,
         // android.provider.Settings.Secure.TTS_DEFAULT_LANG);
-
-        if (defaultLang == null) {
-            // no setting found, use the current Locale to determine the default
-            // language
-            return Locale.getDefault().getISO3Language();
-        } else {
-            return defaultLang;
-        }
     }
 
     private String getDefaultCountry() {
-        String defaultCountry = PreferenceManager.getDefaultSharedPreferences(this).getString(
-                "lang_pref", "");
-
-        if (defaultCountry.length() != 7) {
-            defaultCountry = null;
-        } else {
-            defaultCountry = defaultCountry.substring(4, 7);
-        }
-
+        return PreferenceManager.getDefaultSharedPreferences(this).getString(
+                "tts_default_country", Locale.getDefault().getISO3Country());
+        
         // In the framework, use the Secure settings instead by doing:
         //       	        
         // String defaultCountry =
         // android.provider.Settings.Secure.getString(mResolver,
         // android.provider.Settings.Secure.TTS_DEFAULT_COUNTRY);
-        if (defaultCountry == null) {
-            // no setting found, use the current Locale to determine the default
-            // country
-            return Locale.getDefault().getISO3Country();
-        } else {
-            return defaultCountry;
-        }
     }
 
     private String getDefaultLocVariant() {
-        String defaultVar = PreferenceManager.getDefaultSharedPreferences(this).getString(
-                "lang_pref", "");
-
-        if (defaultVar.length() < 9) {
-            defaultVar = null;
-        } else {
-            defaultVar = defaultVar.substring(8);
-        }
-
+        return PreferenceManager.getDefaultSharedPreferences(this).getString(
+                "tts_default_variant", Locale.getDefault().getVariant());
         // In the framework, use the Secure settings instead by doing:
         //       	          	
         // String defaultVar =
         // android.provider.Settings.Secure.getString(mResolver,
         // android.provider.Settings.Secure.TTS_DEFAULT_VARIANT);
-        if (defaultVar == null) {
-            // no setting found, use the current Locale to determine the default
-            // variant
-            return Locale.getDefault().getVariant();
-        } else {
-            return defaultVar;
-        }
     }
 
     private int setSpeechRate(String callingApp, int rate) {
