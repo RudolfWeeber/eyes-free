@@ -28,31 +28,39 @@ import android.os.Bundle;
  */
 public class TalkingDialer extends Activity {
 
-  private final int reqCode = 1;
+    private final int reqCode = 1;
 
-  /** Called when the activity is first created. */
-  @Override
-  public void onCreate(Bundle icicle) {
-    super.onCreate(icicle);
-    setContentView(R.layout.main);
-    Intent intent = new Intent(this, SlideDial.class);
-    startActivityForResult(intent, reqCode);
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == reqCode) {
-      if (resultCode == Activity.RESULT_CANCELED) {
-        finish();
-        return;
-      }
-      String phoneNumber = data.getStringExtra("number");
-      Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode(phoneNumber));
-
-      Intent intent = new Intent(Intent.ACTION_CALL, phoneNumberURI);
-      startActivity(intent);
-      finish();
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        //setContentView(R.layout.main);
+        //Intent intent = new Intent(this, SlideDial.class);
+        //startActivityForResult(intent, reqCode);
     }
-  }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setContentView(R.layout.main);
+        Intent intent = new Intent(this, SlideDial.class);
+        startActivityForResult(intent, reqCode);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == reqCode) {
+            if (resultCode == Activity.RESULT_CANCELED) {
+                finish();
+                return;
+            }
+            String phoneNumber = data.getStringExtra("number");
+            Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode(phoneNumber));
+
+            Intent intent = new Intent(Intent.ACTION_CALL, phoneNumberURI);
+            startActivity(intent);
+            finish();
+        }
+    }
 
 }

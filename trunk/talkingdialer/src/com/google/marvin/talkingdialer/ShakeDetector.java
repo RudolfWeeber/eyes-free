@@ -1,7 +1,9 @@
 package com.google.marvin.talkingdialer;
 
 import android.content.Context;
-import android.hardware.SensorListener;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 public class ShakeDetector {
@@ -11,25 +13,25 @@ public class ShakeDetector {
   }
 
 
-  private SensorListener mListener;
+  private SensorEventListener mListener;
   private ShakeListener cb;
   private SensorManager sensorManager;
 
   public ShakeDetector(Context context, ShakeListener callback) {
     cb = callback;
-    mListener = new SensorListener() {
+    mListener = new SensorEventListener() {
       private final double deletionForce = .8;
       private final int deletionCount = 2;
       int shakeCount = 0;
       boolean lastShakePositive = false;
       private int shakeCountTimeout = 500;
 
-      public void onSensorChanged(int sensor, float[] values) {
-        if ((values[1] > deletionForce) && !lastShakePositive) {
+      public void onSensorChanged(SensorEvent sensorEvent) {
+        if ((sensorEvent.values[1] > deletionForce) && !lastShakePositive) {
           (new Thread(new resetShakeCount())).start();
           shakeCount++;
           lastShakePositive = true;
-        } else if ((values[1] < -deletionForce) && lastShakePositive) {
+        } else if ((sensorEvent.values[1] < -deletionForce) && lastShakePositive) {
           (new Thread(new resetShakeCount())).start();
           shakeCount++;
           lastShakePositive = false;
@@ -40,7 +42,7 @@ public class ShakeDetector {
         }
       }
 
-      public void onAccuracyChanged(int arg0, int arg1) {
+      public void onAccuracyChanged(Sensor sensor, int arg1) {
       }
 
       class resetShakeCount implements Runnable {
@@ -57,7 +59,7 @@ public class ShakeDetector {
     
     
     sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-    sensorManager.registerListener(mListener, SensorManager.SENSOR_ACCELEROMETER,
+    sensorManager.registerListener(mListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
         SensorManager.SENSOR_DELAY_FASTEST);
   }
   
