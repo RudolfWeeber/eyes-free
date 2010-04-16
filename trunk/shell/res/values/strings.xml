@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home">Home</string>    
-    <string name="press_menu_to_unlock">Press menu to unlock</string>
+    <string name="please_unlock">Please unlock.</string>
     <string name="you_have_new_voicemail">You have new voicemail.</string>    
     <string name="application_not_installed">Application not installed.</string>
     <string name="compass">Compass</string>

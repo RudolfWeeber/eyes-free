@@ -48,12 +48,10 @@ public class ProximitySensor {
     private boolean close;
 
     SensorEventListener listener = new SensorEventListener() {
-        @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
             // Ignoring this for now
         }
 
-        @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.values[0] < farValue) {
                 close = true;

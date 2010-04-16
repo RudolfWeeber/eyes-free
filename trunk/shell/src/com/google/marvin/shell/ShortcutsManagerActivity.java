@@ -201,7 +201,6 @@ public class ShortcutsManagerActivity extends Activity {
             final int gestureNumber = indexToButtonMapping.get(i);
             final int buttonIndex = i;
             buttons[i].setOnClickListener(new OnClickListener() {
-                @Override
                 public void onClick(View view) {
 
                     // Non-launch actions cannot be changed, so clicking button
@@ -213,7 +212,6 @@ public class ShortcutsManagerActivity extends Activity {
                         AlertDialog.Builder builder = new AlertDialog.Builder(self);
 
                         builder.setAdapter(aa, new DialogInterface.OnClickListener() {
-                            @Override
                             public void onClick(DialogInterface arg0, int index) {
 
                                 // Update button text

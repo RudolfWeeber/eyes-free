@@ -209,7 +209,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     return;
                 }
                 if (!isFocused && (tts != null)) {
-                    tts.speak(getString(R.string.press_menu_to_unlock), 0, null);
+                    tts.speak(getString(R.string.please_unlock), 0, null);
                 }
             }
         };
@@ -257,8 +257,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         String pkgName = MarvinShell.class.getPackage().getName();
         tts.addSpeech(getString(R.string.marvin_intro_snd_), pkgName, R.raw.marvin_intro);
         tts.addSpeech(getString(R.string.home), pkgName, R.raw.home);
-        tts.addSpeech(getString(R.string.press_menu_to_unlock), pkgName,
-                        R.raw.press_menu_to_unlock);
         tts.addSpeech(getString(R.string.compass), pkgName, R.raw.compass);
         tts.addSpeech(getString(R.string.battery), pkgName, R.raw.battery);
         tts.addSpeech(getString(R.string.application_not_installed), pkgName,
@@ -293,6 +291,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         tts.addSpeech(getString(R.string.shortcuts), pkgName, R.raw.shortcuts);
         tts.addSpeech(getString(R.string.time), pkgName, R.raw.time);
         tts.addSpeech(getString(R.string.search), pkgName, R.raw.search);
+        tts.addEarcon(TTSEarcon.TOCK.toString(), pkgName, R.raw.tock_snd);
     }
 
     private OnInitListener ttsInitListener = new OnInitListener() {
@@ -721,7 +720,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         }
     }
 
-    @Override
     public void onProximityChanged(float proximity) {
         if (proximity == 0) {
             if (tts != null) {

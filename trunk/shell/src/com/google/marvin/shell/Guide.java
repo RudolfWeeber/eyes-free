@@ -35,7 +35,6 @@ import android.os.Bundle;
  */
 public class Guide implements Runnable, StreetLocatorListener {
     class GiveUpTimer implements Runnable {
-        @Override
         public void run() {
             try {
                 Thread.sleep(10000);
@@ -124,7 +123,6 @@ public class Guide implements Runnable, StreetLocatorListener {
     // This is a fix for the Droid - the status listener must be set or GPS will
     // not work right.
     GpsStatus.Listener dummyGpsStatusListener = new GpsStatus.Listener() {
-        @Override
         public void onGpsStatusChanged(int event) {
         }
     };

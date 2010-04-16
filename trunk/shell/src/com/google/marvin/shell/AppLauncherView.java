@@ -32,6 +32,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 /**
@@ -41,6 +43,55 @@ import java.util.ArrayList;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class AppLauncherView extends TextView {
+    // BEGIN OF WORKAROUND FOR DONUT COMPATIBILITY
+    private static Method MotionEvent_getX;
+    private static Method MotionEvent_getY;
+    static {
+        initCompatibility();
+    }
+    private static void initCompatibility() {
+        try {
+            MotionEvent_getX = MotionEvent.class.getMethod(
+                    "getX", new Class[] { Integer.TYPE } );
+            MotionEvent_getY = MotionEvent.class.getMethod(
+                    "getY", new Class[] { Integer.TYPE } );
+            /* success, this is a newer device */
+        } catch (NoSuchMethodException nsme) {
+            /* failure, must be older device */
+        }
+    }
+    private static float getX(MotionEvent event, int x) {
+        try {
+            Object retobj = MotionEvent_getX.invoke(event, x);
+            return (Float) retobj;
+        }  catch (IllegalAccessException ie) {
+            System.err.println("unexpected " + ie);
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    private static float getY(MotionEvent event, int y) {
+        try {
+            Object retobj = MotionEvent_getY.invoke(event, y);
+            return (Float) retobj;
+        }  catch (IllegalAccessException ie) {
+            System.err.println("unexpected " + ie);
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return -1;
+    }    
+    // END OF WORKAROUND FOR DONUT COMPATIBILITY
+    
     private static final char alphabet[] = {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
             'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
@@ -107,6 +158,12 @@ public class AppLauncherView extends TextView {
     private int trackballTimeout = 500;
 
     private boolean trackballEnabled = true;
+    
+    private boolean inDPadMode = false;
+    
+    private float p2DownX;
+
+    private float p2DownY;
 
     private ShakeDetector shakeDetector;
 
@@ -191,10 +248,11 @@ public class AppLauncherView extends TextView {
             index++;
         }
         if (!foundMatch) {
-            parent.tts.speak("No matching applications found.", 0, null);
+            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
             if (currentString.length() > 0) {
                 currentString = currentString.substring(0, currentString.length() - 1);
             }
+            speakCurrentApp(true);
             return;
         } else {
             nextApp();
@@ -304,11 +362,39 @@ public class AppLauncherView extends TextView {
         int action = event.getAction();
         float x = event.getX();
         float y = event.getY();
+        
+        // Treat the screen as a dpad
+        if (action == 261) { // 261 == ACTION_POINTER_2_DOWN - using number for Android 1.6 compat
+            inDPadMode = true;
+            screenIsBeingTouched = false;
+            p2DownX = getX(event, 1);
+            p2DownY = getY(event, 1);
+            vibe.vibrate(PATTERN, -1);
+        } else if (action == 262) { // 262 == MotionEvent.ACTION_POINTER_2_UP - using number for Android 1.6 compat
+            float p2DeltaX = getX(event, 1) - p2DownX;
+            float p2DeltaY = getY(event, 1) - p2DownY;
+            if (Math.abs(p2DeltaX) > Math.abs(p2DeltaY)) {
+                if (p2DeltaX < -200) {
+                    backspace();
+                }
+            } else {
+                if (p2DeltaY < -100) {
+                    prevApp();
+                } else if (p2DeltaY > 100) {
+                    nextApp();
+                }
+            }
+        }
+        
         if (action == MotionEvent.ACTION_DOWN) {
             initiateMotion(x, y);
             return true;
         } else if (action == MotionEvent.ACTION_UP) {
-            confirmEntry();
+            if (inDPadMode == false) {
+                confirmEntry();
+            } else {
+                inDPadMode = false;
+            }
             return true;
         } else {
             screenIsBeingTouched = true;
