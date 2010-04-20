@@ -466,7 +466,7 @@ public class TextToSpeechBeta extends TextToSpeech {
             mCachedParams[Engine.PARAM_POSITION_STREAM + 1] = String.valueOf(Engine.DEFAULT_STREAM);
             mCachedParams[Engine.PARAM_POSITION_UTTERANCE_ID + 1] = "";
 
-            mCachedParams[Engine.PARAM_POSITION_ENGINE + 1] = Engine.DEFAULT_SYNTH;
+            mCachedParams[Engine.PARAM_POSITION_ENGINE + 1] = "";
 
             initTts();
         }
@@ -481,6 +481,9 @@ public class TextToSpeechBeta extends TextToSpeech {
                 synchronized (mStartLock) {
                     mITts = ITtsBeta.Stub.asInterface(service);
                     mStarted = true;
+                    // Cache the default engine and current language
+                    setEngineByPackageName(getDefaultEngine());
+                    setLanguage(getLanguage());
                     if (mInitListener != null) {
                         try {
                             PackageManager pm = mContext.getPackageManager();
@@ -1427,6 +1430,91 @@ public class TextToSpeechBeta extends TextToSpeech {
         }
     }
 
+    /**
+     * Gets the packagename of the default speech synthesis engine.
+     *
+     * @return Packagename of the TTS engine that the user has chosen as their default.
+     */
+    public String getDefaultEngine() {
+        if (!ttsBetaInstalled) {
+            Log.d("TextToSpeechBeta", this.NOT_ON_PLATFORM_TTS + "getDefaultEngine");
+            return TextToSpeechBeta.Engine.DEFAULT_SYNTH;
+        }
+        synchronized (mStartLock) {
+            String engineName = "";
+            if (!mStarted) {
+                return engineName;
+            }
+            try {
+                engineName = mITts.getDefaultEngine();
+            } catch (RemoteException e) {
+                // TTS died; restart it.
+                Log.e("TextToSpeech.java - setEngineByPackageName", "RemoteException");
+                e.printStackTrace();
+                mStarted = false;
+                initTts();
+            } catch (NullPointerException e) {
+                // TTS died; restart it.
+                Log.e("TextToSpeech.java - setEngineByPackageName", "NullPointerException");
+                e.printStackTrace();
+                mStarted = false;
+                initTts();
+            } catch (IllegalStateException e) {
+                // TTS died; restart it.
+                Log.e("TextToSpeech.java - setEngineByPackageName", "IllegalStateException");
+                e.printStackTrace();
+                mStarted = false;
+                initTts();
+            } finally {
+                return engineName;
+            }
+        }
+    }
+
+
+    /**
+     * Returns whether or not the user is forcing their defaults to override the
+     * Text-To-Speech settings set by applications.
+     *
+     * @return Whether or not defaults are enforced.
+     */
+    public boolean areDefaultsEnforced() {
+        if (!ttsBetaInstalled) {
+            Log.d("TextToSpeechBeta", this.NOT_ON_PLATFORM_TTS + "areDefaultsEnforced");
+            return false;
+        }
+        synchronized (mStartLock) {
+            boolean defaultsEnforced = false;
+            if (!mStarted) {
+                return defaultsEnforced;
+            }
+            try {
+                defaultsEnforced = mITts.areDefaultsEnforced();
+            } catch (RemoteException e) {
+                // TTS died; restart it.
+                Log.e("TextToSpeech.java - areDefaultsEnforced", "RemoteException");
+                e.printStackTrace();
+                mStarted = false;
+                initTts();
+            } catch (NullPointerException e) {
+                // TTS died; restart it.
+                Log.e("TextToSpeech.java - areDefaultsEnforced", "NullPointerException");
+                e.printStackTrace();
+                mStarted = false;
+                initTts();
+            } catch (IllegalStateException e) {
+                // TTS died; restart it.
+                Log.e("TextToSpeech.java - areDefaultsEnforced", "IllegalStateException");
+                e.printStackTrace();
+                mStarted = false;
+                initTts();
+            } finally {
+                return defaultsEnforced;
+            }
+        }
+    }
+
+    
     /**
      * Standalone TTS ONLY! Checks if the TTS service is installed or not
      * 
