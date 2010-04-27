@@ -1,0 +1,11 @@
+#summary Answers to FAQs for Developers working with the eyes-free code.
+#labels Phase-Implementation
+
+= Introduction =
+
+This wiki page contains links to help developers compile, build and install the eyes-free applications.
+
+= Details =
+Please see the README file, available as both a text file and in HTML format, for instructions on how to get started with the various projects. The HTML format file is available using the following link http://eyes-free.googlecode.com/svn/trunk/README.html as is the text file http://eyes-free.googlecode.com/svn/trunk/README
+
+If you would like to write an Accessibility Service, a series of worked examples are available in a 'code-walk' as part of the project. The code-walk is available using the following link http://eyes-free.googlecode.com/svn/trunk/ClockBack/CODE-WALK.html
