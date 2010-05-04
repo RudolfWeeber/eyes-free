@@ -9,3 +9,54 @@ This wiki page contains links to help developers compile, build and install the 
 Please see the README file, available as both a text file and in HTML format, for instructions on how to get started with the various projects. The HTML format file is available using the following link http://eyes-free.googlecode.com/svn/trunk/README.html as is the text file http://eyes-free.googlecode.com/svn/trunk/README
 
 If you would like to write an Accessibility Service, a series of worked examples are available in a 'code-walk' as part of the project. The code-walk is available using the following link http://eyes-free.googlecode.com/svn/trunk/ClockBack/CODE-WALK.html
+
+= Troubleshooting build and run time issues =
+Here are some notes that may help you debug and fix issues related to building and running the various eyes-free applications.
+== Could not find class 'com.google.tts.TextToSpeechBeta' ==
+The following problem was discovered when building the Circle IME using Ant. The project build without error (using the following commands)
+{{{
+cd CircleIME
+android update project --path . --target 4
+ant -e install -lib ..\commonlibs
+}}}
+
+To use the IME:
+   * Enable Circle IME in Settings -> Language & keyboard
+   * Select it using a long-press in a edit box (where the soft keyboard typically appears). A list of IMEs will be displayed, pick the Circle IME.
+
+If all's well then the IME will be active the next time you touch the edit box. However if you get a 'force close' error then something's wrong and we need to troubleshoot the problem(s).
+
+Here's an extract from {{{ adb logcat }}}
+
+{{{
+I/ActivityManager(   77): Start proc com.marvin.circleime for service com.marvin.circleime/.SoftKeyboard: pid=10902 uid=10045 gids={1015}
+D/StatusBar(   77): performSetIconVisibility key=android.os.Binder@43887bd8 visible=false
+W/InputManagerService(   77): Window already focused, ignoring focus gain of: com.android.internal.view.IInputMethodClient$Stub$Proxy@43ac6638
+I/dalvikvm(10902): Debugger thread not active, ignoring DDM send (t=0x41504e4d l=38)
+I/dalvikvm(10902): Debugger thread not active, ignoring DDM send (t=0x41504e4d l=44)
+E/dalvikvm(10902): Could not find class 'com.google.tts.TextToSpeechBeta', referenced from method com.marvin.circleime.SoftKeyboard.onCreate
+W/dalvikvm(10902): VFY: unable to resolve new-instance 37 (Lcom/google/tts/TextToSpeechBeta;) in Lcom/marvin/circleime/SoftKeyboard;
+W/dalvikvm(10902): VFY:  rejecting opcode 0x22 at 0x0010
+W/dalvikvm(10902): VFY:  rejected Lcom/marvin/circleime/SoftKeyboard;.onCreate ()V
+W/dalvikvm(10902): Verifier rejected class Lcom/marvin/circleime/SoftKeyboard;
+W/dalvikvm(10902): Class init failed in newInstance call (Lcom/marvin/circleime/SoftKeyboard;)
+D/AndroidRuntime(10902): Shutting down VM
+W/dalvikvm(10902): threadid=3: thread exiting with uncaught exception (group=0x4001db88)
+E/AndroidRuntime(10902): Uncaught handler: thread main exiting due to uncaught exception
+E/AndroidRuntime(10902): java.lang.VerifyError: com.marvin.circleime.SoftKeyboard
+E/AndroidRuntime(10902):        at java.lang.Class.newInstanceImpl(Native Method)
+E/AndroidRuntime(10902):        at java.lang.Class.newInstance(Class.java:1472)
+E/AndroidRuntime(10902):        at android.app.ActivityThread.handleCreateService(ActivityThread.java:2737)
+E/AndroidRuntime(10902):        at android.app.ActivityThread.access$3100(ActivityThread.java:123)
+E/AndroidRuntime(10902):        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1895)
+E/AndroidRuntime(10902):        at android.os.Handler.dispatchMessage(Handler.java:99)
+E/AndroidRuntime(10902):        at android.os.Looper.loop(Looper.java:123)
+E/AndroidRuntime(10902):        at android.app.ActivityThread.main(ActivityThread.java:4321)
+E/AndroidRuntime(10902):        at java.lang.reflect.Method.invokeNative(NativeMethod)
+E/AndroidRuntime(10902):        at java.lang.reflect.Method.invoke(Method.java:521)
+E/AndroidRuntime(10902):        at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:791)
+E/AndroidRuntime(10902):        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:549)
+E/AndroidRuntime(10902):        at dalvik.system.NativeStart.main(Native Method)
+}}}
+
+The problem is that the TextToSpeechBeta class is missing from the IME. The fix is simple once you know how - copy the TTS_library_stub.jar from the commonlibs folder to the local libs folder of CircleIME. Then run {{{ ant install }}} to rebuild and install the IME on the device and - hopefully - your IME will now work the next time it's initialized. The phone should not need to be restarted for the change to take effect.
