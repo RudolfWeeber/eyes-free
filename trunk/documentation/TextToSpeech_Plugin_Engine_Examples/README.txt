@@ -36,25 +36,8 @@ I. Build the .so file
   must implement "TtsEngine.h" as seen here:
 http://android.git.kernel.org/?p=platform/frameworks/base.git;a=blob_plain;f=include/tts/TtsEngine.h;hb=master 
 
-  There are a few ways to build this .so file.
-
-  A. Recommended - Use the Android NDK. 
+  Use the Android NDK to build your .so file.
   See http://developer.android.com/sdk/ndk/index.html
-  
-  B. If the NDK does not work for you because you absolutely have to use 
-  something which is not exposed in the NDK, first try to import those bits 
-  into your NDK project and build it that way.
-  
-  C. If that still doesn't work, you can build against the framework. However, 
-  that approach is NOT recommended and should only be used as a last resort.
-
-    1. Check out and build the Android source code by following the steps here:
-       http://source.android.com/download
-
-    2. Create your own "mytts" directory under "external" so that you have 
-    something which looks like: /mydroid/external/mytts  The easiest way to 
-    do this step is to just clone how the SVOX directory is setup - 
-    http://android.git.kernel.org/?p=platform/external/svox.git;a=tree
 
 *******************************************************************************
     
