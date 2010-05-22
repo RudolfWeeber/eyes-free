@@ -31,6 +31,7 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -61,11 +62,14 @@ public class RockLockActivity extends Activity {
             0, 10, 70, 80
     };
 
+    private RockLockActivity self;
+    private boolean wasStartedByService = false;
     private boolean poked = false;
 
     private FrameLayout contentFrame;
 
-    private Button unlockButton;
+    private Button exitButton;
+    private Button prefsButton;
 
     private MusicPlayer mp;
 
@@ -127,7 +131,11 @@ public class RockLockActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        self = this;
+        
+        wasStartedByService = getIntent().getBooleanExtra(EXTRA_STARTED_BY_SERVICE, false);
+        Log.e("wasStartedByService", wasStartedByService + "");
+        
         // Start the service in case it is not already running
         startService(new Intent(this, ScreenOnHandlerService.class));
 
@@ -151,11 +159,19 @@ public class RockLockActivity extends Activity {
             }
         }, PhoneStateListener.LISTEN_CALL_STATE);
 
-        unlockButton = (Button) findViewById(R.id.unlockButton);
-        unlockButton.setOnClickListener(new OnClickListener() {
-            @Override
+        exitButton = (Button) findViewById(R.id.exitButton);
+        exitButton.setOnClickListener(new OnClickListener() {
             public void onClick(View arg0) {
                 dismissSlideUnlockScreen();
+            }
+        });
+
+        prefsButton = (Button) findViewById(R.id.prefsButton);
+        prefsButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View arg0) {
+                Intent i = new Intent(self, PrefsActivity.class);
+                self.startActivity(i);
+                finish();
             }
         });
 
@@ -170,7 +186,6 @@ public class RockLockActivity extends Activity {
 
         gestureOverlay = new GestureOverlay(this, new GestureListener() {
 
-            @Override
             public void onGestureChange(int g) {
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
@@ -182,8 +197,12 @@ public class RockLockActivity extends Activity {
                                 .getPrevArtistName(), true);
                         break;
                     case Gesture.UP:
-                        updateDisplayText(getString(R.string.previous_album),
-                                mp.getPrevAlbumName(), true);
+                        if (seekingStopped) {
+                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(),
+                                    false);
+                            isSeeking = true;
+                            new Thread(new Seeker(-1)).start();
+                        }
                         break;
                     case Gesture.UPRIGHT:
                         updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(),
@@ -207,18 +226,10 @@ public class RockLockActivity extends Activity {
                                 true);
                         break;
                     case Gesture.DOWNLEFT:
-                        if (seekingStopped) {
-                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(),
-                                    false);
-                            isSeeking = true;
-                            new Thread(new Seeker(-1)).start();
-                        }
+                        updateDisplayText(getString(R.string.previous_album),
+                                mp.getPrevAlbumName(), true);
                         break;
                     case Gesture.DOWN:
-                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(),
-                                true);
-                        break;
-                    case Gesture.DOWNRIGHT:
                         if (seekingStopped) {
                             updateDisplayText(getString(R.string.fast_forward), mp
                                     .getCurrentSongInfo(), false);
@@ -226,10 +237,13 @@ public class RockLockActivity extends Activity {
                             new Thread(new Seeker(1)).start();
                         }
                         break;
+                    case Gesture.DOWNRIGHT:
+                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(),
+                                true);
+                        break;
                 }
             }
 
-            @Override
             public void onGestureFinish(int g) {
                 isSeeking = false;
                 vibe.vibrate(VIBE_PATTERN, -1);
@@ -261,7 +275,6 @@ public class RockLockActivity extends Activity {
                 updateDisplayText(null, null, false);
             }
 
-            @Override
             public void onGestureStart(int g) {
                 poked = true;
                 isSeeking = false;
@@ -283,7 +296,6 @@ public class RockLockActivity extends Activity {
         final RockLockActivity self = this;
 
         tts = new TextToSpeech(this, new OnInitListener() {
-            @Override
             public void onInit(int arg0) {
                 tts.addEarcon(TICK_EARCON, self.getPackageName(), R.raw.tick_snd);
                 tts.playEarcon(TICK_EARCON, TextToSpeech.QUEUE_FLUSH, null);
@@ -357,7 +369,6 @@ public class RockLockActivity extends Activity {
             seekMode = seekDirection;
         }
 
-        @Override
         public void run() {
             while (isSeeking) {
                 try {
@@ -376,14 +387,13 @@ public class RockLockActivity extends Activity {
     }
 
     private class PokeWatcher implements Runnable {
-        @Override
         public void run() {
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (!poked && (mp != null) && !mp.isPlaying()) {
+            if (wasStartedByService && !poked && (mp != null) && !mp.isPlaying()) {
                 finish();
             }
         }
@@ -394,7 +404,6 @@ public class RockLockActivity extends Activity {
         // finish() must be called in another thread or else the addFlags
         // call in the previous line will not take effect.
         new Thread(new Runnable() {
-            @Override
             public void run() {
                 finish();
             }

@@ -229,7 +229,6 @@ public class MusicPlayer {
                 return;
             }
             player.setOnCompletionListener(new OnCompletionListener() {
-                @Override
                 public void onCompletion(MediaPlayer mp) {
                     nextTrack();
                     parent.updateDisplayText(null, null, false);

@@ -43,7 +43,6 @@ public class DirectoryStructuredSongPicker implements SongPicker {
             + "/RockLock/.music");
 
     private class DirectoryFilter implements FileFilter {
-        @Override
         public boolean accept(File pathname) {
             if (pathname.isDirectory()) {
                 return true;
@@ -53,7 +52,6 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     }
 
     private class MP3Filter implements FileFilter {
-        @Override
         public boolean accept(File pathname) {
             if (pathname.isFile() && pathname.toString().endsWith(".mp3")) {
                 return true;

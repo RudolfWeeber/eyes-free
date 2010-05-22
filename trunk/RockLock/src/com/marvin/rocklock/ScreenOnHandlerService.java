@@ -21,7 +21,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -43,11 +45,14 @@ public class ScreenOnHandlerService extends Service {
                 return;
             }
 
-            Log.e(TAG, Screen);
-
-            Intent i = new Intent(context, RockLockActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean useAsPrelock = sharedPrefs.getBoolean("use_as_prelock", false);
+            if (useAsPrelock) {
+                Intent i = new Intent(context, RockLockActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra(RockLockActivity.EXTRA_STARTED_BY_SERVICE, true);
+                context.startActivity(i);
+            }
         }
     };
 
@@ -60,11 +65,13 @@ public class ScreenOnHandlerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        this.startForeground(0, null);
-
-        IntentFilter onfilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        this.registerReceiver(screenwakeup, onfilter);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean useAsPrelock = sharedPrefs.getBoolean("use_as_prelock", false);
+        if (useAsPrelock) {
+            this.startForeground(0, null);
+            IntentFilter onfilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+            this.registerReceiver(screenwakeup, onfilter);
+        }
     }
 
 }

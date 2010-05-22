@@ -307,7 +307,6 @@ public class TagStructuredSongPicker implements SongPicker {
                     && !musicCursor.getString(TRACK).equals(currentTrack)) {
                 String track = musicCursor.getString(TRACK);
                 musicCursor.moveToPosition(initialPosition);
-                Log.e("peek end 0", musicCursor.getPosition() + " " + getCurrentSongInfo());
                 return track;
             }
         }
@@ -318,12 +317,10 @@ public class TagStructuredSongPicker implements SongPicker {
                     && !musicCursor.getString(TRACK).equals(currentTrack)) {
                 String track = musicCursor.getString(TRACK);
                 musicCursor.moveToPosition(initialPosition);
-                Log.e("peek end 1", musicCursor.getPosition() + " " + getCurrentSongInfo());
                 return track;
             }
             musicCursor.moveToNext();
         }
-        Log.e("peek end 2", musicCursor.getPosition() + " " + getCurrentSongInfo());
         return musicCursor.getString(TRACK);
     }
 
