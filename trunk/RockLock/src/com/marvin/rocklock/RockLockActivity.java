@@ -34,8 +34,8 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -292,8 +292,6 @@ public class RockLockActivity extends Activity {
         contentFrame.addView(uiAnimation);
         contentFrame.addView(textLayer);
         contentFrame.addView(gestureOverlay);
-
-        final RockLockActivity self = this;
 
         tts = new TextToSpeech(this, new OnInitListener() {
             public void onInit(int arg0) {

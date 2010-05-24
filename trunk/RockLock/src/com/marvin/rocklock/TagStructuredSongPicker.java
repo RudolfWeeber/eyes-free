@@ -22,9 +22,8 @@ import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.MediaStore.MediaColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
-import android.util.Log;
+import android.provider.MediaStore.MediaColumns;
 
 /**
  * SongPicker implementation that uses the tags in the music files to organize

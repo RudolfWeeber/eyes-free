@@ -28,6 +28,9 @@ import android.view.View;
  */
 
 public class GestureOverlay extends View {
+    /**
+     * Constants for the types of stroke gestures
+     */
     public static class Gesture {
         public static final int UPLEFT = 1;
 

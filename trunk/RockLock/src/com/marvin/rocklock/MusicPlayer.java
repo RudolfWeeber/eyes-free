@@ -244,7 +244,6 @@ public class MusicPlayer {
             });
             player.start();
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

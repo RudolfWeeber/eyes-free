@@ -24,7 +24,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 /**
  * Service that registers a receiver to catch the screen on intent and launches
@@ -37,11 +36,11 @@ public class ScreenOnHandlerService extends Service {
 
         public static final String TAG = "screen wakeup";
 
-        public static final String Screen = "android.intent.action.SCREEN_ON";
+        public static final String SCREEN = "android.intent.action.SCREEN_ON";
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!intent.getAction().equals(Screen)) {
+            if (!intent.getAction().equals(SCREEN)) {
                 return;
             }
 
