@@ -155,7 +155,11 @@ public class MusicPlayer {
             return;
         }
         if (player != null) {
-            player.seekTo(player.getCurrentPosition() + 3000);
+            try {
+                player.seekTo(player.getCurrentPosition() + 3000);
+            } catch (IllegalStateException e) {
+                // Unable to seek, so just do nothing.
+            }
         }
     }
 
@@ -164,7 +168,11 @@ public class MusicPlayer {
             return;
         }
         if (player != null) {
-            player.seekTo(player.getCurrentPosition() - 3000);
+            try {
+                player.seekTo(player.getCurrentPosition() - 3000);
+            } catch (IllegalStateException e) {
+                // Unable to seek, so just do nothing.
+            }
         }
     }
 

@@ -253,7 +253,7 @@ public class RockLockActivity extends Activity {
                     case Gesture.UPLEFT:
                         mp.prevArtist();
                         break;
-                    case Gesture.UP:
+                    case Gesture.DOWNLEFT:
                         mp.prevAlbum();
                         break;
                     case Gesture.UPRIGHT:
@@ -268,7 +268,7 @@ public class RockLockActivity extends Activity {
                     case Gesture.RIGHT:
                         mp.nextTrack();
                         break;
-                    case Gesture.DOWN:
+                    case Gesture.DOWNRIGHT:
                         mp.nextAlbum();
                         break;
                 }

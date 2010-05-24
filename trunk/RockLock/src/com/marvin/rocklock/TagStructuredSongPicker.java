@@ -91,7 +91,8 @@ public class TagStructuredSongPicker implements SongPicker {
         currentAlbum = prefs.getString(PREF_ALBUM, "");
         currentTrack = prefs.getString(PREF_TRACK, "");
         while (musicCursor.moveToNext()) {
-            if (musicCursor.getString(ARTIST).equals(currentArtist)
+            if ((musicCursor.getString(ARTIST) != null)
+                    && musicCursor.getString(ARTIST).equals(currentArtist)
                     && musicCursor.getString(ALBUM).equals(currentAlbum)
                     && musicCursor.getString(TRACK).equals(currentTrack)) {
                 return true;
