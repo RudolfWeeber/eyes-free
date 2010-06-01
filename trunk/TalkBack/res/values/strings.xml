@@ -42,22 +42,31 @@
 
     <!-- TEMPLATES -->
 
+    <!-- %1$s - The title of a check box/radio button; -->
     <string name="template_compound_button_checked">%1$s checked</string>
 
+    <!-- %1$s - The title of a check box/ radio button; -->
     <string name="template_compound_button_not_checked">%1$s not checked</string>
 
+    <!-- %1$s - Arbitrary text to be spoken; -->
     <string name="template_announce_value">%1$s</string>
 
+    <!-- %1$s - The text content of an edit box; -->
     <string name="template_edit_box">Edit box. %1$s</string>
 
+    <!-- %1$s - The text content of a search box; -->
     <string name="template_search_box">Search box. %1$s</string>
 
+    <!-- %1$s - The text content of an alert/pop up message; -->
     <string name="template_alert_dialog_template">Alert  %1$s</string>
 
+    <!-- %1$s - The replaced text; %2$s - The replacement text; -->
     <string name="temlate_text_replaced">%1$s replaced with %2$s</string>
 
+    <!-- %1$s - The count of replaced characters; %2$s - The count of replacement characters; (used for password fields) -->
     <string name="template_replaced_characters">%1$s characters replaced with %2$s characters</string>
 
+    <!-- %1$s - The ringer volume in percent;-->
     <string name="template_ringer_volume">Ringer %1$s percent.</string>
 
     <!-- VALUES -->

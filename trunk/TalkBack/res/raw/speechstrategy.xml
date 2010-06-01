@@ -51,15 +51,6 @@
 
   <!-- TYPE_VIEW_FOCUSED -->
 
-  <!-- Special case to avoid double announcing MP3 store results.   -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.RelativeLayout</ss:className>
-      <ss:packageName>com.amazon.mp3</ss:packageName>
-    </ss:filter>
-  </ss:rule>
-
   <!-- Special case for not speaking the 'Speak Now' dialog.       -->
   <!-- Announcing this dialog is caught by the speech recognition. -->
   <ss:rule>
@@ -140,6 +131,45 @@
     </ss:formatter>
   </ss:rule>
 
+  <!-- TextView - Launcher2 application - icons -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.android.launcher2.BubbleTextView</ss:className>
+      <ss:packageName>com.android.launcher</ss:packageName>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- TextView - Launcher / Launcher2 application - options -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.android.internal.view.menu.IconMenuItemView</ss:className>
+      <ss:packageName>com.android.launcher</ss:packageName>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- TextView - Launcher 2 - Google Quick Search Box -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.TextView</ss:className>
+      <ss:packageName>com.google.android.googlequicksearchbox</ss:packageName>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_search_box</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
   <!-- TextView - Launcher application - icons -->
   <ss:rule>
     <ss:filter>
@@ -153,64 +183,12 @@
     </ss:formatter>
   </ss:rule>
 
-  <!-- TextView - Launcher application - options -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.android.internal.view.menu.IconMenuItemView</ss:className>
-      <ss:packageName>com.android.launcher</ss:packageName>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- TextView - Launcher application - serach box -->
+  <!-- TextView - Launcher application - serach box (edge case) -->
   <ss:rule>
     <ss:filter>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.TextView</ss:className>
       <ss:packageName>com.android.launcher</ss:packageName>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_search_box</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- TextView - Launcher2 application - icons -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.android.launcher2.BubbleTextView</ss:className>
-      <ss:packageName>com.android.launcher2</ss:packageName>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- TextView - Launcher2 application - options -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.android.internal.view.menu.IconMenuItemView</ss:className>
-      <ss:packageName>com.android.launcher2</ss:packageName>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- TextView - Launcher2 application - serach box -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.TextView</ss:className>
-      <ss:packageName>com.android.launcher2</ss:packageName>
     </ss:filter>
     <ss:formatter>
       <ss:template>@com.google.android.marvin.talkback:string/template_search_box</ss:template>
@@ -241,6 +219,18 @@
   </ss:rule>
 
   <!-- TYPE_VIEW_SELECTED -->
+
+  <!-- Special case to avoid double announcing MP3 store results.
+      This is caused of getting select and focus events. This happens
+      in Eclair but is fixed later. This is a backwards compatible fix.
+  -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>android.widget.RelativeLayout</ss:className>
+      <ss:packageName>com.amazon.mp3</ss:packageName>
+    </ss:filter>
+  </ss:rule>
 
   <!-- AlertController$RecycleListView - Settings - checked -->
   <ss:rule>

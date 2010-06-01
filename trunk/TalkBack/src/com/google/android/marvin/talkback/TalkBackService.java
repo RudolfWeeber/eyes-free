@@ -394,9 +394,11 @@ public class TalkBackService extends AccessibilityService {
 
         synchronized (mEventQueue) {
             enqueueEventLocked(event);
-            long eventTimeout = isSourceInCallScreenActivity(event) ? EVENT_TIMEOUT_IN_CALL_SCREEN
-                    : EVENT_TIMEOUT;
-            sendSpeakMessageLocked(WHAT_SPEAK, eventTimeout);
+            if (isSourceInCallScreenActivity(event)) {
+              sendSpeakMessageLocked(WHAT_SPEAK_WHILE_IN_CALL, EVENT_TIMEOUT_IN_CALL_SCREEN);
+            } else {
+              sendSpeakMessageLocked(WHAT_SPEAK, EVENT_TIMEOUT);
+            }
         }
 
         return;
@@ -622,6 +624,7 @@ public class TalkBackService extends AccessibilityService {
         clone.setCurrentItemIndex(event.getCurrentItemIndex());
         clone.setEventTime(event.getEventTime());
         clone.setEventType(event.getEventType());
+        clone.setEnabled(event.isEnabled());
         clone.setFromIndex(event.getFromIndex());
         clone.setFullScreen(event.isFullScreen());
         clone.setItemCount(event.getItemCount());
