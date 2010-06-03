@@ -363,7 +363,7 @@ public class TextToSpeechSettings extends PreferenceActivity implements
             initDefaultSettings();
             mTts.setLanguage(new Locale(mDefaultLanguage, mDefaultCountry, mDefaultLocVariant));
             mTts.setSpeechRate((mDefaultRate / 100.0f));
-            mTts.setEngineByPackageName(mDefaultEng);
+            mTts.setEngineByPackageNameExtended(mDefaultEng);
             initClickers();
             updateWidgetState();
             checkVoiceData();
@@ -537,7 +537,7 @@ public class TextToSpeechSettings extends PreferenceActivity implements
             prefsEditor.putString(KEY_TTS_DEFAULT_SYNTH, mDefaultEng);
             prefsEditor.commit();
             if (mTts != null) {
-                mTts.setEngineByPackageName(mDefaultEng);
+                mTts.setEngineByPackageNameExtended(mDefaultEng);
                 mEnableDemo = false;
                 mVoicesMissing = false;
                 updateWidgetState();

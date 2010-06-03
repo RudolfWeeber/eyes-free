@@ -34,7 +34,10 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.MotionEvent;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -51,6 +54,82 @@ import java.util.Locale;
  * TextToSpeech engine.
  */
 public class TextToSpeechBeta extends TextToSpeech {
+    // BEGINNING OF WORKAROUND FOR PRE-FROYO COMPATIBILITY
+    private static Method Platform_areDefaultsEnforced;
+
+    private static Method Platform_getDefaultEngine;
+
+    private static Method Platform_setEngineByPackageName;
+    static {
+        initCompatibility();
+    }
+
+    private static void initCompatibility() {
+        try {
+            Platform_areDefaultsEnforced = TextToSpeech.class.getMethod("areDefaultsEnforced",
+                    new Class[] {});
+            Platform_getDefaultEngine = TextToSpeech.class.getMethod("getDefaultEngine",
+                    new Class[] {});
+            Platform_setEngineByPackageName = TextToSpeech.class.getMethod(
+                    "setEngineByPackageName", new Class[] {
+                        String.class
+                    });
+            /* success, this is a newer device */
+        } catch (NoSuchMethodException nsme) {
+            /* failure, must be older device */
+        }
+    }
+
+    private static boolean usePlatform_areDefaultsEnforced(TextToSpeech ttsObj) {
+        try {
+            Object retobj = Platform_areDefaultsEnforced.invoke(ttsObj);
+            return (Boolean) retobj;
+        } catch (IllegalAccessException ie) {
+            System.err.println("unexpected " + ie);
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private static String usePlatform_getDefaultEngine(TextToSpeech ttsObj) {
+        try {
+            Object retobj = Platform_getDefaultEngine.invoke(ttsObj);
+            return (String) retobj;
+        } catch (IllegalAccessException ie) {
+            System.err.println("unexpected " + ie);
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return "com.svox.pico";
+    }
+
+    private static int usePlatform_setEngineByPackageName(TextToSpeech ttsObj, String enginePackageName) {
+        try {
+            Object retobj = Platform_setEngineByPackageName.invoke(ttsObj, enginePackageName);
+            return (Integer) retobj;
+        } catch (IllegalAccessException ie) {
+            System.err.println("unexpected " + ie);
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return ERROR;
+    }
+
+    // END OF WORKAROUND FOR PRE-FROYO COMPATIBILITY
+
     public static final String USING_PLATFORM_TTS = "TextToSpeechBeta not installed - defaulting to basic platform TextToSpeech for ";
 
     public static final String NOT_ON_PLATFORM_TTS = "TextToSpeechBeta not installed - basic platform TextToSpeech does not support ";
@@ -446,7 +525,7 @@ public class TextToSpeechBeta extends TextToSpeech {
             mPackageName = mContext.getPackageName();
 
             mCachedParams = new String[2 * Engine.NB_CACHED_PARAMS]; // store
-                                                                     // key and
+            // key and
             // value
             mCachedParams[Engine.PARAM_POSITION_RATE] = Engine.KEY_PARAM_RATE;
             mCachedParams[Engine.PARAM_POSITION_LANGUAGE] = Engine.KEY_PARAM_LANGUAGE;
@@ -482,7 +561,7 @@ public class TextToSpeechBeta extends TextToSpeech {
                     mITts = ITtsBeta.Stub.asInterface(service);
                     mStarted = true;
                     // Cache the default engine and current language
-                    setEngineByPackageName(getDefaultEngine());
+                    setEngineByPackageNameExtended(getDefaultEngineExtended());
                     setLanguage(getLanguage());
                     if (mInitListener != null) {
                         try {
@@ -1391,10 +1470,10 @@ public class TextToSpeechBeta extends TextToSpeech {
         }
     }
 
-    public int setEngineByPackageName(String enginePackageName) {
+    public int setEngineByPackageNameExtended(String enginePackageName) {
         if (!ttsBetaInstalled) {
-            Log.d("TextToSpeechBeta", this.NOT_ON_PLATFORM_TTS + "setEngineByPackageName");
-            return TextToSpeechBeta.ERROR;
+            Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "setEngineByPackageName");
+            return usePlatform_setEngineByPackageName(this, enginePackageName);
         }
         synchronized (mStartLock) {
             int result = TextToSpeechBeta.ERROR;
@@ -1432,13 +1511,14 @@ public class TextToSpeechBeta extends TextToSpeech {
 
     /**
      * Gets the packagename of the default speech synthesis engine.
-     *
-     * @return Packagename of the TTS engine that the user has chosen as their default.
+     * 
+     * @return Packagename of the TTS engine that the user has chosen as their
+     *         default.
      */
-    public String getDefaultEngine() {
+    public String getDefaultEngineExtended() {
         if (!ttsBetaInstalled) {
-            Log.d("TextToSpeechBeta", this.NOT_ON_PLATFORM_TTS + "getDefaultEngine");
-            return TextToSpeechBeta.Engine.DEFAULT_SYNTH;
+            Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "getDefaultEngine");
+            return usePlatform_getDefaultEngine(this);
         }
         synchronized (mStartLock) {
             String engineName = "";
@@ -1471,18 +1551,18 @@ public class TextToSpeechBeta extends TextToSpeech {
         }
     }
 
-
     /**
      * Returns whether or not the user is forcing their defaults to override the
      * Text-To-Speech settings set by applications.
-     *
+     * 
      * @return Whether or not defaults are enforced.
      */
-    public boolean areDefaultsEnforced() {
+    public boolean areDefaultsEnforcedExtended() {
         if (!ttsBetaInstalled) {
-            Log.d("TextToSpeechBeta", this.NOT_ON_PLATFORM_TTS + "areDefaultsEnforced");
-            return false;
+            Log.d("TextToSpeechBeta", USING_PLATFORM_TTS + "setOnUtteranceCompletedListener");
+            return usePlatform_areDefaultsEnforced(this);
         }
+
         synchronized (mStartLock) {
             boolean defaultsEnforced = false;
             if (!mStarted) {
@@ -1514,7 +1594,6 @@ public class TextToSpeechBeta extends TextToSpeech {
         }
     }
 
-    
     /**
      * Standalone TTS ONLY! Checks if the TTS service is installed or not
      * 
