@@ -17,11 +17,13 @@
 package com.google.marvin.talkingdialer;
 
 import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
+import com.google.tts.TTSEarcon;
 import com.google.tts.TTSParams;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -32,9 +34,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Vibrator;
-import android.provider.Contacts.PeopleColumns;
-import android.provider.Contacts.Phones;
-import android.provider.Contacts.PhonesColumns;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -140,8 +140,8 @@ public class ContactsView extends TextView {
 
     // An array specifying which columns to return.
     private static final String[] PROJECTION = new String[] {
-            PeopleColumns.NAME, PhonesColumns.NUMBER, PhonesColumns.TYPE,
-            PeopleColumns.CUSTOM_RINGTONE,
+            Phone.DISPLAY_NAME, Phone.NUMBER, Phone.TYPE,
+            Phone.CUSTOM_RINGTONE
     };
 
     private SlideDial parent;
@@ -195,7 +195,7 @@ public class ContactsView extends TextView {
 
         // Get the base URI for People table in Contacts content provider.
         // ie. content://contacts/people/
-        Uri mContacts = Phones.CONTENT_URI;
+        Uri mContacts = Phone.CONTENT_URI;
 
         // Best way to retrieve a query; returns a managed query.
         managedCursor = parent.managedQuery(mContacts, PROJECTION, // Which
@@ -203,9 +203,9 @@ public class ContactsView extends TextView {
                 // to return.
                 null, // WHERE clause--we won't specify.
                 null, // no selection args
-                PeopleColumns.NAME + " ASC"); // Order-by clause.
+                Phone.DISPLAY_NAME + " ASC"); // Order-by clause.
         boolean moveSucceeded = managedCursor.moveToFirst();
-
+        
         ArrayList<String> contactNames = new ArrayList<String>();
         while (moveSucceeded) {
             contactNames.add(managedCursor.getString(NAME));
@@ -260,17 +260,24 @@ public class ContactsView extends TextView {
             }
         }
     }
+    
+    private void resetContactList() {
+        currentString = "";
+        managedCursor.moveToFirst();
+        // Keep going if the entry doesn't have a name
+        String name = managedCursor.getString(NAME);
+        if (name == null) {
+            nextContact();
+            return;
+        }
+    }
 
     private void nextContact() {
         currentString = "";
         boolean moveSucceeded = managedCursor.moveToNext();
         if (!moveSucceeded) {
-            moveSucceeded = managedCursor.moveToFirst();
+            managedCursor.moveToFirst();
         }
-        if (!moveSucceeded) {
-            // The user has no contacts, return to avoid crashing.
-            return;
-        }        
         // Keep going if the entry doesn't have a name
         String name = managedCursor.getString(NAME);
         if (name == null) {
@@ -285,11 +292,7 @@ public class ContactsView extends TextView {
         currentString = "";
         boolean moveSucceeded = managedCursor.moveToPrevious();
         if (!moveSucceeded) {
-            moveSucceeded = managedCursor.moveToLast();
-        }
-        if (!moveSucceeded) {
-            // The user has no contacts, return to avoid crashing.
-            return;
+            managedCursor.moveToLast();
         }
         // Keep going if the entry doesn't have a name
         String name = managedCursor.getString(NAME);
@@ -304,15 +307,14 @@ public class ContactsView extends TextView {
     private void jumpToFirstFilteredResult() {
         ContactEntry entry = filteredContacts.next();
         if (entry == null) {
-            parent.tts.speak("[tock]", 0, null);
-            // parent.tts.speak("No contacts found.", 0, null);
+            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
             if (currentString.length() > 0) {
                 currentString = currentString.substring(0, currentString.length() - 1);
                 if (currentString.length() > 0) {
                     filteredContacts.filter(currentString);
                     jumpToFirstFilteredResult();
                 } else {
-                    parent.tts.speak("No contacts found.", 0, null);
+                    parent.tts.speak(parent.getString(R.string.no_contacts_found), 0, null);
                 }
             }
             return;
@@ -341,12 +343,12 @@ public class ContactsView extends TextView {
         }
         int phoneType = Integer.parseInt(managedCursor.getString(TYPE));
         String type = "";
-        if (phoneType == PhonesColumns.TYPE_HOME) {
-            type = "home";
-        } else if (phoneType == PhonesColumns.TYPE_MOBILE) {
-            type = "cell";
-        } else if (phoneType == PhonesColumns.TYPE_WORK) {
-            type = "work";
+        if (phoneType == Phone.TYPE_HOME) {
+            type = parent.getString(R.string.home);
+        } else if (phoneType == Phone.TYPE_MOBILE) {
+            type = parent.getString(R.string.cell);
+        } else if (phoneType == Phone.TYPE_WORK) {
+            type = parent.getString(R.string.work);
         }
         if (type.length() > 0) {
             parent.tts.speak(type, 1, null);
@@ -357,9 +359,13 @@ public class ContactsView extends TextView {
 
     private void dialActionHandler() {
         if (!confirmed) {
-            parent.tts.speak("You are about to dial", 0, null);
-            speakCurrentContact(false);
-            confirmed = true;
+            if(currentContact.length() != 0) {
+                parent.tts.speak(parent.getString(R.string.you_are_about_to_dial), 0, null);
+                speakCurrentContact(false);
+                confirmed = true;   
+            } else {
+                parent.tts.speak(parent.getString(R.string.invalid_contact), 0, null);
+            }
         } else {
             parent.returnResults(managedCursor.getString(NUMBER));
         }
@@ -467,6 +473,9 @@ public class ContactsView extends TextView {
             case KeyEvent.KEYCODE_Z:
                 input = "z";
                 break;
+            case KeyEvent.KEYCODE_DEL:
+                backspace();
+                return true;
         }
         if (input.length() > 0) {
             currentString = currentString + input;
@@ -584,11 +593,21 @@ public class ContactsView extends TextView {
                 invalidate();
                 if (prevVal != currentValue) {
                     if (currentCharacter.equals("")) {
-                        parent.tts.speak("[tock]", 0, null);
+                      parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
                     } else {
-                        String[] params = new String[1];
-                        params[0] = TTSParams.VOICE_FEMALE.toString();
-                        parent.tts.speak(currentCharacter, 0, null); 
+                      if (currentCharacter.equals(".")) {
+                        parent.tts.speak(parent.getString(R.string.period), 0, null);
+                      } else if (currentCharacter.equals("!")) {
+                        parent.tts.speak(parent.getString(R.string.exclamation_point), 0, null);
+                      } else if (currentCharacter.equals("?")) {
+                        parent.tts.speak(parent.getString(R.string.question_mark), 0, null);
+                      } else if (currentCharacter.equals(",")) {
+                        parent.tts.speak(parent.getString(R.string.comma), 0, null);
+                      } else if (currentCharacter.equals("<-")) {
+                        parent.tts.speak(parent.getString(R.string.backspace), 0, null);
+                      } else {
+                        parent.tts.speak(currentCharacter, 0, null);
+                      }
                     }
                 }
                 vibe.vibrate(PATTERN, -1);
@@ -907,6 +926,7 @@ public class ContactsView extends TextView {
     }
 
     public void backspace() {
+        confirmed = false;
         String deletedCharacter = "";
         if (currentString.length() > 0) {
             deletedCharacter = "" + currentString.charAt(currentString.length() - 1);
@@ -917,14 +937,15 @@ public class ContactsView extends TextView {
             // parent.tts.speak(deletedCharacter, 0, new String[]
             // {TTSParams.VOICE_ROBOT.toString()});
         } else {
-            parent.tts.speak("[tock]", 0, null);
-            parent.tts.speak("[tock]", 1, null);
+            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 1, null);
         }
         if (currentString.length() > 0) {
             filteredContacts.filter(currentString);
             jumpToFirstFilteredResult();
+        } else {
+            resetContactList();
         }
         invalidate();
     }
-
 }

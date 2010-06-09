@@ -16,12 +16,14 @@
 
 package com.google.marvin.talkingdialer;
 
+import com.google.tts.TTSEarcon;
 import com.google.tts.TextToSpeechBeta;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -46,35 +48,21 @@ public class SlideDial extends Activity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        // android.os.Debug.waitForDebugger();
-        // setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        // tts = new TextToSpeechBeta(this, ttsInitListener);
-
+        if (tts == null) {
+            tts = new TextToSpeechBeta(this, ttsInitListener);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        tts = new TextToSpeechBeta(this, ttsInitListener);
     }
 
     private TextToSpeechBeta.OnInitListener ttsInitListener = new TextToSpeechBeta.OnInitListener() {
         public void onInit(int status, int version) {
-            String pkgName = "com.google.marvin.talkingdialer";
-
-            tts.addSpeech("You are about to dial", pkgName, R.raw.you_are_about_to_dial);
-            tts.addSpeech("Dialing mode", pkgName, R.raw.dialing_mode);
-            tts.addSpeech("deleted", pkgName, R.raw.deleted);
-            tts.addSpeech("Nothing to delete", pkgName, R.raw.nothing_to_delete);
-            tts.addSpeech("Phonebook", pkgName, R.raw.phonebook);
-            tts.addSpeech("home", pkgName, R.raw.home);
-            tts.addSpeech("cell", pkgName, R.raw.cell);
-            tts.addSpeech("work", pkgName, R.raw.work);
-            tts.addSpeech("[honk]", pkgName, R.raw.honk);
-            tts.addSpeech("[tock]", pkgName, R.raw.tock_snd);
-            tts.addSpeech("<-", pkgName, R.raw.backspace);
-
+            String pkgName = SlideDial.class.getPackage().getName();
+            tts.addEarcon(TTSEarcon.TOCK.toString(), pkgName, R.raw.tock_snd);
             switchToDialingView();
         }
     };
@@ -89,17 +77,21 @@ public class SlideDial extends Activity {
 
     public void switchToContactsView() {
         removeViews();
-        contactsView = new ContactsView(this);
+        if (contactsView == null) {
+            contactsView = new ContactsView(this);
+        }
         setContentView(contactsView);
-        tts.speak("Phonebook", 0, null);
+        tts.speak(getString(R.string.phonebook), 0, null);
     }
 
     public void switchToDialingView() {
         removeViews();
-        mView = new SlideDialView(this);
+        if (mView == null) {
+            mView = new SlideDialView(this);
+        }
         mView.parent = this;
         setContentView(mView);
-        tts.speak("Dialing mode", 0, null);
+        tts.speak(getString(R.string.dialing_mode), 0, null);
     }
 
     public void removeViews() {
@@ -114,26 +106,12 @@ public class SlideDial extends Activity {
             mView = null;
         }
     }
-
+    
     public void quit() {
         setResult(RESULT_CANCELED, null);
         finish();
     }
-
-    @Override
-    public void onPause() {
-        removeViews();
-        tts.shutdown();
-        super.onStop();
-    }
-
-    @Override
-    public void onStop() {
-        removeViews();
-        tts.shutdown();
-        super.onStop();
-    }
-
+    
     @Override
     protected void onDestroy() {
         removeViews();

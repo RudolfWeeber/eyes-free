@@ -17,6 +17,7 @@
 package com.google.marvin.talkingdialer;
 
 import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
+import com.google.tts.TTSEarcon;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -123,7 +124,7 @@ public class SlideDialView extends TextView {
           break;
         }
         if (prevVal != currentValue) {
-          parent.tts.speak("[tock]", 0, null);
+          parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
           long[] pattern = {0, 1, 40, 41};
           vibe.vibrate(pattern, -1);
         }
@@ -347,6 +348,23 @@ public class SlideDialView extends TextView {
       canvas.drawText("#", xPound, yPound, paint);
     }
   }
+  
+  private void callCurrentNumber() {
+      if (!confirmed) {
+        if (dialedNumber.length() < 3) {
+          parent.tts.speak(parent.getString(R.string.invalid_number), 1, null);
+        } else {
+          parent.tts.speak(parent.getString(R.string.you_are_about_to_dial), 1, null);
+          for (int i = 0; i < dialedNumber.length(); i++) {
+            String digit = dialedNumber.charAt(i) + "";
+            parent.tts.speak(digit, 1, null);
+          }
+          confirmed = true;
+        }
+      } else {
+      parent.returnResults(dialedNumber);
+    }
+  }
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -355,34 +373,15 @@ public class SlideDialView extends TextView {
       case KeyEvent.KEYCODE_MENU:
         parent.switchToContactsView();
         return true;
-
       case KeyEvent.KEYCODE_SEARCH:
-        if (!confirmed) {
-          parent.tts.speak("You are about to dial", 1, null);
-          for (int i = 0; i < dialedNumber.length(); i++) {
-            String digit = dialedNumber.charAt(i) + "";
-            parent.tts.speak(digit, 1, null);
-          }
-          confirmed = true;
-          return true;
-        } else {
-          parent.returnResults(dialedNumber);
-          return true;
-        }
+        callCurrentNumber();
+        return true;
       case KeyEvent.KEYCODE_CALL:
-        if (!confirmed) {
-          parent.tts.speak("You are about to dial", 1, null);
-          for (int i = 0; i < dialedNumber.length(); i++) {
-            String digit = dialedNumber.charAt(i) + "";
-            parent.tts.speak(digit, 1, null);
-          }
-          confirmed = true;
-          return true;
-        } else {
-          parent.returnResults(dialedNumber);
-          return true;
-        }
-
+        callCurrentNumber();
+        return true;
+      case KeyEvent.KEYCODE_ENTER:
+        callCurrentNumber();
+        return true;      
       case KeyEvent.KEYCODE_0:
         newNumberEntered = true;
         break;
@@ -446,10 +445,10 @@ public class SlideDialView extends TextView {
     }
     if (!deletedNum.equals("")) {
       parent.tts.speak(deletedNum, 0, null);
-      parent.tts.speak("deleted", 1, null);
+      parent.tts.speak(parent.getString(R.string.deleted), 1, null);
     } else {
-      parent.tts.speak("[tock]", 0, null);
-      parent.tts.speak("[tock]", 1, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+      parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 1, null);
     }
     currentValue = "";
     invalidate();

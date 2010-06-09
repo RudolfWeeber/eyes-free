@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, TalkingDialer</string>
-    <string name="app_name">Talking Dialer</string>
+  <string name="phonebook">Phonebook</string>
+  <string name="dialing_mode">Dialing mode</string>
+  <string name="app_name">Talking Dialer</string>
+  <string name="deleted"> deleted.</string>
+  <string name="nothing_to_delete">Nothing to delete</string>
+  <string name="you_are_about_to_dial">You are about to dial</string>
+  <string name="home">home</string>
+  <string name="cell">cell</string>
+  <string name="work">work</string>
+  <string name="no_contacts_found">No Contacts Found</string>
+  <string name="period">Period</string>
+  <string name="question_mark">Question Mark</string>
+  <string name="exclamation_point">Exclamation Point</string>
+  <string name="comma">Comma</string>
+  <string name="backspace">Backspace</string>
+  <string name="invalid_number">Cannot Dial.  Invalid phone number.</string>
+  <string name="invalid_contact">Cannot Dial. No contact selected.</string>
 </resources>
