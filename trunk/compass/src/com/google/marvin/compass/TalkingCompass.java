@@ -76,8 +76,6 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
 
     private static final String TAG = "Compass";
 
-    private static final String PLEASECALIBRATE = "Please calibrate the compass by shaking your handset";
-
     private static final int MIN_STABLECOUNT = 50;
 
     private static final int STABLECOUNT_AFTER_MODESETTING = 25;
@@ -173,7 +171,7 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
             lastStableHeading = 0;
             speechMode = DEFAULT_SPEECHMODE;
             lastCardinalDir = 0;
-            loadUtterances();
+            tts.speak(getString(R.string.compass), 0, null);
             Log.e("Compass debug", 4 + "");
         }
     };
@@ -251,32 +249,6 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
         locationManager.requestLocationUpdates(android.location.LocationManager.NETWORK_PROVIDER, 0, 0,
                 networkLocationListener);
         locationManager.addGpsStatusListener(mGpsStatusListener);     
-    }
-
-    private void loadUtterances() {
-        String pkgName = TalkingCompass.class.getPackage().getName();
-        tts.addSpeech("north", pkgName, R.raw.north);
-        tts.addSpeech("north east", pkgName, R.raw.north_east);
-        tts.addSpeech("north west", pkgName, R.raw.north_west);
-        tts.addSpeech("north north east", pkgName, R.raw.north_north_east);
-        tts.addSpeech("north north west", pkgName, R.raw.north_north_west);
-        tts.addSpeech("east north east", pkgName, R.raw.east_north_east);
-        tts.addSpeech("west north west", pkgName, R.raw.west_north_west);
-        tts.addSpeech("south", pkgName, R.raw.south);
-        tts.addSpeech("south east", pkgName, R.raw.south_east);
-        tts.addSpeech("south west", pkgName, R.raw.south_west);
-        tts.addSpeech("south south east", pkgName, R.raw.south_south_east);
-        tts.addSpeech("south south west", pkgName, R.raw.south_south_west);
-        tts.addSpeech("east south east", pkgName, R.raw.east_south_east);
-        tts.addSpeech("west south west", pkgName, R.raw.west_south_west);
-        tts.addSpeech("east", pkgName, R.raw.east);
-        tts.addSpeech("west", pkgName, R.raw.west);
-        tts.addSpeech("compass", pkgName, R.raw.compass);
-        tts.addSpeech("muted", pkgName, R.raw.muted);
-        tts.addSpeech("default", pkgName, R.raw.default_);
-        tts.addSpeech("verbose", pkgName, R.raw.verbose);
-        tts.addSpeech(PLEASECALIBRATE, pkgName, R.raw.please_calibrate);
-        tts.speak("compass", 0, null);
     }
 
     @Override
@@ -441,7 +413,6 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
         }
 
         if (newCardinalDir) {
-            //tts.speak("[tock]", 0, null);
             vibe.vibrate(VIBE_PATTERN, -1);
         }
     }
@@ -466,24 +437,23 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
         switch (speechMode) {
             case VERBOSE_SPEECHMODE:
                 stableCount = STABLECOUNT_AFTER_MODESETTING;
-                text = "verbose";
+                text = getString(R.string.verbose);
                 break;
             case DEFAULT_SPEECHMODE:
                 stableCount = STABLECOUNT_AFTER_MODESETTING;
-                text = "default";
+                text = getString(R.string.default_);
                 break;
             case MUTE_SPEECHMODE:
-                text = "muted";
+                text = getString(R.string.muted);
                 break;
         }
-
         tts.speak(text, 0, null);
     }
 
     public void speakDirection() {
         stableCount = 0;
         if (!sensorOk) {
-            tts.speak(PLEASECALIBRATE, 0, null);
+            tts.speak(getString(R.string.calibrate), 0, null);
             stableCount = STABLECOUNT_FOR_CALIBRATION;
             return;
         }
@@ -493,12 +463,12 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
 
         tts.speak(directionToString(currentHeading), 0, null);
         
-        String currentLocationUtterance = currentAddress + " " + currentIntersection + " " +currentFrontBackStreets;
+        String currentLocationUtterance = currentAddress + " " + currentIntersection + " " + currentFrontBackStreets;
         if (currentLocationUtterance.length() > 2){
             if (usingGps){
-                currentLocationUtterance = "G P S. " + currentLocationUtterance;
+                currentLocationUtterance = getString(R.string.gps) + currentLocationUtterance;
             } else {
-                currentLocationUtterance = "Network. " + currentLocationUtterance;                
+                currentLocationUtterance = getString(R.string.network) + currentLocationUtterance;                
             }
             tts.speak(currentLocationUtterance, 1, null);
         }
@@ -508,7 +478,6 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
             int degrees = Math.round(currentHeading);
             tts.speak(Integer.toString(degrees), 1, null);
         }
-
     }
 
     public static String directionToString(float heading) {
@@ -517,6 +486,7 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
     }
 
     private void unregisterLocationServices() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.removeUpdates(networkLocationListener);
         locationManager.removeUpdates(gpsLocationListener);
     }
@@ -530,9 +500,7 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
                 public void onWifiLocalizationResult(int arg0, Location result) {
                     final String locationName = result == null ? "Location cannot be determined." :
                         result.getExtras().getStringArray(LocationManager.MATCH_LOCATIONS)[0];
-                    String message = locationName.substring(locationName.lastIndexOf("_") + 1);
-                    message = message + " Facing " + directionToString(currentHeading);
-                    tts.speak(message, 0, null);
+                    tts.speak(locationName, 0, null);
                 }
             });
             if (localizationStarted){
@@ -598,5 +566,4 @@ public class TalkingCompass extends Activity implements StreetLocatorListener {
             return false;
         }
     }
-
 }

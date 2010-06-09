@@ -18,6 +18,7 @@ package com.google.marvin.shell;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -26,99 +27,128 @@ import java.util.ArrayList;
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
-public class AppEntry {
-    private String title;
+public class AppEntry implements Comparable {
+  private String title;
 
-    private String packageName;
+  private String packageName;
 
-    private String className;
+  private String className;
 
-    private String scriptName;
+  private String scriptName;
 
-    private Drawable icon;
+  private Drawable icon;
 
-    private ArrayList<Param> params;
+  private ArrayList<Param> params;
 
-    private ResolveInfo rInfo;
+  private ResolveInfo rInfo;
 
-    AppEntry(String appTitle, String appPackageName, String appClassName, String appScriptName,
-            Drawable appIcon, ArrayList<Param> parameters) {
-        title = appTitle;
-        packageName = appPackageName;
-        className = appClassName;
-        scriptName = appScriptName;
-        icon = appIcon;
-        params = parameters;
+  AppEntry(String appTitle, String appPackageName, String appClassName, String appScriptName,
+      Drawable appIcon, ArrayList<Param> parameters) {
+    title = appTitle;
+    packageName = appPackageName;
+    className = appClassName;
+    scriptName = appScriptName;
+    icon = appIcon;
+    params = parameters;
+  }
+
+  AppEntry(String appTitle, ResolveInfo info, ArrayList<Param> parameters) {
+    title = appTitle;
+    packageName = null;
+    className = null;
+    icon = null;
+    rInfo = info;
+    params = parameters;
+  }
+
+  String getTitle() {
+    return title;
+  }
+
+  String getPackageName() {
+    if (packageName != null) {
+      return packageName;
     }
-
-    AppEntry(String appTitle, ResolveInfo info, ArrayList<Param> parameters) {
-        title = appTitle;
-        packageName = null;
-        className = null;
-        icon = null;
-        rInfo = info;
-        params = parameters;
+    if (rInfo != null) {
+      return rInfo.activityInfo.packageName;
     }
+    return "";
+  }
+  
+  void setPackageName(String name) {
+    packageName = name;
+    return;
+  }
 
-    String getTitle() {
-        return title;
+  String getClassName() {
+    if (className != null) {
+      return className;
     }
-
-    String getPackageName() {
-        if (packageName != null) {
-            return packageName;
-        }
-        return rInfo.activityInfo.packageName;
+    if (rInfo != null) {
+      return rInfo.activityInfo.name;
     }
+    return "";
+  }
 
-    String getClassName() {
-        if (className != null) {
-            return className;
-        }
-        return rInfo.activityInfo.name;
+  String getScriptName() {
+    if (scriptName != null) {
+      return scriptName;
     }
+    return "";
+  }
 
-    String getScriptName() {
-        if (scriptName != null) {
-            return scriptName;
-        }
-        return "";
+  Drawable getIcon(PackageManager pm) {
+    if (icon != null) {
+      return icon;
     }
-
-    Drawable getIcon(PackageManager pm) {
-        if (icon != null) {
-            return icon;
-        }
-        return rInfo.loadIcon(pm);
+    if (rInfo != null) {
+      return rInfo.loadIcon(pm);
     }
+    return null;
+  }
 
-    ArrayList<Param> getParams() {
-        return params;
+  ArrayList<Param> getParams() {
+    return params;
+  }
+  
+  ResolveInfo getResolveInfo() {
+    return rInfo;
+  }
+
+  private boolean addToXml(String str) {
+    return ((null != str) && (str.length() > 0));
+  }
+
+  /**
+   * Returns a String xml representation of this appInfo element.
+   * 
+   * @return String xml representation of this appInfo object
+   */
+  public String toXml() {
+    String xmlStr = "    <appInfo";
+    if (addToXml(getPackageName())) {
+      xmlStr = xmlStr + " package='" + getPackageName() + "'";
     }
-
-    private boolean addToXml(String str) {
-        return ((null != str) && (str.length() > 0));
+    if (addToXml(getClassName())) {
+      xmlStr = xmlStr + " class='" + getClassName() + "'";
     }
-
-    /**
-     * Returns a String xml representation of this appInfo element.
-     * 
-     * @return String xml representation of this appInfo object
-     */
-    public String toXml() {
-        String xmlStr = "    <appInfo";
-        if (addToXml(getPackageName())) {
-            xmlStr = xmlStr + " package='" + getPackageName() + "'";
-        }
-        if (addToXml(getClassName())) {
-            xmlStr = xmlStr + " class='" + getClassName() + "'";
-        }
-        if (addToXml(getScriptName())) {
-            xmlStr = xmlStr + " script='" + getScriptName() + "'";
-        }
-        xmlStr = xmlStr + "/>\n";
-
-        // TODO: Populate "params" and "icon"
-        return xmlStr;
+    if (addToXml(getScriptName())) {
+      xmlStr = xmlStr + " script='" + getScriptName() + "'";
     }
+    xmlStr = xmlStr + "/>\n";
+
+    // TODO: Populate "params" and "icon"
+    return xmlStr;
+  }
+  
+  @Override
+  public boolean equals(Object o) {
+    AppEntry app = (AppEntry) o;
+    return this.getPackageName().equals(app.getPackageName());
+  }
+  
+  public int compareTo(Object o) {
+    AppEntry app = (AppEntry) o;
+    return this.title.compareTo(app.getTitle());
+  }
 }

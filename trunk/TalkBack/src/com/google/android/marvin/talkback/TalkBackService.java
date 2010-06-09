@@ -179,27 +179,6 @@ public class TalkBackService extends AccessibilityService {
         // add other command intents here
     }
 
-    // TODO(svetoslavganov): The hard coding of predefined punctuation leads
-    // to internationalization problems. Refactor this while internationalizing.
-
-    /**
-     * This table will force the TTS to speak out the punctuation by mapping
-     * punctuation to its spoken equivalent.
-     */
-    private static final HashMap<String, String> sSpokenEquivalentsMap = new HashMap<String, String>();
-    static {
-        sSpokenEquivalentsMap.put("?", "question mark");
-        sSpokenEquivalentsMap.put(" ", "space");
-        sSpokenEquivalentsMap.put(",", "comma");
-        sSpokenEquivalentsMap.put(".", "dot");
-        sSpokenEquivalentsMap.put("!", "exclamation");
-        sSpokenEquivalentsMap.put("(", "open paren");
-        sSpokenEquivalentsMap.put(")", "close paren");
-        sSpokenEquivalentsMap.put("\"", "double quote");
-        sSpokenEquivalentsMap.put(";", "semi-colon");
-        sSpokenEquivalentsMap.put(":", "colon");
-    }
-
     /**
      * Queuing mode - undefined.
      */
@@ -740,26 +719,18 @@ public class TalkBackService extends AccessibilityService {
      * Cleans up <code>text</text> by separating camel case words with space
      * to compensate for the not robust pronounciation of the SVOX TTS engine
      * and replacing the text with predefined strings.
-     * 
-     * TODO(svetoslavganov): Hard coding a dependency on a TTS engine behavior
-     *      is wrong. We have to move engine specific rules in a configuration
-     *      file.
-     * 
+     *
      * @param text The text to clean up.
      * @return The cleaned text.
      */
     private String cleanUpString(String text) {
-        // use mapping first
-        String cleanedText = sSpokenEquivalentsMap.get(text);
+        String cleanedText = text;
 
-        if (cleanedText == null) {
-            cleanedText = text;
-            Matcher camelCasePrefix = sCamelCasePrefixPattern.matcher(cleanedText);
-            cleanedText = camelCasePrefix.replaceAll("$1 $2");
-            Matcher camelCaseSuffix = sCamelCaseSuffixPattern.matcher(cleanedText);
-            cleanedText = camelCaseSuffix.replaceAll(" $1$2");
-            cleanedText = cleanedText.replaceAll(" & ", " and ");
-        }
+        Matcher camelCasePrefix = sCamelCasePrefixPattern.matcher(cleanedText);
+        cleanedText = camelCasePrefix.replaceAll("$1 $2");
+        Matcher camelCaseSuffix = sCamelCaseSuffixPattern.matcher(cleanedText);
+        cleanedText = camelCaseSuffix.replaceAll(" $1$2");
+        cleanedText = cleanedText.replaceAll(" & ", " and ");
 
         return cleanedText;
     }

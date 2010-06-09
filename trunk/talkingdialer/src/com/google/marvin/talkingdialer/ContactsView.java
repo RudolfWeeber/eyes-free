@@ -265,8 +265,12 @@ public class ContactsView extends TextView {
         currentString = "";
         boolean moveSucceeded = managedCursor.moveToNext();
         if (!moveSucceeded) {
-            managedCursor.moveToFirst();
+            moveSucceeded = managedCursor.moveToFirst();
         }
+        if (!moveSucceeded) {
+            // The user has no contacts, return to avoid crashing.
+            return;
+        }        
         // Keep going if the entry doesn't have a name
         String name = managedCursor.getString(NAME);
         if (name == null) {
@@ -281,7 +285,11 @@ public class ContactsView extends TextView {
         currentString = "";
         boolean moveSucceeded = managedCursor.moveToPrevious();
         if (!moveSucceeded) {
-            managedCursor.moveToLast();
+            moveSucceeded = managedCursor.moveToLast();
+        }
+        if (!moveSucceeded) {
+            // The user has no contacts, return to avoid crashing.
+            return;
         }
         // Keep going if the entry doesn't have a name
         String name = managedCursor.getString(NAME);

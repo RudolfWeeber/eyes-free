@@ -116,4 +116,17 @@
     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Allows an application or service to drive TalkBack
         via intent broadcasts and potentially obtain information about the TlakBack state for example the cached notifications.</string>
 
+    <!-- Punctuation mappings -->
+
+    <string name="punctuation_questionmark">Question mark</string>
+    <string name="punctuation_space">Space</string>    
+    <string name="punctuation_comma">Comma</string>    
+    <string name="punctuation_dot">Dot</string>            
+    <string name="punctuation_exclamation">Exclamation</string>
+    <string name="punctuation_open_paren">Open paren</string>
+    <string name="punctuation_close_paren">Close paren</string>
+    <string name="punctuation_double_quote">Double quote</string>
+    <string name="punctuation_semicolon">Semicolon</string>
+    <string name="punctuation_colon">Colon</string>        
+
 </resources>

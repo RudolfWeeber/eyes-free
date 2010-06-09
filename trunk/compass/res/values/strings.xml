@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Compass</string>
-    <string name="app_name">Talking Compass</string>
+  <string name="app_name">Talking Compass</string>
+  <string name="compass">compass</string>
+  <string name="muted">muted</string>
+  <string name="default_">default</string>
+  <string name="verbose">verbose</string>
+  <string name="calibrate">Please calibrate the compass by shaking your
+    handset.</string>
+  <string name="gps">G. P. S.</string>
+  <string name="network">Network.</string>
 </resources>

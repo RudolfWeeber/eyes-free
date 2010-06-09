@@ -26,6 +26,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -35,6 +36,7 @@ import android.widget.TextView;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Allows the user to select the application they wish to start by moving
@@ -45,26 +47,31 @@ import java.util.ArrayList;
 public class AppLauncherView extends TextView {
     // BEGIN OF WORKAROUND FOR DONUT COMPATIBILITY
     private static Method MotionEvent_getX;
+
     private static Method MotionEvent_getY;
     static {
         initCompatibility();
     }
+
     private static void initCompatibility() {
         try {
-            MotionEvent_getX = MotionEvent.class.getMethod(
-                    "getX", new Class[] { Integer.TYPE } );
-            MotionEvent_getY = MotionEvent.class.getMethod(
-                    "getY", new Class[] { Integer.TYPE } );
+            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] {
+                Integer.TYPE
+            });
+            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] {
+                Integer.TYPE
+            });
             /* success, this is a newer device */
         } catch (NoSuchMethodException nsme) {
             /* failure, must be older device */
         }
     }
+
     private static float getX(MotionEvent event, int x) {
         try {
             Object retobj = MotionEvent_getX.invoke(event, x);
             return (Float) retobj;
-        }  catch (IllegalAccessException ie) {
+        } catch (IllegalAccessException ie) {
             System.err.println("unexpected " + ie);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
@@ -75,11 +82,12 @@ public class AppLauncherView extends TextView {
         }
         return -1;
     }
+
     private static float getY(MotionEvent event, int y) {
         try {
             Object retobj = MotionEvent_getY.invoke(event, y);
             return (Float) retobj;
-        }  catch (IllegalAccessException ie) {
+        } catch (IllegalAccessException ie) {
             System.err.println("unexpected " + ie);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
@@ -89,9 +97,10 @@ public class AppLauncherView extends TextView {
             e.printStackTrace();
         }
         return -1;
-    }    
+    }
+
     // END OF WORKAROUND FOR DONUT COMPATIBILITY
-    
+
     private static final char alphabet[] = {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
             'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
@@ -147,6 +156,8 @@ public class AppLauncherView extends TextView {
 
     private boolean screenIsBeingTouched;
 
+    private boolean gestureHadSecondPoint;
+
     private Vibrator vibe;
 
     private int currentWheel;
@@ -158,14 +169,16 @@ public class AppLauncherView extends TextView {
     private int trackballTimeout = 500;
 
     private boolean trackballEnabled = true;
-    
+
     private boolean inDPadMode = false;
-    
+
     private float p2DownX;
 
     private float p2DownY;
 
     private ShakeDetector shakeDetector;
+
+    private long backKeyTimeDown;
 
     public AppLauncherView(Context context, ArrayList<AppEntry> installedApps) {
         super(context);
@@ -258,6 +271,11 @@ public class AppLauncherView extends TextView {
             nextApp();
         }
     }
+    
+    public void resetListState() {
+        appListIndex = 0;
+        currentString = "";
+    }
 
     public void speakCurrentApp(boolean interrupt) {
         String name = appList.get(appListIndex).getTitle();
@@ -267,6 +285,29 @@ public class AppLauncherView extends TextView {
             parent.tts.speak(name, 1, null);
         }
         invalidate();
+    }
+
+    public void addApplication(AppEntry app) {
+        appList.add(app);
+        Collections.sort(appList);
+        appListIndex = 0;
+        currentString = "";
+        parent.tts.speak(parent.getString(R.string.applist_reload), 0, null);
+        return;
+    }
+
+    public void removeApplication(AppEntry app) {
+        if (!appList.remove(app)) {
+            Log.e("AppLauncherView", "Attempted to remove non-existent application");
+        }
+        appListIndex = 0;
+        currentString = "";
+        parent.tts.speak(parent.getString(R.string.applist_reload), 0, null);
+        return;
+    }
+
+    public boolean applicationExists(AppEntry app) {
+        return appList.contains(app);
     }
 
     private void startActionHandler() {
@@ -297,7 +338,27 @@ public class AppLauncherView extends TextView {
                 startActionHandler();
                 return true;
             case KeyEvent.KEYCODE_BACK:
-                parent.switchToMainView();
+                if (backKeyTimeDown == -1) {
+                    backKeyTimeDown = System.currentTimeMillis();
+                    class QuitCommandWatcher implements Runnable {
+                        public void run() {
+                            try {
+                                Thread.sleep(3000);
+                                if ((backKeyTimeDown > 0)
+                                        && (System.currentTimeMillis() - backKeyTimeDown > 2500)) {
+                                    AppEntry regularHome = new AppEntry(null,
+                                            "com.android.launcher",
+                                            "com.android.launcher.Launcher", "", null, null);
+                                    parent.launchApplication(regularHome);
+                                    parent.finish();
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    new Thread(new QuitCommandWatcher()).start();
+                }
                 return true;
             case KeyEvent.KEYCODE_DEL:
                 backspace();
@@ -309,6 +370,17 @@ public class AppLauncherView extends TextView {
         if (input.length() > 0) {
             currentString = currentString + input;
             jumpToFirstMatchingApp();
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                backKeyTimeDown = -1;
+                parent.switchToMainView();
+                return true;
         }
         return false;
     }
@@ -362,15 +434,22 @@ public class AppLauncherView extends TextView {
         int action = event.getAction();
         float x = event.getX();
         float y = event.getY();
-        
+
         // Treat the screen as a dpad
-        if (action == 261) { // 261 == ACTION_POINTER_2_DOWN - using number for Android 1.6 compat
-            inDPadMode = true;
+        if (action == 261) { // 261 == ACTION_POINTER_2_DOWN - using number for
+                             // Android 1.6 compat
+            // Track the starting location of the second touch point.
+            inDPadMode = false;
+            gestureHadSecondPoint = true;
             screenIsBeingTouched = false;
+            currentWheel = NONE;
             p2DownX = getX(event, 1);
             p2DownY = getY(event, 1);
             vibe.vibrate(PATTERN, -1);
-        } else if (action == 262) { // 262 == MotionEvent.ACTION_POINTER_2_UP - using number for Android 1.6 compat
+            invalidate();
+        } else if (action == 262) { // 262 == MotionEvent.ACTION_POINTER_2_UP -
+                                    // using number for Android 1.6 compat
+            // Second touch point has lifted, so process the gesture
             float p2DeltaX = getX(event, 1) - p2DownX;
             float p2DeltaY = getY(event, 1) - p2DownY;
             if (Math.abs(p2DeltaX) > Math.abs(p2DeltaY)) {
@@ -385,50 +464,66 @@ public class AppLauncherView extends TextView {
                 }
             }
         }
-        
+
         if (action == MotionEvent.ACTION_DOWN) {
             initiateMotion(x, y);
             return true;
         } else if (action == MotionEvent.ACTION_UP) {
-            if (inDPadMode == false) {
-                confirmEntry();
+            if (gestureHadSecondPoint == false) {
+                if (inDPadMode == false) {
+                    confirmEntry();
+                } else {
+                    inDPadMode = false;
+                }
             } else {
-                inDPadMode = false;
+                // Full multi-touch gesture completed, so reset the state.
+                gestureHadSecondPoint = false;
             }
             return true;
         } else {
-            screenIsBeingTouched = true;
-            lastX = x;
-            lastY = y;
-            int prevVal = currentValue;
-            currentValue = evalMotion(x, y);
-            // Do nothing since we want a deadzone here;
-            // restore the state to the previous value.
-            if (currentValue == -1) {
-                currentValue = prevVal;
-                return true;
-            }
-            // There is a wheel that is active
-            if (currentValue != 5) {
-                if (currentWheel == NONE) {
-                    currentWheel = getWheel(currentValue);
+            if (gestureHadSecondPoint == false) {
+                screenIsBeingTouched = true;
+                lastX = x;
+                lastY = y;
+                int prevVal = currentValue;
+                currentValue = evalMotion(x, y);
+                // Do nothing since we want a deadzone here;
+                // restore the state to the previous value.
+                if (currentValue == -1) {
+                    currentValue = prevVal;
+                    return true;
                 }
-                currentCharacter = getCharacter(currentWheel, currentValue);
-            } else {
-                currentCharacter = "";
-            }
-            invalidate();
-            if (prevVal != currentValue) {
-                if (currentCharacter.equals("")) {
-                    parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+                // There is a wheel that is active
+                if (currentValue != 5) {
+                    if (currentWheel == NONE) {
+                        currentWheel = getWheel(currentValue);
+                    }
+                    currentCharacter = getCharacter(currentWheel, currentValue);
                 } else {
-                    String[] params = new String[1];
-                    params[0] = TTSParams.VOICE_FEMALE.toString();
-                    parent.tts.speak(currentCharacter, 0, null); // TODO: Fix
-                                                                 // me!
+                    currentCharacter = "";
                 }
+                invalidate();
+                if (prevVal != currentValue) {
+                    if (currentCharacter.equals("")) {
+                        parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+                    } else {
+                        if (currentCharacter.equals(".")) {
+                            parent.tts.speak(parent.getString(R.string.period), 0, null);
+                        } else if (currentCharacter.equals("!")) {
+                            parent.tts.speak(parent.getString(R.string.exclamation_point), 0, null);
+                        } else if (currentCharacter.equals("?")) {
+                            parent.tts.speak(parent.getString(R.string.question_mark), 0, null);
+                        } else if (currentCharacter.equals(",")) {
+                            parent.tts.speak(parent.getString(R.string.comma), 0, null);
+                        } else if (currentCharacter.equals("<-")) {
+                            parent.tts.speak(parent.getString(R.string.backspace), 0, null);
+                        } else {
+                            parent.tts.speak(currentCharacter, 0, null);
+                        }
+                    }
+                }
+                vibe.vibrate(PATTERN, -1);
             }
-            vibe.vibrate(PATTERN, -1);
         }
         return true;
     }
@@ -745,7 +840,7 @@ public class AppLauncherView extends TextView {
         if (!deletedCharacter.equals("")) {
             // parent.tts.speak(deletedCharacter, 0, new String[]
             // {TTSParams.VOICE_ROBOT.toString()});
-            parent.tts.speak(deletedCharacter + " deleted.", 0, null);
+            parent.tts.speak(deletedCharacter + parent.getString(R.string.deleted), 0, null);
         } else {
             parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
             parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 1, null);

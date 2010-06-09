@@ -17,11 +17,14 @@
 package com.google.android.marvin.talkback;
 
 import android.app.Notification;
+import android.content.Context;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class contains custom formatters used by TalkBack.
@@ -35,9 +38,15 @@ public final class CustomFormatters {
     private static final String VALUE_PASSWORD_CHARACTER_TYPED = "@com.google.android.marvin.talkback:string/value_cpassword_character_typed";
 
     /**
+     * This table will force the TTS to speak out the punctuation by mapping
+     * punctuation to its spoken equivalent.
+     */
+    private static final HashMap<String, String> sPunctuationSpokenEquivalentsMap = new HashMap<String, String>();
+
+    /**
      * Creates a new instance.
      */
-    private CustomFormatters() { /* hide constructor */ }
+    private CustomFormatters() { /* hide constructor */}
 
     /**
      * Formatter that returns an utterance to announce text addition.
@@ -53,7 +62,13 @@ public final class CustomFormatters {
                 StringBuilder text = SpeechRule.getEventText(event);
                 int begIndex = event.getFromIndex();
                 int endIndex = begIndex + event.getAddedCount();
-                utterance.getText().append(text.subSequence(begIndex, endIndex));
+
+                CharSequence addedText = text.subSequence(begIndex, endIndex);
+                if (addedText.length() == 1) {
+                    addedText = getCharacterSpokenEquivalent(addedText);
+                }
+
+                utterance.getText().append(addedText);
             }
         }
     }
@@ -73,8 +88,14 @@ public final class CustomFormatters {
                 CharSequence beforeText = event.getBeforeText();
                 int begIndex = event.getFromIndex();
                 int endIndex = begIndex + event.getRemovedCount();
+
+                CharSequence removedText = beforeText.subSequence(begIndex, endIndex);                
+                if (removedText.length() == 1) {
+                    removedText = getCharacterSpokenEquivalent(removedText);
+                }
+
                 StringBuilder utteranceText = utterance.getText();
-                utteranceText.append(beforeText.subSequence(begIndex, endIndex));
+                utteranceText.append(getCharacterSpokenEquivalent(removedText));
                 utteranceText.append(SPACE);
                 utteranceText.append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
             }
@@ -113,7 +134,8 @@ public final class CustomFormatters {
                     // more frequent case mentioned above.
                     int begIndex = text.length() - 1;
                     int endIndex = begIndex + 1;
-                    utteranceText.append(text.subSequence(begIndex, endIndex));
+                    CharSequence addedText = text.subSequence(begIndex, endIndex);
+                    utteranceText.append(getCharacterSpokenEquivalent(addedText));
                 } else if (isRemovedCharacter(text, beforeText)) {
                     // This happens if the application replaces the entire text
                     // while the user is typing. This logic leads to missing
@@ -122,7 +144,8 @@ public final class CustomFormatters {
                     // more frequent case mentioned above.
                     int begIndex = beforeText.length() - 1;
                     int endIndex = begIndex + 1;
-                    utteranceText.append(beforeText.subSequence(begIndex, endIndex));
+                    CharSequence removedText = beforeText.subSequence(begIndex, endIndex); 
+                    utteranceText.append(getCharacterSpokenEquivalent(removedText));
                     utteranceText.append(SPACE);
                     utteranceText.append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
                 } else {
@@ -372,5 +395,63 @@ public final class CustomFormatters {
                 return false;
             }
         }
+    }
+
+    /**
+     * Gets the spoken equivalent of a character. Passing an argument longer
+     * that one return the argument itself as the spoken equivalent.
+     * </p>
+     * Note: The argument is a {@link CharSequence} for efficiency to avoid
+     *       multiple string creation.
+     *
+     * @param character The character to transform.
+     * @return The spoken equivalent.
+     */
+    private static CharSequence getCharacterSpokenEquivalent(CharSequence character) {
+        if (character.length() != 1) {
+            return character;
+        }
+
+        String mapping = getPunctuationSpokenEquivalentMap().get(character);
+        if (mapping != null) {
+            return mapping;
+        }
+
+        return character;
+    }
+
+    /**
+     * Gets the spoken equivalent map. If the map is not initialized
+     * it is first create and populated.
+     *
+     * @return The spoken equivalent map.
+     */
+    private static Map<String, String> getPunctuationSpokenEquivalentMap() {
+        if (sPunctuationSpokenEquivalentsMap.isEmpty()) {
+            Context context = TalkBackService.asContext();
+
+            sPunctuationSpokenEquivalentsMap.put("?",
+                context.getString(R.string.punctuation_questionmark));
+            sPunctuationSpokenEquivalentsMap.put(" ",
+                context.getString(R.string.punctuation_space));
+            sPunctuationSpokenEquivalentsMap.put(",",
+                context.getString(R.string.punctuation_comma));
+            sPunctuationSpokenEquivalentsMap.put(".",
+                context.getString(R.string.punctuation_dot));
+            sPunctuationSpokenEquivalentsMap.put("!",
+                context.getString(R.string.punctuation_exclamation));
+            sPunctuationSpokenEquivalentsMap.put("(",
+                context.getString(R.string.punctuation_open_paren));
+            sPunctuationSpokenEquivalentsMap.put(")",
+                context.getString(R.string.punctuation_close_paren));
+            sPunctuationSpokenEquivalentsMap.put("\"",
+                context.getString(R.string.punctuation_double_quote));
+            sPunctuationSpokenEquivalentsMap.put(";",
+                context.getString(R.string.punctuation_semicolon));
+            sPunctuationSpokenEquivalentsMap.put(":",
+                context.getString(R.string.punctuation_colon));
+        }
+
+        return sPunctuationSpokenEquivalentsMap; 
     }
 }

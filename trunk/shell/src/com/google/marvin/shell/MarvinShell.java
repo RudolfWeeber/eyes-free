@@ -35,6 +35,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -73,6 +74,14 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private static final int ttsCheckCode = 42;
 
     public static final int VOICE_RECO_CODE = 777;
+    
+    private static final int MAIN_VIEW = 1000;
+    
+    private static final int SHORTCUTS_VIEW = 1001;
+    
+    private static final int APPLAUNCHER_VIEW = 1002;
+    
+    private int activeView;
 
     private PackageManager pm;
 
@@ -80,11 +89,11 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
     private AppLauncherView appLauncherView;
 
-    private boolean appLauncherActive;
-
     public TextToSpeechBeta tts;
 
     private boolean ttsStartedSuccessfully;
+    
+    private boolean screenStateChanged;
 
     public boolean isFocused;
 
@@ -135,7 +144,11 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     
     public String voiceMailNumber = "";
 
-    private BroadcastReceiver screenStateOnReceiver;
+    private BroadcastReceiver screenStateChangeReceiver;
+    
+    private BroadcastReceiver appChangeReceiver;
+    
+    private IntentFilter screenStateChangeFilter;
 
     private ProximitySensor proximitySensor;
 
@@ -146,7 +159,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        appLauncherActive = false;
+        activeView = MAIN_VIEW;
         pm = getPackageManager();
         ttsStartedSuccessfully = false;
         justStarted = true;
@@ -170,6 +183,14 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             new ProcessTask().execute();
         }
     }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (screenStateChanged == false) {
+            switchToMainView();
+        }
+    }
 
     private void initMarvinShell() {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -183,7 +204,53 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         menus = new ArrayList<Menu>();
         isReturningFromTask = false;
         currentCallState = TelephonyManager.CALL_STATE_IDLE;
+        screenStateChanged = false;
 
+        // Receive notifications for app installations and removals
+        appChangeReceiver = new BroadcastReceiver() {
+          @Override
+          public void onReceive(Context context, Intent intent) {
+            // Obtain the package name of the changed application and create an Intent
+            String packageName = intent.getData().getSchemeSpecificPart();
+            if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
+              // If the application is an update, we don't want to act on it.
+              if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+                return;
+              } else {
+                // Since the application is being removed, we can no longer access its PackageInfo object.
+                // Creating AppEntry object without one is acceptable because matching can be done by package name.
+                AppEntry targetApp = new AppEntry("", null, null);
+                targetApp.setPackageName(packageName);
+                appLauncherView.removeApplication(targetApp);
+              }
+            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+              // Get the application title and create the AppEntry object.
+              Intent targetIntent = new Intent(Intent.ACTION_MAIN, null);
+              targetIntent.setPackage(packageName);
+              ResolveInfo info = pm.resolveActivity(targetIntent, 0);
+              // Some packages won't have a main activity
+              // and are not directly launchable, ignore them.
+              if (info == null) {
+                  return;
+              }
+              String title = info.loadLabel(pm).toString();
+              if (title.length() == 0) {
+                title = info.activityInfo.name.toString();
+              }
+              AppEntry targetApp = new AppEntry(title, info, null);
+              
+              // Add the application to the list only if it doesn't exist.
+              if (!appLauncherView.applicationExists(targetApp)) {
+                appLauncherView.addApplication(targetApp);
+              }
+            }           
+          }
+        };
+        IntentFilter appChangeFilter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
+        appChangeFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        appChangeFilter.addDataScheme("package");
+        registerReceiver(appChangeReceiver, appChangeFilter);
+               
         // Watch for voicemails
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(new PhoneStateListener() {
@@ -199,22 +266,28 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR | PhoneStateListener.LISTEN_CALL_STATE);
         voiceMailNumber = PhoneNumberUtils.extractNetworkPortion(tm.getVoiceMailNumber());
 
-        screenStateOnReceiver = new BroadcastReceiver() {
+        // Receive notifications about the screen power changes
+        screenStateChangeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.e("currentCallState", currentCallState + "");
-                // If the phone is ringing or the user is talking,
-                // don't try do anything else.
-                if (currentCallState != TelephonyManager.CALL_STATE_IDLE){
-                    return;
-                }
-                if (!isFocused && (tts != null)) {
-                    tts.speak(getString(R.string.please_unlock), 0, null);
+                if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                    Log.e("currentCallState", currentCallState + "");
+                    // If the phone is ringing or the user is talking,
+                    // don't try do anything else.
+                    if (currentCallState != TelephonyManager.CALL_STATE_IDLE) {
+                        return;
+                    }
+                    if (!isFocused && (tts != null)) {
+                        tts.speak(getString(R.string.please_unlock), 0, null);
+                    }
+                } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                    screenStateChanged = true;
                 }
             }
         };
-        IntentFilter screenOnFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-//        registerReceiver(screenStateOnReceiver, screenOnFilter);
+        screenStateChangeFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        screenStateChangeFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(screenStateChangeReceiver, screenStateChangeFilter);
     }
 
     @Override
@@ -225,6 +298,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
+        boolean announceLocation = true;
         isFocused = hasFocus;
         if (hasFocus) {
             if (widgets != null) {
@@ -233,16 +307,27 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     audioManager.setSpeakerphoneOn(true);
                 }
             }
-
             if (gestureOverlay != null) {
                 if (isReturningFromTask) {
                     isReturningFromTask = false;
+                    announceLocation = false;
                     resetTTS();
                 }
-                menus = new ArrayList<Menu>();
-                loadHomeMenu();
+                if(activeView == MAIN_VIEW) {
+                    menus = new ArrayList<Menu>();
+                    loadHomeMenu();
+                }
+            }          
+            if (screenStateChangeReceiver != null && screenStateChangeFilter != null) {
+                registerReceiver(screenStateChangeReceiver, screenStateChangeFilter);
             }
-            announceCurrentMenu();
+            if (announceLocation) {
+                announceCurrentMenu();   
+            }
+            
+            // Now that the view has regained focus, reset the flag indicating
+            // screen power down.
+            screenStateChanged = false;
         }
         super.onWindowFocusChanged(hasFocus);
     }
@@ -256,41 +341,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private void resetTTS() {
         String pkgName = MarvinShell.class.getPackage().getName();
         tts.addSpeech(getString(R.string.marvin_intro_snd_), pkgName, R.raw.marvin_intro);
-        tts.addSpeech(getString(R.string.home), pkgName, R.raw.home);
-        tts.addSpeech(getString(R.string.compass), pkgName, R.raw.compass);
-        tts.addSpeech(getString(R.string.battery), pkgName, R.raw.battery);
-        tts.addSpeech(getString(R.string.application_not_installed), pkgName,
-                R.raw.application_not_installed);
-        tts.addSpeech(getString(R.string.applications), pkgName, R.raw.applications);
-        tts.addSpeech(getString(R.string.you_have_new_voicemail), pkgName,
-                R.raw.you_have_new_voicemail);
-        tts.addSpeech(getString(R.string.voicemail), pkgName, R.raw.voicemail);
-        tts.addSpeech(getString(R.string.charging), pkgName, R.raw.charging);
-        tts.addSpeech("north", pkgName, R.raw.north);
-        tts.addSpeech("north east", pkgName, R.raw.north_east);
-        tts.addSpeech("north west", pkgName, R.raw.north_west);
-        tts.addSpeech("north north east", pkgName, R.raw.north_north_east);
-        tts.addSpeech("north north west", pkgName, R.raw.north_north_west);
-        tts.addSpeech("east north east", pkgName, R.raw.east_north_east);
-        tts.addSpeech("west north west", pkgName, R.raw.west_north_west);
-        tts.addSpeech("south", pkgName, R.raw.south);
-        tts.addSpeech("south east", pkgName, R.raw.south_east);
-        tts.addSpeech("south west", pkgName, R.raw.south_west);
-        tts.addSpeech("south south east", pkgName, R.raw.south_south_east);
-        tts.addSpeech("south south west", pkgName, R.raw.south_south_west);
-        tts.addSpeech("east south east", pkgName, R.raw.east_south_east);
-        tts.addSpeech("west south west", pkgName, R.raw.west_south_west);
-        tts.addSpeech("east", pkgName, R.raw.east);
-        tts.addSpeech("west", pkgName, R.raw.west);
-        tts.addSpeech("Android Says", pkgName, R.raw.android_says);
-        tts.addSpeech("<-", pkgName, R.raw.backspace);
-        tts.addSpeech(getString(R.string.gps), pkgName, R.raw.gps);
-        tts.addSpeech(getString(R.string.signal), pkgName, R.raw.signal);
-        tts.addSpeech(getString(R.string.bluetooth), pkgName, R.raw.bluetooth);
-        tts.addSpeech(getString(R.string.location), pkgName, R.raw.location);
-        tts.addSpeech(getString(R.string.shortcuts), pkgName, R.raw.shortcuts);
-        tts.addSpeech(getString(R.string.time), pkgName, R.raw.time);
-        tts.addSpeech(getString(R.string.search), pkgName, R.raw.search);
         tts.addEarcon(TTSEarcon.TOCK.toString(), pkgName, R.raw.tock_snd);
     }
 
@@ -306,7 +356,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         if (gestureOverlay != null) {
             Menu currentMenu = menus.get(menus.size() - 1);
             String message = currentMenu.title;
-            if (appLauncherActive) {
+            if (activeView == APPLAUNCHER_VIEW) {
                 message = getString(R.string.applications);
             }
             updateStatusText();
@@ -370,10 +420,15 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             }
         }
         tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
+        boolean launchSuccessful = true;
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             tts.speak(getString(R.string.application_not_installed), 0, null);
+            launchSuccessful = false;
+        }
+        if (screenStateChangeReceiver != null && launchSuccessful == true) {
+            unregisterReceiver(screenStateChangeReceiver);
         }
     }
 
@@ -443,6 +498,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                 AppEntry info = item.appInfo;
                 runAseScript(item.appInfo.getScriptName());
             } else if (item.action.equals("LOAD")) {
+                // Populate menus for shortcuts and load the shortcuts view.
                 if (new File(item.data).isFile()) {
                     menus.add(new Menu(item.label, item.data));
                     items = MenuLoader.loadMenu(item.data);
@@ -483,13 +539,17 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     }
                     new Thread(new CreateShortcutsFileThread()).start();
                 }
+                activeView = SHORTCUTS_VIEW;
             }
         }
         mainText.setText(menus.get(menus.size() - 1).title);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     public void onGestureStart(int g) {
         vibe.vibrate(VIBE_PATTERN, -1);
+        // The ringer volume will be adjusted during a gesture.
+        setVolumeControlStream(AudioManager.STREAM_RING);
     }
     
 
@@ -557,8 +617,10 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                         items = MenuLoader.loadMenu(currentMenu.filename);
                         mainText.setText(currentMenu.title);
                     }
-                    announceCurrentMenu();
                 }
+                activeView = MAIN_VIEW;
+                loadHomeMenu();
+                announceCurrentMenu();
                 return true;
         }
         return false;
@@ -617,18 +679,19 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         if (appLauncherView != null) {
             setContentView(appLauncherView);
             appLauncherView.requestFocus();
-            appLauncherView.speakCurrentApp(true);
-            appLauncherActive = true;
+            appLauncherView.resetListState();
+            appLauncherView.speakCurrentApp(false);
+            activeView = APPLAUNCHER_VIEW;
         }
     }
 
     public void switchToMainView() {
         setContentView(mainFrameLayout);
         mainFrameLayout.requestFocus();
-        appLauncherActive = false;
+        activeView = MAIN_VIEW;
         announceCurrentMenu();
     }
-
+    
     private void shutdown() {
         if (tts != null) {
             tts.shutdown();
@@ -640,8 +703,8 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             proximitySensor.shutdown();
         }
         try {
-            if (screenStateOnReceiver != null) {
-                unregisterReceiver(screenStateOnReceiver);
+            if (screenStateChangeReceiver != null) {
+                unregisterReceiver(screenStateChangeReceiver);
             }
         } catch (IllegalArgumentException e) {
             // Sometimes there may be 2 shutdown requests in which case, the 2nd

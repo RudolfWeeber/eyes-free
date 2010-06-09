@@ -237,7 +237,7 @@ public class AuditoryWidgets {
     public void callVoiceMail() {
         Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode(parent.voiceMailNumber));
         Intent intent = new Intent(Intent.ACTION_CALL, phoneNumberURI);
-//        parent.startActivity(intent);
+        parent.startActivity(intent);
     }
 
     public void speakLocation() {

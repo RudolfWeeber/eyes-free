@@ -11,6 +11,7 @@
     <string name="am">AM</string>
     <string name="pm">PM</string>
     <string name="applications">Applications</string>
+    <string name="applist_reload">Applications Reloaded</string>
     <string name="shortcuts">Shortcuts</string>
     <string name="voicemail">Voicemail</string>
     <string name="marvin_intro_snd_">[marvin intro]</string>
@@ -22,6 +23,7 @@
     <string name="threeg_data_network">3G data network</string>
     <string name="edge_data_network">EDGE data network</string>
     <string name="bars">bars.</string>
+    <string name="deleted">.  deleted.</string>
     <string name="signal">Signal</string>
     <string name="location">Location</string>
     <string name="wifi">WiFi</string>
@@ -33,6 +35,11 @@
     <string name="button7_prompt">Application for button 7</string>      
     <string name="button8_prompt">Application for button 8</string>
     <string name="button9_prompt">Application for button 9</string>
+    <string name="period">Period</string>
+    <string name="question_mark">Question Mark</string>
+    <string name="exclamation_point">Exclamation Point</string>
+    <string name="comma">Comma</string>
+    <string name="backspace">Backspace</string>
     <string name="confirm">Confirm</string>     
     <string name="time">Time</string>    
     <string name="search">Search</string>     
