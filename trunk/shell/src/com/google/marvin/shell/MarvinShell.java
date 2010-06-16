@@ -74,13 +74,13 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private static final int ttsCheckCode = 42;
 
     public static final int VOICE_RECO_CODE = 777;
-    
+
     private static final int MAIN_VIEW = 1000;
-    
+
     private static final int SHORTCUTS_VIEW = 1001;
-    
+
     private static final int APPLAUNCHER_VIEW = 1002;
-    
+
     private int activeView;
 
     private PackageManager pm;
@@ -92,7 +92,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     public TextToSpeechBeta tts;
 
     private boolean ttsStartedSuccessfully;
-    
+
     private boolean screenStateChanged;
 
     public boolean isFocused;
@@ -141,13 +141,13 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private boolean messageWaiting;
 
     private int currentCallState;
-    
+
     public String voiceMailNumber = "";
 
     private BroadcastReceiver screenStateChangeReceiver;
-    
+
     private BroadcastReceiver appChangeReceiver;
-    
+
     private IntentFilter screenStateChangeFilter;
 
     private ProximitySensor proximitySensor;
@@ -183,7 +183,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             new ProcessTask().execute();
         }
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
@@ -213,36 +213,34 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             // Obtain the package name of the changed application and create an Intent
             String packageName = intent.getData().getSchemeSpecificPart();
             if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
-              // If the application is an update, we don't want to act on it.
-              if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
-                return;
-              } else {
-                // Since the application is being removed, we can no longer access its PackageInfo object.
-                // Creating AppEntry object without one is acceptable because matching can be done by package name.
-                AppEntry targetApp = new AppEntry("", null, null);
-                targetApp.setPackageName(packageName);
-                appLauncherView.removeApplication(targetApp);
-              }
-            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
-              // Get the application title and create the AppEntry object.
-              Intent targetIntent = new Intent(Intent.ACTION_MAIN, null);
-              targetIntent.setPackage(packageName);
-              ResolveInfo info = pm.resolveActivity(targetIntent, 0);
-              // Some packages won't have a main activity
-              // and are not directly launchable, ignore them.
-              if (info == null) {
-                  return;
-              }
-              String title = info.loadLabel(pm).toString();
-              if (title.length() == 0) {
-                title = info.activityInfo.name.toString();
-              }
-              AppEntry targetApp = new AppEntry(title, info, null);
+              // Since the application is being removed, we can no longer access its PackageInfo object.
+              // Creating AppEntry object without one is acceptable because matching can be done by package name.
+              AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
+              appLauncherView.removeMatchingApplications(targetApp);
+              tts.speak(getString(R.string.applist_reload), 0, null);
               
-              // Add the application to the list only if it doesn't exist.
-              if (!appLauncherView.applicationExists(targetApp)) {
+            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+              
+              // Remove all entries in the app list with a package matching this one.
+              AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
+              appLauncherView.removeMatchingApplications(targetApp);
+              
+              // Create intent filter to obtain only launchable activities within the given package.
+              Intent targetIntent = new Intent(Intent.ACTION_MAIN, null);
+              targetIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+              targetIntent.setPackage(packageName);
+              
+              // For every launchable activity in the installed package, add it to the app list.
+              for (ResolveInfo info : pm.queryIntentActivities(targetIntent, 0)) {
+                String title = info.loadLabel(pm).toString();
+                if (title.length() == 0) {
+                  title = info.activityInfo.name.toString();
+                }
+                targetApp = new AppEntry(title, info, null);
+                
                 appLauncherView.addApplication(targetApp);
               }
+              tts.speak(getString(R.string.applist_reload), 0, null);
             }           
           }
         };
@@ -313,18 +311,18 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     announceLocation = false;
                     resetTTS();
                 }
-                if(activeView == MAIN_VIEW) {
+                if (activeView == MAIN_VIEW) {
                     menus = new ArrayList<Menu>();
                     loadHomeMenu();
                 }
-            }          
+            }
             if (screenStateChangeReceiver != null && screenStateChangeFilter != null) {
                 registerReceiver(screenStateChangeReceiver, screenStateChangeFilter);
             }
             if (announceLocation) {
-                announceCurrentMenu();   
+                announceCurrentMenu();
             }
-            
+
             // Now that the view has regained focus, reset the flag indicating
             // screen power down.
             screenStateChanged = false;
@@ -380,8 +378,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
         items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.signal), "WIDGET",
                 "CONNECTIVITY", null));
-        items.put(Gesture.UP, new MenuItem(getString(R.string.time), "WIDGET",
-                "TIME_DATE", null));
+        items.put(Gesture.UP, new MenuItem(getString(R.string.time), "WIDGET", "TIME_DATE", null));
         items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY",
                 null));
 
@@ -397,7 +394,8 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "WIDGET",
                 "APPLAUNCHER", null));
 
-        items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.search), "WIDGET", "VOICE_SEARCH", null));
+        items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.search), "WIDGET",
+                "VOICE_SEARCH", null));
 
         menus.add(new Menu(getString(R.string.home), ""));
         mainText.setText(menus.get(menus.size() - 1).title);
@@ -485,7 +483,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         vibe.vibrate(VIBE_PATTERN, -1);
     }
 
-
     public void onGestureFinish(int g) {
         MenuItem item = items.get(g);
         if (item != null) {
@@ -551,7 +548,6 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         // The ringer volume will be adjusted during a gesture.
         setVolumeControlStream(AudioManager.STREAM_RING);
     }
-    
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -691,7 +687,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         activeView = MAIN_VIEW;
         announceCurrentMenu();
     }
-    
+
     private void shutdown() {
         if (tts != null) {
             tts.shutdown();
@@ -731,15 +727,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                 AppEntry entry = new AppEntry(title, info, null);
                 appList.add(entry);
             }
-
-            class AppEntrySorter implements Comparator {
-                public int compare(Object arg0, Object arg1) {
-                    String title0 = ((AppEntry) arg0).getTitle().toLowerCase();
-                    String title1 = ((AppEntry) arg1).getTitle().toLowerCase();
-                    return title0.compareTo(title1);
-                }
-            }
-            Collections.sort(appList, new AppEntrySorter());
+            Collections.sort(appList);
 
             // now that app tree is built, pass along to adapter
             return appList;

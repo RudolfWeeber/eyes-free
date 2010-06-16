@@ -36,13 +36,13 @@ final public class OneBoxScraper {
     public static String processGoogleResults(String query) {
         String processedResult = "";
         try {
-            String url = "http://www.google.com/m?q=" + URLEncoder.encode(query, "UTF-8");
+            String url = "http://www.google.com/m?q=" + URLEncoder.encode(query, "UTF-8");            
             StringExtractor se = new StringExtractor(url);
             String results = se.extractStrings(true);
 
             // Uncomment this line to see the raw dump;
             // very useful when trying to come up with scraping rules
-            // Log.e("OneBoxScraper Debug", results);
+            //Log.e("OneBoxScraper Debug", results);
 
             /* Check for known one box types */
             // Weather
@@ -144,6 +144,21 @@ final public class OneBoxScraper {
                     processedResult = vsScoreMatcher.group();
                 } else if (recordScoreMatcher.find()) {
                     processedResult = recordScoreMatcher.group();
+                }
+            }
+            // World cup
+            if ((processedResult.length() < 1) && (results.indexOf("\n") != -1)) {
+                int firstLineBreak = results.indexOf("\n");
+                String firstLine = results.substring(0, firstLineBreak);
+                int secondLineBreak = results.indexOf("\n", firstLineBreak + 1);
+                String secondLine = results.substring(firstLineBreak + 1, secondLineBreak);
+                int thirdLineBreak = results.indexOf("\n", secondLineBreak + 1);
+                String thirdLine = results.substring(secondLineBreak + 1, thirdLineBreak);
+                int fourthLineBreak = results.indexOf("\n", thirdLineBreak + 1);
+                String fourthLine = results.substring(thirdLineBreak + 1, fourthLineBreak);
+                if (firstLine.equals("2010 FIFA World Cup(tm): Latest Matches") &&
+                    fourthLine.equals("Upcoming matches:")) {
+                    processedResult = secondLine + "\n" + thirdLine;
                 }
             }
 

@@ -288,22 +288,25 @@ public class AppLauncherView extends TextView {
     }
 
     public void addApplication(AppEntry app) {
-        appList.add(app);
-        Collections.sort(appList);
-        appListIndex = 0;
-        currentString = "";
-        parent.tts.speak(parent.getString(R.string.applist_reload), 0, null);
-        return;
-    }
-
-    public void removeApplication(AppEntry app) {
-        if (!appList.remove(app)) {
-            Log.e("AppLauncherView", "Attempted to remove non-existent application");
+        synchronized (appList) {
+            appList.add(app);
+            Collections.sort(appList);
         }
         appListIndex = 0;
         currentString = "";
-        parent.tts.speak(parent.getString(R.string.applist_reload), 0, null);
-        return;
+    }
+    
+    public void removeMatchingApplications(AppEntry app) {
+        synchronized (appList) {
+            for (int i = 0; i < appList.size(); ++i) {
+                if (appList.get(i).equals(app)) {
+                    appList.remove(i);
+                    i--;
+                }
+            }
+        }
+        appListIndex = 0;
+        currentString = "";
     }
 
     public boolean applicationExists(AppEntry app) {

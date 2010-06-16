@@ -148,7 +148,8 @@ public class AppEntry implements Comparable {
   }
   
   public int compareTo(Object o) {
-    AppEntry app = (AppEntry) o;
-    return this.title.compareTo(app.getTitle());
+    String title0 = this.getTitle().toLowerCase();
+    String title1 = ((AppEntry) o).getTitle().toLowerCase();
+    return title0.compareTo(title1);
   }
 }
