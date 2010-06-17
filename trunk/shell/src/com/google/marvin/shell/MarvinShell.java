@@ -21,9 +21,6 @@ import com.google.marvin.utils.UserTask;
 import com.google.marvin.widget.GestureOverlay;
 import com.google.marvin.widget.GestureOverlay.Gesture;
 import com.google.marvin.widget.GestureOverlay.GestureListener;
-import com.google.tts.TTSEarcon;
-import com.google.tts.TextToSpeechBeta;
-import com.google.tts.TextToSpeechBeta.OnInitListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -44,6 +41,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -89,7 +88,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
     private AppLauncherView appLauncherView;
 
-    public TextToSpeechBeta tts;
+    public TextToSpeech tts;
 
     private boolean ttsStartedSuccessfully;
 
@@ -198,7 +197,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
         self = this;
         gestureOverlay = null;
-        tts = new TextToSpeechBeta(this, ttsInitListener);
+        tts = new TextToSpeech(this, ttsInitListener);
         isFocused = true;
         messageWaiting = false;
         menus = new ArrayList<Menu>();
@@ -339,11 +338,12 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     private void resetTTS() {
         String pkgName = MarvinShell.class.getPackage().getName();
         tts.addSpeech(getString(R.string.marvin_intro_snd_), pkgName, R.raw.marvin_intro);
-        tts.addEarcon(TTSEarcon.TOCK.toString(), pkgName, R.raw.tock_snd);
+        tts.addEarcon(getString(R.string.earcon_tock), pkgName, R.raw.tock_snd);
+        tts.addEarcon(getString(R.string.earcon_tick), pkgName, R.raw.tick_snd);
     }
 
     private OnInitListener ttsInitListener = new OnInitListener() {
-        public void onInit(int status, int version) {
+        public void onInit(int status) {
             resetTTS();
             tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
             ttsStartedSuccessfully = true;
@@ -417,7 +417,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                 intent.putExtra(params.get(i).name, keyValue);
             }
         }
-        tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
+        tts.playEarcon(getString(R.string.earcon_tick), 0, null);
         boolean launchSuccessful = true;
         try {
             startActivity(intent);
@@ -426,14 +426,19 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             launchSuccessful = false;
         }
         if (screenStateChangeReceiver != null && launchSuccessful == true) {
-            unregisterReceiver(screenStateChangeReceiver);
+            try {
+              unregisterReceiver(screenStateChangeReceiver);
+            } catch (IllegalArgumentException e) {
+                // Sometimes there may be 2 shutdown requests in which case, the 2nd
+                // request will fail
+            }
         }
     }
 
     public void runAseScript(String scriptName) {
         Intent intent = makeClassLaunchIntent("com.google.ase", "com.google.ase.terminal.Terminal");
         intent.putExtra("com.google.ase.extra.SCRIPT_NAME", scriptName);
-        tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
+        tts.playEarcon(getString(R.string.earcon_tick), 0, null);
         try {
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
@@ -451,10 +456,10 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         } else if (widgetName.equals("BATTERY")) {
             widgets.announceBattery();
         } else if (widgetName.equals("VOICEMAIL")) {
-            tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
+            tts.playEarcon(getString(R.string.earcon_tick), 0, null);
             widgets.callVoiceMail();
         } else if (widgetName.equals("LOCATION")) {
-            tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
+            tts.playEarcon(getString(R.string.earcon_tick), 0, null);
             widgets.speakLocation();
         } else if (widgetName.equals("CONNECTIVITY")) {
             widgets.announceConnectivity();
@@ -499,7 +504,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                 if (new File(item.data).isFile()) {
                     menus.add(new Menu(item.label, item.data));
                     items = MenuLoader.loadMenu(item.data);
-                    tts.playEarcon(TTSEarcon.TICK.toString(), 0, null);
+                    tts.playEarcon(getString(R.string.earcon_tick), 0, null);
                 } else {
                     // Write file and retry
                     /**

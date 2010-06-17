@@ -17,8 +17,6 @@
 package com.google.marvin.shell;
 
 import com.google.marvin.shell.ShakeDetector.ShakeListener;
-import com.google.tts.TTSEarcon;
-import com.google.tts.TTSParams;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -261,7 +259,7 @@ public class AppLauncherView extends TextView {
             index++;
         }
         if (!foundMatch) {
-            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
             if (currentString.length() > 0) {
                 currentString = currentString.substring(0, currentString.length() - 1);
             }
@@ -508,7 +506,7 @@ public class AppLauncherView extends TextView {
                 invalidate();
                 if (prevVal != currentValue) {
                     if (currentCharacter.equals("")) {
-                        parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+                        parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
                     } else {
                         if (currentCharacter.equals(".")) {
                             parent.tts.speak(parent.getString(R.string.period), 0, null);
@@ -845,8 +843,8 @@ public class AppLauncherView extends TextView {
             // {TTSParams.VOICE_ROBOT.toString()});
             parent.tts.speak(deletedCharacter + parent.getString(R.string.deleted), 0, null);
         } else {
-            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
-            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 1, null);
+            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
+            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 1, null);
         }
         if (currentString.length() > 0) {
             jumpToFirstMatchingApp();

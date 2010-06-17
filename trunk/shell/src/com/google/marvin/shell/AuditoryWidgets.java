@@ -15,8 +15,6 @@
  */
 package com.google.marvin.shell;
 
-import com.google.tts.TextToSpeechBeta;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -31,6 +29,7 @@ import android.os.BatteryManager;
 import android.provider.Settings.SettingNotFoundException;
 import android.provider.Settings.System;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
@@ -47,7 +46,7 @@ import java.util.Calendar;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class AuditoryWidgets {
-    private TextToSpeechBeta tts;
+    private TextToSpeech tts;
 
     private MarvinShell parent;
 
@@ -59,7 +58,7 @@ public class AuditoryWidgets {
 
     private int callState = TelephonyManager.CALL_STATE_IDLE;
 
-    public AuditoryWidgets(TextToSpeechBeta theTts, MarvinShell shell) {
+    public AuditoryWidgets(TextToSpeech theTts, MarvinShell shell) {
         tts = theTts;
         parent = shell;
         useGpsThisTime = true;

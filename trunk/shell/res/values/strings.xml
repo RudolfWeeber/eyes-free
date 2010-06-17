@@ -47,4 +47,9 @@
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>
     <string name="shortcutsManager">Shortcuts Manager for Eyes-Free Shell</string>
+    
+    <!-- The following strings are used for earcons  -->
+    <string name="earcon_tick">[TICK]</string>
+    <string name="earcon_tock">[TOCK]</string>
+    
 </resources>
