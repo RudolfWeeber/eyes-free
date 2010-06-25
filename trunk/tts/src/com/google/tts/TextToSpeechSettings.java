@@ -26,6 +26,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -343,6 +344,16 @@ public class TextToSpeechSettings extends PreferenceActivity implements
                 this.startActivityForResult(intent, GET_SAMPLE_TEXT);
             }
         }
+        // -- Only needed in TTS Extended to deal with pre-Froyo system Pico
+        // The version of Pico built into the system for versions 4-7 of Android
+        // does not return all the information needed by TTS Extended.
+        // Compensate for that here by adding in the missing bits.
+        if (mDefaultEng.equals(SYSTEM_TTS) && (Integer.parseInt(android.os.Build.VERSION.SDK) < 8)
+                && (Integer.parseInt(android.os.Build.VERSION.SDK) > 3)) {
+            intent.setClassName("com.google.tts", "com.google.tts.GetSampleText");
+            this.startActivityForResult(intent, GET_SAMPLE_TEXT);
+        }
+        // -- End of workaround for pre-Froyo system Pico
     }
 
     /**
@@ -394,6 +405,35 @@ public class TextToSpeechSettings extends PreferenceActivity implements
             // TODO (clchen): Add these extras to TextToSpeech.Engine
             ArrayList<String> available = data.getStringArrayListExtra("availableVoices");
             ArrayList<String> unavailable = data.getStringArrayListExtra("unavailableVoices");
+
+            // -- Only needed in TTS Extended to deal with pre-Froyo system Pico
+            // The version of Pico built into the system for versions 4-7 of
+            // Android
+            // does not return all the information needed by TTS Extended.
+            // Compensate for that here by adding in the missing bits.
+            if (mDefaultEng.equals(SYSTEM_TTS)
+                    && (Integer.parseInt(android.os.Build.VERSION.SDK) < 8)
+                    && (Integer.parseInt(android.os.Build.VERSION.SDK) > 3)) {
+                available = new ArrayList<String>();
+                unavailable = new ArrayList<String>();
+                if (resultCode < 0) {
+                    unavailable.add("deu-DEU");
+                    unavailable.add("eng-GBR");
+                    unavailable.add("eng-USA");
+                    unavailable.add("spa-ESP");
+                    unavailable.add("fra-FRA");
+                    unavailable.add("ita-ITA");
+                } else {
+                    available.add("deu-DEU");
+                    available.add("eng-GBR");
+                    available.add("eng-USA");
+                    available.add("spa-ESP");
+                    available.add("fra-FRA");
+                    available.add("ita-ITA");
+                }
+            }
+            // -- End of workaround for pre-Froyo system Pico
+
             if ((available == null) || (unavailable == null)) {
                 // The CHECK_TTS_DATA activity for the plugin did not run
                 // properly;
