@@ -156,7 +156,7 @@ final public class OneBoxScraper {
                 String thirdLine = results.substring(secondLineBreak + 1, thirdLineBreak);
                 int fourthLineBreak = results.indexOf("\n", thirdLineBreak + 1);
                 String fourthLine = results.substring(thirdLineBreak + 1, fourthLineBreak);
-                if (firstLine.equals("2010 FIFA World Cup(tm): Latest Matches") &&
+                if (firstLine.contains("2010 FIFA World Cup(tm)") &&
                     fourthLine.equals("Upcoming matches:")) {
                     processedResult = secondLine + "\n" + thirdLine;
                 }
