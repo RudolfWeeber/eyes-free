@@ -503,7 +503,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                 // Populate menus for shortcuts and load the shortcuts view.
                 if (new File(item.data).isFile()) {
                     menus.add(new Menu(item.label, item.data));
-                    items = MenuLoader.loadMenu(item.data);
+                    items = MenuLoader.loadMenu(this, item.data);
                     tts.playEarcon(getString(R.string.earcon_tick), 0, null);
                 } else {
                     // Write file and retry
@@ -615,7 +615,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                     if (currentMenu.title.equals(getString(R.string.home))) {
                         loadHomeMenu();
                     } else {
-                        items = MenuLoader.loadMenu(currentMenu.filename);
+                        items = MenuLoader.loadMenu(this, currentMenu.filename);
                         mainText.setText(currentMenu.title);
                     }
                 }

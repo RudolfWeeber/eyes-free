@@ -17,14 +17,16 @@
 package com.google.marvin.shell;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+
+import java.util.List;
 
 /**
  * Launches the Eyes-Free Shell if the user has Talkback enabled; otherwise, it
@@ -34,18 +36,9 @@ import android.os.Bundle;
  */
 
 public class HomeLauncher extends Activity {
-    private static final String QUERY_ACTION = "com.google.android.marvin.talkback.ACTION_QUERY_TALKBACK_ENABLED_COMMAND";
+    private final static String SCREENREADER_INTENT_ACTION = "android.accessibilityservice.AccessibilityService";
 
-    private BroadcastReceiver mResultReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (getResultCode() == 1) {
-                homeIntent = new Intent(self, MarvinShell.class);
-            }
-            startActivity(homeIntent);
-            finish();
-        }
-    };
+    private final static String SCREENREADER_INTENT_CATEGORY = "android.accessibilityservice.category.FEEDBACK_SPOKEN";
 
     private Intent homeIntent;
 
@@ -71,22 +64,40 @@ public class HomeLauncher extends Activity {
                 break;
             }
         }
-
-        if (talkbackInstalled()) {
-            Intent queryIntent = new Intent(QUERY_ACTION);
-            sendOrderedBroadcast(queryIntent, null, mResultReceiver, null, 0, null, null);
-        } else {
-            startActivity(homeIntent);
-            finish();
+        if (isScreenReaderActive()) {
+            homeIntent = new Intent(self, MarvinShell.class);
         }
+        startActivity(homeIntent);
+        finish();
     }
 
-    private boolean talkbackInstalled() {
-        try {
-            Context ctx = createPackageContext("com.google.android.marvin.talkback", 0);
-        } catch (NameNotFoundException e) {
-            return false;
+    private boolean isScreenReaderActive() {
+        // Restrict the set of intents to only accessibility services that have
+        // the category FEEDBACK_SPOKEN (aka, screen readers).
+        Intent screenReaderIntent = new Intent(SCREENREADER_INTENT_ACTION);
+        screenReaderIntent.addCategory(SCREENREADER_INTENT_CATEGORY);
+        List<ResolveInfo> screenReaders = getPackageManager().queryIntentServices(
+                screenReaderIntent, 0);
+        ContentResolver cr = getContentResolver();
+        Cursor cursor = null;
+        int status = 0;
+        for (ResolveInfo screenReader : screenReaders) {
+            // All screen readers are expected to implement a content provider
+            // that responds to
+            // content://<nameofpackage>.providers.StatusProvider
+            cursor = cr.query(Uri.parse("content://" + screenReader.serviceInfo.packageName
+                    + ".providers.StatusProvider"), null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                // These content providers use a special cursor that only has one element, 
+                // an integer that is 1 if the screen reader is running.
+                status = cursor.getInt(0);
+                cursor.close();
+                if (status == 1) {
+                    return true;
+                }
+            }
         }
-        return true;
+        return false;
     }
 }

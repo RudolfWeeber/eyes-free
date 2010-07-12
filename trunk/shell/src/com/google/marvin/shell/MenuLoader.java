@@ -16,6 +16,9 @@
 
 package com.google.marvin.shell;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -43,7 +46,7 @@ final public class MenuLoader {
     private MenuLoader() {
     }
 
-    public static HashMap<Integer, MenuItem> loadMenu(String filename) {
+    public static HashMap<Integer, MenuItem> loadMenu(Context context, String filename) {
         HashMap<Integer, MenuItem> menu = new HashMap<Integer, MenuItem>();
         try {
             FileInputStream fis = new FileInputStream(filename);
@@ -87,7 +90,7 @@ final public class MenuLoader {
                     String packageName = "";
                     Node packageAttrNode = appInfoAttr.getNamedItem("package");
                     if (packageAttrNode != null) {
-                        packageName = packageAttrNode.getNodeValue();
+                        packageName = packageAttrNode.getNodeValue();   
                     }
                     String className = "";
                     Node classAttrNode = appInfoAttr.getNamedItem("class");
@@ -101,8 +104,11 @@ final public class MenuLoader {
                     }
                     appInfo = new AppEntry(null, packageName, className, scriptName, null, params);
                 }
-
-                menu.put(g, new MenuItem(label, action, data, appInfo));
+                
+                // Check to see if the package is still installed
+                if (packageExists(context, appInfo)) {
+                    menu.put(g, new MenuItem(label, action, data, appInfo));
+                }
             }
 
         } catch (FileNotFoundException e) {
@@ -116,7 +122,17 @@ final public class MenuLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
         return menu;
+    }
+    
+    private static boolean packageExists(Context context, AppEntry application) {
+        PackageManager manager = context.getPackageManager();
+        try {
+            manager.getApplicationInfo(application.getPackageName(), 0);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }

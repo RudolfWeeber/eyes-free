@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -46,7 +45,7 @@ import java.util.Map;
 
 /**
  * Allows users to customize their Eyes-Free Shell shortcuts.
- * 
+ *
  * @author mgl@google.com (Matthew Lee)
  */
 public class ShortcutsManagerActivity extends Activity {
@@ -58,8 +57,8 @@ public class ShortcutsManagerActivity extends Activity {
      * which on a phone corresponds to the directional gesture that the button
      * represents (1, 2, 3, 4, 6, 7, 8, or 9).
      */
-    private static final HashMap<Integer, Integer> indexToButtonMapping =
-        new HashMap<Integer, Integer>();
+    private static final HashMap<Integer, Integer> indexToButtonMapping = new HashMap<
+            Integer, Integer>();
     static {
         indexToButtonMapping.put(0, 1);
         indexToButtonMapping.put(1, 2);
@@ -75,8 +74,8 @@ public class ShortcutsManagerActivity extends Activity {
      * Maps from directional gesture to index of button in shortcuts manager
      * list (0 to 7)
      */
-    private static final HashMap<Integer, Integer> gestureToIndexMapping =
-        new HashMap<Integer, Integer>();
+    private static final HashMap<Integer, Integer> gestureToIndexMapping = new HashMap<
+            Integer, Integer>();
     static {
         gestureToIndexMapping.put(Gesture.UPLEFT, 0);
         gestureToIndexMapping.put(Gesture.UP, 1);
@@ -92,8 +91,8 @@ public class ShortcutsManagerActivity extends Activity {
      * Maps from index of button in shortcuts manager list (0 to 7) to
      * directional gesture
      */
-    private static final HashMap<Integer, Integer> indexToGestureMapping =
-        new HashMap<Integer, Integer>();
+    private static final HashMap<Integer, Integer> indexToGestureMapping = new HashMap<
+            Integer, Integer>();
     static {
         indexToGestureMapping.put(0, Gesture.UPLEFT);
         indexToGestureMapping.put(1, Gesture.UP);
@@ -166,20 +165,20 @@ public class ShortcutsManagerActivity extends Activity {
         Button confirmButton = (Button) findViewById(R.id.confirm);
 
         // Load shortcuts.xml file
-        menu = MenuLoader.loadMenu(filename);
+        menu = MenuLoader.loadMenu(this, filename);
         Iterator<Map.Entry<Integer, MenuItem>> it = menu.entrySet().iterator();
 
         while (it.hasNext()) {
             Map.Entry<Integer, MenuItem> entry = it.next();
             MenuItem item = entry.getValue();
+
             int buttonIndex = gestureToIndexMapping.get(entry.getKey());
-            Log.e("debug", String.valueOf(buttonIndex));
 
             // Non-launch actions cannot be changed
             if (!item.action.equalsIgnoreCase("launch")) {
                 fixedIndices[buttonIndex] = true;
-                buttons[buttonIndex].setText(indexToButtonMapping.get(buttonIndex)
-                        + " - Special action");
+                buttons[buttonIndex].setText(
+                        indexToButtonMapping.get(buttonIndex) + " - Special action");
             } else {
                 int appTitleIndex = launchableAppTitles.indexOf(item.label);
 
@@ -196,8 +195,8 @@ public class ShortcutsManagerActivity extends Activity {
 
         // Set up buttons to listen for clicks and show AlertDialog on click.
         for (int i = 0; i < kNumButtons; i++) {
-            final ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item,
-                    launchableAppTitles.toArray());
+            final ArrayAdapter aa = new ArrayAdapter(
+                    this, android.R.layout.simple_spinner_item, launchableAppTitles.toArray());
             final int gestureNumber = indexToButtonMapping.get(i);
             final int buttonIndex = i;
             buttons[i].setOnClickListener(new OnClickListener() {
@@ -215,9 +214,8 @@ public class ShortcutsManagerActivity extends Activity {
                             public void onClick(DialogInterface arg0, int index) {
 
                                 // Update button text
-                                button
-                                        .setText(gestureNumber + " - "
-                                                + aa.getItem(index).toString());
+                                button.setText(
+                                        gestureNumber + " - " + aa.getItem(index).toString());
 
                                 // Update stored selection
                                 selectedIndices[buttonIndex] = index;
@@ -228,14 +226,18 @@ public class ShortcutsManagerActivity extends Activity {
                                     menu.remove(indexToGestureMapping.get(buttonIndex));
                                 } else {
                                     // Create item and add to menu
-                                    // Do a search to accomodate for the index changing because of users typing and filtering down the list.
+                                    // Do a search to accomodate for the
+                                    // index changing because of users
+                                    // typing and filtering down the
+                                    // list.
                                     MenuItem menuItem = null;
-                                    for (int i=0; i<launchableApps.size(); i++){
-                                        if (launchableApps.get(i).getTitle().equals(name)){
-                                            menuItem = new MenuItem(name, "LAUNCH", "", launchableApps.get(i));
+                                    for (int i = 0; i < launchableApps.size(); i++) {
+                                        if (launchableApps.get(i).getTitle().equals(name)) {
+                                            menuItem = new MenuItem(
+                                                    name, "LAUNCH", "", launchableApps.get(i));
                                         }
                                     }
-                                    if (menuItem != null){
+                                    if (menuItem != null) {
                                         menu.put(indexToGestureMapping.get(buttonIndex), menuItem);
                                     }
                                 }
@@ -257,8 +259,8 @@ public class ShortcutsManagerActivity extends Activity {
                 try {
                     // Output xml
                     FileOutputStream fileOutputStream = new FileOutputStream(filename);
-                    OutputStreamWriter outputStreamWriter =
-                        new OutputStreamWriter(fileOutputStream);
+                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+                            fileOutputStream);
 
                     // Sort gestures by button number ordering
                     class GestureSorter implements Comparator {
