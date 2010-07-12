@@ -61,14 +61,17 @@ public final class CustomFormatters {
             } else {
                 StringBuilder text = SpeechRule.getEventText(event);
                 int begIndex = event.getFromIndex();
-                int endIndex = begIndex + event.getAddedCount();
-
-                CharSequence addedText = text.subSequence(begIndex, endIndex);
-                if (addedText.length() == 1) {
-                    addedText = getCharacterSpokenEquivalent(addedText);
+                int endIndex = begIndex + event.getAddedCount();                
+                
+                // TODO(svetoslavganov): Remove the following check once bug
+                // 2513822 is resolved with a framework patch.
+                if (endIndex <= AccessibilityEvent.MAX_TEXT_LENGTH) {
+                    CharSequence addedText = text.subSequence(begIndex, endIndex);
+                    if (addedText.length() == 1) {
+                        addedText = getCharacterSpokenEquivalent(addedText);
+                    }
+                    utterance.getText().append(addedText);
                 }
-
-                utterance.getText().append(addedText);
             }
         }
     }
@@ -134,8 +137,13 @@ public final class CustomFormatters {
                     // more frequent case mentioned above.
                     int begIndex = text.length() - 1;
                     int endIndex = begIndex + 1;
-                    CharSequence addedText = text.subSequence(begIndex, endIndex);
-                    utteranceText.append(getCharacterSpokenEquivalent(addedText));
+                    
+                    // TODO(svetoslavganov): Remove the following check once bug
+                    // 2513822 is resolved with a framework patch.
+                    if (endIndex <= AccessibilityEvent.MAX_TEXT_LENGTH) {
+                        CharSequence addedText = text.subSequence(begIndex, endIndex);
+                        utteranceText.append(getCharacterSpokenEquivalent(addedText));
+                    }
                 } else if (isRemovedCharacter(text, beforeText)) {
                     // This happens if the application replaces the entire text
                     // while the user is typing. This logic leads to missing
@@ -156,11 +164,16 @@ public final class CustomFormatters {
 
                     int addedBegIndex = event.getFromIndex();
                     int addedEndIndex = addedBegIndex + event.getAddedCount();
-                    CharSequence addedText = text.subSequence(addedBegIndex, addedEndIndex);
 
-                    String template = SpeechRule.getStringResource(TEMPLATE_TEXT_REPLACED);
-                    String populatedTemplate = String.format(template, removedText, addedText);
-                    utteranceText.append(populatedTemplate);
+                    // TODO(svetoslavganov): Remove the following check once bug
+                    // 2513822 is resolved with a framework patch.
+                    if (addedEndIndex <= AccessibilityEvent.MAX_TEXT_LENGTH) {
+                        CharSequence addedText = text.subSequence(addedBegIndex, addedEndIndex);
+
+                        String template = SpeechRule.getStringResource(TEMPLATE_TEXT_REPLACED);
+                        String populatedTemplate = String.format(template, removedText, addedText);
+                        utteranceText.append(populatedTemplate);
+                    }
                 }
             }
         }

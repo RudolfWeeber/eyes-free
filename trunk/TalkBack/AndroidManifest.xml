@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.marvin.talkback"
     android:sharedUserId="com.google.android.marvin.feedback"    
-    android:versionCode="9"
-    android:versionName="2.2.1">
+    android:versionCode="11"
+    android:versionName="2.3.0">
 
     <uses-sdk android:minSdkVersion="4" />
 
@@ -21,6 +21,7 @@
                 android:permission="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK">
             <intent-filter>
                 <action android:name="com.google.android.marvin.talkback.ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND"/>
+                <!-- TODO(caseyburkhardt): Remove the following action when we decide to no longer support intent broadcasts for querying the current state of TalkBack. -->
                 <action android:name="com.google.android.marvin.talkback.ACTION_QUERY_TALKBACK_ENABLED_COMMAND"/>
             </intent-filter>
         </receiver>
@@ -28,10 +29,13 @@
         <service android:name=".TalkBackService">
              <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
+                <category android:name="android.accessibilityservice.category.FEEDBACK_SPOKEN" />
                 <action android:name="com.google.android.marvin.talkback.ACTION_TALKBACK_AS_NOTIFICATION_STATE" />
             </intent-filter>
         </service>
 
+    <provider android:name=".StatusProvider"
+            android:authorities="com.google.android.marvin.talkback.providers.StatusProvider"  />
     </application>
 
 </manifest>
