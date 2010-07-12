@@ -16,14 +16,13 @@
 
 package com.google.marvin.talkingdialer;
 
-import com.google.tts.TTSEarcon;
-import com.google.tts.TextToSpeechBeta;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
-import android.os.Bundle;
-import android.util.Log;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.View;
 
 /**
@@ -38,32 +37,49 @@ import android.view.View;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class SlideDial extends Activity {
+    
+    private static final int DIALING_VIEW = 0;
+    
+    private static final int CONTACTS_VIEW = 1;
+    
+    private int currentView = -1;
 
     private SlideDialView mView;
 
     private ContactsView contactsView;
+    
+    private SharedPreferences prefs;
 
-    public TextToSpeechBeta tts;
-
-    @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        if (tts == null) {
-            tts = new TextToSpeechBeta(this, ttsInitListener);
-        }
-    }
+    public TextToSpeech tts;
 
     @Override
     public void onResume() {
         super.onResume();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        if (tts == null) {
+            tts = new TextToSpeech(this, ttsInitListener);
+        } else {
+            prefs = getPreferences(MODE_PRIVATE);
+            currentView = prefs.getInt(getString(R.string.view_mode_preference), DIALING_VIEW);
+            if (currentView == DIALING_VIEW) {
+                switchToDialingView();
+            } else {
+                switchToContactsView();
+            }
+        }
     }
 
-    private TextToSpeechBeta.OnInitListener ttsInitListener = new TextToSpeechBeta.OnInitListener() {
-        public void onInit(int status, int version) {
+    private OnInitListener ttsInitListener = new OnInitListener() {
+        public void onInit(int status) {
             String pkgName = SlideDial.class.getPackage().getName();
-            tts.addEarcon(TTSEarcon.TOCK.toString(), pkgName, R.raw.tock_snd);
-            switchToDialingView();
+            tts.addEarcon(getString(R.string.earcon_tock), pkgName, R.raw.tock_snd);
+            prefs = getPreferences(MODE_PRIVATE);
+            currentView = prefs.getInt(getString(R.string.view_mode_preference), DIALING_VIEW);
+            if (currentView == DIALING_VIEW) {
+                switchToDialingView();
+            } else {
+                switchToContactsView();
+            }
         }
     };
 
@@ -81,6 +97,7 @@ public class SlideDial extends Activity {
             contactsView = new ContactsView(this);
         }
         setContentView(contactsView);
+        currentView = CONTACTS_VIEW;
         tts.speak(getString(R.string.phonebook), 0, null);
     }
 
@@ -91,6 +108,7 @@ public class SlideDial extends Activity {
         }
         mView.parent = this;
         setContentView(mView);
+        currentView = DIALING_VIEW;
         tts.speak(getString(R.string.dialing_mode), 0, null);
     }
 
@@ -106,10 +124,20 @@ public class SlideDial extends Activity {
             mView = null;
         }
     }
-    
+
     public void quit() {
         setResult(RESULT_CANCELED, null);
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        if (prefs != null && currentView != -1) {
+            Editor editor = prefs.edit();
+            editor.putInt(getString(R.string.view_mode_preference), currentView);
+            editor.commit();
+        }
+        super.onPause();
     }
     
     @Override

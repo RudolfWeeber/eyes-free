@@ -17,15 +17,9 @@
 package com.google.marvin.talkingdialer;
 
 import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
-import com.google.tts.TTSEarcon;
-import com.google.tts.TTSParams;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Canvas;
@@ -35,10 +29,15 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.TextView;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Allows the user to select the contact they wish to call by moving through
@@ -52,26 +51,31 @@ import android.widget.TextView;
 public class ContactsView extends TextView {
     // BEGIN OF WORKAROUND FOR DONUT COMPATIBILITY
     private static Method MotionEvent_getX;
+
     private static Method MotionEvent_getY;
     static {
         initCompatibility();
     }
+
     private static void initCompatibility() {
         try {
-            MotionEvent_getX = MotionEvent.class.getMethod(
-                    "getX", new Class[] { Integer.TYPE } );
-            MotionEvent_getY = MotionEvent.class.getMethod(
-                    "getY", new Class[] { Integer.TYPE } );
+            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] {
+                Integer.TYPE
+            });
+            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] {
+                Integer.TYPE
+            });
             /* success, this is a newer device */
         } catch (NoSuchMethodException nsme) {
             /* failure, must be older device */
         }
     }
+
     private static float getX(MotionEvent event, int x) {
         try {
             Object retobj = MotionEvent_getX.invoke(event, x);
             return (Float) retobj;
-        }  catch (IllegalAccessException ie) {
+        } catch (IllegalAccessException ie) {
             System.err.println("unexpected " + ie);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
@@ -82,11 +86,12 @@ public class ContactsView extends TextView {
         }
         return -1;
     }
+
     private static float getY(MotionEvent event, int y) {
         try {
             Object retobj = MotionEvent_getY.invoke(event, y);
             return (Float) retobj;
-        }  catch (IllegalAccessException ie) {
+        } catch (IllegalAccessException ie) {
             System.err.println("unexpected " + ie);
         } catch (IllegalArgumentException e) {
             // TODO Auto-generated catch block
@@ -96,10 +101,10 @@ public class ContactsView extends TextView {
             e.printStackTrace();
         }
         return -1;
-    }    
+    }
+
     // END OF WORKAROUND FOR DONUT COMPATIBILITY
-    
-    
+
     private static final long[] PATTERN = {
             0, 1, 40, 41
     };
@@ -109,6 +114,8 @@ public class ContactsView extends TextView {
     private static final int NUMBER = 1;
 
     private static final int TYPE = 2;
+        
+    private static final int PERSON_ID = 3;
 
     private static final int AE = 0;
 
@@ -119,6 +126,8 @@ public class ContactsView extends TextView {
     private static final int Y = 4;
 
     private static final int NONE = 5;
+    
+    private static final int LONG_PRESS_THRESHOLD = 2000;
 
     private final double left = 0;
 
@@ -140,8 +149,7 @@ public class ContactsView extends TextView {
 
     // An array specifying which columns to return.
     private static final String[] PROJECTION = new String[] {
-            Phone.DISPLAY_NAME, Phone.NUMBER, Phone.TYPE,
-            Phone.CUSTOM_RINGTONE
+            Phone.DISPLAY_NAME, Phone.NUMBER, Phone.TYPE, Phone.RAW_CONTACT_ID
     };
 
     private SlideDial parent;
@@ -183,6 +191,8 @@ public class ContactsView extends TextView {
     private boolean trackballEnabled = true;
 
     private ShakeDetector shakeDetector;
+    
+    private LongPressDetector longPress = null;
 
     private boolean inDPadMode = false;
 
@@ -205,7 +215,7 @@ public class ContactsView extends TextView {
                 null, // no selection args
                 Phone.DISPLAY_NAME + " ASC"); // Order-by clause.
         boolean moveSucceeded = managedCursor.moveToFirst();
-        
+
         ArrayList<String> contactNames = new ArrayList<String>();
         while (moveSucceeded) {
             contactNames.add(managedCursor.getString(NAME));
@@ -260,54 +270,64 @@ public class ContactsView extends TextView {
             }
         }
     }
-    
+
     private void resetContactList() {
         currentString = "";
-        managedCursor.moveToFirst();
-        // Keep going if the entry doesn't have a name
-        String name = managedCursor.getString(NAME);
-        if (name == null) {
-            nextContact();
-            return;
+        if (managedCursor.getCount() > 0) {
+            managedCursor.moveToFirst();
+            if(!managedCursor.isBeforeFirst() && !managedCursor.isAfterLast()) {
+                // Keep going if the entry doesn't have a name
+                String name = managedCursor.getString(NAME);
+                if (name == null) {
+                    nextContact();
+                    return;
+                }
+            }
         }
     }
 
     private void nextContact() {
         currentString = "";
-        boolean moveSucceeded = managedCursor.moveToNext();
-        if (!moveSucceeded) {
-            managedCursor.moveToFirst();
+        // Make sure we don't try to act on an empty table
+        if (managedCursor.getCount() > 0) {
+            boolean moveSucceeded = managedCursor.moveToNext();
+            if (!moveSucceeded) {
+                managedCursor.moveToFirst();
+            }
+            // Keep going if the entry doesn't have a name
+            String name = managedCursor.getString(NAME);
+            if (name == null) {
+                nextContact();
+                return;
+            }
+            vibe.vibrate(PATTERN, -1);
+            speakCurrentContact(true);
         }
-        // Keep going if the entry doesn't have a name
-        String name = managedCursor.getString(NAME);
-        if (name == null) {
-            nextContact();
-            return;
-        }
-        vibe.vibrate(PATTERN, -1);
-        speakCurrentContact(true);
     }
 
     private void prevContact() {
         currentString = "";
-        boolean moveSucceeded = managedCursor.moveToPrevious();
-        if (!moveSucceeded) {
-            managedCursor.moveToLast();
+        // Make sure we don't try to act on an empty table
+        if (managedCursor.getCount() > 0) {
+            boolean moveSucceeded = managedCursor.moveToPrevious();
+            if (!moveSucceeded) {
+                managedCursor.moveToLast();
+            }
+            // Keep going if the entry doesn't have a name
+            String name = managedCursor.getString(NAME);
+            if (name == null) {
+                prevContact();
+                return;
+            }
+            vibe.vibrate(PATTERN, -1);
+            speakCurrentContact(true);
         }
-        // Keep going if the entry doesn't have a name
-        String name = managedCursor.getString(NAME);
-        if (name == null) {
-            prevContact();
-            return;
-        }
-        vibe.vibrate(PATTERN, -1);
-        speakCurrentContact(true);
     }
 
     private void jumpToFirstFilteredResult() {
         ContactEntry entry = filteredContacts.next();
         if (entry == null) {
-            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
             if (currentString.length() > 0) {
                 currentString = currentString.substring(0, currentString.length() - 1);
                 if (currentString.length() > 0) {
@@ -359,12 +379,13 @@ public class ContactsView extends TextView {
 
     private void dialActionHandler() {
         if (!confirmed) {
-            if(currentContact.length() != 0) {
+            if (currentContact.length() != 0) {
                 parent.tts.speak(parent.getString(R.string.you_are_about_to_dial), 0, null);
                 speakCurrentContact(false);
-                confirmed = true;   
+                confirmed = true;
             } else {
-                parent.tts.speak(parent.getString(R.string.invalid_contact), 0, null);
+                // If the user attempts to dial with no contact selected, switch to dialing view.
+                parent.switchToDialingView();
             }
         } else {
             parent.returnResults(managedCursor.getString(NUMBER));
@@ -384,11 +405,7 @@ public class ContactsView extends TextView {
                 currentString = "";
                 return true;
             case KeyEvent.KEYCODE_ENTER:
-                dialActionHandler();
-                return true;
             case KeyEvent.KEYCODE_SEARCH:
-                dialActionHandler();
-                return true;
             case KeyEvent.KEYCODE_CALL:
                 dialActionHandler();
                 return true;
@@ -528,7 +545,7 @@ public class ContactsView extends TextView {
         currentWheel = NONE;
         currentCharacter = "";
     }
-
+    
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -536,13 +553,17 @@ public class ContactsView extends TextView {
         float y = event.getY();
 
         // Treat the screen as a dpad
-        if (action == 261) { // 261 == ACTION_POINTER_2_DOWN - using number for Android 1.6 compat
+        if (action == 261) { // 261 == ACTION_POINTER_2_DOWN - using number for
+                             // Android 1.6 compat
+            removeCallbacks(longPress);
             inDPadMode = true;
             screenIsBeingTouched = false;
             p2DownX = getX(event, 1);
             p2DownY = getY(event, 1);
             vibe.vibrate(PATTERN, -1);
-        } else if (action == 262) { // 262 == MotionEvent.ACTION_POINTER_2_UP - using number for Android 1.6 compat
+            invalidate();
+        } else if (action == 262) { // 262 == MotionEvent.ACTION_POINTER_2_UP -
+                                    // using number for Android 1.6 compat
             float p2DeltaX = getX(event, 1) - p2DownX;
             float p2DeltaY = getY(event, 1) - p2DownY;
             if (Math.abs(p2DeltaX) > Math.abs(p2DeltaY)) {
@@ -560,12 +581,19 @@ public class ContactsView extends TextView {
 
         if (action == MotionEvent.ACTION_DOWN) {
             initiateMotion(x, y);
+            if (longPress == null) {
+                longPress = new LongPressDetector();
+            }
+            postDelayed(longPress, LONG_PRESS_THRESHOLD);
             return true;
         } else if (action == MotionEvent.ACTION_UP) {
             if (inDPadMode == false) {
                 confirmEntry();
             } else {
                 inDPadMode = false;
+            }
+            if (longPress != null) {
+                removeCallbacks(longPress);
             }
             return true;
         } else {
@@ -585,6 +613,10 @@ public class ContactsView extends TextView {
                 if (currentValue != 5) {
                     if (currentWheel == NONE) {
                         currentWheel = getWheel(currentValue);
+                        // User has entered a wheel so invalidate the long press callback.
+                        if (longPress != null) {
+                            removeCallbacks(longPress);
+                        }
                     }
                     currentCharacter = getCharacter(currentWheel, currentValue);
                 } else {
@@ -593,21 +625,21 @@ public class ContactsView extends TextView {
                 invalidate();
                 if (prevVal != currentValue) {
                     if (currentCharacter.equals("")) {
-                      parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
+                        parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
                     } else {
-                      if (currentCharacter.equals(".")) {
-                        parent.tts.speak(parent.getString(R.string.period), 0, null);
-                      } else if (currentCharacter.equals("!")) {
-                        parent.tts.speak(parent.getString(R.string.exclamation_point), 0, null);
-                      } else if (currentCharacter.equals("?")) {
-                        parent.tts.speak(parent.getString(R.string.question_mark), 0, null);
-                      } else if (currentCharacter.equals(",")) {
-                        parent.tts.speak(parent.getString(R.string.comma), 0, null);
-                      } else if (currentCharacter.equals("<-")) {
-                        parent.tts.speak(parent.getString(R.string.backspace), 0, null);
-                      } else {
-                        parent.tts.speak(currentCharacter, 0, null);
-                      }
+                        if (currentCharacter.equals(".")) {
+                            parent.tts.speak(parent.getString(R.string.period), 0, null);
+                        } else if (currentCharacter.equals("!")) {
+                            parent.tts.speak(parent.getString(R.string.exclamation_point), 0, null);
+                        } else if (currentCharacter.equals("?")) {
+                            parent.tts.speak(parent.getString(R.string.question_mark), 0, null);
+                        } else if (currentCharacter.equals(",")) {
+                            parent.tts.speak(parent.getString(R.string.comma), 0, null);
+                        } else if (currentCharacter.equals("<-")) {
+                            parent.tts.speak(parent.getString(R.string.backspace), 0, null);
+                        } else {
+                            parent.tts.speak(currentCharacter, 0, null);
+                        }
                     }
                 }
                 vibe.vibrate(PATTERN, -1);
@@ -931,21 +963,33 @@ public class ContactsView extends TextView {
         if (currentString.length() > 0) {
             deletedCharacter = "" + currentString.charAt(currentString.length() - 1);
             currentString = currentString.substring(0, currentString.length() - 1);
-        }
-        if (!deletedCharacter.equals("")) {
-            // parent.tts.speak(deletedCharacter + " deleted.", 0, null);
-            // parent.tts.speak(deletedCharacter, 0, new String[]
-            // {TTSParams.VOICE_ROBOT.toString()});
+            if (currentString.length() > 0) {
+                filteredContacts.filter(currentString);
+                jumpToFirstFilteredResult();
+            } else {
+                resetContactList();
+            }
         } else {
-            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 0, null);
-            parent.tts.playEarcon(TTSEarcon.TOCK.toString(), 1, null);
-        }
-        if (currentString.length() > 0) {
-            filteredContacts.filter(currentString);
-            jumpToFirstFilteredResult();
-        } else {
-            resetContactList();
+            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
+            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 1, null);
         }
         invalidate();
+    }
+    
+    public void displayContactDetails() {
+        if (!managedCursor.isAfterLast()) {
+            parent.tts.speak(parent.getString(R.string.load_detail) + managedCursor.getString(NAME),
+                    TextToSpeech.QUEUE_FLUSH, null);
+            String uri = parent.getString(R.string.people_uri) + managedCursor.getString(PERSON_ID);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri)); 
+            parent.startActivity(intent);
+        }
+    }
+    
+    private class LongPressDetector implements Runnable {
+        public void run() {
+            invalidate();
+            displayContactDetails();
+        }
     }
 }

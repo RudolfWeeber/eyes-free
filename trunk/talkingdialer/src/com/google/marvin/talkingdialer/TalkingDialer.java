@@ -19,7 +19,6 @@ package com.google.marvin.talkingdialer;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 
 /**
  * Talking dialer for eyes-free dialing
@@ -29,15 +28,6 @@ import android.os.Bundle;
 public class TalkingDialer extends Activity {
 
     private final int reqCode = 1;
-
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        //setContentView(R.layout.main);
-        //Intent intent = new Intent(this, SlideDial.class);
-        //startActivityForResult(intent, reqCode);
-    }
 
     @Override
     public void onResume() {
