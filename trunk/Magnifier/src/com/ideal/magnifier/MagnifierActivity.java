@@ -18,11 +18,12 @@ package com.ideal.magnifier;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnCancelListener;
 import android.hardware.Camera;
+import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,8 +33,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.SurfaceHolder.Callback;
+import android.view.SurfaceView;
 import android.widget.LinearLayout;
 
 import java.io.IOException;
@@ -46,14 +47,62 @@ import java.util.List;
  * blurry, just tap the screen and it will refocus.
  */
 public class MagnifierActivity extends Activity implements Callback {
-    private SurfaceHolder mHolder;
 
-    private MagnificationView mPreview;
+    /**
+     * The user interaction cool down period in milliseconds. The camera's
+     * autoFocus method is invoked after this delay if no further user
+     * interactions occur.
+     */
+    public static final long FOCUS_INTERACTION_TIMEOUT_THRESHOLD = 750;
 
+    /**
+     * Runnable used to defer camera focusing until user interaction has stopped
+     * for FOCUS_INTERACTION_TIMEOUT_THRESHOLD milliseconds.
+     */
+    private Runnable mFocuserLocked;
+
+    /**
+     * A flag indicating whether the camera is currently performing an
+     * auto-focus operation.
+     */
+    private boolean mCameraFocusing = false;
+
+    /**
+     * A flag indicating whether or not a user interaction occurred during the
+     * last camera focus event. Used to defer updating of camera parameters
+     * until the focus operation completes.
+     */
+    private boolean mParameterSettingDeferred = false;
+
+    /**
+     * The set of camera parameters to be applied after a focus operation
+     * completes.
+     */
+    private Parameters mDeferredParameters = null;
+
+    /**
+     * Surface used to project the camera preview.
+     */
+    private SurfaceHolder mHolder = null;
+
+    /**
+     * Abstracted SurfaceView used to further magnify the camera preview frames.
+     */
+    private MagnificationView mPreview = null;
+
+    /**
+     * The system's camera hardware
+     */
     private Camera mCamera;
 
+    /**
+     * The current zoom level
+     */
     private int mZoom = 0;
 
+    /**
+     * Flag indicating the current state of the camera flash LED.
+     */
     private boolean mTorch = false;
 
     // This class lies about our actual screen size, thus giving us a 2x digital
@@ -66,6 +115,8 @@ public class MagnifierActivity extends Activity implements Callback {
 
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            // TODO: This method miscalculates the dimensions of the projected
+            // screen, causing a horizontal stretch effect.
             Display display = getWindowManager().getDefaultDisplay();
             int width = display.getWidth();
             int height = display.getHeight();
@@ -84,9 +135,34 @@ public class MagnifierActivity extends Activity implements Callback {
         mPreview = new MagnificationView(this);
         LinearLayout rootView = (LinearLayout) findViewById(R.id.rootView);
         rootView.addView(mPreview);
+        mPreview.setKeepScreenOn(true);
         mHolder = mPreview.getHolder();
         mHolder.addCallback(this);
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        mFocuserLocked = new Runnable() {
+            @Override
+            public void run() {
+                // This Runnable will focus the camera, and guarantee that calls
+                // to Camera.autoFocus are synchronous.
+                if (mCamera != null && !mCameraFocusing) {
+                    mCameraFocusing = true;
+                    mCamera.autoFocus(new AutoFocusCallback() {
+                        @Override
+                        public void onAutoFocus(boolean success, Camera camera) {
+                            mCameraFocusing = false;
+                            if (mParameterSettingDeferred) {
+                                // The user attempted to change a camera
+                                // parameter during the focus event, set the
+                                // parameters again so the user's change
+                                // takes effect.
+                                setParams(mDeferredParameters);
+                                mParameterSettingDeferred = false;
+                            }
+                        }
+                    });
+                }
+            }
+        };
     }
 
     @Override
@@ -128,21 +204,22 @@ public class MagnifierActivity extends Activity implements Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mCamera != null) {
-            mCamera.autoFocus(null);
-        }
+        mFocuserLocked.run();
         return super.onTouchEvent(event);
     }
 
     private void setParams(Parameters params) {
-        try {
+        // Setting the parameters of the camera is only a safe operation if the
+        // camera is not presently focusing. Only focus the camera after the
+        // user interaction has quieted down, verified by a delay period.
+        mPreview.removeCallbacks(mFocuserLocked);
+        if (!mCameraFocusing) {
             mCamera.setParameters(params);
-            mCamera.autoFocus(null);
-        } catch (RuntimeException e) {
-            // Do nothing - sometimes the hardware seems to just be too slow.
-            // Catching this exception will at least prevent a force close - the
-            // user will just have to repeat the action.
+        } else {
+            mParameterSettingDeferred = true;
+            mDeferredParameters = params;
         }
+        mPreview.postDelayed(mFocuserLocked, FOCUS_INTERACTION_TIMEOUT_THRESHOLD);
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
@@ -183,7 +260,7 @@ public class MagnifierActivity extends Activity implements Callback {
         effects = effectsList.toArray(effects);
         final String[] items = effects;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Color Effect");
+        builder.setTitle(getString(R.string.color_effect_dialog_title));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 Parameters params = mCamera.getParameters();
@@ -191,12 +268,7 @@ public class MagnifierActivity extends Activity implements Callback {
                 setParams(params);
             }
         });
-        AlertDialog alert = builder.create();
-        alert.show();
-        alert.setOnCancelListener(new OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {
-            }
-        });
+        builder.create().show();
     }
 
     @Override
@@ -207,15 +279,19 @@ public class MagnifierActivity extends Activity implements Callback {
         // id -- Used only when you want to handle and identify the click
         // yourself.
         // title
-        menu.add(0, 0, 0, "Choose color effect").setIcon(android.R.drawable.ic_menu_manage);
-        menu.add(0, 1, 0, "More apps").setIcon(android.R.drawable.ic_menu_search);
+        menu.add(0, 0, 0, getString(R.string.color_effect_button_text)).setIcon(
+                android.R.drawable.ic_menu_manage);
+        menu.add(0, 1, 0, getString(R.string.more_apps_button_text)).setIcon(
+                android.R.drawable.ic_menu_search);
         return true;
     }
-
-    // Activity callback that lets your handle the selection in the class.
-    // Return true to indicate that you've got it, false to indicate
-    // that it should be handled by a declared handler object for that
-    // item (handler objects are discouraged for reasons of efficiency).
+    
+    /**
+     * Activity callback that lets your handle the selection in the class.
+     * Return true to indicate that you've got it, false to indicate that it
+     * should be handled by a declared handler object for that item (handler
+     * objects are discouraged for reasons of efficiency).
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -223,10 +299,19 @@ public class MagnifierActivity extends Activity implements Callback {
                 showEffectsList();
                 return true;
             case 1:
-                String marketUrl = "market://search?q=pub:\"IDEAL Group, Inc. Android Development Team\"";
+                String marketUrl = 
+                    "market://search?q=pub:\"IDEAL Group, Inc. Android Development Team\"";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(marketUrl));
-                startActivity(i);
+                try {
+                    startActivity(i);
+                } catch (ActivityNotFoundException anf) {
+                    new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.market_launch_error_title))
+                            .setMessage(getString(R.string.market_launch_error_text))
+                            .setNeutralButton(getString(R.string.market_launch_error_button), null)
+                            .show();
+                }
                 return true;
         }
         return false;
