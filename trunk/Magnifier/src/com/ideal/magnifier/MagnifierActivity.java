@@ -22,12 +22,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -102,13 +102,25 @@ public class MagnifierActivity extends Activity implements Callback {
     private int mZoom = 0;
 
     /**
+     * The current camera mode
+     */
+    private String mCameraMode = null;
+    
+    /**
      * Flag indicating the current state of the camera flash LED.
      */
     private boolean mTorch = false;
 
-    // This class lies about our actual screen size, thus giving us a 2x digital
-    // zoom to start with even before we invoke the hardware zoom features of
-    // the camera.
+    /**
+     * The Preferences in which we store the last application state.
+     */
+    private SharedPreferences mPrefs = null;
+
+    /**
+     * This class lies about our actual screen size, thus giving us a 2x digital
+     * zoom to start with even before we invoke the hardware zoom features of
+     * the camera.
+     */
     public class MagnificationView extends SurfaceView {
         public MagnificationView(Context context) {
             super(context);
@@ -244,7 +256,7 @@ public class MagnifierActivity extends Activity implements Callback {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+	}
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         mCamera.stopPreview();
@@ -262,9 +274,15 @@ public class MagnifierActivity extends Activity implements Callback {
         // (such as the Motorola Droid), this will cause the parameters to not
         // actually change/may lead to an ANR on a subsequent set attempt.
         Parameters params = mCamera.getParameters();
-        mZoom = params.getMaxZoom() / 2;
         
+        // Reload the previous state from the stored preferences.
+		mPrefs = getSharedPreferences(getString(R.string.app_name), 0);
+		mZoom = mPrefs.getInt(getString(R.string.zoom_level_pref),
+				mCamera.getParameters().getMaxZoom() / 2);
+		mCameraMode = mPrefs.getString(getString(R.string.camera_mode_pref),
+				mCamera.getParameters().getSupportedColorEffects().get(0));
         params.setZoom(mZoom);
+        params.setColorEffect(mCameraMode);
         setParams(params);
     }
 
@@ -284,6 +302,7 @@ public class MagnifierActivity extends Activity implements Callback {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 Parameters params = mCamera.getParameters();
+                mCameraMode = items[item];
                 params.setColorEffect(items[item]);
                 setParams(params);
             }
@@ -335,5 +354,18 @@ public class MagnifierActivity extends Activity implements Callback {
                 return true;
         }
         return false;
+    }
+    
+    /**
+     * Save the state of the application as it loses focus.
+     */
+    @Override
+    public void onPause() {
+    	super.onPause();
+
+    	SharedPreferences.Editor editor = mPrefs.edit();
+    	editor.putInt(getString(R.string.zoom_level_pref), mZoom);
+    	editor.putString(getString(R.string.camera_mode_pref), mCameraMode);
+    	editor.commit();
     }
 }
