@@ -121,8 +121,8 @@ public class MagnifierActivity extends Activity implements Callback {
             Display display = getWindowManager().getDefaultDisplay();
             int width = display.getWidth();
             int height = display.getHeight();
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);            
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);            
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
