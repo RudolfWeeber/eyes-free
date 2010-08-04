@@ -27,6 +27,7 @@ import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -120,8 +121,8 @@ public class MagnifierActivity extends Activity implements Callback {
             Display display = getWindowManager().getDefaultDisplay();
             int width = display.getWidth();
             int height = display.getHeight();
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);            
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
@@ -214,6 +215,20 @@ public class MagnifierActivity extends Activity implements Callback {
         // user interaction has quieted down, verified by a delay period.
         mPreview.removeCallbacks(mFocuserLocked);
         if (!mCameraFocusing) {
+            // On some phones such as the Motorola Droid, the preview needs to
+            // be stopped and then restarted.
+            // Failing to do so will result in an ANR (application not
+            // responding) error.
+            //
+            // TODO: Check if it is possible to detect when a restart is needed
+            // by checking isSmoothZoomSupported in the Camera Parameters.
+            //
+            // Nexus One: False (does not need a restart)
+            // Motorola Droid: True (must have preview restarted)
+            //             
+            // Log.e("smooth zoom?", params.isSmoothZoomSupported() + "");
+            mCamera.stopPreview();
+            mCamera.startPreview();
             mCamera.setParameters(params);
         } else {
             mParameterSettingDeferred = true;
@@ -240,12 +255,17 @@ public class MagnifierActivity extends Activity implements Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         mHolder.setFixedSize(w, h);
 
+        mCamera.startPreview();
+
+        // Note: Parameters are not safe to set until AFTER the preview is up.
+        // One some phones, it is OK (such as the Nexus One), but on others,
+        // (such as the Motorola Droid), this will cause the parameters to not
+        // actually change/may lead to an ANR on a subsequent set attempt.
         Parameters params = mCamera.getParameters();
         mZoom = params.getMaxZoom() / 2;
+        
         params.setZoom(mZoom);
         setParams(params);
-
-        mCamera.startPreview();
     }
 
     public void showEffectsList() {
