@@ -19,12 +19,12 @@ package com.google.marvin.shell;
 import com.google.marvin.shell.ShakeDetector.ShakeListener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -269,7 +269,7 @@ public class AppLauncherView extends TextView {
             nextApp();
         }
     }
-    
+
     public void resetListState() {
         appListIndex = 0;
         currentString = "";
@@ -293,7 +293,7 @@ public class AppLauncherView extends TextView {
         appListIndex = 0;
         currentString = "";
     }
-    
+
     public void removeMatchingApplications(AppEntry app) {
         synchronized (appList) {
             for (int i = 0; i < appList.size(); ++i) {
@@ -347,10 +347,9 @@ public class AppLauncherView extends TextView {
                                 Thread.sleep(3000);
                                 if ((backKeyTimeDown > 0)
                                         && (System.currentTimeMillis() - backKeyTimeDown > 2500)) {
-                                    AppEntry regularHome = new AppEntry(null,
-                                            "com.android.launcher",
-                                            "com.android.launcher.Launcher", "", null, null);
-                                    parent.launchApplication(regularHome);
+                                    Intent systemHomeIntent = HomeLauncher
+                                            .getSystemHomeIntent(parent);
+                                    parent.startActivity(systemHomeIntent);
                                     parent.finish();
                                 }
                             } catch (InterruptedException e) {
@@ -374,7 +373,7 @@ public class AppLauncherView extends TextView {
         }
         return false;
     }
-    
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         switch (keyCode) {
@@ -438,7 +437,7 @@ public class AppLauncherView extends TextView {
 
         // Treat the screen as a dpad
         if (action == 261) { // 261 == ACTION_POINTER_2_DOWN - using number for
-                             // Android 1.6 compat
+            // Android 1.6 compat
             // Track the starting location of the second touch point.
             inDPadMode = false;
             gestureHadSecondPoint = true;
@@ -449,7 +448,7 @@ public class AppLauncherView extends TextView {
             vibe.vibrate(PATTERN, -1);
             invalidate();
         } else if (action == 262) { // 262 == MotionEvent.ACTION_POINTER_2_UP -
-                                    // using number for Android 1.6 compat
+            // using number for Android 1.6 compat
             // Second touch point has lifted, so process the gesture
             float p2DeltaX = getX(event, 1) - p2DownX;
             float p2DeltaY = getY(event, 1) - p2DownY;

@@ -32,7 +32,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.DialogInterface.OnClickListener;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
@@ -59,7 +58,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -207,47 +205,53 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
         // Receive notifications for app installations and removals
         appChangeReceiver = new BroadcastReceiver() {
-          @Override
-          public void onReceive(Context context, Intent intent) {
-            // Obtain the package name of the changed application and create an Intent
-            String packageName = intent.getData().getSchemeSpecificPart();
-            if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
-              // Since the application is being removed, we can no longer access its PackageInfo object.
-              // Creating AppEntry object without one is acceptable because matching can be done by package name.
-              AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
-              appLauncherView.removeMatchingApplications(targetApp);
-              tts.speak(getString(R.string.applist_reload), 0, null);
-              
-            } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
-              
-              // Remove all entries in the app list with a package matching this one.
-              AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
-              appLauncherView.removeMatchingApplications(targetApp);
-              
-              // Create intent filter to obtain only launchable activities within the given package.
-              Intent targetIntent = new Intent(Intent.ACTION_MAIN, null);
-              targetIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-              targetIntent.setPackage(packageName);
-              
-              // For every launchable activity in the installed package, add it to the app list.
-              for (ResolveInfo info : pm.queryIntentActivities(targetIntent, 0)) {
-                String title = info.loadLabel(pm).toString();
-                if (title.length() == 0) {
-                  title = info.activityInfo.name.toString();
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                // Obtain the package name of the changed application and create
+                // an Intent
+                String packageName = intent.getData().getSchemeSpecificPart();
+                if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
+                    // Since the application is being removed, we can no longer
+                    // access its PackageInfo object.
+                    // Creating AppEntry object without one is acceptable
+                    // because matching can be done by package name.
+                    AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
+                    appLauncherView.removeMatchingApplications(targetApp);
+                    tts.speak(getString(R.string.applist_reload), 0, null);
+
+                } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
+
+                    // Remove all entries in the app list with a package
+                    // matching this one.
+                    AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
+                    appLauncherView.removeMatchingApplications(targetApp);
+
+                    // Create intent filter to obtain only launchable activities
+                    // within the given package.
+                    Intent targetIntent = new Intent(Intent.ACTION_MAIN, null);
+                    targetIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    targetIntent.setPackage(packageName);
+
+                    // For every launchable activity in the installed package,
+                    // add it to the app list.
+                    for (ResolveInfo info : pm.queryIntentActivities(targetIntent, 0)) {
+                        String title = info.loadLabel(pm).toString();
+                        if (title.length() == 0) {
+                            title = info.activityInfo.name.toString();
+                        }
+                        targetApp = new AppEntry(title, info, null);
+
+                        appLauncherView.addApplication(targetApp);
+                    }
+                    tts.speak(getString(R.string.applist_reload), 0, null);
                 }
-                targetApp = new AppEntry(title, info, null);
-                
-                appLauncherView.addApplication(targetApp);
-              }
-              tts.speak(getString(R.string.applist_reload), 0, null);
-            }           
-          }
+            }
         };
         IntentFilter appChangeFilter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
         appChangeFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         appChangeFilter.addDataScheme("package");
         registerReceiver(appChangeReceiver, appChangeFilter);
-               
+
         // Watch for voicemails
         TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(new PhoneStateListener() {
@@ -255,12 +259,13 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             public void onMessageWaitingIndicatorChanged(boolean mwi) {
                 messageWaiting = mwi;
             }
-            
+
             @Override
-            public void onCallStateChanged(int state, String incomingNumber){
+            public void onCallStateChanged(int state, String incomingNumber) {
                 currentCallState = state;
             }
-        }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR | PhoneStateListener.LISTEN_CALL_STATE);
+        }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR
+                | PhoneStateListener.LISTEN_CALL_STATE);
         voiceMailNumber = PhoneNumberUtils.extractNetworkPortion(tm.getVoiceMailNumber());
 
         // Receive notifications about the screen power changes
@@ -427,10 +432,10 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         }
         if (screenStateChangeReceiver != null && launchSuccessful == true) {
             try {
-              unregisterReceiver(screenStateChangeReceiver);
+                unregisterReceiver(screenStateChangeReceiver);
             } catch (IllegalArgumentException e) {
-                // Sometimes there may be 2 shutdown requests in which case, the 2nd
-                // request will fail
+                // Sometimes there may be 2 shutdown requests in which case, the
+                // 2nd request will fail
             }
         }
     }
@@ -582,10 +587,9 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                                 Thread.sleep(3000);
                                 if ((backKeyTimeDown > 0)
                                         && (System.currentTimeMillis() - backKeyTimeDown > 2500)) {
-                                    AppEntry regularHome = new AppEntry(null,
-                                            "com.android.launcher",
-                                            "com.android.launcher.Launcher", "", null, null);
-                                    launchApplication(regularHome);
+                                    Intent systemHomeIntent = HomeLauncher
+                                            .getSystemHomeIntent(self);
+                                    startActivity(systemHomeIntent);
                                     shutdown();
                                     finish();
                                 }

@@ -18,6 +18,7 @@ package com.google.marvin.shell;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -49,11 +50,20 @@ public class HomeLauncher extends Activity {
         super.onCreate(savedInstanceState);
         self = this;
 
-        homeIntent = new Intent("android.intent.action.MAIN");
+        homeIntent = getSystemHomeIntent(this);
+        if (isScreenReaderActive()) {
+            homeIntent = new Intent(self, MarvinShell.class);
+        }
+        startActivity(homeIntent);
+        finish();
+    }
+    
+    public static Intent getSystemHomeIntent(Context ctx){
+        Intent homeIntent = new Intent("android.intent.action.MAIN");
         homeIntent.addCategory("android.intent.category.HOME");
 
         ResolveInfo[] homeAppsArray = new ResolveInfo[0];
-        PackageManager pm = getPackageManager();
+        PackageManager pm = ctx.getPackageManager();
         homeAppsArray = pm.queryIntentActivities(homeIntent, 0).toArray(homeAppsArray);
 
         for (int i = 0; i < homeAppsArray.length; i++) {
@@ -64,11 +74,7 @@ public class HomeLauncher extends Activity {
                 break;
             }
         }
-        if (isScreenReaderActive()) {
-            homeIntent = new Intent(self, MarvinShell.class);
-        }
-        startActivity(homeIntent);
-        finish();
+        return homeIntent;
     }
 
     private boolean isScreenReaderActive() {
