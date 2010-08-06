@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- NOTIFICATIONS -->
+
+    <string name="notification_type_text_message">Mitteilung</string>
+
+    <string name="notification_type_failed_text_message">Mitteilung konnte nicht gesendet werden</string>
+
+    <string name="notification_type_missed_call">Entgangener Anruf</string>
+
+    <string name="notification_type_usb_connected">USB verbunden</string>
+
+    <string name="notification_type_status_mute">Ton aus</string>
+
+    <string name="notification_type_status_chat">Chat</string>
+
+    <string name="notification_type_status_error">Fehler</string>
+
+    <string name="notification_type_status_more">Mehr</string>
+
+    <string name="notification_type_status_sdcard">SD Karte</string>
+
+    <string name="notification_type_status_sdcard_usb">SD Karte USB</string>
+
+    <string name="notification_status_sync">Synchronisierung</string>
+
+    <string name="notification_type_status_sync_noanim">Synchronisation</string>
+
+    <string name="notification_type_status_voicemail">Mailbox</string>
+
+    <string name="notification_status_play">Spielen</string>
+
+    <string name="notification_type_status_notification">Statusmeldung</string>
+
+    <!-- TEMPLATES -->
+
+    <!-- %1$s - The title of a check box/radio button; -->
+    <string name="template_compound_button_checked">%1$s aktiviert</string>
+
+    <!-- %1$s - The title of a check box/ radio button; -->
+    <string name="template_compound_button_not_checked">%1$s nicht aktiviert</string>
+
+    <!-- %1$s - The text content of an edit box; -->
+    <string name="template_edit_box">Eingabefeld. %1$s</string>
+
+    <!-- %1$s - The text content of a search box; -->
+    <string name="template_search_box">Suchfeld. %1$s</string>
+
+    <!-- %1$s - The text content of an alert/pop up message; -->
+    <string name="template_alert_dialog_template">%1$s Dialog</string>
+
+    <!-- %1$s - The replaced text; %2$s - The replacement text; -->
+    <string name="temlate_text_replaced">%1$s ersetzt durch %2$s</string>
+
+    <!-- %1$s - The count of replaced characters; %2$s - The count of replacement characters; (used for password fields) -->
+    <string name="template_replaced_characters">%1$s Zeichen ersetzt durch %2$s characters</string>
+
+    <!-- %1$s - The ringer volume in percent;-->
+    <string name="template_ringer_volume">Klingel-Lautstärke 1$s Prozent.</string>
+
+    <!-- VALUES -->
+
+    <string name="value_password">Kennwort</string>
+
+    <string name="value_sliding_drawer_opened">Sliding drawer geöffnet</string>
+
+    <string name="value_handle_view">Sliding drawer handle</string>
+
+    <string name="value_input_method_shown">Eingabemethode</string>
+
+    <string name="value_status_bar_opened">Statusbereich</string>
+
+    <string name="value_options_menu_open">Optionen.</string>
+
+    <string name="value_text_removed">gelöscht</string>
+
+    <string name="value_notification_summary">Zusammenfassung der Meldungen</string>
+
+    <string name="value_checked">aktiviert</string>
+
+    <string name="value_not_checked">nicht aktiviert</string>
+
+    <string name="value_clicked">gedruckt</string>
+
+    <string name="value_ringer_vibrate">Klingel vibrierend.</string>
+
+    <string name="value_ringer_silent">Klingel stumm.</string>
+
+    <string name="value_ringer_normal">Klingel normal.</string>
+
+    <string name="value_screen_on">Bildschirm aktiv.</string>
+
+    <string name="value_screen_off">Bildschirm inaktiv.</string>
+
+    <string name="value_phone_unlocked">Telefon entsperrt.</string>
+
+    <!-- PERMISSIONS -->
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack">Sende Befehle direkt an TalkBack</string>
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Erlaubt einer Anwendung oder einem Dienst, Talkback mittels Broadcast Intents anzusteuern und eventuell Informationen über den TalkBack Status, z.B. Meldungen im Cache zu bekommen.</string>
+
+</resources>

@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -17,35 +17,53 @@
 package com.google.android.marvin.talkback;
 
 import com.google.android.marvin.talkback.ProximitySensor.ProximityChangeListener;
+import com.google.tts.TextToSpeechBeta;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.ActivityManager;
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.EditText;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * {@link AccessibilityService} that provides spoken feedback.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  * @author clchen@google.com (Charles L. Chen)
  */
@@ -70,14 +88,14 @@ public class TalkBackService extends AccessibilityService {
 
     /**
      * Result that TalkBack is enabled.
-     * 
+     *
      * @see #ACTION_QUERY_TALKBACK_ENABLED_COMMAND
      */
     public static final int RESULT_TALKBACK_ENABLED = 0x00000001;
 
     /**
      * Result that TalkBack is disabled.
-     * 
+     *
      * @see #ACTION_QUERY_TALKBACK_ENABLED_COMMAND
      */
     public static final int RESULT_TALKBACK_DISABLED = 0x00000002;
@@ -123,6 +141,11 @@ public class TalkBackService extends AccessibilityService {
     private static final String CLASS_NAME_IN_CALL_SCREEN = "com.android.phone.InCallScreen";
 
     /**
+     * The package name of the Accessibility Settings Manager
+     */
+    private static final String SETTINGS_MANAGER_PACKAGE = "com.google.android.marvin.asm";
+
+    /**
      * Speak action.
      */
     private static final int WHAT_SPEAK = 1;
@@ -146,6 +169,11 @@ public class TalkBackService extends AccessibilityService {
      * Stop the TTS service.
      */
     private static final int WHAT_SHUTDOWN_TTS = 5;
+
+    /**
+     * Switch TTS systems (from or to TTS Extended).
+     */
+    private static final int WHAT_SWITCH_TTS = 6;
 
     /**
      * Space string constant.
@@ -184,6 +212,12 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
+
+     * Notification ID for the "TalkBack Crash Report" notification
+     */
+    private static final int CRASH_NOTIFICTION_ID = 2;
+    
+    /**
      * Queuing mode - undefined.
      */
     public static final int QUEUING_MODE_UNDEFINED = 0;
@@ -204,9 +238,69 @@ public class TalkBackService extends AccessibilityService {
     private static final int EVENT_QUEUE_MAX_SIZE = 2;
 
     /**
+     * Ringer preference - speak at all ringer volumes.
+     */
+    public static final int PREF_RINGER_ALL = 0;
+
+    /**
+     * Ringer preference - speak unless silent mode.
+     */
+    public static final int PREF_RINGER_NOT_SILENT = 1;
+
+    /**
+     * Ringer preference - speak unless silent or vibrate mode.
+     */
+    public static final int PREF_RINGER_NOT_SILENT_OR_VIBRATE = 2;
+
+    /**
+     * Ringer preference - default.
+     */
+    public static final int PREF_RINGER_DEFAULT = PREF_RINGER_ALL;
+
+    /**
+     * Screen preference - allow speech when screen is off.
+     */
+    public static final int PREF_SCREEN_OFF_ALLOWED = 0;
+
+    /**
+     * Screen preference - do not allow speech when screen is off.
+     */
+    public static final int PREF_SCREEN_OFF_DISALLOWED = 1;
+
+    /**
+     * Screen preference - default.
+     */
+    public static final int PREF_SCREEN_DEFAULT = PREF_SCREEN_OFF_ALLOWED;
+
+    /**
+     * Caller ID preference - default.
+     */
+    public static final boolean PREF_CALLER_ID_DEFAULT = true;
+
+    /**
+     * TTS Extended preference - default.
+     */
+    public static final boolean PREF_TTS_EXTENDED_DEFAULT = false;
+    
+    /**
+     * Proximity Sensor preference - default.
+     */
+    public static final boolean PREF_PROXIMITY_DEFAULT = true;
+    
+    /**
+     * Period for the proximity sensor to remain active after last utterance (in milliseconds).
+     */
+    public static final long PROXIMITY_SENSOR_CUTOFF_THRESHOLD = 1000;
+    
+    /**
      * Flag if the infrastructure has been initialized.
      */
-    static boolean mInfrastructureInitialized;
+    private static boolean sInfrastructureInitialized = false;
+    
+    /**
+     * Flag if the TTS service has been initialized.
+     */
+    private static boolean sTtsInitialized = false;
 
     /**
      * We keep the accessibility events to be processed. If a received event is
@@ -222,14 +316,34 @@ public class TalkBackService extends AccessibilityService {
     private final HashMap<String, String> mSpeechParamtersMap = new HashMap<String, String>();
 
     /**
+     * Listeners interested in the TalkBack initialization state.
+     */
+    private final ArrayList<InfrastructureStateListener> mInfrastructureStateListeners = new ArrayList<InfrastructureStateListener>();
+
+    /**
      * Flag if a notification is currently spoken.
      */
     private boolean mSpeakingNotification;
 
     /**
-     * The TTS engine
+     * The TTS engine. Only one of this and mTtsExtended will be non-null at a time.
      */
-    private TextToSpeech mTts;
+    private TextToSpeech mTts = null;
+
+    /**
+     * The TTS engine being initialized.
+     */
+    private TextToSpeech mTtsInitializing = null;
+
+    /**
+     * The TTS extended engine. Only one of this and mTts will be non-null at a time.
+     */
+    private TextToSpeechBeta mTtsExtended = null;
+
+    /**
+     * The TTS extended engine being initialized.
+     */
+    private TextToSpeechBeta mTtsExtendedInitializing = null;
 
     /**
      * Proximity sensor for implementing "shut up" functionality.
@@ -253,10 +367,30 @@ public class TalkBackService extends AccessibilityService {
     private AudioManager mAudioManager;
 
     /**
+     * The activity manager used for determining currently open activities.
+     */
+    private ActivityManager mActivityManager;
+
+    /**
+     * The telephony manager used to determine the call state.
+     */
+    private TelephonyManager mTelephonyManager;
+
+    /**
+     * The manager for TalkBack plug-ins.
+     */
+    private PluginManager mPluginManager;
+
+    /**
      * {@link BroadcastReceiver} for tracking the phone state.
      */
     private BroadcastReceiver mPhoneStateBroadcastReceiver;
-
+    
+    /**
+     * {@link Runnable} for processing the standby of the proximity sensor.
+     */
+    private Runnable mProximitySensorSilencer;
+    
     /**
      * The current ringer mode of the device.
      */
@@ -267,6 +401,66 @@ public class TalkBackService extends AccessibilityService {
      */
     private int mNextEventQueueMode;
 
+    /**
+     * Access to preferences.
+     */
+    SharedPreferences mPrefs;
+
+    /**
+     * Whether speech should be silenced based on the ringer mode.
+     */
+    private int mRingerPref;
+
+    /**
+     * Whether speech should be silenced based on screen status.
+     */
+    private int mScreenPref;
+
+    /**
+     * Whether Caller ID should be spoken.
+     */
+    private boolean mCallerIdPref;
+    
+    /**
+     * Whether TTS Extended should be used.
+     */
+    private boolean mTtsExtendedPref;
+
+    /**
+     * Whether to use the proximity sensor to silence speech.
+     */
+    private boolean mProximityPref;
+
+    /**
+     * The version code of the last known running version of TalkBack
+     */
+    private int mLastVersion;
+
+    /**
+     * The version code of the currently running version of TalkBack
+     */
+    private int mCurVersion;
+
+    /**
+     * Whether the screen is off.
+     */
+    private boolean mScreenIsOff;
+
+    /**
+     * The last spoken accessibility event, used for crash reporting.
+     */
+    private AccessibilityEvent mLastSpokenEvent = null;
+    
+    /**
+     * The filename used for logging crash reports.
+     */
+    private static final String TALKBACK_CRASH_LOG = "talkback_crash.log";
+
+    /**
+     * The email address that receives TalkBack crash reports.
+     */
+    private static final String[] CRASH_REPORT_EMAILS = {"eyes.free.crash.reports@gmail.com"};
+    
     /**
      * Static handle to TalkBack so CommandInterfaceBroadcastReceiver can access
      * it.
@@ -286,13 +480,39 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
+     * Returns true if TalkBack is running and initialized.
+     */
+    public static boolean isServiceInitialized() {
+        return sInfrastructureInitialized && sTtsInitialized;
+    }
+
+    /**
+     * Returns the TalkBackService instance if it's running and initialized,
+     * otherwise returns null.
+     */
+    public static TalkBackService getInstance() {
+        if (sInfrastructureInitialized) {
+            return sInstance;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return The service instance as {@link Context} if it has been
+     *         instantiated regardless if infrastructure has been initialized;
+     */
+    public static Context asContext() {
+        return sInstance;
+    }
+
+    /**
      * Shuts down the infrastructure in case it has been initialized.
      */
     private void shutdownInfrastructure() {
-        if (!mInfrastructureInitialized) {
+        if (!sInfrastructureInitialized) {
             return;
         }
-
         if (mProximitySensor != null) {
             mProximitySensor.shutdown();
         }
@@ -301,13 +521,17 @@ public class TalkBackService extends AccessibilityService {
 
         unregisterReceiver(mPhoneStateBroadcastReceiver);
 
-        mInfrastructureInitialized = false;
+        sInfrastructureInitialized = false;
+        notifyInfrastructureSteteListeners();
     }
 
     @Override
     public void onServiceConnected() {
         setServiceInfo();
         initializeInfrastructure();
+        processVersionSpecificTasks();
+        registerUncaughtExceptionHandler();
+        processCrashLog();
     }
 
     /**
@@ -327,26 +551,25 @@ public class TalkBackService extends AccessibilityService {
      * Initializes the infrastructure.
      */
     private void initializeInfrastructure() {
-
         // start the TTS service
         mSpeechHandler.obtainMessage(WHAT_START_TTS).sendToTarget();
 
         // create a speech processor for generating utterances
-        mSpeechRuleProcessor = new SpeechRuleProcessor(this, R.raw.speechstrategy);
+        mSpeechRuleProcessor = new SpeechRuleProcessor();
 
-        // create and register in a proximity sensor for stopping speech
-        mProximitySensor = new ProximitySensor(this, new ProximityChangeListener() {
-            @Override
-            public void onProximityChanged(float proximity) {
-                if (proximity == 0) {
-                    // Stop all speech if the user is touching the proximity
-                    // sensor
-                    if (mTts != null) {
-                        mSpeechHandler.obtainMessage(WHAT_STOP_ALL_SPEAKING).sendToTarget();
-                    }
-                }
-            }
-        });
+        // add speech strategy for third-party apps; later this may be loaded
+        // dynamically from another file
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_thirdparty);
+
+        // add speech strategy for specific built-in Android apps
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_apps);
+
+        // add generic speech strategy for views in any app; this should always be last
+        // so that the app-specific rules above can override the generic rules
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy);
+       
+        // Create and register in a proximity sensor for stopping speech
+        initializeProximitySensor();
 
         // Create a filter with the phone state broadcast intents we are
         // interested in
@@ -366,7 +589,281 @@ public class TalkBackService extends AccessibilityService {
         // get the ringer mode on start
         mRingerMode = mAudioManager.getRingerMode();
 
-        mInfrastructureInitialized = true;
+        // get the ActivityManager
+        mActivityManager = (ActivityManager) getSystemService(Service.ACTIVITY_SERVICE);
+
+        // get the TelephonyManager
+        mTelephonyManager = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
+
+        // instantiate the plug-in manager and load plug-ins
+        mPluginManager = new PluginManager(this, mSpeechRuleProcessor);
+        addInfrastructureSteteListener(mPluginManager);
+
+        // load preferences
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        reloadPreferences();
+
+        // write preferences in case we set anything to its default value for the first time.
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putString(getString(R.string.pref_speak_ringer_key), "" + mRingerPref);
+        prefsEditor.putString(getString(R.string.pref_speak_screenoff_key), "" + mScreenPref);
+        prefsEditor.putBoolean(getString(R.string.pref_caller_id_key), mCallerIdPref);
+        prefsEditor.putBoolean(getString(R.string.pref_tts_extended_key), mTtsExtendedPref);
+        prefsEditor.putBoolean(getString(R.string.pref_proximity_key), mProximityPref);
+        prefsEditor.commit();
+
+        mScreenIsOff = false;
+
+        sInfrastructureInitialized = true;
+        notifyInfrastructureSteteListeners();
+    }
+    
+    private void initializeProximitySensor() {
+        mProximitySensor = new ProximitySensor(this, new ProximityChangeListener() {
+            @Override
+            public void onProximityChanged(float proximity) {
+                if (proximity == 0) {
+                    // Stop all speech if the user is touching the proximity sensor
+                    if (mTts != null || mTtsExtended != null) {
+                        mSpeechHandler.obtainMessage(WHAT_STOP_ALL_SPEAKING).sendToTarget();
+                    }
+                }
+            }
+        });
+        
+        // Create a Runnable for causing the standby of the proximity sensor.
+        mProximitySensorSilencer = new Runnable() {
+            @Override
+            public void run() {
+                if (mProximitySensor != null) {
+                    mProximitySensor.standby();
+                }
+            }
+        };
+    }
+
+    /**
+     * Adds an {@link InfrastructureStateListener}.
+     */
+    public void addInfrastructureSteteListener(InfrastructureStateListener listener) {
+        mInfrastructureStateListeners.add(listener);
+    }
+
+    /**
+     * Removes an {@link InfrastructureStateListener}.
+     */
+    public void removeInfrastructureStateListener(InfrastructureStateListener listener) {
+        mInfrastructureStateListeners.remove(listener);
+    }
+ 
+     /**
+      * Version 12 (2.4.0) introduced a preference for tracking the last run
+      * version of TalkBack. This method processes one-time tasks defined to run
+      * after upgrades or installations from a specific version.
+      */
+     private void processVersionSpecificTasks() {
+         // Obtain the current and previous version numbers
+         mLastVersion = mPrefs.getInt(getString(R.string.pref_last_talkback_version), 0);
+         PackageManager packageManager = getPackageManager();
+         try {
+             mCurVersion = packageManager.getPackageInfo(getPackageName(), 0).versionCode;
+         } catch (NameNotFoundException e) {
+             // TalkBack couldn't locate it's own PackageInfo, probably not a
+             // good thing.
+             mCurVersion = 0;
+         }
+         if (mLastVersion == 0) {
+             // Display a notification about the settings activity only if
+             // the user is running version 12 or higher and did a clean install
+             // or upgraded from a version earlier than 12 and the application is
+             // not yet already installed.
+             Intent settingsManager = new Intent(Intent.ACTION_MAIN);
+             settingsManager.setPackage(SETTINGS_MANAGER_PACKAGE);
+             List<ResolveInfo> settingsManagerPresence = packageManager.queryIntentActivities(
+                     settingsManager, 0);
+             if (settingsManagerPresence == null || settingsManagerPresence.isEmpty()) {
+                 displaySettingsAvailableNotification();
+             }
+         } else {
+             // We want to track the number of times that TalkBack has started
+             // without notifying the user about the new settings activity. This
+             // will be used later to tune further announcements.
+             int notificationlessLaunches = mPrefs.getInt(
+                     getString(R.string.pref_notificationless_launches), 0);
+             SharedPreferences.Editor editor = mPrefs.edit();
+             editor.putInt(getString(R.string.pref_notificationless_launches),
+                     notificationlessLaunches + 1);
+             editor.commit();
+         }
+         if (mLastVersion != mCurVersion) {
+             SharedPreferences.Editor editor = mPrefs.edit();
+             editor.putInt(getString(R.string.pref_last_talkback_version), mCurVersion);
+             editor.commit();
+         }
+     }
+ 
+     /**
+      * Displays a notification that TalkBack now offers customizable settings by
+      * downloading the Accessibility Settings Manager application.
+      */
+    private void displaySettingsAvailableNotification() {
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Intent launchMarketIntent = new Intent(Intent.ACTION_VIEW);
+        launchMarketIntent.setData(Uri.parse(getString(R.string.settings_manager_market_uri)));
+        Notification notification = new Notification(-1,
+                getString(R.string.title_talkback_settings_availible),
+                System.currentTimeMillis());
+        notification.setLatestEventInfo(this,
+                getString(R.string.title_talkback_settings_availible),
+                getString(R.string.message_talkback_settings_availible), PendingIntent.getActivity(
+                        this, 0, launchMarketIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        notification.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONGOING_EVENT;
+    }
+    
+    /**
+     * Displays a notification that TalkBack has crashed and data can be sent to
+     * developers to help improve TalkBack.
+     */
+    private void displayCrashReportNotification(String crashReport) {
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, CRASH_REPORT_EMAILS);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject_crash_report_email));
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+                getString(R.string.header_crash_report_email) + crashReport);
+        Notification notification = new Notification(
+                -1, getString(R.string.title_talkback_crash), System.currentTimeMillis());
+        notification.setLatestEventInfo(this,
+                getString(R.string.title_talkback_crash),
+                getString(R.string.message_talkback_crash), PendingIntent.getActivity(
+                        this, 0, emailIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        nm.notify(CRASH_NOTIFICTION_ID, notification);
+
+    }
+
+    /**
+     * Notifies the {@link InfrastructureStateListener}s.
+     */
+    private void notifyInfrastructureSteteListeners() {
+        ArrayList<InfrastructureStateListener> listeners = mInfrastructureStateListeners;
+        for (int i = 0, count = listeners.size(); i < count; i++) {
+            InfrastructureStateListener listener = listeners.get(i);
+            listener.onInfrastructureStateChange(sInfrastructureInitialized);
+        }
+    }
+
+    /**
+     * Registers an uncaught exception handler for TalkBack. Causes TalkBack to
+     * store crash data before the thread terminates.
+     */
+    private void registerUncaughtExceptionHandler() {
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+            private UncaughtExceptionHandler sysUeh = Thread.getDefaultUncaughtExceptionHandler();
+            
+            @Override
+            public void uncaughtException(Thread thread, Throwable ex) {
+                String timestamp = new Date().toString();
+                String androidOsVersion = Build.VERSION.SDK_INT + " - " + Build.VERSION.INCREMENTAL;
+                String deviceInfo = Build.MANUFACTURER + ", " + Build.MODEL + ", " + Build.PRODUCT;
+                String talkBackVersion = "" + mCurVersion;
+                StringBuilder stackTrace = new StringBuilder();
+                stackTrace.append(ex.toString() + "\n");
+                for (StackTraceElement element : ex.getStackTrace()) {
+                    stackTrace.append(element.toString() + "\n");
+                }
+                String lastEvent = mLastSpokenEvent != null ? mLastSpokenEvent.toString() : "null";
+                writeCrashReport(
+                        String.format(getString(R.string.template_crash_report_message), timestamp,
+                                androidOsVersion, deviceInfo, talkBackVersion, stackTrace,
+                                lastEvent));
+                // Show the standard "Force Close" alert dialog.
+                if (sysUeh != null) {
+                    sysUeh.uncaughtException(thread, ex);
+                }
+            }
+            
+            private void writeCrashReport(String report) {
+                FileOutputStream fos;
+                try {
+                    fos = openFileOutput(TALKBACK_CRASH_LOG, Context.MODE_APPEND);
+                    fos.write(report.getBytes());
+                    fos.flush();
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    // Ignored
+                } catch (IOException e) {
+                    // Ignored
+                }
+            }
+        });
+    }
+    
+    /**
+     * Checks the TalkBack crash log and prompts the user to submit reports if appropriate. 
+     */
+    private void processCrashLog() {
+        StringBuilder crashReport = new StringBuilder();
+        String line = null;
+        try {
+            BufferedReader br = new BufferedReader(
+                    new FileReader(getFilesDir() + "/" + TALKBACK_CRASH_LOG));
+            while ((line = br.readLine()) != null) {
+                crashReport.append(line + "\n");
+            }
+        } catch (FileNotFoundException e) {
+            // Handles the case where no crash log exists.
+            return;
+        } catch (IOException e) {
+            // Don't bother the user with this.
+            return;
+        }
+        deleteFile(TALKBACK_CRASH_LOG);
+        displayCrashReportNotification(crashReport.toString());
+    }
+    
+    /**
+     * Reload the preferences from the SharedPreferences object.
+     */
+    public void reloadPreferences() {
+        mRingerPref = Integer.parseInt(mPrefs.getString(
+                getString(R.string.pref_speak_ringer_key), "" + PREF_RINGER_DEFAULT));
+        mScreenPref = Integer.parseInt(mPrefs.getString(
+                getString(R.string.pref_speak_screenoff_key), "" + PREF_SCREEN_DEFAULT));
+        mCallerIdPref = mPrefs.getBoolean(
+                getString(R.string.pref_caller_id_key), PREF_CALLER_ID_DEFAULT);
+        mTtsExtendedPref = mPrefs.getBoolean(
+                getString(R.string.pref_tts_extended_key), PREF_TTS_EXTENDED_DEFAULT);
+        mProximityPref = mPrefs.getBoolean(
+                getString(R.string.pref_proximity_key), PREF_PROXIMITY_DEFAULT);
+
+        // Switch TTS engines if necessary.
+        if (sInfrastructureInitialized) {
+            if ((mTtsExtendedPref && mTts != null) ||
+                (!mTtsExtendedPref && mTtsExtended != null)) {
+                mSpeechHandler.obtainMessage(WHAT_SWITCH_TTS).sendToTarget();
+            }
+        }
+
+        // Power off the proximity sensor if necessary.
+        if (mProximitySensor != null) {
+            if (!mProximityPref && mProximitySensor.getState() != ProximitySensor.STATE_STOPPED) {
+                mProximitySensor.shutdown();
+                // After calling shutdown, the instance loses state and must be discarded.
+                mProximitySensor = null;
+            }
+        }
+        
+        // Power on the proximity sensor if necessary.
+        if (mProximityPref) {
+            if (mProximitySensor == null
+                    || mProximitySensor.getState() == ProximitySensor.STATE_STOPPED) {
+                initializeProximitySensor();
+            }
+        }
     }
 
     @Override
@@ -375,13 +872,40 @@ public class TalkBackService extends AccessibilityService {
             Log.e(LOG_TAG, "Received null accessibility event.");
             return;
         }
-
-        // TalkBack should not speak while the phone is in a silent ringer mode.
-        if (mRingerMode == AudioManager.RINGER_MODE_VIBRATE
-                || mRingerMode == AudioManager.RINGER_MODE_SILENT) {
+        
+        if (!isServiceInitialized()) {
+            Log.w(LOG_TAG, "No TTS instance found - dropping event.");
             return;
         }
 
+        // Check ringer state
+        if (mRingerPref == PREF_RINGER_NOT_SILENT_OR_VIBRATE
+            && (mRingerMode == AudioManager.RINGER_MODE_VIBRATE
+                || mRingerMode == AudioManager.RINGER_MODE_SILENT)) {
+            return;
+        } else if (mRingerPref == PREF_RINGER_NOT_SILENT &&
+                   mRingerMode == AudioManager.RINGER_MODE_SILENT) {
+            return;
+        }
+
+        // Check screen state; screen off can be silenced, but caller ID can override.
+        boolean silence = false;
+        if (mScreenPref == PREF_SCREEN_OFF_DISALLOWED && mScreenIsOff) {
+            silence = true;
+        }
+
+        // If the state is ringing, then the Caller ID pref overrides what we do.
+        if (mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+            silence = (mCallerIdPref == false);
+        }
+
+        if (silence) {
+            return;
+        }
+
+        // Keep a representation of the last spoken event for crash reporting.
+        mLastSpokenEvent = clone(event);
+        
         synchronized (mEventQueue) {
             enqueueEventLocked(event);
             if (isSourceInCallScreenActivity(event)) {
@@ -412,7 +936,7 @@ public class TalkBackService extends AccessibilityService {
      * 1. Events within the event timeout with type same as the last event
      * replace the latter if they are not notification with different icon.
      * </br> 2. All other events are enqueued.
-     * 
+     *
      * @param event The event to enqueue.
      */
     private void enqueueEventLocked(AccessibilityEvent event) {
@@ -473,7 +997,7 @@ public class TalkBackService extends AccessibilityService {
             if (lastNotification.tickerText != null) {
                 return false;
             }
-            return true;
+            return true; 
         } else {
             return currentNotification.tickerText.equals(lastNotification.tickerText);
         }
@@ -486,7 +1010,7 @@ public class TalkBackService extends AccessibilityService {
      * events. Since TalkBackService processes only the last event of a given
      * type in a given time frame the original event is replaced by a more
      * recent hyphen adding event.
-     * 
+     *
      * @param event The event we are checking.
      * @return True if the event comes from the dialer input box, false
      *         ohterwise.
@@ -499,7 +1023,7 @@ public class TalkBackService extends AccessibilityService {
     /**
      * Sends {@link #WHAT_SPEAK} to the speech handler. This method cancels the
      * old message (if such exists) since it is no longer relevant.
-     * 
+     *
      * @param action The action to perform with the message.
      * @param timeout The timeout after which to send the message.
      */
@@ -514,16 +1038,24 @@ public class TalkBackService extends AccessibilityService {
      * Processes an <code>event</code> by asking the {@link SpeechRuleProcessor}
      * to match it against its rules and in case an utterance is generated it is
      * spoken. This method is responsible for recycling of the processed event.
-     * 
+     *
      * @param event The event to process.
      * @param queueMode The queuing mode to use while processing events.
      * @param action The action to perform with the message.
      */
     private void processAndRecycleEvent(AccessibilityEvent event, int queueMode, int action) {
-        Log.d(LOG_TAG, "Processing event: " + event);
+        String currentActivity = "";
+        List<ActivityManager.RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
+        if (tasks.size() >= 1) {
+            currentActivity = tasks.get(0).topActivity.getClassName();
+        }
+
+        Log.d(LOG_TAG, "Processing event: " + event + " activity=" + currentActivity);
 
         Utterance utterance = Utterance.obtain();
-        if (mSpeechRuleProcessor.processEvent(event, utterance)) {
+        // For now we do not pass any filter/formatter arguments. Their purpose is to
+        // ensure future flexibility.
+        if (mSpeechRuleProcessor.processEvent(event, currentActivity, utterance, null, null)) {
             HashMap<String, Object> metadata = utterance.getMetadata();
             // notifications are never interruptible
             boolean speakingNotification = mSpeakingNotification;
@@ -540,7 +1072,7 @@ public class TalkBackService extends AccessibilityService {
             if (isEarcon(utterance)) {
                 String earcon = utterance.getText().toString();
                 // earcons always use QUEUING_MODE_QUEUE
-                mTts.playEarcon(earcon, QUEUING_MODE_QUEUE, null);
+                playEarcon(earcon, QUEUING_MODE_QUEUE, null);
                 return;
             }
 
@@ -576,19 +1108,9 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
-     * Returns the TalkBackService as a {@link Context}. This is a package level
-     * convenience method.
-     * 
-     * @return The context.
-     */
-    static Context asContext() {
-        return sInstance;
-    }
-
-    /**
      * Updates the {@link NotificationCache}. If a notification is present in
      * the cache it is removed, otherwise it is added.
-     * 
+     *
      * @param type The type of the notification.
      * @param text The notification text to be cached.
      */
@@ -601,7 +1123,7 @@ public class TalkBackService extends AccessibilityService {
 
     /**
      * Clones an <code>event</code>.
-     * 
+     *
      * @param event The event to clone.
      */
     private AccessibilityEvent clone(AccessibilityEvent event) {
@@ -635,7 +1157,7 @@ public class TalkBackService extends AccessibilityService {
      * matches to improve presentation. The <code>queueMode</code> determines if
      * speaking the event interrupts the speaking of previous events
      * {@link #QUEUING_MODE_INTERRUPT} or is queued {@link #QUEUING_MODE_QUEUE}.
-     * 
+     *
      * @param utterance The utterance to speak.
      * @param queueMode The queue mode to use for speaking.
      * @param action The action to perform with the message.
@@ -644,8 +1166,11 @@ public class TalkBackService extends AccessibilityService {
     private void cleanUpAndSpeak(Utterance utterance, int queueMode, int action,
             boolean isNotification) {
         String text = cleanUpString(utterance.getText().toString());
+        if (text.equals("")) {
+            return;
+        }
         HashMap<String, String> parameters = mSpeechParamtersMap;
-
+        
         if (action == WHAT_SPEAK_WHILE_IN_CALL) {
             manageRingerVolume();
             parameters.clear();
@@ -656,8 +1181,20 @@ public class TalkBackService extends AccessibilityService {
             parameters.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, KEY_SPEAK_COMPLETE_CALLBACK);
         }
 
-        if (text.equals("")) {
-            return;
+        if (mProximitySensor != null
+                && mProximitySensor.getState() != ProximitySensor.STATE_STOPPED) {
+            mSpeechHandler.removeCallbacks(mProximitySensorSilencer);
+            mProximitySensor.resume();
+            final TextToSpeech tts = mTts;
+            parameters.clear();
+            parameters.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, KEY_SPEAK_COMPLETE_CALLBACK);
+            tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                @Override
+                public void onUtteranceCompleted(String utteranceId) {
+                    mSpeechHandler.postDelayed(
+                            mProximitySensorSilencer, PROXIMITY_SENSOR_CUTOFF_THRESHOLD);
+                }
+            });
         }
 
         // Workaround for the strange behavior of the Pico TTS engine
@@ -665,7 +1202,7 @@ public class TalkBackService extends AccessibilityService {
         if (queueMode == QUEUING_MODE_INTERRUPT) {
             // It seems that the stop() call is non-blocking and if we try
             // to speak immediately after that the stopping process is confused
-            mTts.stop();
+            ttsStop();
             try {
                 Thread.sleep(50);
             } catch (InterruptedException ie) {
@@ -673,7 +1210,7 @@ public class TalkBackService extends AccessibilityService {
             }
         }
 
-        mTts.speak(text, QUEUING_MODE_QUEUE /* queueMode */, parameters);
+        ttsSpeak(text, QUEUING_MODE_QUEUE /* queueMode */, parameters);
     }
 
     /**
@@ -681,7 +1218,6 @@ public class TalkBackService extends AccessibilityService {
      * completing to speak which restores the volume to its previous level.
      */
     private void manageRingerVolume() {
-        final TextToSpeech tts = mTts;
         final AudioManager audioManger = getAudioManager();
 
         final int currentRingerVolume = audioManger.getStreamVolume(AudioManager.STREAM_RING);
@@ -690,13 +1226,28 @@ public class TalkBackService extends AccessibilityService {
 
         audioManger.setStreamVolume(AudioManager.STREAM_RING, lowerEnoughVolume, 0);
 
-        tts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
-            @Override
-            public void onUtteranceCompleted(String utteranceId) {
-                tts.setOnUtteranceCompletedListener(null);
-                audioManger.setStreamVolume(AudioManager.STREAM_RING, currentRingerVolume, 0);
-            }
-        });
+        if (mTts != null) {
+            final TextToSpeech tts = mTts;
+            tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                @Override
+                public void onUtteranceCompleted(String utteranceId) {
+                    tts.setOnUtteranceCompletedListener(null);
+                    audioManger.setStreamVolume(AudioManager.STREAM_RING, currentRingerVolume, 0);
+                }
+            });
+        } else if (mTtsExtended != null) {
+            final TextToSpeechBeta tts = mTtsExtended;
+            tts.setOnUtteranceCompletedListener(
+                new TextToSpeechBeta.OnUtteranceCompletedListener() {
+                    @Override
+                    public void onUtteranceCompleted(String utteranceId) {
+                        tts.setOnUtteranceCompletedListener(
+                            (TextToSpeechBeta.OnUtteranceCompletedListener) null);
+                        audioManger.setStreamVolume(AudioManager.STREAM_RING,
+                                                    currentRingerVolume, 0);
+                    }
+                });
+        }
     }
 
     /**
@@ -704,20 +1255,34 @@ public class TalkBackService extends AccessibilityService {
      * clear the flag after speaking completes.
      */
     private void manageSpeakingNotification() {
-        final TextToSpeech tts = mTts;
         mSpeakingNotification = true;
-        tts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
-            @Override
-            public void onUtteranceCompleted(String utteranceId) {
-                tts.setOnUtteranceCompletedListener(null);
-                mSpeakingNotification = false;
-            }
-        });
+
+        if (mTts != null) {
+            final TextToSpeech tts = mTts;
+            tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                @Override
+                public void onUtteranceCompleted(String utteranceId) {
+                    tts.setOnUtteranceCompletedListener(null);
+                    mSpeakingNotification = false;
+                }
+            });
+        } else if (mTtsExtended != null) {
+            final TextToSpeechBeta tts = mTtsExtended;
+            tts.setOnUtteranceCompletedListener(
+                new TextToSpeechBeta.OnUtteranceCompletedListener() {
+                    @Override
+                    public void onUtteranceCompleted(String utteranceId) {
+                        tts.setOnUtteranceCompletedListener(
+                            (TextToSpeechBeta.OnUtteranceCompletedListener) null);
+                        mSpeakingNotification = false;
+                    }
+                });
+        }
     }
 
     /**
      * Gets the {@link AudioManager} instance.
-     * 
+     *
      * @return The audio manager.
      */
     private AudioManager getAudioManager() {
@@ -731,7 +1296,7 @@ public class TalkBackService extends AccessibilityService {
      * Cleans up <code>text</text> by separating camel case words with space
      * to compensate for the not robust pronounciation of the SVOX TTS engine
      * and replacing the text with predefined strings.
-     * 
+     *
      * @param text The text to clean up.
      * @return The cleaned text.
      */
@@ -750,14 +1315,14 @@ public class TalkBackService extends AccessibilityService {
     /**
      * Determines if an <code>utterance</code> refers to an earcon. The
      * convention is that earcons are enclosed in square brackets.
-     * 
+     *
      * @param utterance The utterance.
      * @return True if the utterance is an earcon, false otherwise.
      */
     private boolean isEarcon(Utterance utterance) {
         StringBuilder text = utterance.getText();
         if (text.length() > 0) {
-            return (text.charAt(0) == OPEN_SQUARE_BRACKET 
+            return (text.charAt(0) == OPEN_SQUARE_BRACKET
                     && text.charAt(text.length() - 1) == CLOSE_SQUARE_BRACKET);
         } else {
             return false;
@@ -783,27 +1348,111 @@ public class TalkBackService extends AccessibilityService {
                         processAndRecycleEvent(event, message.arg1, message.what);
                     }
                 case WHAT_STOP_ALL_SPEAKING:
-                    mTts.speak("", QUEUING_MODE_INTERRUPT, null);
+                    ttsSpeak("", QUEUING_MODE_INTERRUPT, null);
                     return;
                 case WHAT_START_TTS:
-                    mTts = new TextToSpeech(sInstance, new TextToSpeech.OnInitListener() {
-                        @Override
-                        public void onInit(int status) {
-                            mTts.addEarcon(getString(R.string.earcon_progress),
-                                    "com.google.android.marvin.talkback", R.raw.progress);
-                        }
-                    });
+                    startTts();
                     return;
                 case WHAT_SHUTDOWN_TTS:
-                    mTts.shutdown();
+                    shutdownTts();
                     return;
+                case WHAT_SWITCH_TTS:
+                    if ((mTtsExtendedPref && mTts != null) ||
+                        (!mTtsExtendedPref && mTtsExtended != null)) {
+                        shutdownTts();
+                        startTts();
+                        return;
+                    }
             }
+        }
+
+        private void startTts() {
+            mTts = null;
+            mTtsExtended = null;
+            if (mTtsExtendedPref) {
+                mTtsExtendedInitializing = new TextToSpeechBeta(
+                    sInstance, new TextToSpeechBeta.OnInitListener() {
+                        @Override
+                        public void onInit(int status, int version) {
+                            if (status != TextToSpeechBeta.SUCCESS) {
+                                Log.e(LOG_TAG, "TTS extended init failed.");
+                                return;
+                            }
+
+                                mTtsExtended = mTtsExtendedInitializing;
+                                mTtsExtended.addEarcon(getString(R.string.earcon_progress),
+                                        getPackageName(), R.raw.progress);
+                                sTtsInitialized = true;
+                            }
+                        });
+            } else {
+                mTtsInitializing = new TextToSpeech(
+                    sInstance, new TextToSpeech.OnInitListener() {
+                        @Override
+                        public void onInit(int status) {
+                            if (status != TextToSpeech.SUCCESS) {
+                                Log.e(LOG_TAG, "TTS init failed.");
+                                return;
+                            }
+
+                        mTts = mTtsInitializing;
+                        mTts.addEarcon(getString(R.string.earcon_progress), getPackageName(),
+                                R.raw.progress);
+                        sTtsInitialized = true;
+                    }
+                });
+            }
+        }
+
+        private void shutdownTts() {
+            if (mTts != null) {
+                mTts.shutdown();
+                mTts = null;
+            }
+            if (mTtsExtended != null) {
+                mTtsExtended.shutdown();
+                mTtsExtended = null;
+            }
+            sTtsInitialized = false;
         }
     };
 
     /**
+     * Abstraction that calls stop on either TTS or TTS extended.
+     */
+    private void ttsStop() {
+        if (mTts != null) {
+            mTts.stop();
+        } else if (mTtsExtended != null) {
+            mTtsExtended.stop();
+        }
+    }
+
+    /**
+     * Abstraction that calls speak on either TTS or TTS extended.
+     */
+    private void ttsSpeak(String text, int queueMode, HashMap<String, String> params) {
+        if (mTts != null) {
+            mTts.speak(text, queueMode, params);
+        } else if (mTtsExtended != null) {
+            mTtsExtended.speak(text, queueMode, params);
+        }
+    }
+
+    /**
+     * Abstraction that calls playEarcon on either TTS or TTS extended.
+     */
+    private void playEarcon(String earcon, int queueMode, HashMap<String, String> params) {
+        if (mTts != null) {
+            mTts.playEarcon(earcon, queueMode, params);
+        } else if (mTtsExtended != null) {
+            mTtsExtended.playEarcon(earcon, queueMode, params);
+        }
+    }
+
+    /**
      * Appends the ringer state announcement to an {@link Utterance}.
-     * 
+     *
      * @param ringerMode the device ringer mode.
      * @param utterance The utterance to append to.
      */
@@ -850,7 +1499,7 @@ public class TalkBackService extends AccessibilityService {
 
         /**
          * {@inheritDoc BroadcastReceiver#onReceive(Context, Intent)}
-         * 
+         *
          * @throws SecurityException if the user does not have
          *             com.google.android.marvin.talkback.
          *             SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK permission.
@@ -875,12 +1524,13 @@ public class TalkBackService extends AccessibilityService {
                 // TODO(caseyburkhardt): Remove this block when we decide to no longer support
                 // intent broadcasts for determining the state of TalkBack in favor of the content
                 // provider method.
-                if (mInfrastructureInitialized) {
+                if (sInfrastructureInitialized) {
                     setResultCode(RESULT_TALKBACK_ENABLED);
                 } else {
                     setResultCode(RESULT_TALKBACK_DISABLED);
                 }
             }
+
             abortBroadcast();
             // other intent commands go here ...
         }
@@ -891,10 +1541,13 @@ public class TalkBackService extends AccessibilityService {
      * state
      */
     class PhoneStateBroadcastReceiver extends BroadcastReceiver {
-        private TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (!isServiceInitialized()) {
+                Log.w(LOG_TAG, "Service not initialized during broadcast.");
+                return;
+            }
+
             String action = intent.getAction();
 
             if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(action)) {
@@ -908,7 +1561,8 @@ public class TalkBackService extends AccessibilityService {
                 cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
                 mRingerMode = ringerMode;
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                if (tm.getCallState() != TelephonyManager.CALL_STATE_RINGING) {
+                mScreenIsOff = false;
+                if (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_RINGING) {
                     Utterance utterance = Utterance.obtain();
                     String screenState = getString(R.string.value_screen_on);
                     utterance.getText().append(screenState);
@@ -916,6 +1570,7 @@ public class TalkBackService extends AccessibilityService {
                     cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
                 }
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                mScreenIsOff = true;
                 Utterance utterance = Utterance.obtain();
                 String screenState = getString(R.string.value_screen_off);
                 utterance.getText().append(screenState);
@@ -1007,7 +1662,7 @@ public class TalkBackService extends AccessibilityService {
         public void enforceRelevantEventSize() {
             for (int i = 0, count = size(); i < count; i++) {
                 if (relevantEventCount() <= EVENT_QUEUE_MAX_SIZE) {
-                    break;   
+                    break;
                 }
                 AccessibilityEvent bottom = get(i);
                 if (!isNotificationEvent(bottom)) {
@@ -1025,5 +1680,12 @@ public class TalkBackService extends AccessibilityService {
         private boolean isNotificationEvent(AccessibilityEvent event) {
             return (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);
         }
+    }
+
+    /**
+     * Interface for listeners for the TalkBack initialization state. 
+     */
+    interface InfrastructureStateListener {
+        public void onInfrastructureStateChange(boolean isInitialized);
     }
 }

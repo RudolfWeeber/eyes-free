@@ -35,8 +35,6 @@ public final class CustomFormatters {
 
     private static final String SPACE = " ";
 
-    private static final String VALUE_PASSWORD_CHARACTER_TYPED = "@com.google.android.marvin.talkback:string/value_cpassword_character_typed";
-
     /**
      * This table will force the TTS to speak out the punctuation by mapping
      * punctuation to its spoken equivalent.
@@ -54,12 +52,13 @@ public final class CustomFormatters {
     public static final class AddedTextFormatter implements Formatter {
 
         @Override
-        public void format(AccessibilityEvent event, Utterance utterance) {
+        public void format(AccessibilityEvent event, Context context, Utterance utterance,
+                Object args) {
             if (event.isPassword()) {
-                String message = SpeechRule.getStringResource(VALUE_PASSWORD_CHARACTER_TYPED);
+                String message = context.getString(R.string.value_password_character_typed);
                 utterance.getText().append(message);
             } else {
-                StringBuilder text = SpeechRule.getEventText(event);
+                StringBuilder text = SpeechRule.getEventText(context, event);
                 int begIndex = event.getFromIndex();
                 int endIndex = begIndex + event.getAddedCount();                
                 
@@ -81,18 +80,17 @@ public final class CustomFormatters {
      */
     public static final class RemovedTextFormatter implements Formatter {
 
-        private static final String VALUE_TEXT_REMOVED = "@com.google.android.marvin.talkback:string/value_text_removed";
-
         @Override
-        public void format(AccessibilityEvent event, Utterance utterance) {
+        public void format(AccessibilityEvent event, Context context, Utterance utterance,
+                Object args) {
             if (event.isPassword()) {
-                utterance.getText().append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
+                utterance.getText().append(context.getString(R.string.value_text_removed));
             } else {
                 CharSequence beforeText = event.getBeforeText();
                 int begIndex = event.getFromIndex();
                 int endIndex = begIndex + event.getRemovedCount();
 
-                CharSequence removedText = beforeText.subSequence(begIndex, endIndex);                
+                CharSequence removedText = beforeText.subSequence(begIndex, endIndex);
                 if (removedText.length() == 1) {
                     removedText = getCharacterSpokenEquivalent(removedText);
                 }
@@ -100,7 +98,7 @@ public final class CustomFormatters {
                 StringBuilder utteranceText = utterance.getText();
                 utteranceText.append(getCharacterSpokenEquivalent(removedText));
                 utteranceText.append(SPACE);
-                utteranceText.append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
+                utteranceText.append(context.getString(R.string.value_text_removed));
             }
         }
     }
@@ -110,23 +108,18 @@ public final class CustomFormatters {
      */
     public static final class ReplacedTextFormatter implements Formatter {
 
-        private static final String TEMPLATE_TEXT_REPLACED = "@com.google.android.marvin.talkback:string/temlate_text_replaced";
-
-        private static final String TEMPLATE_REPLACED_CHARACTERS = "@com.google.android.marvin.talkback:string/template_replaced_characters";
-
-        private static final String VALUE_TEXT_REMOVED = "@com.google.android.marvin.talkback:string/value_text_removed";
-
         @Override
-        public void format(AccessibilityEvent event, Utterance utterance) {
+        public void format(AccessibilityEvent event, Context context, Utterance utterance,
+                Object args) {
             StringBuilder utteranceText = utterance.getText();
 
             if (event.isPassword()) {
-                String template = SpeechRule.getStringResource(TEMPLATE_REPLACED_CHARACTERS);
+                String template = context.getString(R.string.template_replaced_characters);
                 String populatedTemplate = String.format(template, event.getRemovedCount(), event
                         .getAddedCount());
                 utteranceText.append(populatedTemplate);
             } else {
-                String text = SpeechRule.getEventText(event).toString();
+                String text = SpeechRule.getEventText(context, event).toString();
                 String beforeText = event.getBeforeText().toString();
 
                 if (isTypedCharacter(text, beforeText)) {
@@ -155,7 +148,7 @@ public final class CustomFormatters {
                     CharSequence removedText = beforeText.subSequence(begIndex, endIndex); 
                     utteranceText.append(getCharacterSpokenEquivalent(removedText));
                     utteranceText.append(SPACE);
-                    utteranceText.append(SpeechRule.getStringResource(VALUE_TEXT_REMOVED));
+                    utteranceText.append(context.getString(R.string.value_text_removed));
                 } else {
                     int beforeBegIndex = event.getFromIndex();
                     int beforeEndIndex = beforeBegIndex + event.getRemovedCount();
@@ -170,7 +163,7 @@ public final class CustomFormatters {
                     if (addedEndIndex <= AccessibilityEvent.MAX_TEXT_LENGTH) {
                         CharSequence addedText = text.subSequence(addedBegIndex, addedEndIndex);
 
-                        String template = SpeechRule.getStringResource(TEMPLATE_TEXT_REPLACED);
+                        String template = context.getString(R.string.template_text_replaced);
                         String populatedTemplate = String.format(template, removedText, addedText);
                         utteranceText.append(populatedTemplate);
                     }
@@ -255,7 +248,8 @@ public final class CustomFormatters {
         private static final int ICON_PHONE_CALL = android.R.drawable.stat_sys_phone_call;
 
         @Override
-        public void format(AccessibilityEvent event, Utterance utterance) {
+        public void format(AccessibilityEvent event, Context context, Utterance utterance,
+                Object args) {
 
             Parcelable parcelable = event.getParcelableData();
             if (!(parcelable instanceof Notification)) {
@@ -273,7 +267,7 @@ public final class CustomFormatters {
 
             StringBuilder utteranceText = utterance.getText();
 
-            StringBuilder eventText = SpeechRule.getEventText(event);
+            StringBuilder eventText = SpeechRule.getEventText(context, event);
             NotificationType type = null;
 
             switch (icon) {
@@ -327,8 +321,7 @@ public final class CustomFormatters {
             }
 
             if (type != null) {
-                CharSequence typeText = TalkBackService.asContext().getResources().getString(
-                        type.getValue());
+                CharSequence typeText = context.getResources().getString(type.getValue());
                 utteranceText.append(typeText);
                 utteranceText.append(SPACE);
             }
@@ -353,7 +346,8 @@ public final class CustomFormatters {
         private static final int INDEX_SOCIAL_STATUS = 7;
 
         @Override
-        public void format(AccessibilityEvent event, Utterance utterance) {
+        public void format(AccessibilityEvent event, Context context, Utterance utterance,
+                Object args) {
             List<CharSequence> eventText = event.getText();
             StringBuilder utteranceText = utterance.getText();
 
@@ -441,6 +435,7 @@ public final class CustomFormatters {
      */
     private static Map<String, String> getPunctuationSpokenEquivalentMap() {
         if (sPunctuationSpokenEquivalentsMap.isEmpty()) {
+            // intentional use of the TalkBack context
             Context context = TalkBackService.asContext();
 
             sPunctuationSpokenEquivalentsMap.put("?",

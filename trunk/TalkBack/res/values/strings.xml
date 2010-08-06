@@ -1,132 +1,728 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <!-- Setting up the user interface speech feedback service -->
-    <string name="talkback_setup_title">TalkBack</string>
+    <!--The human-readable name of this service. Do not translate. -->
+    <string name="talkback_setup_title" translatable="false">TalkBack</string>
 
     <!-- NOTIFICATIONS -->
 
+    <!--
+      Source: A notification for a new text message (SMS) has appeared on the status bar.
+      Description: This is spoken to the user. [[CHAR LIMIT="NONE"]]
+    -->
     <string name="notification_type_text_message">Text message</string>
 
+    <!--
+      Source: A notification for a failed-to-be-send text message (SMS) has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_failed_text_message">Not sent text message</string>
 
+    <!--
+      Source: A notification for a missed call has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_missed_call">Missed call</string>
 
+    <!--
+      Source: A notification for a USB cable connected to the device has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_usb_connected">USB connected</string>
 
+    <!--
+      Source: A notification for muted state of the device has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_mute">Mute</string>
 
+    <!--
+      Source: A notification for a new chat message has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_chat">Chat</string>
 
+    <!--
+      Source: A notification for an error has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_error">Error</string>
 
+    <!--
+      Source: A notification for more (collapsed) icons has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_more">More</string>
 
+    <!--
+      Source: A notification that it is safe to remove a SD card has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_sdcard">SD card</string>
 
+    <!--
+      Source: A notification that an empty (no file system) USB card is present has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_sdcard_usb">SD card USB</string>
 
+    <!--
+      Source: A notification that the device is synchronizing has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_status_sync">Sync</string>
 
+    <!--
+      Source: A notification that the device is synchronizing has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_sync_noanim">Sync</string>
 
+    <!--
+      Source: A notification for a new voice mail has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_voicemail">Voicemail</string>
 
+    <!--
+      Source: A notification that the device is playing media has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_status_play">Playing</string>
 
+    <!--
+      Source: A notification icon for a custom (not in the above defined) event has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="notification_type_status_notification">Status notification</string>
-
-    <!-- EARCONS -->
-
-    <string name="earcon_progress">[PROGRESS]</string>
 
     <!-- TEMPLATES -->
 
-    <!-- %1$s - The title of a check box/radio button; -->
+    <!--
+      Source: An utterance template for announcing the checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The check-box/radio-button title.
+    -->
     <string name="template_compound_button_checked">%1$s checked</string>
 
-    <!-- %1$s - The title of a check box/ radio button; -->
+    <!--
+      Source: An utterance template for announcing the not checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The  check-box/radio-button title.
+    -->
     <string name="template_compound_button_not_checked">%1$s not checked</string>
 
-    <!-- %1$s - Arbitrary text to be spoken; -->
-    <string name="template_announce_value">%1$s</string>
+    <!--
+      Source: An utterance template for announcing arbitrary text.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The text to be announced.
+    -->
+    <string name="template_announce_value" translatable="false">%1$s</string>
 
-    <!-- %1$s - The text content of an edit box; -->
+    <!--
+      Source: An utterance template for announcing an edit-box.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The edit box text content.
+    -->
     <string name="template_edit_box">Edit box. %1$s</string>
 
-    <!-- %1$s - The text content of a search box; -->
+    <!--
+      Source: An utterance template for announcing a search-box.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The search box text content.
+    -->
     <string name="template_search_box">Search box. %1$s</string>
 
-    <!-- %1$s - The text content of an alert/pop up message; -->
-    <string name="template_alert_dialog_template">Alert  %1$s</string>
+    <!--
+      Source: An utterance template for announcing an alert/pop-up message.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The alert/pop-up message text content.
+    -->
+    <string name="template_alert_dialog_template">Alert %1$s</string>
 
-    <!-- %1$s - The replaced text; %2$s - The replacement text; -->
-    <string name="temlate_text_replaced">%1$s replaced with %2$s</string>
+    <!--
+      Source: An utterance template for announcing a text replacement (during edit).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The replaced text.
+      %2$s - The replacement text.
+    -->
+    <string name="template_text_replaced">%1$s replaced with %2$s</string>
 
-    <!-- %1$s - The count of replaced characters; %2$s - The count of replacement characters; (used for password fields) -->
+    <!--
+      Source: An utterance template for announcing a character sequence replacement (used for password fields).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The replaced characters count.
+      %2$s - The replacement characters count.
+    -->
     <string name="template_replaced_characters">%1$s characters replaced with %2$s characters</string>
 
-    <!-- %1$s - The ringer volume in percent;-->
+    <!--
+      Source: An utterance template for announcing the ringer volume.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s -  The ringer volume in percent.
+    -->
     <string name="template_ringer_volume">Ringer %1$s percent.</string>
+
+    <!--
+      Source: An utterance template for announcing dragging an icon on the home screen.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s -  The dragged icon text.
+    -->
+    <string name="template_dragging_icon">Dragging %1$s icon.</string>
+
+    <!--
+      Source: An utterance template for announcing dragging an image button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s -  The image button title.
+    -->
+    <string name="template_image_button">%1$s image button.</string>
+
+    <!--
+      Source: An utterance template for announcing a button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The button title.
+    -->
+    <string name="template_button">%1$s button.</string>
+
+    <!--
+      Source: An utterance template for announcing an image.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The image title.
+    -->
+    <string name="template_image_view">%1$s image.</string>
+
+    <!--
+      Source: An utterance template for announcing a seek-bar (slider).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The seek-bar value.
+    -->
+    <string name="template_seek_bar">%1$s seek control.</string>
+
+    <!--
+      Source: An utterance template for announcing a spinner/drop-down list.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      %1$s - The spinner/drop-down list title.
+    -->
+    <string name="template_spinner">%1$s drop down list.</string>
 
     <!-- VALUES -->
 
+    <!--
+      Source: A value for announcing a password field.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_password">password</string>
 
+    <!--
+      Source: A value for announcing a sliding-drawer opening (widget that slides open to reveal a grid of applications).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_sliding_drawer_opened">Sliding drawer opened</string>
 
+    <!--
+      Source: A value for announcing a sliding-drawer open handle (widget that slides open to reveal a grid of applications).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_handle_view">Sliding drawer handle</string>
 
+    <!--
+      Source: A value for announcing showing an Input Method (like soft-keyboard).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_input_method_shown">Input method</string>
 
+    <!--
+      Source: A value for announcing opening the status-bar (for notifications on the top of the screen).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_status_bar_opened">Status bar</string>
 
+    <!--
+      Source: A value for announcing opening the activity options (shown on a press of the menu button).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_options_menu_open">Options.</string>
 
+    <!--
+      Source: A value for announcing text deletion.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_text_removed">deleted</string>
 
+    <!--
+      Source: A value for announcing the pending notifications summary.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_notification_summary">Notification summary</string>
 
-    <string name="value_cpassword_character_typed">.</string>
+    <!--
+      Source: A value for announcing a character in a password filed.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_password_character_typed">dot</string>
 
+    <!--
+      Source: A value for announcing the checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_checked">checked</string>
 
+    <!--
+      Source: A value for announcing the not checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_not_checked">not checked</string>
 
+    <!--
+      Source: A value for announcing the action of clicking on something.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_clicked">clicked</string>
 
+    <!--
+      Source: A value for announcing the vibrate ringer mode.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_ringer_vibrate">Ringer vibrate.</string>
 
+    <!--
+      Source: A value for announcing the silent ringer mode.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_ringer_silent">Ringer silent.</string>
 
+    <!--
+      Source: A value for announcing the normal ringer mode.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_ringer_normal">Ringer normal.</string>
 
+    <!--
+      Source: A value for announcing turning off the screen.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_screen_on">Screen on.</string>
 
+    <!--
+      Source: A value for announcing turning on the screen.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_screen_off">Screen off.</string>
 
+    <!--
+      Source: A value for announcing unlocking of the phone.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="value_phone_unlocked">Phone unlocked.</string>
+
+    <!--
+      Source: A value for announcing a dragging-widget.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_dragging_widget">Dragging widget.</string>
+
+    <!--
+      Source: A value for announcing a web view (a view with web content).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_web_view">Web view.</string>
+
+    <!--
+      Source: A value for announcing an unknown object.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_unknown_object">Unknown object.</string>
+
+    <!--VALUES specific for the Market -->
+
+    <!--
+      Source: A value for announcing the Market application search button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_market_search">Search button.</string>
+
+    <!-- VALUES specific for Google Maps -->
+
+    <!--
+      Source: A value for announcing the Maps button for choosing start location.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_choose_start">Choose Start Location button.</string>
+
+    <!--
+      Source: A value for announcing the Maps button for choosing destination location.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_choose_destination">Choose Destination Location button.</string>
+
+    <!--
+      Source: A value for announcing the Maps button to get driving directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_driving">Driving radio button.</string>
+
+    <!--
+      Source: A value for announcing the Maps button to get public transportation directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_public_transport">Public transport radio button.</string>
+
+    <!--
+      Source: A value for announcing the Maps button to get bicycling directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_bicycling">Bicycling radio button.</string>
+
+    <!--
+      Source: A value for announcing the Maps button to get walking directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_walking">Walking radio button.</string>
+
+    <!--
+      Source: A value for announcing the Maps checked button to get driving directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_driving_checked">Driving, checked.</string>
+
+    <!--
+      Source: A value for announcing the Maps checked button to get public transportation directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_public_transport_checked">Public transport, checked.</string>
+
+    <!--
+      Source: A value for announcing the Maps checked button to get bicycling directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_bicycling_checked">Bicycling, checked.</string>
+
+    <!--
+      Source: A value for announcing the Maps checked button to get walking directions.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_maps_walking_checked">Walking, checked.</string>
+
+    <!-- VALUES for the setting time -->
+
+    <!--
+      Source: A value for announcing an increment hours button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_hours">Increment hours.</string>
+
+    <!--
+      Source: A value for announcing an increment minutes button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_minutes">Increment minutes.</string>
+
+    <!--
+      Source: A value for announcing an decrement hours button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_hours">Decrement hours.</string>
+
+    <!--
+      Source: A value for announcing an decrement minutes button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_minutes">Decrement minutes.</string>
+
+    <!--VALUES for the setting the date -->
+
+    <!--
+      Source: A value for announcing an increment month button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_month">Increment month.</string>
+
+    <!--
+      Source: A value for announcing an increment day button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_day">Increment day.</string>
+
+    <!--
+      Source: A value for announcing an increment year button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_year">Increment year.</string>
+
+    <!--
+      Source: A value for announcing an decrement month button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_month">Decrement month.</string>
+
+    <!--
+      Source: A value for announcing an decrement day button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_day">Decrement day.</string>
+
+    <!--
+      Source: A value for announcing an decrement year button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_year">Decrement year.</string>
+
+    <!-- VALUES for media playback -->
+
+    <!--
+      Source: A value for announcing a play list.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_playlist">Playlist.</string>
+
+    <!--
+      Source: A value for announcing the toggle-shuffle button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_toggle_shuffle">Toggle shuffle.</string>
+
+    <!--
+      Source: A value for announcing the toggle-repeat button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_toggle_repeat">Toggle repeat.</string>
+
+    <!--
+      Source: A value for announcing the rewind button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_rewind_button">Rewind button.</string>
+
+    <!--
+      Source: A value for announcing the play button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_play_button">Play button.</string>
+
+    <!--
+      Source: A value for announcing the fast forward button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_fast_forward_button">Fast forward button.</string>
 
     <!-- PERMISSIONS -->
 
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <!--
+      Source: Title of an application permission.
+      Description: Listed so the user can choose whether they want to allow using the permission. [CHAR LIMIT=30]
+    -->
     <string name="permlab_sendIntentBroadcastCommandsToTalkBack">Send intent commands to TalkBack</string>
 
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+   <!--
+      Source: Description of an application permission.
+      Description: Listed so the user can choose whether they want to allow using the permission. [CHAR LIMIT=200]
+    -->
     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Allows an application or service to drive TalkBack
         via intent broadcasts and potentially obtain information about the TlakBack state for example the cached notifications.</string>
 
-    <!-- Punctuation mappings -->
+    <!-- PUNCTUATION -->
 
+    <!--
+      Source: A value for announcing a question mark.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="punctuation_questionmark">Question mark</string>
-    <string name="punctuation_space">Space</string>    
-    <string name="punctuation_comma">Comma</string>    
-    <string name="punctuation_dot">Dot</string>            
+
+    <!--
+      Source: A value for announcing a space.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_space">Space</string>
+
+    <!--
+      Source: A value for announcing a comma.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_comma">Comma</string>
+
+    <!--
+      Source: A value for announcing a dot.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_dot">Dot</string>
+
+    <!--
+      Source: A value for announcing an exclamation.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="punctuation_exclamation">Exclamation</string>
+
+    <!--
+      Source: A value for announcing an opening parenthesis.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="punctuation_open_paren">Open paren</string>
+
+    <!--
+      Source: A value for announcing a closing parenthesis.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="punctuation_close_paren">Close paren</string>
+
+    <!--
+      Source: A value for announcing a double quote.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="punctuation_double_quote">Double quote</string>
+
+    <!--
+      Source: A value for announcing a semicolon.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="punctuation_semicolon">Semicolon</string>
+
+    <!--
+      Source: A value for announcing a colon.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
     <string name="punctuation_colon">Colon</string>        
+
+    <!-- SETTINGS MANAGEMENT -->
+
+    <!--
+      Source: Title of a notification that a settings-manager application exists.
+      Description: Allows the user to choose to download a settings manager application. [CHAR LIMIT=30]
+    -->
+    <string name="title_talkback_settings_availible">TalkBack Settings Available</string>
+
+    <!--
+      Source: Description of a notification that a settings-manager application exists.
+      Description: Allows the user to choose to download a settings manager application. [CHAR LIMIT=70]
+    -->
+    <string name="message_talkback_settings_availible">Click here to download the Accessibility Settings Manager.</string>
+
+    <!--
+      Source: Title of a notification that information about a TalkBack crash is present.
+      Description: The user may choose to upload the crash information. [CHAR LIMIT=30]
+    -->
+    <string name="title_talkback_crash">TalkBack Crash Data Available</string>
+
+    <!--
+      Source: Description of a notification that information about a TalkBack crash is present.
+      Description: The user may choose to upload the crash information.
+      CHAR LIMIT=70
+    -->
+    <string name="message_talkback_crash">Click here to improve TalkBack by sending crash data.</string>
+
+    <!-- PREFERENCES -->
+
+    <!--
+      Source: Preference category for customizing when to speak.
+      Description: Contains preferences for customizing when to speak. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_category_when_to_speak">When to Speak</string>
+
+    <!--
+      Source: Preference for customizing how to speak for a given ringer mode.
+      Description: The user can select one of several options. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_speak_ringer">Ringer Volume</string>
+
+    <!--
+      Source: Preference for customizing how to speak when the screen is off.
+      Description: The user can select one of several options. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_speak_screenoff">Screen Status</string>
+
+    <!--
+      Source: Preference category for customizing the Text-To-Speech (TTS).
+      Description: Contains preferences for customizing the Text-To-Speech. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_category_tts_settings">TTS Settings</string>
+
+    <!--
+      Source: Preference for setting up if to announce the caller ID.
+      Description: The user can select one of several options. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_caller_id">Speak Caller ID</string>
+
+    <!--
+      Source: Preference for using the Text-To-Speech (TTS) extended - a specific TTS library.
+      Description: The user can select one of several options. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_tts_extended">Use TTS Extended</string>
+
+    <!--
+      Source: Preference for using the proximity sensor to silence speech output.
+      Description: The user can select one of several options. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_proximity">Use Proximity Sensor</string>
+
+    <!--
+      Source: Preference category for managing plug-ins.
+      Description: Contains preferences for managing plug-ins. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_category_plugins">Plug-ins</string>
+
+    <!--
+      Source: Preference for managing plug-ins.
+      Description: The user can select one of several options. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_manage_plugins">Manage plug-ins</string>
+
+    <!--
+      Source: Title for the uninstall plug-in menu item in the manage plug-ins preference screen.
+      Description: Each plug-in record shows a context menu. [CHAR LIMIT=25]
+    -->
+    <string name="title_uninstall_plugin">Uninstall</string>
+
+    <!-- ALERTS  -->
+
+    <!--
+      Source: Alert title for the event if TalkBack being disabled.
+      Description: While managing the settings an announcement is made if TalkBack if disabled. [CHAR LIMIT=30]
+    -->
+    <string name="title_talkback_inactive_alert">TalkBack Disabled!</string>
+
+    <!--
+      Source: Alert message for the event if TalkBack being disabled.
+      Description: While managing the settings an announcement is made if TalkBack if disabled. [CHAR LIMIT=100]
+    -->
+    <string name="message_talkback_inactive_alert">TalkBack is currently disabled. Would you like to open accessibility settings?</string>
+
+    <!--
+      Source: Alert title for the event of lacking accessibility settings on the device.
+      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=30]
+    -->
+    <string name="title_no_accessibility_alert">Error</string>
+
+    <!--
+      Source: Alert message for the event of lacking accessibility settings on the device.
+      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=100]
+    -->
+    <string name="message_no_accessibility_alert">Accessibility is not supported on this device.</string>
+
+    <!--
+      Source: Email subject for TalkBack crash report.
+      Description: The user can optionally submit a TalkBack crash report. [CHAR LIMIT=50]
+    -->
+    <string name="subject_crash_report_email">TalkBack Crash Report</string>
+
+    <!--
+      Source: Header for TalkBack crash report messages
+      Description: The user can optionally submit a TalkBack crash report. [CHAR LIMIT=200]
+    -->
+    <string name="header_crash_report_email">The following is a crash report for TalkBack. Clicking 
+        the \"Send\" button will transmit this data to the TalkBack developers.\n\n</string>
+
+    <!--
+      Source: Title for announcing that a plug-in defines classes.
+      Description: Some plug-ins define classes which requires an informed consent. [CHAR LIMIT=30]
+    -->
+    <string name="title_warning_talkback_plugin_security">Warning</string>
+
+    <!--
+      Source: Message for announcing that a plug-in defines classes.
+      Description: Some plug-ins define classes which requires an informed consent. [CHAR LIMIT=350]
+    -->
+    <string name="message_warning_talkback_plugin_security">This TalkBack plug-in may be able
+        to collect all the text you type, including personal data credit card numbers except
+        passwords. It may also log your user interface interactions. It comes from the application
+        <xliff:g id="plugin_name">%1$s</xliff:g>. Enable this plug-in?</string>
 
 </resources>

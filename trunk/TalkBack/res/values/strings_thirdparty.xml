@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- This file contains strings for third-party apps. -->
+
+
+    <!-- Amazon app -->
+
+    <string name="value_amazon_go">Go.</string>
+
+    <string name="value_amazon_search">Search.</string>
+
+    <!-- %1$s - The number of a particular item in the shopping cart; -->
+    <string name="template_amazon_quantity">Quantity %1$s</string>
+
+
+    <!-- Amazon mp3 app -->
+
+    <!-- %1$s - The text of the buy button, indicates the price; -->
+    <string name="template_amazon_mp3_buy_button">Buy button, %1$s</string>
+
+
+    <!-- Camera Magic app -->
+
+    <string name="value_camera_magic_take_picture">Shutter button.</string>
+
+    <string name="value_camera_magic_zoom_slider">Zoom slider.</string>
+
+
+    <!-- File Manager by Apollo software app -->
+
+    <string name="value_file_manager_home">Home button.</string>
+
+    <string name="value_file_manager_up">Up button.</string>
+
+    <string name="value_file_manager_multi_select">Toggle multi select.</string>
+
+    <string name="value_file_manager_edit">Edit button.</string>
+
+    <string name="value_file_manager_bookmark">Bookmark button.</string>
+
+    <string name="value_file_manager_new_folder">New folder button.</string>
+
+    <string name="value_file_manager_back">Back button.</string>
+
+    <string name="value_file_manager_forwards">Forwards button.</string>
+
+    <string name="value_file_manager_sort">Sort button.</string>
+
+    <string name="value_file_manager_refresh">Refresh button.</string>
+
+    <string name="value_file_manager_help">Help button.</string>
+
+
+    <!-- Facebook app -->
+
+    <string name="value_facebook_news_feed">News feed.</string>
+
+    <string name="value_facebook_friends">Friends.</string>
+
+    <string name="value_facebook_photos">Photos.</string>
+
+    <string name="value_facebook_inbox">Inbox.</string>
+
+    <string name="value_facebook_profile">Profile.</string>
+
+    <string name="value_facebook_notifications">Notifications.</string>
+
+</resources>

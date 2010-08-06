@@ -16,21 +16,24 @@
 
 package com.google.android.marvin.talkback;
 
+import android.content.Context;
 import android.view.accessibility.AccessibilityEvent;
 
 /**
  * This interface defines the contract for writing formatters. A formatter
  * populates a formatted {@link Utterance} from an {@link AccessibilityEvent}.
- *
+ * 
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public interface Formatter {
 
     /**
      * Formats an <code>utterance</code> form given <code>event</code>.
-     *
+     * 
      * @param event The event.
+     * @param context The context to be used for loading resources etc.
      * @param utterance The utterance instance to populate.
+     * @param args Additional formatting arguments.
      */
-    public void format(AccessibilityEvent event, Utterance utterance);
+    public void format(AccessibilityEvent event, Context context, Utterance utterance, Object args);
 }

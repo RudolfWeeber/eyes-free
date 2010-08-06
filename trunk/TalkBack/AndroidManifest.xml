@@ -2,12 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.marvin.talkback"
     android:sharedUserId="com.google.android.marvin.feedback"    
-    android:versionCode="11"
-    android:versionName="2.3.0">
+    android:versionCode="12"
+    android:versionName="2.4.0">
 
     <uses-sdk android:minSdkVersion="4" />
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- Allows TalkBack to find out what activity is running. -->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <!-- Allows third party applications to send Intent broadcast commands to TalkBack. -->
     <permission android:name="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK"
@@ -33,6 +36,13 @@
                 <action android:name="com.google.android.marvin.talkback.ACTION_TALKBACK_AS_NOTIFICATION_STATE" />
             </intent-filter>
         </service>
+
+        <activity android:name=".TalkBackPreferencesActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.accessibilityservice.SERVICE_SETTINGS" />
+            </intent-filter>
+        </activity>
 
     <provider android:name=".StatusProvider"
             android:authorities="com.google.android.marvin.talkback.providers.StatusProvider"  />

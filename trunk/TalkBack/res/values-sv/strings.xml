@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- NOTIFICATIONS -->
+
+    <string name="notification_type_text_message">Textmeddelande</string>
+
+    <string name="notification_type_failed_text_message">textmeddelande inte skickat</string>
+
+    <string name="notification_type_missed_call">Missat samtal</string>
+
+    <string name="notification_type_usb_connected">USB ansluten</string>
+
+    <string name="notification_type_status_mute">Tyst</string>
+
+    <string name="notification_type_status_chat">Chat</string>
+
+    <string name="notification_type_status_error">Fel</string>
+
+    <string name="notification_type_status_more">Mer</string>
+
+    <string name="notification_type_status_sdcard">SD kort</string>
+
+    <string name="notification_type_status_sdcard_usb">SD kort USB</string>
+
+    <string name="notification_status_sync">Synkronisera</string>
+
+    <string name="notification_type_status_sync_noanim">Synkronisera</string>
+
+    <string name="notification_type_status_voicemail">Röstmeddelande</string>
+
+    <string name="notification_status_play">Spelar</string>
+
+    <string name="notification_type_status_notification">Statusnotifiering</string>
+
+    <!-- TEMPLATES -->
+
+    <!-- %1$s - The title of a check box/radio button; -->
+    <string name="template_compound_button_checked">%1$s kryssad</string>
+
+    <!-- %1$s - The title of a check box/ radio button; -->
+    <string name="template_compound_button_not_checked">%1$s ej kryssad</string>
+
+    <!-- %1$s - The text content of an edit box; -->
+    <string name="template_edit_box">textfält. %1$s</string>
+
+    <!-- %1$s - The text content of a search box; -->
+    <string name="template_search_box">Sökfält. %1$s</string>
+
+    <!-- %1$s - The text content of an alert/pop up message; -->
+    <string name="template_alert_dialog_template">Varning  %1$s</string>
+
+    <!-- %1$s - The replaced text; %2$s - The replacement text; -->
+    <string name="temlate_text_replaced">%1$s ersatt med %2$s</string>
+
+    <!-- %1$s - The count of replaced characters; %2$s - The count of replacement characters; (used for password fields) -->
+    <string name="template_replaced_characters">%1$s tecken ersatta med %2$s tecken</string>
+
+    <!-- %1$s - The ringer volume in percent;-->
+    <string name="template_ringer_volume">Ringvolym %1$s procent.</string>
+
+    <!-- VALUES -->
+
+    <string name="value_password">lösenord</string>
+
+    <string name="value_sliding_drawer_opened">Glidande ritare öppnas</string>
+
+    <string name="value_handle_view">Sliding drawer handle</string>
+
+    <string name="value_input_method_shown">Inmatningsmetod</string>
+
+    <string name="value_status_bar_opened">Statusfält</string>
+
+    <string name="value_options_menu_open">Val.</string>
+
+    <string name="value_text_removed">raderad</string>
+
+    <string name="value_notification_summary">Notifieringsammandrag</string>
+
+    <string name="value_checked">kryssad</string>
+
+    <string name="value_not_checked">ej kryssad</string>
+
+    <string name="value_clicked">clickad</string>
+
+    <string name="value_ringer_vibrate">Ringsignalstyp vibrera.</string>
+
+    <string name="value_ringer_silent">Ringsignalstyp tyst.</string>
+
+    <string name="value_ringer_normal">Ringsignalstyp normal.</string>
+
+    <string name="value_screen_on">Skärm på.</string>
+
+    <string name="value_screen_off">Skärm av.</string>
+
+    <string name="value_phone_unlocked">Telefonen upplåst.</string>
+
+    <!-- PERMISSIONS -->
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack">Skicka avsiktliga kommandon till TalkBack</string>
+
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Tillåter en applikation eller tjänst att këra TalkBack via avsiktliga sändningar och potentiellt erhålla information om TalkBacks tillstånd till exempel de cachade notifieringarna.</string>
+
+    <!-- Punctuation mappings -->
+
+    <string name="punctuation_questionmark">Frågetecken</string>
+    <string name="punctuation_space">Mellanslag</string>    
+    <string name="punctuation_comma">Komma</string>    
+    <string name="punctuation_dot">Punkt</string>            
+    <string name="punctuation_exclamation">Utropstecken</string>
+    <string name="punctuation_open_paren">Vänster parentes</string>
+    <string name="punctuation_close_paren">Häger parentes</string>
+    <string name="punctuation_double_quote">Citationstecken</string>
+    <string name="punctuation_semicolon">Semicolon</string>
+    <string name="punctuation_colon">Kolon</string>        
+
+</resources>

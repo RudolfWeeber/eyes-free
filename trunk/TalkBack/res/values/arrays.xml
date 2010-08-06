@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="pref_speak_ringer_entries">
+        <item>Speak at all ringer volumes</item>
+        <item>No speech in Silent Mode</item>
+        <item>No speech in Vibrate and Silent Mode</item>
+    </string-array>
+
+    <string-array name="pref_speak_ringer_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="pref_speak_screenoff_entries">
+        <item>Allow speech when screen is off</item>
+        <item>No speech when screen is off</item>
+    </string-array>
+
+    <string-array name="pref_speak_screenoff_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+</resources>

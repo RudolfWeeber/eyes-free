@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd">
+
+  <!-- This file contains speech strategy rules for 3rd-party apps. -->
+  <!-- Later, these might not be built into TalkBack, but loaded  -->
+  <!-- dynamically from another file.  -->
+
+  <!-- Amazon.com -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.amazon.mShop.android</ss:packageName>
+      <ss:activity>com.amazon.mShop.android.home.HomeActivity</ss:activity>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+      <ss:itemCount>16</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_amazon_go</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.EditText</ss:className>
+      <ss:packageName>com.amazon.mShop.android</ss:packageName>
+      <ss:activity>com.amazon.mShop.android.cart.CartActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_amazon_quantity</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Amazon MP3 store -->
+  <!-- Special case to avoid double announcing MP3 store results.
+      This is caused of getting select and focus events. This happens
+      in Eclair but is fixed later. This is a backwards compatible fix.
+  -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>android.widget.RelativeLayout</ss:className>
+      <ss:packageName>com.amazon.mp3</ss:packageName>
+    </ss:filter>
+  </ss:rule>
+
+  <!-- Amazon MP3 store search button -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageView</ss:className>
+      <ss:packageName>com.amazon.mp3</ss:packageName>
+      <ss:activity>com.amazon.mp3.client.activity.HomeActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_amazon_search</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Amazon MP3 store buy button -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.amazon.mp3.client.views.BuyButton</ss:className>
+      <ss:packageName>com.amazon.mp3</ss:packageName>
+      <ss:activity>com.amazon.mp3.client.activity.HomeActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_amazon_mp3_buy_button</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Camera Magic -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.noclicklabs.camera.ShutterButton</ss:className>
+      <ss:packageName>com.noclicklabs.camera</ss:packageName>
+      <ss:activity>com.noclicklabs.camera.CameraActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_camera_magic_take_picture</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.SeekBar</ss:className>
+      <ss:packageName>com.noclicklabs.camera</ss:packageName>
+      <ss:activity>com.noclicklabs.camera.CameraActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_camera_magic_zoom_slider</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Facebook App -->
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_news_feed</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_friends</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_photos</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>3</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_inbox</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>4</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_profile</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>5</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_notifications</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- File Manager by Apollo software -->
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_home</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_up</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_multi_select</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>3</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_edit</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>4</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_bookmark</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>5</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_new_folder</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>6</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_back</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>7</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_forwards</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>8</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_sort</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>9</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_refresh</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.adao.android.afm.FileManagerActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:packageName>com.adao.android.afm</ss:packageName>
+      <ss:currentItemIndex>10</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_help</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+</ss:speechstrategy>

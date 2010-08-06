@@ -28,18 +28,18 @@ import android.net.Uri;
  *
  * Applications can check if any screen readers are running by doing the
  * following:
- * 
+ *
  * 1. Detect all installed screen readers by using Intents.
- *    Screen reader services are expected to respond to intent filters for 
+ *    Screen reader services are expected to respond to intent filters for
  *    action = "android.accessibilityservice.AccessibilityService" and
  *    category = "android.accessibilityservice.category.FEEDBACK_SPOKEN".
- * 
+ *
  * 2. For the list of screen readers installed, check their status provider.
  *    Screen readers are expected to implement:
  *    <packagename>.providers.StatusProvider.
  *    For example, in TalkBack, the status provider is:
  *    com.google.android.marvin.talkback.providers.StatusProvider
- * 
+ *
  * 3. The status provider returns 0 for inactive, and
  *    1 for active.
  *
@@ -98,7 +98,7 @@ public class StatusProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
         StatusCursor cursor = new StatusCursor();
-        if (TalkBackService.mInfrastructureInitialized) {
+        if (TalkBackService.isServiceInitialized()) {
             cursor.setStatus(TalkBackService.RESULT_TALKBACK_ENABLED);
         } else {
             cursor.setStatus(TalkBackService.RESULT_TALKBACK_DISABLED);
