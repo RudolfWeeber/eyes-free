@@ -637,21 +637,33 @@
 
     <!--
       Source: Preference for setting up if to announce the caller ID.
-      Description: The user can select one of several options. [CHAR LIMIT=25]
+      Description: The user can check or not check this. [CHAR LIMIT=25]
     -->
     <string name="title_pref_caller_id">Speak Caller ID</string>
 
     <!--
       Source: Preference for using the Text-To-Speech (TTS) extended - a specific TTS library.
-      Description: The user can select one of several options. [CHAR LIMIT=25]
+      Description: The user can check or not check this. [CHAR LIMIT=25]
     -->
     <string name="title_pref_tts_extended">Use TTS Extended</string>
 
     <!--
       Source: Preference for using the proximity sensor to silence speech output.
-      Description: The user can select one of several options. [CHAR LIMIT=25]
+      Description: The user can check or not check this. [CHAR LIMIT=25]
     -->
-    <string name="title_pref_proximity">Use Proximity Sensor</string>
+    <string name="title_pref_proximity">Proximity Sensor</string>
+
+    <!--
+      Source: Summary subtext for the Proximity Sensor setting.
+      Description: Explains that the proximity sensor will be used to stop speech. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOn_pref_proximity">Proximity sensor silences speech</string>
+
+    <!--
+      Source: Summary subtext for the Proximity Sensor setting.
+      Description: Explains that the proximity sensor will not have any effect on speech. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOff_pref_proximity">Proximity sensor does not control speech</string>
 
     <!--
       Source: Preference category for managing plug-ins.

@@ -31,7 +31,9 @@
 
         <CheckBoxPreference
                 android:key="@string/pref_proximity_key"
-                android:title="@string/title_pref_proximity" />
+                android:title="@string/title_pref_proximity"
+                android:summaryOn="@string/summaryOn_pref_proximity"
+                android:summaryOff="@string/summaryOff_pref_proximity" />
 
     </PreferenceCategory>
 

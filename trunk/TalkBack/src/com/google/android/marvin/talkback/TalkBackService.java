@@ -619,7 +619,7 @@ public class TalkBackService extends AccessibilityService {
     }
     
     private void initializeProximitySensor() {
-        mProximitySensor = new ProximitySensor(this, new ProximityChangeListener() {
+        mProximitySensor = new ProximitySensor(this, true, new ProximityChangeListener() {
             @Override
             public void onProximityChanged(float proximity) {
                 if (proximity == 0) {
