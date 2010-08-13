@@ -16,6 +16,7 @@
 
 package com.ideal.itemid;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -31,6 +32,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -48,6 +51,7 @@ public class ItemIdActivity extends Activity {
     private HashMap<String, String> mTtsParams;
 
     private OnUtteranceCompletedListener mUtteranceCompletedListener = new OnUtteranceCompletedListener() {
+        @Override
         public void onUtteranceCompleted(String utteranceId) {
             doScan();
         }
@@ -67,6 +71,7 @@ public class ItemIdActivity extends Activity {
         // just that the TTS has finished speaking.
         mTtsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "done");
         mTts = new TextToSpeech(this, new OnInitListener() {
+            @Override
             public void onInit(int arg0) {
                 mTts.setOnUtteranceCompletedListener(mUtteranceCompletedListener);
                 mTts.speak("Ready to scan", 0, mTtsParams);
@@ -146,7 +151,24 @@ public class ItemIdActivity extends Activity {
     // Handles the results from the Barcode Scanner.
     private void processResults(String format, String content) {
         if (IntentIntegrator.QR_CODE_TYPES.indexOf(format) != -1) {
-            mTts.speak(content, 0, mTtsParams);
+            if (content.indexOf("audio://") == 0) {
+                String filename = "/sdcard/idealItemId/" + content.replaceAll("audio://", "");
+                if (new File(filename).exists()) {
+                    MediaPlayer mPlayer = MediaPlayer.create(this, Uri.parse(filename));
+                    mPlayer.setOnCompletionListener(new OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.release();
+                            doScan();
+                        }
+                    });
+                    mPlayer.start();
+                } else {
+                    mTts.speak("Error: Unable to locate audio label on SD card.", 0, mTtsParams);
+                }
+            } else {
+                mTts.speak(content, 0, mTtsParams);
+            }
         } else {
             mTts.speak("Looking up barcode.", 0, null);
             HtmlDownloadJob currentJob = new HtmlDownloadJob("http://www.upcdatabase.com/item/"
