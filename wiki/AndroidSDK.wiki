@@ -13,8 +13,8 @@ Please note that the SDK is quite large (over 20 MB), and the tools assume a bas
 
 The SDK can be found at http://developer.android.com/sdk, but for your convenience, here are direct links to the SDK for three platforms:
 
-  * Linux: http://dl.google.com/android/android-sdk_r04-linux_86.tgz
-  * Windows: http://dl.google.com/android/android-sdk_r04-windows.zip
-  * Mac: http://dl.google.com/android/android-sdk_r04-mac_86.zip
+  * Linux: http://dl.google.com/android/android-sdk_r06-linux_86.tgz
+  * Windows: http://dl.google.com/android/android-sdk_r06-windows.zip
+  * Mac: http://dl.google.com/android/android-sdk_r06-mac_86.zip
 
 In the "tools" directory, you'll find a program called "emulator".  Run it from the command line with no options to get some options.
