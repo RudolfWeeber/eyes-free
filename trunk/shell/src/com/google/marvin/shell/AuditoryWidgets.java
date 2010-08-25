@@ -15,6 +15,7 @@
  */
 package com.google.marvin.shell;
 
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -139,8 +140,8 @@ public class AuditoryWidgets {
                 WifiManager wManager = (WifiManager) parent.getSystemService(Context.WIFI_SERVICE);
                 WifiInfo wInfo = wManager.getConnectionInfo();
                 int wifiSignalStrength = WifiManager.calculateSignalLevel(wInfo.getRssi(), 4);
-                info = parent.getString(R.string.wifi) + wInfo.getSSID() + " " + wifiSignalStrength + " "
-                        + parent.getString(R.string.bars);
+                info = parent.getString(R.string.wifi) + wInfo.getSSID() + " " + wifiSignalStrength
+                        + " " + parent.getString(R.string.bars);
             }
         }
         tts.speak(info, 1, null);
@@ -253,7 +254,11 @@ public class AuditoryWidgets {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-        parent.startActivityForResult(intent, MarvinShell.VOICE_RECO_CODE);
+        try {
+            parent.startActivityForResult(intent, MarvinShell.VOICE_RECO_CODE);
+        } catch (ActivityNotFoundException anf) {
+            parent.tts.speak(parent.getString(R.string.search_not_available), 0, null);
+        }
     }
 
     public int getCallState() {

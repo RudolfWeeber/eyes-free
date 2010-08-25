@@ -190,7 +190,7 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
     }
 
     private void initMarvinShell() {
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        setVolumeControlStream(AudioManager.STREAM_RING);
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         self = this;
@@ -550,13 +550,13 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
             }
         }
         mainText.setText(menus.get(menus.size() - 1).title);
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        setVolumeControlStream(AudioManager.STREAM_RING);
     }
 
     public void onGestureStart(int g) {
         vibe.vibrate(VIBE_PATTERN, -1);
         // The ringer volume will be adjusted during a gesture.
-        setVolumeControlStream(AudioManager.STREAM_RING);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -599,6 +599,20 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
                         }
                     }
                     new Thread(new QuitCommandWatcher()).start();
+                }
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                audioManager.adjustStreamVolume(getVolumeControlStream(), AudioManager.ADJUST_RAISE,
+                        AudioManager.FLAG_SHOW_UI);
+                if (getVolumeControlStream() == AudioManager.STREAM_MUSIC) {
+                    tts.playEarcon(getString(R.string.earcon_tick), 0, null);
+                }
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                audioManager.adjustStreamVolume(getVolumeControlStream(), AudioManager.ADJUST_LOWER,
+                        AudioManager.FLAG_SHOW_UI);
+                if (getVolumeControlStream() == AudioManager.STREAM_MUSIC) {
+                    tts.playEarcon(getString(R.string.earcon_tick), 1, null);
                 }
                 return true;
         }

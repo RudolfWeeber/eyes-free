@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home">Home</string>    
+    <string name="home">Home</string>
     <string name="please_unlock">Please unlock.</string>
-    <string name="you_have_new_voicemail">You have new voicemail.</string>    
+    <string name="you_have_new_voicemail">You have new voicemail.</string>
     <string name="application_not_installed">Application not installed.</string>
     <string name="compass">Compass</string>
-    <string name="battery">Battery</string>    
+    <string name="battery">Battery</string>
     <string name="midnight">midnight</string>
     <string name="noon">noon</string>
     <string name="am">AM</string>
@@ -32,7 +32,7 @@
     <string name="button3_prompt">Application for button 3</string>
     <string name="button4_prompt">Application for button 4</string>
     <string name="button6_prompt">Application for button 6</string>
-    <string name="button7_prompt">Application for button 7</string>      
+    <string name="button7_prompt">Application for button 7</string>
     <string name="button8_prompt">Application for button 8</string>
     <string name="button9_prompt">Application for button 9</string>
     <string name="period">Period</string>
@@ -40,10 +40,11 @@
     <string name="exclamation_point">Exclamation Point</string>
     <string name="comma">Comma</string>
     <string name="backspace">Backspace</string>
-    <string name="confirm">Confirm</string>     
-    <string name="time">Time</string>    
-    <string name="search">Search</string>     
-    
+    <string name="confirm">Confirm</string>
+    <string name="time">Time</string>
+    <string name="search">Search</string>
+    <string name="search_not_available">Voice search is not available on this device.</string>
+
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>
     <string name="shortcutsManager">Shortcuts Manager for Eyes-Free Shell</string>
