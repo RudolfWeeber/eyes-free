@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#ffffff"
+  android:gravity="center_vertical"
+  android:padding="20dp">
+  <TextView
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:textSize="20sp"
+    android:paddingLeft="20dp"
+    android:gravity="center_horizontal"
+    android:textColor="#777777"
+    android:text="Wifi Tests"/>
+  <TextView
+    android:layout_width="fill_parent" 
+    android:layout_height="30dp"/>
+  <Button
+    android:id="@+id/launcher_accuracy_test"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp" 
+    android:text="Run accuracy tests"/>
+  <Button
+    android:id="@+id/launcher_health_check"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp" 
+    android:text="Wifi signal health check"/>
+</LinearLayout>

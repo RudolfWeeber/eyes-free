@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#ffffff"
+  android:gravity="center_vertical"
+  android:padding="20dp">
+  <TextView
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:textSize="20sp"
+    android:paddingLeft="20dp"
+    android:gravity="center_horizontal"
+    android:textColor="#777777"
+    android:text="Wifi Location Demos"/>
+  <TextView
+    android:layout_width="fill_parent" 
+    android:layout_height="30dp"/>
+  <Button
+    android:id="@+id/launcher_getMyLocation"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp"
+    android:text="Get my location"/>
+  <Button
+    android:id="@+id/launcher_continuousPositioningDemo"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp"
+    android:text="Continuous Positioning Demo"/>
+  <Button
+    android:id="@+id/launcher_navigateDemo"
+    android:layout_width="fill_parent"
+    android:layout_height="70dp"
+    android:text="Navigate"/>
+</LinearLayout>
