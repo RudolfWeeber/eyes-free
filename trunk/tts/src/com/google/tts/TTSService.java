@@ -246,6 +246,7 @@ public class TTSService extends Service implements OnCompletionListener {
 
     private boolean deprecatedKeepBlockingFlag = false;
 
+
     @Override
     public void onCreate() {
         super.onCreate();
