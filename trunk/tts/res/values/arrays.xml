@@ -59,4 +59,101 @@
   <string-array name="tts_engine_values">
     <item>com.svox.pico</item>
   </string-array>
+  
+  
+  <!-- These are for the older prefs setting that will be shown to Cupcake users. -->
+  <string-array name="language_entries">
+        <item>Afrikaans [af]</item>
+        <item>Bosnian [bs]</item>
+        <item>Chinese (Cantonese) [zh-yue]</item>
+        <item>Chinese (Mandarin) [zh]</item>
+        <item>Croatian [hr]</item>
+        <item>Czech [cz]</item>
+        <item>Dutch [nl]</item>
+        <item>English (American) [en-us]</item>
+        <item>English (British) [en-uk]</item>
+        <item>Esperanto [eo]</item>
+        <item>Finnish [fi]</item>
+        <item>French [fr]</item>
+        <item>German [de]</item>
+        <item>Greek [el]</item>
+        <item>Hindi [hi]</item>
+        <item>Hungarian [hu]</item>
+        <item>Icelandic [is]</item>
+        <item>Indonesian [id]</item>
+        <item>Italian [it]</item>
+        <item>Kurdish [ku]</item>
+        <item>Latin [la]</item>
+        <item>Macedonian [mk]</item>
+        <item>Norwegian [no]</item>
+        <item>Polish [pl]</item>
+        <item>Portuguese [pt]</item>
+        <item>Romanian [ro]</item>
+        <item>Russian [ru]</item>
+        <item>Serbian [sr]</item>
+        <item>Slovak [sk]</item>
+        <item>Spanish [es]</item>
+        <item>Spanish (Latin America) [es-la]</item>
+        <item>Swahili [sw]</item>
+        <item>Swedish [sv]</item>
+        <item>Tamil [ta]</item>
+        <item>Turkish [tr]</item>
+        <item>Vietnamese [vi]</item>
+        <item>Welsh [cy]</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>afr</item>
+        <item>bos</item>
+        <item>yue</item>
+        <item>cmn</item>
+        <item>hrv</item>
+        <item>ces</item>
+        <item>nld</item>
+        <item>eng-USA</item>
+        <item>eng-GBR</item>
+        <item>epo</item>
+        <item>fin</item>
+        <item>fra</item>
+        <item>deu</item>
+        <item>ell</item>
+        <item>hin</item>
+        <item>hun</item>
+        <item>isl</item>
+        <item>ind</item>
+        <item>ita</item>
+        <item>kur</item>
+        <item>lat</item>
+        <item>mkd</item>
+        <item>nor</item>
+        <item>pol</item>
+        <item>por</item>
+        <item>ron</item>
+        <item>rus</item>
+        <item>srp</item>
+        <item>slk</item>
+        <item>spa</item>
+        <item>spa-MEX</item>
+        <item>swa</item>
+        <item>swe</item>
+        <item>tam</item>
+        <item>tur</item>
+        <item>vie</item>
+        <item>cym</item>
+    </string-array>
+
+    <string-array name="rate_entries">
+        <item>Very slow</item>
+        <item>Slow</item>
+        <item>Normal</item>
+        <item>Fast</item>
+        <item>Very fast</item>
+    </string-array>
+    <string-array name="rate_values">
+        <item>60</item>
+        <item>100</item>
+        <item>140</item>
+        <item>180</item>
+        <item>220</item>
+    </string-array>
+  
 </resources>
