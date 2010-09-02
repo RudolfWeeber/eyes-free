@@ -32,10 +32,11 @@ h2 {
     font-size: 20px;
     font-family: Helvetica, sans-serif;
     margin-top: 35px;
+    line-height: 30px;
 }
 
 h3 {
-    margin-top: 20px;
+    margin-top: 18px;
 }
 
 #contents {
@@ -100,7 +101,7 @@ h3 {
 }
 
 ul {
-    list-style-type: none;
+    list-style-type: bullet;
     padding-bottom: 5px;
 }
 
