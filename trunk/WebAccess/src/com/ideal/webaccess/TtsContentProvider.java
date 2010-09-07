@@ -29,20 +29,14 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
 /**
- * Content Provider for wrapping the TextToSpeech library.
- * 
- * Usage:
- * content://com.ideal.webaccess.tts/MODE/RANDOMNUMBER/STRING_TO_BE_SPOKEN 
- * where
- * MODE is 0 for flush, 1 for queue, 
- * RANDOMNUMBER is a random number that is used to force the content provider
- * to speak the message (even if it was previously spoken because it will 
- * have a different URI),
- * and STRING_TO_BE_SPOKEN is the actual string that should be spoken to 
- * the user.
- * 
- * What is served back is currently not used, but it should be possible to
- * use that to communicate back whether or not the TTS is currently speaking.
+ * Content Provider for wrapping the TextToSpeech library. Usage:
+ * content://com.ideal.webaccess.tts/MODE/RANDOMNUMBER/STRING_TO_BE_SPOKEN where
+ * MODE is 0 for flush, 1 for queue, RANDOMNUMBER is a random number that is
+ * used to force the content provider to speak the message (even if it was
+ * previously spoken because it will have a different URI), and
+ * STRING_TO_BE_SPOKEN is the actual string that should be spoken to the user.
+ * What is served back is currently not used, but it should be possible to use
+ * that to communicate back whether or not the TTS is currently speaking.
  */
 public class TtsContentProvider extends ContentProvider {
     private static final String URI_PREFIX = "content://com.ideal.webaccess.tts";
@@ -84,6 +78,7 @@ public class TtsContentProvider extends ContentProvider {
                 // We are using the random number to force a content refresh.
                 int stringStart = text.indexOf("/", 2) + 1;
                 text = URLDecoder.decode(text.substring(stringStart), "UTF-8");
+                text = StringUtils.unescapeHTML(text);
             }
         } catch (UnsupportedEncodingException e) {
             // TODO Auto-generated catch block

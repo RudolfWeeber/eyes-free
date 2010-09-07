@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.ideal.webaccess;
 
 import java.io.ByteArrayOutputStream;
@@ -31,9 +32,8 @@ import android.provider.Browser;
 import android.webkit.WebView;
 
 /**
- * Main activity for IDEAL Web Access.
- * Adds the bookmarklet + unzips the necessary JavaScript files, then
- * displays the tutorial HTML WebView.
+ * Main activity for IDEAL Web Access. Adds the bookmarklet + unzips the
+ * necessary JavaScript files, then displays the tutorial HTML WebView.
  */
 public class StartIdealWebAccess extends Activity {
     private static final String[] mColumnStrings = {
@@ -63,16 +63,16 @@ public class StartIdealWebAccess extends Activity {
             // http://code.google.com/p/android/issues/detail?id=3122
             AssetFileDescriptor jsZipFd = res.openRawResourceFd(R.raw.ideal_js);
             InputStream stream = jsZipFd.createInputStream();
-            (new Thread(new unzipper(stream))).start();
+            (new Thread(new dataCheckAndUnzip(stream))).start();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private class unzipper implements Runnable {
+    private class dataCheckAndUnzip implements Runnable {
         public InputStream stream;
 
-        public unzipper(InputStream is) {
+        public dataCheckAndUnzip(InputStream is) {
             stream = is;
         }
 
@@ -81,7 +81,7 @@ public class StartIdealWebAccess extends Activity {
                     + "/ideal-webaccess/js/ideal-webaccess.user.js");
             boolean result = idealLoaderScript.exists();
             if (!result) {
-                result = Unzipper.unzip(stream);
+                result = Unzipper.doDataCheckAndUnzip(stream);
             }
             if (result) {
                 runOnUiThread(new Runnable() {

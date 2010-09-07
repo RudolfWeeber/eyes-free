@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.ideal.webaccess;
 
 import java.io.File;
@@ -26,14 +27,10 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 
 /**
- * Content Provider for serving JavaScript.
- * JavaScript files must be stored under:
- *   /sdcard/ideal-webaccess/js/
- * for example:
- *   /sdcard/ideal-webaccess/js/MY_JS_FILE.js
- *   
- * JavaScript files can be accessed by in the WebView by using:
- *   content://com.ideal.webaccess.localjs/MY_JS_FILE.js
+ * Content Provider for serving JavaScript. JavaScript files must be stored
+ * under: /sdcard/ideal-webaccess/js/ for example:
+ * /sdcard/ideal-webaccess/js/MY_JS_FILE.js JavaScript files can be accessed by
+ * in the WebView by using: content://com.ideal.webaccess.localjs/MY_JS_FILE.js
  */
 public class LocalJsProvider extends ContentProvider {
     private static final String URI_PREFIX = "content://com.ideal.webaccess.localjs";
