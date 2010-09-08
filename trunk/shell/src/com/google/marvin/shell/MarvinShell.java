@@ -746,6 +746,9 @@ public class MarvinShell extends Activity implements GestureListener {
             if (screenStateChangeReceiver != null) {
                 unregisterReceiver(screenStateChangeReceiver);
             }
+            if (appChangeReceiver != null) {
+                unregisterReceiver(appChangeReceiver);
+            }
         } catch (IllegalArgumentException e) {
             // Sometimes there may be 2 shutdown requests in which case, the 2nd
             // request will fail
