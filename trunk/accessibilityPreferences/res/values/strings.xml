@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Accessibility Preferences</string>
+    <string name="no_settings_message">No Accessibility Preferences Found</string>
+    <string name="launch_failed_message">Unable to launch preferences application.</string>
+    <string name="ok_button">OK</string>
+    <!-- Template used for the text that appears in the Accessibility Preferences ListView -->
+    <string name="template_list_item_text">%1$s Preferences</string>
+</resources>
