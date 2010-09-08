@@ -34,24 +34,25 @@ import android.preference.Preference.OnPreferenceChangeListener;
  * Activity used to set TalkBack's service preferences. This activity is loaded
  * when the TalkBackService is first connected to and allows the user to select
  * a font zoom size.
- *
+ * 
  * @author dmazzoni@google.com (Dominic Mazzoni)
  */
 public class TalkBackPreferencesActivity extends PreferenceActivity {
 
-    private static final String ACTION_ACCESSIBILITY_SETTINGS =
-        "android.settings.ACCESSIBILITY_SETTINGS";
+    private static final String ACTION_ACCESSIBILITY_SETTINGS = "android.settings.ACCESSIBILITY_SETTINGS";
 
     private ListPreference mScreenOff = null;
+
     private String[] mScreenOffStrings = null;
 
     private ListPreference mRinger = null;
+
     private String[] mRingerStrings = null;
 
     private CheckBoxPreference mCallerId = null;
 
     private CheckBoxPreference mTtsExtended = null;
-    
+
     private CheckBoxPreference mProximity = null;
 
     private PreferenceScreen mManagePluginsScreen = null;
@@ -66,7 +67,11 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        addPreferencesFromResource(R.xml.preferences);
+        if (Build.VERSION.SDK_INT < 8) {
+            addPreferencesFromResource(R.xml.preferences_prefroyo);
+        } else {
+            addPreferencesFromResource(R.xml.preferences);
+        }
 
         mHandler = new Handler();
 
@@ -102,8 +107,7 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
             }
         });
 
-        mCallerId = (CheckBoxPreference) findPreference(
-            getString(R.string.pref_caller_id_key));
+        mCallerId = (CheckBoxPreference) findPreference(getString(R.string.pref_caller_id_key));
         mCallerId.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 deferReloadPreferences();
@@ -111,31 +115,26 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
             }
         });
 
-        mTtsExtended = (CheckBoxPreference) findPreference(
-            getString(R.string.pref_tts_extended_key));
-        mTtsExtended.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                deferReloadPreferences();
-                return true;
-            }
-        });
-        // TTS Extended should always be false on Froyo or later.
-        if (Build.VERSION.SDK_INT >= 8) {
-            mTtsExtended.setChecked(false);
-            mTtsExtended.setEnabled(Build.VERSION.SDK_INT < 8);
-        }
-        
-        mProximity = (CheckBoxPreference) findPreference(
-                getString(R.string.pref_proximity_key));
-            mProximity.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        // TTS Extended only exists pre-Froyo.
+        if (Build.VERSION.SDK_INT < 8) {
+            mTtsExtended = (CheckBoxPreference) findPreference(getString(R.string.pref_tts_extended_key));
+            mTtsExtended.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     deferReloadPreferences();
                     return true;
                 }
             });
+        }
 
-        mManagePluginsScreen = (PreferenceScreen) findPreference(
-            getString(R.string.pref_manage_plugins_key));
+        mProximity = (CheckBoxPreference) findPreference(getString(R.string.pref_proximity_key));
+        mProximity.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                deferReloadPreferences();
+                return true;
+            }
+        });
+
+        mManagePluginsScreen = (PreferenceScreen) findPreference(getString(R.string.pref_manage_plugins_key));
     }
 
     /**
@@ -164,8 +163,9 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
     }
 
     /**
-     * Tell the service to reload preferences, but defer until the next event loop, because
-     * onPreferenceChange gets called before the preference changes, not after.
+     * Tell the service to reload preferences, but defer until the next event
+     * loop, because onPreferenceChange gets called before the preference
+     * changes, not after.
      */
     private void deferReloadPreferences() {
         mHandler.post(new Runnable() {
@@ -174,25 +174,22 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
                     TalkBackService.getInstance().reloadPreferences();
                 }
             }
-          });
+        });
     }
 
     /**
      * Constructs an AlertDialog that displays a warning when TalkBack is
      * disabled. Clicking the "Yes" button launches the accessibility settings
      * menu to enable the Talkback service.
-     *
+     * 
      * @return an AlertDialog containing a warning message about TalkBack's
      *         disabled state
      */
     private AlertDialog createInactiveServiceAlert() {
-        return new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.title_talkback_inactive_alert))
-            .setMessage(getString(R.string.message_talkback_inactive_alert))
-            .setCancelable(false)
-            .setPositiveButton(
-                android.R.string.yes,
-                new DialogInterface.OnClickListener() {
+        return new AlertDialog.Builder(this).setTitle(
+                getString(R.string.title_talkback_inactive_alert)).setMessage(
+                getString(R.string.message_talkback_inactive_alert)).setCancelable(false)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         /*
                          * There is no guarantee that an accessibility settings
@@ -208,30 +205,20 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
                         }
                         dialog.dismiss();
                     }
-                })
-            .setNegativeButton(
-                android.R.string.no,
-                new DialogInterface.OnClickListener() {
+                }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
-                })
-            .create();
+                }).create();
     }
 
     private void showNoAccessibilityWarning() {
-        new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.title_no_accessibility_alert))
-            .setMessage(getString(R.string.message_no_accessibility_alert))
-            .setPositiveButton(
-                android.R.string.ok,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        TalkBackPreferencesActivity.this.finish();
-                    }
-                })
-            .create()
-            .show();
+        new AlertDialog.Builder(this).setTitle(getString(R.string.title_no_accessibility_alert))
+                .setMessage(getString(R.string.message_no_accessibility_alert)).setPositiveButton(
+                        android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                TalkBackPreferencesActivity.this.finish();
+                            }
+                        }).create().show();
     }
 }
-

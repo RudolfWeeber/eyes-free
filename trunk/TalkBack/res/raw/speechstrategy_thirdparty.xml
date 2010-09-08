@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  <ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd">
 
   <!-- This file contains speech strategy rules for 3rd-party apps. -->
@@ -101,17 +101,19 @@
   </ss:rule>
 
   <!-- Facebook App -->
+
+  <!-- Facebook Home screen -->
+
   <ss:rule>
     <ss:filter>
       <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.facebook.katana</ss:packageName>
       <ss:currentItemIndex>0</ss:currentItemIndex>
-      <ss:itemCount>6</ss:itemCount>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_news_feed</ss:template>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_post_status</ss:template>
     </ss:formatter>
   </ss:rule>
 
@@ -119,69 +121,244 @@
     <ss:filter>
       <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.facebook.katana</ss:packageName>
       <ss:currentItemIndex>1</ss:currentItemIndex>
-      <ss:itemCount>6</ss:itemCount>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_friends</ss:template>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_search</ss:template>
     </ss:formatter>
   </ss:rule>
 
   <ss:rule>
     <ss:filter>
       <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>android.widget.Gallery</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_gallery_photo</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Facebook News feed -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.StreamActivity</ss:activity>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_home</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.StreamActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_search</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.StreamActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.facebook.katana</ss:packageName>
       <ss:currentItemIndex>2</ss:currentItemIndex>
-      <ss:itemCount>6</ss:itemCount>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_photos</ss:template>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_camera</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Facebook Profile page -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.ProfileTabHostActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_home</ss:template>
     </ss:formatter>
   </ss:rule>
 
   <ss:rule>
     <ss:filter>
-      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:activity>com.facebook.katana.ProfileTabHostActivity</ss:activity>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.facebook.katana</ss:packageName>
-      <ss:currentItemIndex>3</ss:currentItemIndex>
-      <ss:itemCount>6</ss:itemCount>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_inbox</ss:template>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_search</ss:template>
     </ss:formatter>
   </ss:rule>
 
   <ss:rule>
     <ss:filter>
-      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:activity>com.facebook.katana.ProfileTabHostActivity</ss:activity>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.facebook.katana</ss:packageName>
-      <ss:currentItemIndex>4</ss:currentItemIndex>
-      <ss:itemCount>6</ss:itemCount>
+      <ss:currentItemIndex>6</ss:currentItemIndex>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_profile</ss:template>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_camera</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Facebook Albums page -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.AlbumsActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_home</ss:template>
     </ss:formatter>
   </ss:rule>
 
   <ss:rule>
     <ss:filter>
-      <ss:activity>com.facebook.katana.HomeActivity</ss:activity>
+      <ss:activity>com.facebook.katana.RequestsActivity</ss:activity>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>com.facebook.katana.MyButton</ss:className>
+      <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.facebook.katana</ss:packageName>
-      <ss:currentItemIndex>5</ss:currentItemIndex>
-      <ss:itemCount>6</ss:itemCount>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_notifications</ss:template>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_camera</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.RequestsActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_search</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Facebook Messages page -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.MailboxTabHostActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_home</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.MailboxTabHostActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_compose</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.MailboxTabHostActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_search</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Facebook Requests page -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.RequestsActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_home</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.RequestsActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_search</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Facebook events page -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.EventsActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_home</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:activity>com.facebook.katana.EventsActivity</ss:activity>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.facebook.katana</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_facebook_search</ss:template>
     </ss:formatter>
   </ss:rule>
 
@@ -326,6 +503,159 @@
     </ss:filter>
     <ss:formatter>
       <ss:template>@com.google.android.marvin.talkback:string/value_file_manager_help</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Stitcher -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.stitcher.app</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+      <ss:itemCount>7</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_stitcher_thumbs_down</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.stitcher.app</ss:packageName>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+      <ss:itemCount>7</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_stitcher_thumbs_up</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.stitcher.app</ss:packageName>
+      <ss:currentItemIndex>3</ss:currentItemIndex>
+      <ss:itemCount>7</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_stitcher_star</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.stitcher.app</ss:packageName>
+      <ss:currentItemIndex>4</ss:currentItemIndex>
+      <ss:itemCount>7</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_stitcher_play</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.stitcher.app</ss:packageName>
+      <ss:currentItemIndex>5</ss:currentItemIndex>
+      <ss:itemCount>7</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_stitcher_next</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Google Voice -->
+
+  <!-- Google Voice: this rule would normally be handled by the default
+       handler, but the rule below would override it otherwise. -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>com.android.internal.view.menu.ExpandedMenuView</ss:className>
+      <ss:packageName>com.google.android.apps.googlevoice</ss:packageName>
+      <ss:activity>com.google.android.apps.googlevoice.PhoneCallListActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- The phone call list view reports both a focus and a select event.
+       This silences the select event so it isn't double-announced.
+       Note that this breaks the "More" menu unless the previous rule
+       specifically enables it. -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>android.widget.ListView</ss:className>
+      <ss:packageName>com.google.android.apps.googlevoice</ss:packageName>
+      <ss:activity>com.google.android.apps.googlevoice.PhoneCallListActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>com.google.android.apps.googlevoice.TranscriptView</ss:className>
+      <ss:packageName>com.google.android.apps.googlevoice</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+      <ss:itemCount>4</ss:itemCount>
+      <ss:activity>com.google.android.apps.googlevoice.PhoneCallListActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_google_voice_transcript</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.google.android.apps.googlevoice</ss:packageName>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+      <ss:itemCount>4</ss:itemCount>
+      <ss:activity>com.google.android.apps.googlevoice.PhoneCallListActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_google_voice_play_button</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.google.android.apps.googlevoice</ss:packageName>
+      <ss:currentItemIndex>3</ss:currentItemIndex>
+      <ss:itemCount>4</ss:itemCount>
+      <ss:activity>com.google.android.apps.googlevoice.PhoneCallListActivity</ss:activity>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_google_voice_speakerphone_button</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Accessible K12 IME -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_TEXT_CHANGED</ss:eventType>
+      <ss:packageName>com.marvin.k12ime</ss:packageName>
+      <ss:className>com.marvin.k12ime.nav.AccessibleInputConnection</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
 

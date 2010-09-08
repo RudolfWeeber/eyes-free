@@ -79,7 +79,6 @@
       <ss:packageName>com.android.launcher</ss:packageName>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
@@ -142,7 +141,6 @@
       <ss:packageName>com.android.launcher</ss:packageName>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
@@ -168,7 +166,6 @@
       <ss:packageName>com.android.launcher</ss:packageName>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
@@ -443,6 +440,162 @@
 
   <!-- In call screen -->
   <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_one</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_two</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>3</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_three</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>4</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_four</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>5</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_five</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>6</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_six</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>7</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_seven</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>8</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_eight</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>9</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_nine</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>11</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_zero</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>10</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_star</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:currentItemIndex>12</ss:currentItemIndex>
+      <ss:itemCount>19</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_phone_incall_hash</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
     <ss:metadata>
       <ss:queuing>INTERRUPT</ss:queuing>
     </ss:metadata>
@@ -465,7 +618,6 @@
       <ss:className>android.app.Activity</ss:className>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>

@@ -62,6 +62,15 @@ import java.util.regex.Pattern;
  *   <li>The plug-in mechanism watches for (re)installed plug-ins and loads them
  *       appropriately.
  *   </li>
+ *   <li>
+ *     <strong>
+ *       For a plug-in to define custom filters and formatters it must have the
+ *       com.google.android.marvin.talkback.PERMISSION_PLUGIN_DEFINES_CLASSES
+ *       permission which is signature protected. In other words, only packages
+ *       signed with the same key with TalkBack will be able to define custom
+ *       filters and formatters.
+ *     </strong>
+ *   </li>
  * </ul>
  * <p>
  *   Android.apk:
@@ -142,11 +151,6 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
      * Meta-data key to obtain packages handled by a given plug-in.
      */
     private static final String KEY_METADATA_PACKAGES = "packages";
-    
-    /**
-     * Meta-data key to obtain if a plug-in definces custom filters/formatters.
-     */
-    private static final String KEY_METADATA_DEFINES_CLASSES = "definesclasses";
 
     /**
      * Meta-data key to obtain speech strategies provided by a given plug-in.
@@ -290,6 +294,9 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
         synchronized (mLock) {
             List<ServiceInfo> plugins = getPlugins(mPackageManager);
             for (ServiceInfo plugin : plugins) {
+                if (!isValidPlugin(plugin)) {
+                    continue;
+                }
                 String key = new ComponentName(plugin.packageName, plugin.name).flattenToString();
                 PluginInfo pluginInfo = createPluginInfo(plugin);
                 mPluginCache.put(key, pluginInfo);
@@ -307,11 +314,19 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
     }
 
     /**
+     * @return If a <code>plug-in</code> is valid which is it has the same
+     *         shared user Id (this requires that the plug-in package is
+     *         signed with the TalkBack key).
+     */
+    private boolean isValidPlugin(ServiceInfo plugin) {
+        return (android.os.Process.myUid() == plugin.applicationInfo.uid);
+    }
+
+    /**
      * Loads the plug-ins.
      */
     private void loadPlugins() {
         synchronized (mLock) {
-            mPluginCache.clear();
             for (PluginInfo pluginInfo : mPluginCache.values()) {
                 if (pluginInfo.enabled) {
                     loadPlugin(pluginInfo);
@@ -332,12 +347,11 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
     }
 
     /**
-     * @return A plug-in info instance given the <code>plugin</code>
+     * @return A plug-in info instance given the <code>plug-in</code>.
      */
     private PluginInfo createPluginInfo(ServiceInfo plugin) {
         String targePackagesValue = plugin.metaData.getString(KEY_METADATA_PACKAGES);
         String speechStrategiesValue = plugin.metaData.getString(KEY_METADATA_SPEECHSTRATEGIES);
-        boolean definesClasses = plugin.metaData.getBoolean(KEY_METADATA_DEFINES_CLASSES, false);
         String key = new ComponentName(plugin.packageName, plugin.name).flattenToString();
 
         PluginInfo info = new PluginInfo();
@@ -346,7 +360,6 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
         info.publicSourceDir = plugin.applicationInfo.publicSourceDir;
         info.speechStrategies = mColonSplitPattern.split(speechStrategiesValue);
         info.targetPackages = mColonSplitPattern.split(targePackagesValue);
-        info.definesclasses = definesClasses;
 
         return info;
     }
@@ -416,7 +429,7 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
             int resourceId = resources.getIdentifier(context.getPackageName() + ":raw/"
                     + speechStrategyResourceName, null, null);
             mSpeechRuleProcessor.addSpeechStrategy(context, pluginInfo.publicSourceDir,
-                    targetPackages[i], resourceId, pluginInfo.definesclasses);
+                    targetPackages[i], resourceId);
         }
     }
 
@@ -513,8 +526,6 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
         String[] targetPackages;
 
         String[] speechStrategies;
-
-        boolean definesclasses;
     }
 
     /**
@@ -541,6 +552,9 @@ public class PluginManager implements Handler.Callback, InfrastructureStateListe
     private void handlePackageAddedOrChanged(String packageName) {
         ServiceInfo plugin = getPluginForPackage(packageName);
         if (plugin != null) {
+            if (!isValidPlugin(plugin)) {
+                return;
+            }
             String key = new ComponentName(plugin.packageName, plugin.name)
                 .flattenToString();
             PluginInfo pluginInfo = createPluginInfo(plugin);

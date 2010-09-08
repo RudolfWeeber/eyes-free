@@ -49,6 +49,12 @@ import javax.xml.parsers.ParserConfigurationException;
 public class SpeechRuleProcessor {
 
     /**
+     * Constant used for storing all speech rules that either do not
+     * define a filter package or have custom filters.
+     */
+    private static final String UNDEFINED_PACKAGE_NAME = "undefined_package_name";
+
+    /**
      * Tag for logging.
      */
     private static final String LOG_TAG = "SpeechRuleProcessor";
@@ -61,12 +67,7 @@ public class SpeechRuleProcessor {
     /**
      * Mapping from package name to speech rules for that package.
      */
-    private HashMap<String, ArrayList<SpeechRule>> mPackageToSpeechRulesMap = new HashMap<String, ArrayList<SpeechRule>>();
-
-    /**
-     * Default speech rules used as fall-back if no package specific ones exist.
-     */
-    private ArrayList<SpeechRule> mDefaultSpeechRules = new ArrayList<SpeechRule>();
+    private HashMap<String, ArrayList<SpeechRule>> mPackageNameToSpeechRulesMap = new HashMap<String, ArrayList<SpeechRule>>();
 
     /**
      * Creates a new instance.
@@ -80,7 +81,7 @@ public class SpeechRuleProcessor {
      * events from all packages and use the resources of the TalkBack context.
      */
     void addSpeechStrategy(int resourceId) {
-        addSpeechStrategy(TalkBackService.asContext(), null, null, resourceId, true);
+        addSpeechStrategy(TalkBackService.asContext(), null, null, resourceId);
     }
 
     /**
@@ -94,17 +95,51 @@ public class SpeechRuleProcessor {
      * defines them is used to enabled using the TalkBack {@link ClassLoader}.
      */
     void addSpeechStrategy(Context context, String publicSourceDir, String targetPackage,
-            int resourceId, boolean customInstanceSupported) {
+            int resourceId) {
         Document document = parseSpeechStrategy(context, resourceId);
         ArrayList<SpeechRule> speechRules = SpeechRule.createSpeechRules(context, publicSourceDir,
-                document,customInstanceSupported);
+                document);
         synchronized (mLock) {
-            if (targetPackage == null) {
-                mDefaultSpeechRules.addAll(speechRules);
-            } else {
-                mPackageToSpeechRulesMap.put(targetPackage, speechRules);
+            for (int i = 0, count = speechRules.size(); i < count; i++) {
+                SpeechRule speechRule = speechRules.get(i);
+                addSpeechRule(targetPackage, speechRule);
             }
         }
+    }
+
+    /**
+     * Adds a <code>speechRule</code> for a given <code>targetPackage</code>
+     * If <code>targetPackage</code> is specified the speech rule is added to
+     * the list of rules for that package. It is up to the speech rule writer
+     * to make sure that the accepted package name is the same as this argument
+     * (This is applicable only for plug-ins). If the target package is
+     * <code>null</code> and the rule's filter is a {@link SpeechRule.DefaultFilter}
+     * it is polled to find the accepted package name (if such). If this fails
+     * we fall back to putting the rule to the list of rules with not defined
+     * package names as {@link #UNDEFINED_PACKAGE_NAME}.
+     */
+    private boolean addSpeechRule(String targetPackage, SpeechRule speechRule) {
+        String packageName = targetPackage;
+        if (packageName == null) {
+            Filter filter = speechRule.getFilter(); 
+            if (filter instanceof SpeechRule.DefaultFilter) {
+                SpeechRule.DefaultFilter defaultFilter = (SpeechRule.DefaultFilter) filter;
+                packageName = defaultFilter.getAcceptedPackageName();
+            }
+        }
+
+        // target package neither specified by the client nor the speech rule
+        if (packageName == null) {
+            packageName = UNDEFINED_PACKAGE_NAME;
+        }
+
+        ArrayList<SpeechRule> packageSpeechRules = mPackageNameToSpeechRulesMap.get(packageName);
+        if (packageSpeechRules == null) {
+            packageSpeechRules = new ArrayList<SpeechRule>();
+            mPackageNameToSpeechRulesMap.put(packageName, packageSpeechRules);
+        }
+
+        return packageSpeechRules.add(speechRule);
     }
 
     /**
@@ -114,7 +149,7 @@ public class SpeechRuleProcessor {
      */
     boolean removeSpeechRulesForPackage(String packageName) {
         synchronized (mLock) {
-            ArrayList<SpeechRule> speechRules = mPackageToSpeechRulesMap.remove(packageName);
+            ArrayList<SpeechRule> speechRules = mPackageNameToSpeechRulesMap.remove(packageName);
             if (speechRules != null) {
                 Log.i(LOG_TAG, speechRules.size() + " speech rules removed");
             }
@@ -137,16 +172,23 @@ public class SpeechRuleProcessor {
     boolean processEvent(AccessibilityEvent event, String activity, Utterance utterance,
             Map<Object, Object> filterArguments, Map<Object, Object> formatterArguments) {
         synchronized (mLock) {
-            ArrayList<SpeechRule> speechRules = mPackageToSpeechRulesMap
+            // try package specific speech rules first
+            ArrayList<SpeechRule> speechRules = mPackageNameToSpeechRulesMap
                     .get(event.getPackageName());
             if (speechRules != null
                     && processEvent(speechRules, event, activity, utterance, filterArguments,
                             formatterArguments)) {
                 return true;
             }
-            return processEvent(mDefaultSpeechRules, event, activity, utterance, filterArguments,
-                    formatterArguments);
+            // package specific rule not found - try undefined package ones
+            speechRules = mPackageNameToSpeechRulesMap.get(UNDEFINED_PACKAGE_NAME);
+            if (speechRules != null
+                    && processEvent(speechRules, event, activity, utterance, filterArguments,
+                            formatterArguments)) {
+                return true;
+            }
         }
+        return false;
     }
 
     /**

@@ -26,6 +26,10 @@
     <PreferenceCategory android:title="@string/title_pref_category_tts_settings">
 
         <CheckBoxPreference
+                android:key="@string/pref_tts_extended_key"
+                android:title="@string/title_pref_tts_extended" />
+
+        <CheckBoxPreference
                 android:key="@string/pref_proximity_key"
                 android:title="@string/title_pref_proximity"
                 android:summaryOn="@string/summaryOn_pref_proximity"

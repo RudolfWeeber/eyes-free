@@ -101,109 +101,86 @@
     <!--
       Source: An utterance template for announcing the checked state of a check-box/radio-button.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The check-box/radio-button title.
     -->
-    <string name="template_compound_button_checked">%1$s checked</string>
+    <string name="template_compound_button_checked"><xliff:g id="title">%1$s</xliff:g> checked</string>
 
     <!--
       Source: An utterance template for announcing the not checked state of a check-box/radio-button.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The  check-box/radio-button title.
     -->
-    <string name="template_compound_button_not_checked">%1$s not checked</string>
-
-    <!--
-      Source: An utterance template for announcing arbitrary text.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The text to be announced.
-    -->
-    <string name="template_announce_value" translatable="false">%1$s</string>
+    <string name="template_compound_button_not_checked"><xliff:g id="title">%1$s</xliff:g> not checked</string>
 
     <!--
       Source: An utterance template for announcing an edit-box.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The edit box text content.
     -->
-    <string name="template_edit_box">Edit box. %1$s</string>
+    <string name="template_edit_box">Edit box. <xliff:g id="text_content">%1$s</xliff:g></string>
 
     <!--
       Source: An utterance template for announcing a search-box.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The search box text content.
     -->
-    <string name="template_search_box">Search box. %1$s</string>
+    <string name="template_search_box">Search box. <xliff:g id="text_content">%1$s</xliff:g></string>
 
     <!--
       Source: An utterance template for announcing an alert/pop-up message.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The alert/pop-up message text content.
     -->
-    <string name="template_alert_dialog_template">Alert %1$s</string>
+    <string name="template_alert_dialog_template">Alert <xliff:g id="message">%1$s</xliff:g></string>
 
     <!--
       Source: An utterance template for announcing a text replacement (during edit).
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The replaced text.
-      %2$s - The replacement text.
     -->
-    <string name="template_text_replaced">%1$s replaced with %2$s</string>
+    <string name="template_text_replaced"><xliff:g id="old_text">%1$s</xliff:g> replaced with <xliff:g id="new_text">%2$s</xliff:g></string>
 
     <!--
       Source: An utterance template for announcing a character sequence replacement (used for password fields).
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The replaced characters count.
-      %2$s - The replacement characters count.
     -->
-    <string name="template_replaced_characters">%1$s characters replaced with %2$s characters</string>
+    <string name="template_replaced_characters"><xliff:g id="old_text_length">%1$s</xliff:g> characters replaced with <xliff:g id="new_text_length">%2$s</xliff:g> characters</string>
 
     <!--
       Source: An utterance template for announcing the ringer volume.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s -  The ringer volume in percent.
     -->
-    <string name="template_ringer_volume">Ringer %1$s percent.</string>
+    <string name="template_ringer_volume">Ringer <xliff:g id="percent">%1$s</xliff:g> percent.</string>
 
     <!--
       Source: An utterance template for announcing dragging an icon on the home screen.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s -  The dragged icon text.
     -->
-    <string name="template_dragging_icon">Dragging %1$s icon.</string>
+    <string name="template_dragging_icon">Dragging <xliff:g id="title">%1$s</xliff:g> icon.</string>
 
     <!--
       Source: An utterance template for announcing dragging an image button.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s -  The image button title.
     -->
-    <string name="template_image_button">%1$s image button.</string>
+    <string name="template_image_button"><xliff:g id="title">%1$s</xliff:g> image button.</string>
 
     <!--
       Source: An utterance template for announcing a button.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The button title.
     -->
-    <string name="template_button">%1$s button.</string>
+    <string name="template_button"><xliff:g id="title">%1$s</xliff:g> button.</string>
 
     <!--
       Source: An utterance template for announcing an image.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The image title.
     -->
-    <string name="template_image_view">%1$s image.</string>
+    <string name="template_image_view"><xliff:g id="title">%1$s</xliff:g> image.</string>
 
     <!--
       Source: An utterance template for announcing a seek-bar (slider).
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The seek-bar value.
     -->
-    <string name="template_seek_bar">%1$s seek control.</string>
+    <string name="template_seek_bar"><xliff:g id="title">%1$s</xliff:g> seek control.</string>
 
     <!--
       Source: An utterance template for announcing a spinner/drop-down list.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-      %1$s - The spinner/drop-down list title.
     -->
-    <string name="template_spinner">%1$s drop down list.</string>
+    <string name="template_spinner"><xliff:g id="title">%1$s</xliff:g> drop down list.</string>
 
     <!-- VALUES -->
 
@@ -403,6 +380,35 @@
     -->
     <string name="value_maps_walking_checked">Walking, checked.</string>
 
+  <!-- VALUES for the in call phone keypad -->
+
+    <!--
+      Source: Phone in call keypad.
+      Description: values spoken when user focuses keypad buttons.
+    -->
+    <string name="value_phone_incall_one" translatable="false">1</string>
+    <string name="value_phone_incall_two" translatable="false">2</string>
+    <string name="value_phone_incall_three" translatable="false">3</string>
+    <string name="value_phone_incall_four" translatable="false">4</string>
+    <string name="value_phone_incall_five" translatable="false">5</string>
+    <string name="value_phone_incall_six" translatable="false">6</string>
+    <string name="value_phone_incall_seven" translatable="false">7</string>
+    <string name="value_phone_incall_eight" translatable="false">8</string>
+    <string name="value_phone_incall_nine" translatable="false">9</string>
+    <string name="value_phone_incall_zero" translatable="false">0</string>
+
+    <!--
+      Source: Phone in call keypad.
+      Description: The text spoken when a user places focus  on the (*) star key.
+    -->
+    <string name="value_phone_incall_star">star</string>
+
+    <!--
+      Source: Phone in call keypad.
+      Description: The text spoken when a user places focus  on the pound/hash key.
+    -->
+    <string name="value_phone_incall_hash" translatable="false">#</string>
+
     <!-- VALUES for the setting time -->
 
     <!--
@@ -585,16 +591,16 @@
     <!-- SETTINGS MANAGEMENT -->
 
     <!--
-      Source: Title of a notification that a settings-manager application exists.
-      Description: Allows the user to choose to download a settings manager application. [CHAR LIMIT=30]
+      Source: Title of a notification that a preferences-manager application exists.
+      Description: Allows the user to choose to download a preferences manager application. [CHAR LIMIT=30]
     -->
-    <string name="title_talkback_settings_availible">TalkBack Settings Available</string>
+    <string name="title_talkback_settings_available">TalkBack Preferences Available</string>
 
     <!--
-      Source: Description of a notification that a settings-manager application exists.
-      Description: Allows the user to choose to download a settings manager application. [CHAR LIMIT=70]
+      Source: Description of a notification that a preferences-manager application exists.
+      Description: Allows the user to choose to download a preferences manager application. [CHAR LIMIT=70]
     -->
-    <string name="message_talkback_settings_availible">Click here to download the Accessibility Settings Manager.</string>
+    <string name="message_talkback_settings_available">Click here to download the Accessibility Preferences application.</string>
 
     <!--
       Source: Title of a notification that information about a TalkBack crash is present.

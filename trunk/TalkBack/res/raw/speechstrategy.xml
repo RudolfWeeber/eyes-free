@@ -18,7 +18,6 @@
     </ss:filter>
     <ss:formatter>
       <ss:template>@com.google.android.marvin.talkback:string/value_checked</ss:template>
-      <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -30,7 +29,6 @@
     </ss:filter>
     <ss:formatter>
       <ss:template>@com.google.android.marvin.talkback:string/value_not_checked</ss:template>
-      <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -163,7 +161,6 @@
     </ss:filter>
     <ss:formatter>
       <ss:template>@com.google.android.marvin.talkback:string/value_web_view</ss:template>
-      <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -185,7 +182,6 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
@@ -210,7 +206,6 @@
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
@@ -258,7 +253,6 @@
       <ss:className>android.widget.LinearLayout</ss:className>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_value</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>

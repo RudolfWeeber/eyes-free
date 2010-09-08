@@ -142,9 +142,10 @@ public class SpeechRule {
      */
     private static final HashMap<String, Integer> sQueueModeNameToQueueModeMap = new HashMap<String, Integer>();
     static {
+        sQueueModeNameToQueueModeMap.put("INTERRUPT", 0);
         sQueueModeNameToQueueModeMap.put("QUEUE", 1);
-        sQueueModeNameToQueueModeMap.put("INTERRUPT", 2);
-        sQueueModeNameToQueueModeMap.put("COMPUTE_FROM_EVENT_CONTEXT", 3);
+        sQueueModeNameToQueueModeMap.put("COMPUTE_FROM_EVENT_CONTEXT", 2);
+        sQueueModeNameToQueueModeMap.put("UNINTERRUPTIBLE", 3);
     }
 
     /**
@@ -172,12 +173,6 @@ public class SpeechRule {
     private Context mContext;
 
     /**
-     * Flag indicating of indicating if custom filter and formatter
-     * instances are supported.
-     */
-    private boolean mCustomInstancesSupported;
-
-    /**
      * The location of the APK from which to load classes. This is
      * required since we need to load the plug-in classes through
      * the TalkBack class loader.
@@ -196,13 +191,11 @@ public class SpeechRule {
      * @throws IllegalStateException If the tries to load custom filter/formatter
      *         while <code>customInstancesSupported</code> is false;
      */
-    private SpeechRule(Context context, String publicSourceDird, Node node, int ruleIndex,
-            boolean customInstancesSupported) {
+    private SpeechRule(Context context, String publicSourceDird, Node node, int ruleIndex) {
         ensureCompoundButtonWorkaround();
 
         mContext = context;
         mPublicSourceDir = publicSourceDird;
-        mCustomInstancesSupported = customInstancesSupported;
 
         Filter filter = null;
         Formatter formatter = null;
@@ -230,6 +223,20 @@ public class SpeechRule {
         mFilter = filter;
         mFormatter = formatter;
         mRuleIndex = ruleIndex;
+    }
+
+    /**
+     * @return This rule's filter.
+     */
+    public Filter getFilter() {
+        return mFilter;
+    }
+
+    /**
+     * @return This rule's formatter.
+     */
+    public Formatter getFormatter() {
+        return mFormatter;
     }
 
     /**
@@ -452,11 +459,6 @@ public class SpeechRule {
     @SuppressWarnings("unchecked")
     // the possible ClassCastException is handled by the method
     private <T> T createNewInstance(String className, Class<T> expectedClass) {
-        if (!mCustomInstancesSupported) {
-           throw new IllegalStateException("Trying to create custom " + expectedClass.getName()
-                   + " while creating such is diabled. Maybe the plug-in does not declare" +
-                   		"\"definesclasses\"");
-        }
         try {
             Class<T> clazz = null;
             // if we are loaded by the context class loader => use the latter
@@ -501,11 +503,10 @@ public class SpeechRule {
      * @param context A {@link Context} instance for loading resources.
      * @param publicSourceDir The location of the plug-in APK for loading classes.
      * @param document The parsed XML.
-     * @param customInstancesSupported If creating of custom filters/formatters is supported.
      * @return The list of loaded speech rules.
      */
     public static ArrayList<SpeechRule> createSpeechRules(Context context, String publicSourceDir,
-            Document document, boolean customInstancesSupported)  throws IllegalStateException {
+            Document document)  throws IllegalStateException {
         ArrayList<SpeechRule> speechRules = new ArrayList<SpeechRule>();
 
         if (document == null || context == null) {
@@ -517,8 +518,7 @@ public class SpeechRule {
             Node child = children.item(i);
             if (child.getNodeType() == Node.ELEMENT_NODE) {
                 try {
-                    speechRules.add(new SpeechRule(context, publicSourceDir, child, i,
-                            customInstancesSupported));
+                    speechRules.add(new SpeechRule(context, publicSourceDir, child, i));
                 } catch (IllegalStateException ise) {
                     Log.w(LOG_TAG, "Failed loading speech rule: " + getTextContent(child), ise);
                 }
@@ -616,7 +616,11 @@ public class SpeechRule {
     static StringBuilder getEventText(Context context, AccessibilityEvent event) {
         StringBuilder aggregator = new StringBuilder();
         List<CharSequence> eventText = event.getText();
-        Class<?> eventClass = Utils.loadOrGetCachedClass(context, event.getClassName().toString(),
+        if (context == null) {
+            String s = "";
+        }
+        Class<?> eventClass = ClassLoadingManager.getInstance().loadOrGetCachedClass(
+                context, event.getClassName().toString(),
                 event.getPackageName().toString());
 
         // here we have a special case since the framework is adding
@@ -743,6 +747,13 @@ public class SpeechRule {
         }
 
         /**
+         * @return The package name accepted by this filter or null if no such.
+         */
+        public String getAcceptedPackageName() {
+            return mFilterProperties.getProperty(PROPERTY_PACKAGE_NAME);
+        }
+
+        /**
          * Checks if the filter accepts a <code>property</code> with a given
          * <code>value</code>.
          *
@@ -787,9 +798,9 @@ public class SpeechRule {
 
             String filteringPackageName = mFilterProperties.getProperty(PROPERTY_PACKAGE_NAME);
 
-            Class<?> filteringClass = Utils.loadOrGetCachedClass(mContext, filteringClassName,
-                    filteringPackageName);
-            Class<?> eventClass = Utils.loadOrGetCachedClass(mContext,
+            Class<?> filteringClass = ClassLoadingManager.getInstance().loadOrGetCachedClass(
+                    mContext, filteringClassName, filteringPackageName);
+            Class<?> eventClass = ClassLoadingManager.getInstance().loadOrGetCachedClass(mContext,
                     event.getClassName().toString(), event.getPackageName().toString());
 
             if (filteringClass == null || eventClass == null) {
@@ -878,7 +889,8 @@ public class SpeechRule {
                 }
 
                 if (NODE_NAME_PROPERTY.equals(selectorType)) {
-                    arguments[i] = getPropertyValue(selectorValue, event);
+                    Object propertyValue = getPropertyValue(selectorValue, event);
+                    arguments[i] = propertyValue != null ? propertyValue : "";
                 } else if (NODE_NAME_REGEX.equals(selectorType)) {
                     arguments[i] = getEventTextRegExpMatch(event, selectorValue);
                 } else {
