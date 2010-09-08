@@ -67,7 +67,7 @@ import java.util.List;
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
-public class MarvinShell extends Activity implements GestureListener, ProximityChangeListener {
+public class MarvinShell extends Activity implements GestureListener {
     private static final int ttsCheckCode = 42;
 
     public static final int VOICE_RECO_CODE = 777;
@@ -161,7 +161,17 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         ttsStartedSuccessfully = false;
         justStarted = true;
         if (checkTtsRequirements()) {
-            proximitySensor = new ProximitySensor(this, this);
+            proximitySensor =
+                new ProximitySensor(this, true, new ProximityChangeListener() {
+                        @Override
+                        public void onProximityChanged(float proximity) {
+                            if ((proximity == 0)
+                                && (tts != null)) {
+                            // Stop all speech if the user is touching the proximity sensor
+                                tts.speak("", 2, null);
+                            }
+                        }
+                    });
             initMarvinShell();
             setContentView(R.layout.main);
             mainText = (TextView) self.findViewById(R.id.mainText);
@@ -187,7 +197,18 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
         if (screenStateChanged == false) {
             switchToMainView();
         }
+        if (proximitySensor != null) {
+            proximitySensor.resume();
+        }
     }
+
+    public void onPause() {
+        super.onPause();
+        if (proximitySensor != null) {
+            proximitySensor.standby();
+        }
+    }
+
 
     private void initMarvinShell() {
         setVolumeControlStream(AudioManager.STREAM_RING);
@@ -793,12 +814,5 @@ public class MarvinShell extends Activity implements GestureListener, ProximityC
 
         }
     }
-
-    public void onProximityChanged(float proximity) {
-        if (proximity == 0) {
-            if (tts != null) {
-                tts.speak("", 2, null);
-            }
-        }
-    }
+     
 }
