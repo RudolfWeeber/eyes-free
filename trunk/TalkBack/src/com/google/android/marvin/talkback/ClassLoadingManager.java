@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * This class manages efficient loading of classes.
- *
+ * 
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  */
 public class ClassLoadingManager implements InfrastructureStateListener {

@@ -569,10 +569,9 @@ public class TalkBackService extends AccessibilityService {
             unregisterReceiver(mPhoneStateMonitor);
         }
 
-        removeInfrastructureStateListener(ClassLoadingManager.getInstance());
-
         sInfrastructureInitialized = false;
         notifyInfrastructureStateListeners();
+        mInfrastructureStateListeners.clear();
     }
 
     @Override
