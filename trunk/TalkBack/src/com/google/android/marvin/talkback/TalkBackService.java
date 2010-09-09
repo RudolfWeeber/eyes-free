@@ -156,7 +156,7 @@ public class TalkBackService extends AccessibilityService {
     /**
      * The package name of the Accessibility Settings Manager
      */
-    private static final String SETTINGS_MANAGER_PACKAGE = "com.google.android.marvin.asm";
+    private static final String SETTINGS_MANAGER_PACKAGE = "com.marvin.preferences";
 
     /**
      * Speak action.
