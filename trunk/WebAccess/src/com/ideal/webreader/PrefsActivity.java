@@ -53,7 +53,7 @@ public class PrefsActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Intent i = new Intent();
-                i.setClassName("com.ideal.webreader",
+                i.setClassName("com.ideal.webaccess",
                         "com.ideal.webreader.CreateGestureWizardActivity");
                 startActivity(i);
                 return false;
