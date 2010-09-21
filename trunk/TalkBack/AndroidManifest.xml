@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.marvin.talkback"
     android:sharedUserId="com.google.android.marvin.feedback"
-    android:versionCode="13"
-    android:versionName="2.5.0">
+    android:versionCode="14"
+    android:versionName="2.5.1">
 
     <uses-sdk android:minSdkVersion="4" />
 
