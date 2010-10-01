@@ -1,4 +1,4 @@
-<install link="market">
+<install link="market" />
 <desc text="Turns your Android into an eyes-free communication device."/>
 <desc text="Provides one-touch access to Android applications, as well as useful mini-apps built into the Eyes-Free Shell."/>
 <desc text="Move your finger over the screen to explore; lift your finger up to run what you stopped on."/>
