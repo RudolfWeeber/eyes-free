@@ -1,0 +1,8 @@
+<apps>
+ <app packageName="com.google.marvin.shell" title="Eyes-Free Shell" desc="An alternative, eyes-free home screen"/> 
+ <app packageName="com.google.marvin.talkingdialer" title="Talking Dialer" desc="A talking dialer and phonebook"/> 
+ <app packageName="com.google.android.marvin.talkback" title="Talkback" desc="An open source screen reader for Android"/> 
+ <app packageName="com.fsck.idealk9" title="Accessible K-9 Mail" desc="An accessible e-mail client"/> 
+ <app packageName="com.ideal.webaccess" title="IDEAL WebAccess" desc="An accessible web browser"/>
+ <app packageName="com.ideal.magnifier" title="IDEAL Magnifier" desc="Turn your Android device into a portable video magnifier"/>
+</apps>
