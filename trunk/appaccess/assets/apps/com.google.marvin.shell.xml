@@ -1,8 +1,10 @@
-<appinfo> 
-<install link="market" />
+<appinfo>
+<install link="market"/>
+<title name="Eyes-Free Shell"/>
 <desc text="Turns your Android into an eyes-free communication device."/>
 <desc text="Provides one-touch access to Android applications, as well as useful mini-apps built into the Eyes-Free Shell."/>
 <desc text="Move your finger over the screen to explore; lift your finger up to run what you stopped on."/>
 <notes text="To replace your default home screen with this app, press the Home button, go to bottom of the list and check the 'Use by default' checkbox, and scroll back up the list and select Eyes-Free Shell."/>
 <notes text="This app uses the same UI paradigm as the Talking Dialer."/>
+<developer market="Eyes-Free Project" web="http://eyes-free.googlecode.com" contact="eyesfreeproject@gmail.com"/>
 </appinfo> 
