@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Keyboard Tutor</string>
+
+	<string name="alt">alt</string>
+	<string name="shift">shift</string>
+	<string name="sym">sym</string>
+	<string name="delete">delete</string>
+	<string name="enter">enter</string>	
+	<string name="space">space</string>
+	<string name="search">search</string>
+	<string name="back">back</string>
+	<string name="menu">menu</string>
+	<string name="call">call</string>
+	<string name="end_call">end call</string>
+	<string name="volume_down">volume down</string>
+	<string name="volume_up">volume up</string>	
+	<string name="camera">camera</string>	
+	<string name="left">left</string>
+	<string name="right">right</string>
+	<string name="up">up</string>
+	<string name="down">down</string>
+	<string name="center">select</string>
+	<string name="edit_description">Press a key:</string>
+	<string name="back_message">Back. Press back again to exit the application.</string>
+	<string name="home_message">Home, exiting the application.</string>
+</resources>
