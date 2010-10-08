@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+      <CheckBoxPreference
+            android:title="Speak"
+            android:defaultValue="false"
+            android:key="speak" />
+      <CheckBoxPreference
+            android:title="Status notifications"
+            android:defaultValue="true"
+            android:key="post_status" />
+      <CheckBoxPreference
+            android:title="Enable Compass"
+            android:defaultValue="false"
+            android:key="enable_compass" />
+</PreferenceScreen>

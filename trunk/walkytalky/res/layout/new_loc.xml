@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text=" "
+    />
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text=" "
+    />
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+<AutoCompleteTextView
+    android:id="@+id/dest_EditText"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:hint="Enter destination"
+    />
+<Button
+    android:id="@+id/goTextInput_Button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Go"
+    />
+</LinearLayout>
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text=" "
+    />
+<Button
+    android:id="@+id/goFavorite_Button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Go to favorite destinations"
+    />
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text=" "
+    />
+<Button
+    android:id="@+id/goRecent_Button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Go to recent destinations"
+    />
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text=" "
+    />
+<Button
+    android:id="@+id/markFavorite_Button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Add favorite"
+    />
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text=" "
+    />
+<Button
+    android:id="@+id/removeFavorite_Button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Remove favorite"
+    />
+</LinearLayout>
+</ScrollView>
