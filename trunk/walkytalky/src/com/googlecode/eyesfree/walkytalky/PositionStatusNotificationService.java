@@ -30,8 +30,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
-import android.util.Log;
-
 import com.googlecode.eyesfree.walkytalky.Compass.HeadingListener;
 import com.googlecode.eyesfree.walkytalky.StreetLocator.StreetLocatorListener;
 import com.whereabout.location.LocationManager;
@@ -47,8 +45,6 @@ import java.util.ArrayList;
  */
 
 public class PositionStatusNotificationService extends Service implements StreetLocatorListener {
-    private static final String TAG = "PSNS"; // Tag used for logging
-
     private boolean isIndoors = false;
 
     private boolean needReset = true;
@@ -87,10 +83,8 @@ public class PositionStatusNotificationService extends Service implements Street
 
     private String currentIntersection = "";
 
-    private String currentFrontBackStreets = "";
-    
+    private String previousPostalCode = "";
     private String previousCity = "";
-    private String previousRawStateZip = "";
 
     private LocationListener locationListener = new LocationListener() {
         /*
@@ -253,46 +247,21 @@ public class PositionStatusNotificationService extends Service implements Street
         }
     }
 
-    public void onAddressLocated(String address) {
+    public void onAddressLocated(Address address) {
         currentAddress = "";
         String rawAddress = "";
-        if (address.length() > 0) {            
-            // Drop the country
-            address = address.substring(0, address.lastIndexOf(","));
-            // Extract the state and zip and insert spaces in the state name
-            // that the synthesizer will do the right thing.
-            String rawStateZip = address.substring(address.lastIndexOf(",") + 1);
-            String streetCity = address.substring(0, address.lastIndexOf(","));
-            String street = streetCity.substring(0, streetCity.lastIndexOf(","));
-            String city = streetCity.substring(streetCity.lastIndexOf(",") + 1);
-            
-            String stateZip = "";
-            if (!previousRawStateZip.equals(rawStateZip)){                
-                String zip = rawStateZip.substring(rawStateZip.lastIndexOf(" ") + 1);
-                String state = rawStateZip.substring(0, rawStateZip.lastIndexOf(" ") + 1);
-                for (int i = 0; i < state.length(); i++) {
-                    stateZip = stateZip + state.charAt(i) + " ";
-                }
-                stateZip = stateZip + zip;     
-                previousRawStateZip = rawStateZip;
+        if ((address != null) && (address.isValid())) {
+            currentAddress = "Near " + address.getStreetNumber() + " " + address.getRoute();
+            // If either the city or the zip code changes, add both to the announcement
+            if (!address.getCity().equals(previousCity) ||
+                    !address.getPostalCode().equals(previousPostalCode)){
+                currentAddress = currentAddress + ", " + address.getCity() + " " + address.getPostalCode();
+                previousCity = address.getCity();
+                previousPostalCode = address.getPostalCode();
             }
-            if (!previousCity.equals(city)){   
-                previousCity = city;
-            } else {
-                city = "";                
-            }
-            
-            currentAddress = "Near " + street;
-            if (city.length() > 0){
-                currentAddress = currentAddress + ", " + city;
-            }
-            currentAddress = currentAddress + ". ";
-            if (stateZip.length() > 0){
-                currentAddress = currentAddress + stateZip + ". ";
-            }
-            rawAddress = street + ", " + previousCity + ", " + previousRawStateZip;
+            rawAddress = address.getStreetNumber() + " " + address.getRoute() + ", " + previousCity + ", " + previousPostalCode;
+            sendNotification(currentAddress, currentAddress, "", rawAddress);
         }
-        sendNotification(currentAddress, currentAddress, "", rawAddress);
     }
     
     public void onIntersectionLocated(String[] streetnames) {
@@ -317,7 +286,6 @@ public class PositionStatusNotificationService extends Service implements Street
     }
 
     public void onFrontBackLocated(String[] streetsFront, String[] streetsBack) {
-        currentFrontBackStreets = "";
         String currentFrontStreet = "";
         String currentBackStreet = "";
         if (streetsFront.length > 0) {
@@ -350,8 +318,6 @@ public class PositionStatusNotificationService extends Service implements Street
         if (currentBackStreet.indexOf("Unknown road") != -1) {
             currentBackStreet = "";
         }
-
-        currentFrontBackStreets = currentFrontStreet + currentBackStreet;
     }
 
     private void unregisterLocationServices() {

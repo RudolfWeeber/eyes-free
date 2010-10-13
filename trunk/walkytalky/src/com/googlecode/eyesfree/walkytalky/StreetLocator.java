@@ -44,7 +44,7 @@ public class StreetLocator {
     public interface StreetLocatorListener {
         public void onIntersectionLocated(String[] streetnames);
 
-        public void onAddressLocated(String address);
+        public void onAddressLocated(Address address);
 
         public void onFrontBackLocated(String[] streetsFront, String[] streetsBack);
     }
@@ -57,7 +57,7 @@ public class StreetLocator {
     private static final String URL_NAV_STRING = "http://maps.google.com/maps/nav?";
 
     // URL for obtaining reverse geocoded location
-    private static final String URL_GEO_STRING = "http://maps.google.com/maps/geo?";
+    private static final String URL_GEO_STRING = "http://maps.google.com/maps/api/geocode/json?sensor=false&latlng=";
 
     public StreetLocator(StreetLocatorListener callback) {
         cb = callback;
@@ -101,7 +101,7 @@ public class StreetLocator {
         final double direction = heading;
         /**
          * Runnable for fetching the front and back streets asynchronously
-         */        
+         */
         class FrontBackStreetsThread implements Runnable {
             public void run() {
                 getStreetsInFrontAndBack(latitude, longitude, direction);
@@ -125,10 +125,7 @@ public class StreetLocator {
          */
         class AddressThread implements Runnable {
             public void run() {
-                String address = getAddress(latitude, longitude);
-                if (address != null) {
-                    cb.onAddressLocated(address);
-                }
+                cb.onAddressLocated(getAddress(latitude, longitude));
             }
         }
         (new Thread(new AddressThread())).start();
@@ -247,18 +244,12 @@ public class StreetLocator {
      * @param lon The longitude in degrees
      * @return Returns the reverse geocoded address
      */
-    public String getAddress(double lat, double lon) {
+    public Address getAddress(double lat, double lon) {
         try {
             String resp = getResult(makeGeoURL(lat, lon));
-            JSONObject jsonObj = new JSONObject(resp);
-            int code = jsonObj.getJSONObject("Status").getInt("code");
-            if (code == 200) {
-                return extendShorts(jsonObj.getJSONArray("Placemark").getJSONObject(0).getString(
-                        "address"));
-            }
+            return new Address(resp);
         } catch (MalformedURLException mue) {
         } catch (IOException e) {
-        } catch (JSONException e) {
         }
         return null;
     }
@@ -327,7 +318,7 @@ public class StreetLocator {
      */
     private URL makeGeoURL(double lat, double lon) throws MalformedURLException {
         StringBuilder url = new StringBuilder();
-        url.append(URL_GEO_STRING).append("q=").append(lat).append(",").append(lon);
+        url.append(URL_GEO_STRING).append(lat).append(",").append(lon);
         return new URL(url.toString());
     }
 
@@ -341,8 +332,7 @@ public class StreetLocator {
         StringBuilder outputBuilder = new StringBuilder();
         String string;
         if (inputStream != null) {
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(inputStream, ENCODING));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, ENCODING));
             while (null != (string = reader.readLine())) {
                 outputBuilder.append(string).append('\n');
             }
@@ -357,7 +347,7 @@ public class StreetLocator {
      * @param addr The address from which to replace short forms
      * @return the modified address string
      */
-    private String extendShorts(String addr) {
+    public static String extendShorts(String addr) {
         addr = addr.replace("St,", "Street");
         addr = addr.replace("St.", "Street");
         addr = addr.replace("Rd", "Road");
