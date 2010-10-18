@@ -1,27 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">Keyboard Tutor</string>
+    <string name="app_name">Keyboard Tutor</string>
 
-	<string name="alt">alt</string>
-	<string name="shift">shift</string>
-	<string name="sym">sym</string>
-	<string name="delete">delete</string>
-	<string name="enter">enter</string>	
-	<string name="space">space</string>
-	<string name="search">search</string>
-	<string name="back">back</string>
-	<string name="menu">menu</string>
-	<string name="call">call</string>
-	<string name="end_call">end call</string>
-	<string name="volume_down">volume down</string>
-	<string name="volume_up">volume up</string>	
-	<string name="camera">camera</string>	
-	<string name="left">left</string>
-	<string name="right">right</string>
-	<string name="up">up</string>
-	<string name="down">down</string>
-	<string name="center">select</string>
-	<string name="edit_description">Press a key:</string>
-	<string name="back_message">Back. Press back again to exit the application.</string>
-	<string name="home_message">Home, exiting the application.</string>
+ <!--  Special keys -->
+    <!--
+      Source: A value for announcing the alt key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="alt">alt</string>
+
+    <!--
+      Source: A value for announcing the shift key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="shift">shift</string>
+
+    <!--
+      Source: A value for announcing the symbol key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="sym">sym</string>
+
+    <!--
+      Source: A value for announcing the delete key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="delete">delete</string>
+
+    <!--
+      Source: A value for announcing the enter key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="enter">enter</string>
+
+    <!--
+      Source: A value for announcing the space key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->	
+    <string name="space">space</string>
+
+    <!--
+      Source: A value for announcing the search key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="search">search</string>
+
+    <!--
+      Source: A value for announcing the back key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="back">back</string>
+
+    <!--
+      Source: A value for announcing the menu key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="menu">menu</string>
+
+    <!--
+      Source: A value for announcing the start call key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="call">call</string>
+
+    <!--
+      Source: A value for announcing the end call key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="end_call">end call</string>
+
+    <!--
+      Source: A value for announcing the volume down key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="volume_down">volume down</string>
+
+    <!--
+      Source: A value for announcing the volume up key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="volume_up">volume up</string>
+
+    <!--
+      Source: A value for announcing the camera key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="camera">camera</string>
+
+    <!--
+      Source: A value for announcing the left arrow key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="left">left</string>
+
+    <!--
+      Source: A value for announcing the right arrow key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="right">right</string>
+
+    <!--
+      Source: A value for announcing the up arrow key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="up">up</string>
+
+    <!--
+      Source: A value for announcing the down arrow key.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="down">down</string>
+
+    <!--
+      Source: A value for announcing the center dpad key, or enter button that acts as a click.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="center">select</string>
+
+    <!--
+      Source: A value for announcing an unknown key, typically a special function key that does
+      not result in a character.
+      Description: This is spoken to the user. [CHAR LIMIT="30"]
+    -->
+    <string name="unknown">Unknown or empty</string>
+
+    <!-- PUNCTUATION -->
+
+    <!--
+      Source: A value for announcing a question mark.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_questionmark">Question mark</string>
+
+    <!--
+      Source: A value for announcing a space.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_space">Space</string>
+
+    <!--
+      Source: A value for announcing a comma.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_comma">Comma</string>
+
+    <!--
+      Source: A value for announcing a dot.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_dot">Dot</string>
+
+    <!--
+      Source: A value for announcing an exclamation.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_exclamation">Exclamation</string>
+
+    <!--
+      Source: A value for announcing an opening parenthesis.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_open_paren">Open paren</string>
+
+    <!--
+      Source: A value for announcing a closing parenthesis.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_close_paren">Close paren</string>
+
+    <!--
+      Source: A value for announcing a double quote.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_double_quote">Double quote</string>
+
+    <!--
+      Source: A value for announcing a semicolon.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_semicolon">Semicolon</string>
+
+    <!--
+      Source: A value for announcing a colon.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="punctuation_colon">Colon</string>
+
+    <!--
+      Source: A description of the edit text.
+      Description:  Instructions telling the user what to do. [CHAR LIMIT=NONE]
+     -->
+    <string name="edit_description">Press a key:</string>
+
+    <!--
+      Source: A value for announcing the back key.  Includes instruction for exiting the application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="back_message">Back. Press back again to exit the application.</string>
+
+    <!--
+      Source: A value for announcing the home key.  Includes notice that the application is exiting.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="home_message">Home, exiting the application.</string>
+
+    <!-- ALERTS  -->
+
+    <!--
+      Source: Alert title for the event if the screen reader is being disabled.
+      Description: While starting the application an announcement is made if screen reader is disabled. [CHAR LIMIT=30]
+    -->
+    <string name="title_no_active_screen_reader_alert">Screen reader Disabled!</string>
+
+    <!--
+      Source: Alert message for the event if the screen reader is being disabled.
+      Description: While starting the application an announcement is made if screen reader is disabled. [CHAR LIMIT=30]
+    -->
+    <string name="message_no_active_screen_reader_alert">Screen reader is currently disabled. Would you like to open accessibility settings?</string>
+
+    <!--
+      Source: Alert title for the event of lacking accessibility settings on the device.
+      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=30]
+    -->
+    <string name="title_no_accessibility_alert">Error</string>
+
+    <!--
+      Source: Alert message for the event of lacking accessibility settings on the device.
+      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=100]
+    -->
+    <string name="message_no_accessibility_alert">Accessibility is not supported on this device.</string>
+
+    <!--
+      Source: Alert title for the event of lacking screen reader(s) on the device.
+      Description: Some devices come with no screen readers. [CHAR LIMIT=30]
+    -->
+    <string name="title_no_screen_reader_alert">No screen reader</string>
+
+    <!--
+      Source: Alert message for the event of lacking screen reader(s) on the device.
+      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=100]
+    -->
+    <string name="message_no_screen_reader_alert">There is no screen reader installed on the device.</string>
+
 </resources>

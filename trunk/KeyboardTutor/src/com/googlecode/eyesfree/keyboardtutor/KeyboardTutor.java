@@ -17,21 +17,24 @@
 package com.googlecode.eyesfree.keyboardtutor;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Service;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.TextKeyListener;
-import android.text.method.TextKeyListener.Capitalize;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The {@link KeyboardTutor} activity contains a single TextView that displays a
@@ -43,148 +46,144 @@ import android.widget.TextView;
  */
 public class KeyboardTutor extends Activity {
 
-    private int lastKeyCode = 0;
-    private TextToSpeech tts;
-    private boolean ttsInited = false;
+    private static final String LOG_TAG = KeyboardTutor.class.getSimpleName();
 
-    /**
-     * This key listener listens for key press events from the physical keyboard
-     * and displays a single letter or key description at a time in the
-     * editText.
-     */
-    private TextKeyListener editTextKeyListener = new TextKeyListener(
-            Capitalize.NONE, false) {
+    private static final String ACTION_ACCESSIBILITY_SERVICE =
+        "android.accessibilityservice.AccessibilityService";
 
-        @Override
-        public boolean onKeyDown(View view, Editable text, int keyCode,
-                KeyEvent event) {
-            // Allow the TextKeyListener to append the character it wants to
-            // the end of the
-            // editable, text. The TextKeyListener accounts for modifier
-            // keys.
-            Log.d("KeyboardTutor", "before " + text);
-            super.onKeyDown(view, text, keyCode, event);
+    private static final String CATEGORY_FEEDBACK_SPOKEN =
+        "android.accessibilityservice.category.FEEDBACK_SPOKEN";
 
-            Log.d("KeyboardTutor", "after " + text);
+    private static final String ACTION_ACCESSIBILITY_SETTINGS =
+        "android.settings.ACCESSIBILITY_SETTINGS";
 
-            String keyText = getKeyDescription(keyCode, event);
-            // if the key pressed was a "special" key (alt, menu, arrow,
-            // etc),
-            // display the description text
-            if (keyText != null) {
-                text.clear();
-                text.append(keyText);
-            } else if (text.length() > 0) {
-                // otherwise, display the last character that was added.
-                char last = text.charAt(text.length() - 1);
-                text.clear();
-                text.append(last);
-            }
+    private static final String STATUS_PROVIDER_URI_PREFIX = "content://";
 
-            if (KeyEvent.KEYCODE_BACK == keyCode) {
-                if (lastKeyCode == KeyEvent.KEYCODE_BACK) {
-                    Log.d("KeyboardTutor", "exiting app");
-                    finish();
-                } else {
-                    if (ttsInited) {
-                        tts.speak(getString(R.string.back_message),
-                                TextToSpeech.QUEUE_ADD, null);
-                    }
-                }
-            } else {
-                sendAccessibilityEvent(text.toString());
-            }
+    private static final String STATUS_PROVIDER_URI_SUFFIX = ".providers.StatusProvider";
 
-            lastKeyCode = keyCode;
-            return true;
-        }
-    };
+    private static final Intent sScreenreaderIntent = new Intent();
 
-    /**
-     * The text watcher is used to catch changes from the IME. It simply removes
-     * all of the old text, so that only one character is displayed at a time.
-     * TODO(clsimon) Use this task watcher to add support for text entry via
-     * IMEs.
-     */
-    TextWatcher textWatcher = new TextWatcher() {
+    
+    static {
+        sScreenreaderIntent.setAction(ACTION_ACCESSIBILITY_SERVICE);
+        sScreenreaderIntent.addCategory(CATEGORY_FEEDBACK_SPOKEN);
 
-        // Used to prevent infinte loops while editing the text content
-        private boolean doNothing;
-
-        // The new char sequence that was added.
-        private CharSequence changed;
-
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
-            if (!doNothing) {
-                changed = s.subSequence(start, start + count);
-            }
-        }
-
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
-        }
-
-        public void afterTextChanged(Editable s) {
-            if (!doNothing) {
-                doNothing = true;
-                s.clear();
-                s.append(changed);
-                Log.i("KeyboardTutor",
-                        "Updated edit text through TextWatcher");
-                doNothing = false;
-            }
-        }
-    };
+    }
+    
+    private final Map<String, String> mPunctuationSpokenEquivalentsMap
+        = new HashMap<String, String>();
+    
+    private TextView mKeyDescriptionText;
+    private int mLastKeyCode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        buildPunctuationSpokenEquivalentMap();
+     
         setContentView(R.layout.main);
+        mKeyDescriptionText = (TextView) findViewById(R.id.editText);
+        mKeyDescriptionText.requestFocus();
+    }
 
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, 0);
-
-        final TextView editText = (TextView) findViewById(R.id.editText);
-        editText.requestFocus();
-
-        // add an on click listener to detect when the view is clicked. This
-        // seems like the only
-        // way to detect a middle d-pad click.
-        editText.setOnClickListener(new OnClickListener() {
-
-            public void onClick(View v) {
-                editText.setText(R.string.center);
-                sendAccessibilityEvent(editText.getText().toString());
-            }
-        });
-
-        // The KeyListener receives KeyEvents when buttons on the hardware
-        // keyboard
-        // are pressed.
-        editText.setKeyListener(editTextKeyListener);
+    private void buildPunctuationSpokenEquivalentMap() {
+        mPunctuationSpokenEquivalentsMap.put("?",
+            getString(R.string.punctuation_questionmark));
+        mPunctuationSpokenEquivalentsMap.put(" ",
+            getString(R.string.punctuation_space));
+        mPunctuationSpokenEquivalentsMap.put(",",
+            getString(R.string.punctuation_comma));
+        mPunctuationSpokenEquivalentsMap.put(".",
+            getString(R.string.punctuation_dot));
+        mPunctuationSpokenEquivalentsMap.put("!",
+            getString(R.string.punctuation_exclamation));
+        mPunctuationSpokenEquivalentsMap.put("(",
+            getString(R.string.punctuation_open_paren));
+        mPunctuationSpokenEquivalentsMap.put(")",
+            getString(R.string.punctuation_close_paren));
+        mPunctuationSpokenEquivalentsMap.put("\"",
+            getString(R.string.punctuation_double_quote));
+        mPunctuationSpokenEquivalentsMap.put(";",
+            getString(R.string.punctuation_semicolon));
+        mPunctuationSpokenEquivalentsMap.put(":",
+            getString(R.string.punctuation_colon));
     }
 
     /**
-     * onUserLeaveHint is called when the user requests that we exit the
-     * application. Assume this means that the home key was pressed, and give a
-     * final message as we exit.
+     * We want to capture all key events, so that we can read the key and not
+     * leave the screen, unless the user presses home or back to exit the app.
      */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.d(LOG_TAG, "global keydown " + keyCode);
+
+        String description = getKeyDescription(keyCode);
+        if (description == null) {
+            int unicodeChar = event.getUnicodeChar();
+            // if value is 0, this means that it is not something meant to be displayed in unicode.
+            // These tend to be special function keys that are phone specific, or keys that don't
+            // have an alt function.
+            // TODO(clsimon): find a way to describe what they do.
+            if (unicodeChar == 0) {
+                description = getString(R.string.unknown);
+            } else {
+                description = new String(new int[] { 
+                        unicodeChar 
+                    }, 0, 1);
+                // If this is a punctuation, replace with the spoken equivalent.
+                if (mPunctuationSpokenEquivalentsMap.containsKey(description)) {
+                    description = mPunctuationSpokenEquivalentsMap.get(description);
+                }
+            }
+        }
+        displayAndSpeak(description);
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mLastKeyCode == KeyEvent.KEYCODE_BACK) {
+                finish();
+            } else {
+                displayAndSpeak(getString(R.string.back_message));
+            }
+        }
+        mLastKeyCode = keyCode;
+
+        // allow volume to be adjusted and the soft-keyboard toggled
+        return KeyEvent.KEYCODE_VOLUME_UP != keyCode
+            && KeyEvent.KEYCODE_VOLUME_DOWN != keyCode
+            && KeyEvent.KEYCODE_MENU != keyCode;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {        
+            ensureEnabledScreenReader();
+        }
+    }
+
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        if (tts != null && ttsInited) {
-            tts.speak(getString(R.string.home_message),
-                    TextToSpeech.QUEUE_FLUSH, null);
-        }
+        displayAndSpeak(getString(R.string.home_message));
+        // reset to empty text, so it doesnt say "Home, exiting .." the next time the open
+        // the application
+        mKeyDescriptionText.setText("");
+    }
+
+    /**
+     * Displays and speaks the given <code>text</code>.
+     */
+    private void displayAndSpeak(String text) {
+        mKeyDescriptionText.setText(text);
+        mKeyDescriptionText.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED);
     }
 
     /**
      * If the KeyEvent is a special key, return a string value describing the
      * key. Otherwise, return null.
      */
-    private String getKeyDescription(int keyCode, KeyEvent event) {
+    private String getKeyDescription(int keyCode) {
         String keyText;
         switch (keyCode) {
         case KeyEvent.KEYCODE_ALT_LEFT:
@@ -254,55 +253,95 @@ public class KeyboardTutor extends Activity {
     }
 
     /**
-     * We want to capture all key events, so that we can read the key and not
-     * leave the screen, unless the user presses home or back to exit the app.
+     * Ensure there is an enabled screen reader. If no such is present we
+     * open the accessibility preferences so the user can enabled it.
      */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.d("KeyboardTutor", "global keydown " + keyCode);
-        // allow volume to be adjusted.
-        return KeyEvent.KEYCODE_VOLUME_UP != keyCode
-                && KeyEvent.KEYCODE_VOLUME_DOWN != keyCode;
-    }
-
-    private void sendAccessibilityEvent(String text) {
-        Log.d("KeyboardTutor", "sending event " + text);
-        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-        if (!manager.isEnabled()) {
-            Log.d("KeyboardTutor", "manager not enabled");
+    private void ensureEnabledScreenReader() {
+        List<ResolveInfo> resolveInfos = getPackageManager().queryIntentServices(
+                sScreenreaderIntent, 0);
+        // if no screen readers installed we let the user know
+        // and quit (this should the first check)
+        if (resolveInfos.isEmpty()) {
+            showNoInstalledScreenreadersWarning();
             return;
         }
-        AccessibilityEvent event = AccessibilityEvent
-                .obtain(AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
-        event.setFromIndex(0);
-        event.setRemovedCount(0);
-        event.setAddedCount(text.length());
-        event.setContentDescription(text);
 
-        manager.sendAccessibilityEvent(event);
+        // check if accessibility is enabled and if not try to open accessibility
+        // preferences so the user can enable it (this should be the second check)
+        AccessibilityManager accessibilityManger =
+            (AccessibilityManager) getSystemService(Service.ACCESSIBILITY_SERVICE);
+        if (!accessibilityManger.isEnabled()) {
+            showInactiveServiceAlert();
+            return;
+        }
+
+        // find an enabled screen reader and if no such try to open accessibility
+        // preferences so the user can enable one (this should be the third check)
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            Uri uri = Uri.parse(STATUS_PROVIDER_URI_PREFIX + resolveInfo.serviceInfo.packageName
+                    + STATUS_PROVIDER_URI_SUFFIX);
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            if (cursor.moveToFirst() && cursor.getInt(0) == 1) {
+                return;
+            }
+        }
+        showInactiveServiceAlert();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-            tts = new TextToSpeech(this, new OnInitListener() {
-                public void onInit(int status) {
-                    ttsInited = true;
-                }
-            });
-        } else {
-            Intent installIntent = new Intent();
-            installIntent
-                    .setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-            startActivity(installIntent);
-        }
+    /**
+     * Show a dialog to announce the lack of accessibility settings on the device.
+     */
+    private void showInactiveServiceAlert() {
+        new AlertDialog.Builder(this).setTitle(
+                getString(R.string.title_no_active_screen_reader_alert)).setMessage(
+                getString(R.string.message_no_active_screen_reader_alert)).setCancelable(false)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        /*
+                         * There is no guarantee that an accessibility settings
+                         * menu exists, so if the ACTION_ACCESSIBILITY_SETTINGS
+                         * intent doesn't match an activity, simply start the
+                         * main settings activity.
+                         */
+                        Intent launchSettings = new Intent(ACTION_ACCESSIBILITY_SETTINGS);
+                        try {
+                            startActivity(launchSettings);
+                        } catch (ActivityNotFoundException ae) {
+                            showNoAccessibilityWarning();
+                        }
+                        dialog.dismiss();
+                    }
+                }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        KeyboardTutor.this.finish();
+                    }
+                }).create().show();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (tts != null && ttsInited) {
-            tts.shutdown();
-        }
+    /**
+     * Show a dialog to announce the lack of accessibility settings on the device.
+     */
+    private void showNoAccessibilityWarning() {
+        new AlertDialog.Builder(this).setTitle(getString(R.string.title_no_accessibility_alert))
+                .setMessage(getString(R.string.message_no_accessibility_alert)).setPositiveButton(
+                        android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                KeyboardTutor.this.finish();
+                            }
+                        }).create().show();
+    }
+
+    /**
+     * Show a dialog to announce the lack of screen readers on the device.
+     */
+    private void showNoInstalledScreenreadersWarning() {
+        new AlertDialog.Builder(this).setTitle(getString(R.string.title_no_screen_reader_alert))
+                .setMessage(getString(R.string.message_no_screen_reader_alert)).setPositiveButton(
+                        android.R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                KeyboardTutor.this.finish();
+                            }
+                        }).create().show();
     }
 }

@@ -4,18 +4,17 @@
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
     <TextView
+      android:id="@+id/titleText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="@string/edit_description"
       android:textSize="30sp"/>
-    <com.googlecode.eyesfree.keyboardtutor.TutorTextView
+    <TextView
       android:id="@+id/editText"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:textSize="90sp"
       android:paddingLeft="10dp"
-      android:contentDescription="@string/edit_description"
       android:focusable="true">
-        <requestFocus/>
-    </com.googlecode.eyesfree.keyboardtutor.TutorTextView>
+    </TextView>
 </LinearLayout>
