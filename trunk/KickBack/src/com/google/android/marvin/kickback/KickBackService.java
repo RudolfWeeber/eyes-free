@@ -59,11 +59,7 @@ public class KickBackService extends AccessibilityService {
     }
 
     @Override
-    public synchronized void onAccessibilityEvent(AccessibilityEvent event) {
-        if (event == null){
-            Log.e(LOG_TAG, "Received null accessibility event.");
-            return;
-        }
+    public void onAccessibilityEvent(AccessibilityEvent event) {
         int eventType = event.getEventType();
         switch (eventType) {
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED :
