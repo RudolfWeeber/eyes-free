@@ -32,16 +32,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.telephony.TelephonyManager;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.EditText;
@@ -52,9 +56,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -320,7 +321,7 @@ public class TalkBackService extends AccessibilityService {
     private static final String[] CRASH_REPORT_EMAILS = {"eyes.free.crash.reports@gmail.com"};
 
     /**
-     * The name of the telephony feature.
+     * The name of the telephony feature (not yet defined in SDK 1.6 we build against).
      */
     private static final String FEATURE_NAME_TELEPHONY = "android.hardware.telephony";
 
@@ -333,7 +334,7 @@ public class TalkBackService extends AccessibilityService {
      * Flag if the TTS service has been initialized.
      */
     private static boolean sTtsInitialized = false;
-  
+
     /**
      * We keep the accessibility events to be processed. If a received event is
      * the same type as the previous one it replaces the latter, otherwise it is
@@ -392,6 +393,11 @@ public class TalkBackService extends AccessibilityService {
      * {@link Utterance}s.
      */
     private SpeechRuleProcessor mSpeechRuleProcessor;
+
+    /**
+     * Loader of speech rules.
+     */
+    private SpeechRuleLoader mSpeechRuleLoader;
 
     /**
      * The last event - used to auto-determine the speech queue mode.
@@ -482,6 +488,11 @@ public class TalkBackService extends AccessibilityService {
      * Whether the screen is off.
      */
     private boolean mScreenIsOff;
+    
+    /**
+     * When the screen was last turned on.
+     */
+    private long mTimeScreenOn;
 
     /**
      * The last spoken accessibility event, used for crash reporting.
@@ -600,37 +611,26 @@ public class TalkBackService extends AccessibilityService {
         info.flags = AccessibilityServiceInfo.DEFAULT;
         setServiceInfo(info);
     }
- 
+
     /**
      * Initializes the infrastructure.
      */
     private void initializeInfrastructure() {
         // first check if we are running on a phone
-        mDeviceIsPhone = hasTelephonyFeatureOrSdkVersionFour();
+        mDeviceIsPhone = Utils.hasSystemFeature(this, FEATURE_NAME_TELEPHONY);
 
         // start the TTS service
         mSpeechHandler.obtainMessage(WHAT_START_TTS).sendToTarget();
 
         // create a speech processor for generating utterances
-        mSpeechRuleProcessor = new SpeechRuleProcessor();
+        mSpeechRuleProcessor = new SpeechRuleProcessor(this);
 
-        // add speech strategy for third-party apps; later this may be loaded
-        // dynamically from another file
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_thirdparty);
+        // initialize the speech rule loader and load speech rules
+        mSpeechRuleLoader = new SpeechRuleLoader(getPackageName(), mSpeechRuleProcessor,
+                mDeviceIsPhone);
+        mSpeechRuleLoader.loadSpeechRules();
+        addInfrastructureStateListener(mSpeechRuleLoader);
 
-        // add speech strategy for specific built-in Android apps
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_apps);
-
-        if (!mDeviceIsPhone) {
-            // Add device-type specific speech strategies here.
-            // This should always be after the application specific
-            // ones but before the generic.
-        }
-
-        // add generic speech strategy for views in any app; this should always be last
-        // so that the app-specific rules above can override the generic rules
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy);
-        
         // We initialize phone specific stuff only if needed
         if (mDeviceIsPhone) {
             // Create and register in a proximity sensor for stopping speech
@@ -649,8 +649,9 @@ public class TalkBackService extends AccessibilityService {
             // get the TelephonyManager
             mTelephonyManager = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
 
-            // TODO (svetoslavganov): For now preferences are supported only on devices
+            // TODO(svetoslavganov): For now preferences are supported only on devices
             //   with telephony feature i.e. phones
+
             // load preferences
             mPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
             reloadPreferences();
@@ -662,7 +663,7 @@ public class TalkBackService extends AccessibilityService {
             prefsEditor.putBoolean(getString(R.string.pref_caller_id_key), mCallerIdPref);
             prefsEditor.putBoolean(getString(R.string.pref_tts_extended_key), mTtsExtendedPref);
             prefsEditor.putBoolean(getString(R.string.pref_proximity_key), mProximityPref);
-            prefsEditor.commit();            
+            prefsEditor.commit();
         }
 
         // get the ActivityManager
@@ -673,6 +674,7 @@ public class TalkBackService extends AccessibilityService {
         addInfrastructureStateListener(mPluginManager);
 
         mScreenIsOff = false;
+        mTimeScreenOn = SystemClock.uptimeMillis();
 
         mSpeakingNotification = false;
         mClearSpeakingNotification = new Runnable() {
@@ -686,48 +688,6 @@ public class TalkBackService extends AccessibilityService {
 
         sInfrastructureInitialized = true;
         notifyInfrastructureStateListeners();
-    }
-
-    /**
-     * @return If the devices has telephony feature or SDK version is 4.
-     * <p>
-     * Note: We are using reflection since the features API appeared in
-     *       API level 5 but we prefer to be compatible with API level 4.
-     *       If no feature API is present (version 4) we are falling back
-     *       to a Phone device.
-     * </p>
-     */
-    private boolean hasTelephonyFeatureOrSdkVersionFour() {
-        // if SDK is four we default to a Phone
-        if (Build.VERSION.SDK_INT <= 4) {
-            return true;
-        }
-        PackageManager packageManager = getPackageManager();
-        Method getSystemAvailableFeatures = null;
-        try {
-            getSystemAvailableFeatures = packageManager.getClass().getMethod(
-                    "getSystemAvailableFeatures", (Class[]) null);
-        } catch (NoSuchMethodException nsme) {
-            return false;
-        }
-        try {
-            Object[] features = (Object[]) getSystemAvailableFeatures.invoke(packageManager,
-                    (Object[]) null);
-            for (Object feature : features) {
-                Field field = feature.getClass().getField("name");
-                String featureName = (String) field.get(feature);
-                if (FEATURE_NAME_TELEPHONY.equals(featureName)) {
-                    return true;
-                }
-            }
-            return false;
-        } catch (InvocationTargetException ite) {
-            return false;
-        } catch (IllegalAccessException iae) {
-            return false;
-        } catch (NoSuchFieldException nsfe) {
-            return false;
-        }
     }
 
     private void initializeProximitySensor() {
@@ -753,7 +713,7 @@ public class TalkBackService extends AccessibilityService {
             }
         };
     }
-
+    
     /**
      * Adds an {@link InfrastructureStateListener}.
      */
@@ -1015,6 +975,25 @@ public class TalkBackService extends AccessibilityService {
             boolean silence = false;
             if (mScreenPref == PREF_SCREEN_OFF_DISALLOWED && mScreenIsOff) {
                 silence = true;
+                if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+                    String text = Utils.getEventText(this, event).toString();
+                    
+                    NotificationType type;
+                    Parcelable parcelable = event.getParcelableData();
+                    if (parcelable instanceof Notification) {
+                        int icon = ((Notification) parcelable).icon;
+                        // don't record phone calls in the cache because we get missed call anyway
+                        if (icon == NotificationType.ICON_PHONE_CALL) {
+                            type = null; // ignore this notification
+                        } else {
+                            type = NotificationType.getNotificationTypeFromIcon(icon);
+                        }
+                    } else {
+                        type = null;
+                    }
+                    
+                    updateNotificationCache(type, text);
+                }
             }
 
             // If the state is ringing, then the Caller ID pref overrides what we do.
@@ -1473,7 +1452,7 @@ public class TalkBackService extends AccessibilityService {
      * @param text The text to clean up.
      * @return The cleaned text.
      */
-    String cleanUpString(String text) {
+    public String cleanUpString(String text) {
         String cleanedText = text;
         Matcher allCapsMatcher = sAllCapsPattern.matcher(cleanedText);
         while (allCapsMatcher.find()) {
@@ -1678,18 +1657,6 @@ public class TalkBackService extends AccessibilityService {
      */
     private void ttsSpeak(String text, int queueMode, HashMap<String, String> params) {
         if (mTts != null) {
-            // Workaround for the strange behavior of the Pico TTS engine
-            // TODO(svetoslavganov): Remove as soon as the Pico issue is resolved
-            if (queueMode == QUEUING_MODE_INTERRUPT) {
-                // It seems that the stop() call is non-blocking and if we try
-                // to speak immediately after that the stopping process is confused
-                mTts.stop();
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ie) {
-                    /* ignore */
-                }
-            }
             mTts.speak(text, queueMode, params);
         } else if (mTtsExtended != null) {
             mTtsExtended.speak(text, queueMode, params);
@@ -1867,21 +1834,34 @@ public class TalkBackService extends AccessibilityService {
                 mRingerMode = ringerMode;
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 mScreenIsOff = false;
+                mTimeScreenOn = SystemClock.uptimeMillis();
                 if (mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
                     Utterance utterance = Utterance.obtain();
-                    String screenState = getString(R.string.value_screen_on);
-                    utterance.getText().append(screenState);
+                    StringBuilder utteranceBuilder = utterance.getText();
+                    int timeFlags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_CAP_NOON_MIDNIGHT;
+                    if (DateFormat.is24HourFormat(TalkBackService.asContext())) {
+                        timeFlags |= DateUtils.FORMAT_24HOUR;
+                    }
+                    utteranceBuilder.append(DateUtils.formatDateTime(asContext(), System.currentTimeMillis(), timeFlags));
+                    utteranceBuilder.append(SPACE);
+                    utteranceBuilder.append(sNotificationCache.getFormattedSummary());
+                    utteranceBuilder.append(SPACE);
                     appendRingerStateAnouncement(mRingerMode, utterance);
                     cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
+                    sNotificationCache.removeNotificationsAll();
                 }
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                 mScreenIsOff = true;
                 if (mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
-                    Utterance utterance = Utterance.obtain();
-                    String screenState = getString(R.string.value_screen_off);
-                    utterance.getText().append(screenState);
-                    appendRingerStateAnouncement(mRingerMode, utterance);
-                    cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
+                    if (SystemClock.uptimeMillis()-mTimeScreenOn < 2000) {
+                        // Don't speak anything, let above notification continue
+                    } else {
+                        Utterance utterance = Utterance.obtain();
+                        String screenState = getString(R.string.value_screen_off);
+                        utterance.getText().append(screenState);
+                        appendRingerStateAnouncement(mRingerMode, utterance);
+                        cleanUpAndSpeak(utterance, QUEUING_MODE_INTERRUPT, WHAT_SPEAK, false);
+                    }
                 }
             } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
                 Utterance utterance = Utterance.obtain();

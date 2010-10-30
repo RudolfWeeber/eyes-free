@@ -144,7 +144,7 @@ public class NotificationCache {
     }
 
     /**
-     * returns a summary of the notifications.
+     * Returns a summary of the notifications.
      * 
      * @return The summary.
      */
@@ -152,7 +152,7 @@ public class NotificationCache {
         StringBuilder summary = new StringBuilder();
         for (Map.Entry<NotificationType, List<String>> entry : mTypeToMessageMap.entrySet()) {
             int count = entry.getValue().size();
-            if (count > 0) {
+            if (count > 0 && entry.getKey() != null) {
                 summary.append(count);
                 summary.append(" ");
                 summary.append(getStringForResourceId(entry.getKey().getValue()));

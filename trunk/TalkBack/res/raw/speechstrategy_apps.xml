@@ -604,7 +604,7 @@
       <ss:className>com.android.phone.InCallScreen</ss:className>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.CustomFormatters$InCallScreenFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.talkback.formatter.phone.InCallScreenFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 

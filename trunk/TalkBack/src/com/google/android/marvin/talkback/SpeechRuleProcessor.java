@@ -23,10 +23,14 @@ import android.content.Context;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -65,6 +69,11 @@ public class SpeechRuleProcessor {
     private final Object mLock = new Object();
 
     /**
+     * Context for accessing resources.
+     */
+    private final Context mContext;
+
+    /**
      * Mapping from package name to speech rules for that package.
      */
     private HashMap<String, ArrayList<SpeechRule>> mPackageNameToSpeechRulesMap = new HashMap<String, ArrayList<SpeechRule>>();
@@ -72,8 +81,8 @@ public class SpeechRuleProcessor {
     /**
      * Creates a new instance.
      */
-    SpeechRuleProcessor() {
-        /* do nothing - reducing constructor visibility */
+    SpeechRuleProcessor(Context context) {
+        mContext = context;
     }
 
     /**
@@ -81,7 +90,38 @@ public class SpeechRuleProcessor {
      * events from all packages and use the resources of the TalkBack context.
      */
     void addSpeechStrategy(int resourceId) {
-        addSpeechStrategy(TalkBackService.asContext(), null, null, resourceId);
+        addSpeechStrategy(mContext, null, null, resourceId);
+    }
+
+    /**
+     * Removes the speech rules defined by a speech strategy with the
+     * given <code>resourceId</code> 
+     */
+    void removeSpeechStrategy(int resourceId) {
+        String speechStrategy = mContext.getResources().getResourceName(resourceId);
+        removeSpeechStrategy(speechStrategy);
+    }
+
+    /**
+     * Loads a speech strategy from a given <code>file</code>.
+     */
+    void addSpeechStrategy(File file) {
+        String speechStrategy = file.toURI().toString();
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            addSpeechStrategy(mContext, speechStrategy, null, null, inputStream);
+        } catch (FileNotFoundException fnfe) {
+            Log.e(LOG_TAG, "Error loading speech strategy: " + speechStrategy, fnfe);
+        }
+    }
+
+    /**
+     * Removes the speech rules defined by a speech strategy in the
+     * given <code>file</code> 
+     */
+    void removeSpeechStrategy(File file) {
+        String speechStrategy = file.toURI().toString();
+        removeSpeechStrategy(speechStrategy);
     }
 
     /**
@@ -96,49 +136,64 @@ public class SpeechRuleProcessor {
      */
     void addSpeechStrategy(Context context, String publicSourceDir, String targetPackage,
             int resourceId) {
-        Document document = parseSpeechStrategy(context, resourceId);
-        ArrayList<SpeechRule> speechRules = SpeechRule.createSpeechRules(context, publicSourceDir,
-                document);
-        synchronized (mLock) {
-            for (int i = 0, count = speechRules.size(); i < count; i++) {
-                SpeechRule speechRule = speechRules.get(i);
-                addSpeechRule(targetPackage, speechRule);
-            }
-        }
+        String speechStrategy = context.getResources().getResourceName(resourceId);
+        InputStream inputStream = context.getResources().openRawResource(resourceId);
+        addSpeechStrategy(context, speechStrategy, targetPackage, publicSourceDir, inputStream);
     }
 
     /**
-     * Adds a <code>speechRule</code> for a given <code>targetPackage</code>
-     * If <code>targetPackage</code> is specified the speech rule is added to
-     * the list of rules for that package. It is up to the speech rule writer
-     * to make sure that the accepted package name is the same as this argument
-     * (This is applicable only for plug-ins). If the target package is
-     * <code>null</code> and the rule's filter is a {@link SpeechRule.DefaultFilter}
-     * it is polled to find the accepted package name (if such). If this fails
-     * we fall back to putting the rule to the list of rules with not defined
-     * package names as {@link #UNDEFINED_PACKAGE_NAME}.
+     * Loads a <code>speechStrategy</code> from a given <code>inputStream</code> to handle
+     * events from the specified <code>targetPackage</code> and use the resources
+     * from a given <code>context</code>. If the target package is
+     * <code>null</code> the rules of the loaded speech strategy are appended to
+     * the default speech rules. While for loading of resources is used the provided
+     * context instance, for loading plug-in classes (custom Filters and Formatters)
+     * from the <code>publicSourceDir</code> (specifies the location of the APK that
+     * defines them) is used the TalkBack {@link ClassLoader}.
      */
-    private boolean addSpeechRule(String targetPackage, SpeechRule speechRule) {
-        String packageName = targetPackage;
-        if (packageName == null) {
-            Filter filter = speechRule.getFilter(); 
-            if (filter instanceof SpeechRule.DefaultFilter) {
-                SpeechRule.DefaultFilter defaultFilter = (SpeechRule.DefaultFilter) filter;
-                packageName = defaultFilter.getAcceptedPackageName();
+    private void addSpeechStrategy(Context context, String speechStrategy, String targetPackage,
+            String publicSourceDir, InputStream inputStream) {
+        Document document = parseSpeechStrategy(context, inputStream);
+        ArrayList<SpeechRule> speechRules = SpeechRule.createSpeechRules(context, speechStrategy,
+                targetPackage, publicSourceDir, document);
+        synchronized (mLock) {
+            for (int i = 0, count = speechRules.size(); i < count; i++) {
+                SpeechRule speechRule = speechRules.get(i);
+                addSpeechRuleLocked(speechRule);
             }
         }
+        Log.d(LOG_TAG, speechRules.size() + " speech rules appended form: " + speechStrategy);
+    }
 
-        // target package neither specified by the client nor the speech rule
-        if (packageName == null) {
-            packageName = UNDEFINED_PACKAGE_NAME;
+    /**
+     * Removes the speech rules defined by a given <code>speechStrategy</code>
+     */
+    private void removeSpeechStrategy(String speechStrategy) {
+        int removedCount = 0;
+        for (String key : mPackageNameToSpeechRulesMap.keySet()) {
+            ArrayList<SpeechRule> speechRules = mPackageNameToSpeechRulesMap.get(key);
+            Iterator<SpeechRule> speechRulesIterator = speechRules.iterator();
+            while (speechRulesIterator.hasNext()) {
+                SpeechRule speechRule = speechRulesIterator.next();
+                if (speechStrategy.equals(speechRule.getSpeechStrategy())) {
+                    speechRulesIterator.remove();
+                    removedCount++;
+                }
+            }
         }
+        Log.d(LOG_TAG, removedCount + " speech rules removed from: " + speechStrategy);
+    } 
 
+    /**
+     * Adds a <code>speechRule</code>.
+     */
+    private boolean addSpeechRuleLocked(SpeechRule speechRule) {
+        String packageName = speechRule.getPackageName();
         ArrayList<SpeechRule> packageSpeechRules = mPackageNameToSpeechRulesMap.get(packageName);
         if (packageSpeechRules == null) {
             packageSpeechRules = new ArrayList<SpeechRule>();
             mPackageNameToSpeechRulesMap.put(packageName, packageSpeechRules);
         }
-
         return packageSpeechRules.add(speechRule);
     }
 
@@ -208,9 +263,15 @@ public class SpeechRuleProcessor {
             String activity, Utterance utterance, Map<Object, Object> filterArguments,
             Map<Object, Object> formatterArguments) {
         for (int i = 0, count = speechRules.size(); i < count; i++) {
-            if (speechRules.get(i).apply(event, activity, utterance, filterArguments,
-                    formatterArguments)) {
-                return true;
+            // make sure we never crash because of a bug in speech rules
+            SpeechRule speechRule = speechRules.get(i);
+            try {
+                if (speechRule.apply(event, activity, utterance, filterArguments,
+                        formatterArguments)) {
+                    return true;
+                }
+            } catch (Throwable t) {
+                Log.e(LOG_TAG, "Error while processing rule:\n" + speechRule.asXmlString(), t);
             }
         }
         return false;
@@ -222,13 +283,12 @@ public class SpeechRuleProcessor {
      * parsing, it is logged and <code>null</code> is returned.
      * 
      * @param context A {@link Context} instance.
-     * @param resourceId The resource id of the speech strategy XML file.
+     * @param inputStream An {@link InputStream} to the speech strategy XML file.
      * @return The parsed {@link Document} or <code>null</code> if an error
      *         occurred.
      */
-    private Document parseSpeechStrategy(Context context, int resourceId) {
+    private Document parseSpeechStrategy(Context context, InputStream inputStream) {
         try {
-            InputStream inputStream = context.getResources().openRawResource(resourceId);
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             return builder.parse(inputStream);
         } catch (IOException ioe) {

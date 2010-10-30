@@ -266,7 +266,7 @@
       <ss:removedCount>0</ss:removedCount>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.CustomFormatters$AddedTextFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$AddedTextFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -277,7 +277,7 @@
       <ss:addedCount>0</ss:addedCount>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.CustomFormatters$RemovedTextFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$RemovedTextFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -287,7 +287,7 @@
       <ss:eventType>TYPE_VIEW_TEXT_CHANGED</ss:eventType>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.CustomFormatters$ReplacedTextFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$ReplacedTextFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -299,7 +299,7 @@
       <ss:eventType>TYPE_NOTIFICATION_STATE_CHANGED</ss:eventType>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.CustomFormatters$NotificationFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.talkback.formatter.phone.NotificationFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 

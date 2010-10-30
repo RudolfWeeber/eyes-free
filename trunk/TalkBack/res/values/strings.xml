@@ -73,6 +73,12 @@
     <string name="notification_status_sync">Sync</string>
 
     <!--
+      Source: A notification that the user received an email has appeared in the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_new_email">New email</string>
+    
+    <!--
       Source: A notification that the device is synchronizing has appeared the status bar.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
@@ -742,5 +748,6 @@
         to collect all the text you type, including personal data credit card numbers except
         passwords. It may also log your user interface interactions. It comes from the application
         <xliff:g id="plugin_name">%1$s</xliff:g>. Enable this plug-in?</string>
+
 
 </resources>
