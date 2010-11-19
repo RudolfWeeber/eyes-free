@@ -2,4 +2,6 @@ california_cities.kmz
 california_counties.kmz
 us_states.kmz
 world_countries.kmz
+new_york_counties.kmz
+new_york_cities.kmz
 brazil_states.kmz
