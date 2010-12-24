@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.ideal.textenlarger" android:versionCode="1"
+	android:versionName="1.0">
+
+	<application android:label="Text Enlarger" android:icon="@drawable/icon">
+
+
+		<service android:name=".TextEnlargerService">
+			<intent-filter>
+				<action android:name="android.accessibilityservice.AccessibilityService" />
+			</intent-filter>
+		</service>
+
+		<activity android:name=".TextEnlargerPrefs" android:label="Text Enlarger">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		
+		<activity android:name=".ApplicationsListActivity" android:label="Text Enlarger">
+		</activity>
+
+	</application>
+
+	<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+
+	<uses-sdk android:minSdkVersion="4" />
+
+</manifest>

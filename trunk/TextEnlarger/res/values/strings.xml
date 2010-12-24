@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hello">Hello World, TextEnlargerService!</string>
+	<string name="app_name">TextEnlarger</string>
+
+	<string-array name="text_enlargement_entries">
+		<item>No enlargement</item>
+		<item>A Bit Larger</item>
+		<item>Large</item>
+		<item>XL</item>
+		<item>XXL</item>
+		<item>XXXL</item>
+	</string-array>
+	<string-array name="text_enlargement_values">
+		<item>1.0</item>
+		<item>1.25</item>
+		<item>1.5</item>
+		<item>1.75</item>
+		<item>2.0</item>
+		<item>2.5</item>
+	</string-array>
+
+
+</resources>
