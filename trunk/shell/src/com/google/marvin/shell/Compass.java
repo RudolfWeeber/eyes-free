@@ -16,13 +16,15 @@
 package com.google.marvin.shell;
 
 import android.content.Context;
-import android.hardware.SensorListener;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 /**
  * Compass uses the magnetic compass to track the current heading.
  * 
- * @author clchen@google.com (Charles L. Chen)
+ * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
  */
 
 public class Compass {
@@ -32,8 +34,8 @@ public class Compass {
         ctx = context;
         sensorOk = true;
         sensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
-        sensorManager.registerListener(mListener, SensorManager.SENSOR_ORIENTATION,
-                SensorManager.SENSOR_DELAY_GAME);
+        Sensor compassSensor = sensorManager.getDefaultSensor(SensorManager.SENSOR_ORIENTATION);
+        sensorManager.registerListener(mListener, compassSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     private static final String[] DIRECTION_NAMES = {
@@ -52,13 +54,13 @@ public class Compass {
     /**
      * Handles the sensor events for changes to readings and accuracy
      */
-    private final SensorListener mListener = new SensorListener() {
-        public void onSensorChanged(int sensor, float[] values) {
-            currentHeading = values[0]; // Values are yaw (heading), pitch, and
-                                        // roll.
+    private final SensorEventListener mListener = new SensorEventListener() {
+        public void onSensorChanged(SensorEvent event) {
+            // Values are yaw (heading), pitch, and roll.
+            currentHeading = event.values[0]; 
         }
 
-        public void onAccuracyChanged(int arg0, int arg1) {
+        public void onAccuracyChanged(Sensor arg0, int arg1) {
             sensorOk = (arg1 == SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
         }
     };

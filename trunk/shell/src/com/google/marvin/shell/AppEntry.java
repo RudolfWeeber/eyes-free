@@ -18,7 +18,6 @@ package com.google.marvin.shell;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -27,7 +26,7 @@ import java.util.ArrayList;
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
-public class AppEntry implements Comparable {
+public class AppEntry implements Comparable<AppEntry> {
   private String title;
 
   private String packageName;
@@ -147,9 +146,9 @@ public class AppEntry implements Comparable {
     return this.getPackageName().equals(app.getPackageName());
   }
   
-  public int compareTo(Object o) {
+  public int compareTo(AppEntry o) {
     String title0 = this.getTitle().toLowerCase();
-    String title1 = ((AppEntry) o).getTitle().toLowerCase();
+    String title1 = o.getTitle().toLowerCase();
     return title0.compareTo(title1);
   }
 }

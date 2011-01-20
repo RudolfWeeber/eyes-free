@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+  <string name="home">Inicio</string>
+  <string name="please_unlock">Favor de desbloquear.</string>
+  <string name="you_have_new_voicemail">Hay correo de voz nuevo.</string>
+  <string name="application_not_installed">Aplicación no instalada.</string>
+  <string name="compass">Grújula</string>
+  <string name="battery">Batería</string>
+  <string name="midnight">las doce de la noche</string>
+  <string name="noon">las doce del día</string>
+  <string name="am">AM</string>
+  <string name="pm">PM</string>
+  <string name="applications">Aplicaciones</string>
+  <string name="applist_reload">Aplicaciones reiniciadas</string>
+  <string name="shortcuts">Atajos</string>
+  <string name="voicemail">Correo de voz</string>
+  <string name="marvin_intro_snd_">[marvin intro]</string>
+  <string name="charging">cargando</string>
+  <string name="bluetooth">Bluetooth</string>
+  <string name="gps">GPS</string>
+  <string name="no_data_network">No hay red de datos</string>
+  <string name="mobile_data_network">Red de datos móviles</string>
+  <string name="threeg_data_network">Red de datos 3G</string>
+  <string name="edge_data_network">Red de datos EDGE</string>
+  <string name="bars">barras.</string>
+  <string name="deleted">. eliminado.</string>
+  <string name="signal">Señal</string>
+  <string name="location">Ubicación</string>
+  <string name="wifi">WiFi</string>
+  <string name="button1_prompt">Aplicación para botón 1</string>
+  <string name="button2_prompt">Aplicación para botón 2</string>
+  <string name="button3_prompt">Aplicación para botón 3</string>
+  <string name="button4_prompt">Aplicación para botón 4</string>
+  <string name="button6_prompt">Aplicación para botón 6</string>
+  <string name="button7_prompt">Aplicación para botón 7</string>
+  <string name="button8_prompt">Aplicación para botón 8</string>
+  <string name="button9_prompt">Aplicación para botón 9</string>
+  <string name="period">Punto</string>
+  <string name="question_mark">Interrogación</string>
+  <string name="exclamation_point">Admiración</string>
+  <string name="comma">Coma</string>
+  <string name="backspace">Retroceso</string>
+  <string name="confirm">Confirmar</string>
+  <string name="time">La hora</string>
+
+  <string name="search">Búsqueda</string>
+  <string name="search_not_available">La búsqueda por voz no está disponible en este dispositivo.</string>
+
+  <!-- The following strings are displayed but never spoken -->
+  <string name="app_name">Escritorio Eyes-Free Shell</string>
+  <string name="shortcutsManager">Gestor de atajos de Eyes-Free Shell</string>
+
+  <!-- The following strings are used for earcons -->
+  <string name="earcon_tick">[TICK]</string>
+  <string name="earcon_tock">[TOCK]</string>
+
+</resources>

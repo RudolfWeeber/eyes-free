@@ -17,26 +17,24 @@
 package com.google.marvin.shell;
 
 import com.google.marvin.shell.ProximitySensor.ProximityChangeListener;
-import com.google.marvin.utils.UserTask;
 import com.google.marvin.widget.GestureOverlay;
 import com.google.marvin.widget.GestureOverlay.Gesture;
 import com.google.marvin.widget.GestureOverlay.GestureListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.DialogInterface.OnClickListener;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.RecognizerIntent;
@@ -47,44 +45,47 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Shell An alternate home screen that is designed to be friendly for eyes-free
  * use
- * 
- * @author clchen@google.com (Charles L. Chen)
+ *
+ * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
  */
-public class MarvinShell extends Activity implements GestureListener {
+public class MarvinShell extends Activity {
     private static final int ttsCheckCode = 42;
 
     public static final int VOICE_RECO_CODE = 777;
 
     private static final int MAIN_VIEW = 1000;
 
-    private static final int SHORTCUTS_VIEW = 1001;
-
     private static final int APPLAUNCHER_VIEW = 1002;
 
-    private int activeView;
+    private static final int MENU_EDIT_MODE = 1003;
+
+    public static final String HOME_MENU = "Home";
+    
+    public static final int DIALOG_RENAME_MENU = 1312341;
+
+    public static boolean editAllItems = true;
+
+    private int activeMode;
 
     private PackageManager pm;
 
     private FrameLayout mainFrameLayout;
 
-    private AppLauncherView appLauncherView;
+    private AppChooserView appChooserView;
 
     public TextToSpeech tts;
 
@@ -98,9 +99,11 @@ public class MarvinShell extends Activity implements GestureListener {
 
     private AuditoryWidgets widgets;
 
-    private HashMap<Integer, MenuItem> items;
+    private Menu currentMenu;
 
-    private ArrayList<Menu> menus;
+    private MenuManager menus;
+
+    private ArrayList<String> menuHistory;
 
     long backKeyTimeDown = -1;
 
@@ -125,9 +128,9 @@ public class MarvinShell extends Activity implements GestureListener {
 
     private Vibrator vibe;
 
-    private static final long[] VIBE_PATTERN = {
-            0, 10, 70, 80
-    };
+    private static final long[] VIBE_PATTERN = { 0, 80 };
+
+    private static final long[] CENTER_PATTERN = { 0, 40, 40, 40, 40, 40 };
 
     private GestureOverlay gestureOverlay;
 
@@ -151,44 +154,52 @@ public class MarvinShell extends Activity implements GestureListener {
 
     private AudioManager audioManager;
 
+    int lastGesture = -1;
+
+    // Path to shortcuts file.
+    private String efDirStr = "/sdcard/eyesfree/";
+
+    private String filename = efDirStr + "shortcuts.xml";
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        activeView = MAIN_VIEW;
+        activeMode = MAIN_VIEW;
         pm = getPackageManager();
         ttsStartedSuccessfully = false;
         justStarted = true;
-        if (checkTtsRequirements()) {
-            proximitySensor =
-                new ProximitySensor(this, true, new ProximityChangeListener() {
-                        @Override
-                        public void onProximityChanged(float proximity) {
-                            if ((proximity == 0)
-                                && (tts != null)) {
-                            // Stop all speech if the user is touching the proximity sensor
-                                tts.speak("", 2, null);
-                            }
-                        }
-                    });
-            initMarvinShell();
-            setContentView(R.layout.main);
-            mainText = (TextView) self.findViewById(R.id.mainText);
-            statusText = (TextView) self.findViewById(R.id.statusText);
-            widgets = new AuditoryWidgets(tts, self);
+        proximitySensor = new ProximitySensor(this, true, new ProximityChangeListener() {
+            @Override
+            public void onProximityChanged(float proximity) {
+                if ((proximity == 0) && (tts != null)) {
+                    // Stop all speech if the user is touching the proximity
+                    // sensor
+                    tts.speak("", 2, null);
+                }
+            }
+        });
 
-            loadHomeMenu();
+        initMarvinShell();
+        setContentView(R.layout.main);
+        mainText = (TextView) self.findViewById(R.id.mainText);
+        statusText = (TextView) self.findViewById(R.id.statusText);
+        widgets = new AuditoryWidgets(tts, self);
 
-            updateStatusText();
+        menus = new MenuManager();
+        menus.put(HOME_MENU, new Menu(HOME_MENU));
+        loadMenus();
+        switchMenu(HOME_MENU);
 
-            mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
-            vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-            gestureOverlay = new GestureOverlay(self, self);
-            mainFrameLayout.addView(gestureOverlay);
+        updateStatusText();
 
-            new ProcessTask().execute();
-        }
+        mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        gestureOverlay = new GestureOverlay(this, new ShellGestureListener());
+        mainFrameLayout.addView(gestureOverlay);
+
+        new ProcessTask().execute();
     }
 
     @Override
@@ -202,13 +213,13 @@ public class MarvinShell extends Activity implements GestureListener {
         }
     }
 
+    @Override
     public void onPause() {
         super.onPause();
         if (proximitySensor != null) {
             proximitySensor.standby();
         }
     }
-
 
     private void initMarvinShell() {
         setVolumeControlStream(AudioManager.STREAM_RING);
@@ -219,7 +230,7 @@ public class MarvinShell extends Activity implements GestureListener {
         tts = new TextToSpeech(this, ttsInitListener);
         isFocused = true;
         messageWaiting = false;
-        menus = new ArrayList<Menu>();
+        menuHistory = new ArrayList<String>();
         isReturningFromTask = false;
         currentCallState = TelephonyManager.CALL_STATE_IDLE;
         screenStateChanged = false;
@@ -237,7 +248,7 @@ public class MarvinShell extends Activity implements GestureListener {
                     // Creating AppEntry object without one is acceptable
                     // because matching can be done by package name.
                     AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
-                    appLauncherView.removeMatchingApplications(targetApp);
+                    appChooserView.removeMatchingApplications(targetApp);
                     tts.speak(getString(R.string.applist_reload), 0, null);
 
                 } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
@@ -245,7 +256,7 @@ public class MarvinShell extends Activity implements GestureListener {
                     // Remove all entries in the app list with a package
                     // matching this one.
                     AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
-                    appLauncherView.removeMatchingApplications(targetApp);
+                    appChooserView.removeMatchingApplications(targetApp);
 
                     // Create intent filter to obtain only launchable activities
                     // within the given package.
@@ -262,7 +273,7 @@ public class MarvinShell extends Activity implements GestureListener {
                         }
                         targetApp = new AppEntry(title, info, null);
 
-                        appLauncherView.addApplication(targetApp);
+                        appChooserView.addApplication(targetApp);
                     }
                     tts.speak(getString(R.string.applist_reload), 0, null);
                 }
@@ -321,6 +332,7 @@ public class MarvinShell extends Activity implements GestureListener {
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
+
         boolean announceLocation = true;
         isFocused = hasFocus;
         if (hasFocus) {
@@ -335,10 +347,6 @@ public class MarvinShell extends Activity implements GestureListener {
                     isReturningFromTask = false;
                     announceLocation = false;
                     resetTTS();
-                }
-                if (activeView == MAIN_VIEW) {
-                    menus = new ArrayList<Menu>();
-                    loadHomeMenu();
                 }
             }
             if (screenStateChangeReceiver != null && screenStateChangeFilter != null) {
@@ -370,23 +378,29 @@ public class MarvinShell extends Activity implements GestureListener {
 
     private OnInitListener ttsInitListener = new OnInitListener() {
         public void onInit(int status) {
-            resetTTS();
-            tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
-            ttsStartedSuccessfully = true;
+            switch (status) {
+                case TextToSpeech.SUCCESS:
+                    resetTTS();
+                    tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
+                    ttsStartedSuccessfully = true;
+                    break;
+            }
         }
     };
 
     private void announceCurrentMenu() {
         if (gestureOverlay != null) {
-            Menu currentMenu = menus.get(menus.size() - 1);
-            String message = currentMenu.title;
-            if (activeView == APPLAUNCHER_VIEW) {
+            String message = currentMenu.getName();
+            if (activeMode == MENU_EDIT_MODE) {
+                message = getString(R.string.editing) + " " + message;
+            }
+            if (activeMode == APPLAUNCHER_VIEW) {
                 message = getString(R.string.applications);
             }
             updateStatusText();
             // Only announce airplane mode and voicemails
             // if the user is on the home screen.
-            if (currentMenu.title.equals(getString(R.string.home))) {
+            if (message.equals(HOME_MENU)) {
                 if (messageWaiting) {
                     message = getString(R.string.you_have_new_voicemail);
                 }
@@ -399,32 +413,33 @@ public class MarvinShell extends Activity implements GestureListener {
         }
     }
 
-    private void loadHomeMenu() {
-        items = new HashMap<Integer, MenuItem>();
+    private void switchMenu(String id) {
+        if (!menus.containsKey(id)) {
+            id = HOME_MENU;
+        }
+        currentMenu = menus.get(id);
+        if (id.equalsIgnoreCase(HOME_MENU)) {
+            menuHistory = new ArrayList<String>();
+        }
+        menuHistory.add(id);
+        mainText.setText(currentMenu.getName());
+    }
 
-        items.put(Gesture.UPLEFT, new MenuItem(getString(R.string.signal), "WIDGET",
-                "CONNECTIVITY", null));
-        items.put(Gesture.UP, new MenuItem(getString(R.string.time), "WIDGET", "TIME_DATE", null));
-        items.put(Gesture.UPRIGHT, new MenuItem(getString(R.string.battery), "WIDGET", "BATTERY",
-                null));
+    private void loadMenus() {
+        final Context ctx = this;
+        File efDir = new File(efDirStr);
+        boolean directoryExists = efDir.isDirectory();
+        if (!directoryExists) {
+            efDir.mkdir();
+        }
 
-        items.put(Gesture.LEFT, new MenuItem(getString(R.string.shortcuts), "LOAD",
-                "/sdcard/eyesfree/shortcuts.xml", null));
-
-        items.put(Gesture.RIGHT, new MenuItem(getString(R.string.location), "WIDGET", "LOCATION",
-                null));
-
-        items.put(Gesture.DOWNLEFT, new MenuItem(getString(R.string.voicemail), "WIDGET",
-                "VOICEMAIL", null));
-
-        items.put(Gesture.DOWN, new MenuItem(getString(R.string.applications), "WIDGET",
-                "APPLAUNCHER", null));
-
-        items.put(Gesture.DOWNRIGHT, new MenuItem(getString(R.string.search), "WIDGET",
-                "VOICE_SEARCH", null));
-
-        menus.add(new Menu(getString(R.string.home), ""));
-        mainText.setText(menus.get(menus.size() - 1).title);
+        if (new File(filename).isFile()) {
+            menus = MenuManager.loadMenus(ctx, filename);
+        } else {
+            Resources res = getResources();
+            InputStream is = res.openRawResource(R.raw.default_shortcuts);
+            menus = MenuManager.loadMenus(ctx, is);
+        }
     }
 
     private Intent makeClassLaunchIntent(String packageName, String className) {
@@ -434,29 +449,43 @@ public class MarvinShell extends Activity implements GestureListener {
                 .setClassName(packageName, className);
     }
 
-    public void launchApplication(AppEntry appInfo) {
-        Intent intent = makeClassLaunchIntent(appInfo.getPackageName(), appInfo.getClassName());
-        ArrayList<Param> params = appInfo.getParams();
-        if (params != null) {
-            for (int i = 0; i < params.size(); i++) {
-                boolean keyValue = params.get(i).value.equalsIgnoreCase("true");
-                intent.putExtra(params.get(i).name, keyValue);
+    public void onAppSelected(AppEntry appInfo) {
+        if (activeMode == MENU_EDIT_MODE) {
+            if (lastGesture > 0) {
+                tts.speak(lastGesture + " - " + appInfo.getTitle(), 0, null);
+                if (appInfo.getTitle().equalsIgnoreCase("(" + getString(R.string.none) + ")")) {
+                    currentMenu.remove(lastGesture);
+                } else {
+                    MenuItem menuItem = new MenuItem(appInfo.getTitle(), "LAUNCH", "", appInfo);
+                    currentMenu.put(lastGesture, menuItem);
+                }
             }
-        }
-        tts.playEarcon(getString(R.string.earcon_tick), 0, null);
-        boolean launchSuccessful = true;
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            tts.speak(getString(R.string.application_not_installed), 0, null);
-            launchSuccessful = false;
-        }
-        if (screenStateChangeReceiver != null && launchSuccessful == true) {
+            switchToMainView();
+        } else {
+            Intent intent = makeClassLaunchIntent(appInfo.getPackageName(), appInfo.getClassName());
+            ArrayList<Param> params = appInfo.getParams();
+            if (params != null) {
+                for (int i = 0; i < params.size(); i++) {
+                    boolean keyValue = params.get(i).value.equalsIgnoreCase("true");
+                    intent.putExtra(params.get(i).name, keyValue);
+                }
+            }
+            tts.playEarcon(getString(R.string.earcon_tick), 0, null);
+            boolean launchSuccessful = true;
             try {
-                unregisterReceiver(screenStateChangeReceiver);
-            } catch (IllegalArgumentException e) {
-                // Sometimes there may be 2 shutdown requests in which case, the
-                // 2nd request will fail
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                tts.speak(getString(R.string.application_not_installed), 0, null);
+                launchSuccessful = false;
+            }
+            if (screenStateChangeReceiver != null && launchSuccessful == true) {
+                try {
+                    unregisterReceiver(screenStateChangeReceiver);
+                } catch (IllegalArgumentException e) {
+                    // Sometimes there may be 2 shutdown requests in which
+                    // case, the
+                    // 2nd request will fail
+                }
             }
         }
     }
@@ -490,94 +519,100 @@ public class MarvinShell extends Activity implements GestureListener {
         } else if (widgetName.equals("CONNECTIVITY")) {
             widgets.announceConnectivity();
         } else if (widgetName.equals("APPLAUNCHER")) {
-            widgets.startAppLauncher();
+            widgets.startAppChooser();
         } else if (widgetName.equals("VOICE_SEARCH")) {
             widgets.launchVoiceSearch();
         }
     }
 
-    public void onGestureChange(int g) {
-        MenuItem item = items.get(g);
-        if (item != null) {
-            String label = item.label;
-            mainText.setText(label);
-            if (label.equals(getString(R.string.voicemail)) && messageWaiting) {
+    private class ShellGestureListener implements GestureListener {
+
+        public void onGestureStart(int g) {
+            setVolumeControlStream(AudioManager.STREAM_MUSIC);
+            if (g == GestureOverlay.Gesture.CENTER) {
+                // if the gesture starts in the middle, don't start speaking
+                vibe.vibrate(CENTER_PATTERN, -1);
+            } else {
+                onGestureChange(g);
+            }
+        }
+
+        public void onGestureChange(int g) {
+            String feedback;
+            if (g == GestureOverlay.Gesture.CENTER) {
+                vibe.vibrate(CENTER_PATTERN, -1);
+                feedback = currentMenu.getName();
+            } else {
+                vibe.vibrate(VIBE_PATTERN, -1);
+                MenuItem item = currentMenu.get(g);
+                if (item != null) {
+                    // if the item is a menu, we want to look up the name
+                    if (item.action.equalsIgnoreCase("MENU")) {
+                        feedback = menus.get(item.data).getName();
+                    } else {
+                        feedback = item.label;
+                    }
+                } else if (activeMode == MENU_EDIT_MODE) {
+                    feedback = getString(R.string.none);
+                } else {
+                    feedback = currentMenu.getName();
+                }
+            }
+            mainText.setText(feedback);
+            if (feedback.equals(getString(R.string.voicemail)) && messageWaiting
+                    && activeMode == MAIN_VIEW) {
                 tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
             } else {
-                tts.speak(label, 0, null);
+                tts.speak(feedback, 0, null);
             }
-        } else {
-            String titleText = menus.get(menus.size() - 1).title;
-            mainText.setText(titleText);
-            tts.speak(titleText, 0, null);
         }
-        vibe.vibrate(VIBE_PATTERN, -1);
-    }
 
-    public void onGestureFinish(int g) {
-        MenuItem item = items.get(g);
-        if (item != null) {
-            if (item.action.equals("LAUNCH")) {
-                launchApplication(item.appInfo);
-            } else if (item.action.equals("WIDGET")) {
-                runWidget(item.data);
-            } else if (item.action.equals("ASE")) {
-                MenuItem itam = item;
-                AppEntry info = item.appInfo;
-                runAseScript(item.appInfo.getScriptName());
-            } else if (item.action.equals("LOAD")) {
-                // Populate menus for shortcuts and load the shortcuts view.
-                if (new File(item.data).isFile()) {
-                    menus.add(new Menu(item.label, item.data));
-                    items = MenuLoader.loadMenu(this, item.data);
-                    tts.playEarcon(getString(R.string.earcon_tick), 0, null);
-                } else {
-                    // Write file and retry
-                    /**
-                     * Class for asynchronously writing out the shortcuts.xml
-                     * file.
-                     */
-                    class CreateShortcutsFileThread implements Runnable {
-                        public void run() {
-                            try {
-                                String efDirStr = "/sdcard/eyesfree/";
-                                String filename = efDirStr + "shortcuts.xml";
-                                Resources res = getResources();
-                                InputStream fis = res.openRawResource(R.raw.default_shortcuts);
-                                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                                        fis));
-                                String contents = "";
-                                String line = null;
-                                while ((line = reader.readLine()) != null) {
-                                    contents = contents + line;
-                                }
-                                File efDir = new File(efDirStr);
-                                boolean directoryExists = efDir.isDirectory();
-                                if (!directoryExists) {
-                                    efDir.mkdir();
-                                }
-                                FileWriter writer = new FileWriter(filename);
-                                writer.write(contents);
-                                writer.close();
-                                tts.speak("Default shortcuts dot X M L created.", 0, null);
-                            } catch (IOException e) {
-                                tts.speak("S D Card error.", 0, null);
-                            }
+        public void onGestureFinish(int g) {
+            setVolumeControlStream(AudioManager.STREAM_RING);
+            MenuItem item = currentMenu.get(g);
+
+            // if the gesture switches menus, that takes precedence
+            if (item != null && item.action.equalsIgnoreCase("MENU")) {
+                if (menus.containsKey(item.data)) {
+                    switchMenu(item.data);
+                    if (!tts.isSpeaking()) {
+                        tts.playEarcon(getString(R.string.earcon_tick), 0, null);
+                    }
+                }
+                return;
+            }
+
+            // otherwise do the appropriate thing depending on mode
+            switch (activeMode) {
+                case MAIN_VIEW:
+                    // activate this item
+                    if (item != null) {
+                        if (item.action.equals("LAUNCH")) {
+                            onAppSelected(item.appInfo);
+                        } else if (item.action.equals("WIDGET")) {
+                            runWidget(item.data);
+                        } else if (item.action.equals("ASE")) {
+                            MenuItem itam = item;
+                            AppEntry info = item.appInfo;
+                            runAseScript(item.appInfo.getScriptName());
                         }
                     }
-                    new Thread(new CreateShortcutsFileThread()).start();
-                }
-                activeView = SHORTCUTS_VIEW;
+                    break;
+                case MENU_EDIT_MODE:
+                    // edit this item
+                    if (g != GestureOverlay.Gesture.CENTER) {
+                        if (item == null || item.action.equalsIgnoreCase("LAUNCH")
+                                || editAllItems) {
+                            lastGesture = g;
+                            switchToAppChooserView();
+                        } else {
+                            tts.speak(getString(R.string.cannot_edit_this_item), 0, null);
+                        }
+                    }
+                    break;
             }
+            mainText.setText(currentMenu.getName());
         }
-        mainText.setText(menus.get(menus.size() - 1).title);
-        setVolumeControlStream(AudioManager.STREAM_RING);
-    }
-
-    public void onGestureStart(int g) {
-        vibe.vibrate(VIBE_PATTERN, -1);
-        // The ringer volume will be adjusted during a gesture.
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -586,18 +621,15 @@ public class MarvinShell extends Activity implements GestureListener {
             return false;
         }
         switch (keyCode) {
-            case KeyEvent.KEYCODE_MENU:
-                announceCurrentMenu();
-                return true;
             case KeyEvent.KEYCODE_SEARCH:
                 AppEntry talkingDialer1 = new AppEntry(null, "com.google.marvin.talkingdialer",
                         "com.google.marvin.talkingdialer.TalkingDialer", "", null, null);
-                launchApplication(talkingDialer1);
+                onAppSelected(talkingDialer1);
                 return true;
             case KeyEvent.KEYCODE_CALL:
                 AppEntry talkingDialer = new AppEntry(null, "com.google.marvin.talkingdialer",
                         "com.google.marvin.talkingdialer.TalkingDialer", "", null, null);
-                launchApplication(talkingDialer);
+                onAppSelected(talkingDialer);
                 return true;
             case KeyEvent.KEYCODE_BACK:
                 if (backKeyTimeDown == -1) {
@@ -608,8 +640,8 @@ public class MarvinShell extends Activity implements GestureListener {
                                 Thread.sleep(3000);
                                 if ((backKeyTimeDown > 0)
                                         && (System.currentTimeMillis() - backKeyTimeDown > 2500)) {
-                                    Intent systemHomeIntent = HomeLauncher
-                                            .getSystemHomeIntent(self);
+                                    Intent systemHomeIntent = HomeLauncher.getSystemHomeIntent(
+                                            self);
                                     startActivity(systemHomeIntent);
                                     shutdown();
                                     finish();
@@ -648,52 +680,30 @@ public class MarvinShell extends Activity implements GestureListener {
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 backKeyTimeDown = -1;
-                if (menus.size() > 1) {
-                    menus.remove(menus.size() - 1);
-                    Menu currentMenu = menus.get(menus.size() - 1);
-                    if (currentMenu.title.equals(getString(R.string.home))) {
-                        loadHomeMenu();
-                    } else {
-                        items = MenuLoader.loadMenu(this, currentMenu.filename);
-                        mainText.setText(currentMenu.title);
-                    }
+                switch (activeMode) {
+                    case MAIN_VIEW:
+                        if (menuHistory.size() > 1) {
+                            menuHistory.remove(menuHistory.size() - 1);
+                            switchMenu(menuHistory.get(menuHistory.size() - 1));
+                        }
+                        activeMode = MAIN_VIEW;
+                        announceCurrentMenu();
+                        return true;
+                    case MENU_EDIT_MODE:
+                        menus.save(filename);
+                        tts.speak(getString(R.string.exiting_edit_mode), 0, null);
+                        activeMode = MAIN_VIEW;
+                        return true;
                 }
-                activeView = MAIN_VIEW;
-                loadHomeMenu();
-                announceCurrentMenu();
-                return true;
         }
         return false;
-    }
-
-    /** Checks to make sure that all the requirements for the TTS are there */
-    private boolean checkTtsRequirements() {
-        // Disable TTS check for now
-        /*
-         * if (!TTS.isInstalled(this)) { Uri marketUri =
-         * Uri.parse("market://search?q=pname:com.google.tts"); Intent
-         * marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
-         * startActivityForResult(marketIntent, ttsCheckCode); return false; }
-         */
-        /*
-         * if (!ConfigurationManager.allFilesExist()) { Intent intent =
-         * makeClassLaunchIntent("com.google.tts",
-         * "com.google.tts.ConfigurationManager");
-         * startActivityForResult(intent, ttsCheckCode); return false; }
-         */
-        return true;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == ttsCheckCode) {
-            // if (TTS.isInstalled(this)) {
             initMarvinShell();
-            // } else {
-            // displayTTSMissing();
-            // }
-        }
-        if (requestCode == VOICE_RECO_CODE) {
+        } else if (requestCode == VOICE_RECO_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 ArrayList<String> results = data.getExtras().getStringArrayList(
                         RecognizerIntent.EXTRA_RESULTS);
@@ -702,34 +712,37 @@ public class MarvinShell extends Activity implements GestureListener {
         }
     }
 
-    private void displayTTSMissing() {
-        AlertDialog errorDialog = new Builder(this).create();
-        errorDialog.setTitle("Unable to continue");
-        errorDialog.setMessage("TTS is a required component. Please install it first.");
-        errorDialog.setButton("Quit", new OnClickListener() {
-            public void onClick(DialogInterface arg0, int arg1) {
-                finish();
+    public void switchToAppChooserView() {
+        if (appChooserView != null) {
+            setContentView(appChooserView);
+            appChooserView.requestFocus();
+            appChooserView.resetListState();
+            appChooserView.speakCurrentApp(false);
+            switch (activeMode) {
+                case MENU_EDIT_MODE:
+                    break;
+                case APPLAUNCHER_VIEW:
+                    break;
+                case MAIN_VIEW:
+                    activeMode = APPLAUNCHER_VIEW;
+                    break;
             }
-        });
-        errorDialog.setCancelable(false);
-        errorDialog.show();
-    }
-
-    public void switchToAppLauncherView() {
-        if (appLauncherView != null) {
-            setContentView(appLauncherView);
-            appLauncherView.requestFocus();
-            appLauncherView.resetListState();
-            appLauncherView.speakCurrentApp(false);
-            activeView = APPLAUNCHER_VIEW;
         }
     }
 
     public void switchToMainView() {
         setContentView(mainFrameLayout);
         mainFrameLayout.requestFocus();
-        activeView = MAIN_VIEW;
-        announceCurrentMenu();
+        switch (activeMode) {
+            case MENU_EDIT_MODE:
+                break;
+            case APPLAUNCHER_VIEW:
+                activeMode = MAIN_VIEW;
+                announceCurrentMenu();
+                break;
+            case MAIN_VIEW:
+                break;
+        }
     }
 
     private void shutdown() {
@@ -755,8 +768,99 @@ public class MarvinShell extends Activity implements GestureListener {
         }
     }
 
-    private class ProcessTask extends UserTask<Void, Void, ArrayList<AppEntry>> {
-        @SuppressWarnings("unchecked")
+    @Override
+    public boolean onPrepareOptionsMenu(android.view.Menu menu) {
+        menu.clear();
+        int NONE = android.view.Menu.NONE;
+        switch (activeMode) {
+            case APPLAUNCHER_VIEW:
+                String uninstallText = getString(R.string.uninstall) + " "
+                        + appChooserView.getCurrentAppTitle();
+                String detailsFor = getString(R.string.details_for) + " "
+                        + appChooserView.getCurrentAppTitle();
+                menu.add(NONE, R.string.details_for, 0, detailsFor).setIcon(
+                        android.R.drawable.ic_menu_info_details);
+                menu.add(NONE, R.string.uninstall, 1, uninstallText).setIcon(
+                        android.R.drawable.ic_menu_delete);
+                return true;
+            case MAIN_VIEW:
+                String editMenus = getString(R.string.edit_menus);
+                menu.add(NONE, R.string.edit_menus, 0, editMenus).setIcon(
+                        android.R.drawable.ic_menu_edit);
+                return true;
+            case MENU_EDIT_MODE:
+                String restoreDefault = getString(R.string.restore_default_menus);
+                menu.add(NONE, R.string.restore_default_menus, 2, restoreDefault).setIcon(
+                        android.R.drawable.ic_menu_revert);
+                String insertMenuLeft = getString(R.string.insert_menu_left);
+                menu.add(NONE, R.string.insert_menu_left, 0, insertMenuLeft).setIcon(
+                        R.drawable.ic_menu_left);
+                String insertMenuRight = getString(R.string.insert_menu_right);
+                menu.add(NONE, R.string.insert_menu_right, 1, insertMenuRight).setIcon(
+                        R.drawable.ic_menu_right);
+                String renameMenu = getString(R.string.rename_menu);
+                menu.add(NONE, R.string.rename_menu, 3, renameMenu).setIcon(
+                        android.R.drawable.ic_menu_edit);
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.string.details_for:
+                appChooserView.showCurrentAppInfo();
+                break;
+            case R.string.uninstall:
+                appChooserView.uninstallCurrentApp();
+                break;
+            case R.string.restore_default_menus:
+                if (new File(filename).isFile()) {
+                    new File(filename).delete();
+                }
+                loadMenus();
+                switchMenu(HOME_MENU);
+                break;
+            case R.string.edit_menus:
+                tts.speak(getString(R.string.entering_edit_mode), 0, null);
+                activeMode = MENU_EDIT_MODE;
+                break;
+            case R.string.rename_menu:
+                if (currentMenu.getID().equalsIgnoreCase(HOME_MENU)) {
+                    tts.speak(getString(R.string.cannot_edit_this_item), 0, null);
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    final EditText input = new EditText(this);
+                    alert.setTitle("Enter new menu name");
+                    alert.setView(input);
+                    alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                           currentMenu.setName(input.getText().toString().trim());
+                           switchMenu(currentMenu.getID());
+                       }
+                   });
+                   alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                           dialog.cancel();
+                       }
+                   });
+                   alert.show();
+                }
+                break;
+            case R.string.insert_menu_left:
+                menus.insertMenu(currentMenu, Gesture.EDGELEFT, getString(R.string.new_menu));
+                break;
+            case R.string.insert_menu_right:
+                menus.insertMenu(currentMenu, Gesture.EDGERIGHT, getString(R.string.new_menu));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private class ProcessTask extends AsyncTask<Void, Void, ArrayList<AppEntry>> {
         @Override
         public ArrayList<AppEntry> doInBackground(Void... params) {
             // search for all launchable apps
@@ -774,7 +878,14 @@ public class MarvinShell extends Activity implements GestureListener {
                 AppEntry entry = new AppEntry(title, info, null);
                 appList.add(entry);
             }
-            Collections.sort(appList);
+            class AppEntrySorter implements Comparator<AppEntry> {
+                public int compare(AppEntry arg0, AppEntry arg1) {
+                    String title0 = arg0.getTitle().toLowerCase();
+                    String title1 = arg1.getTitle().toLowerCase();
+                    return title0.compareTo(title1);
+                }
+            }
+            Collections.sort(appList, new AppEntrySorter());
 
             // now that app tree is built, pass along to adapter
             return appList;
@@ -782,7 +893,12 @@ public class MarvinShell extends Activity implements GestureListener {
 
         @Override
         public void onPostExecute(ArrayList<AppEntry> appList) {
-            appLauncherView = new AppLauncherView(self, appList);
+            appChooserView = new AppChooserView(self, appList);
+            /*
+             *launchableApps = appList; launchableApps.add(0, new
+             * AppEntry("(none)","","","", null, null)); loadUi();
+             * shortcutChooser = new ShortcutChooserView(self,appList);
+             */
         }
     }
 
@@ -798,7 +914,7 @@ public class MarvinShell extends Activity implements GestureListener {
         }
 
         public void run() {
-            String contents = OneBoxScraper.processGoogleResults(q);
+            String contents = OneBoxScraper.processGoogleResults(q, getString(R.string.search_url));
             if (contents.length() > 0) {
                 if (contents.indexOf("PAW_YOUTUBE:") == 0) {
                     Intent ytIntent = new Intent("android.intent.action.VIEW");
@@ -812,10 +928,8 @@ public class MarvinShell extends Activity implements GestureListener {
                     tts.speak(contents, 0, null);
                 }
             } else {
-                tts.speak("Sorry, no short answer for " + q, 0, null);
+                tts.speak(getString(R.string.no_short_answer) + " " + q, 0, null);
             }
-
         }
     }
-     
 }

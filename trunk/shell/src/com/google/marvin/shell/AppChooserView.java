@@ -24,6 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Vibrator;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -42,7 +43,7 @@ import java.util.Collections;
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
-public class AppLauncherView extends TextView {
+public class AppChooserView extends TextView {
     // BEGIN OF WORKAROUND FOR DONUT COMPATIBILITY
     private static Method MotionEvent_getX;
 
@@ -177,8 +178,11 @@ public class AppLauncherView extends TextView {
     private ShakeDetector shakeDetector;
 
     private long backKeyTimeDown;
+    
+    // Change this to true to enable shake to erase
+    private static final boolean useShake = false;
 
-    public AppLauncherView(Context context, ArrayList<AppEntry> installedApps) {
+    public AppChooserView(Context context, ArrayList<AppEntry> installedApps) {
         super(context);
 
         parent = ((MarvinShell) context);
@@ -314,13 +318,15 @@ public class AppLauncherView extends TextView {
     private void startActionHandler() {
         currentString = "";
         // Launch app here
-        parent.launchApplication(appList.get(appListIndex));
+        parent.onAppSelected(appList.get(appListIndex));
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         String input = "";
         switch (keyCode) {
+            case KeyEvent.KEYCODE_MENU:
+                return false;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 nextApp();
                 currentString = "";
@@ -860,11 +866,37 @@ public class AppLauncherView extends TextView {
         if (visibility == View.VISIBLE) {
             shakeDetector = new ShakeDetector(parent, new ShakeListener() {
                 public void onShakeDetected() {
-                    backspace();
+                    if (useShake) {
+                        backspace();
+                    }
                 }
             });
         }
         super.onWindowVisibilityChanged(visibility);
     }
 
+    public void uninstallCurrentApp(){
+        String targetPackageName = appList.get(appListIndex).getPackageName();
+        Intent i = new Intent();
+        i.setAction("android.intent.action.DELETE");
+        i.setData(Uri.parse("package:" + targetPackageName));        
+        parent.startActivity(i);
+    }
+    
+    public void showCurrentAppInfo(){
+        String targetPackageName = appList.get(appListIndex).getPackageName();
+        Intent i = new Intent();
+        i.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+        // "pkg" is a magic key - see ManageApplications.APP_PKG_NAME in:
+        // src/com/android/settings/ManageApplications.java
+        // under
+        // http://android.git.kernel.org/?p=platform/packages/apps/Settings.git
+        i.putExtra("pkg", targetPackageName);
+        parent.startActivity(i);        
+    }
+    
+
+    public String getCurrentAppTitle(){
+        return appList.get(appListIndex).getTitle();
+    }
 }

@@ -42,12 +42,14 @@ public class MenuItem {
     /**
      * Returns a string xml representation of this item element.
      * 
-     * @return
+     * @return xmlStr
      */
     public String toXml(int gesture) {
         String xmlStr = "  <item gesture='" + gesture + "' label='" + label + "' action='" + action
-                + "'>\n";
-        xmlStr = xmlStr + appInfo.toXml();
+                + "' data='" + data + "'>\n";
+        if (appInfo != null) {
+            xmlStr = xmlStr + appInfo.toXml();
+        }
         xmlStr = xmlStr + "  </item>\n";
         return xmlStr;
     }

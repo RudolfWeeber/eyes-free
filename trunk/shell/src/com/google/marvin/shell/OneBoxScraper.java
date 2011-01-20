@@ -13,10 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.google.marvin.shell;
 
 import org.htmlparser.parserapplications.StringExtractor;
 import org.htmlparser.util.ParserException;
+
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -32,17 +35,17 @@ final public class OneBoxScraper {
 
     private OneBoxScraper() {
     }
-    
-    public static String processGoogleResults(String query) {
+
+    public static String processGoogleResults(String query, String baseUrl) {
         String processedResult = "";
         try {
-            String url = "http://www.google.com/m?q=" + URLEncoder.encode(query, "UTF-8");            
+            String url = baseUrl + URLEncoder.encode(query, "UTF-8");
             StringExtractor se = new StringExtractor(url);
             String results = se.extractStrings(true);
 
             // Uncomment this line to see the raw dump;
             // very useful when trying to come up with scraping rules
-            //Log.e("OneBoxScraper Debug", results);
+            Log.e("OneBoxScraper Debug", results);
 
             /* Check for known one box types */
             // Weather
@@ -72,7 +75,8 @@ final public class OneBoxScraper {
                 }
             }
             // Finance
-            // This is tricky, the market line could be the first or the second line
+            // This is tricky, the market line could be the first or the second
+            // line
             if ((processedResult.length() < 1) && (results.indexOf("\n") != -1)) {
                 int firstLineBreak = results.indexOf("\n");
                 String firstLine = results.substring(0, firstLineBreak);
@@ -156,8 +160,8 @@ final public class OneBoxScraper {
                 String thirdLine = results.substring(secondLineBreak + 1, thirdLineBreak);
                 int fourthLineBreak = results.indexOf("\n", thirdLineBreak + 1);
                 String fourthLine = results.substring(thirdLineBreak + 1, fourthLineBreak);
-                if (firstLine.contains("2010 FIFA World Cup(tm)") &&
-                    fourthLine.equals("Upcoming matches:")) {
+                if (firstLine.contains("2010 FIFA World Cup(tm)")
+                        && fourthLine.equals("Upcoming matches:")) {
                     processedResult = secondLine + "\n" + thirdLine;
                 }
             }
@@ -242,7 +246,19 @@ final public class OneBoxScraper {
                                     .indexOf(">"));
                 }
             }
-
+            // Try to read the first result if there is no preceding link
+            // since this will usually be a onebox of some sort.
+            if ((processedResult.length() < 1) && (results.indexOf("<") != -1)) {
+                int endIndex = results.indexOf("<", 0);
+                if (endIndex != -1) {
+                    processedResult = results.substring(0, endIndex + 1);
+                }
+                // If this is the weather box, try to trim it down by cutting it off at humidity
+                if ((processedResult.length() > 1) && (processedResult.indexOf("%") != -1)){
+                    processedResult = processedResult.substring(0, processedResult.indexOf("%") + 1);
+                }
+            }
+            Log.e("processedResultLength", processedResult.length() + "");
         } catch (ParserException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {

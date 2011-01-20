@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="you_have_new_voicemail">您有新的語音郵件</string>
+    <string name="application_not_installed">程式沒有安裝</string>
+    <string name="compass">指南針</string>
+    <string name="battery">電池</string>
+    <string name="midnight">午夜</string>
+    <string name="noon">中午</string>
+    <string name="am">上午</string>
+    <string name="pm">下午</string>
+    <string name="applications">應用程序</string>
+    <string name="shortcuts">捷徑</string>
+    <string name="voicemail">語音郵件</string>
+    <string name="charging">正在充電</string>
+    <string name="signal">訊號</string>
+    <string name="location">我的地點</string>
+    <string name="time">時間</string>
+    <string name="search">語音搜索</string>
+
+    <!-- Translated to please say it again. -->
+    <string name="no_short_answer">請你再說一遍</string>
+
+    <!-- The following strings are displayed but never spoken  -->
+    <string name="app_name">桌面</string>
+    <string name="shortcutsManager">捷徑設定</string>
+
+    <!-- The following strings are used for the search URL. Use the localized language for better onebox triggering.  -->
+    <string name="search_url">http://www.google.com/m?hl=zh-TW&amp;q=</string>
+</resources>

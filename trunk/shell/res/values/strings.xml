@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home">Home</string>
     <string name="please_unlock">Please unlock.</string>
     <string name="you_have_new_voicemail">You have new voicemail.</string>
     <string name="application_not_installed">Application not installed.</string>
@@ -40,17 +39,35 @@
     <string name="exclamation_point">Exclamation Point</string>
     <string name="comma">Comma</string>
     <string name="backspace">Backspace</string>
-    <string name="confirm">Confirm</string>
+    <string name="save_shortcuts">Save Shortcuts</string>
     <string name="time">Time</string>
     <string name="search">Search</string>
     <string name="search_not_available">Voice search is not available on this device.</string>
+    <string name="uninstall">Uninstall</string>
+    <string name="details_for">Details for</string>
+    <string name="entering_edit_mode">Entering edit mode</string>
+    <string name="exiting_edit_mode">Exiting edit mode</string>
+    <string name="none">None</string>
+    <string name="unable_to_continue">Unable to continue.</string>
+    <string name="tts_required">TextToSpeech is a required component. Please install it first.</string>
+    <string name="quit">Quit</string>
+    <string name="cannot_edit_this_item">Cannot edit this item.</string>
+    <string name="restore_default_menus">Restore Default Menus</string>
+    <string name="edit_menus">Edit Menus</string>
+    <string name="editing">Editing</string>
+    <string name="rename_menu">Rename Menu</string>
+    <string name="insert_menu_left">Insert Menu Left</string>
+    <string name="insert_menu_right">Insert Menu Right</string>
+    <string name="new_menu">New Menu</string>
+    <string name="no_short_answer">Sorry, no short answer for</string>
 
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>
-    <string name="shortcutsManager">Shortcuts Manager for Eyes-Free Shell</string>
 
     <!-- The following strings are used for earcons  -->
     <string name="earcon_tick">[TICK]</string>
     <string name="earcon_tock">[TOCK]</string>
 
+    <!-- The following strings are used for the search URL. Use the localized language for better onebox triggering.  -->
+    <string name="search_url">http://www.google.com/m?q=</string>
 </resources>

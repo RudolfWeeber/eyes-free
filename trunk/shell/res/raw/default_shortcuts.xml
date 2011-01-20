@@ -1,14 +1,22 @@
 <shell>
-
-  <item gesture='1' label='Shortcuts Manager for Eyes-Free Shell' action='LAUNCH'>
-    <appInfo package='com.google.marvin.shell' class='com.google.marvin.shell.ShortcutsManagerActivity'/>
-  </item>
-
-  <item gesture='2' label='Compass' action='LAUNCH'>
-    <appInfo package='com.google.marvin.compass' class='com.google.marvin.compass.TalkingCompass'/>
-  </item>
-  
-  <item gesture='3' label='Android Says' action='LAUNCH'>
-    <appInfo package='com.google.marvin.androidsays' class='com.google.marvin.androidsays.AndroidSays'/>
-  </item>
+  <version number='0.1' />
+  <menu label='Home'>
+    <item gesture='1' label='Signal' action='WIDGET' data='CONNECTIVITY' />
+    <item gesture='2' label='Time' action='WIDGET' data='TIME_DATE' />
+    <item gesture='3' label='Battery' action='WIDGET' data='BATTERY' />
+    <item gesture='6' label='Location' action='WIDGET' data='LOCATION' />
+    <item gesture='7' label='Voicemail' action='WIDGET' data='VOICEMAIL' />
+    <item gesture='8' label='Applications' action='WIDGET' data='APPLAUNCHER' />
+    <item gesture='9' label='Search' action='WIDGET' data='VOICE_SEARCH' />
+    <item gesture='10' label='Shortcuts Left' action='MENU' data='Shortcuts Left' />
+    <item gesture='11' label='Shortcuts Right' action='MENU' data='Shortcuts Right' />
+  </menu>
+  <menu label='Shortcuts Right'>
+    <item gesture='10' label='Home' action='MENU' data='Home' />
+    <item gesture='11' label='Shortcuts Left' action='MENU' data='Shortcuts Left' />
+  </menu>
+  <menu label='Shortcuts Left'>
+    <item gesture='10' label='Shortcuts Right' action='MENU' data='Shortcuts Right' />
+    <item gesture='11' label='Home' action='MENU' data='Home' />
+  </menu>
 </shell>

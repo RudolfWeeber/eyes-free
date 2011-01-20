@@ -246,8 +246,8 @@ public class AuditoryWidgets {
         useGpsThisTime = !useGpsThisTime;
     }
 
-    public void startAppLauncher() {
-        parent.switchToAppLauncherView();
+    public void startAppChooser() {
+        parent.switchToAppChooserView();
     }
 
     public void launchVoiceSearch() {

@@ -296,69 +296,8 @@ public class Guide implements Runnable, StreetLocatorListener {
 
         // If there was no location, just give up.
         // Otherwise, try to get the intersection.
-        if (currentLocation != null) {
-            locator.getStreetIntersectionAsync(currentLocation.getLatitude(), currentLocation
-                    .getLongitude());
-        } else {
+        if (currentLocation == null) {
             self.shutdown();
         }
     }
-
-    public void onIntersectionLocated(String[] streetnames) {
-        if (streetnames.length == 0) {
-            // No intersection, try to get front/back streets
-            locator.getStreetsInFrontAndBackAsync(currentLocation.getLatitude(), currentLocation
-                    .getLongitude(), compass.getCurrentHeadingValue());
-            return;
-        }
-        currentIntersection = "";
-        for (String ad : streetnames) {
-            if (currentAddress.indexOf(ad) == -1) {
-                currentIntersection += ad + " and ";
-            }
-        }
-        if (currentIntersection.length() > 5) {
-            currentIntersection = currentIntersection
-                    .substring(0, currentIntersection.length() - 4);
-            currentIntersection = " Nearby streets are: " + currentIntersection;
-            parent.tts.speak(currentIntersection, 1, null);
-            self.shutdown();
-        } else {
-            // No intersection, try to get front/back streets
-            locator.getStreetsInFrontAndBackAsync(currentLocation.getLatitude(), currentLocation
-                    .getLongitude(), compass.getCurrentHeadingValue());
-        }
-    }
-
-    public void onFrontBackLocated(String[] streetsFront, String[] streetsBack) {
-        currentIntersection = "";
-        if (streetsFront.length > 0) {
-            for (String ad : streetsFront) {
-                if (currentAddress.indexOf(ad) == -1) {
-                    currentIntersection += ad + " and ";
-                }
-            }
-            if (currentIntersection.length() > 5) {
-                currentIntersection = currentIntersection.substring(0,
-                        currentIntersection.length() - 4);
-                parent.tts.speak("Ahead. " + currentIntersection, 1, null);
-            }
-        }
-
-        currentIntersection = "";
-        if (streetsBack.length > 0) {
-            for (String ad : streetsBack) {
-                if (currentAddress.indexOf(ad) == -1) {
-                    currentIntersection += ad + " and ";
-                }
-            }
-            if (currentIntersection.length() > 5) {
-                currentIntersection = currentIntersection.substring(0,
-                        currentIntersection.length() - 4);
-                parent.tts.speak("Behind. " + currentIntersection, 1, null);
-            }
-        }
-        self.shutdown();
-    }
-
 }
