@@ -622,15 +622,23 @@ public class MarvinShell extends Activity {
         }
         switch (keyCode) {
             case KeyEvent.KEYCODE_SEARCH:
-                AppEntry talkingDialer1 = new AppEntry(null, "com.google.marvin.talkingdialer",
-                        "com.google.marvin.talkingdialer.TalkingDialer", "", null, null);
-                onAppSelected(talkingDialer1);
-                return true;
+                if (activeMode == MAIN_VIEW) {
+                    AppEntry talkingDialer = new AppEntry(null, "com.google.marvin.talkingdialer",
+                            "com.google.marvin.talkingdialer.TalkingDialer", "", null, null);
+                    onAppSelected(talkingDialer);
+                    return true;
+                } else {
+                    return false;
+                }
             case KeyEvent.KEYCODE_CALL:
-                AppEntry talkingDialer = new AppEntry(null, "com.google.marvin.talkingdialer",
-                        "com.google.marvin.talkingdialer.TalkingDialer", "", null, null);
-                onAppSelected(talkingDialer);
-                return true;
+                if (activeMode == MAIN_VIEW) {
+                    AppEntry talkingDialer = new AppEntry(null, "com.google.marvin.talkingdialer",
+                            "com.google.marvin.talkingdialer.TalkingDialer", "", null, null);
+                    onAppSelected(talkingDialer);
+                    return true;
+                } else {
+                    return false;
+                }
             case KeyEvent.KEYCODE_BACK:
                 if (backKeyTimeDown == -1) {
                     backKeyTimeDown = System.currentTimeMillis();
