@@ -1,0 +1,192 @@
+
+<!-- Copyright 2010 Google Inc.
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License. -->
+
+<html>
+<head>
+<title>Designing for Accessibility</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style>
+.code {
+  font-style: italic;
+}
+</style>
+
+</head>
+<body>
+
+<div id="main_body">
+<h1>Designing for Accessibility</h1>
+<p>Many Android users have disabilities that cause them to interact with
+their Android devices in different ways. These include users who have visual,
+physical or aging-related disabilities that prevent them from fully using or
+seeing a touch screen.</p>
+<p></p>
+<p>Android provides an accessibility layer that helps these users navigate
+their Android devices more easily. These services provide things like
+text-to-speech, haptic feedback and trackball/D-pad navigation that augment the
+user experience.</p>
+<p></p>
+<p>Your application should follow these guidelines to assure that it will
+provide a good experience for these users.</p>
+<h2>Introduction</h2>
+<p>Following these two basic rules will solve the majority of access related
+problems:</p>
+<ol>
+  <li>Make all of your controls accessible via the trackball or directional
+  controller.</li>
+  <li><span class="code"><a
+    href="http://developer.android.com/reference/android/widget/ImageButton.html">ImageButton</a></span><a
+    href="http://developer.android.com/reference/android/widget/ImageButton.html">s</a>,
+  <span class="code"><a
+    href="http://developer.android.com/reference/android/widget/EditText.html">EditTexts</a></span>
+  and other input elements using the <span class="code"><a
+    href="http://developer.android.com/reference/android/view/View.html#attr_android:contentDescription">contentDescription</a></span>
+  attribute.</li>
+</ol>
+<h2>Allow Navigation with a Directional Controller</h2>
+<p>Many Android devices come with some sort of directional controller, such
+as:</p>
+<ol>
+  <li>A clickable trackball that can be moved in arbitrary directions.</li>
+  <li>A clickable D-pad that provides movement in four directions.</li>
+  <li>Arrow keys plus a center button that&rsquo;s equivalent to clicking a
+  trackball or d-pad.</li>
+</ol>
+<p></p>
+<p>All of these types of directional controllers allow users to navigate the
+screen without using the touch screen. On some devices, a user can also navigate
+to the top or bottom of a list by holding down the alt key while pressing a
+discrete key for up or down.</p>
+<p></p>
+<p>A directional controller is the primary means of navigation for users
+with visual and some physical impairments and for devices without a touch
+screen. Verify that all important controls are reachable without using the touch
+screen and that clicking with the center button has the same effect as clicking
+on the element on the touch screen.</p>
+<p></p>
+<p>The ability to navigate to a particular view with a directional
+controller it is determined via the <span class="code"><a
+  href="http://developer.android.com/reference/android/view/View.html#isFocusable()">isFocusable()</a></span>
+method. To change whether a view can take focus, call <span class="code"><a
+  href="http://developer.android.com/reference/android/view/View.html#setFocusable(boolean)">setFocusable(boolean)</a></span>
+or set the <span class="code"><a
+  href="http://developer.android.com/reference/android/view/View.html#attr_android:focusable">android:focusable</a></span>
+attribute in an XML layout file.</p>
+<p></p>
+<p>The ordering of the focus movement is based on an algorithm which finds
+the nearest neighbor in a given direction. In rare cases, the default algorithm
+may not match the intended behavior of the developer. In these situations, you
+can provide explicit overrides by using these XML attributes in the layout file:</p>
+<p class="code">nextFocusDown</p>
+<p class="code">nextFocusLeft</p>
+<p class="code">nextFocusRight</p>
+<p class="code">nextFocusUp</p>
+<h3>Clicking with the a directional controller</h3>
+<p>On most devices, clicking with a directional controller sends a <span
+  class="code"><a
+  href="http://developer.android.com/reference/android/view/KeyEvent.html">KeyEvent</a></span>
+with <span class="code"><a
+  href="http://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_DPAD_CENTER">KEYCODE_DPAD_CENTER</a></span>.
+Make sure that this event has the same effect as clicking on the element. All
+standard Android views already handle <span class="code">KEYCODE_DPAD_CENTER</span>
+appropriately.</p>
+<p></p>
+<p><span class="code">KeyEvent</span> <span class="code"><a
+  href="http://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_ENTER">KEYCODE_ENTER</a></span>
+as equivalent to <span class="code">KEYCODE_DPAD_CENTER</span>. That makes
+things easier for devices with a full qwerty keyboard.</p>
+<h2>Label Your Input Elements</h2>
+<p>Many input elements rely on visual cues to inform the user of their
+meaning. For example, an application may use an <span class="code"><a
+  href="http://developer.android.com/reference/android/widget/ImageButton.html">ImageButton</a></span>
+with a picture of a plus sign to indicate that the user can add an entry to a
+table. Or, an <span class="code"><a
+  href="http://developer.android.com/reference/android/widget/EditText.html">EditText</a></span>
+may have a label near it that indicates its purpose. When a visually impaired
+user accesses your application using Android&rsquo;s accessibility services,
+these visual cues are often lost.</p>
+<p></p>
+<p>The <span class="code"><a
+  href="http://developer.android.com/reference/android/view/View.html#attr_android:contentDescription">contentDescription</a></span>
+attribute that should be used to provide a textual representation of this
+information. Set this attribute on every <span class="code">ImageButton</span>
+and <span class="code">EditText</span> and on any other input widget that might
+benefit from this extra information.</p>
+<h2>Follow Android UI Best Practices</h2>
+<p>Developing a user interface that complies with the Android UI guidelines
+will make it easier for users to learn to use your application. This consistency
+is especially important for many disabled users, as they may have less
+contextual information available to try to understand your application&rsquo;s
+interface.</p>
+<p></p>
+<p>Use the view elements provided by the Android SDK whenever possible, as
+these elements have accessibility support built in.</p>
+<h2>Send <span class="code">AccessibilityEvents</span> from Custom View
+Elements</h2>
+<p>If your application requires that you create a custom view element, you
+can make your view accessible by implementing the <span class="code"><a
+  href="http://developer.android.com/reference/android/view/accessibility/AccessibilityEventSource.html">AccessibilityEventSource</a></span>
+interface and sending <span class="code"><a
+  href="http://developer.android.com/reference/android/view/accessibility/AccessibilityEvent.html">AccessibilityEvent</a></span>s
+at the proper times.</p>
+<p></p>
+<p>View classes already implement the <span class="code">AccessibiltyEventSource</span>
+interface. This interface provides the mechanism for sending events to the
+registered AccessibilityServices.</p>
+<p></p>
+<p>There are five types of accessibility events that should be sent as the
+user interacts with your view.</p>
+<p></p>
+<p class="code">TYPE_VIEW_CLICKED</p>
+<p>&nbsp; &nbsp;This should be sent when the user clicks on the view.</p>
+<p class="code">TYPE_VIEW_LONG_CLICKED</p>
+<p>&nbsp; &nbsp;This should be sent when the user long clicks on the view.</p>
+<p class="code">TYPE_VIEW_SELECTED</p>
+<p>&nbsp; &nbsp;This should be sent when the selects and item, usually in
+the context of an <a
+  href="http://developer.android.com/reference/android/widget/AdapterView.html">AdapterView</a>.</p>
+<p class="code">TYPE_VIEW_FOCUSED</p>
+<p>&nbsp; &nbsp;This should be sent when the user focuses on the view.</p>
+<p class="code">TYPE_VIEW_TEXT_CHANGED</p>
+<p>&nbsp; &nbsp;This should be sent when the text of the view changes.</p>
+<p></p>
+<p>Each event type requires that particular properties be set, so that the
+accessibility service can properly respond to the event. Those specifics are
+detailed in the <span class="code">AccessibilityEvent</span> documentation.</p>
+<h2>Test Your Application&rsquo;s Accessibility</h2>
+<p>You can simulate the experience for many users by enabling an
+accessibility service that will speak as you move about the screen. One such
+service is <a
+  href="http://market.android.com/details?id=com.google.android.marvin.talkback">TalkBack</a>,
+by the Eyes-Free Project. It comes preinstalled on many Android devices, but is
+also available for free download in the Android Market.</p>
+<p></p>
+<p>This service requires that you have a text-to-speech engine installed on
+your phone. You can verify if you have one installed in the <span class="code">Text-to-speech</span>
+settings menu by selecting <span class="code">Listen to an example</span>. If
+you do not hear anything spoken, install the required voice data using the <span
+  class="code">Install voice data</span> option.</p>
+<p></p>
+<p>Once text-to-speech is functioning correctly, you can enable TalkBack in
+the <span class="code">Accessibility settings</span> menu. Enable both
+Accessibility and TalkBack. As you navigate about the device, you should now
+hear spoken feedback.</p>
+<p></p>
+<p>You can now attempt to use your application as a blind user would. As you
+move around using only the directional controller, make sure that the spoken
+feedback hear makes sense and is sufficient to navigate the application without
+any visual cues.</p>
+</div>
+</body>
+</html>
