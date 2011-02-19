@@ -23,9 +23,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageFormat;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
+import android.hardware.Camera.PreviewCallback;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Display;
@@ -34,10 +40,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
+import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
+import android.view.View.OnLongClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -82,6 +92,12 @@ public class MagnifierActivity extends Activity implements Callback {
     private Parameters mDeferredParameters = null;
 
     /**
+     * The Layout Manager holding either the MagnificationView or
+     * MagnifiedImageView
+     */
+    private LinearLayout mRootView = null;
+
+    /**
      * Surface used to project the camera preview.
      */
     private SurfaceHolder mHolder = null;
@@ -92,9 +108,25 @@ public class MagnifierActivity extends Activity implements Callback {
     private MagnificationView mPreview = null;
 
     /**
+     * Abstracted ImageView used to further magnify a single camera preview
+     * frame.
+     */
+    private MagnifiedImageView mImagePreview = null;
+
+    /**
      * The system's camera hardware
      */
-    private Camera mCamera;
+    private Camera mCamera = null;
+
+    /**
+     * Handler for long click events
+     */
+    private OnLongClickListener mLongClickListener = null;
+    
+    /**
+     * Callback used to obtain camera data for pausing the magnifier.
+     */
+    private PreviewCallback mPreviewCallback = null;
 
     /**
      * The current zoom level
@@ -105,11 +137,16 @@ public class MagnifierActivity extends Activity implements Callback {
      * The current camera mode
      */
     private String mCameraMode = null;
-    
+
     /**
      * Flag indicating the current state of the camera flash LED.
      */
     private boolean mTorch = false;
+
+    /**
+     * Flag indicating the state of the surface, true indicating paused.
+     */
+    private boolean mMagnifierPaused = false;
 
     /**
      * The Preferences in which we store the last application state.
@@ -117,9 +154,9 @@ public class MagnifierActivity extends Activity implements Callback {
     private SharedPreferences mPrefs = null;
 
     /**
-     * This class lies about our actual screen size, thus giving us a 2x digital
-     * zoom to start with even before we invoke the hardware zoom features of
-     * the camera.
+     * These classes lie about our actual screen size, thus giving us a 2x
+     * digital zoom to start with even before we invoke the hardware zoom
+     * features of the camera.
      */
     public class MagnificationView extends SurfaceView {
         public MagnificationView(Context context) {
@@ -134,7 +171,25 @@ public class MagnifierActivity extends Activity implements Callback {
             int width = display.getWidth();
             int height = display.getHeight();
             widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);            
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
+    }
+
+    public class MagnifiedImageView extends ImageView {
+        public MagnifiedImageView(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            // TODO: This method miscalculates the dimensions of the projected
+            // screen, causing a horizontal stretch effect.
+            Display display = getWindowManager().getDefaultDisplay();
+            int width = display.getWidth();
+            int height = display.getHeight();
+            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
@@ -146,8 +201,55 @@ public class MagnifierActivity extends Activity implements Callback {
 
         setContentView(R.layout.main);
         mPreview = new MagnificationView(this);
-        LinearLayout rootView = (LinearLayout) findViewById(R.id.rootView);
-        rootView.addView(mPreview);
+        mImagePreview = new MagnifiedImageView(this);
+        mLongClickListener = new OnLongClickListener() {
+            // When any view is long clicked, toggle pausing the magnifier.
+            @Override
+            public boolean onLongClick(View v) {
+                togglePausePreview();
+                return true;
+            }
+        };
+        mPreview.setOnLongClickListener(mLongClickListener);
+        mImagePreview.setOnLongClickListener(mLongClickListener);
+        mPreviewCallback = new PreviewCallback() {
+            @Override
+            /**
+             * This callback will be used to capture a single frame from the camera
+             * hardware.  We process the image in YUV format, convert to JPEG, and
+             * finally to Bitmap so it can be shown in an extended ImageView.  This
+             * process is sub-optimal as Android's graphics BitmapFactory does not
+             * support direct YUV to Bitmap conversions.
+             */
+            public void onPreviewFrame(byte[] data, Camera camera) {
+                Camera.Parameters parameters = camera.getParameters();
+
+                // Generate a YuvImage from the camera data
+                int w = parameters.getPreviewSize().width;
+                int h = parameters.getPreviewSize().height;
+                YuvImage pausedYuvImage = new YuvImage(data, parameters.getPreviewFormat(), w, h,
+                        null);
+
+                // Compress the YuvImage to JPEG Output Stream
+                ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
+                pausedYuvImage.compressToJpeg(new Rect(0, 0, w, h), 100, jpegOutputStream);
+
+                // Use BitmapFactory to create a Bitmap from the JPEG stream
+                Bitmap pausedImage = BitmapFactory.decodeByteArray(jpegOutputStream.toByteArray(),
+                        0, jpegOutputStream.size());
+
+                // Scale the Bitmap to match the MagnifiedImageView's dimensions
+                Display display = getWindowManager().getDefaultDisplay();
+                int width = display.getWidth();
+                int height = display.getHeight();
+                mImagePreview.setImageBitmap(Bitmap.createScaledBitmap(pausedImage, width * 2,
+                        height * 2, false));
+                mRootView.removeAllViews();
+                mRootView.addView(mImagePreview);
+            }
+        };
+        mRootView = (LinearLayout) findViewById(R.id.rootView);
+        mRootView.addView(mPreview);
         mPreview.setKeepScreenOn(true);
         mHolder = mPreview.getHolder();
         mHolder.addCallback(this);
@@ -202,7 +304,7 @@ public class MagnifierActivity extends Activity implements Callback {
             }
             if (keyCode == KeyEvent.KEYCODE_SEARCH) {
                 if (mTorch) {
-                    params.setFlashMode(Parameters.FLASH_MODE_AUTO);
+                    params.setFlashMode(Parameters.FLASH_MODE_OFF);
                     mTorch = false;
                 } else {
                     params.setFlashMode(Parameters.FLASH_MODE_TORCH);
@@ -211,6 +313,12 @@ public class MagnifierActivity extends Activity implements Callback {
                 setParams(params);
                 return true;
             }
+        }
+        if (keyCode == KeyEvent.KEYCODE_CAMERA || keyCode == KeyEvent.KEYCODE_ENTER
+                || keyCode == KeyEvent.KEYCODE_DPAD_CENTER
+                || (keyCode == KeyEvent.KEYCODE_BACK && mMagnifierPaused)) {
+            togglePausePreview();
+            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -237,7 +345,7 @@ public class MagnifierActivity extends Activity implements Callback {
             //
             // Nexus One: False (does not need a restart)
             // Motorola Droid: True (must have preview restarted)
-            //             
+            //
             // Log.e("smooth zoom?", params.isSmoothZoomSupported() + "");
             mCamera.stopPreview();
             mCamera.startPreview();
@@ -256,7 +364,10 @@ public class MagnifierActivity extends Activity implements Callback {
         } catch (IOException e) {
             e.printStackTrace();
         }
-	}
+        Parameters initParams = mCamera.getParameters();
+        initParams.setPreviewFormat(ImageFormat.NV21);
+        setParams(initParams);
+    }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         mCamera.stopPreview();
@@ -274,13 +385,13 @@ public class MagnifierActivity extends Activity implements Callback {
         // (such as the Motorola Droid), this will cause the parameters to not
         // actually change/may lead to an ANR on a subsequent set attempt.
         Parameters params = mCamera.getParameters();
-        
+
         // Reload the previous state from the stored preferences.
-		mPrefs = getSharedPreferences(getString(R.string.app_name), 0);
-		mZoom = mPrefs.getInt(getString(R.string.zoom_level_pref),
-				mCamera.getParameters().getMaxZoom() / 2);
-		mCameraMode = mPrefs.getString(getString(R.string.camera_mode_pref),
-				mCamera.getParameters().getSupportedColorEffects().get(0));
+        mPrefs = getSharedPreferences(getString(R.string.app_name), 0);
+        mZoom = mPrefs.getInt(getString(R.string.zoom_level_pref), mCamera.getParameters()
+                .getMaxZoom() / 2);
+        mCameraMode = mPrefs.getString(getString(R.string.camera_mode_pref), mCamera
+                .getParameters().getSupportedColorEffects().get(0));
         params.setZoom(mZoom);
         params.setColorEffect(mCameraMode);
         setParams(params);
@@ -320,11 +431,13 @@ public class MagnifierActivity extends Activity implements Callback {
         // title
         menu.add(0, 0, 0, getString(R.string.color_effect_button_text)).setIcon(
                 android.R.drawable.ic_menu_manage);
-        menu.add(0, 1, 0, getString(R.string.more_apps_button_text)).setIcon(
+        menu.add(0, 1, 0, getString(R.string.toggle_freeze_frame_button_text)).setIcon(
+                android.R.drawable.ic_menu_camera);
+        menu.add(0, 2, 0, getString(R.string.more_apps_button_text)).setIcon(
                 android.R.drawable.ic_menu_search);
         return true;
     }
-    
+
     /**
      * Activity callback that lets your handle the selection in the class.
      * Return true to indicate that you've got it, false to indicate that it
@@ -338,8 +451,10 @@ public class MagnifierActivity extends Activity implements Callback {
                 showEffectsList();
                 return true;
             case 1:
-                String marketUrl = 
-                    "market://search?q=pub:\"IDEAL Group, Inc. Android Development Team\"";
+                togglePausePreview();
+                return true;
+            case 2:
+                String marketUrl = "market://search?q=pub:\"IDEAL Group, Inc. Android Development Team\"";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(marketUrl));
                 try {
@@ -355,17 +470,31 @@ public class MagnifierActivity extends Activity implements Callback {
         }
         return false;
     }
-    
+
+    /**
+     * Toggles the freeze frame feature by removing the MagnificationView and
+     * adding a MagnifiedImageView with a single scaled preview frame.
+     */
+    public void togglePausePreview() {
+        mMagnifierPaused = !mMagnifierPaused;
+        if (!mMagnifierPaused) {
+            mRootView.removeAllViews();
+            mRootView.addView(mPreview);
+        } else {
+            mCamera.setOneShotPreviewCallback(mPreviewCallback);
+        }
+    }
+
     /**
      * Save the state of the application as it loses focus.
      */
     @Override
     public void onPause() {
-    	super.onPause();
+        super.onPause();
 
-    	SharedPreferences.Editor editor = mPrefs.edit();
-    	editor.putInt(getString(R.string.zoom_level_pref), mZoom);
-    	editor.putString(getString(R.string.camera_mode_pref), mCameraMode);
-    	editor.commit();
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putInt(getString(R.string.zoom_level_pref), mZoom);
+        editor.putString(getString(R.string.camera_mode_pref), mCameraMode);
+        editor.commit();
     }
 }
