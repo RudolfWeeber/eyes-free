@@ -46,16 +46,10 @@
     <string name="search">search</string>
 
     <!--
-      Source: A value for announcing the back key.
-      Description: This is spoken to the user. [CHAR LIMIT="30"]
-    -->
-    <string name="back">back</string>
-
-    <!--
       Source: A value for announcing the menu key.
       Description: This is spoken to the user. [CHAR LIMIT="30"]
     -->
-    <string name="menu">menu</string>
+    <string name="menu">menu. Press menu again to view options.</string>
 
     <!--
       Source: A value for announcing the start call key.
@@ -193,10 +187,11 @@
     <string name="edit_description">Press a key:</string>
 
     <!--
-      Source: A value for announcing the back key.  Includes instruction for exiting the application.
+      Source: A value for announcing the back key.  Includes instruction for exiting the 
+      application.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="back_message">Back. Press back again to exit the application.</string>
+    <string name="back_message">Back. Press back again to exit.</string>
 
     <!--
       Source: A value for announcing the home key.  Includes notice that the application is exiting.
@@ -208,38 +203,70 @@
 
     <!--
       Source: Alert title for the event if the screen reader is being disabled.
-      Description: While starting the application an announcement is made if screen reader is disabled. [CHAR LIMIT=30]
+      Description: While starting the application an announcement is made if accessibility services 
+      are disabled. [CHAR LIMIT=30]
     -->
-    <string name="title_no_active_screen_reader_alert">Screen reader Disabled!</string>
+    <string name="title_no_active_screen_reader_alert">Accessibility services Disabled!</string>
 
     <!--
       Source: Alert message for the event if the screen reader is being disabled.
-      Description: While starting the application an announcement is made if screen reader is disabled. [CHAR LIMIT=30]
+      Description: While starting the application an announcement is made if accessibility services 
+      are disabled. [CHAR LIMIT=30]
     -->
-    <string name="message_no_active_screen_reader_alert">Screen reader is currently disabled. Would you like to open accessibility settings?</string>
+    <string name="message_no_active_screen_reader_alert">Accessibility services are currently disabled. Would you like to open accessibility settings?</string>
 
     <!--
       Source: Alert title for the event of lacking accessibility settings on the device.
-      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=30]
+      Description: On some devices the accessibility category of the setting is missing. 
+      [CHAR LIMIT=30]
     -->
     <string name="title_no_accessibility_alert">Error</string>
 
     <!--
       Source: Alert message for the event of lacking accessibility settings on the device.
-      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=100]
+      Description: On some devices the accessibility category of the setting is missing. 
+      [CHAR LIMIT=100]
     -->
     <string name="message_no_accessibility_alert">Accessibility is not supported on this device.</string>
 
     <!--
       Source: Alert title for the event of lacking screen reader(s) on the device.
-      Description: Some devices come with no screen readers. [CHAR LIMIT=30]
+      Description: Some devices come with no accessibility services. [CHAR LIMIT=30]
     -->
-    <string name="title_no_screen_reader_alert">No screen reader</string>
+    <string name="title_no_screen_reader_alert">No accessibility service</string>
 
     <!--
-      Source: Alert message for the event of lacking screen reader(s) on the device.
-      Description: On some devices the accessibility category of the setting is missing. [CHAR LIMIT=100]
+      Source: Alert message for the event of lacking accessibility services on the device.
+      Description: On some devices the accessibility category of the setting is missing. 
+      [CHAR LIMIT=100]
     -->
-    <string name="message_no_screen_reader_alert">There is no screen reader installed on the device.</string>
+    <string name="message_no_screen_reader_alert">There is no accessibility service installed on the device.</string>
 
+    <!--
+      Source: Displayed as a menu name.
+      Description:  A menu option that displays details about the application.
+      [CHAR LIMIT=30]
+     -->
+    <string name="about_menu">About</string>
+    
+    <!--
+      Source: Displayed on the about page.
+      Description:  Indicated the version of the application.
+      [CHAR LIMIT=30]
+     -->
+    <string name="version_name">Version: %1s</string>
+    
+    <!--
+      Source: Displayed on a button on the about page.
+      Description:  Indicates the link to the application terms of service.
+      [CHAR LIMIT=30]
+     -->
+    <string name="terms_of_service">Terms of Service</string>
+    
+    <!--
+      Source: Displayed on a button on the about page.
+      Description:  Indicates the link to the application privacy policy.
+      [CHAR LIMIT=30]
+     -->
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

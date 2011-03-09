@@ -28,6 +28,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
@@ -75,6 +78,9 @@ public class KeyboardTutor extends Activity {
     
     private TextView mKeyDescriptionText;
     private int mLastKeyCode;
+    
+    // used to track if onUserLeaveHint is caused by starting an activity vs. pressing home.
+    private boolean startingActivity = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,12 @@ public class KeyboardTutor extends Activity {
         setContentView(R.layout.main);
         mKeyDescriptionText = (TextView) findViewById(R.id.editText);
         mKeyDescriptionText.requestFocus();
+    }
+    
+    @Override
+    public void onResume() {
+        super.onResume();
+        startingActivity = false;
     }
 
     private void buildPunctuationSpokenEquivalentMap() {
@@ -117,6 +129,12 @@ public class KeyboardTutor extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.d(LOG_TAG, "global keydown " + keyCode);
+        
+        if (keyCode == KeyEvent.KEYCODE_BACK && mLastKeyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+        } else if (keyCode == KeyEvent.KEYCODE_MENU && mLastKeyCode == KeyEvent.KEYCODE_MENU) {
+            return false;
+        }
 
         String description = getKeyDescription(keyCode);
         if (description == null) {
@@ -139,19 +157,12 @@ public class KeyboardTutor extends Activity {
         }
         displayAndSpeak(description);
 
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mLastKeyCode == KeyEvent.KEYCODE_BACK) {
-                finish();
-            } else {
-                displayAndSpeak(getString(R.string.back_message));
-            }
-        }
+
         mLastKeyCode = keyCode;
 
-        // allow volume to be adjusted and the soft-keyboard toggled
+        // allow volume to be adjusted
         return KeyEvent.KEYCODE_VOLUME_UP != keyCode
-            && KeyEvent.KEYCODE_VOLUME_DOWN != keyCode
-            && KeyEvent.KEYCODE_MENU != keyCode;
+            && KeyEvent.KEYCODE_VOLUME_DOWN != keyCode;
     }
 
     @Override
@@ -165,10 +176,12 @@ public class KeyboardTutor extends Activity {
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        displayAndSpeak(getString(R.string.home_message));
-        // reset to empty text, so it doesnt say "Home, exiting .." the next time the open
-        // the application
-        mKeyDescriptionText.setText("");
+        if (!startingActivity) {
+            displayAndSpeak(getString(R.string.home_message));
+            // reset to empty text, so it doesnt say "Home, exiting .." the next time the user opens
+            // the application
+            mKeyDescriptionText.setText("");
+        }
     }
 
     /**
@@ -210,7 +223,7 @@ public class KeyboardTutor extends Activity {
             keyText = getString(R.string.search);
             break;
         case KeyEvent.KEYCODE_BACK:
-            keyText = getString(R.string.back);
+            keyText = getString(R.string.back_message);
             break;
         case KeyEvent.KEYCODE_MENU:
             keyText = getString(R.string.menu);
@@ -343,5 +356,30 @@ public class KeyboardTutor extends Activity {
                                 KeyboardTutor.this.finish();
                             }
                         }).create().show();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.about_menu:
+                showAbout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        
+    }
+    
+    private void showAbout() {
+        startingActivity = true;
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
 }

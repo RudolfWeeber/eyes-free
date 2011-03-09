@@ -4,7 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <application
-      android:icon="@drawable/keyboard_icon"
+      android:icon="@drawable/ic_launcher_keyboard_tutor"
       android:label="@string/app_name">
         <activity android:name=".KeyboardTutor"
           android:label="@string/app_name">
@@ -13,6 +13,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".AboutActivity"
+          android:label="@string/about_menu"/>
 
     </application>
     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="4" />
