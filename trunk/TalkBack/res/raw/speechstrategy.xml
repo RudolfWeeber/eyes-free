@@ -200,6 +200,17 @@
     </ss:formatter>
   </ss:rule>
 
+  <!-- WebView -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>android.webkit.WebView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+       <ss:custom>com.google.android.marvin.talkback.formatter.WebContentFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
   <!-- All other objects -->
   <ss:rule>
     <ss:filter>

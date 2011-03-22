@@ -1,0 +1,17 @@
+This project was branched from Android 2.3's Latin IME package. It has been
+modified to exist in the com.googlecode.eyesfree namespace and to support
+Android's built-in accessibility features.
+
+**IMPORTANT**
+To build this project's APK, you must first build its native libraries:
+  1. Install Android NDK r4 or greater
+  2. Run ndk-build from the project directory
+  3. (Eclipse only) Refresh the project's libs folder
+
+To regenerate this projects's ant build files, run:
+  android update project --name latinime --target android-8 --path <project-path>
+
+To clone the current Latin IME tree, install git, and run:
+git clone git://android.git.kernel.org/platform/packages/inputmethods/LatinIME.git
+
+Last updated February 3, 2011 by Alan Viverette <alanv@google.com>

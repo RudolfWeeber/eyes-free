@@ -16,7 +16,11 @@
 
 package com.google.android.marvin.talkback;
 
+import com.google.android.marvin.commands.Command;
+import com.google.android.marvin.commands.CommandConstants;
+import com.google.android.marvin.commands.CommandsManager;
 import com.google.android.marvin.talkback.ProximitySensor.ProximityChangeListener;
+import com.google.android.marvin.talkback.commands.TalkBackCommands;
 import com.google.tts.TextToSpeechBeta;
 
 import android.accessibilityservice.AccessibilityService;
@@ -32,8 +36,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -57,11 +61,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,6 +85,8 @@ public class TalkBackService extends AccessibilityService {
      * performed through {@link Context#sendBroadcast(Intent, String)}
      */
     public static final String ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND = "com.google.android.marvin.talkback.ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND";
+
+    public static final String TALKBACK_USER_EVENT_COMMAND = "com.google.android.marvin.commands.TALKBACK_USER_EVENT_COMMAND";
 
     /**
      * {@link Intent} broadcast action for querying the state of TalkBack. </p>
@@ -127,7 +135,7 @@ public class TalkBackService extends AccessibilityService {
     /**
      * To recognize string with only capital letters.
      */
-    private static final Pattern sAllCapsPattern = Pattern.compile("[A-Z]{2,}+"); 
+    private static final Pattern sAllCapsPattern = Pattern.compile("[A-Z]{2,}+");
 
     /**
      * To add spaces between two consecutive capital letters.
@@ -226,9 +234,14 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
+     * Notification ID for the "TalkBack Settings" notification
+     */
+    private static final int SETTINGS_NOTIFICATION_ID = 1;
+
+    /**
      * Notification ID for the "TalkBack Crash Report" notification
      */
-    private static final int CRASH_NOTIFICTION_ID = 2;
+    private static final int CRASH_NOTIFICATION_ID = 2;
 
     /**
      * Queuing mode - interrupt the spoken utterance before speaking another one.
@@ -329,7 +342,7 @@ public class TalkBackService extends AccessibilityService {
      * Flag if the infrastructure has been initialized.
      */
     private static boolean sInfrastructureInitialized = false;
-    
+
     /**
      * Flag if the TTS service has been initialized.
      */
@@ -428,12 +441,12 @@ public class TalkBackService extends AccessibilityService {
      * {@link BroadcastReceiver} for tracking the phone state.
      */
     private PhoneStateMonitor mPhoneStateMonitor;
-    
+
     /**
      * {@link Runnable} for processing the standby of the proximity sensor.
      */
     private Runnable mProximitySensorSilencer;
-    
+
     /**
      * The current ringer mode of the device.
      */
@@ -463,7 +476,7 @@ public class TalkBackService extends AccessibilityService {
      * Whether Caller ID should be spoken.
      */
     private boolean mCallerIdPref;
-    
+
     /**
      * Whether TTS Extended should be used.
      */
@@ -488,7 +501,7 @@ public class TalkBackService extends AccessibilityService {
      * Whether the screen is off.
      */
     private boolean mScreenIsOff;
-    
+
     /**
      * When the screen was last turned on.
      */
@@ -516,6 +529,11 @@ public class TalkBackService extends AccessibilityService {
      * ever-increasing index.
      */
     private int mNextUtteranceIndex = 0;
+
+    /**
+     * Maps the name to command enum for user commands handled by TalkBack.
+     */
+    private Map<String, TalkBackCommands> mIdToUserCommands;
 
     /**
      * Static handle to TalkBack so CommandInterfaceBroadcastReceiver can access
@@ -686,8 +704,22 @@ public class TalkBackService extends AccessibilityService {
         // register the class loading manager
         addInfrastructureStateListener(ClassLoadingManager.getInstance());
 
+        initializeCommands();
+
         sInfrastructureInitialized = true;
         notifyInfrastructureStateListeners();
+    }
+
+    private void initializeCommands() {
+        CommandsManager accessor = new CommandsManager();
+        accessor.addCommands(
+                Arrays.<Command>asList(TalkBackCommands.values()),
+                getApplicationContext());
+        mIdToUserCommands = new HashMap<String, TalkBackCommands>();
+
+        for (TalkBackCommands command : TalkBackCommands.values()) {
+            mIdToUserCommands.put(command.getDisplayName(), command);
+        }
     }
 
     private void initializeProximitySensor() {
@@ -702,7 +734,7 @@ public class TalkBackService extends AccessibilityService {
                 }
             }
         });
-        
+
         // Create a Runnable for causing the standby of the proximity sensor.
         mProximitySensorSilencer = new Runnable() {
             @Override
@@ -713,7 +745,7 @@ public class TalkBackService extends AccessibilityService {
             }
         };
     }
-    
+
     /**
      * Adds an {@link InfrastructureStateListener}.
      */
@@ -727,14 +759,14 @@ public class TalkBackService extends AccessibilityService {
     public void removeInfrastructureStateListener(InfrastructureStateListener listener) {
         mInfrastructureStateListeners.remove(listener);
     }
- 
+
      /**
       * Version 12 (2.4.0) introduced a preference for tracking the last run
       * version of TalkBack. This method processes one-time tasks defined to run
       * after upgrades or installations from a specific version.
       */
      private void tryShowSettingsManagerAvailable() {
-         // this is method is a NOOP on non-phone devices 
+         // this is method is a NOOP on non-phone devices
          if (!mDeviceIsPhone) {
              return;
          }
@@ -778,7 +810,7 @@ public class TalkBackService extends AccessibilityService {
              editor.commit();
          }
      }
- 
+
      /**
       * Displays a notification that TalkBack now offers customizable settings by
       * downloading the Accessibility Settings Manager application.
@@ -787,17 +819,17 @@ public class TalkBackService extends AccessibilityService {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent launchMarketIntent = new Intent(Intent.ACTION_VIEW);
         launchMarketIntent.setData(Uri.parse(getString(R.string.settings_manager_market_uri)));
-        Notification notification = new Notification(-1,
-                getString(R.string.title_talkback_settings_available),
-                System.currentTimeMillis());
+        Notification notification = new Notification(android.R.drawable.stat_notify_more,
+                getString(R.string.title_talkback_settings_available), System.currentTimeMillis());
         notification.setLatestEventInfo(this,
                 getString(R.string.title_talkback_settings_available),
                 getString(R.string.message_talkback_settings_available), PendingIntent.getActivity(
                         this, 0, launchMarketIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         notification.defaults |= Notification.DEFAULT_SOUND;
         notification.flags |= Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONGOING_EVENT;
+        nm.notify(SETTINGS_NOTIFICATION_ID, notification);
     }
-    
+
     /**
      * Displays a notification that TalkBack has crashed and data can be sent to
      * developers to help improve TalkBack.
@@ -810,16 +842,15 @@ public class TalkBackService extends AccessibilityService {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject_crash_report_email));
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
                 getString(R.string.header_crash_report_email) + crashReport);
-        Notification notification = new Notification(
-                -1, getString(R.string.title_talkback_crash), System.currentTimeMillis());
+        Notification notification = new Notification(android.R.drawable.stat_notify_error,
+                getString(R.string.title_talkback_crash), System.currentTimeMillis());
         notification.setLatestEventInfo(this,
                 getString(R.string.title_talkback_crash),
                 getString(R.string.message_talkback_crash), PendingIntent.getActivity(
                         this, 0, emailIntent, PendingIntent.FLAG_UPDATE_CURRENT));
         notification.defaults |= Notification.DEFAULT_SOUND;
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        nm.notify(CRASH_NOTIFICTION_ID, notification);
-
+        nm.notify(CRASH_NOTIFICATION_ID, notification);
     }
 
     /**
@@ -840,7 +871,7 @@ public class TalkBackService extends AccessibilityService {
     private void registerUncaughtExceptionHandler() {
         Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
             private UncaughtExceptionHandler sysUeh = Thread.getDefaultUncaughtExceptionHandler();
-            
+
             @Override
             public void uncaughtException(Thread thread, Throwable ex) {
                 String timestamp = new Date().toString();
@@ -862,7 +893,7 @@ public class TalkBackService extends AccessibilityService {
                     sysUeh.uncaughtException(thread, ex);
                 }
             }
-            
+
             private void writeCrashReport(String report) {
                 FileOutputStream fos;
                 try {
@@ -878,9 +909,9 @@ public class TalkBackService extends AccessibilityService {
             }
         });
     }
-    
+
     /**
-     * Checks the TalkBack crash log and prompts the user to submit reports if appropriate. 
+     * Checks the TalkBack crash log and prompts the user to submit reports if appropriate.
      */
     private void processCrashLog() {
         StringBuilder crashReport = new StringBuilder();
@@ -901,7 +932,7 @@ public class TalkBackService extends AccessibilityService {
         deleteFile(TALKBACK_CRASH_LOG);
         displayCrashReportNotification(crashReport.toString());
     }
-    
+
     /**
      * Reload the preferences from the SharedPreferences object.
      */
@@ -938,7 +969,7 @@ public class TalkBackService extends AccessibilityService {
                 mProximitySensor = null;
             }
         }
-        
+
         // Power on the proximity sensor if necessary.
         if (mProximityPref) {
             if (mProximitySensor == null
@@ -977,7 +1008,7 @@ public class TalkBackService extends AccessibilityService {
                 silence = true;
                 if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
                     String text = Utils.getEventText(this, event).toString();
-                    
+
                     NotificationType type;
                     Parcelable parcelable = event.getParcelableData();
                     if (parcelable instanceof Notification) {
@@ -991,7 +1022,7 @@ public class TalkBackService extends AccessibilityService {
                     } else {
                         type = null;
                     }
-                    
+
                     updateNotificationCache(type, text);
                 }
             }
@@ -1000,7 +1031,7 @@ public class TalkBackService extends AccessibilityService {
             if (mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
                 silence = (mCallerIdPref == false);
             }
-            
+
             if (silence) {
                 return;
             }
@@ -1008,12 +1039,13 @@ public class TalkBackService extends AccessibilityService {
 
         // avoid processing duplicate events
         if (equals(mLastSpokenEvent, event)) {
+            Log.i(LOG_TAG, "duplicate");
             return;
         }
 
         // Keep a representation of the last spoken event for crash reporting.
         mLastSpokenEvent = clone(event);
-        
+
         synchronized (mEventQueue) {
             enqueueEventLocked(event);
             if (isSourceInCallScreenActivity(event)) {
@@ -1026,11 +1058,15 @@ public class TalkBackService extends AccessibilityService {
         return;
     }
 
+    public AccessibilityEvent getLastSpokenEvent() {
+        return clone(mLastSpokenEvent);
+    }
+
     /**
      * Returns if the <code>event</code> source is the in-call screen activity.
      */
     private boolean isSourceInCallScreenActivity(AccessibilityEvent event) {
-        return (AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED == event.getEventType() 
+        return (AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED == event.getEventType()
                 && CLASS_NAME_IN_CALL_SCREEN.equals(event.getClassName()));
     }
 
@@ -1105,7 +1141,7 @@ public class TalkBackService extends AccessibilityService {
             if (lastNotification.tickerText != null) {
                 return false;
             }
-            return true; 
+            return true;
         } else {
             return currentNotification.tickerText.equals(lastNotification.tickerText);
         }
@@ -1196,7 +1232,7 @@ public class TalkBackService extends AccessibilityService {
                 if (metadataQueueMode == QUEUING_MODE_UNINTERRUPTIBLE
                         || metadataQueueMode == QUEUING_MODE_COMPUTE_FROM_EVENT_CONTEXT) {
                     queueMode = (mLastEventType == collapsedEventType) ? QUEUING_MODE_INTERRUPT
-                            : QUEUING_MODE_QUEUE;   
+                            : QUEUING_MODE_QUEUE;
                 } else {
                     queueMode = metadataQueueMode;
                 }
@@ -1293,14 +1329,14 @@ public class TalkBackService extends AccessibilityService {
         }
         if (first.getPackageName() == null) {
             if (second.getPackageName() != null) {
-                return false;    
+                return false;
             }
         } else if (!first.getPackageName().equals(second.getPackageName())) {
             return false;
         }
         if (first.getClassName() == null) {
             if (second.getClassName() != null) {
-                return false;    
+                return false;
             }
         } else if (!first.getClassName().equals(second.getClassName())) {
             return false;
@@ -1310,21 +1346,21 @@ public class TalkBackService extends AccessibilityService {
         }
         if (first.getContentDescription() == null) {
             if (second.getContentDescription() != null) {
-                return false;    
+                return false;
             }
         } else if (!first.getContentDescription().equals(second.getContentDescription())) {
             return false;
         }
         if (first.getBeforeText() == null) {
             if (second.getBeforeText() != null) {
-                return false;    
+                return false;
             }
         } else if (!first.getBeforeText().equals(second.getBeforeText())) {
             return false;
         }
         if (first.getParcelableData() != null) {
-            // do not compare parcelable data it may not implement equals correctly 
-            return false;    
+            // do not compare parcelable data it may not implement equals correctly
+            return false;
         }
         if (first.getAddedCount() != second.getAddedCount()) {
             return false;
@@ -1351,6 +1387,9 @@ public class TalkBackService extends AccessibilityService {
             return false;
         }
         if (first.getRemovedCount() != second.getRemovedCount()) {
+            return false;
+        }
+        if (first.getEventTime() != second.getEventTime()) {
             return false;
         }
         return true;
@@ -1697,6 +1736,7 @@ public class TalkBackService extends AccessibilityService {
                 return;
             case AudioManager.RINGER_MODE_NORMAL:
                 String template = getString(R.string.template_ringer_volume);
+                template = fixTemplateForStringFormat(template);
 
                 // format the template with the ringer percentage
                 int currentRingerVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
@@ -1710,13 +1750,35 @@ public class TalkBackService extends AccessibilityService {
                 } else if (adjustment > 5) {
                     volumePercent += (10 - adjustment);
                 }
+                String volumePercentString = String.format("%d", volumePercent);
 
-                String populatedTemplate = String.format(template, volumePercent);
+                String populatedTemplate = String.format(template, volumePercentString);
                 utterance.getText().append(populatedTemplate);
                 return;
             default:
                 throw new IllegalArgumentException("Unknown ringer mode: " + ringerMode);
         }
+    }
+
+    /**
+     * Work around a bug where the translation might have an unescaped percent
+     * sign in it that will cause a call to String.format to fail.
+     */
+    private static String fixTemplateForStringFormat(String template) {
+        // Work around a bug where the translation might have an unescaped percent
+        // sign in it.
+        int index = template.indexOf('%');
+        while (index >= 0) {
+            if (index == template.length() - 1 ||
+                (template.charAt(index + 1) != '1' && template.charAt(index + 1) != '%')) {
+                template = template.substring(0, index) +
+                           "%" +
+                           template.substring(index);
+            }
+            index = template.indexOf('%', index + 2);
+        }
+
+        return template;
     }
 
     /**
@@ -1758,11 +1820,60 @@ public class TalkBackService extends AccessibilityService {
                 } else {
                     setResultCode(RESULT_TALKBACK_DISABLED);
                 }
+            } else if (TALKBACK_USER_EVENT_COMMAND.equals(intentAction)) {
+                if (sInstance == null) {
+                    return;
+                }
+                sInstance.processUserCommand(
+                        intent.getStringExtra(CommandConstants.EXTRA_COMMAND_NAME));
+                return;
             }
 
             abortBroadcast();
             // other intent commands go here ...
         }
+    }
+
+    /**
+     * Process the user commands defiend in {TalkBackCommands}.
+     * @param commandName
+     */
+    private void processUserCommand(String commandName) {
+        TalkBackCommands command = mIdToUserCommands.get(commandName);
+        if (command == null) {
+            Log.e(LOG_TAG, "Unknown user command " + commandName);
+            return;
+        } else {
+            Log.i(LOG_TAG, "Command " + commandName);
+        }
+        switch (command) {
+            case REPEAT_LAST:
+                if (mLastSpokenEvent != null) {
+                    AccessibilityEvent event = clone(mLastSpokenEvent);
+                    event.setEventTime(new Date().getTime());
+                    Log.i(LOG_TAG, "sending event " + event.getText());
+                    onAccessibilityEvent(event);
+                }
+                break;
+            case SPELL_LAST:
+                if (mLastSpokenEvent != null) {
+                    AccessibilityEvent event = clone(mLastSpokenEvent);
+                    Log.i(LOG_TAG, "event: " + event);
+                    StringBuilder res = new StringBuilder();
+                    for (CharSequence seq : event.getText()) {
+                        for (int x = 0; x < seq.length(); x++) {
+                            res.append(seq.charAt(x));
+                            res.append(" ");
+                        }
+                    }
+                    event.setEventTime(new Date().getTime());
+                    event.getText().clear();
+                    event.getText().add(res.toString());
+                    onAccessibilityEvent(event);
+                }
+                break;
+        }
+
     }
 
     /**
@@ -1991,7 +2102,7 @@ public class TalkBackService extends AccessibilityService {
     }
 
     /**
-     * Interface for listeners for the TalkBack initialization state. 
+     * Interface for listeners for the TalkBack initialization state.
      */
     interface InfrastructureStateListener {
         public void onInfrastructureStateChange(boolean isInitialized);

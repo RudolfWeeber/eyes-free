@@ -188,6 +188,42 @@
     -->
     <string name="template_spinner"><xliff:g id="title">%1$s</xliff:g> drop down list.</string>
 
+    <!--
+      Source: An utterance template for announcing minutes in the alarm clock activity.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_minutes"><xliff:g id="minutes">%1$s</xliff:g> minutes</string>
+
+    <!--
+      Source: An utterance template for announcing hours in the alarm clock activity.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_hours"><xliff:g id="hours">%1$s</xliff:g> hours</string>
+    
+    <!--
+      Source: An utterance template for announcing a day time range.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_day"><xliff:g id="date">%1$s</xliff:g>, day view.</string>
+
+    <!--
+      Source: An utterance template for announcing the a week time range.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_week"><xliff:g id="from_date">%1$s</xliff:g> to <xliff:g id="to_date">%2$s</xliff:g>, week view.</string>
+
+    <!--
+      Source: An utterance template for announcing a month time range.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_month"><xliff:g id="month">%1$s</xliff:g>, month view.</string>
+
+    <!--
+      Source: A value for announcing the current event index (example: 2 of 6).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_item_index"><xliff:g id="item_index">%1$s</xliff:g> of <xliff:g id="item_count">%2$s</xliff:g></string>
+
     <!-- VALUES -->
 
     <!--
@@ -516,7 +552,13 @@
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
     <string name="value_fast_forward_button">Fast forward button.</string>
-
+    
+    <!--
+      Source: A value for announcing to whom a calendar belongs.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_owner">Owner</string>
+    
     <!-- PERMISSIONS -->
 
     <!--
@@ -530,7 +572,7 @@
       Description: Listed so the user can choose whether they want to allow using the permission. [CHAR LIMIT=200]
     -->
     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Allows an application or service to drive TalkBack
-        via intent broadcasts and potentially obtain information about the TlakBack state for example the cached notifications.</string>
+        via intent broadcasts and potentially obtain information about the TalkBack state for example the cached notifications.</string>
 
     <!-- PUNCTUATION -->
 
@@ -592,7 +634,18 @@
       Source: A value for announcing a colon.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="punctuation_colon">Colon</string>        
+    <string name="punctuation_colon">Colon</string>
+    
+    <!-- PLURALS -->
+
+    <!--
+      Source: A plural for announcing the number of event(s) on a calendar day.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <plurals name="plural_event">
+        <item quantity="one">event</item>
+        <item quantity="other">events</item>
+    </plurals>        
 
     <!-- SETTINGS MANAGEMENT -->
 
@@ -749,5 +802,56 @@
         passwords. It may also log your user interface interactions. It comes from the application
         <xliff:g id="plugin_name">%1$s</xliff:g>. Enable this plug-in?</string>
 
+    <!-- AXIS  -->
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to character. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_character">Navigate by character.</string>
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to word. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_word">Navigate by word.</string>
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to sentence. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_sentence">Navigate by sentence.</string>
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to heading. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_heading">Navigate by heading.</string>
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to sibling. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_sibling">Navigate by sibling.</string>
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to parent first child. This
+      axis is deprecated so this string is not translated. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_parent_first_child" translatable="false">Navigate by parent first child.</string>
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to document. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_document">Navigate by document.</string>
+
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to the default webview behavior. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_default_web_view_behavior">Navigate by default web view behavior.</string>
 
 </resources>
+

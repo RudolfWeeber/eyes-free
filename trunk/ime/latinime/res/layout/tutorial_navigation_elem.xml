@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  style="@android:style/ButtonBar">
+  <com.googlecode.eyesfree.inputmethod.latin.tutorial.ContentButton
+    android:id="@+id/tutorial_previous"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_centerVertical="true"
+    android:drawableLeft="@drawable/ic_previous"
+    android:text="@string/tutorial_previous"
+    android:contentDescription="@string/tutorial_previous_hint" />
+  <com.googlecode.eyesfree.inputmethod.latin.tutorial.ContentButton
+    android:id="@+id/tutorial_continue"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    android:drawableRight="@drawable/ic_continue"
+    android:text="@string/tutorial_continue"
+    android:contentDescription="@string/tutorial_continue_hint" />
+</RelativeLayout>

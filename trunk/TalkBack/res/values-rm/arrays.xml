@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Discurrer cun tut il volumens dal tun da scalin"</item>
+    <item msgid="7158875206945163928">"Betg discurrer en il modus silenzius"</item>
+    <item msgid="4945285159234224758">"Betg discurrer en il modus da vibrar e silenzius"</item>
+  </string-array>
+  <string-array name="pref_speak_ringer_values">
+    <item msgid="187847560624455756">"0"</item>
+    <item msgid="8273555182574340701">"1"</item>
+    <item msgid="1704630093639180434">"2"</item>
+  </string-array>
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"Permetter da discurrer sch\'il visur è deactivà"</item>
+    <item msgid="3411424877209877052">"Betg discurrer sch\'il visur è stizzà"</item>
+  </string-array>
+  <string-array name="pref_speak_screenoff_values">
+    <item msgid="933236199570311408">"0"</item>
+    <item msgid="9097665412962478723">"1"</item>
+  </string-array>
+</resources>

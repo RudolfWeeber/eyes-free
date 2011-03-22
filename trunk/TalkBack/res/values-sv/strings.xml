@@ -1,119 +1,119 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- NOTIFICATIONS -->
-
-    <string name="notification_type_text_message">Textmeddelande</string>
-
-    <string name="notification_type_failed_text_message">textmeddelande inte skickat</string>
-
-    <string name="notification_type_missed_call">Missat samtal</string>
-
-    <string name="notification_type_usb_connected">USB ansluten</string>
-
-    <string name="notification_type_status_mute">Tyst</string>
-
-    <string name="notification_type_status_chat">Chat</string>
-
-    <string name="notification_type_status_error">Fel</string>
-
-    <string name="notification_type_status_more">Mer</string>
-
-    <string name="notification_type_status_sdcard">SD kort</string>
-
-    <string name="notification_type_status_sdcard_usb">SD kort USB</string>
-
-    <string name="notification_status_sync">Synkronisera</string>
-
-    <string name="notification_type_status_sync_noanim">Synkronisera</string>
-
-    <string name="notification_type_status_voicemail">Röstmeddelande</string>
-
-    <string name="notification_status_play">Spelar</string>
-
-    <string name="notification_type_status_notification">Statusnotifiering</string>
-
-    <!-- TEMPLATES -->
-
-    <!-- %1$s - The title of a check box/radio button; -->
-    <string name="template_compound_button_checked">%1$s kryssad</string>
-
-    <!-- %1$s - The title of a check box/ radio button; -->
-    <string name="template_compound_button_not_checked">%1$s ej kryssad</string>
-
-    <!-- %1$s - The text content of an edit box; -->
-    <string name="template_edit_box">textfält. %1$s</string>
-
-    <!-- %1$s - The text content of a search box; -->
-    <string name="template_search_box">Sökfält. %1$s</string>
-
-    <!-- %1$s - The text content of an alert/pop up message; -->
-    <string name="template_alert_dialog_template">Varning  %1$s</string>
-
-    <!-- %1$s - The replaced text; %2$s - The replacement text; -->
-    <string name="temlate_text_replaced">%1$s ersatt med %2$s</string>
-
-    <!-- %1$s - The count of replaced characters; %2$s - The count of replacement characters; (used for password fields) -->
-    <string name="template_replaced_characters">%1$s tecken ersatta med %2$s tecken</string>
-
-    <!-- %1$s - The ringer volume in percent;-->
-    <string name="template_ringer_volume">Ringvolym %1$s procent.</string>
-
-    <!-- VALUES -->
-
-    <string name="value_password">lösenord</string>
-
-    <string name="value_sliding_drawer_opened">Glidande ritare öppnas</string>
-
-    <string name="value_handle_view">Sliding drawer handle</string>
-
-    <string name="value_input_method_shown">Inmatningsmetod</string>
-
-    <string name="value_status_bar_opened">Statusfält</string>
-
-    <string name="value_options_menu_open">Val.</string>
-
-    <string name="value_text_removed">raderad</string>
-
-    <string name="value_notification_summary">Notifieringsammandrag</string>
-
-    <string name="value_checked">kryssad</string>
-
-    <string name="value_not_checked">ej kryssad</string>
-
-    <string name="value_clicked">clickad</string>
-
-    <string name="value_ringer_vibrate">Ringsignalstyp vibrera.</string>
-
-    <string name="value_ringer_silent">Ringsignalstyp tyst.</string>
-
-    <string name="value_ringer_normal">Ringsignalstyp normal.</string>
-
-    <string name="value_screen_on">Skärm på.</string>
-
-    <string name="value_screen_off">Skärm av.</string>
-
-    <string name="value_phone_unlocked">Telefonen upplåst.</string>
-
-    <!-- PERMISSIONS -->
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack">Skicka avsiktliga kommandon till TalkBack</string>
-
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Tillåter en applikation eller tjänst att këra TalkBack via avsiktliga sändningar och potentiellt erhålla information om TalkBacks tillstånd till exempel de cachade notifieringarna.</string>
-
-    <!-- Punctuation mappings -->
-
-    <string name="punctuation_questionmark">Frågetecken</string>
-    <string name="punctuation_space">Mellanslag</string>    
-    <string name="punctuation_comma">Komma</string>    
-    <string name="punctuation_dot">Punkt</string>            
-    <string name="punctuation_exclamation">Utropstecken</string>
-    <string name="punctuation_open_paren">Vänster parentes</string>
-    <string name="punctuation_close_paren">Häger parentes</string>
-    <string name="punctuation_double_quote">Citationstecken</string>
-    <string name="punctuation_semicolon">Semicolon</string>
-    <string name="punctuation_colon">Kolon</string>        
-
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"SMS"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"SMS som inte skickats"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Missat samtal"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB-ansluten"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"Ljud av"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Chatt"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Fel"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Mer"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD-kort"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"SD-kort USB"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"Synkronisera"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"Nytt e-postmeddelande"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Synkronisera"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Röstbrevlåda"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Spelar"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Statusmeddelande"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> markerad"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> har inte markerats"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Redigeringsruta. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Sökruta. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Meddelande <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> har ersatts med <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> tecken har ersatts med <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> tecken"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Ringsignalen är <xliff:g id="PERCENT">%1$s</xliff:g> procent."</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"Drar <xliff:g id="TITLE">%1$s</xliff:g> ikon."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"<xliff:g id="TITLE">%1$s</xliff:g> bildknapp."</string>
+    <string name="template_button" msgid="5913853507836606140">"<xliff:g id="TITLE">%1$s</xliff:g> knapp."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> bild."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> sökreglage."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> rullgardinsmeny."</string>
+    <string name="value_password" msgid="52094746222829357">"lösenord"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Lådan är öppen"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Lådans handtag"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Indatametod"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Statusfält"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Alternativ."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"borttaget"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Meddelandeöversikt"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"punkt"</string>
+    <string name="value_checked" msgid="5234989698372864892">"markerat"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"inte markerat"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"markerat"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Vibrerande ringsignal."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Tyst ringsignal."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Normal ringsignal."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Skärm på."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Skärm av."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telefonen är upplåst."</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Dragande widget."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Webbvy."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Okänt objekt"</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Sökknapp."</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Välj knapp för startplats."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Välj knapp för målplats."</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"Alternativknapp för bil."</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Alternativknapp för kollektivtrafik."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Alternativknapp för cykel."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Alternativknapp för promenad."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Bil, kontrollerat."</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Kollektivtrafik, kontrollerad."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Cykel, kontrollerat."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Promenad, kontrollerad."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"stjärna"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Öka timmar."</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Öka minuter."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Minska timmar."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Minska minuter."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Öka månad."</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Öka dag."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Öka år."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Minska månad."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Minska dag."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Öka år."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Spellista."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Växla blandning."</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Växla upprepning."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Knapp för bakåtspolning."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Uppspelningsknapp."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Knapp för snabbspolning."</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Skicka avsiktliga kommandon till TalkBack"</string>
+    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="7116495433045146292">"Tillåter att ett program eller en tjänst kör TalkBack via avsiktlig sändning och eventuellt erhåller information om TalkBack-status för till exempel cachelagrade meddelanden."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Frågetecken"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Blanksteg"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Komma"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Punkt"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Utropstecken"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Öppna parentes"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Stäng parentes"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Dubbla citattecken"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Semikolon"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Kolon"</string>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBack-inställningar finns"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Klicka här om du vill hämta programmet Tillgänglighetsinställningar"</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"Kraschdata för TalkBack finns"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Klicka här om du vill förbättra TalkBack genom att skicka kraschdata"</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Tala när"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Ringvolym"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Skärmstatus"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"TTS-inställningar"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Läs upp inkommande nummer"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Använd utökat TTS"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Närhetssensor"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Närhetssensorn stänger av tal"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Närhetssensorn styr inte tal"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Plugin-program"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Hantera plugin-program"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Avinstallera"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack är inaktiverat!"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack är inaktiverat. Vill du öppna tillgänglighetsinställningarna?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Fel"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Tillgänglighet stöds inte i den här enheten."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"Kraschrapport för TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"Följande är en kraschrapport för TalkBack. Klicka på Skicka så skickas rapporten till TalkBack-utvecklarna."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Varning"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Det här plugin-programmet för TalkBack kan samla in all text du skriver, inklusive personliga uppgifter som kreditkortsnummer, men inte lösenord. Den kan även logga din kommunikation med användargränssnittet. Den kommer från programmet <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Vill du aktivera plugin-programmet?"</string>
 </resources>

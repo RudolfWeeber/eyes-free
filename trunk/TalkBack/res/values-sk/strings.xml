@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"Textová správa"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Textová správa nebola odoslaná"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Zmeškaný hovor"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"Zariadenie USB pripojené"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"Ignorovať"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Rozhovor"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Chyba"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Viac"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"Karta SD"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"Rozhranie USB karty SD"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"Synchronizovať"</string>
+    <!-- no translation found for notification_type_new_email (207543580986817175) -->
+    <skip />
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Synchronizovať"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Hlasová schránka"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Prehrávanie"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Oznámenie o stave"</string>
+    <!-- no translation found for template_compound_button_checked (8969457633214121273) -->
+    <skip />
+    <!-- no translation found for template_compound_button_not_checked (2022559641068252555) -->
+    <skip />
+    <!-- no translation found for template_edit_box (8644462446565912356) -->
+    <skip />
+    <!-- no translation found for template_search_box (374713873976390037) -->
+    <skip />
+    <!-- no translation found for template_alert_dialog_template (578525726030867650) -->
+    <skip />
+    <!-- no translation found for template_text_replaced (6030467088396825159) -->
+    <skip />
+    <!-- no translation found for template_replaced_characters (5425385364820310962) -->
+    <skip />
+    <!-- no translation found for template_ringer_volume (5136691769333649340) -->
+    <skip />
+    <!-- no translation found for template_dragging_icon (7633606891857792337) -->
+    <skip />
+    <!-- no translation found for template_image_button (7981434777534909849) -->
+    <skip />
+    <!-- no translation found for template_button (5913853507836606140) -->
+    <skip />
+    <!-- no translation found for template_image_view (3085333029274972273) -->
+    <skip />
+    <!-- no translation found for template_seek_bar (8598603084443742698) -->
+    <skip />
+    <!-- no translation found for template_spinner (3914981448273826697) -->
+    <skip />
+    <string name="value_password" msgid="52094746222829357">"heslo"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Výsuvné okno otvorené"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Držadlo výsuvného okna"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Metóda vstupu"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Stavový riadok"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Možnosti."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"odstránené"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Súhrn upozornení"</string>
+    <!-- no translation found for value_password_character_typed (3384590085073731527) -->
+    <skip />
+    <string name="value_checked" msgid="5234989698372864892">"začiarknuté"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"nezačiarknuté"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"kliknuté"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Vibračné zvonenie."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Tiché zvonenie."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Štandardné zvonenie."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Obrazovka zapnutá."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Obrazovka vypnutá."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telefón odomknutý."</string>
+    <!-- no translation found for value_dragging_widget (2839615701303758943) -->
+    <skip />
+    <!-- no translation found for value_web_view (8368045336469722566) -->
+    <skip />
+    <!-- no translation found for value_unknown_object (7353842829622995954) -->
+    <skip />
+    <!-- no translation found for value_market_search (5962672691633469998) -->
+    <skip />
+    <!-- no translation found for value_maps_choose_start (2446857840351856118) -->
+    <skip />
+    <!-- no translation found for value_maps_choose_destination (7597325109784367823) -->
+    <skip />
+    <!-- no translation found for value_maps_driving (17682521549267904) -->
+    <skip />
+    <!-- no translation found for value_maps_public_transport (4853965273701512693) -->
+    <skip />
+    <!-- no translation found for value_maps_bicycling (3373483282987467511) -->
+    <skip />
+    <!-- no translation found for value_maps_walking (4266344744219840236) -->
+    <skip />
+    <!-- no translation found for value_maps_driving_checked (5433513572249853506) -->
+    <skip />
+    <!-- no translation found for value_maps_public_transport_checked (8304476990748308126) -->
+    <skip />
+    <!-- no translation found for value_maps_bicycling_checked (7554345318572740886) -->
+    <skip />
+    <!-- no translation found for value_maps_walking_checked (1515076165963612327) -->
+    <skip />
+    <!-- no translation found for value_phone_incall_star (2693353543372512851) -->
+    <skip />
+    <!-- no translation found for value_increment_hours (7158276085728574637) -->
+    <skip />
+    <!-- no translation found for value_increment_minutes (6165324977047656454) -->
+    <skip />
+    <!-- no translation found for value_decrement_hours (441296968884730689) -->
+    <skip />
+    <!-- no translation found for value_decrement_minutes (8498790312841197460) -->
+    <skip />
+    <!-- no translation found for value_increment_month (5454425189529249656) -->
+    <skip />
+    <!-- no translation found for value_increment_day (3105875429979308831) -->
+    <skip />
+    <!-- no translation found for value_increment_year (2817702366437069114) -->
+    <skip />
+    <!-- no translation found for value_decrement_month (8924970351354671861) -->
+    <skip />
+    <!-- no translation found for value_decrement_day (6765872058795160928) -->
+    <skip />
+    <!-- no translation found for value_decrement_year (6888532808015558315) -->
+    <skip />
+    <!-- no translation found for value_playlist (169034635850956540) -->
+    <skip />
+    <!-- no translation found for value_toggle_shuffle (3396915142517587583) -->
+    <skip />
+    <!-- no translation found for value_toggle_repeat (8873027804000805156) -->
+    <skip />
+    <!-- no translation found for value_rewind_button (5161645834242351385) -->
+    <skip />
+    <!-- no translation found for value_play_button (2701216749763299935) -->
+    <skip />
+    <!-- no translation found for value_fast_forward_button (8502328522663492005) -->
+    <skip />
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Odosielať príkazy Intent aplikácii TalkBack"</string>
+    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="7116495433045146292">"Umožňuje aplikácií alebo službe spustiť reakciu aplikácie TalkBack prostredníctvom vysielania Intent a potenciálne získať informácie o stave aplikácie TalkBack, napríklad oznámenia uložené vo vyrovnávacej pamäti."</string>
+    <!-- no translation found for punctuation_questionmark (179720356310397041) -->
+    <skip />
+    <!-- no translation found for punctuation_space (2858396268976961492) -->
+    <skip />
+    <!-- no translation found for punctuation_comma (5904123197868367248) -->
+    <skip />
+    <!-- no translation found for punctuation_dot (5613956000742145839) -->
+    <skip />
+    <!-- no translation found for punctuation_exclamation (5087215816659188811) -->
+    <skip />
+    <!-- no translation found for punctuation_open_paren (1087551343442146730) -->
+    <skip />
+    <!-- no translation found for punctuation_close_paren (8180528806258316143) -->
+    <skip />
+    <!-- no translation found for punctuation_double_quote (5451902512870494782) -->
+    <skip />
+    <!-- no translation found for punctuation_semicolon (2970948646830240735) -->
+    <skip />
+    <!-- no translation found for punctuation_colon (4212987887163582631) -->
+    <skip />
+    <!-- no translation found for title_talkback_settings_available (4405797779993860783) -->
+    <skip />
+    <!-- no translation found for message_talkback_settings_available (3073212089159547463) -->
+    <skip />
+    <!-- no translation found for title_talkback_crash (1342512684382958066) -->
+    <skip />
+    <!-- no translation found for message_talkback_crash (8552017712769665127) -->
+    <skip />
+    <!-- no translation found for title_pref_category_when_to_speak (1720405045631424064) -->
+    <skip />
+    <!-- no translation found for title_pref_speak_ringer (4166340335462900044) -->
+    <skip />
+    <!-- no translation found for title_pref_speak_screenoff (9028437778107614413) -->
+    <skip />
+    <!-- no translation found for title_pref_category_tts_settings (4451374891076937625) -->
+    <skip />
+    <!-- no translation found for title_pref_caller_id (2074176178525278688) -->
+    <skip />
+    <!-- no translation found for title_pref_tts_extended (3575787698372364355) -->
+    <skip />
+    <!-- no translation found for title_pref_proximity (2074129049942782489) -->
+    <skip />
+    <!-- no translation found for summaryOn_pref_proximity (9000886370261892995) -->
+    <skip />
+    <!-- no translation found for summaryOff_pref_proximity (3024213283254452034) -->
+    <skip />
+    <!-- no translation found for title_pref_category_plugins (1814360382704814668) -->
+    <skip />
+    <!-- no translation found for title_pref_manage_plugins (8859821963030140877) -->
+    <skip />
+    <!-- no translation found for title_uninstall_plugin (8034480031728764190) -->
+    <skip />
+    <!-- no translation found for title_talkback_inactive_alert (6863405328162570213) -->
+    <skip />
+    <!-- no translation found for message_talkback_inactive_alert (4618141745593778043) -->
+    <skip />
+    <!-- no translation found for title_no_accessibility_alert (3854928935920775093) -->
+    <skip />
+    <!-- no translation found for message_no_accessibility_alert (8090527713370798145) -->
+    <skip />
+    <!-- no translation found for subject_crash_report_email (3043388136219501183) -->
+    <skip />
+    <!-- no translation found for header_crash_report_email (9218276172142314054) -->
+    <skip />
+    <!-- no translation found for title_warning_talkback_plugin_security (4058317690233608531) -->
+    <skip />
+    <!-- no translation found for message_warning_talkback_plugin_security (7622424149639111854) -->
+    <skip />
+</resources>

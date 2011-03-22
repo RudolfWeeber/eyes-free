@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="set_granularity">%s navigation set</string>
+    <string-array name="granularity_types">
+        <item>character</item>
+        <item>word</item>
+        <item>sentence</item>
+        <item>paragraph</item>
+        <item>entire text</item>
+    </string-array>
+    <string name="set_action">%s mode set</string>
+    <string-array name="action_types">
+        <item>navigation</item>
+        <item>selection</item>
+    </string-array>
+    <string name="cursor_at_start_position">Start of line</string>
+    <string name="cursor_at_end_position">End of line</string>
+</resources>

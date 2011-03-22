@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutorial_name">TalkBack keyboard tutorial</string>
+    <string name="tutorial_continue">Continue</string>
+    <string name="tutorial_continue_hint">Click to move to the next lesson.</string>
+    <string name="tutorial_previous">Go back</string>
+    <string name="tutorial_previous_hint">Click to go back to the previous lesson.</string>
+    <string name="tutorial_skip">Skip to first lesson</string>
+    <string name="tutorial_skip_hint">Click to skip setting your default input method.</string>
+    <string name="tutorial_exit">Finish</string>
+    <string name="tutorial_exit_hint">Click to finish and exit the tutorial.</string>
+    <string name="tutorial_speak_text">Speak text</string>
+    <string name="tutorial_instructions">Instructions</string>
+    
+    <!-- Lessons list -->
+    <string name="tutorial_lessons_title">Available lessons</string>
+    <string name="no_lessons_available">No lessons available</string>
+
+    <!-- Custom components -->
+    <declare-styleable name="ContentButton">
+        <attr name="tooltip" format="string" />    
+    </declare-styleable>
+    
+    <!-- Lesson 1: Introduction -->
+    <string name="tutorial_1_title">Welcome to the Eyes-Free TalkBack keyboard tutorial</string>
+    <string name="tutorial_1_message_1">Welcome to the Eyes-Free TalkBack keyboard tutorial.</string>
+    <string name="tutorial_1_message_2">In this tutorial, you will have the opportunity to learn about and practice using the TalkBack keyboard\'s navigation and editing features.</string>
+    <string name="tutorial_1_message_3">Click the Continue button at the bottom-right of the screen to start the first lesson.</string>
+    
+    <!-- Lesson 2: Virtual D-Pad -->
+    <string name="tutorial_2_title">Using the virtual D-pad</string>
+    <string name="tutorial_2_message_1">When activated, the TalkBack keyboard provides a virtual directional pad on the bottom one-third of the screen.</string>
+    <string name="tutorial_2_message_2">In this area, you can flick one finger up, down, left, or right to simulate directional pad presses.</string>
+    <string name="tutorial_2_message_3">You can also tap the virtual d-pad area to simulate a center click.</string>
+    <string name="tutorial_2_message_4">The virtual d-pad has been opened for you below. Use flick and tap gestures to select the button labeled \"First\".</string>
+    <string name="tutorial_2_first">First</string>
+    <string name="tutorial_2_third">Third</string>
+    <string name="tutorial_2_second">Second</string>
+    <string name="tutorial_2_first_selected">\"First\" button selected. Now flick right to select the button labeled \"Second\".</string>
+    <string name="tutorial_2_second_selected">\"Second\" button selected. Tap once to click the button.</string>
+    <string name="tutorial_2_second_tapped">\"Second\" button clicked. Good. If you swipe your finger above the d-pad area, you will hear a a sound to let you know you\'ve traveled too far.</string>
+    <string name="tutorial_2_second_tapped_2">Place your finger in the d-pad area and drag up until you hear a tick.</string>
+    <string name="tutorial_2_left_dpad">Keep your finger on the screen and drag back down into the d-pad area until you hear another tick.</string>
+    <string name="tutorial_2_entered_dpad">You\'re back in the d-pad area. At the corners of this area are, in clockwise order from the top left, buttons for Back, Home, Search, and Menu.</string>
+    <string name="tutorial_2_dpad_buttons">Drag your finger to the bottom-right corner of the d-pad area to find the Search button, then lift your finger to click it.</string>
+    <string name="tutorial_2_search_pressed">Good. Practice exploring the screen using flick gestures. When you\'re ready to move on, find and click the \"Continue\" button.</string>
+    
+    <!-- Lesson 3: Speaking Keyboard -->
+    <string name="tutorial_3_title">Typing with the keyboard</string>
+    <string name="tutorial_3_message_1">At any time, you can press and hold the volume up button to cycle from navigating to typing mode.</string>
+    <string name="tutorial_3_message_2">The editable text area at the top of the screen has been selected for you. Press and hold the volume up button to switch to typing mode.</string>
+    <string name="tutorial_3_wrong_mode">You\'ve entered hidden mode by pressing volume down. Press it again to cycle to typing mode and continue the tutorial.</string>
+    <string name="tutorial_3_message_3">Notice how the phone says \"typing\" to announce that the directional pad has changed to a keyboard.</string>
+    <string name="tutorial_3_message_4">In typing mode, you can slide a finger around the keyboard to find a letter, then lift to type that letter.</string>
+    <string name="tutorial_3_message_5">Try typing \"hello\" by sliding your finger around the keyboard and lifting your finger to enter keys.</string>
+    <string name="tutorial_3_hello_ok">Place your finger on the keyboard and slide up to the top half of the screen to hear what you have typed.</string>
+    <string name="tutorial_3_read_back">When your finger leaves the keyboard area, you can lift your finger without typing a key. Try lifting your finger now.</string>
+    <string name="tutorial_3_finger_lifted">When you\'re comfortable typing, use the right flick gesture in the keyboard area to move outside of the text area and continue.</string>
+    <string name="tutorial_3_outside">If you press and hold the volume up button again, you can hide the keyboard to show the full screen. Try hiding the keyboard now.</string>
+    <string name="tutorial_3_mode_hidden">Now press and hold the volume up button again to cycle back around to navigating mode.</string>
+    <string name="tutorial_3_mode_navigating">The virtual directional pad is now open. Use it to click the \"Continue\" button when you\'re ready to move on.</string>
+    <string name="tutorial_3_text_hello">hello</string>
+    
+    <!-- Lesson 4: Text Navigation -->
+    <string name="tutorial_4_title">Navigating with the keyboard</string>
+    <string name="tutorial_4_message_1">When editing text, you can use left and right flick gestures to move the cursor forward and backward by single characters.</string>
+    <string name="tutorial_4_message_2">The editable text area at the top of the screen has been filled and activated for you. Try flicking to move forward and backward by character.</string>
+    <string name="tutorial_4_character_ok">The TalkBack keyboard also allows you to move by larger units of text. Tap using two fingers to switch to word navigation.</string>
+    <string name="tutorial_4_word_mode">When word navigation is set, flicking left and right will move by words. Try flicking right twice to move two words to the right.</string>
+    <string name="tutorial_4_word_ok">Double-tap using two fingers to go back to character navigation mode.</string>
+    <string name="tutorial_4_char_mode">You\'ve completed the last lesson. When you\'re confident navigating text, find and click the \"Finish\" button.</string>
+    <string name="tutorial_4_text">This is sample text.</string>
+    
+    <!-- DefaultIMEWizard resources -->
+    <string name="wizard_name">Loading input method...</string>
+    <string name="need_accessibility_title">Enable accessibility</string>
+    <string name="need_accessibility_message">Accessibility must be enabled to use the TalkBack keyboard tutorial. Please enable accessibility in the Settings application.</string>
+    <string name="need_enable_title">Enable input method</string>
+    <string name="need_enable_message">The TalkBack keyboard must be enabled and set as your default input method before you can use the tutorial. Please enable the keyboard in the Settings application, then set it as your default keyboard by long-clicking in an edit field and selecting Input Method.</string>
+    <string name="need_default_title">Set default input method</string>
+    <string name="need_default_message">The TalkBack keyboard must be set as your default input method before you can use the tutorial. Please set it as your default keyboard by long-clicking in an edit field and selecting Input Method.</string>
+</resources>

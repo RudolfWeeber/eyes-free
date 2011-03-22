@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.googlecode.eyesfree.inputmethod.latin"
+      android:versionCode="1"
+      android:versionName="1.0">
+
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST" />
+    
+    <!-- Allows third party applications to send Intent broadcast commands to LatinIME. -->
+    <permission android:name="com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST"
+            android:protectionLevel="dangerous"
+            android:label="@string/permlab_sendIntentBroadcastCommandsToLatinIME"
+            android:description="@string/permdesc_sendIntentBroadcastCommandsToLatinIME" />
+
+    <application android:label="@string/english_ime_name"
+            android:backupAgent="LatinIMEBackupAgent"
+            android:killAfterRestore="false">
+
+        <service android:name="com.googlecode.eyesfree.inputmethod.latin.LatinIME"
+                android:label="@string/english_ime_name"
+                android:permission="android.permission.BIND_INPUT_METHOD"
+                android:icon="@drawable/ime_icon">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data android:name="android.view.im" android:resource="@xml/method" />
+        </service>
+
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.LatinIMESettings"
+                 android:label="@string/english_ime_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.LatinIMEDebugSettings"
+                 android:label="@string/english_ime_debug_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.InputLanguageSelection"
+                android:label="@string/language_selection_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="com.googlecode.eyesfree.inputmethod.latin.INPUT_LANGUAGE_SELECTION"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinIMETutorial"
+                android:label="@string/tutorial_name"
+                android:windowSoftInputMode="adjustResize|stateAlwaysVisible"
+                android:configChanges="orientation|keyboard|keyboardHidden"
+                android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.googlecode.eyesfree.inputmethod.latin.tutorial.LAUNCH_TUTORIAL"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <receiver android:name="com.googlecode.eyesfree.inputmethod.latin.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.BootActivity"
+                android:theme="@android:style/Theme.Dialog"
+                android:label="@string/wizard_name"
+                android:windowSoftInputMode="adjustResize|stateAlwaysVisible"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+    
+    <uses-sdk android:minSdkVersion="8" />
+</manifest> 

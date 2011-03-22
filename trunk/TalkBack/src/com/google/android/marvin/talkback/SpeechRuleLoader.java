@@ -110,6 +110,12 @@ public class SpeechRuleLoader implements InfrastructureStateListener {
         // add speech strategy for specific built-in Android apps
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_apps);
 
+        if (!mDeviceIsPhone) {
+            // add the speech strategy for Google TV; this should always be
+            // after the application specific ones but before the generic
+            mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_googletv);
+        }
+
         // add generic speech strategy for views in any app; this should always
         // be last so that the app-specific rules above can override the
         // generic rules

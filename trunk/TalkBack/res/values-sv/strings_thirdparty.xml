@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="value_amazon_go" msgid="4394074100082803216">"Kör."</string>
+    <string name="value_amazon_search" msgid="6434927954393699886">"Sök."</string>
+    <string name="template_amazon_quantity" msgid="6479878374510151419">"Antal <xliff:g id="COUNT">%1$s</xliff:g>"</string>
+    <string name="template_amazon_mp3_buy_button" msgid="3211627160627972269">"Köpknappen, <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="value_camera_magic_take_picture" msgid="3348188942968677220">"Slutarknappen."</string>
+    <string name="value_camera_magic_zoom_slider" msgid="9068720508404801914">"Zoomreglage."</string>
+    <string name="value_file_manager_home" msgid="3221104680687868085">"Knappen Startsida."</string>
+    <string name="value_file_manager_up" msgid="6532390888528162351">"Knappen Upp."</string>
+    <string name="value_file_manager_multi_select" msgid="7202234365922477703">"Knappen Markera flera."</string>
+    <string name="value_file_manager_edit" msgid="6950401308694253576">"Knappen Redigera."</string>
+    <string name="value_file_manager_bookmark" msgid="8039687460141246943">"Knappen Bokmärke."</string>
+    <string name="value_file_manager_new_folder" msgid="7831830298976400348">"Knappen Ny mapp."</string>
+    <string name="value_file_manager_back" msgid="4409971220398537431">"Knappen Tillbaka."</string>
+    <string name="value_file_manager_forwards" msgid="2509760444137103469">"Knappen Framåt"</string>
+    <string name="value_file_manager_sort" msgid="7174008674937375487">"Knappen Sortera."</string>
+    <string name="value_file_manager_refresh" msgid="5921119137028689654">"Knappen Uppdatera."</string>
+    <string name="value_file_manager_help" msgid="5054016981865395456">"Knappen Hjälp."</string>
+    <string name="value_facebook_post_status" msgid="8118977173989445501">"Knappen Lägg upp statusuppdateringar."</string>
+    <string name="value_facebook_search" msgid="4808938297614670409">"Sökknapp."</string>
+    <string name="value_facebook_gallery_photo" msgid="6169119911043900106">"Galleri-foto."</string>
+    <string name="value_facebook_home" msgid="4723428329772455197">"Knappen Facebooks startsida."</string>
+    <string name="value_facebook_camera" msgid="5583147343352954089">"Knappen Kamera."</string>
+    <string name="value_facebook_compose" msgid="2373734201043407698">"Knappen Skriv."</string>
+    <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"Knappen Tummen ned."</string>
+    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"Knappen Tummen upp."</string>
+    <string name="value_stitcher_star" msgid="4889938499496305463">"Knappen Stjärnmärk."</string>
+    <string name="value_stitcher_play" msgid="8953331682349687236">"Knappen Spela upp/pausa."</string>
+    <string name="value_stitcher_next" msgid="2945481957178798103">"Knappen Nästa."</string>
+    <string name="value_google_voice_play_button" msgid="2873426918700224250">"Knappen Spela upp."</string>
+    <string name="value_google_voice_speakerphone_button" msgid="4812261205507729876">"Knappen Högtalartelefon."</string>
+    <string name="value_google_voice_transcript" msgid="4984373756636020629">"Manuskript."</string>
+</resources>

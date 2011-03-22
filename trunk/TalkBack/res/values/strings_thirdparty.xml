@@ -54,55 +54,55 @@
 
     <!--
       Source: An utterance template for announcing the "Home" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. When the user presses this button it jumps to the home directory. The translation should indicate that this is a button, so the user knows they can click on it. [CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_home">Home button.</string>
 
     <!--
       Source: An utterance template for announcing the "Up" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. When the user presses this button it goes up to the parent directory of the filesystem. The translation should indicate that this is a button, so the user knows they can click on it. [CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_up">Up button.</string>
 
     <!--
       Source: An utterance template for announcing the "Toggle multi-selection" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. When the user presses this button it toggles whether or not it is possible to select multiple files at once. The translation should indicate that this is a button, so the user knows they can click on it.[CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_multi_select">Toggle multi select.</string>
 
     <!--
       Source: An utterance template for announcing the "Edit" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user.When the user presses this button it edits the current selected file. The translation should indicate that this is a button, so the user knows they can click on it.  [CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_edit">Edit button.</string>
 
     <!--
       Source: An utterance template for announcing the "Bookmark" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. When the user presses this button it bookmarks the current location in the file manager. The translation should indicate that this is a button, so the user knows they can click on it.[CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_bookmark">Bookmark button.</string>
 
     <!--
       Source: An utterance template for announcing the "New folder" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. When the user presses this button it creates a new folder. The translation should indicate that this is a button, so the user knows they can click on it.[CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_new_folder">New folder button.</string>
 
     <!--
       Source: An utterance template for announcing the "Back" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. When the user presses this button it jumps back to the previous directory the user was viewing. The translation should indicate that this is a button, so the user knows they can click on it. [CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_back">Back button.</string>
 
     <!--
-      Source: An utterance template for announcing the "Forwards" button in the File Manager application.
+      Source: An utterance template for announcing the "Forwards" button in the File Manager application. When the user presses this button it jumps forwards to the next directory the user was viewing (this only makes sense after pressing Back, like in a web browser). The translation should indicate that this is a button, so the user knows they can click on it.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_forwards">Forwards button.</string>
 
     <!--
       Source: An utterance template for announcing the "Sort" button in the File Manager application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. When the user presses this button it sorts all of the files in the list below. The translation should indicate that this is a button, so the user knows they can click on it. [CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_sort">Sort button.</string>
 
@@ -113,7 +113,7 @@
     <string name="value_file_manager_refresh">Refresh button.</string>
 
     <!--
-      Source: An utterance template for announcing the "Help" button in the File Manager application.
+      Source: An utterance template for announcing the "Help" button in the File Manager application. When the user presses this button it opens up a window with online help. The translation should indicate that this is a button, so the user knows they can click on it.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
     <string name="value_file_manager_help">Help button.</string>
@@ -161,31 +161,31 @@
 
     <!--
       Source: An utterance template for announcing the "Thumbs down" button in the Stitcher application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. Thumbs down means that the user does not like the current podcast or other item. The translation should indicate that this is a button, so the user knows it's something to click on. [CHAR LIMIT="NONE"]
     -->
     <string name="value_stitcher_thumbs_down">Thumbs down button.</string>
 
     <!--
       Source: An utterance template for announcing the "Thumbs button" button in the Stitcher application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. Thumbs up means that the user likes the current podcast or other item. The translation should indicate that this is a button, so the user knows it's something to click on.[CHAR LIMIT="NONE"]
     -->
     <string name="value_stitcher_thumbs_up">Thumbs up button.</string>
 
     <!--
-      Source: An utterance template for announcing the "Star" (which marks something as a favorite) button in the Stitcher application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Source: An utterance template for announcing the "Star" button in the Stitcher application.
+      Description: This is spoken to the user. Pressing the star button marks it as a favorite. The translation should indicate that this is a button, so the user knows it's something to click on. [CHAR LIMIT="NONE"]
     -->
     <string name="value_stitcher_star">Star button.</string>
 
     <!--
       Source: An utterance template for announcing the "Play/Pause" toggle button in the Stitcher application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Description: This is spoken to the user. This is a button that plays or pauses, depending on context. For technical reasons we can't change the description when the button changes state, so it should say both play and pause. [CHAR LIMIT="NONE"]
     -->
     <string name="value_stitcher_play">Play pause button.</string>
 
     <!--
-      Source: An utterance template for announcing the "Next" button in the Stitcher application.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+      Source: An utterance for announcing the "Next" button in the Stitcher application.
+      Description: This is spoken to the user. When the user presses this button it will skip to the next item, for example the next podcast to listen to. The translation should indicate that this is a button, so the user knows it's something to click on. [CHAR LIMIT="NONE"]
     -->
     <string name="value_stitcher_next">Next button.</string>
 

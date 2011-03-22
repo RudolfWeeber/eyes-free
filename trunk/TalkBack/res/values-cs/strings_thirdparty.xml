@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="value_amazon_go" msgid="4394074100082803216">"Přejít."</string>
+    <string name="value_amazon_search" msgid="6434927954393699886">"Vyhledat."</string>
+    <string name="template_amazon_quantity" msgid="6479878374510151419">"Množství <xliff:g id="COUNT">%1$s</xliff:g>"</string>
+    <string name="template_amazon_mp3_buy_button" msgid="3211627160627972269">"Tlačítko Koupit, <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="value_camera_magic_take_picture" msgid="3348188942968677220">"Tlačítko závěrky."</string>
+    <string name="value_camera_magic_zoom_slider" msgid="9068720508404801914">"Posuvník pro přiblížení a oddálení."</string>
+    <string name="value_file_manager_home" msgid="3221104680687868085">"Tlačítko Plocha."</string>
+    <string name="value_file_manager_up" msgid="6532390888528162351">"Tlačítko Nahoru."</string>
+    <string name="value_file_manager_multi_select" msgid="7202234365922477703">"Zapnutí a vypnutí hromadného výběru."</string>
+    <string name="value_file_manager_edit" msgid="6950401308694253576">"Tlačítko Upravit."</string>
+    <string name="value_file_manager_bookmark" msgid="8039687460141246943">"Tlačítko Záložka."</string>
+    <string name="value_file_manager_new_folder" msgid="7831830298976400348">"Tlačítko Nová složka."</string>
+    <string name="value_file_manager_back" msgid="4409971220398537431">"Tlačítko Zpět."</string>
+    <string name="value_file_manager_forwards" msgid="2509760444137103469">"Tlačítko Vpřed."</string>
+    <string name="value_file_manager_sort" msgid="7174008674937375487">"Tlačítko Seřadit."</string>
+    <string name="value_file_manager_refresh" msgid="5921119137028689654">"Tlačítko Obnovit."</string>
+    <string name="value_file_manager_help" msgid="5054016981865395456">"Tlačítko Nápověda."</string>
+    <string name="value_facebook_post_status" msgid="8118977173989445501">"Tlačítko pro aktualizaci stavu."</string>
+    <string name="value_facebook_search" msgid="4808938297614670409">"Tlačítko Hledat."</string>
+    <string name="value_facebook_gallery_photo" msgid="6169119911043900106">"Fotografie v Galerii."</string>
+    <string name="value_facebook_home" msgid="4723428329772455197">"Tlačítko Domovská stránka na Facebooku."</string>
+    <string name="value_facebook_camera" msgid="5583147343352954089">"Tlačítko Fotoaparát."</string>
+    <string name="value_facebook_compose" msgid="2373734201043407698">"Tlačítko Napsat."</string>
+    <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"Negativní hodnocení."</string>
+    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"Pozitivní hodnocení."</string>
+    <string name="value_stitcher_star" msgid="4889938499496305463">"Tlačítko Hvězdička."</string>
+    <string name="value_stitcher_play" msgid="8953331682349687236">"Tlačítko Přehrát/Pauza."</string>
+    <string name="value_stitcher_next" msgid="2945481957178798103">"Tlačítko Další."</string>
+    <string name="value_google_voice_play_button" msgid="2873426918700224250">"Tlačítko Přehrát."</string>
+    <string name="value_google_voice_speakerphone_button" msgid="4812261205507729876">"Tlačítko pro přepínání hlasitého telefonu."</string>
+    <string name="value_google_voice_transcript" msgid="4984373756636020629">"Přepis."</string>
+</resources>

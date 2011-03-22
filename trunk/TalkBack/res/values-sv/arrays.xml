@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Prata oavsett ringsignalsvolym"</item>
+    <item msgid="7158875206945163928">"Inget tal i tyst läge"</item>
+    <item msgid="4945285159234224758">"Prata inte i tyst läge eller vibratorläge"</item>
+  </string-array>
+    <!-- no translation found for pref_speak_ringer_values:0 (187847560624455756) -->
+    <!-- no translation found for pref_speak_ringer_values:1 (8273555182574340701) -->
+    <!-- no translation found for pref_speak_ringer_values:2 (1704630093639180434) -->
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"Tillåt tal när skärmen är avstängd"</item>
+    <item msgid="3411424877209877052">"Inget tal när skärmen är avstängd"</item>
+  </string-array>
+    <!-- no translation found for pref_speak_screenoff_values:0 (933236199570311408) -->
+    <!-- no translation found for pref_speak_screenoff_values:1 (9097665412962478723) -->
+</resources>

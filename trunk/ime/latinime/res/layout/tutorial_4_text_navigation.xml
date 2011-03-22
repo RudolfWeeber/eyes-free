@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_gravity="bottom"
+    android:layout_weight="1.0"
+    android:orientation="vertical"
+    android:padding="10dp">
+    <TextView
+      android:id="@+id/tutorial_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/tutorial_4_title"
+      android:textAppearance="@android:style/TextAppearance.Medium" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1.0"
+      android:layout_margin="10dp"
+      android:orientation="horizontal">
+      <com.googlecode.eyesfree.inputmethod.latin.tutorial.SelectionEditText
+        android:id="@+id/tutorial_4_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:text="@string/tutorial_4_text" />
+    </LinearLayout>
+    <ViewAnimator
+      android:id="@+id/tutorial_instructions"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inAnimation="@android:anim/slide_in_left"
+      android:outAnimation="@android:anim/slide_out_right"
+      android:background="@drawable/dialog"
+      android:contentDescription="@string/tutorial_instructions"
+      android:onClick="onClick" />
+  </LinearLayout>
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@android:style/ButtonBar">
+    <com.googlecode.eyesfree.inputmethod.latin.tutorial.ContentButton
+      android:id="@+id/tutorial_previous"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_centerVertical="true"
+      android:drawableLeft="@drawable/ic_previous"
+      android:text="@string/tutorial_previous"
+      android:contentDescription="@string/tutorial_previous_hint" />
+    <com.googlecode.eyesfree.inputmethod.latin.tutorial.ContentButton
+      android:id="@+id/tutorial_exit"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:text="@string/tutorial_exit"
+      android:contentDescription="@string/tutorial_exit_hint" />
+  </RelativeLayout>
+</LinearLayout>

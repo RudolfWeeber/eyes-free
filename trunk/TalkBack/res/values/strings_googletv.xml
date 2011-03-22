@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- VALUES -->
+
+    <!--
+      Source: A value for announcing the turning on the screen saver.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_screen_saver">Screen saver.</string>
+
+    <!--
+      Source: A value for announcing the pressed state of a toggle button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_pressed">Pressed.</string>
+
+    <!--
+      Source: A value for announcing the non-pressed state of a toggle button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_not_pressed">Not pressed.</string>
+
+    <!--
+      Source: A value for announcing the "My Stocks" image button in the CNBC application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_my_stocks">My Stocks</string>
+
+    <!--
+      Source: A value for announcing the "Hot Stocks" image button in the CNBC application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_hot_stocks">Hot Stocks</string>
+
+    <!--
+      Source: A value for announcing the "Videos" image button in the CNBC application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_videos">Videos</string>
+
+    <!--
+      Source: A value for announcing the "Edit" image button in the CNBC application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_edit_button">Edit button</string>
+
+    <!--
+      Do not translate.
+      Source: A value for announcing the "CNBC.com" image button in the CNBC application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_cnbc_com" translatable="false">C N B C dot com</string>
+
+    <!--
+      Source: A value for announcing the "CNBC TV" image button in the CNBC application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_cnbc_tv">C N B C T V</string>
+
+    <!--
+      Source: A value for announcing the "F" image button in the Weather application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_weather_fahrenheit">Fahrenheit button</string>
+
+    <!--
+      Source: A value for announcing the "C" image button in the Weather application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_weather_celsius">Celsius button</string>
+
+    <!--
+      Source: A value for announcing the "Play" top story image button in the Weather application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_weather_play_top_story">Play top story button</string>
+
+    <!--
+      Source: A value for announcing a toggle button in the Launcher application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_toggle_button">Toggle button.</string>
+
+    <!-- TEMPLATES -->
+
+    <!--
+      Source: An utterance template for announcing an item position. 
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_googletv_item_position"><xliff:g id="item_index">%1$s</xliff:g> of <xliff:g id="item_count">%2$s</xliff:g>.</string>
+
+    <!--
+      Source: An utterance template for announcing a stock quote in the CNBC application.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_googletv_stock_quote"><xliff:g id="stock_abbreviation">%1$s</xliff:g> <xliff:g id="stock_description">%2$s</xliff:g>. Last <xliff:g id="stock_price">%3$s</xliff:g>, change <xliff:g id="absolute_stock_price_change">%4$s</xliff:g>, or <xliff:g id="relative_stock_price_change">%5$s</xliff:g>.</string>
+
+</resources>

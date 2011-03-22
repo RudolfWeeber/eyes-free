@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd">
+
+  <!-- TYPE_WINDOW_STATE_CHANGED -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:packageName>android</ss:packageName>
+      <ss:className>com.android.internal.policy.impl.ui.Screensaver$Ui</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_screen_saver</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Launcher -->
+
+  <!-- TYPE_VIEW_CLICKED -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_CLICKED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>com.google.tv.launcher.ui.MoveButton</ss:className>
+      <ss:checked>true</ss:checked>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_pressed</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_CLICKED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>com.google.tv.launcher.ui.MoveButton</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_not_pressed</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_CLICKED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>android.widget.ToggleButton</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_clicked</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- TYPE_VIEW_FOCUSED -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>com.google.tv.launcher.ui.MoveButton</ss:className>
+      <ss:checked>true</ss:checked>
+    </ss:filter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>android.widget.ToggleButton</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_toggle_button</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>com.google.tv.launcher.ui.ControlledFocus$ControlledFocusButton</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_button</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_button</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>android.widget.Button</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.tv.LauncherButtonFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- TYPE_VIEW_SELECTED -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:activity>com.google.tv.launcher.HomeActivity</ss:activity>
+      <ss:packageName>com.google.tv.launcher</ss:packageName>
+      <ss:className>com.google.tv.launcher.ui.HeaderLayout</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.tv.ItemPositionFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- CNBC -->
+
+  <!-- TYPE_VIEW_FOCUSED -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_my_stocks</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_hot_stocks</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_videos</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>6</ss:currentItemIndex>
+      <ss:itemCount>9</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_edit_button</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>7</ss:currentItemIndex>
+      <ss:itemCount>10</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_edit_button</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>6</ss:currentItemIndex>
+      <ss:itemCount>8</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_cnbc_com</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>7</ss:currentItemIndex>
+      <ss:itemCount>9</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_cnbc_com</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>8</ss:currentItemIndex>
+      <ss:itemCount>10</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_cnbc_com</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>7</ss:currentItemIndex>
+      <ss:itemCount>8</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_cnbc_tv</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>8</ss:currentItemIndex>
+      <ss:itemCount>9</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_cnbc_tv</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>4</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_cnbc_com</ss:template>
+    </ss:formatter>
+  </ss:rule>
+  
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ImageButton</ss:className>
+      <ss:currentItemIndex>5</ss:currentItemIndex>
+      <ss:itemCount>6</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_cnbc_tv</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- TYPE_VIEW_SELECTED -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ListView</ss:className>
+      <ss:itemCount>&lt;=1</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:activity>com.cnbc.client.ui.cnbcclient</ss:activity>
+      <ss:packageName>com.cnbc.client</ss:packageName>
+      <ss:className>android.widget.ListView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.tv.CnbcStockQuoteFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- The Weather Channel -->
+
+  <!-- TYPE_VIEW_FOCUSED -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.weather.Weather.activities.WeatherSummaryActivity</ss:activity>
+      <ss:packageName>com.weather.Weather</ss:packageName>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:currentItemIndex>2</ss:currentItemIndex>
+      <ss:itemCount>8</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_weather_fahrenheit</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.weather.Weather.activities.WeatherSummaryActivity</ss:activity>
+      <ss:packageName>com.weather.Weather</ss:packageName>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+      <ss:itemCount>8</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_weather_celsius</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:activity>com.weather.Weather.activities.WeatherSummaryActivity</ss:activity>
+      <ss:packageName>com.weather.Weather</ss:packageName>
+      <ss:className>android.widget.Button</ss:className>
+      <ss:currentItemIndex>6</ss:currentItemIndex>
+      <ss:itemCount>8</ss:itemCount>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/value_googletv_weather_play_top_story</ss:template>
+    </ss:formatter>
+  </ss:rule>
+
+</ss:speechstrategy>

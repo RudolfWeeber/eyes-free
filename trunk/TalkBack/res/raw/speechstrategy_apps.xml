@@ -36,6 +36,8 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.TextView</ss:className>
       <ss:packageName>com.google.android.voicesearch</ss:packageName>
+      <ss:currentItemIndex>0</ss:currentItemIndex>
+      <ss:itemCount>3</ss:itemCount>
     </ss:filter>
     <ss:formatter>
       <ss:template>@com.google.android.marvin.talkback:string/earcon_progress</ss:template>
@@ -883,5 +885,144 @@
       <ss:template>@com.google.android.marvin.talkback:string/value_market_search</ss:template>
     </ss:formatter>
   </ss:rule>
+  
+    <!-- Alarmclock. (Set alarm dialog - hours input.) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:packageName>com.google.android.deskclock</ss:packageName>
+      <ss:className>android.widget.EditText</ss:className>
+      <ss:itemCount>11</ss:itemCount>
+      <ss:currentItemIndex>1</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_hours</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
 
+  <!-- Alarmclock. (Set alarm dialog - minutes input.) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:packageName>com.google.android.deskclock</ss:packageName>
+      <ss:className>android.widget.EditText</ss:className>
+      <ss:itemCount>11</ss:itemCount>
+      <ss:currentItemIndex>5</ss:currentItemIndex>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_minutes</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- CALENDAR RULES -->
+  
+  <!-- DayView (day/week version) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>com.android.calendar.DayView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- WeekView (Gingerbread) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>com.android.calendar.WeekView</ss:className>
+      <ss:platformSdk>9</ss:platformSdk>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- MonthView (Gingerbread) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>com.android.calendar.MonthView</ss:className>
+      <ss:platformSdk>9</ss:platformSdk>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.MonthViewSelectedFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- MonthView (Honeycomb) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>com.android.calendar.month.FullMonthView</ss:className>
+      <ss:platformSdk>10</ss:platformSdk>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.MonthViewSelectedFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- AgendaListView (Gingerbread) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>com.android.calendar.AgendaListView</ss:className>
+      <ss:platformSdk>9</ss:platformSdk>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- DayView (day/month version) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:className>com.android.calendar.DayView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+       <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayViewWindowStateChangedFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- WeekView (Gingerbread) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:className>com.android.calendar.WeekView</ss:className>
+      <ss:platformSdk>9</ss:platformSdk>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_announce_week</ss:template>
+      <ss:split> – </ss:split>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- MonthView (Gingerbread) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:className>com.android.calendar.MonthView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_announce_month</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+  
+    <!-- MonthView (Honeycomb) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:className>com.android.calendar.month.FullMonthView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_announce_month</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>  
+  
 </ss:speechstrategy>

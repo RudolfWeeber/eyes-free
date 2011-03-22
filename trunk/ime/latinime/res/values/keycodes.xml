@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* 
+**
+** Copyright 2009, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License"); 
+** you may not use this file except in compliance with the License. 
+** You may obtain a copy of the License at 
+**
+**     http://www.apache.org/licenses/LICENSE-2.0 
+**
+** Unless required by applicable law or agreed to in writing, software 
+** distributed under the License is distributed on an "AS IS" BASIS, 
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+** See the License for the specific language governing permissions and 
+** limitations under the License.
+*/
+-->
+
+<resources>
+    <integer name="key_tab">9</integer>
+    <integer name="key_return">10</integer>
+    <integer name="key_space">32</integer>
+    <integer name="key_shift">-1</integer>
+    <integer name="key_symbol">-2</integer>
+    <integer name="key_delete">-5</integer>
+    <!-- Keycode for F1 (function) key. This one switches between language switch & comma/.com -->
+    <integer name="key_settings">-100</integer>
+    <integer name="key_voice">-102</integer>
+    <integer name="key_f1">-103</integer>
+    <integer name="key_back">-106</integer>
+    <integer name="key_search">-107</integer>
+    <integer name="key_home">-108</integer>
+    <integer name="key_menu">-109</integer>
+    <integer name="key_call">-110</integer>
+    <integer name="key_endcall">-111</integer>
+
+    <!-- Array used for mapping key codes to description strings. -->
+    <array name="key_descriptions">
+        <item>@integer/key_tab</item>
+        <item>@string/description_tab_key</item>
+        <item>@integer/key_return</item>
+        <item>@string/description_return_key</item>
+        <item>@integer/key_space</item>
+        <item>@string/description_space_key</item>
+        <item>@integer/key_shift</item>
+        <item>@string/description_shift_key</item>
+        <item>@integer/key_symbol</item>
+        <item>@string/description_symbol_key</item>
+        <item>@integer/key_delete</item>
+        <item>@string/description_delete_key</item>
+        <item>@integer/key_settings</item>
+        <item>@string/description_settings_key</item>
+        <item>@integer/key_voice</item>
+        <item>@string/description_voice_key</item>
+        <item>@integer/key_f1</item>
+        <item>@string/description_f1_key</item>
+        <item>@integer/key_back</item>
+        <item>@string/description_back_key</item>
+        <item>@integer/key_search</item>
+        <item>@string/description_search_key</item>
+        <item>@integer/key_home</item>
+        <item>@string/description_home_key</item>
+        <item>@integer/key_menu</item>
+        <item>@string/description_menu_key</item>
+        <item>@integer/key_call</item>
+        <item>@string/description_call_key</item>
+        <item>@integer/key_endcall</item>
+        <item>@string/description_endcall_key</item>
+    </array>
+</resources>

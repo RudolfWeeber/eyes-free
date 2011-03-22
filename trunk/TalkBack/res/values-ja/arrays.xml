@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"着信音量の設定に関係なく常に読み上げる"</item>
+    <item msgid="7158875206945163928">"マナーモードのときは読み上げない"</item>
+    <item msgid="4945285159234224758">"バイブレーションまたはマナーモード時は読み上げない"</item>
+  </string-array>
+    <!-- no translation found for pref_speak_ringer_values:0 (187847560624455756) -->
+    <!-- no translation found for pref_speak_ringer_values:1 (8273555182574340701) -->
+    <!-- no translation found for pref_speak_ringer_values:2 (1704630093639180434) -->
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"画面がOFFのときでも読み上げる"</item>
+    <item msgid="3411424877209877052">"画面がOFFのときは読み上げない"</item>
+  </string-array>
+    <!-- no translation found for pref_speak_screenoff_values:0 (933236199570311408) -->
+    <!-- no translation found for pref_speak_screenoff_values:1 (9097665412962478723) -->
+</resources>
