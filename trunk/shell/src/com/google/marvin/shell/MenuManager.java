@@ -47,23 +47,23 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 final public class MenuManager extends HashMap<String, Menu> {
 
-    static String shellTag = "<shell>\n";
+    private static String XML_SHELL_TAG = "<shell>\n";
 
-    static String versionTag = "<version number='0.1' />\n";
+    private static String XML_VERSION_TAG = "<version number='0.1' />\n";
 
-    static String shellCloseTag = "</shell>";
+    private static String XML_SHELL_CLOSE_TAG = "</shell>\n";
 
     /**
      * Write out the currently loaded set of menus to an XML string.
      */
     public String toXml() {
         StringBuffer xml = new StringBuffer();
-        xml.append(shellTag);
-        xml.append(versionTag);
+        xml.append(XML_SHELL_TAG);
+        xml.append(XML_VERSION_TAG);
         for (String menuName : keySet()) {
             xml.append(get(menuName).toXml());
         }
-        xml.append(shellCloseTag);
+        xml.append(XML_SHELL_CLOSE_TAG);
         return xml.toString();
     }
 
@@ -272,5 +272,16 @@ final public class MenuManager extends HashMap<String, Menu> {
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
+    }
+    
+    /**
+     * Escape entities in text for XML.
+     */
+    public static String escapeEntities(String string) {
+        return string.replaceAll("\"", "&quot;")
+                     .replaceAll("<", "&lt;")
+                     .replaceAll(">", "&gt;")
+                     .replaceAll("'", "&apos;")
+                     .replaceAll("&", "&amp;");
     }
 }

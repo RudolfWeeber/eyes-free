@@ -24,19 +24,19 @@ import java.util.Iterator;
 /**
  * A class for representing menus as a HashMap mapping gesture codes to
  * MenuItems.
- *
+ * 
  * @author credo@google.com (Tim Credo)
  */
 final public class Menu extends HashMap<Integer, MenuItem> {
 
-    private static String xmlMenuTag = "<menu label='%s'>\n";
+    private static String XML_MENU_TAG = "<menu label='%s'>\n";
 
-    private static String xmlMenuTagId = "<menu label='%s' id='%s'>\n";
-    
-    private static String xmlMenuCloseTag = "</menu>\n";
+    private static String XML_MENU_TAG_WITH_ID = "<menu label='%s' id='%s'>\n";
+
+    private static String XML_MENU_CLOSE_TAG = "</menu>\n";
 
     private String mName;
-    
+
     private String mID = null;
 
     /**
@@ -57,15 +57,15 @@ final public class Menu extends HashMap<Integer, MenuItem> {
     public String getName() {
         return mName;
     }
-    
+
     public void setName(String name) {
         mName = name;
     }
-    
+
     public String getID() {
         return mID;
     }
-    
+
     public void setID(String id) {
         mID = id;
     }
@@ -74,12 +74,13 @@ final public class Menu extends HashMap<Integer, MenuItem> {
      * Write out this menu to an XML string.
      */
     public String toXml() {
-        StringBuffer xml = new StringBuffer();
+        StringBuilder xmlBuilder = new StringBuilder();
         // don't use the id if not necessary
         if (mID == null || mID == mName) {
-            xml.append(String.format(xmlMenuTag, mName));
+            xmlBuilder.append(String.format(XML_MENU_TAG, MenuManager.escapeEntities(mName)));
         } else {
-            xml.append(String.format(xmlMenuTagId, mName, mID));
+            xmlBuilder.append(String.format(XML_MENU_TAG_WITH_ID,
+                    MenuManager.escapeEntities(mName), MenuManager.escapeEntities(mID)));
         }
         ArrayList<Integer> keyList = new ArrayList<Integer>(keySet());
         Collections.sort(keyList);
@@ -87,9 +88,9 @@ final public class Menu extends HashMap<Integer, MenuItem> {
         while (it.hasNext()) {
             int gesture = it.next();
             MenuItem item = get(gesture);
-            xml.append(item.toXml(gesture));
+            xmlBuilder.append(item.toXml(gesture));
         }
-        xml.append(xmlMenuCloseTag);
-        return xml.toString();
+        xmlBuilder.append(XML_MENU_CLOSE_TAG);
+        return xmlBuilder.toString();
     }
 }

@@ -435,6 +435,12 @@ public class MarvinShell extends Activity {
 
         if (new File(filename).isFile()) {
             menus = MenuManager.loadMenus(ctx, filename);
+            if (!menus.containsKey(HOME_MENU)) {
+                new File(filename).delete();
+                Resources res = getResources();
+                InputStream is = res.openRawResource(R.raw.default_shortcuts);
+                menus = MenuManager.loadMenus(ctx, is);
+            }
         } else {
             Resources res = getResources();
             InputStream is = res.openRawResource(R.raw.default_shortcuts);

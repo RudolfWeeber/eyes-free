@@ -24,6 +24,11 @@ package com.google.marvin.shell;
  */
 
 public class MenuItem {
+    
+    private static String XML_ITEM_OPEN_TAG = "<item gesture='%s' label='%s' action='%s' data=''>\n";
+    
+    private static String XML_ITEM_CLOSE_TAG = "</item>\n";
+    
     public String label;
 
     public String action;
@@ -40,17 +45,19 @@ public class MenuItem {
     }
 
     /**
-     * Returns a string xml representation of this item element.
-     * 
-     * @return xmlStr
+     * Returns a string XML representation of this item element.
      */
     public String toXml(int gesture) {
-        String xmlStr = "  <item gesture='" + gesture + "' label='" + label + "' action='" + action
-                + "' data='" + data + "'>\n";
+        StringBuilder xmlBuilder = new StringBuilder();
+        xmlBuilder.append(String.format(XML_ITEM_OPEN_TAG,
+                String.valueOf(gesture),
+                MenuManager.escapeEntities(label),
+                MenuManager.escapeEntities(action),
+                MenuManager.escapeEntities(data)));
         if (appInfo != null) {
-            xmlStr = xmlStr + appInfo.toXml();
+            xmlBuilder.append(appInfo.toXml());
         }
-        xmlStr = xmlStr + "  </item>\n";
-        return xmlStr;
+        xmlBuilder.append(XML_ITEM_CLOSE_TAG);
+        return xmlBuilder.toString();
     }
 }
