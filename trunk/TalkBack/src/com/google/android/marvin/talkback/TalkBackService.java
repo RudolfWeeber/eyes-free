@@ -19,6 +19,7 @@ package com.google.android.marvin.talkback;
 import com.google.android.marvin.commands.Command;
 import com.google.android.marvin.commands.CommandConstants;
 import com.google.android.marvin.commands.CommandsManager;
+import com.google.android.marvin.commands.impls.SavingPhoneStateListener;
 import com.google.android.marvin.talkback.ProximitySensor.ProximityChangeListener;
 import com.google.android.marvin.talkback.commands.TalkBackCommands;
 import com.google.tts.TextToSpeechBeta;
@@ -47,6 +48,7 @@ import android.os.Parcelable;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
+import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -534,6 +536,8 @@ public class TalkBackService extends AccessibilityService {
      * Maps the name to command enum for user commands handled by TalkBack.
      */
     private Map<String, TalkBackCommands> mIdToUserCommands;
+    
+    private PhoneStateListener mPhoneStateListener;
 
     /**
      * Static handle to TalkBack so CommandInterfaceBroadcastReceiver can access
@@ -596,6 +600,10 @@ public class TalkBackService extends AccessibilityService {
 
         if (mPhoneStateMonitor != null) {
             unregisterReceiver(mPhoneStateMonitor);
+        }
+        
+        if (mPhoneStateListener != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
 
         sInfrastructureInitialized = false;
@@ -682,6 +690,11 @@ public class TalkBackService extends AccessibilityService {
             prefsEditor.putBoolean(getString(R.string.pref_tts_extended_key), mTtsExtendedPref);
             prefsEditor.putBoolean(getString(R.string.pref_proximity_key), mProximityPref);
             prefsEditor.commit();
+            
+            // register a phone state listener for the connectivity command.
+            mPhoneStateListener = new SavingPhoneStateListener(this);
+            mTelephonyManager.listen(mPhoneStateListener, 
+                    PhoneStateListener.LISTEN_SIGNAL_STRENGTHS | PhoneStateListener.LISTEN_SERVICE_STATE);
         }
 
         // get the ActivityManager

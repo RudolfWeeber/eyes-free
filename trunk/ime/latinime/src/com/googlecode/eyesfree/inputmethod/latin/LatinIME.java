@@ -66,6 +66,7 @@ import android.widget.LinearLayout;
 import com.googlecode.eyesfree.inputmethod.FeedbackUtil;
 import com.googlecode.eyesfree.inputmethod.PersistentInputMethodService;
 import com.googlecode.eyesfree.inputmethod.latin.LatinIMEUtil.RingCharBuffer;
+import com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinTutorialDialog;
 import com.googlecode.eyesfree.inputmethod.voice.FieldContext;
 import com.googlecode.eyesfree.inputmethod.voice.SettingsUtil;
 import com.googlecode.eyesfree.inputmethod.voice.VoiceInput;
@@ -103,15 +104,11 @@ public class LatinIME extends PersistentInputMethodService implements
 
     // Mode change request broadcast constants
     public static final String REQUEST_KEYBOARD_MODE_CHANGE =
-            "com.googlecode.eyesfree.inputmethod.latin.REQUEST_KEYBOARD_MODE_CHANGE";
+        "com.googlecode.eyesfree.inputmethod.latin.REQUEST_KEYBOARD_MODE_CHANGE";
     public static final String REQUEST_KEYBOARD_MODE_UPDATE =
             "com.googlecode.eyesfree.inputmethod.latin.REQUEST_KEYBOARD_MODE_UPDATE";
-    public static final String REQUEST_LOADED_STATUS =
-        "com.googlecode.eyesfree.inputmethod.latin.REQUEST_LOADED_STATUS";
 
     // Mode change broadcast constants
-    public static final String BROADCAST_IME_LOADED =
-            "com.googlecode.eyesfree.inputmethod.latin.IME_LOADED";
     public static final String BROADCAST_KEYBOARD_MODE_CHANGE =
             "com.googlecode.eyesfree.inputmethod.latin.KEYBOARD_MODE_CHANGE";
     public static final String BROADCAST_KEYBOARD_MODE_UPDATE =
@@ -156,29 +153,25 @@ public class LatinIME extends PersistentInputMethodService implements
     private static final String PREF_VOICE_MODE = "voice_mode";
 
     // Whether or not the user has used voice input before (and thus, whether to
-    // show the
-    // first-run warning dialog or not).
+    // show the first-run warning dialog or not).
     private static final String PREF_HAS_USED_VOICE_INPUT = "has_used_voice_input";
 
     // Whether or not the user has used voice input from an unsupported locale
-    // UI before.
-    // For example, the user has a Chinese UI but activates voice input.
+    // UI before. For example, the user has a Chinese UI but activates voice input.
     private static final String PREF_HAS_USED_VOICE_INPUT_UNSUPPORTED_LOCALE =
             "has_used_voice_input_unsupported_locale";
 
     // A list of locales which are supported by default for voice input, unless
-    // we get a
-    // different list from Gservices.
+    // we get a different list from Gservices.
     public static final String DEFAULT_VOICE_INPUT_SUPPORTED_LOCALES = "en " + "en_US " + "en_GB "
             + "en_AU " + "en_CA " + "en_IE " + "en_IN " + "en_NZ " + "en_SG " + "en_ZA ";
 
     // The private IME option used to indicate that no microphone should be
-    // shown for a
-    // given text field. For instance this is specified by the search dialog
-    // when the
-    // dialog is already showing a voice search button.
+    // shown for a given text field. For instance this is specified by the search dialog
+    // when the dialog is already showing a voice search button.
     private static final String IME_OPTION_NO_MICROPHONE = "nm";
 
+    public static final String PREF_HAS_RUN_TUTORIAL = "has_run_tutorial";
     public static final String PREF_SELECTED_LANGUAGES = "selected_languages";
     public static final String PREF_INPUT_LANGUAGE = "input_language";
     private static final String PREF_RECORRECTION_ENABLED = "recorrection_enabled";
@@ -240,32 +233,14 @@ public class LatinIME extends PersistentInputMethodService implements
             if (AudioManager.RINGER_MODE_CHANGED_ACTION.equals(action)) {
                 updateRingerMode();
             } else if (REQUEST_KEYBOARD_MODE_CHANGE.equals(action)) {
-                // Only respond to requests from this package.
-                if (!getPackageName().equals(context.getPackageName())) {
-                    return;
-                }
                 // Don't make changes unless accessibility is enabled.
-                if (!isAccessibilityEnabled()) {
-                    return;
-                }
-                int mode = intent.getIntExtra(EXTRA_MODE, FORCE_HIDDEN);
-                if (requestKeyboardMode(mode)) {
-                    Intent broadcast = new Intent(BROADCAST_KEYBOARD_MODE_CHANGE);
-                    broadcast.putExtra(EXTRA_MODE, mForcedMode);
-                    sendBroadcast(broadcast, PERMISSION_REQUEST);
+                if (isAccessibilityEnabled()) {
+                    requestKeyboardMode(intent.getIntExtra(EXTRA_MODE, FORCE_DPAD));
                 }
             } else if (REQUEST_KEYBOARD_MODE_UPDATE.equals(action)) {
-                // Only respond to requests from this package.
-                if (!getPackageName().equals(context.getPackageName())) {
-                    return;
-                }
                 Intent broadcast = new Intent(BROADCAST_KEYBOARD_MODE_UPDATE);
                 broadcast.putExtra(EXTRA_MODE, mForcedMode);
                 sendBroadcast(broadcast, PERMISSION_REQUEST);
-            } else if (REQUEST_LOADED_STATUS.equals(action)) {
-                if (getWindow().isShowing()) {
-                    sendBroadcast(new Intent(BROADCAST_IME_LOADED), PERMISSION_REQUEST);
-                }
             }
         }
     };
@@ -459,7 +434,7 @@ public class LatinIME extends PersistentInputMethodService implements
 
     /**
      * Returns <code>true<code> if this Android build supports voice input. * *
-     * * @return <code>true<code>if this Android build supports voice input
+     * * * @return <code>true<code>if this Android build supports voice input
      */
     public static boolean supportsVoiceInput() {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO);
@@ -514,7 +489,6 @@ public class LatinIME extends PersistentInputMethodService implements
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(REQUEST_KEYBOARD_MODE_CHANGE);
         filter.addAction(REQUEST_KEYBOARD_MODE_UPDATE);
-        filter.addAction(REQUEST_LOADED_STATUS);
         registerReceiver(mReceiver, filter);
 
         if (VOICE_INSTALLED) {
@@ -537,7 +511,17 @@ public class LatinIME extends PersistentInputMethodService implements
     public void onWindowShown() {
         super.onWindowShown();
 
-        sendBroadcast(new Intent(BROADCAST_IME_LOADED), PERMISSION_REQUEST);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean hasRunTutorial = prefs.getBoolean(PREF_HAS_RUN_TUTORIAL, false);
+        if (!hasRunTutorial) {
+            Intent showDialog = new Intent(this, LatinTutorialDialog.class);
+            showDialog.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(showDialog);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(PREF_HAS_RUN_TUTORIAL, true);
+            editor.commit();
+        }
     }
 
     /**

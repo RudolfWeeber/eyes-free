@@ -27,9 +27,7 @@ import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceGroup;
 import android.speech.SpeechRecognizer;
-import android.text.AutoText;
 import android.util.Log;
 
 import com.googlecode.eyesfree.inputmethod.voice.SettingsUtil;
@@ -45,8 +43,8 @@ public class LatinIMESettings extends PreferenceActivity
         DialogInterface.OnDismissListener {
 
     private static final String VIBRATE_ON_KEY = "vibrate_on";
-    private static final String QUICK_FIXES_KEY = "quick_fixes";
-    private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
+    //private static final String QUICK_FIXES_KEY = "quick_fixes";
+    //private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
     private static final String VOICE_SETTINGS_KEY = "voice_mode";
     /* package */ static final String PREF_SETTINGS_KEY = "settings_key";
 
@@ -56,7 +54,7 @@ public class LatinIMESettings extends PreferenceActivity
     private static final int VOICE_INPUT_CONFIRM_DIALOG = 0;
 
     private CheckBoxPreference mHapticPreference;
-    private CheckBoxPreference mQuickFixes;
+    //private CheckBoxPreference mQuickFixes;
     private ListPreference mVoicePreference;
     private ListPreference mSettingsKeyPreference;
     private boolean mVoiceOn;
@@ -72,7 +70,7 @@ public class LatinIMESettings extends PreferenceActivity
         super.onCreate(icicle);
         addPreferencesFromResource(R.xml.prefs);
         mHapticPreference = (CheckBoxPreference) findPreference(VIBRATE_ON_KEY);
-        mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
+        //mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
         mVoicePreference = (ListPreference) findPreference(VOICE_SETTINGS_KEY);
         mSettingsKeyPreference = (ListPreference) findPreference(PREF_SETTINGS_KEY);
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
@@ -89,11 +87,13 @@ public class LatinIMESettings extends PreferenceActivity
     @Override
     protected void onResume() {
         super.onResume();
-        int autoTextSize = AutoText.getSize(getListView());
-        if (autoTextSize < 1) {
-            ((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
-                    .removePreference(mQuickFixes);
-        }
+        // TODO: This (and related commented-out code) goes back in when we
+        // reconcile prediction with accessibility.
+        //int autoTextSize = AutoText.getSize(getListView());
+        //if (autoTextSize < 1) {
+        //    ((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
+        //            .removePreference(mQuickFixes);
+        //}
         if (!LatinIME.VOICE_INSTALLED
                 || !SpeechRecognizer.isRecognitionAvailable(this)) {
             getPreferenceScreen().removePreference(mVoicePreference);

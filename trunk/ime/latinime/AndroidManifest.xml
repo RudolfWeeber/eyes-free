@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST" />
+    <uses-permission android:name="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK" />
     
     <!-- Allows third party applications to send Intent broadcast commands to LatinIME. -->
     <permission android:name="com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST"
@@ -56,6 +57,9 @@
             </intent-filter>
         </activity>
         
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinTutorialDialog"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        
         <activity android:name="com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinIMETutorial"
                 android:label="@string/tutorial_name"
                 android:windowSoftInputMode="adjustResize|stateAlwaysVisible"
@@ -76,8 +80,7 @@
         <activity android:name="com.googlecode.eyesfree.inputmethod.latin.BootActivity"
                 android:theme="@android:style/Theme.Dialog"
                 android:label="@string/wizard_name"
-                android:windowSoftInputMode="adjustResize|stateAlwaysVisible"
-                android:exported="false">
+                android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT" />

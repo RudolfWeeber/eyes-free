@@ -11,6 +11,7 @@
     <string name="tutorial_exit_hint">Click to finish and exit the tutorial.</string>
     <string name="tutorial_speak_text">Speak text</string>
     <string name="tutorial_instructions">Instructions</string>
+    <string name="tutorial_first_time">It looks like this is your first time using the TalkBack keyboard. Would you like to run the tutorial?\n\nYou can also run the tutorial later from the TalkBack keyboard settings screen.</string>
     
     <!-- Lessons list -->
     <string name="tutorial_lessons_title">Available lessons</string>

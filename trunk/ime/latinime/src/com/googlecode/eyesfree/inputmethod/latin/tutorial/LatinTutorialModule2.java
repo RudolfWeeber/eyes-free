@@ -63,12 +63,7 @@ public class LatinTutorialModule2 extends TutorialModule implements View.OnClick
 
         if (!hasFlag(FLAG_STARTED)) {
             setFlag(FLAG_STARTED, true);
-            if (getController().getKeyboardMode() != LatinIME.FORCE_DPAD) {
-                LatinTutorialLogger.log(Log.INFO, "Switching to DPAD mode");
-                getController().setKeyboardMode(LatinIME.FORCE_DPAD);
-            } else {
-                onKeyboardModeChanged(LatinIME.FORCE_DPAD);
-            }
+            getController().requestKeyboardModeUpdate();
         }
     }
 
@@ -152,6 +147,16 @@ public class LatinTutorialModule2 extends TutorialModule implements View.OnClick
     }
 
     @Override
+    public void onKeyboardModeUpdated(int mode) {
+        if (mode != LatinIME.FORCE_DPAD) {
+            LatinTutorialLogger.log(Log.INFO, "Switching to DPAD mode");
+            getController().setKeyboardMode(LatinIME.FORCE_DPAD);
+        } else {
+            onKeyboardModeChanged(LatinIME.FORCE_DPAD);
+        }
+    }
+
+    @Override
     public void onKeyboardBroadcast(String action, Bundle extras) {
         if (LatinIME.BROADCAST_LEFT_KEYBOARD_AREA.equals(action)) {
             if (hasFlag(FLAG_LEFT_DPAD_READY) && !hasFlag(FLAG_LEFT_DPAD)) {
@@ -175,7 +180,7 @@ public class LatinTutorialModule2 extends TutorialModule implements View.OnClick
                 return true;
             }
         }
-        
+
         return false;
     }
 }

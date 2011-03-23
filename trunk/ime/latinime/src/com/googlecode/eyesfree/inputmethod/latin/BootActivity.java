@@ -17,14 +17,9 @@
 package com.googlecode.eyesfree.inputmethod.latin;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
-
-import com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinTutorialLogger;
+import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * This activity waits for the IME to load, then finishes.
@@ -32,25 +27,19 @@ import com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinTutorialLogger;
  * @author alanv@google.com (Alan Viverette)
  */
 public class BootActivity extends Activity {
-    private boolean mFinishing = false;
+    private InputMethodManager mInputManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTheme(android.R.style.Theme_Dialog);
         setContentView(R.layout.default_ime_wizard);
 
-        registerReceiver(receiver, new IntentFilter(LatinIME.BROADCAST_IME_LOADED));
-        sendBroadcast(new Intent(LatinIME.REQUEST_LOADED_STATUS));
+        getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE
+                | LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        LatinTutorialLogger.log(Log.DEBUG, "Attempting to load IME");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        unregisterReceiver(receiver);
+        mInputManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
     }
 
     @Override
@@ -58,27 +47,8 @@ public class BootActivity extends Activity {
         super.onWindowFocusChanged(hasFocus);
 
         if (hasFocus) {
-            sendBroadcast(new Intent(LatinIME.REQUEST_LOADED_STATUS));
+            mInputManager.showSoftInput(null, InputMethodManager.SHOW_FORCED);
+            finish();
         }
     }
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // We need to wait until we have window focus, otherwise the
-            // Honeycomb window manager won't let us attach the input method.
-            if (!mFinishing && hasWindowFocus()) {
-                mFinishing = true;
-                LatinTutorialLogger.log(Log.DEBUG, "Started IME");
-
-                sendBroadcast(new Intent(LatinIME.REQUEST_KEYBOARD_MODE_CHANGE).putExtra(
-                        LatinIME.EXTRA_MODE, LatinIME.FORCE_DPAD));
-
-                LatinTutorialLogger.log(
-                        Log.DEBUG, "IME loaded, switching to MODE_DPAD and finishing");
-
-                finish();
-            }
-        }
-    };
 }

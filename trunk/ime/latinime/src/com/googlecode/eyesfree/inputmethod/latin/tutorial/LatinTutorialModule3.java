@@ -145,6 +145,11 @@ public class LatinTutorialModule3 extends TutorialModule implements View.OnClick
     }
 
     @Override
+    public void onKeyboardModeUpdated(int mode) {
+        // Do nothing.
+    }
+
+    @Override
     public void onKeyboardModeChanged(int mode) {
         switch (mode) {
             case LatinIME.FORCE_HIDDEN:

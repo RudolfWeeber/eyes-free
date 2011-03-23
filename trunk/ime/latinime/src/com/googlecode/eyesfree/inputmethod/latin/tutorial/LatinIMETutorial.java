@@ -38,6 +38,10 @@ import com.googlecode.eyesfree.inputmethod.latin.R;
  */
 public class LatinIMETutorial extends Activity
         implements TutorialController, View.OnClickListener, TutorialReader.ReaderListener {
+    /** Intent action for launching this activity. */
+    public static final String ACTION =
+            "com.googlecode.eyesfree.inputmethod.latin.tutorial.LAUNCH_TUTORIAL";
+
     /** Instance state saving constant for the active module. */
     private static final String KEY_ACTIVE_MODULE = "active_module";
 
@@ -313,6 +317,7 @@ public class LatinIMETutorial extends Activity
 
     static interface KeyboardModeListener {
         public void onKeyboardModeChanged(int mode);
+
         public void onKeyboardModeUpdated(int mode);
     }
 

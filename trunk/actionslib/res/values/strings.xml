@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Source: Used when announcing the time, if the time is currently 12 midnight.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="midnight">midnight</string>
+    <!--
+      Source: Used when announcing the time, if the time is currently 12 noon.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="noon">noon</string>
+    <!--
+      Source: Used when announcing the time, if the time is currently in the morning.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="am">AM</string>
+    <!--
+      Source: Used when announcing the time, if the time is currently in the afternoon.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="pm">PM</string>
+    <!--
+      Source: Used when announcing the battery level, if the battery is currently being charged.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="charging">charging</string>
+    <!--
+      Source: Used when announcing the connectivity, if bluetooth is currently enabled.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="bluetooth">Bluetooth</string>
+    <!--
+      Source: Used when announcing the connectivity, if GPS is currently enabled.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="gps">GPS</string>
+    <!--
+      Source: Used when announcing the connectivity, if no data network is currently available.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="no_data_network">No data network</string>
+    <!--
+      Source: Used when announcing the connectivity, if the mobile data network is currently 
+      available.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="mobile_data_network">Mobile data network</string>
+    <!--
+      Source: Used when announcing the connectivity, if the 3g data network is currently available.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="threeg_data_network">3G data network</string>
+    <!--
+      Source: Used when announcing the connectivity, if the EDGE data network is currently 
+      available.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="edge_data_network">EDGE data network</string>
+    <!--
+      Source: Used when announcing the connectivity, to announce the current signal strength, i.e.
+      number of bars available.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="bars">bars.</string>
+    <!--
+      Source: Used when announcing the connectivity, if wifi is currently available.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+    -->
+    <string name="wifi">WiFi</string>
+    
+    <!-- 
+      Source: Used in the shortcut preferences page to edit the modifier key associated with a 
+        shortcut.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+     -->
+    <string name="modifier_key">Modifier Key</string>
+
+    <!-- 
+      Source: Used in the shortcut preferences page to edit the letter or number key associated with 
+        a shortcut.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+     -->
+    <string name="letter_key">Shortcut Key</string>
+    
+    <!-- 
+      Source: Used in the shortcut preferences page to describe the menu key.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+     -->
+    <string name="menu_key">Menu</string>
+    
+     <!-- 
+      Source: Used in the shortcut preferences page to describe the search key.
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+     -->
+    <string name="search_key">Search</string>
+    
+    <!-- 
+      Source: Used as the label to the keyboard shortcuts preferences page
+      Description: This is spoken to the user. [[CHAR LIMIT="30"]]
+     -->
+    <string name="preferences_label">Keyboard Shortcuts</string>
+    
+
+    <!-- The following strings are used for earcons  -->
+    <string name="earcon_tick">[TICK]</string>
+    <string name="earcon_tock">[TOCK]</string>
+</resources>

@@ -61,7 +61,9 @@ public class TutorialReader
     }
 
     public void clear() {
-        mAccessibilityManager.interrupt();
+        if (mAccessibilityManager.isEnabled()) {
+            mAccessibilityManager.interrupt();
+        }
 
         synchronized (mSpeechQueue) {
             mSpeechQueue.clear();
