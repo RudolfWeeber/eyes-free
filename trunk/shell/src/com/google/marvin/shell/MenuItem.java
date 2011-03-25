@@ -25,7 +25,7 @@ package com.google.marvin.shell;
 
 public class MenuItem {
     
-    private static String XML_ITEM_OPEN_TAG = "<item gesture='%s' label='%s' action='%s' data=''>\n";
+    private static String XML_ITEM_OPEN_TAG = "<item gesture='%s' label='%s' action='%s' data='%s'>\n";
     
     private static String XML_ITEM_CLOSE_TAG = "</item>\n";
     

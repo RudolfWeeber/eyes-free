@@ -554,7 +554,12 @@ public class MarvinShell extends Activity {
                 if (item != null) {
                     // if the item is a menu, we want to look up the name
                     if (item.action.equalsIgnoreCase("MENU")) {
-                        feedback = menus.get(item.data).getName();
+                        Menu nextMenu = menus.get(item.data);
+                        if (nextMenu != null) {
+                            feedback = menus.get(item.data).getName();
+                        } else {
+                            feedback = item.label;
+                        }
                     } else {
                         feedback = item.label;
                     }

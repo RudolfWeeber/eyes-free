@@ -335,6 +335,7 @@ public class AppChooserView extends TextView {
                 prevApp();
                 currentString = "";
                 return true;
+            case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_ENTER:
                 startActionHandler();
                 return true;
