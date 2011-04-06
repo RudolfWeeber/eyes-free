@@ -31,6 +31,12 @@
     <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> afbeelding."</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Zoekregeling <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Vervolgkeuzelijst <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> minuten"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> uur"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, dagweergave."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> tot <xliff:g id="TO_DATE">%2$s</xliff:g>, weekweergave."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, maandweergave."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> van <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
     <string name="value_password" msgid="52094746222829357">"wachtwoord"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Schuiflade is geopend"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Handvat van schuiflade"</string>
@@ -80,8 +86,9 @@
     <string name="value_rewind_button" msgid="5161645834242351385">"Knop voor terugspoelen."</string>
     <string name="value_play_button" msgid="2701216749763299935">"Afspeelknop."</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Knop voor vooruitspoelen."</string>
+    <string name="value_owner" msgid="2419158478547189476">"Eigenaar"</string>
     <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Geplande opdrachten naar Talkback verzenden"</string>
-    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="7116495433045146292">"Toepassingen of services mogen TalkBack uitvoeren via geplande verzendingen. Zo kan er mogelijk informatie worden verkregen over de status van Talkback (bijvoorbeeld de in het cachegeheugen opgeslagen meldingen)."</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Apps of services mogen TalkBack uitvoeren via geplande verzendingen. Zo kan er mogelijk informatie worden verkregen over de status van Talkback (bijvoorbeeld de in het cachegeheugen opgeslagen meldingen)."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Vraagteken"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Spatie"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Komma"</string>
@@ -92,8 +99,12 @@
     <string name="punctuation_double_quote" msgid="5451902512870494782">"Dubbele aanhalingstekens"</string>
     <string name="punctuation_semicolon" msgid="2970948646830240735">"Puntkomma"</string>
     <string name="punctuation_colon" msgid="4212987887163582631">"Dubbelepunt"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"gebeurtenis"</item>
+    <item quantity="other" msgid="8275223643159991572">"gebeurtenissen"</item>
+  </plurals>
     <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBack-voorkeuren beschikbaar"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Klik hier om de toepassing voor toegankelijkheidsvoorkeuren te downloaden."</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Klik hier om de app voor toegankelijkheidsvoorkeuren te downloaden."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack-crashgegevens beschikbaar"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Klik hier om TalkBack te verbeteren door crashgegevens te verzenden."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"When to Speak"</string>
@@ -115,5 +126,12 @@
     <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack-crashrapport"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"Het volgende is een crashrapport voor TalkBack. Als u op de knop \'Verzenden\' klikt, worden deze gegevens verzonden naar de TalkBack-ontwikkelaars."\n\n</string>
     <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Waarschuwing"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Deze TalkBack-invoegtoepassing verzamelt mogelijk alle tekst die u typt, inclusief persoonlijke gegevens en creditcardnummers, maar geen wachtwoorden. De invoegtoepassing kan ook uw interacties met de gebruikersinterface vastleggen. De invoegtoepassing is afkomstig uit de toepassing <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Deze invoegtoepassing inschakelen?"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Deze TalkBack-invoeg-app verzamelt mogelijk alle tekst die u typt, inclusief persoonlijke gegevens en creditcardnummers, maar geen wachtwoorden. De invoeg-app kan ook uw interacties met de gebruikersinterface vastleggen. De invoeg-app is afkomstig uit de app <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Deze invoeg-app inschakelen?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Navigeren op teken."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Navigeren op woord."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Navigeren op zin."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Navigeren op kop."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Navigeren op items op gelijk niveau."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Navigeren op document."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Navigeren op standaardgedrag voor webweergave."</string>
 </resources>

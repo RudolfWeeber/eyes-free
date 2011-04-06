@@ -135,15 +135,17 @@ public class PersistentInputMethodService extends AccessibleInputMethodService {
             return super.onKeyUp(keyCode, event);
         }
 
+        final KeyEvent downEvent = mDownEvent;
+        mDownEvent = null;
+
         // Give the parent class a chance to consume the cached down
         // event, then send it through the input connection.
-        if (mDownEvent != null && !mInLongPress) {
-            InputConnection input = getCurrentInputConnection();
-            if (!super.onKeyDown(mDownEvent.getKeyCode(), mDownEvent) && input != null) {
-                input.sendKeyEvent(mDownEvent);
+        if (downEvent != null && !mInLongPress) {
+            final InputConnection input = getCurrentInputConnection();
+            if (!super.onKeyDown(downEvent.getKeyCode(), downEvent) && input != null) {
+                input.sendKeyEvent(downEvent);
             }
         }
-        mDownEvent = null;
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
@@ -214,7 +216,8 @@ public class PersistentInputMethodService extends AccessibleInputMethodService {
         if (!isAccessibilityEnabled()) {
             return super.onEvaluateFullscreenMode();
         } else {
-            return true;
+            // This input method should never show an extract view.
+            return false;
         }
     }
 }

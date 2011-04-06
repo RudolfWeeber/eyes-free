@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.marvin.talkback"
     android:sharedUserId="com.google.android.marvin.feedback"
-    android:versionCode="18"
-    android:versionName="2.7.2">
+    android:versionCode="19"
+    android:versionName="2.7.3">
 
     <uses-sdk android:minSdkVersion="8" />
 
@@ -43,6 +43,7 @@
             <intent-filter>
                 <action android:name="com.google.android.marvin.talkback.ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND"/>
                 <action android:name="com.google.android.marvin.commands.TALKBACK_USER_EVENT_COMMAND"/>
+                <action android:name="com.google.android.marvin.talkback.ACTION_RESET_TALKBACK_COMMAND"/>
                 <!-- TODO(caseyburkhardt): Remove the following action when we decide to no longer support intent broadcasts for querying the current state of TalkBack. -->
                 <action android:name="com.google.android.marvin.talkback.ACTION_QUERY_TALKBACK_ENABLED_COMMAND"/>
             </intent-filter>

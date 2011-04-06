@@ -26,6 +26,14 @@
                 android:targetPackage="com.googlecode.eyesfree.inputmethod.latin" />
     </PreferenceScreen>
 
+    <CheckBoxPreference
+            android:key="auto_switch"
+            android:title="@string/auto_switch"
+            android:summary="@string/auto_switch_summary"
+            android:persistent="true"
+            android:defaultValue="@bool/default_auto_switch"
+            />
+
 <!--
     <CheckBoxPreference
             android:key="answer_calls"

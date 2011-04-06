@@ -24,13 +24,19 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Alerte <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> remplacé par <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caractères remplacés par <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caractères"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"Volume de la sonnerie à <xliff:g id="PERCENT">%1$s</xliff:g> %"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Volume de la sonnerie à <xliff:g id="PERCENT">%1$s</xliff:g> pour cent"</string>
     <string name="template_dragging_icon" msgid="7633606891857792337">"Déplacement de l\'icône <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_image_button" msgid="7981434777534909849">"Bouton image <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_button" msgid="5913853507836606140">"Bouton <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_image_view" msgid="3085333029274972273">"Image <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Barre de défilement <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Liste déroulante <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> minutes"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> heures"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, affichage journée"</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"du <xliff:g id="FROM_DATE">%1$s</xliff:g> au <xliff:g id="TO_DATE">%2$s</xliff:g>, affichage semaine"</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, affichage mois"</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> sur <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
     <string name="value_password" msgid="52094746222829357">"mot de passe"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Tiroir SlidingDrawer ouvert"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Poignée du tiroir SlidingDrawer"</string>
@@ -80,8 +86,9 @@
     <string name="value_rewind_button" msgid="5161645834242351385">"Bouton de retour rapide."</string>
     <string name="value_play_button" msgid="2701216749763299935">"Bouton de lecture."</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Bouton d\'avance rapide."</string>
+    <string name="value_owner" msgid="2419158478547189476">"Propriétaire"</string>
     <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Envoyer des commandes d\'intention à TalkBack"</string>
-    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="7116495433045146292">"Permet à une application ou à un service de diriger TalkBack par l\'envoi d\'intentions et d\'obtenir des informations sur l\'état de TalkBack, notamment les notifications en cache."</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Permet à une application ou à un service de diriger TalkBack par l\'envoi d\'intentions et d\'obtenir des informations sur l\'état de TalkBack, notamment les notifications en cache."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Point d\'interrogation"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Espace"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Virgule"</string>
@@ -92,6 +99,10 @@
     <string name="punctuation_double_quote" msgid="5451902512870494782">"Guillemet"</string>
     <string name="punctuation_semicolon" msgid="2970948646830240735">"Point-virgule"</string>
     <string name="punctuation_colon" msgid="4212987887163582631">"Deux-points"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"événement"</item>
+    <item quantity="other" msgid="8275223643159991572">"événements"</item>
+  </plurals>
     <string name="title_talkback_settings_available" msgid="4405797779993860783">"Préférences TalkBack dispo."</string>
     <string name="message_talkback_settings_available" msgid="3073212089159547463">"Téléchargez l\'application Préférences d\'accessibilité."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Rapport d\'incident TalkBack"</string>
@@ -116,4 +127,11 @@
     <string name="header_crash_report_email" msgid="9218276172142314054">"Vous trouverez ci-dessous un rapport d\'incident relatif à TalkBack. Cliquez sur le bouton Envoyer pour transmettre ces données aux développeurs de l\'application."\n\n</string>
     <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Avertissement"</string>
     <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Il est possible que ce plug-in TalkBack puisse enregistrer le texte que vous saisissez, notamment les données personnelles et les numéros de cartes de crédit, mais pas les mots de passe. Il est également possible qu\'il consigne vos interactions avec l\'interface utilisateur. Il provient de l\'application <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Activer ce plug-in ?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Naviguer par caractère"</string>
+    <string name="axis_word" msgid="7745798763195184060">"Naviguer par mot"</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Naviguer par phrase"</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Naviguer par en-tête"</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Naviguer par élément frère"</string>
+    <string name="axis_document" msgid="1581988340856497809">"Naviguer par document"</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Naviguer par comportement d\'affichage Web par défaut"</string>
 </resources>

@@ -134,7 +134,7 @@ public class SpeechRule {
     /**
      * standard, reusable string formatter for populating utterance template
      */
-    private static final java.util.Formatter sStirngFormatter = new java.util.Formatter();
+    private static final java.util.Formatter sStringFormatter = new java.util.Formatter();
 
     /**
      * Mapping from event type name to its type.
@@ -1141,8 +1141,8 @@ public class SpeechRule {
 
             if (mTemplate != null) {
                 try {
-                    sStirngFormatter.format(mTemplate, arguments);
-                    StringBuilder formatterBuilder = (StringBuilder) sStirngFormatter.out();
+                    sStringFormatter.format(mTemplate, arguments);
+                    StringBuilder formatterBuilder = (StringBuilder) sStringFormatter.out();
                     utteranceText.append(formatterBuilder);
                     // clear the builder of the formatter
                     formatterBuilder.delete(0, formatterBuilder.length());
@@ -1418,7 +1418,7 @@ public class SpeechRule {
         private boolean acceptSystemFeatureProperty() {
             for (Object acceptedValue : mAcceptedValues) {
                 String systemFeature = (String) acceptedValue; 
-                if (Utils.hasSystemFeature(mContext, systemFeature)) {
+                if (mContext.getPackageManager().hasSystemFeature(systemFeature)) {
                     return true;
                 }
             }

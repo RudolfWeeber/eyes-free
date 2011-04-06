@@ -29,27 +29,31 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
     public static final int FLICK_DOWN = 1;
     public static final int FLICK_UP = 2;
     public static final int FLICK_RIGHT = 3;
-    
+
+    @Override
     public boolean onDown(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
-        
+
         return onSimpleDown(ev.getPointerCount(), centroid.x, centroid.y);
     }
-    
+
     public abstract boolean onSimpleDown(int pointerCount, float centroidX, float centroidY);
-    
+
+    @Override
     public boolean onTap(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
 
         return onSimpleTap(ev.getPointerCount(), centroid.x, centroid.y);
     }
-    
+
+    @Override
     public boolean onSlideTap(MotionEvent ev) {
         return onSimpleTap(ev.getPointerCount(), ev.getX(), ev.getX());
     }
 
     public abstract boolean onSimpleTap(int pointerCount, float centroidX, float centroidY);
 
+    @Override
     public boolean onDoubleTap(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
 
@@ -57,23 +61,26 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
     }
 
     public abstract boolean onSimpleDoubleTap(int pointerCount, float centroidX, float centroidY);
-    
+
+    @Override
     public boolean onLongPress(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
 
         return onSimpleLongPress(ev.getPointerCount(), centroid.x, centroid.y);
     }
-    
+
     public abstract boolean onSimpleLongPress(int pointerCount, float centroidX, float centroidY);
-    
+
+    @Override
     public boolean onMove(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
 
         return onSimpleMove(ev.getPointerCount(), centroid.x, centroid.y);
     }
-    
+
     public abstract boolean onSimpleMove(int pointerCount, float centroidX, float centroidY);
 
+    @Override
     public boolean onFlick(MotionEvent e1, MotionEvent e2) {
         PointF down = pointerCentroid(e1);
         PointF up = pointerCentroid(e2);

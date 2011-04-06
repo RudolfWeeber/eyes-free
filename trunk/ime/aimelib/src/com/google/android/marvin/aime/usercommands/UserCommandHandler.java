@@ -65,6 +65,11 @@ public class UserCommandHandler {
     private int mCommandHandled = 0;
 
     /**
+     * Set to {@code} true when the Menu key is down.
+     */
+    private boolean mMenuKeyDown = false;
+
+    /**
      * Constructs a new user command handler using the specified parent context.
      *
      * @param context The parent context.
@@ -97,6 +102,12 @@ public class UserCommandHandler {
      * @return {@code true} if the key is captured.
      */
     public boolean onKeyDown(KeyEvent ev) {
+        if (ev.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+            mMenuKeyDown = true;
+        } else if (!mMenuKeyDown) {
+            return false;
+        }
+
         mCurrentKeyDownEvents.add(ev);
 
         // TODO Figure out a way to do this that doesn't involve looping through
@@ -122,6 +133,10 @@ public class UserCommandHandler {
      * @return {@code true} if the key is captured.
      */
     public boolean onKeyUp(KeyEvent ev) {
+        if (ev.getKeyCode() == KeyEvent.KEYCODE_MENU) {
+            mMenuKeyDown = false;
+        }
+
         // If we want to do transformations on text being entered with a hard
         // keyboard, we need to process the up events to update the meta key
         // state we are tracking.

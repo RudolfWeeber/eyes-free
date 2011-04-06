@@ -22,17 +22,11 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.CompoundButton;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * This class contains utility methods.
@@ -46,9 +40,6 @@ public class Utils {
 
     /** Invalid version code for a package. */
     public static final int INVALID_VERSION_CODE = -1;
-
-    /** Cached set of the system features. */
-    private static final Set<String> sSystemFeatureSet = new HashSet<String>();
     
     /** String constant. */
     private static final String SPACE = " ";
@@ -72,43 +63,6 @@ public class Utils {
             return tasks.get(0).topActivity.getClassName();
         }
         return null;
-    }
-
-    /**
-     * @return If the system has a feature with the given <code>featureName</code>
-     *         and false if the feature is not present or the platform version is
-     *         less than 5 in which the features APIs appeared.
-     */
-    public static boolean hasSystemFeature(Context context, String featureName) {
-        if (Build.VERSION.SDK_INT <= 4) {
-            return false;
-        }
-        if (sSystemFeatureSet.isEmpty()) {
-            PackageManager packageManager = context.getPackageManager();
-            Method getSystemAvailableFeatures = null;
-            try {
-                getSystemAvailableFeatures = packageManager.getClass().getMethod(
-                        "getSystemAvailableFeatures", (Class[]) null);
-            } catch (NoSuchMethodException nsme) {
-                return false;
-            }
-            try {
-                Object[] features = (Object[]) getSystemAvailableFeatures.invoke(packageManager,
-                        (Object[]) null);
-                for (Object feature : features) {
-                    Field field = feature.getClass().getField("name");
-                    String name = (String) field.get(feature);
-                    sSystemFeatureSet.add(name);
-                }
-            } catch (InvocationTargetException ite) {
-                return false;
-            } catch (IllegalAccessException iae) {
-                return false;
-            } catch (NoSuchFieldException nsfe) {
-                return false;
-            }
-        }
-        return sSystemFeatureSet.contains(featureName);
     }
 
     /**

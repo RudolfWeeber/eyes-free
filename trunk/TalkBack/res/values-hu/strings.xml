@@ -12,40 +12,31 @@
     <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD-kártya"</string>
     <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"SD-kártya USB"</string>
     <string name="notification_status_sync" msgid="4919271166470257796">"Szinkronizálás"</string>
-    <!-- no translation found for notification_type_new_email (207543580986817175) -->
-    <skip />
+    <string name="notification_type_new_email" msgid="207543580986817175">"Új e-mail"</string>
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Szinkronizálás"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Hangposta"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Lejátszás"</string>
     <string name="notification_type_status_notification" msgid="9030505284302678172">"Állapotértesítés"</string>
-    <!-- no translation found for template_compound_button_checked (8969457633214121273) -->
-    <skip />
-    <!-- no translation found for template_compound_button_not_checked (2022559641068252555) -->
-    <skip />
-    <!-- no translation found for template_edit_box (8644462446565912356) -->
-    <skip />
-    <!-- no translation found for template_search_box (374713873976390037) -->
-    <skip />
-    <!-- no translation found for template_alert_dialog_template (578525726030867650) -->
-    <skip />
-    <!-- no translation found for template_text_replaced (6030467088396825159) -->
-    <skip />
-    <!-- no translation found for template_replaced_characters (5425385364820310962) -->
-    <skip />
-    <!-- no translation found for template_ringer_volume (5136691769333649340) -->
-    <skip />
-    <!-- no translation found for template_dragging_icon (7633606891857792337) -->
-    <skip />
-    <!-- no translation found for template_image_button (7981434777534909849) -->
-    <skip />
-    <!-- no translation found for template_button (5913853507836606140) -->
-    <skip />
-    <!-- no translation found for template_image_view (3085333029274972273) -->
-    <skip />
-    <!-- no translation found for template_seek_bar (8598603084443742698) -->
-    <skip />
-    <!-- no translation found for template_spinner (3914981448273826697) -->
-    <skip />
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> bejelölve"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> nincs bejelölve"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Szerkesztőmező. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Keresőmező. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Riasztás <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> lecserélve erre <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> karakter le lett cserélve <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> karakterre"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Csengetési hangerő <xliff:g id="PERCENT">%1$s</xliff:g> százalék"</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"<xliff:g id="TITLE">%1$s</xliff:g> ikon húzása."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"<xliff:g id="TITLE">%1$s</xliff:g> kép gomb."</string>
+    <string name="template_button" msgid="5913853507836606140">"<xliff:g id="TITLE">%1$s</xliff:g> gomb."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> kép."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> keresősávja."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> legördülő lista."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> perc"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> óra"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, napi nézet."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> és <xliff:g id="TO_DATE">%2$s</xliff:g> között, heti nézet."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, havi nézet."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_COUNT">%2$s</xliff:g>/<xliff:g id="ITEM_INDEX">%1$s</xliff:g>"</string>
     <string name="value_password" msgid="52094746222829357">"jelszó"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"A csúszka nyitva van"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Csúszka fogója"</string>
@@ -54,8 +45,7 @@
     <string name="value_options_menu_open" msgid="8668502811176292723">"Beállítások."</string>
     <string name="value_text_removed" msgid="2700105425865376595">"törölt"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"Értesítési összegzés"</string>
-    <!-- no translation found for value_password_character_typed (3384590085073731527) -->
-    <skip />
+    <string name="value_password_character_typed" msgid="3384590085073731527">"pont"</string>
     <string name="value_checked" msgid="5234989698372864892">"bejelölve"</string>
     <string name="value_not_checked" msgid="193134740901545340">"nincs bejelölve"</string>
     <string name="value_clicked" msgid="8306469740150249879">"kattintás"</string>
@@ -65,136 +55,83 @@
     <string name="value_screen_on" msgid="6000430443458639755">"Képernyő bekapcsolva."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Képernyő kikapcsolva."</string>
     <string name="value_phone_unlocked" msgid="7550105156417722443">"A telefon feloldva."</string>
-    <!-- no translation found for value_dragging_widget (2839615701303758943) -->
-    <skip />
-    <!-- no translation found for value_web_view (8368045336469722566) -->
-    <skip />
-    <!-- no translation found for value_unknown_object (7353842829622995954) -->
-    <skip />
-    <!-- no translation found for value_market_search (5962672691633469998) -->
-    <skip />
-    <!-- no translation found for value_maps_choose_start (2446857840351856118) -->
-    <skip />
-    <!-- no translation found for value_maps_choose_destination (7597325109784367823) -->
-    <skip />
-    <!-- no translation found for value_maps_driving (17682521549267904) -->
-    <skip />
-    <!-- no translation found for value_maps_public_transport (4853965273701512693) -->
-    <skip />
-    <!-- no translation found for value_maps_bicycling (3373483282987467511) -->
-    <skip />
-    <!-- no translation found for value_maps_walking (4266344744219840236) -->
-    <skip />
-    <!-- no translation found for value_maps_driving_checked (5433513572249853506) -->
-    <skip />
-    <!-- no translation found for value_maps_public_transport_checked (8304476990748308126) -->
-    <skip />
-    <!-- no translation found for value_maps_bicycling_checked (7554345318572740886) -->
-    <skip />
-    <!-- no translation found for value_maps_walking_checked (1515076165963612327) -->
-    <skip />
-    <!-- no translation found for value_phone_incall_star (2693353543372512851) -->
-    <skip />
-    <!-- no translation found for value_increment_hours (7158276085728574637) -->
-    <skip />
-    <!-- no translation found for value_increment_minutes (6165324977047656454) -->
-    <skip />
-    <!-- no translation found for value_decrement_hours (441296968884730689) -->
-    <skip />
-    <!-- no translation found for value_decrement_minutes (8498790312841197460) -->
-    <skip />
-    <!-- no translation found for value_increment_month (5454425189529249656) -->
-    <skip />
-    <!-- no translation found for value_increment_day (3105875429979308831) -->
-    <skip />
-    <!-- no translation found for value_increment_year (2817702366437069114) -->
-    <skip />
-    <!-- no translation found for value_decrement_month (8924970351354671861) -->
-    <skip />
-    <!-- no translation found for value_decrement_day (6765872058795160928) -->
-    <skip />
-    <!-- no translation found for value_decrement_year (6888532808015558315) -->
-    <skip />
-    <!-- no translation found for value_playlist (169034635850956540) -->
-    <skip />
-    <!-- no translation found for value_toggle_shuffle (3396915142517587583) -->
-    <skip />
-    <!-- no translation found for value_toggle_repeat (8873027804000805156) -->
-    <skip />
-    <!-- no translation found for value_rewind_button (5161645834242351385) -->
-    <skip />
-    <!-- no translation found for value_play_button (2701216749763299935) -->
-    <skip />
-    <!-- no translation found for value_fast_forward_button (8502328522663492005) -->
-    <skip />
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Modul húzása."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Internetes nézet."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Ismeretlen objektum."</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Keresés gomb."</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Kiindulási hely választása gomb."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Célállomás kiválasztása"</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"Autós választógomb."</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Tömegközlekedés választógomb."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Kerékpár választógomb."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Gyaloglás választógomb."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Autós, megjelölve."</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Tömegközlekedés, bejelölve."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Kerékpár, megjelölve."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Gyaloglás, megjelölve."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"csillag"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Órák növelése."</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Percek növelése."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Órák csökkentése."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Percek csökkentése."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Hónap növelése"</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Nap növelése."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Év növelése."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Hónap csökkentése."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Nap csökkentése."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Év csökkentése."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Lejátszási lista."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Véletlenszerű lejátszás"</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Ismétlés váltása."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Visszatekerés gomb."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Lejátszás gomb."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Gyors előretekerés gomb."</string>
+    <string name="value_owner" msgid="2419158478547189476">"Tulajdonos"</string>
     <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Célparancsok elküldése a TalkBacknek"</string>
-    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="7116495433045146292">"Lehetővé teszi egy alkalmazás vagy szolgáltatás számára a TalkBack célsugárzás révén való használatát, valamint a TalkBack állapotáról szóló információk (például a gyorsítótárazott értesítések) megszerzését."</string>
-    <!-- no translation found for punctuation_questionmark (179720356310397041) -->
-    <skip />
-    <!-- no translation found for punctuation_space (2858396268976961492) -->
-    <skip />
-    <!-- no translation found for punctuation_comma (5904123197868367248) -->
-    <skip />
-    <!-- no translation found for punctuation_dot (5613956000742145839) -->
-    <skip />
-    <!-- no translation found for punctuation_exclamation (5087215816659188811) -->
-    <skip />
-    <!-- no translation found for punctuation_open_paren (1087551343442146730) -->
-    <skip />
-    <!-- no translation found for punctuation_close_paren (8180528806258316143) -->
-    <skip />
-    <!-- no translation found for punctuation_double_quote (5451902512870494782) -->
-    <skip />
-    <!-- no translation found for punctuation_semicolon (2970948646830240735) -->
-    <skip />
-    <!-- no translation found for punctuation_colon (4212987887163582631) -->
-    <skip />
-    <!-- no translation found for title_talkback_settings_available (4405797779993860783) -->
-    <skip />
-    <!-- no translation found for message_talkback_settings_available (3073212089159547463) -->
-    <skip />
-    <!-- no translation found for title_talkback_crash (1342512684382958066) -->
-    <skip />
-    <!-- no translation found for message_talkback_crash (8552017712769665127) -->
-    <skip />
-    <!-- no translation found for title_pref_category_when_to_speak (1720405045631424064) -->
-    <skip />
-    <!-- no translation found for title_pref_speak_ringer (4166340335462900044) -->
-    <skip />
-    <!-- no translation found for title_pref_speak_screenoff (9028437778107614413) -->
-    <skip />
-    <!-- no translation found for title_pref_category_tts_settings (4451374891076937625) -->
-    <skip />
-    <!-- no translation found for title_pref_caller_id (2074176178525278688) -->
-    <skip />
-    <!-- no translation found for title_pref_tts_extended (3575787698372364355) -->
-    <skip />
-    <!-- no translation found for title_pref_proximity (2074129049942782489) -->
-    <skip />
-    <!-- no translation found for summaryOn_pref_proximity (9000886370261892995) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_proximity (3024213283254452034) -->
-    <skip />
-    <!-- no translation found for title_pref_category_plugins (1814360382704814668) -->
-    <skip />
-    <!-- no translation found for title_pref_manage_plugins (8859821963030140877) -->
-    <skip />
-    <!-- no translation found for title_uninstall_plugin (8034480031728764190) -->
-    <skip />
-    <!-- no translation found for title_talkback_inactive_alert (6863405328162570213) -->
-    <skip />
-    <!-- no translation found for message_talkback_inactive_alert (4618141745593778043) -->
-    <skip />
-    <!-- no translation found for title_no_accessibility_alert (3854928935920775093) -->
-    <skip />
-    <!-- no translation found for message_no_accessibility_alert (8090527713370798145) -->
-    <skip />
-    <!-- no translation found for subject_crash_report_email (3043388136219501183) -->
-    <skip />
-    <!-- no translation found for header_crash_report_email (9218276172142314054) -->
-    <skip />
-    <!-- no translation found for title_warning_talkback_plugin_security (4058317690233608531) -->
-    <skip />
-    <!-- no translation found for message_warning_talkback_plugin_security (7622424149639111854) -->
-    <skip />
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Lehetővé teszi egy alkalmazás vagy szolgáltatás számára a TalkBack célsugárzás révén való használatát, valamint a TalkBack állapotáról szóló információk (például a gyorsítótárazott értesítések) megszerzését."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Kérdőjel"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Szóköz"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Vessző"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Pont"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Felkiáltójel"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Nyitó zárójel"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Berekesztő zárójel"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Dupla idézőjel"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Pontosvessző"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Kettőspont"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"esemény"</item>
+    <item quantity="other" msgid="8275223643159991572">"események"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Létezik egy TalkBack preferencia-kezelő"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Kattintson ide a kisegítő lehetőségek beállításait kezelő alkalmazás letöltéséhez."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"Van elérhető TalkBack-hibaadat"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Kattintson ide a TalkBack fejlesztéséhez a hibaadatok elküldésével."</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Mikor kell beszélni"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Csengetés hangereje"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Képernyő állapota"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"TTS-beállítások"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Hívásazonosító mondása"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Bővített TTS használata"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Közelségérzékelő"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"A közelségérzékelő elnémítja a beszédet"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"A közelségérzékelő nem befolyásolja a beszédet."</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Plug-inek"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Plug-inek kezelése"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Eltávolítás"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"A TalkBack ki van kapcsolva."</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"A TalkBack jelenleg ki van kapcsolva. Megnyitja a kisegítő lehetőségek beállításait?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Hiba"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Ez az eszköz nem támogatja a kisegítő lehetőséget."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack hibajelentés"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"A következő egy hibajelentés a TalkBackhez. A \"Küldés\" gombra kattintva elküldi ezt az adatot a TalkBack fejlesztőinek."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Figyelmeztetés"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Ez a TalkBack plug-in minden szöveget összegyűjthet, amit begépel, ideértve a személyes adatokat és a hitelkártyaszámokat is, ám a jelszavakat nem. Az is lehet, hogy rögzíti a felhasználói felületen végrehajtott műveleteket. <xliff:g id="PLUGIN_NAME">%1$s</xliff:g> alkalmazás része. Engedélyezi ezt a plug-int?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Navigáció karakter szerint."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Navigáció szó szerint."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Navigáció mondat szerint."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Navigáció fejléc szerint."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Navigáció testvér szerint."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Navigáció dokumentum szerint."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Navigáció alapértelmezett webes megtekintési viselkedés szerint."</string>
 </resources>

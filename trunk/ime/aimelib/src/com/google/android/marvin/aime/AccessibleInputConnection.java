@@ -215,6 +215,7 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
         }
     }
 
+    @Override
     public Position next(int granularity, int action) {
         if (DEBUG) {
             Log.i(TAG, "Next: " + granularity + " " + action);
@@ -230,6 +231,7 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
         return navigateEntireText(NAVIGATE_NEXT, action);
     }
 
+    @Override
     public Position previous(int granularity, int action) {
         if (DEBUG) {
             Log.i(TAG, "Previous: " + granularity + " " + action);
@@ -245,6 +247,7 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
         return navigateEntireText(NAVIGATE_PREVIOUS, action);
     }
 
+    @Override
     public Position get(int granularity) {
         if (DEBUG) {
             Log.i(TAG, "Get: " + granularity);
@@ -509,6 +512,38 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
     }
 
     /**
+     * Speaks the granular unit of text at the cursor.
+     *
+     * @param granularity The granular unit to speak.
+     */
+    public void speakCurrentUnit(int granularity) {
+        if (!hasExtractedText()) {
+            return;
+        }
+
+        final CharSequence extractedText = mExtractedText.text;
+        final int cursorPos = mExtractedText.selectionEnd;
+        final int textLength = extractedText.length();
+
+        CharSequence description;
+
+        if (cursorPos == textLength) {
+            description = mCursorAtEnd;
+        } else if (granularity == GRANULARITY_ENTIRE_TEXT) {
+            description = extractedText.subSequence(cursorPos, extractedText.length());
+        } else {
+            final BreakIterator iterator = getCurrentIterator(granularity);
+            iterator.setText(extractedText.toString());
+
+            final int unitEndIndex = iterator.following(cursorPos);
+
+            description = extractedText.subSequence(cursorPos, unitEndIndex);
+        }
+
+        trySendAccessiblityEvent(description);
+    }
+
+    /**
      * Implementation of navigating to previous unit.
      */
     private Position navigatePrevious(int granularity, int action) {
@@ -573,15 +608,23 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
 
     /**
      * Navigating, when text unit is Entire text itself.<br>
-     * It is implemented separately, because we don't have iterator for this granularity.
+     * It is implemented separately, because we don't have iterator for this
+     * granularity.
      */
     private Position navigateEntireText(int direction, int action) {
-        // Fetch text from editor and update local variables
         fetchTextFromView();
-        int selectionStart = mExtractedText.selectionStart;
-        int selectionEnd = mExtractedText.selectionEnd;
-        int textLength = mExtractedText.text.length();
-        int newPosition = direction == NAVIGATE_NEXT ? textLength : 0;
+
+        final int selectionStart = mExtractedText.selectionStart;
+        final int selectionEnd = mExtractedText.selectionEnd;
+        final int textLength = mExtractedText.text.length();
+        final int newPosition = direction == NAVIGATE_NEXT ? textLength : 0;
+
+        if (selectionEnd == newPosition) {
+            // Handle corner case when cursor is at edge of the text, Android
+            // implementation deviates from standard Java implementation, check
+            // comments above.
+            return null;
+        }
 
         if (DEBUG) {
             Log.i(TAG, "selectionStart: " + selectionStart + " selectionEnd: " + selectionEnd
@@ -599,13 +642,14 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
         } else if (action == ACTION_EXTEND) {
             updateTextInView(selectionStart, newPosition);
             // Send additional text selected.
-            int lowerIndex = (direction == NAVIGATE_NEXT) ? selectionEnd : newPosition;
-            int higherUpper = (direction == NAVIGATE_NEXT) ? newPosition : selectionEnd;
-            CharSequence spell = mExtractedText.text.subSequence(lowerIndex, higherUpper);
+            final int lowerIndex = (direction == NAVIGATE_NEXT) ? selectionEnd : newPosition;
+            final int higherUpper = (direction == NAVIGATE_NEXT) ? newPosition : selectionEnd;
+            final CharSequence spell = mExtractedText.text.subSequence(lowerIndex, higherUpper);
             trySendAccessiblityEvent(spell.toString());
             // Position of selection
             return Position.obtain(selectionStart, newPosition, true);
         }
+
         return null;
     }
 

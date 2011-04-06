@@ -31,6 +31,12 @@
     <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> 圖片。"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> 搜尋控制介面。"</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> 下拉式清單。"</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> 分鐘"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> 小時"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>，按日檢視。"</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> 至 <xliff:g id="TO_DATE">%2$s</xliff:g>，按週檢視。"</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>，按月檢視。"</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"第 <xliff:g id="ITEM_INDEX">%1$s</xliff:g> 則活動，共 <xliff:g id="ITEM_COUNT">%2$s</xliff:g> 則"</string>
     <string name="value_password" msgid="52094746222829357">"密碼"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"已開啟滑動繪圖器"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"滑動繪圖器把手"</string>
@@ -80,8 +86,9 @@
     <string name="value_rewind_button" msgid="5161645834242351385">"[倒轉] 按鈕。"</string>
     <string name="value_play_button" msgid="2701216749763299935">"[播放] 按鈕。"</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"[快轉] 按鈕。"</string>
+    <string name="value_owner" msgid="2419158478547189476">"擁有者"</string>
     <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"已傳送目的指令給「當機回報員」"</string>
-    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="7116495433045146292">"允許應用程式或服務透過目的廣播執行「當機回報員」，並可能取得有關「當機回報員」狀態的資訊，例如快取通知。"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"允許應用程式或服務透過目的廣播執行「當機回報員」，並可能取得有關「當機回報員」狀態的資訊，例如快取通知。"</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"問號"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"空格"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"逗號"</string>
@@ -92,6 +99,10 @@
     <string name="punctuation_double_quote" msgid="5451902512870494782">"雙引號"</string>
     <string name="punctuation_semicolon" msgid="2970948646830240735">"分號"</string>
     <string name="punctuation_colon" msgid="4212987887163582631">"冒號"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"活動"</item>
+    <item quantity="other" msgid="8275223643159991572">"活動"</item>
+  </plurals>
     <string name="title_talkback_settings_available" msgid="4405797779993860783">"可使用 TalkBack 偏好設定"</string>
     <string name="message_talkback_settings_available" msgid="3073212089159547463">"按一下這裡下載協助工具偏好設定應用程式。"</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"可取得 TalkBack 當機報告"</string>
@@ -116,4 +127,11 @@
     <string name="header_crash_report_email" msgid="9218276172142314054">"以下為 TalkBack 的當機報告。按一下 [傳送] 按鈕會將此資料傳輸給 TalkBack 的開發人員。"\n\n</string>
     <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"警告"</string>
     <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"TalkBack 外掛程式可能會收集您輸入的所有文字，包括個人資料及信用卡號碼，但不會收集您輸入的密碼。此外，它還可能會記錄您的使用者介面互動行為。該程式是由應用程式「<xliff:g id="PLUGIN_NAME">%1$s</xliff:g>」所提供，要啟動這個外掛程式嗎？"</string>
+    <string name="axis_character" msgid="5059604520074645703">"依字元進行導覽。"</string>
+    <string name="axis_word" msgid="7745798763195184060">"依單詞進行導覽。"</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"依句子進行導覽。"</string>
+    <string name="axis_heading" msgid="8928386537164255063">"依標題進行導覽。"</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"依同層級的項目進行導覽。"</string>
+    <string name="axis_document" msgid="1581988340856497809">"依文件進行導覽。"</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"依預設的網路瀏覽行為進行導覽。"</string>
 </resources>

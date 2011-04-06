@@ -46,6 +46,18 @@
     <skip />
     <!-- no translation found for template_spinner (3914981448273826697) -->
     <skip />
+    <!-- no translation found for template_minutes (7785580701367168753) -->
+    <skip />
+    <!-- no translation found for template_hours (8134792651564545111) -->
+    <skip />
+    <!-- no translation found for template_announce_day (2697007626595567773) -->
+    <skip />
+    <!-- no translation found for template_announce_week (8260793227327782733) -->
+    <skip />
+    <!-- no translation found for template_announce_month (1949363379962245428) -->
+    <skip />
+    <!-- no translation found for template_announce_item_index (5245551532025107789) -->
+    <skip />
     <string name="value_password" msgid="52094746222829357">"pled-clav"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Reglader ruschnant avert"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Tegn dal reglader ruschnant"</string>
@@ -95,8 +107,10 @@
     <string name="value_rewind_button" msgid="5161645834242351385">"Buttun per far ir enavos svelt."</string>
     <string name="value_play_button" msgid="2701216749763299935">"Buttun per far ir"</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Buttun per far ir enavant svelt."</string>
+    <!-- no translation found for value_owner (2419158478547189476) -->
+    <skip />
     <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Trametter cumonds d\'intenziun a TalkBack"</string>
-    <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="7116495433045146292">"\"Permetta ad ina applicaziun u ad in servetsch da controllar TalkBack cun trametter intenziuns e retschaiver infurmaziuns davart il status da TalkBack, sco per exempel ils avis en il cache.\""</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"\"Permetta ad ina applicaziun u ad in servetsch da controllar TalkBack cun trametter intenziuns e retschaiver infurmaziuns davart il status da TalkBack, sco per exempel ils avis en il cache.\""</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Segn da dumonda"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Spazi"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Comma"</string>
@@ -107,6 +121,8 @@
     <string name="punctuation_double_quote" msgid="5451902512870494782">"Virgulettas dublas"</string>
     <string name="punctuation_semicolon" msgid="2970948646830240735">"Semicolon"</string>
     <string name="punctuation_colon" msgid="4212987887163582631">"Punct dubel"</string>
+    <!-- no translation found for plural_event:one (8890979114667202113) -->
+    <!-- no translation found for plural_event:other (8275223643159991572) -->
     <string name="title_talkback_settings_available" msgid="4405797779993860783">"Preferenzas TalkBack disponiblas."</string>
     <string name="message_talkback_settings_available" msgid="3073212089159547463">"Cliccai qua per telechargiar l\'applicaziun Preferenzas d\'agids d\'access"</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Datas dal collaps da TalkBack disponiblas"</string>
@@ -131,4 +147,18 @@
     <string name="header_crash_report_email" msgid="9218276172142314054">"Qua sutvart suonda in rapport da collaps da TalkBack. Cliccai sin il buttun Trametter per transmetter questas datas als sviluppaders da l\'applicaziun."\n\n</string>
     <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Avertiment"</string>
     <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"\"Quest plug-in da TalkBack po rimnar l\'entir text che Vus endatais, inclus Vossas datas persunalas sco numers da cartas da credit, dentant nagins pleds-clav. El po era protocollar Vossas interacziuns cun l\'interfatscha d\'utilisader. Questa metoda deriva da l\'applicaziun <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Vulais Vus activar quest plug-in?\""</string>
+    <!-- no translation found for axis_character (5059604520074645703) -->
+    <skip />
+    <!-- no translation found for axis_word (7745798763195184060) -->
+    <skip />
+    <!-- no translation found for axis_sentence (5569363499210008882) -->
+    <skip />
+    <!-- no translation found for axis_heading (8928386537164255063) -->
+    <skip />
+    <!-- no translation found for axis_sibling (7260754205862306385) -->
+    <skip />
+    <!-- no translation found for axis_document (1581988340856497809) -->
+    <skip />
+    <!-- no translation found for axis_default_web_view_behavior (4427026616802959980) -->
+    <skip />
 </resources>

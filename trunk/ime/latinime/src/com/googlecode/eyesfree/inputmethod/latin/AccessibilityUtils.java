@@ -24,6 +24,7 @@ import android.inputmethodservice.Keyboard.Key;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
@@ -64,24 +65,33 @@ public class AccessibilityUtils {
      * Speaks a key's action after it has been released. Does not speak letter
      * keys since typed keys are already spoken aloud by TalkBack.
      *
-     * @param primaryCode The primary code of the released key.
+     * @param key The primary code of the released key.
      * @param switcher The input method's {@link KeyboardSwitcher}.
      */
-    public void onRelease(int primaryCode, KeyboardSwitcher switcher) {
+    public void onRelease(Key key, KeyboardSwitcher switcher) {
         if (!mAccessibilityManager.isEnabled()) {
             return;
         }
+        final int primaryCode = key.codes[0];
         int resId = -1;
         switch (primaryCode) {
             case Keyboard.KEYCODE_SHIFT: {
-                if (switcher.isShiftedOrShiftLocked()) {
-                    if (switcher.isShiftLocked()) {
-                        resId = R.string.description_shift_locked;
+                if (switcher.isAlphabetMode()) {
+                    if (switcher.isShiftedOrShiftLocked()) {
+                        if (switcher.isShiftLocked()) {
+                            resId = R.string.description_shift_locked;
+                        } else {
+                            resId = R.string.description_shift_on;
+                        }
                     } else {
-                        resId = R.string.description_shift_on;
+                        resId = R.string.description_shift_off;
                     }
                 } else {
-                    resId = R.string.description_shift_off;
+                    if (switcher.isShiftedOrShiftLocked()) {
+                        resId = R.string.description_alt_on;
+                    } else {
+                        resId = R.string.description_alt_off;
+                    }
                 }
                 break;
             }
@@ -119,18 +129,23 @@ public class AccessibilityUtils {
 
     /**
      * @param key
-     * @param mKeyboard
+     * @param switcher
      */
-    public void speakKey(Key key, Keyboard mKeyboard) {
+    public void speakKey(Key key, KeyboardSwitcher switcher) {
         if (!mAccessibilityManager.isEnabled()) {
             return;
         }
-        CharSequence description = describeKey(key.codes[0]);
-        if (description == null && key.label != null) {
+
+        CharSequence description = null;
+
+        if (!TextUtils.isEmpty(key.label)) {
             description = key.label;
-        } else if (description == null && Character.isDefined(key.codes[0])) {
+        } else if (hasDescription(key.codes[0])) {
+            description = describeKey(key.codes[0]);
+        } else if (Character.isDefined(key.codes[0])) {
             description = Character.toString((char) key.codes[0]);
         }
+
         if (description != null) {
             speakDescription(description);
         }
@@ -141,22 +156,11 @@ public class AccessibilityUtils {
      * description defined in keycodes.xml, that will be used. Otherwise, if the
      * key is a Unicode character, then its character will be used.
      *
-     * @param primaryCode The primary code of the pressed key.
+     * @param key The primary code of the pressed key.
      * @param switcher The input method's {@link KeyboardSwitcher}.
      */
-    public void onPress(int primaryCode, KeyboardSwitcher switcher) {
-        if (!mAccessibilityManager.isEnabled()) {
-            return;
-        }
-        // TODO Use the current keyboard state to read "Switch to symbols"
-        // instead of just "Symbols" (and similar for shift key).
-        CharSequence description = describeKey(primaryCode);
-        if (description == null && Character.isDefined((char) primaryCode)) {
-            description = Character.toString((char) primaryCode);
-        }
-        if (description != null) {
-            speakDescription(description);
-        }
+    public void onPress(Key key, KeyboardSwitcher switcher) {
+        speakKey(key, switcher);
     }
 
     /**
@@ -174,6 +178,15 @@ public class AccessibilityUtils {
         }
 
         return mDescriptions.get(keyCode);
+    }
+
+    private boolean hasDescription(int keyCode) {
+        // If not loaded yet, load key descriptions from XML file.
+        if (mDescriptions == null) {
+            mDescriptions = loadDescriptions();
+        }
+
+        return mDescriptions.containsKey(keyCode);
     }
 
     /**
@@ -203,6 +216,11 @@ public class AccessibilityUtils {
     public void speakDescription(CharSequence description) {
         if (!mAccessibilityManager.isEnabled()) {
             return;
+        }
+
+        // TODO Contact Loquendo so we can remove this workaround.
+        if (Character.isLetterOrDigit(description.charAt(0))) {
+            description = description + ".";
         }
 
         // TODO We need to add an AccessibilityEvent type for IMEs.

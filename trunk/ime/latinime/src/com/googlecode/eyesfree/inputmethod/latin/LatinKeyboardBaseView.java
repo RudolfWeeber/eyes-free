@@ -85,31 +85,27 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
          * {@link #onKey} is called. For keys that repeat, this is only
          * called once.
          *
-         * @param primaryCode
-         *            the unicode of the key being pressed. If the touch is
-         *            not on a valid key, the value will be zero.
+         * @param key the key being pressed
          */
-        void onPress(int primaryCode);
+        void onPress(Key key);
 
         /**
          * Called when the user leaves a key without lifting their finger. This
          * is send before the {@link #onKey} is called. For keys that repeat,
          * this is only called once.
          *
-         * @param primaryCode
-         *            the code of the key that was left
+         * @param key the key that was left
          */
-        void onLeaving(int primaryCode);
+        void onLeaving(Key key);
 
         /**
          * Called when the user releases a key. This is sent after the
          * {@link #onKey} is called. For keys that repeat, this is only
          * called once.
          *
-         * @param primaryCode
-         *            the code of the key that was released
+         * @param key the key that was released
          */
-        void onRelease(int primaryCode);
+        void onRelease(Key key);
 
         /**
          * Send a key press to the listener.
@@ -151,6 +147,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
          * Called when the user quickly moves the finger from right to
          * left.
          *
+         * @param pointerCount
          * @return <code>true</code> if the event was consumed.
          */
         boolean swipeLeft(int pointerCount);
@@ -159,6 +156,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
          * Called when the user quickly moves the finger from left to
          * right.
          *
+         * @param pointerCount
          * @return <code>true</code> if the event was consumed.
          */
         boolean swipeRight(int pointerCount);
@@ -166,6 +164,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         /**
          * Called when the user quickly moves the finger from up to down.
          *
+         * @param pointerCount
          * @return <code>true</code> if the event was consumed.
          */
         boolean swipeDown(int pointerCount);
@@ -173,6 +172,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         /**
          * Called when the user quickly moves the finger from down to up.
          *
+         * @param pointerCount
          * @return <code>true</code> if the event was consumed.
          */
         boolean swipeUp(int pointerCount);
@@ -180,17 +180,26 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         /**
          * Called when the user quickly taps the finger on screen.
          *
+         * @param pointerCount
          * @return <code>true</code> if the event was consumed.
          */
         boolean singleTap(int pointerCount);
 
         /**
          * Called when the user double taps the finger on screen.
-         * @param pointerCount
          *
+         * @param pointerCount
          * @return <code>true</code> if the event was consumed.
          */
         boolean doubleTap(int pointerCount);
+
+        /**
+         * Called when the user long-presses a finger on screen.
+         *
+         * @param pointerCount
+         * @return <code>true</code> if the event was consumed.
+         */
+        boolean longPress(int pointerCount);
 
         /**
          * Called when the user moves the finger outside the keyboard area.
@@ -642,6 +651,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
      * Return whether the device has distinct multi-touch panel.
      * @return true if the device has distinct multi-touch panel.
      */
+    @Override
     public boolean hasDistinctMultitouch() {
         return mHasDistinctMultitouch;
     }
@@ -663,6 +673,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
      * Return whether the device has accessibility turned on.
      * @return true if the device has accessibility turned on.
      */
+    @Override
     public boolean isAccessibilityEnabled() {
         return mIsAccessibilityEnabled;
     }
@@ -693,6 +704,14 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
             return mKeyboard.isShifted();
         }
         return false;
+    }
+
+    /**
+     * Enables or disables long-press.
+     * @param longPressEnabled whether or not to enable long-press
+     */
+    public void setLongPressEnabled(boolean longPressEnabled) {
+        mGestureDetector.setIsLongPressEnabled(longPressEnabled);
     }
 
     /**
@@ -964,6 +983,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         showPreview(NOT_A_KEY, null);
     }
 
+    @Override
     public void showPreview(int keyIndex, PointerTracker tracker) {
         int oldKeyIndex = mOldPreviewKeyIndex;
         mOldPreviewKeyIndex = keyIndex;
@@ -1081,6 +1101,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
      * @param key key in the attached {@link Keyboard}.
      * @see #invalidateAllKeys
      */
+    @Override
     public void invalidateKey(Key key) {
         if (key == null)
             return;
@@ -1172,6 +1193,11 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
             }
 
             @Override
+            public boolean longPress(int pointerCount) {
+                return false;
+            }
+
+            @Override
             public void exploreKeyboardArea() {
             }
 
@@ -1188,18 +1214,18 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
             }
 
             @Override
-            public void onPress(int primaryCode) {
-                mKeyboardActionListener.onPress(primaryCode);
+            public void onPress(Key key) {
+                mKeyboardActionListener.onPress(key);
             }
 
             @Override
-            public void onLeaving(int primaryCode) {
-                mKeyboardActionListener.onLeaving(primaryCode);
+            public void onLeaving(Key key) {
+                mKeyboardActionListener.onLeaving(key);
             }
 
             @Override
-            public void onRelease(int primaryCode) {
-                mKeyboardActionListener.onRelease(primaryCode);
+            public void onRelease(Key key) {
+                mKeyboardActionListener.onRelease(key);
             }
         });
         // Override default ProximityKeyDetector.
@@ -1655,7 +1681,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
 
         @Override
         public boolean onSimpleLongPress(int pointerCount, float centroidX, float centroidY) {
-            return false;
+            return mKeyboardActionListener.longPress(pointerCount);
         }
     };
 }

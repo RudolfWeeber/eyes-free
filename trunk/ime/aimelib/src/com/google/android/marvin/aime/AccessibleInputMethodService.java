@@ -51,7 +51,9 @@ import java.util.Locale;
  */
 public abstract class AccessibleInputMethodService extends InputMethodService {
     /** List of characters ignored by word iterator. */
-    private final char[] ignoredCharForWords = { ' ' };
+    private final char[] ignoredCharForWords = {
+        ' '
+    };
 
     /** String to speak when granularity changes. */
     private String mGranularitySet;
@@ -80,8 +82,14 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
     /** Stored key down event. */
     private KeyEvent mPreviousDownEvent;
 
+    /** Stored meta key down event. */
+    private KeyEvent mPreviousMetaDownEvent;
+
     /** Whether accessibility is enabled. */
     private boolean mAccessibilityEnabled;
+
+    /** Whether KEYCODE_UP or KEYCODE_DOWN was just pressed. */
+    private boolean mWasUpDownPressed;
 
     private UserCommandHandler mUserCommandHandler;
     private AccessibilityManager mAccessibilityManager;
@@ -197,7 +205,7 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
             boolean isNext = (x > 0);
             boolean isShiftPressed = (event.getMetaState() & KeyEvent.META_SHIFT_ON) != 0;
 
-            moveUnit(count, isNext, isShiftPressed);
+            moveUnit(mGranularity, count, isNext, isShiftPressed);
         }
 
         return true;
@@ -233,25 +241,40 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
         KeyEvent downEvent = mPreviousDownEvent;
         mPreviousDownEvent = null;
 
+        KeyEvent metaDownEvent = mPreviousMetaDownEvent;
+        mPreviousMetaDownEvent = null;
+
         boolean captureEvent = false;
 
         switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                captureEvent = previousUnit(1, event.isShiftPressed());
+                if (!event.isAltPressed()) {
+                    captureEvent = previousUnit(mGranularity, 1, event.isShiftPressed());
+                } else {
+                    mWasUpDownPressed = true;
+                }
                 break;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                captureEvent = nextUnit(1, event.isShiftPressed());
+                if (!event.isAltPressed()) {
+                    captureEvent = nextUnit(mGranularity, 1, event.isShiftPressed());
+                } else {
+                    mWasUpDownPressed = true;
+                }
                 break;
             case KeyEvent.KEYCODE_DPAD_UP:
                 if (event.isAltPressed()) {
                     adjustGranularity(1);
                     captureEvent = true;
+                } else {
+                    mWasUpDownPressed = true;
                 }
                 break;
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 if (event.isAltPressed()) {
                     adjustGranularity(-1);
                     captureEvent = true;
+                } else {
+                    mWasUpDownPressed = true;
                 }
                 break;
         }
@@ -260,10 +283,20 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
             return true;
         }
 
+        // If we didn't capture the meta event, attempt to send the previous
+        // meta down event and then preserve default behavior.
+        if (metaDownEvent != null) {
+            if (!super.onKeyDown(metaDownEvent.getKeyCode(), metaDownEvent)) {
+                aic.sendKeyEvent(metaDownEvent);
+            }
+        }
+
         // If we didn't capture the event, attempt to send the previous down
         // event and then preserve default behavior.
-        if (downEvent != null && !super.onKeyDown(downEvent.getKeyCode(), downEvent)) {
-            aic.sendKeyEvent(downEvent);
+        if (downEvent != null) {
+            if (!super.onKeyDown(downEvent.getKeyCode(), downEvent)) {
+                aic.sendKeyEvent(downEvent);
+            }
         }
 
         return super.onKeyUp(keyCode, event);
@@ -284,12 +317,21 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
             return super.onKeyDown(keyCode, event);
         }
 
+        if (mPreviousMetaDownEvent != null) {
+            mPreviousDownEvent = event;
+            return true;
+        }
+
         switch (event.getKeyCode()) {
             case KeyEvent.KEYCODE_DPAD_DOWN:
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_DPAD_LEFT:
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 mPreviousDownEvent = event;
+                return true;
+            case KeyEvent.KEYCODE_ALT_LEFT:
+            case KeyEvent.KEYCODE_ALT_RIGHT:
+                mPreviousMetaDownEvent = event;
                 return true;
             default:
                 return super.onKeyDown(keyCode, event);
@@ -302,14 +344,15 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
      * carat is already at the end of the text or if there is no available input
      * connection.
      *
+     * @param granularity The granularity with which to move.
      * @param count The number of units to move.
      * @param isShiftPressed <code>true</code> if the shift key is pressed.
      * @return <code>true</code> if successful.
      * @see AccessibleInputMethodService#setGranularity(int)
      * @see AccessibleInputMethodService#setAction(int)
      */
-    protected boolean nextUnit(int count, boolean isShiftPressed) {
-        return moveUnit(count, true, isShiftPressed);
+    protected boolean nextUnit(int granularity, int count, boolean isShiftPressed) {
+        return moveUnit(granularity, count, true, isShiftPressed);
     }
 
     /**
@@ -318,14 +361,15 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
      * carat is already at the beginning of the text or if there is no available
      * input connection.
      *
+     * @param granularity The granularity with which to move.
      * @param count The number of units to move.
      * @param isShiftPressed <code>true</code> if the shift key is pressed.
      * @return <code>true</code> if successful.
      * @see AccessibleInputMethodService#setGranularity(int)
      * @see AccessibleInputMethodService#setAction(int)
      */
-    protected boolean previousUnit(int count, boolean isShiftPressed) {
-        return moveUnit(count, false, isShiftPressed);
+    protected boolean previousUnit(int granularity, int count, boolean isShiftPressed) {
+        return moveUnit(granularity, count, false, isShiftPressed);
     }
 
     /**
@@ -339,7 +383,7 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
      * @return <code>true</code> if successful or <code>false</code> if no input
      *         connection was available or the movement failed
      */
-    private boolean moveUnit(int count, boolean forward, boolean isShiftPressed) {
+    private boolean moveUnit(int granularity, int count, boolean forward, boolean isShiftPressed) {
         // If the input connection is null or count is 0, no-op.
         AccessibleInputConnection inputConnection = getCurrentInputConnection();
         if (inputConnection == null || !inputConnection.hasExtractedText()) {
@@ -357,9 +401,9 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
         inputConnection.setSendAccessibilityEvents(false);
         for (int i = 0; i < count - 1; i++) {
             if (forward) {
-                inputConnection.next(mGranularity, action);
+                inputConnection.next(granularity, action);
             } else {
-                inputConnection.previous(mGranularity, action);
+                inputConnection.previous(granularity, action);
             }
         }
         inputConnection.setSendAccessibilityEvents(savedSendAccessibilityEvents);
@@ -368,7 +412,7 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
         // null, we failed to move and should return false.
         Position newPosition = null;
         if (forward) {
-            newPosition = inputConnection.next(mGranularity, action);
+            newPosition = inputConnection.next(granularity, action);
         } else {
             newPosition = inputConnection.previous(mGranularity, action);
         }
@@ -402,9 +446,8 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
     /**
      * Sets granularity (unit type) for text navigation.
      *
-     * @param granularity Value could be
-     *            {@link TextNavigation#GRANULARITY_CHAR},
-     *            {@link TextNavigation#GRANULARITY_WORD},
+     * @param granularity Value could be {@link TextNavigation#GRANULARITY_CHAR}
+     *            , {@link TextNavigation#GRANULARITY_WORD},
      *            {@link TextNavigation#GRANULARITY_SENTENCE},
      *            {@link TextNavigation#GRANULARITY_PARAGRAPH} or
      *            {@link TextNavigation#GRANULARITY_ENTIRE_TEXT}
@@ -503,8 +546,8 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
      * Updates the current accessibility enabled state.
      */
     private void updateAccessibilityState() {
-        mAccessibilityEnabled = (Settings.Secure.getInt(
-                getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 0) == 1);
+        mAccessibilityEnabled = (Settings.Secure.getInt(getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_ENABLED, 0) == 1);
 
         // Reset text navigation when accessibility is disabled.
         if (!mAccessibilityEnabled) {
@@ -519,6 +562,20 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
      * @param accessibilityEnabled
      */
     protected void onAccessibilityChanged(boolean accessibilityEnabled) {
+        // Placeholder.
+    }
+
+    @Override
+    public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd,
+            int candidatesStart, int candidatesEnd) {
+        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart,
+                candidatesEnd);
+
+        if (mWasUpDownPressed) {
+            mWasUpDownPressed = false;
+
+            mAIC.speakCurrentUnit(mGranularity);
+        }
     }
 
     /**

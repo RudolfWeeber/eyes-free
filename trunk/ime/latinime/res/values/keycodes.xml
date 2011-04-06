@@ -35,6 +35,7 @@
     <integer name="key_menu">-109</integer>
     <integer name="key_call">-110</integer>
     <integer name="key_endcall">-111</integer>
+    <integer name="key_alt">-112</integer>
 
     <!-- Array used for mapping key codes to description strings. -->
     <array name="key_descriptions">
@@ -68,5 +69,7 @@
         <item>@string/description_call_key</item>
         <item>@integer/key_endcall</item>
         <item>@string/description_endcall_key</item>
+        <item>@integer/key_alt</item>
+        <item>@string/description_alt_key</item>
     </array>
 </resources>

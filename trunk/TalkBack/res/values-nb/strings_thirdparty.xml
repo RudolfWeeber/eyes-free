@@ -31,5 +31,5 @@
     <string name="value_stitcher_next" msgid="2945481957178798103">"Nesteknapp."</string>
     <string name="value_google_voice_play_button" msgid="2873426918700224250">"Avspillingsknapp."</string>
     <string name="value_google_voice_speakerphone_button" msgid="4812261205507729876">"Knapp for å slå av og på høyttalertelefon."</string>
-    <string name="value_google_voice_transcript" msgid="4984373756636020629">"Transkript."</string>
+    <string name="value_google_voice_transcript" msgid="4984373756636020629">"Transkripsjon."</string>
 </resources>

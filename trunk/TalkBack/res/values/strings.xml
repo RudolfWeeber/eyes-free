@@ -565,14 +565,14 @@
       Source: Title of an application permission.
       Description: Listed so the user can choose whether they want to allow using the permission. [CHAR LIMIT=30]
     -->
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack">Send intent commands to TalkBack</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack">Send commands to TalkBack</string>
 
    <!--
       Source: Description of an application permission.
       Description: Listed so the user can choose whether they want to allow using the permission. [CHAR LIMIT=200]
     -->
     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack">Allows an application or service to drive TalkBack
-        via intent broadcasts and potentially obtain information about the TalkBack state for example the cached notifications.</string>
+        and potentially obtain information about the TalkBack state, for example the cached notifications.</string>
 
     <!-- PUNCTUATION -->
 

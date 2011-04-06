@@ -30,6 +30,7 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.Keyboard.Key;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Debug;
@@ -51,6 +52,7 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
@@ -99,49 +101,57 @@ public class LatinIME extends PersistentInputMethodService implements
     /**
      * Permission to send {@link Intent} broadcast requests to LatinIME.
      */
-    public static final String PERMISSION_REQUEST =
-            "com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST";
+    public static final String PERMISSION_REQUEST = "com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST";
 
     // Mode change request broadcast constants
-    public static final String REQUEST_KEYBOARD_MODE_CHANGE =
-        "com.googlecode.eyesfree.inputmethod.latin.REQUEST_KEYBOARD_MODE_CHANGE";
-    public static final String REQUEST_KEYBOARD_MODE_UPDATE =
-            "com.googlecode.eyesfree.inputmethod.latin.REQUEST_KEYBOARD_MODE_UPDATE";
+    public static final String REQUEST_KEYBOARD_MODE_CHANGE = "com.googlecode.eyesfree.inputmethod.latin.REQUEST_KEYBOARD_MODE_CHANGE";
+    public static final String REQUEST_KEYBOARD_MODE_UPDATE = "com.googlecode.eyesfree.inputmethod.latin.REQUEST_KEYBOARD_MODE_UPDATE";
 
     // Mode change broadcast constants
-    public static final String BROADCAST_KEYBOARD_MODE_CHANGE =
-            "com.googlecode.eyesfree.inputmethod.latin.KEYBOARD_MODE_CHANGE";
-    public static final String BROADCAST_KEYBOARD_MODE_UPDATE =
-            "com.googlecode.eyesfree.inputmethod.latin.KEYBOARD_MODE_UPDATE";
-    public static final String BROADCAST_LEFT_KEYBOARD_AREA =
-            "com.googlecode.eyesfree.inputmethod.latin.LEFT_KEYBOARD_AREA";
-    public static final String BROADCAST_ENTERED_KEYBOARD_AREA =
-            "com.googlecode.eyesfree.inputmethod.latin.ENTERED_KEYBOARD_AREA";
-    public static final String BROADCAST_UP_OUTSIDE_KEYBOARD =
-            "com.googlecode.eyesfree.inputmethod.latin.TYPED_OUTSIDE_KEYBOARD";
-    public static final String BROADCAST_GRANULARITY_CHANGE =
-            "com.googlecode.eyesfree.inputmethod.latin.GRANULARITY_CHANGE";
+    public static final String BROADCAST_KEYBOARD_MODE_CHANGE = "com.googlecode.eyesfree.inputmethod.latin.KEYBOARD_MODE_CHANGE";
+    public static final String BROADCAST_KEYBOARD_MODE_UPDATE = "com.googlecode.eyesfree.inputmethod.latin.KEYBOARD_MODE_UPDATE";
+    public static final String BROADCAST_LEFT_KEYBOARD_AREA = "com.googlecode.eyesfree.inputmethod.latin.LEFT_KEYBOARD_AREA";
+    public static final String BROADCAST_ENTERED_KEYBOARD_AREA = "com.googlecode.eyesfree.inputmethod.latin.ENTERED_KEYBOARD_AREA";
+    public static final String BROADCAST_UP_OUTSIDE_KEYBOARD = "com.googlecode.eyesfree.inputmethod.latin.TYPED_OUTSIDE_KEYBOARD";
+    public static final String BROADCAST_GRANULARITY_CHANGE = "com.googlecode.eyesfree.inputmethod.latin.GRANULARITY_CHANGE";
 
     public static final String EXTRA_MODE = "mode";
     public static final String EXTRA_GRANULARITY = "granularity";
 
     // Vibration pattern constants
-    private static final long[] VIBRATE_PATTERN_SELECTED = new long[] { 0, 30 };
-    private static final long[] VIBRATE_PATTERN_SWIPE = new long[] { 0, 20, 0, 20 };
-    private static final long[] VIBRATE_PATTERN_TAP = new long[] { 0, 20 };
-    private static final long[] VIBRATE_PATTERN_DOUBLE_TAP = new long[] { 0, 20, 0, 20 };
-    // private static final long[] VIBRATE_PATTERN_EXPLORING = new long[] { 0,
-    // 10 };
-    private static final long[] VIBRATE_PATTERN_MODE_CHANGE = new long[] { 0, 50 };
-    private static final long[] VIBRATE_PATTERN_ENTERED = new long[] { 0, 20, 0, 50 };
-    private static final long[] VIBRATE_PATTERN_LEFT = new long[] { 0, 50, 0, 20 };
+    private static final long[] VIBRATE_PATTERN_SELECTED = new long[] {
+            0, 30
+    };
+    private static final long[] VIBRATE_PATTERN_SWIPE = new long[] {
+            0, 20, 0, 20
+    };
+    private static final long[] VIBRATE_PATTERN_TAP = new long[] {
+            0, 20
+    };
+    private static final long[] VIBRATE_PATTERN_DOUBLE_TAP = new long[] {
+            0, 20, 0, 20
+    };
+    private static final long[] VIBRATE_PATTERN_MODE_CHANGE = new long[] {
+            0, 50
+    };
+    private static final long[] VIBRATE_PATTERN_ENTERED = new long[] {
+            0, 20, 0, 50
+    };
+    private static final long[] VIBRATE_PATTERN_LEFT = new long[] {
+            0, 50, 0, 20
+    };
+    private static final long[] VIBRATE_PATTERN_LONG_PRESS = new long[] {
+            0, 20, 40, 20, 40, 20, 40, 20
+    };
 
     // Sound resource constants
     private static final int SOUND_RESOURCE_SELECTED = R.raw.tick;
     private static final int SOUND_RESOURCE_SWIPE = R.raw.tick;
     private static final int SOUND_RESOURCE_TAP = R.raw.tick;
     private static final int SOUND_RESOURCE_DOUBLE_TAP = R.raw.tick;
+    private static final int SOUND_RESOURCE_LONG_PRESS = R.raw.tick;
 
+    private static final String PREF_AUTO_SWITCH = "auto_switch";
     private static final String PREF_VIBRATE_ON = "vibrate_on";
     private static final String PREF_SOUND_ON = "sound_on";
     private static final String PREF_POPUP_ON = "popup_on";
@@ -157,9 +167,9 @@ public class LatinIME extends PersistentInputMethodService implements
     private static final String PREF_HAS_USED_VOICE_INPUT = "has_used_voice_input";
 
     // Whether or not the user has used voice input from an unsupported locale
-    // UI before. For example, the user has a Chinese UI but activates voice input.
-    private static final String PREF_HAS_USED_VOICE_INPUT_UNSUPPORTED_LOCALE =
-            "has_used_voice_input_unsupported_locale";
+    // UI before. For example, the user has a Chinese UI but activates voice
+    // input.
+    private static final String PREF_HAS_USED_VOICE_INPUT_UNSUPPORTED_LOCALE = "has_used_voice_input_unsupported_locale";
 
     // A list of locales which are supported by default for voice input, unless
     // we get a different list from Gservices.
@@ -167,7 +177,8 @@ public class LatinIME extends PersistentInputMethodService implements
             + "en_AU " + "en_CA " + "en_IE " + "en_IN " + "en_NZ " + "en_SG " + "en_ZA ";
 
     // The private IME option used to indicate that no microphone should be
-    // shown for a given text field. For instance this is specified by the search dialog
+    // shown for a given text field. For instance this is specified by the
+    // search dialog
     // when the dialog is already showing a voice search button.
     private static final String IME_OPTION_NO_MICROPHONE = "nm";
 
@@ -196,26 +207,20 @@ public class LatinIME extends PersistentInputMethodService implements
 
     // Receive phone call status updates.
     private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        private int mCachedForcedMode = -1;
-
         @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             super.onCallStateChanged(state, incomingNumber);
 
             switch (state) {
                 case TelephonyManager.CALL_STATE_IDLE:
-                    // Restore the forced mode, if any, and clear cache.
-                    if (mCachedForcedMode >= 0) {
-                        requestKeyboardMode(mCachedForcedMode);
-                        mCachedForcedMode = -1;
-                    }
+                    // This is a no-op if the cache has been invalidated.
+                    requestKeyboardMode(mCachedForcedMode);
                     break;
                 case TelephonyManager.CALL_STATE_RINGING:
                     // Cache the current forced mode and switch to FORCE_HIDDEN.
-                    if (mCachedForcedMode < 0) {
-                        mCachedForcedMode = getKeyboardMode();
-                        requestKeyboardMode(FORCE_HIDDEN);
-                    }
+                    int currentMode = getKeyboardMode();
+                    requestKeyboardMode(FORCE_HIDDEN);
+                    mCachedForcedMode = currentMode;
                     break;
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     // The user picked up the call. Do nothing.
@@ -272,9 +277,11 @@ public class LatinIME extends PersistentInputMethodService implements
     public static final int FORCE_DPAD = 1;
     public static final int FORCE_CACHED = 2;
     private static final int NUM_FORCE_MODES = 3;
+    private static final int FORCE_NONE = -1;
 
     private int mForcedMode = FORCE_DPAD;
     private int mCachedMode = KeyboardSwitcher.MODE_NONE;
+    private int mCachedForcedMode = FORCE_NONE;
 
     private String mInputLocale;
     private String mSystemLocale;
@@ -303,6 +310,7 @@ public class LatinIME extends PersistentInputMethodService implements
     // TODO move this state variable outside LatinIME
     private boolean mCapsLock;
     private boolean mPasswordText;
+    private boolean mAutoSwitch;
     private boolean mVibrateOn;
     private boolean mSoundOn;
     private boolean mPopupOn;
@@ -331,6 +339,7 @@ public class LatinIME extends PersistentInputMethodService implements
     private CharSequence mJustRevertedSeparator;
     private int mDeleteCount;
     private long mLastKeyTime;
+    private int mPressedKey = LatinKeyboardView.KEYCODE_UNKNOWN;
 
     // Modifier keys state
     private ModifierKeyState mShiftKeyState = new ModifierKeyState();
@@ -354,8 +363,7 @@ public class LatinIME extends PersistentInputMethodService implements
     private boolean mRefreshKeyboardRequired;
 
     // For each word, a list of potential replacements, usually from voice.
-    private Map<String, List<CharSequence>> mWordToSuggestions = new HashMap<
-            String, List<CharSequence>>();
+    private Map<String, List<CharSequence>> mWordToSuggestions = new HashMap<String, List<CharSequence>>();
 
     private ArrayList<WordAlternatives> mWordHistory = new ArrayList<WordAlternatives>();
 
@@ -412,6 +420,41 @@ public class LatinIME extends PersistentInputMethodService implements
         }
     }
 
+    /**
+     * This class sends a key event when it runs. This is useful for sending
+     * delayed key events, such as an UP event for a simulated long-press.
+     *
+     * @author alanv@google.com (Alan Viverette)
+     */
+    private class KeyEventRunnable implements Runnable {
+        private final int mKeyCode;
+        private final int mMetaState;
+        private final long mDownTime;
+
+        public KeyEventRunnable(int keyCode, int metaState, long downTime) {
+            mKeyCode = keyCode;
+            mMetaState = metaState;
+            mDownTime = downTime;
+        }
+
+        @Override
+        public void run() {
+            final KeyEvent event = new KeyEvent(SystemClock.uptimeMillis(), mDownTime,
+                    KeyEvent.ACTION_UP, mKeyCode, 0, mMetaState, KeyCharacterMap.BUILT_IN_KEYBOARD,
+                    0, KeyEvent.FLAG_SOFT_KEYBOARD);
+
+            // First attempt to send the key to the IME, then to the input
+            // connection.
+            if (!onKeyUp(mKeyCode, event)) {
+                final InputConnection ic = getCurrentInputConnection();
+
+                if (ic != null) {
+                    ic.sendKeyEvent(event);
+                }
+            }
+        }
+    }
+
     /* package */Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -460,8 +503,8 @@ public class LatinIME extends PersistentInputMethodService implements
         if (inputLanguage == null) {
             inputLanguage = conf.locale.toString();
         }
-        mReCorrectionEnabled = prefs.getBoolean(PREF_RECORRECTION_ENABLED,
-                getResources().getBoolean(R.bool.default_recorrection_enabled));
+        mReCorrectionEnabled = prefs.getBoolean(PREF_RECORRECTION_ENABLED, getResources()
+                .getBoolean(R.bool.default_recorrection_enabled));
 
         LatinIMEUtil.GCUtils.getInstance().reset();
         boolean tryGC = true;
@@ -494,9 +537,9 @@ public class LatinIME extends PersistentInputMethodService implements
         if (VOICE_INSTALLED) {
             mVoiceInput = new VoiceInput(this, this);
             mHints = new Hints(this, new Hints.Display() {
+                @Override
                 public void showHint(int viewResource) {
-                    LayoutInflater inflater = (LayoutInflater) getSystemService(
-                            Context.LAYOUT_INFLATER_SERVICE);
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     View view = inflater.inflate(viewResource, null);
                     setCandidatesView(view);
                     setCandidatesViewShown(true);
@@ -594,8 +637,7 @@ public class LatinIME extends PersistentInputMethodService implements
         if (mUserBigramDictionary != null) {
             mUserBigramDictionary.close();
         }
-        mUserBigramDictionary = new UserBigramDictionary(
-                this, this, mInputLocale, Suggest.DIC_USER);
+        mUserBigramDictionary = new UserBigramDictionary(this, this, mInputLocale, Suggest.DIC_USER);
         mSuggest.setUserBigramDictionary(mUserBigramDictionary);
         mSuggest.setUserDictionary(mUserDictionary);
         mSuggest.setContactsDictionary(mContactsDictionary);
@@ -680,8 +722,8 @@ public class LatinIME extends PersistentInputMethodService implements
     @Override
     public View onCreateCandidatesView() {
         mKeyboardSwitcher.makeKeyboards(true);
-        mCandidateViewContainer = (LinearLayout) getLayoutInflater().inflate(
-                R.layout.candidates, null);
+        mCandidateViewContainer = (LinearLayout) getLayoutInflater().inflate(R.layout.candidates,
+                null);
         mCandidateView = (CandidateView) mCandidateViewContainer.findViewById(R.id.candidates);
         mCandidateView.setService(this);
         setCandidatesViewShown(true);
@@ -707,10 +749,9 @@ public class LatinIME extends PersistentInputMethodService implements
         TextEntryState.newSession(this);
 
         // Most such things we decide below in the switch statement, but we need
-        // to know
-        // now whether this is a password text field, because we need to know
-        // now (before
-        // the switch statement) whether we want to enable the voice button.
+        // to know now whether this is a password text field, because we need to
+        // know now (before the switch statement) whether we want to enable the
+        // voice button.
         mPasswordText = false;
         int variation = attribute.inputType & EditorInfo.TYPE_MASK_VARIATION;
         if (variation == EditorInfo.TYPE_TEXT_VARIATION_PASSWORD
@@ -797,6 +838,15 @@ public class LatinIME extends PersistentInputMethodService implements
                 break;
             default:
                 mCachedMode = KeyboardSwitcher.MODE_TEXT;
+        }
+
+        // If auto-switch is on AND we're not already auto-switched AND we're
+        // focused on an editable field THEN cache the current mode and force
+        // typing mode.
+        if (mAutoSwitch && mCachedForcedMode == FORCE_NONE
+                && (attribute.inputType & EditorInfo.TYPE_MASK_CLASS) != EditorInfo.TYPE_NULL) {
+            mCachedForcedMode = mForcedMode;
+            mForcedMode = FORCE_CACHED;
         }
 
         int keyboardMode = mCachedMode;
@@ -894,6 +944,12 @@ public class LatinIME extends PersistentInputMethodService implements
         // Remove pending messages related to update suggestions
         mHandler.removeMessages(MSG_UPDATE_SUGGESTIONS);
         mHandler.removeMessages(MSG_UPDATE_OLD_SUGGESTIONS);
+
+        // If auto-switch is on and we're in auto-switched mode, then restore
+        // the previous forced mode.
+        if (mAutoSwitch && mCachedForcedMode != FORCE_NONE) {
+            requestKeyboardMode(mCachedForcedMode);
+        }
     }
 
     @Override
@@ -911,14 +967,13 @@ public class LatinIME extends PersistentInputMethodService implements
     @Override
     public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd,
             int candidatesStart, int candidatesEnd) {
-        super.onUpdateSelection(
-                oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
+        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart,
+                candidatesEnd);
 
         if (DEBUG) {
-            Log.i(TAG,
-                    "onUpdateSelection: oss=" + oldSelStart + ", ose=" + oldSelEnd + ", nss="
-                            + newSelStart + ", nse=" + newSelEnd + ", cs=" + candidatesStart
-                            + ", ce=" + candidatesEnd);
+            Log.i(TAG, "onUpdateSelection: oss=" + oldSelStart + ", ose=" + oldSelEnd + ", nss="
+                    + newSelStart + ", nse=" + newSelEnd + ", cs=" + candidatesStart + ", ce="
+                    + candidatesEnd);
         }
 
         if (mAfterVoiceInput) {
@@ -929,8 +984,7 @@ public class LatinIME extends PersistentInputMethodService implements
         // If the current selection in the text view changes, we should
         // clear whatever candidate text we have.
         if ((((mComposing.length() > 0 && mPredicting) || mVoiceInputHighlighted)
-                && (newSelStart != candidatesEnd || newSelEnd != candidatesEnd)
-                && mLastSelectionStart != newSelStart)) {
+                && (newSelStart != candidatesEnd || newSelEnd != candidatesEnd) && mLastSelectionStart != newSelStart)) {
             mComposing.setLength(0);
             mPredicting = false;
             postUpdateSuggestions();
@@ -962,10 +1016,10 @@ public class LatinIME extends PersistentInputMethodService implements
             if (mKeyboardSwitcher != null && mKeyboardSwitcher.getInputView() != null
                     && mKeyboardSwitcher.getInputView().isShown()) {
                 // Check if we should go in or out of correction mode.
-                if (isPredictionOn() && mJustRevertedSeparator == null
-                        && (candidatesStart == candidatesEnd || newSelStart != oldSelStart
-                                || TextEntryState.isCorrecting())
-                        && (newSelStart < newSelEnd - 1 || (!mPredicting))
+                if (isPredictionOn()
+                        && mJustRevertedSeparator == null
+                        && (candidatesStart == candidatesEnd || newSelStart != oldSelStart || TextEntryState
+                                .isCorrecting()) && (newSelStart < newSelEnd - 1 || (!mPredicting))
                         && !mVoiceInputHighlighted) {
                     if (isCursorTouchingWord() || mLastSelectionStart < mLastSelectionEnd) {
                         postUpdateOldSuggestions();
@@ -1197,6 +1251,7 @@ public class LatinIME extends PersistentInputMethodService implements
         }
 
         mForcedMode = mode;
+        mCachedForcedMode = FORCE_NONE;
         mFeedbackUtil.vibrate(VIBRATE_PATTERN_MODE_CHANGE);
 
         // Broadcast mode switch so that we can receive it in the tutorial.
@@ -1259,8 +1314,8 @@ public class LatinIME extends PersistentInputMethodService implements
     public void updateShiftKeyState(EditorInfo attr) {
         InputConnection ic = getCurrentInputConnection();
         if (ic != null && attr != null && mKeyboardSwitcher.isAlphabetMode()) {
-            mKeyboardSwitcher.setShifted(
-                    mShiftKeyState.isMomentary() || mCapsLock || getCursorCapsMode(ic, attr) != 0);
+            mKeyboardSwitcher.setShifted(mShiftKeyState.isMomentary() || mCapsLock
+                    || getCursorCapsMode(ic, attr) != 0);
         }
     }
 
@@ -1396,6 +1451,7 @@ public class LatinIME extends PersistentInputMethodService implements
 
     // Implementation of KeyboardViewListener
 
+    @Override
     public void onKey(int primaryCode, int[] keyCodes, int x, int y) {
         long when = SystemClock.uptimeMillis();
         if (primaryCode != Keyboard.KEYCODE_DELETE || when > mLastKeyTime + QUICK_PRESS) {
@@ -1453,8 +1509,8 @@ public class LatinIME extends PersistentInputMethodService implements
             case LatinKeyboardView.KEYCODE_HOME: {
                 Intent launcher = new Intent(Intent.ACTION_MAIN, null);
                 launcher.addCategory(Intent.CATEGORY_HOME);
-                launcher.addFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                launcher.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                 startActivity(launcher);
                 break;
             }
@@ -1491,6 +1547,7 @@ public class LatinIME extends PersistentInputMethodService implements
         mEnteredText = null;
     }
 
+    @Override
     public void onText(CharSequence text) {
         if (VOICE_INSTALLED && mVoiceInputHighlighted) {
             commitVoiceInput();
@@ -1512,14 +1569,15 @@ public class LatinIME extends PersistentInputMethodService implements
         mEnteredText = text;
     }
 
+    @Override
     public void onCancel() {
         // User released a finger outside any key
     }
 
     private void handleBackspace() {
         if (VOICE_INSTALLED && mVoiceInputHighlighted) {
-            mVoiceInput.incrementTextModificationDeleteCount(
-                    mVoiceResults.candidates.get(0).toString().length());
+            mVoiceInput.incrementTextModificationDeleteCount(mVoiceResults.candidates.get(0)
+                    .toString().length());
             revertVoiceInput();
             return;
         }
@@ -1660,7 +1718,9 @@ public class LatinIME extends PersistentInputMethodService implements
                 } else {
                     // Some keys, such as [eszett], have upper case as
                     // multi-characters.
-                    String upperCase = new String(new int[] { primaryCode }, 0, 1).toUpperCase();
+                    String upperCase = new String(new int[] {
+                        primaryCode
+                    }, 0, 1).toUpperCase();
                     onText(upperCase);
                     return;
                 }
@@ -1677,8 +1737,7 @@ public class LatinIME extends PersistentInputMethodService implements
             if (ic != null) {
                 // If it's the first letter, make note of auto-caps state
                 if (mWord.size() == 1) {
-                    mWord.setAutoCapitalized(
-                            getCursorCapsMode(ic, getCurrentInputEditorInfo()) != 0);
+                    mWord.setAutoCapitalized(getCursorCapsMode(ic, getCurrentInputEditorInfo()) != 0);
                 }
                 ic.setComposingText(mComposing, 1);
             }
@@ -1718,13 +1777,13 @@ public class LatinIME extends PersistentInputMethodService implements
         }
         if (mPredicting) {
             // In certain languages where single quote is a separator, it's
-            // better
-            // not to auto correct, but accept the typed word. For instance,
-            // in Italian dov' should not be expanded to dove' because the
-            // elision
-            // requires the last vowel to be removed.
-            if (mAutoCorrectOn && primaryCode != '\''
-                    && (mJustRevertedSeparator == null || mJustRevertedSeparator.length() == 0
+            // better not to auto correct, but accept the typed word. For
+            // instance, in Italian dov' should not be expanded to dove' because
+            // the elision requires the last vowel to be removed.
+            if (mAutoCorrectOn
+                    && primaryCode != '\''
+                    && (mJustRevertedSeparator == null
+                            || mJustRevertedSeparator.length() == 0
                             || mJustRevertedSeparator.charAt(0) != primaryCode)) {
                 pickedDefault = pickDefaultSuggestion();
                 // Picked the suggestion by the space key. We consider this
@@ -1793,8 +1852,7 @@ public class LatinIME extends PersistentInputMethodService implements
         // Make a copy of the CharSequence, since it is/could be a mutable
         // CharSequence
         final String resultCopy = result.toString();
-        TypedWordAlternatives entry = new TypedWordAlternatives(
-                resultCopy, new WordComposer(mWord));
+        TypedWordAlternatives entry = new TypedWordAlternatives(resultCopy, new WordComposer(mWord));
         mWordHistory.add(entry);
     }
 
@@ -1816,6 +1874,7 @@ public class LatinIME extends PersistentInputMethodService implements
         return isPredictionOn() && mShowSuggestions;
     }
 
+    @Override
     public void onCancelVoice() {
         if (mRecognizing) {
             switchToKeyboardView();
@@ -1824,6 +1883,7 @@ public class LatinIME extends PersistentInputMethodService implements
 
     private void switchToKeyboardView() {
         mHandler.post(new Runnable() {
+            @Override
             public void run() {
                 mRecognizing = false;
                 if (mKeyboardSwitcher.getInputView() != null) {
@@ -1839,6 +1899,7 @@ public class LatinIME extends PersistentInputMethodService implements
     private void switchToRecognitionStatusView() {
         final boolean configChanged = mConfigurationChanging;
         mHandler.post(new Runnable() {
+            @Override
             public void run() {
                 setCandidatesViewShown(false);
                 mRecognizing = true;
@@ -1871,8 +1932,8 @@ public class LatinIME extends PersistentInputMethodService implements
         if (!mHasUsedVoiceInput) {
             // The user has started a voice input, so remember that in the
             // future (so we don't show the warning dialog after the first run).
-            SharedPreferences.Editor editor = PreferenceManager
-                    .getDefaultSharedPreferences(this).edit();
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit();
             editor.putBoolean(PREF_HAS_USED_VOICE_INPUT, true);
             SharedPreferencesCompat.apply(editor);
             mHasUsedVoiceInput = true;
@@ -1883,8 +1944,8 @@ public class LatinIME extends PersistentInputMethodService implements
             // remember that
             // in the future (so we don't show the warning dialog the next time
             // they do this).
-            SharedPreferences.Editor editor = PreferenceManager
-                    .getDefaultSharedPreferences(this).edit();
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this)
+                    .edit();
             editor.putBoolean(PREF_HAS_USED_VOICE_INPUT_UNSUPPORTED_LOCALE, true);
             SharedPreferencesCompat.apply(editor);
             mHasUsedVoiceInputUnsupportedLocale = true;
@@ -1905,12 +1966,14 @@ public class LatinIME extends PersistentInputMethodService implements
         builder.setCancelable(true);
         builder.setIcon(R.drawable.ic_mic_dialog);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 mVoiceInput.logKeyboardWarningDialogOk();
                 reallyStartListening(swipe);
             }
         });
         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int whichButton) {
                 mVoiceInput.logKeyboardWarningDialogCancel();
             }
@@ -1940,8 +2003,8 @@ public class LatinIME extends PersistentInputMethodService implements
         mVoiceWarningDialog.show();
     }
 
-    public void onVoiceResults(
-            List<String> candidates, Map<String, List<CharSequence>> alternatives) {
+    @Override
+    public void onVoiceResults(List<String> candidates, Map<String, List<CharSequence>> alternatives) {
         if (!mRecognizing) {
             return;
         }
@@ -1967,8 +2030,9 @@ public class LatinIME extends PersistentInputMethodService implements
         switchToKeyboardView();
 
         final List<CharSequence> nBest = new ArrayList<CharSequence>();
-        boolean capitalizeFirstWord = preferCapitalization() || (mKeyboardSwitcher.isAlphabetMode()
-                && mKeyboardSwitcher.getInputView().isShifted());
+        boolean capitalizeFirstWord = preferCapitalization()
+                || (mKeyboardSwitcher.isAlphabetMode() && mKeyboardSwitcher.getInputView()
+                        .isShifted());
         for (String c : mVoiceResults.candidates) {
             if (capitalizeFirstWord) {
                 c = Character.toUpperCase(c.charAt(0)) + c.substring(1, c.length());
@@ -2013,8 +2077,8 @@ public class LatinIME extends PersistentInputMethodService implements
         }
 
         if (mCandidateView != null) {
-            mCandidateView.setSuggestions(
-                    suggestions, completions, typedWordValid, haveMinimalSuggestion);
+            mCandidateView.setSuggestions(suggestions, completions, typedWordValid,
+                    haveMinimalSuggestion);
         }
     }
 
@@ -2035,8 +2099,8 @@ public class LatinIME extends PersistentInputMethodService implements
     }
 
     private List<CharSequence> getTypedSuggestions(WordComposer word) {
-        List<CharSequence> stringList = mSuggest.getSuggestions(
-                mKeyboardSwitcher.getInputView(), word, false, null);
+        List<CharSequence> stringList = mSuggest.getSuggestions(mKeyboardSwitcher.getInputView(),
+                word, false, null);
         return stringList;
     }
 
@@ -2049,24 +2113,25 @@ public class LatinIME extends PersistentInputMethodService implements
     private void showSuggestions(WordComposer word) {
         // long startTime = System.currentTimeMillis(); // TIME MEASUREMENT!
         // TODO Maybe need better way of retrieving previous word
-        CharSequence prevWord = EditingUtil.getPreviousWord(
-                getCurrentInputConnection(), mWordSeparators);
-        List<CharSequence> stringList = mSuggest.getSuggestions(
-                mKeyboardSwitcher.getInputView(), word, false, prevWord);
+        CharSequence prevWord = EditingUtil.getPreviousWord(getCurrentInputConnection(),
+                mWordSeparators);
+        List<CharSequence> stringList = mSuggest.getSuggestions(mKeyboardSwitcher.getInputView(),
+                word, false, prevWord);
         // long stopTime = System.currentTimeMillis(); // TIME MEASUREMENT!
         // Log.d("LatinIME","Suggest Total Time - " + (stopTime - startTime));
 
         int[] nextLettersFrequencies = mSuggest.getNextLettersFrequencies();
 
-        ((LatinKeyboard) mKeyboardSwitcher.getInputView().getKeyboard()).setPreferredLetters(
-                nextLettersFrequencies);
+        ((LatinKeyboard) mKeyboardSwitcher.getInputView().getKeyboard())
+                .setPreferredLetters(nextLettersFrequencies);
 
         boolean correctionAvailable = !mInputTypeNoAutoCorrect && mSuggest.hasMinimalCorrection();
         // || mCorrectionMode == mSuggest.CORRECTION_FULL;
         CharSequence typedWord = word.getTypedWord();
         // If we're in basic correct
-        boolean typedWordValid = mSuggest.isValidWord(typedWord) || (preferCapitalization()
-                && mSuggest.isValidWord(typedWord.toString().toLowerCase()));
+        boolean typedWordValid = mSuggest.isValidWord(typedWord)
+                || (preferCapitalization() && mSuggest.isValidWord(typedWord.toString()
+                        .toLowerCase()));
         if (mCorrectionMode == Suggest.CORRECTION_FULL
                 || mCorrectionMode == Suggest.CORRECTION_FULL_BIGRAM) {
             correctionAvailable |= typedWordValid;
@@ -2117,8 +2182,8 @@ public class LatinIME extends PersistentInputMethodService implements
         if (mAfterVoiceInput && mShowingVoiceSuggestions) {
             mVoiceInput.flushAllTextModificationCounters();
             // send this intent AFTER logging any prior aggregated edits.
-            mVoiceInput.logTextModifiedByChooseSuggestion(
-                    suggestion.toString(), index, mWordSeparators, getCurrentInputConnection());
+            mVoiceInput.logTextModifiedByChooseSuggestion(suggestion.toString(), index,
+                    mWordSeparators, getCurrentInputConnection());
         }
 
         final boolean correcting = TextEntryState.isCorrecting();
@@ -2143,14 +2208,16 @@ public class LatinIME extends PersistentInputMethodService implements
         }
 
         // If this is a punctuation, apply it through the normal key press
-        if (suggestion.length() == 1 && (isWordSeparator(suggestion.charAt(0))
-                || isSuggestedPunctuation(suggestion.charAt(0)))) {
+        if (suggestion.length() == 1
+                && (isWordSeparator(suggestion.charAt(0)) || isSuggestedPunctuation(suggestion
+                        .charAt(0)))) {
             // Word separators are suggested before the user inputs something.
             // So, LatinImeLogger logs "" as a user's input.
             LatinImeLogger.logOnManualSuggestion("", suggestion.toString(), index, suggestions);
             final char primaryCode = suggestion.charAt(0);
-            onKey(primaryCode, new int[] { primaryCode },
-                    LatinKeyboardBaseView.NOT_A_TOUCH_COORDINATE,
+            onKey(primaryCode, new int[] {
+                primaryCode
+            }, LatinKeyboardBaseView.NOT_A_TOUCH_COORDINATE,
                     LatinKeyboardBaseView.NOT_A_TOUCH_COORDINATE);
             if (ic != null) {
                 ic.endBatchEdit();
@@ -2165,8 +2232,8 @@ public class LatinIME extends PersistentInputMethodService implements
         } else {
             addToBigramDictionary(suggestion, 1);
         }
-        LatinImeLogger.logOnManualSuggestion(
-                mComposing.toString(), suggestion.toString(), index, suggestions);
+        LatinImeLogger.logOnManualSuggestion(mComposing.toString(), suggestion.toString(), index,
+                suggestions);
         TextEntryState.acceptedSuggestion(mComposing.toString(), suggestion);
         // Follow it with a space
         if (mAutoSpace && !correcting) {
@@ -2205,8 +2272,8 @@ public class LatinIME extends PersistentInputMethodService implements
         if (mShowingVoiceSuggestions) {
             // Retain the replaced word in the alternatives array.
             EditingUtil.Range range = new EditingUtil.Range();
-            String wordToBeReplaced = EditingUtil.getWordAtCursor(
-                    getCurrentInputConnection(), mWordSeparators, range);
+            String wordToBeReplaced = EditingUtil.getWordAtCursor(getCurrentInputConnection(),
+                    mWordSeparators, range);
             if (!mWordToSuggestions.containsKey(wordToBeReplaced)) {
                 wordToBeReplaced = wordToBeReplaced.toLowerCase();
             }
@@ -2314,11 +2381,14 @@ public class LatinIME extends PersistentInputMethodService implements
             }
         }
         // If we didn't find a match, at least suggest completions
-        if (foundWord == null && (mSuggest.isValidWord(touching.word)
-                || mSuggest.isValidWord(touching.word.toString().toLowerCase()))) {
+        if (foundWord == null
+                && (mSuggest.isValidWord(touching.word) || mSuggest.isValidWord(touching.word
+                        .toString().toLowerCase()))) {
             foundWord = new WordComposer();
             for (int i = 0; i < touching.word.length(); i++) {
-                foundWord.add(touching.word.charAt(i), new int[] { touching.word.charAt(i) });
+                foundWord.add(touching.word.charAt(i), new int[] {
+                    touching.word.charAt(i)
+                });
             }
             foundWord.setFirstCharCapitalized(Character.isUpperCase(touching.word.charAt(0)));
         }
@@ -2348,8 +2418,8 @@ public class LatinIME extends PersistentInputMethodService implements
             return;
         if (!mPredicting) {
             // Extract the selected or touching text
-            EditingUtil.SelectedWord touching = EditingUtil.getWordAtCursorOrSelection(
-                    ic, mLastSelectionStart, mLastSelectionEnd, mWordSeparators);
+            EditingUtil.SelectedWord touching = EditingUtil.getWordAtCursorOrSelection(ic,
+                    mLastSelectionStart, mLastSelectionEnd, mWordSeparators);
 
             if (touching != null && touching.word.length() > 1) {
                 ic.beginBatchEdit();
@@ -2389,28 +2459,28 @@ public class LatinIME extends PersistentInputMethodService implements
      * @param addToBigramDictionary true if it should be added to bigram
      *            dictionary if possible
      */
-    private void checkAddToDictionary(
-            CharSequence suggestion, int frequencyDelta, boolean addToBigramDictionary) {
+    private void checkAddToDictionary(CharSequence suggestion, int frequencyDelta,
+            boolean addToBigramDictionary) {
         if (suggestion == null || suggestion.length() < 1)
             return;
         // Only auto-add to dictionary if auto-correct is ON. Otherwise we'll be
         // adding words in situations where the user or application really
         // didn't
         // want corrections enabled or learned.
-        if (!(mCorrectionMode == Suggest.CORRECTION_FULL
-                || mCorrectionMode == Suggest.CORRECTION_FULL_BIGRAM)) {
+        if (!(mCorrectionMode == Suggest.CORRECTION_FULL || mCorrectionMode == Suggest.CORRECTION_FULL_BIGRAM)) {
             return;
         }
         if (suggestion != null) {
-            if (!addToBigramDictionary && mAutoDictionary.isValidWord(suggestion)
-                    || (!mSuggest.isValidWord(suggestion.toString())
-                            && !mSuggest.isValidWord(suggestion.toString().toLowerCase()))) {
+            if (!addToBigramDictionary
+                    && mAutoDictionary.isValidWord(suggestion)
+                    || (!mSuggest.isValidWord(suggestion.toString()) && !mSuggest
+                            .isValidWord(suggestion.toString().toLowerCase()))) {
                 mAutoDictionary.addWord(suggestion.toString(), frequencyDelta);
             }
 
             if (mUserBigramDictionary != null) {
-                CharSequence prevWord = EditingUtil.getPreviousWord(
-                        getCurrentInputConnection(), mSentenceSeparators);
+                CharSequence prevWord = EditingUtil.getPreviousWord(getCurrentInputConnection(),
+                        mSentenceSeparators);
                 if (!TextUtils.isEmpty(prevWord)) {
                     mUserBigramDictionary.addBigrams(prevWord.toString(), suggestion.toString());
                 }
@@ -2450,8 +2520,7 @@ public class LatinIME extends PersistentInputMethodService implements
                 ic.deleteSurroundingText(1, 0);
             int toDelete = mCommittedLength;
             CharSequence toTheLeft = ic.getTextBeforeCursor(mCommittedLength, 0);
-            if (toTheLeft != null && toTheLeft.length() > 0
-                    && isWordSeparator(toTheLeft.charAt(0))) {
+            if (toTheLeft != null && toTheLeft.length() > 0 && isWordSeparator(toTheLeft.charAt(0))) {
                 toDelete--;
             }
             ic.deleteSurroundingText(toDelete, 0);
@@ -2500,13 +2569,14 @@ public class LatinIME extends PersistentInputMethodService implements
         int currentKeyboardMode = mKeyboardSwitcher.getKeyboardMode();
         reloadKeyboards();
         mKeyboardSwitcher.makeKeyboards(true);
-        mKeyboardSwitcher.setKeyboardMode(
-                currentKeyboardMode, 0, mEnableVoiceButton && mEnableVoice);
+        mKeyboardSwitcher.setKeyboardMode(currentKeyboardMode, 0, mEnableVoiceButton
+                && mEnableVoice);
         initSuggest(mLanguageSwitcher.getInputLanguage());
         mLanguageSwitcher.persist();
         updateShiftKeyState(getCurrentInputEditorInfo());
     }
 
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (PREF_SELECTED_LANGUAGES.equals(key)) {
             mLanguageSwitcher.loadLocales(sharedPreferences);
@@ -2518,6 +2588,13 @@ public class LatinIME extends PersistentInputMethodService implements
     }
 
     /**
+     * @see #sendDownUpKeyEventsPreIme(int, int, long)
+     */
+    private void sendDownUpKeyEventsPreIme(int keyCode, int metaState) {
+        sendDownUpKeyEventsPreIme(keyCode, metaState, 0);
+    }
+
+    /**
      * Attempts to send key events to the IME, then to the input connection if
      * they are not handled by the IME. <br>
      * Unlike {@link InputMethodService#sendDownUpKeyEvents(int)}, this method
@@ -2526,26 +2603,22 @@ public class LatinIME extends PersistentInputMethodService implements
      *
      * @param keyCode The key code to send to the IME (or input connection).
      * @param metaState The meta keys to send along with the key code.
+     * @param delay The delay is milliseconds between key events.
      * @see KeyEvent
      */
-    private void sendDownUpKeyEventsPreIme(int keyCode, int metaState) {
+    private void sendDownUpKeyEventsPreIme(int keyCode, int metaState, long delay) {
         final InputConnection ic = getCurrentInputConnection();
         if (ic == null) {
             Log.e(TAG, "Cannot send key events, no input connection available");
             return;
         }
-        final long eventTime = SystemClock.uptimeMillis();
-        final KeyEvent event1 = new KeyEvent(eventTime, eventTime, KeyEvent.ACTION_DOWN, keyCode, 0,
-                metaState, KeyCharacterMap.BUILT_IN_KEYBOARD, 0, KeyEvent.FLAG_SOFT_KEYBOARD);
+        final long downTime = SystemClock.uptimeMillis();
+        final KeyEvent event1 = new KeyEvent(downTime, downTime, KeyEvent.ACTION_DOWN, keyCode,
+                0, metaState, KeyCharacterMap.BUILT_IN_KEYBOARD, 0, KeyEvent.FLAG_SOFT_KEYBOARD);
         if (!onKeyDown(keyCode, event1)) {
             ic.sendKeyEvent(event1);
         }
-        final KeyEvent event2 = new KeyEvent(SystemClock.uptimeMillis(), eventTime,
-                KeyEvent.ACTION_UP, keyCode, 0, metaState, KeyCharacterMap.BUILT_IN_KEYBOARD, 0,
-                KeyEvent.FLAG_SOFT_KEYBOARD);
-        if (!onKeyUp(keyCode, event2)) {
-            ic.sendKeyEvent(event2);
-        }
+        mHandler.postDelayed(new KeyEventRunnable(keyCode, metaState, downTime), delay);
     }
 
     @Override
@@ -2571,15 +2644,16 @@ public class LatinIME extends PersistentInputMethodService implements
     private boolean sendSwipeEvent(int pointerCount, int keyCode) {
         mFeedbackUtil.playSound(SOUND_RESOURCE_SWIPE);
         mFeedbackUtil.vibrate(VIBRATE_PATTERN_SWIPE);
-        int metaState = pointerCount == 2 ? KeyEvent.META_ALT_ON : 0;
+        final boolean isAltOn = !mKeyboardSwitcher.isAlphabetMode()
+                && mKeyboardSwitcher.isShiftedOrShiftLocked();
+        final int metaState = (isAltOn | pointerCount == 2) ? KeyEvent.META_ALT_ON : 0;
         sendDownUpKeyEventsPreIme(keyCode, metaState);
         return true;
     }
 
     @Override
     public boolean singleTap(int pointerCount) {
-        if (pointerCount == 1
-                && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_DPAD) {
+        if (pointerCount == 1 && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_DPAD) {
             mFeedbackUtil.playSound(SOUND_RESOURCE_TAP);
             mFeedbackUtil.vibrate(VIBRATE_PATTERN_TAP);
             sendDownUpKeyEventsPreIme(KeyEvent.KEYCODE_DPAD_CENTER, 0);
@@ -2596,8 +2670,7 @@ public class LatinIME extends PersistentInputMethodService implements
 
     @Override
     public boolean doubleTap(int pointerCount) {
-        if (pointerCount == 1
-                && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_DPAD) {
+        if (pointerCount == 1 && mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_DPAD) {
             mFeedbackUtil.playSound(SOUND_RESOURCE_DOUBLE_TAP);
             mFeedbackUtil.vibrate(VIBRATE_PATTERN_DOUBLE_TAP);
             sendDownUpKeyEventsPreIme(KeyEvent.KEYCODE_DPAD_CENTER, 0);
@@ -2614,11 +2687,25 @@ public class LatinIME extends PersistentInputMethodService implements
     }
 
     @Override
+    public boolean longPress(int pointerCount) {
+        if (mKeyboardSwitcher.getKeyboardMode() == KeyboardSwitcher.MODE_DPAD) {
+            // TODO Add support for long-pressing system keys like Search.
+            if (mPressedKey != LatinKeyboardView.KEYCODE_UNKNOWN) {
+                return false;
+            }
+            mFeedbackUtil.playSound(SOUND_RESOURCE_LONG_PRESS);
+            mFeedbackUtil.vibrate(VIBRATE_PATTERN_LONG_PRESS);
+            final long timeout = ViewConfiguration.getLongPressTimeout() + ViewConfiguration.getTapTimeout();
+            sendDownUpKeyEventsPreIme(KeyEvent.KEYCODE_DPAD_CENTER, 0, timeout);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public void exploreKeyboardArea() {
-        // if (mKeyboardSwitcher.getKeyboardMode() ==
-        // KeyboardSwitcher.MODE_DPAD) {
-        // mFeedbackUtil.vibrate(VIBRATE_PATTERN_EXPLORING);
-        // }
+        // TODO We used to vibrate here, but it was annoying. Maybe add some sort of feedback.
     }
 
     @Override
@@ -2661,7 +2748,12 @@ public class LatinIME extends PersistentInputMethodService implements
     }
 
     @Override
-    public void onPress(int primaryCode) {
+    public void onPress(Key key) {
+        if (key == null) {
+            return;
+        }
+        final int primaryCode = key.codes[0];
+        mPressedKey = primaryCode;
         mFeedbackUtil.vibrate(VIBRATE_PATTERN_SELECTED);
         mFeedbackUtil.playSound(SOUND_RESOURCE_SELECTED);
         final boolean distinctMultiTouch = mKeyboardSwitcher.hasDistinctMultitouch();
@@ -2677,11 +2769,16 @@ public class LatinIME extends PersistentInputMethodService implements
             mShiftKeyState.onOtherKeyPressed();
             mSymbolKeyState.onOtherKeyPressed();
         }
-        mAccessibilityUtils.onPress(primaryCode, mKeyboardSwitcher);
+        mAccessibilityUtils.onPress(key, mKeyboardSwitcher);
     }
 
     @Override
-    public void onLeaving(int primaryCode) {
+    public void onLeaving(Key key) {
+        if (key == null) {
+            return;
+        }
+        final int primaryCode = key.codes[0];
+        mPressedKey = LatinKeyboardView.KEYCODE_UNKNOWN;
         // Reset any drag flags in the keyboard
         ((LatinKeyboard) mKeyboardSwitcher.getInputView().getKeyboard()).keyReleased();
         // Handle multitouch keys
@@ -2700,13 +2797,17 @@ public class LatinIME extends PersistentInputMethodService implements
     }
 
     @Override
-    public void onRelease(int primaryCode) {
+    public void onRelease(Key key) {
+        if (key == null) {
+            return;
+        }
+        final int primaryCode = key.codes[0];
         // Releasing implies leaving
-        onLeaving(primaryCode);
+        onLeaving(key);
         // Provide feedback
         vibrate();
         playKeyClick(primaryCode);
-        mAccessibilityUtils.onRelease(primaryCode, mKeyboardSwitcher);
+        mAccessibilityUtils.onRelease(key, mKeyboardSwitcher);
     }
 
     @Override
@@ -2729,8 +2830,10 @@ public class LatinIME extends PersistentInputMethodService implements
     }
 
     private boolean shouldShowVoiceButton(FieldContext fieldContext, EditorInfo attribute) {
-        return ENABLE_VOICE_BUTTON && fieldCanDoVoice(fieldContext) && !(attribute != null
-                && IME_OPTION_NO_MICROPHONE.equals(attribute.privateImeOptions))
+        return ENABLE_VOICE_BUTTON
+                && fieldCanDoVoice(fieldContext)
+                && !(attribute != null && IME_OPTION_NO_MICROPHONE
+                        .equals(attribute.privateImeOptions))
                 && SpeechRecognizer.isRecognitionAvailable(this);
     }
 
@@ -2836,10 +2939,12 @@ public class LatinIME extends PersistentInputMethodService implements
     private void loadSettings() {
         // Get the settings preferences
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        mAutoSwitch = sp.getBoolean(PREF_AUTO_SWITCH,
+                mResources.getBoolean(R.bool.default_auto_switch));
         mVibrateOn = sp.getBoolean(PREF_VIBRATE_ON, mResources.getBoolean(R.bool.default_vibrate));
         mSoundOn = sp.getBoolean(PREF_SOUND_ON, mResources.getBoolean(R.bool.default_sound));
-        mPopupOn = sp.getBoolean(
-                PREF_POPUP_ON, mResources.getBoolean(R.bool.default_popup_preview));
+        mPopupOn = sp
+                .getBoolean(PREF_POPUP_ON, mResources.getBoolean(R.bool.default_popup_preview));
         mAutoCap = sp.getBoolean(PREF_AUTO_CAP, mResources.getBoolean(R.bool.default_auto_cap));
         mQuickFixes = sp.getBoolean(PREF_QUICK_FIXES, false);
         mHasUsedVoiceInput = sp.getBoolean(PREF_HAS_USED_VOICE_INPUT, false);
@@ -2862,16 +2967,16 @@ public class LatinIME extends PersistentInputMethodService implements
         String supportedLocalesString = SettingsUtil.getSettingsString(getContentResolver(),
                 SettingsUtil.LATIN_IME_VOICE_INPUT_SUPPORTED_LOCALES,
                 DEFAULT_VOICE_INPUT_SUPPORTED_LOCALES);
-        ArrayList<String> voiceInputSupportedLocales = newArrayList(
-                supportedLocalesString.split("\\s+"));
+        ArrayList<String> voiceInputSupportedLocales = newArrayList(supportedLocalesString
+                .split("\\s+"));
 
         mLocaleSupportedForVoiceInput = voiceInputSupportedLocales.contains(mInputLocale);
 
         mShowSuggestions = sp.getBoolean(PREF_SHOW_SUGGESTIONS, false);
 
         if (VOICE_INSTALLED) {
-            final String voiceMode = sp.getString(
-                    PREF_VOICE_MODE, getString(R.string.voice_mode_main));
+            final String voiceMode = sp.getString(PREF_VOICE_MODE,
+                    getString(R.string.voice_mode_main));
             boolean enableVoice = !voiceMode.equals(getString(R.string.voice_mode_off))
                     && mEnableVoiceButton;
             boolean voiceOnPrimary = voiceMode.equals(getString(R.string.voice_mode_main));
@@ -2882,11 +2987,11 @@ public class LatinIME extends PersistentInputMethodService implements
             mEnableVoice = enableVoice;
             mVoiceOnPrimary = voiceOnPrimary;
         }
-        mAutoCorrectEnabled =
-                sp.getBoolean(PREF_AUTO_COMPLETE, mResources.getBoolean(R.bool.enable_autocorrect))
+        mAutoCorrectEnabled = sp.getBoolean(PREF_AUTO_COMPLETE,
+                mResources.getBoolean(R.bool.enable_autocorrect))
                 & mShowSuggestions;
-        mBigramSuggestionEnabled = sp.getBoolean(
-                PREF_BIGRAM_SUGGESTIONS, mResources.getBoolean(R.bool.default_bigram_suggestions))
+        mBigramSuggestionEnabled = sp.getBoolean(PREF_BIGRAM_SUGGESTIONS,
+                mResources.getBoolean(R.bool.default_bigram_suggestions))
                 & mShowSuggestions;
         updateCorrectionMode();
         updateAutoTextEnabled(mResources.getConfiguration().locale);
@@ -2914,22 +3019,23 @@ public class LatinIME extends PersistentInputMethodService implements
         builder.setNegativeButton(android.R.string.cancel, null);
         CharSequence itemSettings = getString(R.string.english_ime_settings);
         CharSequence itemInputMethod = getString(R.string.selectInputMethod);
-        builder.setItems(new CharSequence[] { itemInputMethod, itemSettings },
-                new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface di, int position) {
-                        di.dismiss();
-                        switch (position) {
-                            case POS_SETTINGS:
-                                launchSettings();
-                                break;
-                            case POS_METHOD:
-                                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
-                                        .showInputMethodPicker();
-                                break;
-                        }
-                    }
-                });
+        builder.setItems(new CharSequence[] {
+                itemInputMethod, itemSettings
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface di, int position) {
+                di.dismiss();
+                switch (position) {
+                    case POS_SETTINGS:
+                        launchSettings();
+                        break;
+                    case POS_METHOD:
+                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+                                .showInputMethodPicker();
+                        break;
+                }
+            }
+        });
         builder.setTitle(mResources.getString(R.string.english_ime_input_options));
         mOptionsDialog = builder.create();
         Window window = mOptionsDialog.getWindow();

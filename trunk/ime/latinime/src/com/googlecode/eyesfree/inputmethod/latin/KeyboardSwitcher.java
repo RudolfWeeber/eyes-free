@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -150,7 +150,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
 
     /**
      * Sets the input locale, when there are multiple locales for input.
-     * If no locale switching is required, then the locale should be set to null. 
+     * If no locale switching is required, then the locale should be set to null.
      * button.
      */
     public void setLanguageSwitcher(LanguageSwitcher languageSwitcher) {
@@ -176,7 +176,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
 
         if (forceCreate) mKeyboards.clear();
         // Configuration change is coming after the keyboard gets recreated. So don't rely on that.
-        // If keyboards have already been made, check if we have a screen width change and 
+        // If keyboards have already been made, check if we have a screen width change and
         // create the keyboard layouts again at the correct orientation
         int displayWidth = mInputMethodService.getMaxWidth();
         if (displayWidth == mLastDisplayWidth) return;
@@ -242,7 +242,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
     private boolean hasVoiceButton(boolean isSymbols) {
         return mHasVoice && (isSymbols != mVoiceOnPrimary);
     }
-    
+
     public void setKeyboardMode(int mode) {
         setKeyboardMode(mode, mImeOptions, mHasVoice);
     }
@@ -278,6 +278,12 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
 
         if (mode == MODE_PHONE) {
             mInputView.setPhoneKeyboard(keyboard);
+        }
+
+        if (mode == MODE_DPAD) {
+            mInputView.setLongPressEnabled(true);
+        } else {
+            mInputView.setLongPressEnabled(false);
         }
 
         mCurrentId = id;
@@ -367,7 +373,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
     public int getKeyboardMode() {
         return mMode;
     }
-    
+
     public boolean isAlphabetMode() {
         if (mCurrentId == null) {
             return false;
@@ -392,7 +398,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
             mInputView.setShiftLocked(shiftLocked);
         }
     }
-    
+
     public boolean isShiftedOrShiftLocked() {
         if (mInputView != null) {
             return mInputView.isShifted();
@@ -453,7 +459,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
 
     /**
      * Updates state machine to figure out when to automatically switch back to alpha mode.
-     * Returns true if the keyboard needs to switch back 
+     * Returns true if the keyboard needs to switch back
      */
     public boolean onKey(int key) {
         // Switch back to alpha mode if user types one or more non-space/enter characters
@@ -507,6 +513,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
             mLayoutId = newLayout;
         }
         mInputMethodService.mHandler.post(new Runnable() {
+            @Override
             public void run() {
                 if (mInputView != null) {
                     mInputMethodService.setInputView(mInputView);
@@ -515,6 +522,7 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
             }});
     }
 
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (PREF_KEYBOARD_LAYOUT.equals(key)) {
             changeLatinKeyboardView(

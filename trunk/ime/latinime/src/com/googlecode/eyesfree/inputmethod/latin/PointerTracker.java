@@ -53,7 +53,7 @@ public class PointerTracker {
     private final KeyDetector mKeyDetector;
     private OnKeyboardActionListener mListener;
     private final boolean mHasDistinctMultitouch;
-    
+
     private boolean mIsAccessibilityEnabled;
 
     private Key[] mKeys;
@@ -281,7 +281,7 @@ public class PointerTracker {
         checkMultiTap(eventTime, keyIndex);
         if (mListener != null) {
             if (isValidKeyIndex(keyIndex)) {
-                mListener.onPress(mKeys[keyIndex].codes[0]);
+                mListener.onPress(mKeys[keyIndex]);
                 // This onPress call may have changed keyboard layout and have updated mKeyIndex.
                 // If that's the case, mKeyIndex has been updated in setKeyboard().
                 keyIndex = mKeyState.getKeyIndex();
@@ -311,13 +311,13 @@ public class PointerTracker {
         if (isValidKeyIndex(keyIndex)) {
             if (oldKey == null) {
                 if (mListener != null)
-                    mListener.onPress(mKeys[keyIndex].codes[0]);
+                    mListener.onPress(mKeys[keyIndex]);
                 keyState.onMoveToNewKey(keyIndex, x, y);
                 mHandler.startLongPressTimer(mLongPressKeyTimeout, keyIndex, this);
             } else if (!isMinorMoveBounce(x, y, keyIndex)) {
                 if (mListener != null) {
-                    mListener.onLeaving(oldKey.codes[0]);
-                    mListener.onPress(mKeys[keyIndex].codes[0]);
+                    mListener.onLeaving(oldKey);
+                    mListener.onPress(mKeys[keyIndex]);
                 }
                 resetMultiTap();
                 keyState.onMoveToNewKey(keyIndex, x, y);
@@ -326,7 +326,7 @@ public class PointerTracker {
         } else {
             if (oldKey != null) {
                  if (mListener != null)
-                     mListener.onLeaving(oldKey.codes[0]);
+                     mListener.onLeaving(oldKey);
                 keyState.onMoveToNewKey(keyIndex, x ,y);
                 mHandler.cancelLongPressTimer();
             } else if (!isMinorMoveBounce(x, y, keyIndex)) {
@@ -451,7 +451,7 @@ public class PointerTracker {
             if (key.text != null) {
                 if (listener != null) {
                     listener.onText(key.text);
-                    listener.onRelease(NOT_A_KEY);
+                    listener.onRelease(null);
                 }
             } else {
                 int code = key.codes[0];
@@ -478,7 +478,7 @@ public class PointerTracker {
                 }
                 if (listener != null) {
                     listener.onKey(code, codes, x, y);
-                    listener.onRelease(code);
+                    listener.onRelease(key);
                 }
             }
             mLastSentIndex = index;
