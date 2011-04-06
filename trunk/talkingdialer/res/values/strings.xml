@@ -15,9 +15,9 @@
   <string name="exclamation_point">Exclamation Point</string>
   <string name="comma">Comma</string>
   <string name="backspace">Backspace</string>
-  <string name="invalid_number">Cannot Dial. Invalid phone number.</string>
   <string name="earcon_tock">[TOCK]</string>
   <string name="view_mode_preference">LastKnownView</string>
   <string name="people_uri">content://contacts/people/</string>
+  <string name="invalid_number">Cannot Dial. Invalid phone number.</string>
   <string name="load_detail">Loading Contact Details For </string>
 </resources>

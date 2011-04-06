@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2008 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -33,21 +33,21 @@ import android.view.View;
  * sliding to the upperleft hand corner and lifting up will dial a "1". A
  * similar technique is used for dialing a contact. Stroking up will go to
  * previous contact; stroking down will go to the next contact.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 public class SlideDial extends Activity {
-    
+
     private static final int DIALING_VIEW = 0;
-    
+
     private static final int CONTACTS_VIEW = 1;
-    
+
     private int currentView = -1;
 
     private SlideDialView mView;
 
     private ContactsView contactsView;
-    
+
     private SharedPreferences prefs;
 
     public TextToSpeech tts;
@@ -70,6 +70,7 @@ public class SlideDial extends Activity {
     }
 
     private OnInitListener ttsInitListener = new OnInitListener() {
+        @Override
         public void onInit(int status) {
             String pkgName = SlideDial.class.getPackage().getName();
             tts.addEarcon(getString(R.string.earcon_tock), pkgName, R.raw.tock_snd);
@@ -106,7 +107,7 @@ public class SlideDial extends Activity {
         if (mView == null) {
             mView = new SlideDialView(this);
         }
-        mView.parent = this;
+        mView.mParent = this;
         setContentView(mView);
         currentView = DIALING_VIEW;
         tts.speak(getString(R.string.dialing_mode), 0, null);
@@ -139,7 +140,7 @@ public class SlideDial extends Activity {
         }
         super.onPause();
     }
-    
+
     @Override
     protected void onDestroy() {
         removeViews();

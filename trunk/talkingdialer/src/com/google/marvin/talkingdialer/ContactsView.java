@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2008 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -45,7 +45,7 @@ import java.util.ArrayList;
  * ringtone. By setting the ringtone to an audio file that is the same as the
  * contact's name, the user gets a talking caller ID feature automatically
  * without needing any additional code.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 public class ContactsView extends TextView {
@@ -114,7 +114,7 @@ public class ContactsView extends TextView {
     private static final int NUMBER = 1;
 
     private static final int TYPE = 2;
-        
+
     private static final int PERSON_ID = 3;
 
     private static final int AE = 0;
@@ -126,7 +126,7 @@ public class ContactsView extends TextView {
     private static final int Y = 4;
 
     private static final int NONE = 5;
-    
+
     private static final int LONG_PRESS_THRESHOLD = 2000;
 
     private final double left = 0;
@@ -191,7 +191,7 @@ public class ContactsView extends TextView {
     private boolean trackballEnabled = true;
 
     private ShakeDetector shakeDetector;
-    
+
     private LongPressDetector longPress = null;
 
     private boolean inDPadMode = false;
@@ -231,6 +231,7 @@ public class ContactsView extends TextView {
         requestFocus();
 
         shakeDetector = new ShakeDetector(context, new ShakeListener() {
+            @Override
             public void onShakeDetected() {
                 backspace();
             }
@@ -261,6 +262,7 @@ public class ContactsView extends TextView {
     }
 
     class trackballTimeout implements Runnable {
+        @Override
         public void run() {
             try {
                 Thread.sleep(trackballTimeout);
@@ -545,7 +547,7 @@ public class ContactsView extends TextView {
         currentWheel = NONE;
         currentCharacter = "";
     }
-    
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -975,18 +977,19 @@ public class ContactsView extends TextView {
         }
         invalidate();
     }
-    
+
     public void displayContactDetails() {
         if (!managedCursor.isAfterLast()) {
             parent.tts.speak(parent.getString(R.string.load_detail) + managedCursor.getString(NAME),
                     TextToSpeech.QUEUE_FLUSH, null);
             String uri = parent.getString(R.string.people_uri) + managedCursor.getString(PERSON_ID);
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri)); 
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             parent.startActivity(intent);
         }
     }
-    
+
     private class LongPressDetector implements Runnable {
+        @Override
         public void run() {
             invalidate();
             displayContactDetails();

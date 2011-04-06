@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2008 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -23,164 +23,217 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
 
 /**
  * Implements the user interface for doing slide dialing.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen) Created 8-2-2008
+ * @author alanv@google.com (Alan Viverette)
  */
 public class SlideDialView extends TextView {
-    private final double left = 0;
+    /** Vibrate pattern to play when the user enters a digit. */
+    private static final long[] VIBRATE_PATTERN_DIGIT = {
+            0, 1, 40, 41
+    };
 
-    private final double upleft = Math.PI * .25;
+    /**
+     * Edge touch tolerance in inches. Used for edge-based commands like delete.
+     */
+    private static final double EDGE_TOLERANCE_INCHES = 0.25;
 
-    private final double up = Math.PI * .5;
+    /**
+     * Radius tolerance in inches. Used for calculating distance from center.
+     */
+    private static final double RADIUS_TOLERANCE_INCHES = 0.15;
+    private static final double THETA_TOLERANCE = (Math.PI / 12.0);
 
-    private final double upright = Math.PI * .75;
+    /**
+     * Delay in milliseconds to wait before speaking a digit. Used to prevent
+     * clutter when swiping across several digits.
+     */
+    private static final long DELAY_SPEAK_DIGIT = 250;
 
-    private final double downright = -Math.PI * .75;
+    // Command constants
+    private static final String DELETE = "delete";
 
-    private final double down = -Math.PI * .5;
+    // Handler constants
+    private static final int MSG_SPEAK_DIGIT = 1;
 
-    private final double downleft = -Math.PI * .25;
+    // Angle constants
+    private static final double LEFT = 0;
+    private static final double UP_LEFT = Math.PI * .25;
+    private static final double UP = Math.PI * .5;
+    private static final double UP_RIGHT = Math.PI * .75;
+    private static final double DOWN_RIGHT = -Math.PI * .75;
+    private static final double DOWN = -Math.PI * .5;
+    private static final double DOWN_LEFT = -Math.PI * .25;
+    private static final double RIGHT = Math.PI;
+    private static final double RIGHT_WRAP = -Math.PI;
 
-    private final double right = Math.PI;
+    public SlideDial mParent;
 
-    private final double rightWrap = -Math.PI;
+    private final Vibrator mVibrator;
+    private final ShakeDetector mShakeDetector;
+    private final SlideHandler mHandler;
 
-    public SlideDial parent;
+    /** Scaled edge tolerance in pixels. Used for edge commands like delete. */
+    private final int mEdgeTolerance;
 
-    private double downX;
+    /** Scaled radius tolerance in pixels. Used for outer commands like star. */
+    private final int mRadiusTolerance;
 
-    private double downY;
+    /** The initial touch DOWN action. */
+    private MotionEvent mDownEvent;
 
-    private String currentValue;
+    /** Currently entered phone number. */
+    private String mDialedNumber;
 
-    private Vibrator vibe;
+    /** Currently entered digit or command. */
+    private String mCurrentValue;
 
-    private String dialedNumber;
-
-    private boolean confirmed;
-
-    boolean screenIsBeingTouched = false;
-
-    boolean screenVisible = true;
-
-    private ShakeDetector shakeDetector;
+    /** Whether the dialed number has been confirmed. */
+    private boolean mNumberConfirmed;
 
     public SlideDialView(Context context) {
         super(context);
-        // android.os.Debug.waitForDebugger();
-        downX = 0;
-        downY = 0;
-        dialedNumber = "";
-        currentValue = "";
-        vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-        confirmed = false;
-        setClickable(true);
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-        requestFocus();
-        screenVisible = true;
-        screenIsBeingTouched = false;
-        shakeDetector = new ShakeDetector(context, new ShakeListener() {
+
+        mDownEvent = null;
+        mDialedNumber = "";
+        mCurrentValue = "";
+        mNumberConfirmed = false;
+        mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        mHandler = new SlideHandler(context.getMainLooper());
+
+        mShakeDetector = new ShakeDetector(context, new ShakeListener() {
+            @Override
             public void onShakeDetected() {
                 deleteNumber();
             }
         });
+
+        mEdgeTolerance = (int) (EDGE_TOLERANCE_INCHES * getResources().getDisplayMetrics().densityDpi);
+        mRadiusTolerance = (int) (RADIUS_TOLERANCE_INCHES * getResources().getDisplayMetrics().densityDpi);
+
+        setClickable(true);
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+
+        requestFocus();
     }
 
     public void shutdown() {
-        shakeDetector.shutdown();
+        mShakeDetector.shutdown();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        confirmed = false; // Inputting a new number invalidates the
-                           // confirmation
+        // Inputting a new number invalidates the confirmation
+        mNumberConfirmed = false;
+
         int action = event.getAction();
         float x = event.getX();
         float y = event.getY();
         String prevVal = "";
+
         switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                screenIsBeingTouched = true;
-                downX = x;
-                downY = y;
-                currentValue = "";
-                break;
             case MotionEvent.ACTION_UP:
-                screenIsBeingTouched = false;
-                prevVal = currentValue;
-                currentValue = evalMotion(x, y);
-                // Do some correction if the user lifts up on deadspace
-                if (currentValue.length() == 0) {
-                    currentValue = prevVal;
+                if (mDownEvent != null) {
+                    mDownEvent.recycle();
+                    mDownEvent = null;
                 }
-                parent.tts.speak(currentValue, 0, null);
-                dialedNumber = dialedNumber + currentValue;
+                prevVal = mCurrentValue;
+                mCurrentValue = evalMotion(x, y);
+                // Do some correction if the user lifts UP on deadspace
+                if (mCurrentValue.length() == 0) {
+                    mCurrentValue = prevVal;
+                }
+                if (DELETE.equals(mCurrentValue)) {
+                    deleteNumber();
+                } else {
+                    speakDigit(mCurrentValue);
+                    mDialedNumber = mDialedNumber + mCurrentValue;
+                }
                 break;
-            default:
-                screenIsBeingTouched = true;
-                prevVal = currentValue;
-                currentValue = evalMotion(x, y);
+            case MotionEvent.ACTION_DOWN:
+                mDownEvent = MotionEvent.obtain(event);
+                //$FALL-THROUGH$
+            case MotionEvent.ACTION_MOVE:
+                prevVal = mCurrentValue;
+                mCurrentValue = evalMotion(x, y);
+
                 // Do nothing since we want a deadzone here;
                 // restore the state to the previous value.
-                if (currentValue.length() == 0) {
-                    currentValue = prevVal;
+                if (mCurrentValue.length() == 0) {
+                    mCurrentValue = prevVal;
                     break;
                 }
-                if (prevVal != currentValue) {
-                    parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
-                    long[] pattern = {
-                            0, 1, 40, 41
-                    };
-                    vibe.vibrate(pattern, -1);
+
+                if (prevVal != mCurrentValue) {
+                    mParent.tts.playEarcon(mParent.getString(R.string.earcon_tock),
+                            TextToSpeech.QUEUE_FLUSH, null);
+                    speakDigitDelayed(mCurrentValue);
+                    mVibrator.vibrate(VIBRATE_PATTERN_DIGIT, -1);
                 }
                 break;
         }
+
         invalidate();
+
         return true;
     }
 
     public String evalMotion(double x, double y) {
-        float rTolerance = 25;
-        double thetaTolerance = (Math.PI / 12);
+        if (mDownEvent == null) {
+            return "";
+        }
+
+        final float downX = mDownEvent.getX();
+        final float downY = mDownEvent.getY();
 
         boolean movedFar = false;
+        boolean nearEdge = false;
 
         double r = Math.sqrt(((downX - x) * (downX - x)) + ((downY - y) * (downY - y)));
 
-        if (r < rTolerance) {
+        if (r < mRadiusTolerance) {
             return "5";
         }
-        if (r > 6 * rTolerance) {
+
+        if (r > 6 * mRadiusTolerance) {
             movedFar = true;
+        }
+
+        if (x < mEdgeTolerance || x > (getWidth() - mEdgeTolerance) || y < mEdgeTolerance
+                || y > (getHeight() - mEdgeTolerance)) {
+            nearEdge = true;
         }
 
         double theta = Math.atan2(downY - y, downX - x);
 
-        if (Math.abs(theta - left) < thetaTolerance) {
-            return "4";
-        } else if (Math.abs(theta - upleft) < thetaTolerance) {
+        if (Math.abs(theta - LEFT) < THETA_TOLERANCE) {
+            return movedFar && nearEdge ? DELETE : "4";
+        } else if (Math.abs(theta - UP_LEFT) < THETA_TOLERANCE) {
             return "1";
-        } else if (Math.abs(theta - up) < thetaTolerance) {
+        } else if (Math.abs(theta - UP) < THETA_TOLERANCE) {
             return "2";
-        } else if (Math.abs(theta - upright) < thetaTolerance) {
+        } else if (Math.abs(theta - UP_RIGHT) < THETA_TOLERANCE) {
             return "3";
-        } else if (Math.abs(theta - downright) < thetaTolerance) {
+        } else if (Math.abs(theta - DOWN_RIGHT) < THETA_TOLERANCE) {
             return movedFar ? "#" : "9";
-        } else if (Math.abs(theta - down) < thetaTolerance) {
+        } else if (Math.abs(theta - DOWN) < THETA_TOLERANCE) {
             return movedFar ? "0" : "8";
-        } else if (Math.abs(theta - downleft) < thetaTolerance) {
+        } else if (Math.abs(theta - DOWN_LEFT) < THETA_TOLERANCE) {
             return movedFar ? "*" : "7";
-        } else if ((theta > right - thetaTolerance) || (theta < rightWrap + thetaTolerance)) {
+        } else if ((theta > RIGHT - THETA_TOLERANCE) || (theta < RIGHT_WRAP + THETA_TOLERANCE)) {
             return "6";
         }
 
@@ -195,19 +248,19 @@ public class SlideDialView extends TextView {
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
 
-        if (!screenIsBeingTouched) {
+        if (mDownEvent == null) {
             int x = getWidth() / 2;
             int y = (getHeight() / 2) - 35;
             paint.setTextSize(400);
             y -= paint.ascent() / 2;
-            canvas.drawText(currentValue, x, y, paint);
+            canvas.drawText(mCurrentValue, x, y, paint);
 
             x = 5;
             y = 30;
             paint.setTextSize(50);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
-            canvas.drawText(dialedNumber, x, y, paint);
+            canvas.drawText(mDialedNumber, x, y, paint);
 
             x = 5;
             y = getHeight() - 60;
@@ -223,14 +276,18 @@ public class SlideDialView extends TextView {
             y -= paint.ascent() / 2;
             canvas.drawText("Stroke the screen to dial.", x, y, paint);
             x = 5;
-            
+
             y = getHeight() - 20;
             paint.setTextSize(20);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
             canvas.drawText("Press CALL twice to confirm.", x, y, paint);
-
         } else {
+            // TODO This is... a lot of code. Figure out a better way to handle
+            // drawing the UI.
+
+            final float downX = mDownEvent.getX();
+            final float downY = mDownEvent.getY();
 
             int offset = 130;
             int regSize = 100;
@@ -255,6 +312,8 @@ public class SlideDialView extends TextView {
             int x9 = (int) downX + offset;
             int y9 = (int) downY + offset;
 
+            int xDel = (int) downX - offset - offset;
+            int yDel = (int) downY;
             int xStar = (int) downX - offset - offset;
             int yStar = (int) downY + offset + offset;
             int x0 = (int) downX;
@@ -262,7 +321,15 @@ public class SlideDialView extends TextView {
             int xPound = (int) downX + offset + offset;
             int yPound = (int) downY + offset + offset;
 
-            if (currentValue.equals("1")) {
+            if (mCurrentValue.equals(DELETE)) {
+                paint.setTextSize(selectedSize);
+            } else {
+                paint.setTextSize(regSize);
+            }
+            yDel -= paint.ascent() / 2;
+            canvas.drawText("DEL", xDel, yDel, paint);
+
+            if (mCurrentValue.equals("1")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -270,7 +337,7 @@ public class SlideDialView extends TextView {
             y1 -= paint.ascent() / 2;
             canvas.drawText("1", x1, y1, paint);
 
-            if (currentValue.equals("2")) {
+            if (mCurrentValue.equals("2")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -278,7 +345,7 @@ public class SlideDialView extends TextView {
             y2 -= paint.ascent() / 2;
             canvas.drawText("2", x2, y2, paint);
 
-            if (currentValue.equals("3")) {
+            if (mCurrentValue.equals("3")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -286,7 +353,7 @@ public class SlideDialView extends TextView {
             y3 -= paint.ascent() / 2;
             canvas.drawText("3", x3, y3, paint);
 
-            if (currentValue.equals("4")) {
+            if (mCurrentValue.equals("4")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -294,7 +361,7 @@ public class SlideDialView extends TextView {
             y4 -= paint.ascent() / 2;
             canvas.drawText("4", x4, y4, paint);
 
-            if (currentValue.equals("5")) {
+            if (mCurrentValue.equals("5")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -302,7 +369,7 @@ public class SlideDialView extends TextView {
             y5 -= paint.ascent() / 2;
             canvas.drawText("5", x5, y5, paint);
 
-            if (currentValue.equals("6")) {
+            if (mCurrentValue.equals("6")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -310,7 +377,7 @@ public class SlideDialView extends TextView {
             y6 -= paint.ascent() / 2;
             canvas.drawText("6", x6, y6, paint);
 
-            if (currentValue.equals("7")) {
+            if (mCurrentValue.equals("7")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -318,7 +385,7 @@ public class SlideDialView extends TextView {
             y7 -= paint.ascent() / 2;
             canvas.drawText("7", x7, y7, paint);
 
-            if (currentValue.equals("8")) {
+            if (mCurrentValue.equals("8")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -326,7 +393,7 @@ public class SlideDialView extends TextView {
             y8 -= paint.ascent() / 2;
             canvas.drawText("8", x8, y8, paint);
 
-            if (currentValue.equals("9")) {
+            if (mCurrentValue.equals("9")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -334,7 +401,7 @@ public class SlideDialView extends TextView {
             y9 -= paint.ascent() / 2;
             canvas.drawText("9", x9, y9, paint);
 
-            if (currentValue.equals("*")) {
+            if (mCurrentValue.equals("*")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -342,7 +409,7 @@ public class SlideDialView extends TextView {
             yStar -= paint.ascent() / 2;
             canvas.drawText("*", xStar, yStar, paint);
 
-            if (currentValue.equals("0")) {
+            if (mCurrentValue.equals("0")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -350,7 +417,7 @@ public class SlideDialView extends TextView {
             y0 -= paint.ascent() / 2;
             canvas.drawText("0", x0, y0, paint);
 
-            if (currentValue.equals("#")) {
+            if (mCurrentValue.equals("#")) {
                 paint.setTextSize(selectedSize);
             } else {
                 paint.setTextSize(regSize);
@@ -361,22 +428,23 @@ public class SlideDialView extends TextView {
     }
 
     private void callCurrentNumber() {
-        if (!confirmed) {
-            if (dialedNumber.length() == 0) {
-                parent.switchToContactsView();
-            } else if (dialedNumber.length() < 3) {
-                // A number is considered invalid if less than 3 digits in length.
-                parent.tts.speak(parent.getString(R.string.invalid_number), 1, null);
+        if (!mNumberConfirmed) {
+            if (mDialedNumber.length() == 0) {
+                mParent.switchToContactsView();
+            } else if (mDialedNumber.length() < 3) {
+                // A number is considered invalid if less than 3 digits in
+                // length.
+                mParent.tts.speak(mParent.getString(R.string.invalid_number), 1, null);
             } else {
-                parent.tts.speak(parent.getString(R.string.you_are_about_to_dial), 1, null);
-                for (int i = 0; i < dialedNumber.length(); i++) {
-                    String digit = dialedNumber.charAt(i) + "";
-                    parent.tts.speak(digit, 1, null);
+                mParent.tts.speak(mParent.getString(R.string.you_are_about_to_dial), 1, null);
+                for (int i = 0; i < mDialedNumber.length(); i++) {
+                    String digit = mDialedNumber.charAt(i) + "";
+                    speakDigit(digit, TextToSpeech.QUEUE_ADD);
                 }
-                confirmed = true;
+                mNumberConfirmed = true;
             }
         } else {
-            parent.returnResults(dialedNumber);
+            mParent.returnResults(mDialedNumber);
         }
     }
 
@@ -386,7 +454,7 @@ public class SlideDialView extends TextView {
         boolean newLetterEntered = false;
         switch (keyCode) {
             case KeyEvent.KEYCODE_MENU:
-                parent.switchToContactsView();
+                mParent.switchToContactsView();
                 return true;
             case KeyEvent.KEYCODE_SEARCH:
             case KeyEvent.KEYCODE_CALL:
@@ -438,17 +506,17 @@ public class SlideDialView extends TextView {
                 break;
         }
         if (newNumberEntered) {
-            confirmed = false;
+            mNumberConfirmed = false;
             KeyCharacterMap kmap = KeyCharacterMap.load(event.getDeviceId());
-            currentValue = kmap.getNumber(keyCode) + "";
-            if ((currentValue.equals("3")) && (event.isAltPressed() || event.isShiftPressed())) {
-                currentValue = "#";
-            } else if ((currentValue.equals("8"))
+            mCurrentValue = kmap.getNumber(keyCode) + "";
+            if ((mCurrentValue.equals("3")) && (event.isAltPressed() || event.isShiftPressed())) {
+                mCurrentValue = "#";
+            } else if ((mCurrentValue.equals("8"))
                     && (event.isAltPressed() || event.isShiftPressed())) {
-                currentValue = "*";
+                mCurrentValue = "*";
             }
-            parent.tts.speak(currentValue, 0, null);
-            dialedNumber = dialedNumber + currentValue;
+            speakDigit(mCurrentValue);
+            mDialedNumber = mDialedNumber + mCurrentValue;
             invalidate();
             return true;
         } else if (newLetterEntered) {
@@ -458,81 +526,118 @@ public class SlideDialView extends TextView {
                 case 'a':
                 case 'b':
                 case 'c':
-                    currentValue = "2";
+                    mCurrentValue = "2";
                     break;
                 case 'd':
                 case 'e':
                 case 'f':
-                    currentValue = "3";
+                    mCurrentValue = "3";
                     break;
                 case 'g':
                 case 'h':
                 case 'i':
-                    currentValue = "4";
+                    mCurrentValue = "4";
                     break;
                 case 'j':
                 case 'k':
                 case 'l':
-                    currentValue = "5";
+                    mCurrentValue = "5";
                     break;
                 case 'm':
                 case 'n':
                 case 'o':
-                    currentValue = "6";
+                    mCurrentValue = "6";
                     break;
                 case 'p':
                 case 'q':
                 case 'r':
                 case 's':
-                    currentValue = "7";
+                    mCurrentValue = "7";
                     break;
                 case 't':
                 case 'u':
                 case 'v':
-                    currentValue = "8";
+                    mCurrentValue = "8";
                     break;
                 case 'w':
                 case 'x':
                 case 'y':
                 case 'z':
-                    currentValue = "9";
+                    mCurrentValue = "9";
                     break;
             }
-            parent.tts.speak(currentValue, 0, null);
-            dialedNumber = dialedNumber + currentValue;
+            speakDigit(mCurrentValue);
+            mDialedNumber = mDialedNumber + mCurrentValue;
             invalidate();
             return true;
         }
-        confirmed = false;
+        mNumberConfirmed = false;
         return false;
     }
 
+    private void speakDigitDelayed(String digit) {
+        mHandler.removeMessages(MSG_SPEAK_DIGIT);
+        Message msg = mHandler.obtainMessage(MSG_SPEAK_DIGIT, digit);
+        mHandler.sendMessageDelayed(msg, DELAY_SPEAK_DIGIT);
+    }
+
+    private void speakDigit(String digit) {
+        speakDigit(digit, TextToSpeech.QUEUE_FLUSH);
+    }
+
+    private void speakDigit(String digit, int queueMode) {
+        String text = adjustForSpeech(digit);
+        mParent.tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    private String adjustForSpeech(String digit) {
+        if ("*".equals(digit)) {
+            return "star.";
+        } else if ("#".equals(digit)) {
+            return "pound.";
+        } else {
+            return digit + ".";
+        }
+    }
+
     private void deleteNumber() {
-        confirmed = false;
+        mNumberConfirmed = false;
+
         String deletedNum;
-        if (dialedNumber.length() > 0) {
-            deletedNum = "" + dialedNumber.charAt(dialedNumber.length() - 1);
-            dialedNumber = dialedNumber.substring(0, dialedNumber.length() - 1);
+
+        if (mDialedNumber.length() > 0) {
+            deletedNum = adjustForSpeech("" + mDialedNumber.charAt(mDialedNumber.length() - 1));
+            mDialedNumber = mDialedNumber.substring(0, mDialedNumber.length() - 1);
         } else {
             deletedNum = "";
         }
+
         if (!deletedNum.equals("")) {
-            parent.tts.speak(deletedNum, 0, null);
-            parent.tts.speak(parent.getString(R.string.deleted), 1, null);
+            mParent.tts.speak(deletedNum, TextToSpeech.QUEUE_FLUSH, null);
+            mParent.tts.speak(mParent.getString(R.string.deleted), 1, null);
         } else {
-            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
-            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 1, null);
+            mParent.tts.playEarcon(mParent.getString(R.string.earcon_tock), 0, null);
+            mParent.tts.playEarcon(mParent.getString(R.string.earcon_tock), 1, null);
         }
-        currentValue = "";
+
+        mCurrentValue = "";
         invalidate();
     }
 
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        if (visibility == View.VISIBLE) {
-            screenVisible = true;
-        } else {
-            screenVisible = false;
+    private class SlideHandler extends Handler {
+        public SlideHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_SPEAK_DIGIT:
+                    if (msg.obj instanceof String) {
+                        speakDigit((String) msg.obj);
+                    }
+                    break;
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ public class ShakeDetector {
 
             private int shakeCountTimeout = 500;
 
+            @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
                 if ((sensorEvent.values[1] > deletionForce) && !lastShakePositive) {
                     (new Thread(new resetShakeCount())).start();
@@ -48,10 +49,12 @@ public class ShakeDetector {
                 }
             }
 
+            @Override
             public void onAccuracyChanged(Sensor sensor, int arg1) {
             }
 
             class resetShakeCount implements Runnable {
+                @Override
                 public void run() {
                     try {
                         Thread.sleep(shakeCountTimeout);
