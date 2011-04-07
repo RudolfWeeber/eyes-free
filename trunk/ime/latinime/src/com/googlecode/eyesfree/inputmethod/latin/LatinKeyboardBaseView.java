@@ -396,7 +396,7 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
 
         public void startLongPressTimer(long delay, int keyIndex, PointerTracker tracker) {
             // Accessibility disables long press because users are likely to need to pause on a key
-            // for an unspecified duration in order to hear the key's spoken descripti
+            // for an unspecified duration in order to hear the key's spoken description.
             if (mIsAccessibilityEnabled) {
                 return;
             }
@@ -1628,8 +1628,6 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
                 handled = true;
             } else {
                 // Only the _UP is necessary for typing, the _DOWN generates a click noise.
-                // MotionEvent down = MotionEvent.obtain(ev);
-                // down.setAction(KeyEvent.ACTION_DOWN);
                 MotionEvent up = MotionEvent.obtain(ev);
                 up.setAction(KeyEvent.ACTION_UP);
                 handled = onTouchEvent(up, true);

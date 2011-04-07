@@ -17,18 +17,18 @@ import android.telephony.TelephonyManager;
 
 /**
  * A command that provides the current connectivity, including phone, data, gps and bluetooth.
- * 
+ *
  * Note: This command assumes that someone else (who is persistent) will be listening for changes to
- * the phone state and saving the updates into a shared preference via the 
+ * the phone state and saving the updates into a shared preference via the
  * {@link SavingPhoneStateListener}.
- * 
+ *
  * TODO(clsimon): Find a better way to get this async data.
- * 
+ *
  * @author clsimon@google.com (Cheryl Simon)
  *
  */
 public class ConnectivityCommand implements CommandExecutor {
-    
+
     @Override
     public String executeCommand(Context context) {
         String bluetooth = "";
@@ -83,15 +83,13 @@ public class ConnectivityCommand implements CommandExecutor {
     }
 
     private String getVoiceNetworkInfo(Context context) {
-        TelephonyManager tm = 
+        TelephonyManager tm =
             (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String voiceNetworkOperator = tm.getNetworkOperatorName();
-        // get the voice signal strength from a shared preference that should be updated with the 
+        // get the voice signal strength from a shared preference that should be updated with the
         // latest.
-        int voiceSignalStrength = 
-            context.getSharedPreferences(SavingPhoneStateListener.PREFERENCES_NAME, 0)
-                .getInt(SavingPhoneStateListener.VOICE_LEVEL, -1);
-        
+        int voiceSignalStrength = SavingPhoneStateListener.getVoiceLevel();
+
         String voiceNetworkStrength = voiceSignalStrength + " " + context.getString(R.string.bars);
         if (voiceSignalStrength == -1) {
             voiceNetworkStrength = "";

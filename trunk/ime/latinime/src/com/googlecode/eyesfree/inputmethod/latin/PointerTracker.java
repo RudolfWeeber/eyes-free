@@ -27,7 +27,7 @@ import com.googlecode.eyesfree.inputmethod.latin.LatinKeyboardBaseView.UIHandler
 
 public class PointerTracker {
     private static final String TAG = "PointerTracker";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final boolean DEBUG_MOVE = false;
 
     public interface UIProxy {

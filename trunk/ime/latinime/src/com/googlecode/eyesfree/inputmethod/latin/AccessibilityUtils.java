@@ -28,7 +28,8 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Utility functions for accessibility support.
@@ -40,7 +41,8 @@ public class AccessibilityUtils {
      */
     private static final Parcelable JUNK_PARCELABLE = new Rect();
 
-    private TreeMap<Integer, CharSequence> mDescriptions;
+    private HashMap<Integer, CharSequence> mDescriptions;
+    private HashSet<Integer> mForcedDescriptions;
 
     private final Context mContext;
 
@@ -48,8 +50,8 @@ public class AccessibilityUtils {
 
     public AccessibilityUtils(Context context) {
         mContext = context;
-        mAccessibilityManager = (AccessibilityManager) context.getSystemService(
-                Context.ACCESSIBILITY_SERVICE);
+        mAccessibilityManager = (AccessibilityManager) context
+                .getSystemService(Context.ACCESSIBILITY_SERVICE);
     }
 
     /**
@@ -138,7 +140,9 @@ public class AccessibilityUtils {
 
         CharSequence description = null;
 
-        if (!TextUtils.isEmpty(key.label)) {
+        if (hasForcedDescription(key.codes[0])) {
+            description = describeKey(key.codes[0]);
+        } else if (!TextUtils.isEmpty(key.label)) {
             description = key.label;
         } else if (hasDescription(key.codes[0])) {
             description = describeKey(key.codes[0]);
@@ -174,16 +178,25 @@ public class AccessibilityUtils {
     private CharSequence describeKey(int keyCode) {
         // If not loaded yet, load key descriptions from XML file.
         if (mDescriptions == null) {
-            mDescriptions = loadDescriptions();
+            loadDescriptions();
         }
 
         return mDescriptions.get(keyCode);
     }
 
+    private boolean hasForcedDescription(int keyCode) {
+        // If not loaded yet, load key descriptions from XML file.
+        if (mDescriptions == null) {
+            loadDescriptions();
+        }
+
+        return mForcedDescriptions.contains(keyCode) && mDescriptions.containsKey(keyCode);
+    }
+
     private boolean hasDescription(int keyCode) {
         // If not loaded yet, load key descriptions from XML file.
         if (mDescriptions == null) {
-            mDescriptions = loadDescriptions();
+            loadDescriptions();
         }
 
         return mDescriptions.containsKey(keyCode);
@@ -192,8 +205,9 @@ public class AccessibilityUtils {
     /**
      * Loads key descriptions from resources.
      */
-    private TreeMap<Integer, CharSequence> loadDescriptions() {
-        TreeMap<Integer, CharSequence> descriptions = new TreeMap<Integer, CharSequence>();
+    private void loadDescriptions() {
+        HashMap<Integer, CharSequence> descriptions = new HashMap<Integer, CharSequence>();
+        HashSet<Integer> forcedDescriptions = new HashSet<Integer>();
         TypedArray array = mContext.getResources().obtainTypedArray(R.array.key_descriptions);
 
         // Key descriptions are stored as a key code followed by a string.
@@ -203,9 +217,13 @@ public class AccessibilityUtils {
             descriptions.put(code, desc);
         }
 
+        // Add forced description for symbols key.
+        forcedDescriptions.add(mContext.getResources().getInteger(R.integer.key_symbol));
+
         array.recycle();
 
-        return descriptions;
+        mDescriptions = descriptions;
+        mForcedDescriptions = forcedDescriptions;
     }
 
     /**
@@ -224,8 +242,8 @@ public class AccessibilityUtils {
         }
 
         // TODO We need to add an AccessibilityEvent type for IMEs.
-        AccessibilityEvent event = AccessibilityEvent.obtain(
-                AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+        AccessibilityEvent event = AccessibilityEvent
+                .obtain(AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
         event.setPackageName(mContext.getPackageName());
         event.setClassName(getClass().getName());
         event.setAddedCount(description.length());
@@ -241,8 +259,8 @@ public class AccessibilityUtils {
     }
 
     public static boolean isAccessibilityEnabled(Context context) {
-        final int accessibilityEnabled = Settings.Secure.getInt(
-                context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 0);
+        final int accessibilityEnabled = Settings.Secure.getInt(context.getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_ENABLED, 0);
 
         return accessibilityEnabled == 1;
     }
@@ -250,8 +268,8 @@ public class AccessibilityUtils {
     public static boolean isInputMethodEnabled(Context context, Class<?> imeClass) {
         final String targetImePackage = imeClass.getPackage().getName();
         final String targetImeClass = imeClass.getSimpleName();
-        final String enabledImeIds = Settings.Secure.getString(
-                context.getContentResolver(), Settings.Secure.ENABLED_INPUT_METHODS);
+        final String enabledImeIds = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ENABLED_INPUT_METHODS);
 
         return enabledImeIds != null && enabledImeIds.contains(targetImePackage)
                 && enabledImeIds.contains(targetImeClass);
@@ -260,8 +278,8 @@ public class AccessibilityUtils {
     public static boolean isInputMethodDefault(Context context, Class<?> imeClass) {
         final String targetImePackage = imeClass.getPackage().getName();
         final String targetImeClass = imeClass.getSimpleName();
-        final String defaultImeId = Settings.Secure.getString(
-                context.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
+        final String defaultImeId = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.DEFAULT_INPUT_METHOD);
 
         return defaultImeId != null && defaultImeId.contains(targetImePackage)
                 && defaultImeId.contains(targetImeClass);

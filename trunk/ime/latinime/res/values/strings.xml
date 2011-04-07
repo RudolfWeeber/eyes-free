@@ -24,6 +24,8 @@
     <string name="english_ime_settings">TalkBack keyboard settings</string>
     <!-- Title for Latin keyboard input options dialog -->
     <string name="english_ime_input_options">Input options</string>
+    <!-- Title for Accessibility settings dialog -->
+    <string name="accessibility_settings">Accessibility settings</string>
     
     <!-- Permission for sending and receiving LatinIME broadcasts -->
     <string name="permlab_sendIntentBroadcastCommandsToLatinIME">Send commands to TalkBack keyboard</string>

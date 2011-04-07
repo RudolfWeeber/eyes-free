@@ -39,6 +39,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.speech.SpeechRecognizer;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -204,6 +205,7 @@ public class LatinIME extends PersistentInputMethodService implements
     // Contextual menu positions
     private static final int POS_METHOD = 0;
     private static final int POS_SETTINGS = 1;
+    private static final int POS_ACCESSIBILITY_SETTINGS = 2;
 
     // Receive phone call status updates.
     private final PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
@@ -1467,16 +1469,10 @@ public class LatinIME extends PersistentInputMethodService implements
                 LatinImeLogger.logOnDelete();
                 break;
             case Keyboard.KEYCODE_SHIFT:
-                // Shift key is handled in onPress() when device has distinct
-                // multi-touch panel.
-                if (!distinctMultiTouch || accessibilityEnabled)
-                    handleShift();
+                handleShift();
                 break;
             case Keyboard.KEYCODE_MODE_CHANGE:
-                // Symbol key is handled in onPress() when device has distinct
-                // multi-touch panel.
-                if (!distinctMultiTouch || accessibilityEnabled)
-                    changeKeyboardMode();
+                changeKeyboardMode();
                 break;
             case Keyboard.KEYCODE_CANCEL:
                 if (!isShowingOptionDialog()) {
@@ -2760,11 +2756,9 @@ public class LatinIME extends PersistentInputMethodService implements
         final boolean accessibilityEnabled = mKeyboardSwitcher.isAccessibilityEnabled();
         if (!accessibilityEnabled && distinctMultiTouch && primaryCode == Keyboard.KEYCODE_SHIFT) {
             mShiftKeyState.onPress();
-            handleShift();
         } else if (!accessibilityEnabled && distinctMultiTouch
                 && primaryCode == Keyboard.KEYCODE_MODE_CHANGE) {
             mSymbolKeyState.onPress();
-            changeKeyboardMode();
         } else {
             mShiftKeyState.onOtherKeyPressed();
             mSymbolKeyState.onOtherKeyPressed();
@@ -2924,6 +2918,13 @@ public class LatinIME extends PersistentInputMethodService implements
         launchSettings(LatinIMESettings.class);
     }
 
+    protected void launchAccessibilitySettings() {
+        handleClose();
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     public void launchDebugSettings() {
         launchSettings(LatinIMEDebugSettings.class);
     }
@@ -3018,9 +3019,10 @@ public class LatinIME extends PersistentInputMethodService implements
         builder.setIcon(R.drawable.ic_dialog_keyboard);
         builder.setNegativeButton(android.R.string.cancel, null);
         CharSequence itemSettings = getString(R.string.english_ime_settings);
+        CharSequence itemAccessibilitySettings = getString(R.string.accessibility_settings);
         CharSequence itemInputMethod = getString(R.string.selectInputMethod);
         builder.setItems(new CharSequence[] {
-                itemInputMethod, itemSettings
+                itemInputMethod, itemSettings, itemAccessibilitySettings
         }, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface di, int position) {
@@ -3028,6 +3030,9 @@ public class LatinIME extends PersistentInputMethodService implements
                 switch (position) {
                     case POS_SETTINGS:
                         launchSettings();
+                        break;
+                    case POS_ACCESSIBILITY_SETTINGS:
+                        launchAccessibilitySettings();
                         break;
                     case POS_METHOD:
                         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))

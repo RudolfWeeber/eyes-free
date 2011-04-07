@@ -515,8 +515,10 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
         mInputMethodService.mHandler.post(new Runnable() {
             @Override
             public void run() {
-                if (mInputView != null) {
-                    mInputMethodService.setInputView(mInputView);
+                synchronized (mInputMethodService) {
+                    if (mInputView != null && mInputView.getParent() == null) {
+                        mInputMethodService.setInputView(mInputView);
+                    }
                 }
                 mInputMethodService.updateInputViewShown();
             }});
