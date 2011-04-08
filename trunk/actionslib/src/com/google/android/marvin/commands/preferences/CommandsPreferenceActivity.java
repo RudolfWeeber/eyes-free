@@ -14,10 +14,12 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.method.BaseKeyListener;
+import android.text.method.MetaKeyKeyListener;
 import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import android.view.View;
 
 import java.util.List;
 
@@ -100,26 +102,38 @@ public class CommandsPreferenceActivity extends PreferenceActivity {
             editTextPreference.setTitle(R.string.letter_key);
             editTextPreference.setSummary(letterKeyName);
             
-            // set up a TextWatcher that only allows a single character at a time in the 
-            // EditText.
-            editTextPreference.getEditText().addTextChangedListener(new TextWatcher() {
-                private CharSequence newChar;
+            editTextPreference.getEditText().setKeyListener(new BaseKeyListener() {
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    newChar = null;
-                    if (s.length() > 1) {
-                        newChar = s.subSequence(start, start + count);
+                public boolean onKeyDown(View view, Editable content, int keyCode, KeyEvent event) {
+                    if (keyCode == KeyEvent.KEYCODE_ALT_LEFT || 
+                            keyCode == KeyEvent.KEYCODE_ALT_RIGHT ||
+                            keyCode == KeyEvent.KEYCODE_SHIFT_LEFT ||
+                            keyCode == KeyEvent.KEYCODE_SHIFT_RIGHT ||
+                            keyCode == KeyEvent.KEYCODE_SEARCH || 
+                            keyCode == KeyEvent.KEYCODE_MENU || 
+                            keyCode == KeyEvent.KEYCODE_ENTER|| 
+                            keyCode == KeyEvent.KEYCODE_DEL) {
+                        return true;
                     }
-                }    
+                    return false;
+                }
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if (newChar != null) {
-                        editTextPreference.getEditText().setText(newChar.toString());
+                public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
+                    int unicode = event.getUnicodeChar();
+                    if (unicode != 0 && unicode != 0xEF02) {
+                        String character = new String(new int[] {unicode}, 0 , 1);
+                        text.clear();
+                        text.append(character);
+                        return true;
                     }
+                    return false;
+                }                
+                @Override
+                public int getInputType() {
+                    return 0;
                 }
             });
+            
             editTextPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 
                 @Override
@@ -127,8 +141,6 @@ public class CommandsPreferenceActivity extends PreferenceActivity {
                     // when the value changes, save the new value to the database
                     int newLetterKey = getKeyCode((String)newValue);
                     
-                    Log.i("CommandsPreferenceActivity", 
-                        "new value " + newValue.toString() + " keycode " + newLetterKey);
                     command.setKeyCode(newLetterKey);
                     commandsManager.updateCommandShortcut(
                         CommandsPreferenceActivity.this, command);

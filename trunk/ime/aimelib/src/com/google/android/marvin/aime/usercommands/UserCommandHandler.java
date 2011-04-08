@@ -67,7 +67,7 @@ public class UserCommandHandler {
     /**
      * Set to {@code} true when the Menu key is down.
      */
-    private boolean mMenuKeyDown = false;
+    private boolean mModifierKeyDown = false;
 
     /**
      * Constructs a new user command handler using the specified parent context.
@@ -95,6 +95,22 @@ public class UserCommandHandler {
     }
 
     /**
+     * Returns whether a key code is a valid modifier for user commands.
+     *
+     * @param keyCode The key code.
+     * @return {@code true} if the key code is a valid modifier
+     */
+    private boolean isModifierKey(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_SEARCH:
+            case KeyEvent.KEYCODE_MENU:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
      * Attempts to handle a key down event. Returns {@code true} if the event is
      * captured.
      *
@@ -102,9 +118,9 @@ public class UserCommandHandler {
      * @return {@code true} if the key is captured.
      */
     public boolean onKeyDown(KeyEvent ev) {
-        if (ev.getKeyCode() == KeyEvent.KEYCODE_MENU) {
-            mMenuKeyDown = true;
-        } else if (!mMenuKeyDown) {
+        if (isModifierKey(ev.getKeyCode())) {
+            mModifierKeyDown = true;
+        } else if (!mModifierKeyDown) {
             return false;
         }
 
@@ -133,8 +149,8 @@ public class UserCommandHandler {
      * @return {@code true} if the key is captured.
      */
     public boolean onKeyUp(KeyEvent ev) {
-        if (ev.getKeyCode() == KeyEvent.KEYCODE_MENU) {
-            mMenuKeyDown = false;
+        if (isModifierKey(ev.getKeyCode())) {
+            mModifierKeyDown = false;
         }
 
         // If we want to do transformations on text being entered with a hard

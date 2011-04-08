@@ -9,14 +9,12 @@ import java.util.HashMap;
 import java.util.Stack;
 
 /**
- * A handler for parsing simple HTML from WebView
- *
+ * A handler for parsing simple HTML from Android WebView.
+ * 
  * @author credo@google.com (Tim Credo)
  */
 public class WebContentHandler extends DefaultHandler {
-
-    static final String INPUT_TAG = "input";
-
+    
     /**
      * Maps input type attribute to element description.
      */
@@ -45,7 +43,7 @@ public class WebContentHandler extends DefaultHandler {
     /**
      * Initializes the handler with maps that provide descriptions for relevant
      * features in HTML.
-     *
+     * 
      * @param htmlInputMap A mapping from input types to text descriptions.
      * @param htmlRoleMap A mapping from ARIA roles to text descriptions.
      * @param htmlTagMap A mapping from common tags to text descriptions.
@@ -82,13 +80,7 @@ public class WebContentHandler extends DefaultHandler {
         } else if (title != null) {
             mOutputBuilder.append(title);
         }
-        String value = attributes.getValue("value");
-        if (value != null) {
-            if (!localName.equalsIgnoreCase("checkbox") && !localName.equalsIgnoreCase("radio")) {
-                fixWhiteSpace();
-                mOutputBuilder.append(value);
-            }
-        }
+
         /*
          * Add role text to the stack so it appears after the content. If there
          * is no text we still need to push a blank string, since this will pop
@@ -97,10 +89,10 @@ public class WebContentHandler extends DefaultHandler {
         String role = attributes.getValue("role");
         String roleName = mAriaRoleToDesc.get(role);
         String type = attributes.getValue("type");
-        String tagInfo = mTagToDesc.get(localName.toLowerCase());
+        String tagInfo = mTagToDesc.get(name.toLowerCase());
         if (roleName != null) {
             mPostorderTextStack.push(roleName);
-        } else if (localName.equalsIgnoreCase(INPUT_TAG) && type != null) {
+        } else if (name.equalsIgnoreCase("input") && type != null) {
             String typeInfo = mInputTypeToDesc.get(type.toLowerCase());
             if (typeInfo != null) {
                 mPostorderTextStack.push(typeInfo);
@@ -111,6 +103,22 @@ public class WebContentHandler extends DefaultHandler {
             mPostorderTextStack.push(tagInfo);
         } else {
             mPostorderTextStack.push("");
+        }
+
+        /*
+         * The value should be spoken as long as the element is not a form
+         * element with a non-human-readable value.
+         */
+        String value = attributes.getValue("value");
+        if (value != null) {
+            String elementType = name;
+            if (name.equalsIgnoreCase("input") && type != null) {
+                elementType = type;
+            }
+            if (!elementType.equalsIgnoreCase("checkbox") && !elementType.equalsIgnoreCase("radio")) {
+                fixWhiteSpace();
+                mOutputBuilder.append(value);
+            }
         }
     }
 
@@ -128,8 +136,11 @@ public class WebContentHandler extends DefaultHandler {
      */
     @Override
     public void endElement(String uri, String localName, String name) {
-        fixWhiteSpace();
-        mOutputBuilder.append(mPostorderTextStack.pop());
+        String postorderText = mPostorderTextStack.pop();
+        if (postorderText.length() > 0) {
+            fixWhiteSpace();
+        }
+        mOutputBuilder.append(postorderText);
     }
 
     /**
@@ -149,7 +160,7 @@ public class WebContentHandler extends DefaultHandler {
     /**
      * Get the processed string in mBuilder. Call this after parsing is done to
      * get the finished output.
-     *
+     * 
      * @return A string with HTML tags converted to descriptions suitable for
      *         speaking.
      */

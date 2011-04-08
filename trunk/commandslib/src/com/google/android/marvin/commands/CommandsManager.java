@@ -98,11 +98,15 @@ public class CommandsManager {
             .append("\"");
         
         Cursor cursor = resolver.query(
-                CONTENT_URI, 
-                projection, 
-                selection.toString(),
-                null,
-                null);
+            CONTENT_URI, 
+            projection, 
+            selection.toString(),
+            null,
+            null);
+        if (cursor == null) {
+            Log.d(TAG, "No commands content provider found.");
+            return;
+        }
         ContentValues values = new ContentValues();
         values.put(NAME_COLUMN, command.getDisplayName());
         values.put(MODIFIER_KEY_COLUMN, command.getModifier());

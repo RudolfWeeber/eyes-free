@@ -308,7 +308,6 @@ public class KeyboardSwitcher implements SharedPreferences.OnSharedPreferenceCha
             keyboard = new LatinKeyboard(mInputMethodService, id.mXml, id.mKeyboardMode);
             keyboard.setVoiceMode(hasVoiceButton(id.mXml == R.xml.kbd_symbols
                     || id.mXml == R.xml.kbd_symbols_black), mHasVoice);
-            keyboard.setLanguageSwitcher(mLanguageSwitcher, mIsAutoCompletionActive, isBlackSym());
 
             if (id.mEnableShiftLock) {
                 keyboard.enableShiftLock();

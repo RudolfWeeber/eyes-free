@@ -110,17 +110,22 @@ public class CommandsContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-        int count = 0;
-        switch (sUriMatcher.match(uri)) {
-            case COMMANDS:
-                count = db.delete(COMMANDS_TABLE, selection, selectionArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown Uri " + uri);
+        try {
+            SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+            int count = 0;
+            switch (sUriMatcher.match(uri)) {
+                case COMMANDS:
+                    count = db.delete(COMMANDS_TABLE, selection, selectionArgs);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown Uri " + uri);
+            }
+            getContext().getContentResolver().notifyChange(uri, null);
+            return count; 
+        } catch (SQLException e) {
+            Log.e(TAG, "Failed to access database.", e);
+            return 0;
         }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return count;
     }
 
     @Override
@@ -135,64 +140,82 @@ public class CommandsContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues initialValues) {
-        if (sUriMatcher.match(uri) != COMMANDS) { 
-            throw new IllegalArgumentException("Unknown URI " + uri); 
+        try {
+            if (sUriMatcher.match(uri) != COMMANDS) { 
+                throw new IllegalArgumentException("Unknown URI " + uri); 
+            }
+            ContentValues values;
+            if (initialValues != null) {
+                values = new ContentValues(initialValues);
+            } else {
+                values = new ContentValues();
+            }
+     
+            SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+            long rowId = db.insert(COMMANDS_TABLE, CommandsManager.NAME_COLUMN, values);
+            if (rowId > 0) {
+                Uri noteUri = ContentUris.withAppendedId(CommandsManager.CONTENT_URI, rowId);
+                getContext().getContentResolver().notifyChange(noteUri, null);
+                return noteUri;
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "Failed to insert row into " + uri, e);
         }
-        ContentValues values;
-        if (initialValues != null) {
-            values = new ContentValues(initialValues);
-        } else {
-            values = new ContentValues();
-        }
- 
-        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-        long rowId = db.insert(COMMANDS_TABLE, CommandsManager.NAME_COLUMN, values);
-        if (rowId > 0) {
-            Uri noteUri = ContentUris.withAppendedId(CommandsManager.CONTENT_URI, rowId);
-            getContext().getContentResolver().notifyChange(noteUri, null);
-            return noteUri;
-        }
- 
-        throw new SQLException("Failed to insert row into " + uri);
+        return null;
     }
 
     @Override
     public boolean onCreate() {
-        mDatabaseHelper = new  DatabaseHelper(getContext());
+        try {
+            mDatabaseHelper = new DatabaseHelper(getContext());
+        } catch (SQLException e) {
+            Log.e(TAG, "Failed to access database.", e);
+            return false;
+        }
         return true;
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
             String sortOrder) {
+        try {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
-        switch (sUriMatcher.match(uri)) {
-            case COMMANDS:
-                builder.setTables(COMMANDS_TABLE);
-                builder.setProjectionMap(sProjectionMap);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown Uri " + uri);
+            switch (sUriMatcher.match(uri)) {
+                case COMMANDS:
+                    builder.setTables(COMMANDS_TABLE);
+                    builder.setProjectionMap(sProjectionMap);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown Uri " + uri);
+            }
+            SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
+            Cursor c = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+            c.setNotificationUri(getContext().getContentResolver(), uri);
+            return c;
+        } catch (SQLException e) {
+            Log.e(TAG, "Failed to access database.", e);
+            return null;
         }
-        SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
-        Cursor c = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-        c.setNotificationUri(getContext().getContentResolver(), uri);
-        return c;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-        int count;
-        switch (sUriMatcher.match(uri)) {
-            case COMMANDS:
-                count = db.update(COMMANDS_TABLE, values, selection, selectionArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown Uri " + uri);
+        try {
+            SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+            int count;
+            switch (sUriMatcher.match(uri)) {
+                case COMMANDS:
+                    count = db.update(COMMANDS_TABLE, values, selection, selectionArgs);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown Uri " + uri);
+            }
+            getContext().getContentResolver().notifyChange(uri, null);
+            return count;
+        } catch (SQLException e) {
+            Log.e(TAG, "Failed to access database.", e);
+            return 0;
         }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return count;
     }
 
 }

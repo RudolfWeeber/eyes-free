@@ -63,6 +63,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -82,6 +84,58 @@ import java.util.regex.Pattern;
  */
 public class TalkBackService extends AccessibilityService {
 
+    // BEGIN WORKAROUND FOR ECLAIRE COMPATIBILITY
+    
+    private static Method TextToSpeech_getDefaultEngine;
+
+    private static Method TextToSpeech_setEngineByPackageName;
+    
+    static {
+        initCompatibility();
+    }
+
+    private static void initCompatibility() {
+        try {
+            TextToSpeech_getDefaultEngine = TextToSpeech.class.getMethod("getDefaultEngine", new Class[] {});
+            TextToSpeech_setEngineByPackageName = TextToSpeech.class.getMethod("setEngineByPackageName", new Class[] {
+                    String.class
+            });
+            /* success, this is a newer device */
+        } catch (NoSuchMethodException nsme) {
+            /* failure, must be older device */
+        }
+    }
+
+    private static String getDefaultEngine(TextToSpeech tts) {
+        try {
+            Object retobj = TextToSpeech_getDefaultEngine.invoke(tts);
+            return (String) retobj;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static int setEngineByPackageName(TextToSpeech tts, String packageName) {
+        try {
+            Object retobj = TextToSpeech_setEngineByPackageName.invoke(tts, packageName);
+            return (Integer) retobj;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    // END OF WORKAROUND FOR ECLAIRE COMPATIBILITY
+    
     /**
      * {@link Intent} broadcast action for announcing the notifications state.
      * </p> Note: Sending intent broadcast commands to TalkBack must be
@@ -797,10 +851,10 @@ public class TalkBackService extends AccessibilityService {
      */
     private void setTtsEngineKeepTrying(
             final String engine, final int retryInterval, final int maxTries) {
-        if (maxTries < 1 || mTts == null) {
+        if (maxTries < 1 || mTts == null || TextToSpeech_setEngineByPackageName == null) {
             return;
         }
-        int result = mTts.setEngineByPackageName(engine);
+        int result = setEngineByPackageName(mTts, engine);
         if (result == TextToSpeech.ERROR) {
             mTtsHandler.postDelayed(new Runnable() {
                 @Override
@@ -1730,7 +1784,9 @@ public class TalkBackService extends AccessibilityService {
                     mTts.addEarcon(
                             getString(R.string.earcon_progress), getPackageName(), R.raw.progress);
                     sTtsInitialized = true;
-                    defaultTtsEngine = mTts.getDefaultEngine();
+                    if (TextToSpeech_getDefaultEngine != null) {
+                        defaultTtsEngine = getDefaultEngine(mTts);
+                    }
                     String mediaState = Environment.getExternalStorageState();
                     if (!mediaState.equals(Environment.MEDIA_MOUNTED)
                             && !mediaState.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
