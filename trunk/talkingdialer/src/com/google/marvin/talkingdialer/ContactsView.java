@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.speech.tts.TextToSpeech;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -110,41 +111,25 @@ public class ContactsView extends TextView {
     };
 
     private static final int NAME = 0;
-
     private static final int NUMBER = 1;
-
     private static final int TYPE = 2;
-
     private static final int PERSON_ID = 3;
-
     private static final int AE = 0;
-
     private static final int IM = 1;
-
     private static final int QU = 2;
-
     private static final int Y = 4;
-
     private static final int NONE = 5;
 
     private static final int LONG_PRESS_THRESHOLD = 2000;
 
     private final double left = 0;
-
     private final double upleft = Math.PI * .25;
-
     private final double up = Math.PI * .5;
-
     private final double upright = Math.PI * .75;
-
     private final double downright = -Math.PI * .75;
-
     private final double down = -Math.PI * .5;
-
     private final double downleft = -Math.PI * .25;
-
     private final double right = Math.PI;
-
     private final double rightWrap = -Math.PI;
 
     // An array specifying which columns to return.
@@ -161,15 +146,11 @@ public class ContactsView extends TextView {
     private boolean confirmed;
 
     private double downX;
-
     private double downY;
-
     private double lastX;
-
     private double lastY;
 
     private float p2DownX;
-
     private float p2DownY;
 
     private int currentValue;
@@ -277,7 +258,7 @@ public class ContactsView extends TextView {
         currentString = "";
         if (managedCursor.getCount() > 0) {
             managedCursor.moveToFirst();
-            if(!managedCursor.isBeforeFirst() && !managedCursor.isAfterLast()) {
+            if (!managedCursor.isBeforeFirst() && !managedCursor.isAfterLast()) {
                 // Keep going if the entry doesn't have a name
                 String name = managedCursor.getString(NAME);
                 if (name == null) {
@@ -345,58 +326,99 @@ public class ContactsView extends TextView {
         speakCurrentContact(true);
     }
 
-    private void speakCurrentContact(boolean interrupt) {
+    /**
+     * @return a string representing the currently selected contact
+     */
+    private String getCurrentContact() {
+        final StringBuilder contact = new StringBuilder();
         String name = null;
+
         try {
             name = managedCursor.getString(NAME);
         } catch (CursorIndexOutOfBoundsException e) {
-            // Cursor was not actually ready yet.
-            name = null;
+            e.printStackTrace();
         }
-        if (name == null) {
-            // There is nothing to speak because something when wrong when
-            // retrieving the name.
+
+        if (TextUtils.isEmpty(name)) {
+            return null;
+        } else {
+            contact.append(name);
+        }
+
+        final int phoneType = Integer.parseInt(managedCursor.getString(TYPE));
+        int typeRes = -1;
+
+        switch (phoneType) {
+            case Phone.TYPE_HOME:
+                typeRes = R.string.home;
+                break;
+            case Phone.TYPE_MOBILE:
+                typeRes = R.string.cell;
+                break;
+            case Phone.TYPE_WORK:
+                typeRes = R.string.work;
+                break;
+        }
+
+        if (typeRes >= 0) {
+            contact.append(' ');
+            contact.append(getContext().getString(typeRes));
+        }
+
+        return contact.toString();
+    }
+
+    /**
+     * Speaks the currently selected contact and sets the internal current contact.
+     *
+     * @param interrupt Set to {@code true} to flush queued speech and speak immediately.
+     */
+    private void speakCurrentContact(boolean interrupt) {
+        final String contact = getCurrentContact();
+
+        if (TextUtils.isEmpty(contact)) {
             return;
         }
-        if (interrupt) {
-            parent.tts.speak(name, 0, null);
-        } else {
-            parent.tts.speak(name, 1, null);
-        }
-        int phoneType = Integer.parseInt(managedCursor.getString(TYPE));
-        String type = "";
-        if (phoneType == Phone.TYPE_HOME) {
-            type = parent.getString(R.string.home);
-        } else if (phoneType == Phone.TYPE_MOBILE) {
-            type = parent.getString(R.string.cell);
-        } else if (phoneType == Phone.TYPE_WORK) {
-            type = parent.getString(R.string.work);
-        }
-        if (type.length() > 0) {
-            parent.tts.speak(type, 1, null);
-        }
-        currentContact = name + " " + type;
+
+        final int mode = interrupt ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD;
+
+        parent.tts.speak(contact, mode, null);
+
+        currentContact = contact;
+
         invalidate();
     }
 
     private void dialActionHandler() {
         if (!confirmed) {
-            if (currentContact.length() != 0) {
-                parent.tts.speak(parent.getString(R.string.you_are_about_to_dial), 0, null);
-                speakCurrentContact(false);
+            if (!TextUtils.isEmpty(currentContact)) {
+                if (parent.contactsPickerMode) {
+                    parent.tts.speak(parent.getString(R.string.you_have_selected, currentContact), 0, null);
+                } else {
+                    parent.tts.speak(parent.getString(R.string.you_are_about_to_dial, currentContact), 0, null);
+                }
                 confirmed = true;
             } else {
-                // If the user attempts to dial with no contact selected, switch to dialing view.
+                // If the user attempts to dial with no contact selected, switch
+                // to dialing view.
                 parent.switchToDialingView();
             }
         } else {
-            parent.returnResults(managedCursor.getString(NUMBER));
+            parent.returnResults(managedCursor.getString(NUMBER), currentContact);
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        String input = "";
+        final char keyLabel = event.getDisplayLabel();
+
+        if (Character.isLetterOrDigit(keyLabel)) {
+            currentString = currentString + keyLabel;
+            filteredContacts.filter(currentString);
+            jumpToFirstFilteredResult();
+            return true;
+        }
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 nextContact();
@@ -414,93 +436,11 @@ public class ContactsView extends TextView {
             case KeyEvent.KEYCODE_MENU:
                 parent.switchToDialingView();
                 return true;
-            case KeyEvent.KEYCODE_A:
-                input = "a";
-                break;
-            case KeyEvent.KEYCODE_B:
-                input = "b";
-                break;
-            case KeyEvent.KEYCODE_C:
-                input = "c";
-                break;
-            case KeyEvent.KEYCODE_D:
-                input = "d";
-                break;
-            case KeyEvent.KEYCODE_E:
-                input = "e";
-                break;
-            case KeyEvent.KEYCODE_F:
-                input = "f";
-                break;
-            case KeyEvent.KEYCODE_G:
-                input = "g";
-                break;
-            case KeyEvent.KEYCODE_H:
-                input = "h";
-                break;
-            case KeyEvent.KEYCODE_I:
-                input = "i";
-                break;
-            case KeyEvent.KEYCODE_J:
-                input = "j";
-                break;
-            case KeyEvent.KEYCODE_K:
-                input = "k";
-                break;
-            case KeyEvent.KEYCODE_L:
-                input = "l";
-                break;
-            case KeyEvent.KEYCODE_M:
-                input = "m";
-                break;
-            case KeyEvent.KEYCODE_N:
-                input = "n";
-                break;
-            case KeyEvent.KEYCODE_O:
-                input = "o";
-                break;
-            case KeyEvent.KEYCODE_P:
-                input = "p";
-                break;
-            case KeyEvent.KEYCODE_Q:
-                input = "q";
-                break;
-            case KeyEvent.KEYCODE_R:
-                input = "r";
-                break;
-            case KeyEvent.KEYCODE_S:
-                input = "s";
-                break;
-            case KeyEvent.KEYCODE_T:
-                input = "t";
-                break;
-            case KeyEvent.KEYCODE_U:
-                input = "u";
-                break;
-            case KeyEvent.KEYCODE_V:
-                input = "v";
-                break;
-            case KeyEvent.KEYCODE_W:
-                input = "w";
-                break;
-            case KeyEvent.KEYCODE_X:
-                input = "x";
-                break;
-            case KeyEvent.KEYCODE_Y:
-                input = "y";
-                break;
-            case KeyEvent.KEYCODE_Z:
-                input = "z";
-                break;
             case KeyEvent.KEYCODE_DEL:
                 backspace();
                 return true;
         }
-        if (input.length() > 0) {
-            currentString = currentString + input;
-            filteredContacts.filter(currentString);
-            jumpToFirstFilteredResult();
-        }
+
         confirmed = false;
         return false;
     }
@@ -615,7 +555,8 @@ public class ContactsView extends TextView {
                 if (currentValue != 5) {
                     if (currentWheel == NONE) {
                         currentWheel = getWheel(currentValue);
-                        // User has entered a wheel so invalidate the long press callback.
+                        // User has entered a wheel so invalidate the long press
+                        // callback.
                         if (longPress != null) {
                             removeCallbacks(longPress);
                         }
@@ -980,10 +921,12 @@ public class ContactsView extends TextView {
 
     public void displayContactDetails() {
         if (!managedCursor.isAfterLast()) {
-            parent.tts.speak(parent.getString(R.string.load_detail) + managedCursor.getString(NAME),
-                    TextToSpeech.QUEUE_FLUSH, null);
-            String uri = parent.getString(R.string.people_uri) + managedCursor.getString(PERSON_ID);
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            final String text = parent.getString(R.string.load_detail,
+                    managedCursor.getString(NAME));
+            parent.tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+            final String uri = parent.getString(R.string.people_uri,
+                    managedCursor.getString(PERSON_ID));
+            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             parent.startActivity(intent);
         }
     }
