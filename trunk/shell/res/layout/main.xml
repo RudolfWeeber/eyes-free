@@ -5,19 +5,17 @@
   android:layout_height="fill_parent"
   android:id="@+id/mainFrameLayout">
   
+  <ImageView
+      android:id="@+id/wallpaper"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:scaleType="fitCenter"/>
+
   <RelativeLayout android:orientation="horizontal"
     android:layout_width="fill_parent" android:layout_height="fill_parent"
     android:layout_gravity="center"
     android:id="@+id/relativeLayout" >
-    
-    <TextView
-      android:id="@+id/statusText" 
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content" android:layout_centerHorizontal="true"
-      android:textSize="30px"
-      android:textColor="#ffffff"
-      android:text=" " />
-    
+
     <TextView
       android:id="@+id/mainText" 
       android:layout_width="wrap_content"
@@ -26,8 +24,7 @@
       android:textColor="#ffffff"
       android:textStyle="bold"
       android:text="Home" />
-      
-      
+
     <LinearLayout android:layout_width="wrap_content"
       android:orientation="vertical"
       android:layout_height="wrap_content">
