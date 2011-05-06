@@ -25,33 +25,39 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.telephony.PhoneNumberUtils;
-import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -59,13 +65,11 @@ import java.util.List;
 /**
  * Shell An alternate home screen that is designed to be friendly for eyes-free
  * use
- *
- * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
+ * 
+ * @author clchen@google.com (Charles L. Chen),
+ * @author credo@google.com (Tim Credo)
  */
 public class MarvinShell extends Activity {
-    private static final int ttsCheckCode = 42;
-
-    public static final int VOICE_RECO_CODE = 777;
 
     private static final int MAIN_VIEW = 1000;
 
@@ -74,10 +78,24 @@ public class MarvinShell extends Activity {
     private static final int MENU_EDIT_MODE = 1003;
 
     public static final String HOME_MENU = "Home";
-    
+
     public static final int DIALOG_RENAME_MENU = 1312341;
 
-    public static boolean editAllItems = true;
+    public static final int VOICE_RECO_CODE = 777;
+
+    public static final int REQUEST_CODE_PICK_CONTACT = 5001;
+
+    public static final int REQUEST_CODE_PICK_BOOKMARK = 5003;
+
+    public static final int REQUEST_CODE_PICK_SETTINGS = 5004;
+
+    public static final int REQUEST_CODE_PICK_DIRECT_DIAL = 5005;
+
+    public static final int REQUEST_CODE_PICK_DIRECT_MESSAGE = 5006;
+    
+    public static final int REQUEST_CODE_TALKING_DIALER_DIAL = 5007;
+    
+    public static final int REQUEST_CODE_TALKING_DIALER_MESSAGE = 5008;
 
     private int activeMode;
 
@@ -85,13 +103,15 @@ public class MarvinShell extends Activity {
 
     private FrameLayout mainFrameLayout;
 
+    // We use an ImageView rather than setBackground to avoid the automatic
+    // stretching caused by setting an image to be the background of a view.
+    private ImageView wallpaperView;
+
     private AppChooserView appChooserView;
 
     public TextToSpeech tts;
 
     private boolean ttsStartedSuccessfully;
-
-    private boolean screenStateChanged;
 
     public boolean isFocused;
 
@@ -128,21 +148,17 @@ public class MarvinShell extends Activity {
 
     private Vibrator vibe;
 
-    private static final long[] VIBE_PATTERN = { 0, 80 };
+    private static final long[] VIBE_PATTERN = {
+            0, 80
+    };
 
-    private static final long[] CENTER_PATTERN = { 0, 40, 40, 40, 40, 40 };
+    private static final long[] CENTER_PATTERN = {
+            0, 40, 40, 40, 40, 40
+    };
 
     private GestureOverlay gestureOverlay;
 
     private TextView mainText;
-
-    private TextView statusText;
-
-    private boolean messageWaiting;
-
-    private int currentCallState;
-
-    public String voiceMailNumber = "";
 
     private BroadcastReceiver screenStateChangeReceiver;
 
@@ -160,6 +176,8 @@ public class MarvinShell extends Activity {
     private String efDirStr = "/sdcard/eyesfree/";
 
     private String filename = efDirStr + "shortcuts.xml";
+
+    private TelephonyManager mTelephonyManager;
 
     /** Called when the activity is first created. */
     @Override
@@ -183,16 +201,14 @@ public class MarvinShell extends Activity {
 
         initMarvinShell();
         setContentView(R.layout.main);
+        wallpaperView = (ImageView) self.findViewById(R.id.wallpaper);
         mainText = (TextView) self.findViewById(R.id.mainText);
-        statusText = (TextView) self.findViewById(R.id.statusText);
         widgets = new AuditoryWidgets(tts, self);
 
         menus = new MenuManager();
         menus.put(HOME_MENU, new Menu(HOME_MENU));
         loadMenus();
         switchMenu(HOME_MENU);
-
-        updateStatusText();
 
         mainFrameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
         vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -205,9 +221,7 @@ public class MarvinShell extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        if (screenStateChanged == false) {
-            switchToMainView();
-        }
+        switchToMainView();
         if (proximitySensor != null) {
             proximitySensor.resume();
         }
@@ -220,20 +234,28 @@ public class MarvinShell extends Activity {
             proximitySensor.standby();
         }
     }
+    
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        switchMenu(HOME_MENU);
+        if (activeMode == MENU_EDIT_MODE) {
+            menus.save(filename);
+            tts.speak(getString(R.string.exiting_edit_mode), TextToSpeech.QUEUE_ADD,
+                    null);
+            activeMode = MAIN_VIEW;
+        }
+    }
 
     private void initMarvinShell() {
         setVolumeControlStream(AudioManager.STREAM_RING);
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         self = this;
-        gestureOverlay = null;
         tts = new TextToSpeech(this, ttsInitListener);
         isFocused = true;
-        messageWaiting = false;
         menuHistory = new ArrayList<String>();
         isReturningFromTask = false;
-        currentCallState = TelephonyManager.CALL_STATE_IDLE;
-        screenStateChanged = false;
 
         // Receive notifications for app installations and removals
         appChangeReceiver = new BroadcastReceiver() {
@@ -243,20 +265,12 @@ public class MarvinShell extends Activity {
                 // an Intent
                 String packageName = intent.getData().getSchemeSpecificPart();
                 if (intent.getAction().equals(Intent.ACTION_PACKAGE_REMOVED)) {
-                    // Since the application is being removed, we can no longer
-                    // access its PackageInfo object.
-                    // Creating AppEntry object without one is acceptable
-                    // because matching can be done by package name.
-                    AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
-                    appChooserView.removeMatchingApplications(targetApp);
-                    tts.speak(getString(R.string.applist_reload), 0, null);
-
+                    appChooserView.removePackage(packageName);
+                    tts.speak(getString(R.string.applist_reload), TextToSpeech.QUEUE_FLUSH, null);
                 } else if (intent.getAction().equals(Intent.ACTION_PACKAGE_ADDED)) {
-
                     // Remove all entries in the app list with a package
                     // matching this one.
-                    AppEntry targetApp = new AppEntry(null, packageName, null, null, null, null);
-                    appChooserView.removeMatchingApplications(targetApp);
+                    appChooserView.removePackage(packageName);
 
                     // Create intent filter to obtain only launchable activities
                     // within the given package.
@@ -271,11 +285,9 @@ public class MarvinShell extends Activity {
                         if (title.length() == 0) {
                             title = info.activityInfo.name.toString();
                         }
-                        targetApp = new AppEntry(title, info, null);
-
-                        appChooserView.addApplication(targetApp);
+                        appChooserView.addApplication(new AppEntry(title, info, null));
                     }
-                    tts.speak(getString(R.string.applist_reload), 0, null);
+                    tts.speak(getString(R.string.applist_reload), TextToSpeech.QUEUE_FLUSH, null);
                 }
             }
         };
@@ -284,43 +296,24 @@ public class MarvinShell extends Activity {
         appChangeFilter.addDataScheme("package");
         registerReceiver(appChangeReceiver, appChangeFilter);
 
-        // Watch for voicemails
-        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        tm.listen(new PhoneStateListener() {
-            @Override
-            public void onMessageWaitingIndicatorChanged(boolean mwi) {
-                messageWaiting = mwi;
-            }
+        mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-            @Override
-            public void onCallStateChanged(int state, String incomingNumber) {
-                currentCallState = state;
-            }
-        }, PhoneStateListener.LISTEN_MESSAGE_WAITING_INDICATOR
-                | PhoneStateListener.LISTEN_CALL_STATE);
-        voiceMailNumber = PhoneNumberUtils.extractNetworkPortion(tm.getVoiceMailNumber());
-
-        // Receive notifications about the screen power changes
         screenStateChangeReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                    Log.e("currentCallState", currentCallState + "");
-                    // If the phone is ringing or the user is talking,
-                    // don't try do anything else.
-                    if (currentCallState != TelephonyManager.CALL_STATE_IDLE) {
-                        return;
+                    // If the user is not in a phone call and the phone is not
+                    // ringing, we can speak something.
+                    if (mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_IDLE) {
+                        if (!isFocused && (tts != null)) {
+                            tts.speak(getString(R.string.please_unlock), TextToSpeech.QUEUE_FLUSH,
+                                    null);
+                        }
                     }
-                    if (!isFocused && (tts != null)) {
-                        tts.speak(getString(R.string.please_unlock), 0, null);
-                    }
-                } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                    screenStateChanged = true;
                 }
             }
         };
         screenStateChangeFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        screenStateChangeFilter.addAction(Intent.ACTION_SCREEN_OFF);
         registerReceiver(screenStateChangeReceiver, screenStateChangeFilter);
     }
 
@@ -355,10 +348,6 @@ public class MarvinShell extends Activity {
             if (announceLocation) {
                 announceCurrentMenu();
             }
-
-            // Now that the view has regained focus, reset the flag indicating
-            // screen power down.
-            screenStateChanged = false;
         }
         super.onWindowFocusChanged(hasFocus);
     }
@@ -381,7 +370,9 @@ public class MarvinShell extends Activity {
             switch (status) {
                 case TextToSpeech.SUCCESS:
                     resetTTS();
-                    tts.speak(getString(R.string.marvin_intro_snd_), 0, null);
+                    tts
+                            .speak(getString(R.string.marvin_intro_snd_), TextToSpeech.QUEUE_FLUSH,
+                                    null);
                     ttsStartedSuccessfully = true;
                     break;
             }
@@ -397,18 +388,10 @@ public class MarvinShell extends Activity {
             if (activeMode == APPLAUNCHER_VIEW) {
                 message = getString(R.string.applications);
             }
-            updateStatusText();
-            // Only announce airplane mode and voicemails
-            // if the user is on the home screen.
-            if (message.equals(HOME_MENU)) {
-                if (messageWaiting) {
-                    message = getString(R.string.you_have_new_voicemail);
-                }
-            }
             if (justStarted) {
                 justStarted = false;
             } else {
-                tts.speak(message, 0, null);
+                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null);
             }
         }
     }
@@ -423,6 +406,7 @@ public class MarvinShell extends Activity {
         }
         menuHistory.add(id);
         mainText.setText(currentMenu.getName());
+        setWallpaper(currentMenu.getWallpaper());
     }
 
     private void loadMenus() {
@@ -458,7 +442,7 @@ public class MarvinShell extends Activity {
     public void onAppSelected(AppEntry appInfo) {
         if (activeMode == MENU_EDIT_MODE) {
             if (lastGesture > 0) {
-                tts.speak(lastGesture + " - " + appInfo.getTitle(), 0, null);
+                tts.speak(lastGesture + " - " + appInfo.getTitle(), TextToSpeech.QUEUE_FLUSH, null);
                 if (appInfo.getTitle().equalsIgnoreCase("(" + getString(R.string.none) + ")")) {
                     currentMenu.remove(lastGesture);
                 } else {
@@ -481,7 +465,8 @@ public class MarvinShell extends Activity {
             try {
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
-                tts.speak(getString(R.string.application_not_installed), 0, null);
+                tts.speak(getString(R.string.application_not_installed), TextToSpeech.QUEUE_FLUSH,
+                        null);
                 launchSuccessful = false;
             }
             if (screenStateChangeReceiver != null && launchSuccessful == true) {
@@ -496,39 +481,23 @@ public class MarvinShell extends Activity {
         }
     }
 
-    public void runAseScript(String scriptName) {
-        Intent intent = makeClassLaunchIntent("com.google.ase", "com.google.ase.terminal.Terminal");
-        intent.putExtra("com.google.ase.extra.SCRIPT_NAME", scriptName);
-        tts.playEarcon(getString(R.string.earcon_tick), 0, null);
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            tts.speak(getString(R.string.application_not_installed), 0, null);
-        }
-    }
-
-    private void updateStatusText() {
-        statusText.setText("");
-    }
-
-    private void runWidget(String widgetName) {
-        if (widgetName.equals("TIME_DATE")) {
-            widgets.announceTime();
-        } else if (widgetName.equals("BATTERY")) {
-            widgets.announceBattery();
-        } else if (widgetName.equals("VOICEMAIL")) {
-            tts.playEarcon(getString(R.string.earcon_tick), 0, null);
-            widgets.callVoiceMail();
-        } else if (widgetName.equals("LOCATION")) {
-            tts.playEarcon(getString(R.string.earcon_tick), 0, null);
-            widgets.speakLocation();
-        } else if (widgetName.equals("CONNECTIVITY")) {
-            widgets.announceConnectivity();
-        } else if (widgetName.equals("APPLAUNCHER")) {
-            widgets.startAppChooser();
-        } else if (widgetName.equals("VOICE_SEARCH")) {
-            widgets.launchVoiceSearch();
-        }
+    private void selectWidget() {
+        final String[] items = new String[AuditoryWidgets.descriptionToWidget.size()];
+        AuditoryWidgets.descriptionToWidget.keySet().toArray(items);
+        Arrays.sort(items);
+        AlertDialog.Builder builder = new AlertDialog.Builder(self);
+        builder.setTitle("Select widget");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                String widgetData = AuditoryWidgets.descriptionToWidget.get(items[item]);
+                if (widgetData != null) {
+                    MenuItem menuItem = new MenuItem(items[item], "WIDGET", widgetData, null);
+                    currentMenu.put(lastGesture, menuItem);
+                }
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private class ShellGestureListener implements GestureListener {
@@ -570,12 +539,7 @@ public class MarvinShell extends Activity {
                 }
             }
             mainText.setText(feedback);
-            if (feedback.equals(getString(R.string.voicemail)) && messageWaiting
-                    && activeMode == MAIN_VIEW) {
-                tts.speak(getString(R.string.you_have_new_voicemail), 0, null);
-            } else {
-                tts.speak(feedback, 0, null);
-            }
+            tts.speak(feedback, TextToSpeech.QUEUE_FLUSH, null);
         }
 
         public void onGestureFinish(int g) {
@@ -587,7 +551,8 @@ public class MarvinShell extends Activity {
                 if (menus.containsKey(item.data)) {
                     switchMenu(item.data);
                     if (!tts.isSpeaking()) {
-                        tts.playEarcon(getString(R.string.earcon_tick), 0, null);
+                        tts.playEarcon(getString(R.string.earcon_tick), TextToSpeech.QUEUE_FLUSH,
+                                null);
                     }
                 }
                 return;
@@ -601,28 +566,132 @@ public class MarvinShell extends Activity {
                         if (item.action.equals("LAUNCH")) {
                             onAppSelected(item.appInfo);
                         } else if (item.action.equals("WIDGET")) {
-                            runWidget(item.data);
-                        } else if (item.action.equals("ASE")) {
-                            MenuItem itam = item;
-                            AppEntry info = item.appInfo;
-                            runAseScript(item.appInfo.getScriptName());
+                            widgets.runWidget(item.data);
+                        } else if (item.action.equals("BOOKMARK")) {
+                            Intent intentBookmark = new Intent(Intent.ACTION_VIEW, Uri
+                                    .parse(item.data));
+                            startActivity(intentBookmark);
+                        } else if (item.action.equals("CONTACT")) {
+                            Intent intentContact = new Intent(Intent.ACTION_VIEW, Uri
+                                    .parse(item.data));
+                            startActivity(intentContact);
+                        } else if (item.action.equals("SETTINGS")) {
+                            Intent intentSettings = new Intent(item.data);
+                            startActivity(intentSettings);
+                        } else if (item.action.equals("CALL")) {
+                            Intent intentCall = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"
+                                    + item.data));
+                            startActivity(intentCall);
+                        } else if (item.action.equals("SMS")) {
+                            Intent intentSms = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+                                    + item.data));
+                            startActivity(intentSms);
                         }
                     }
                     break;
                 case MENU_EDIT_MODE:
                     // edit this item
                     if (g != GestureOverlay.Gesture.CENTER) {
-                        if (item == null || item.action.equalsIgnoreCase("LAUNCH")
-                                || editAllItems) {
-                            lastGesture = g;
-                            switchToAppChooserView();
-                        } else {
-                            tts.speak(getString(R.string.cannot_edit_this_item), 0, null);
-                        }
+                        lastGesture = g;
+                        final CharSequence[] items = {
+                                "Application", "Bookmark", "Contact", "Direct Dial",
+                                "Direct Message", "Eyes-free Widget", "Settings", "None",
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(self);
+                        builder.setTitle("Add to shell");
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                if (item == 0) {
+                                    switchToAppChooserView();
+                                } else if (item == 1) {
+                                    Intent intentBookmark = new Intent();
+                                    ComponentName bookmarks = new ComponentName(
+                                            "com.google.marvin.shell",
+                                            "com.google.marvin.shell.BookmarkChooserActivity");
+                                    intentBookmark.setComponent(bookmarks);
+                                    startActivityForResult(intentBookmark,
+                                            REQUEST_CODE_PICK_BOOKMARK);
+                                } else if (item == 2) {
+                                    Intent intentContact = new Intent(Intent.ACTION_PICK,
+                                            ContactsContract.Contacts.CONTENT_URI);
+                                    startActivityForResult(intentContact,
+                                            REQUEST_CODE_PICK_CONTACT);
+                                } else if (item == 3) {
+                                    if (isTalkingDialerContactChooserAvailable()) {
+                                        Intent talkingDialerIntent = new Intent(Intent.ACTION_PICK);
+                                        ComponentName slideDial = new ComponentName(
+                                                "com.google.marvin.talkingdialer",
+                                                "com.google.marvin.talkingdialer.SlideDial");
+                                        talkingDialerIntent.setComponent(slideDial);
+                                        startActivityForResult(talkingDialerIntent, REQUEST_CODE_TALKING_DIALER_DIAL);
+                                    } else {
+                                        Intent intentDirectDial = new Intent(Intent.ACTION_PICK,
+                                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                                        startActivityForResult(intentDirectDial,
+                                                REQUEST_CODE_PICK_DIRECT_DIAL);
+                                    }
+                                } else if (item == 4) {
+                                    if (isTalkingDialerContactChooserAvailable()) {
+                                        Intent talkingDialerIntent = new Intent(Intent.ACTION_PICK);
+                                        ComponentName slideDial = new ComponentName(
+                                                "com.google.marvin.talkingdialer",
+                                                "com.google.marvin.talkingdialer.SlideDial");
+                                        talkingDialerIntent.setComponent(slideDial);
+                                        startActivityForResult(talkingDialerIntent, REQUEST_CODE_TALKING_DIALER_MESSAGE);
+                                    } else {
+                                        Intent intentDirectMessage = new Intent(Intent.ACTION_PICK,
+                                                ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                                        startActivityForResult(intentDirectMessage,
+                                                REQUEST_CODE_PICK_DIRECT_MESSAGE);
+                                    }
+                                } else if (item == 5) {
+                                    selectWidget();
+                                } else if (item == 6) {
+                                    Intent intentSettings = new Intent();
+                                    ComponentName settings = new ComponentName(
+                                            "com.google.marvin.shell",
+                                            "com.google.marvin.shell.SettingsShortcutChooserActivity");
+                                    intentSettings.setComponent(settings);
+                                    startActivityForResult(intentSettings,
+                                            REQUEST_CODE_PICK_SETTINGS);
+                                } else if (item == 7) {
+                                    currentMenu.remove(lastGesture);
+                                }
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
                     }
                     break;
             }
             mainText.setText(currentMenu.getName());
+        }
+    }
+    
+    /**
+     * Check whether or not TalkingDialer is installed and whether the contact
+     * chooser activity it provides can be used for choosing shortcuts.
+     */
+    public boolean isTalkingDialerContactChooserAvailable() {
+        int versionCode;
+        try {
+            versionCode = pm.getPackageInfo("com.google.marvin.talkingdialer", 0).versionCode;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
+        if (versionCode > 8) {
+            /*
+             * TalkingDialer has contact chooser for version code 9 and up.
+             * Still we make sure the intent can be resolved to double check.
+             */
+            Intent talkingDialerIntent = new Intent(Intent.ACTION_PICK);
+            ComponentName slideDial = new ComponentName(
+                    "com.google.marvin.talkingdialer",
+                    "com.google.marvin.talkingdialer.SlideDial");
+            talkingDialerIntent.setComponent(slideDial);
+            return (pm.queryIntentActivities(talkingDialerIntent, 0).size() > 0);            
+        } else {
+            return false;
         }
     }
 
@@ -659,8 +728,8 @@ public class MarvinShell extends Activity {
                                 Thread.sleep(3000);
                                 if ((backKeyTimeDown > 0)
                                         && (System.currentTimeMillis() - backKeyTimeDown > 2500)) {
-                                    Intent systemHomeIntent = HomeLauncher.getSystemHomeIntent(
-                                            self);
+                                    Intent systemHomeIntent = HomeLauncher
+                                            .getSystemHomeIntent(self);
                                     startActivity(systemHomeIntent);
                                     shutdown();
                                     finish();
@@ -674,15 +743,15 @@ public class MarvinShell extends Activity {
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_UP:
-                audioManager.adjustStreamVolume(getVolumeControlStream(), AudioManager.ADJUST_RAISE,
-                        AudioManager.FLAG_SHOW_UI);
+                audioManager.adjustStreamVolume(getVolumeControlStream(),
+                        AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI);
                 if (getVolumeControlStream() == AudioManager.STREAM_MUSIC) {
                     tts.playEarcon(getString(R.string.earcon_tick), 0, null);
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                audioManager.adjustStreamVolume(getVolumeControlStream(), AudioManager.ADJUST_LOWER,
-                        AudioManager.FLAG_SHOW_UI);
+                audioManager.adjustStreamVolume(getVolumeControlStream(),
+                        AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
                 if (getVolumeControlStream() == AudioManager.STREAM_MUSIC) {
                     tts.playEarcon(getString(R.string.earcon_tick), 1, null);
                 }
@@ -703,14 +772,20 @@ public class MarvinShell extends Activity {
                     case MAIN_VIEW:
                         if (menuHistory.size() > 1) {
                             menuHistory.remove(menuHistory.size() - 1);
-                            switchMenu(menuHistory.get(menuHistory.size() - 1));
+                            String backMenu = menuHistory.get(menuHistory.size() - 1);
+                            
+                            // We need to remove the back menu from history
+                            // since it will be added again on switchMenu.
+                            menuHistory.remove(menuHistory.size() - 1);
+                            switchMenu(backMenu);
                         }
                         activeMode = MAIN_VIEW;
                         announceCurrentMenu();
                         return true;
                     case MENU_EDIT_MODE:
                         menus.save(filename);
-                        tts.speak(getString(R.string.exiting_edit_mode), 0, null);
+                        tts.speak(getString(R.string.exiting_edit_mode), TextToSpeech.QUEUE_FLUSH,
+                                null);
                         activeMode = MAIN_VIEW;
                         return true;
                 }
@@ -720,14 +795,106 @@ public class MarvinShell extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ttsCheckCode) {
-            initMarvinShell();
-        } else if (requestCode == VOICE_RECO_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                ArrayList<String> results = data.getExtras().getStringArrayList(
-                        RecognizerIntent.EXTRA_RESULTS);
-                new Thread(new OneVoxSpeaker(results.get(0))).start();
-            }
+        switch (requestCode) {
+            case VOICE_RECO_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    ArrayList<String> results = data.getExtras().getStringArrayList(
+                            RecognizerIntent.EXTRA_RESULTS);
+                    new Thread(new OneVoxSpeaker(results.get(0))).start();
+                }
+                break;
+            case REQUEST_CODE_PICK_BOOKMARK:
+                if (resultCode == Activity.RESULT_OK) {
+                    String title = data.getStringExtra("TITLE");
+                    String url = data.getStringExtra("URL");
+                    MenuItem menuItem = new MenuItem(title, "BOOKMARK", url, null);
+                    currentMenu.put(lastGesture, menuItem);
+                }
+                break;
+            case REQUEST_CODE_PICK_CONTACT:
+                if (resultCode == Activity.RESULT_OK) {
+                    Cursor c = managedQuery(data.getData(), null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String name = c.getString(c
+                                .getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                        long id = c.getLong(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+                        String lookup = c.getString(c
+                                .getColumnIndexOrThrow(ContactsContract.Contacts.LOOKUP_KEY));
+                        String uriString = ContactsContract.Contacts.getLookupUri(id, lookup)
+                                .toString();
+                        MenuItem menuItem = new MenuItem(name, "CONTACT", uriString, null);
+                        currentMenu.put(lastGesture, menuItem);
+                    }
+                }
+                break;
+            case REQUEST_CODE_PICK_SETTINGS:
+                if (resultCode == Activity.RESULT_OK) {
+                    String title = data.getStringExtra("TITLE");
+                    String action = data.getStringExtra("ACTION");
+                    MenuItem menuItem = new MenuItem(title, "SETTINGS", action, null);
+                    currentMenu.put(lastGesture, menuItem);
+                }
+                break;
+            case REQUEST_CODE_PICK_DIRECT_DIAL:
+                if (resultCode == Activity.RESULT_OK) {
+                    Cursor c = managedQuery(data.getData(), null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String name = c.getString(c
+                                .getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                        String phoneNumber = c
+                                .getString(c.getColumnIndexOrThrow(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        MenuItem menuItem = new MenuItem(getString(R.string.call) + " " + name,
+                                "CALL", phoneNumber, null);
+                        currentMenu.put(lastGesture, menuItem);
+                    }
+                }
+                break;
+            case REQUEST_CODE_PICK_DIRECT_MESSAGE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Cursor c = managedQuery(data.getData(), null, null, null, null);
+                    if (c.moveToFirst()) {
+                        String name = c.getString(c
+                                .getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                        String phoneNumber = c
+                                .getString(c.getColumnIndexOrThrow(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        MenuItem menuItem = new MenuItem(getString(R.string.message) + " " + name,
+                                "SMS", phoneNumber, null);
+                        currentMenu.put(lastGesture, menuItem);
+                    }
+                }
+                break;
+            case REQUEST_CODE_TALKING_DIALER_DIAL:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (resultCode == Activity.RESULT_OK) {
+                        String number = data.getStringExtra("number");
+                        String label = data.getStringExtra("label");
+                        MenuItem menuItem;
+                        if (label != null) {
+                            menuItem = new MenuItem(getString(R.string.call) + " " + label, "CALL", number, null);
+                        } else {
+                            menuItem = new MenuItem(getString(R.string.call) + " " + number, "CALL", number, null);
+                        }
+                        currentMenu.put(lastGesture, menuItem);
+                    }
+                }
+                break;
+            case REQUEST_CODE_TALKING_DIALER_MESSAGE:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (resultCode == Activity.RESULT_OK) {
+                        String number = data.getStringExtra("number");
+                        String label = data.getStringExtra("label");
+                        MenuItem menuItem;
+                        if (label != null) {
+                            menuItem = new MenuItem(getString(R.string.message) + " " + label, "SMS", number, null);
+                        } else {
+                            menuItem = new MenuItem(getString(R.string.message) + " " + number, "SMS", number, null);
+                        }
+                        currentMenu.put(lastGesture, menuItem);
+                    }
+                }
+                break;
         }
     }
 
@@ -842,31 +1009,32 @@ public class MarvinShell extends Activity {
                 switchMenu(HOME_MENU);
                 break;
             case R.string.edit_menus:
-                tts.speak(getString(R.string.entering_edit_mode), 0, null);
+                tts.speak(getString(R.string.entering_edit_mode), TextToSpeech.QUEUE_FLUSH, null);
                 activeMode = MENU_EDIT_MODE;
                 break;
             case R.string.rename_menu:
                 if (currentMenu.getID().equalsIgnoreCase(HOME_MENU)) {
-                    tts.speak(getString(R.string.cannot_edit_this_item), 0, null);
+                    tts.speak(getString(R.string.cannot_edit_this_item), TextToSpeech.QUEUE_FLUSH,
+                            null);
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     final EditText input = new EditText(this);
                     alert.setTitle("Enter new menu name");
                     alert.setView(input);
                     alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                       @Override
-                       public void onClick(DialogInterface dialog, int which) {
-                           currentMenu.setName(input.getText().toString().trim());
-                           switchMenu(currentMenu.getID());
-                       }
-                   });
-                   alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                       @Override
-                       public void onClick(DialogInterface dialog, int which) {
-                           dialog.cancel();
-                       }
-                   });
-                   alert.show();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            currentMenu.setName(input.getText().toString().trim());
+                            switchMenu(currentMenu.getID());
+                        }
+                    });
+                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alert.show();
                 }
                 break;
             case R.string.insert_menu_left:
@@ -877,6 +1045,16 @@ public class MarvinShell extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setWallpaper(String filepath) {
+        Bitmap bmp = BitmapFactory.decodeFile(filepath);
+        if (bmp != null) {
+            wallpaperView.setVisibility(View.VISIBLE);
+            wallpaperView.setImageBitmap(bmp);
+        } else {
+            wallpaperView.setVisibility(View.GONE);
+        }
     }
 
     private class ProcessTask extends AsyncTask<Void, Void, ArrayList<AppEntry>> {
@@ -913,11 +1091,6 @@ public class MarvinShell extends Activity {
         @Override
         public void onPostExecute(ArrayList<AppEntry> appList) {
             appChooserView = new AppChooserView(self, appList);
-            /*
-             *launchableApps = appList; launchableApps.add(0, new
-             * AppEntry("(none)","","","", null, null)); loadUi();
-             * shortcutChooser = new ShortcutChooserView(self,appList);
-             */
         }
     }
 
@@ -944,10 +1117,11 @@ public class MarvinShell extends Activity {
                     ytIntent.setData(Uri.parse(contents.substring(12)));
                     self.startActivity(ytIntent);
                 } else {
-                    tts.speak(contents, 0, null);
+                    tts.speak(contents, TextToSpeech.QUEUE_FLUSH, null);
                 }
             } else {
-                tts.speak(getString(R.string.no_short_answer) + " " + q, 0, null);
+                tts.speak(getString(R.string.no_short_answer) + " " + q, TextToSpeech.QUEUE_FLUSH,
+                        null);
             }
         }
     }

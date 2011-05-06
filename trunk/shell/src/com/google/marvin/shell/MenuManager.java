@@ -45,7 +45,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  *
  * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
  */
-final public class MenuManager extends HashMap<String, Menu> {
+public final class MenuManager extends HashMap<String, Menu> {
 
     private static String XML_SHELL_TAG = "<shell>\n";
 
@@ -111,13 +111,13 @@ final public class MenuManager extends HashMap<String, Menu> {
         Menu newMenu = new Menu(menuName);
         put(id, newMenu);
         newMenu.setID(id);
-        MenuItem link = new MenuItem(menuName, "MENU", menuName, null);
+        MenuItem link = new MenuItem(menuName, "MENU", id, null);
         MenuItem homeLink = new MenuItem(
-                currentMenu.getName(), "MENU", currentMenu.getName(), null);
+                currentMenu.getName(), "MENU", currentMenu.getID(), null);
         currentMenu.put(gesture, link);
         newMenu.put(oppositeGesture, homeLink);
         if (nextMenu != null) {
-            MenuItem nextLink = new MenuItem(nextMenu.getName(), "MENU", nextMenu.getName(), null);
+            MenuItem nextLink = new MenuItem(nextMenu.getName(), "MENU", nextMenu.getID(), null);
             newMenu.put(gesture, nextLink);
             nextMenu.put(oppositeGesture, link);
         }
@@ -172,14 +172,21 @@ final public class MenuManager extends HashMap<String, Menu> {
                 for (int i = 0; i < menus.getLength(); i++) {
                     NamedNodeMap attribs = menus.item(i).getAttributes();
                     String label = attribs.getNamedItem("label").getNodeValue();
+                    String wallpaper = "";
+                    Node wallpaperNode = attribs.getNamedItem("wallpaper");
+                    if (wallpaperNode != null) {
+                        wallpaper = wallpaperNode.getNodeValue();
+                    }
                     Node idAttrNode = attribs.getNamedItem("id");
                     if (idAttrNode != null) {
                         String id = idAttrNode.getNodeValue();
-                        Menu menu = new Menu(label, readItems(context, menus.item(i).getChildNodes()));
+                        Menu menu = new Menu(label, readItems(context,
+                                menus.item(i).getChildNodes()), wallpaper);
                         menu.setID(id);
                         shortcutMenus.put(id, menu);
                     } else {
-                        Menu menu = new Menu(label, readItems(context, menus.item(i).getChildNodes()));
+                        Menu menu = new Menu(label, readItems(context,
+                                menus.item(i).getChildNodes()), wallpaper);
                         shortcutMenus.put(label, menu);
                     }
                 }

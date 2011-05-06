@@ -27,17 +27,19 @@ import java.util.Iterator;
  * 
  * @author credo@google.com (Tim Credo)
  */
-final public class Menu extends HashMap<Integer, MenuItem> {
+public final class Menu extends HashMap<Integer, MenuItem> {
 
-    private static String XML_MENU_TAG = "<menu label='%s'>\n";
+    private static String XML_MENU_TAG = "<menu label='%s' wallpaper='%s'>\n";
 
-    private static String XML_MENU_TAG_WITH_ID = "<menu label='%s' id='%s'>\n";
+    private static String XML_MENU_TAG_WITH_ID = "<menu label='%s' wallpaper='%s' id='%s'>\n";
 
     private static String XML_MENU_CLOSE_TAG = "</menu>\n";
 
     private String mName;
 
     private String mID = null;
+
+    private String mWallpaper;
 
     /**
      * A menu is just a HashMap with an extra name String.
@@ -46,12 +48,14 @@ final public class Menu extends HashMap<Integer, MenuItem> {
         super();
         mName = name;
         mID = name;
+        mWallpaper = "";
     }
 
-    public Menu(String name, HashMap<Integer, MenuItem> items) {
+    public Menu(String name, HashMap<Integer, MenuItem> items, String wallpaper) {
         super(items);
         mName = name;
         mID = name;
+        mWallpaper = wallpaper;
     }
 
     public String getName() {
@@ -70,6 +74,14 @@ final public class Menu extends HashMap<Integer, MenuItem> {
         mID = id;
     }
 
+    public String getWallpaper() {
+        return mWallpaper;
+    }
+
+    public void setWallpaper(String wallpaper) {
+        mWallpaper = wallpaper;
+    }
+
     /**
      * Write out this menu to an XML string.
      */
@@ -77,10 +89,12 @@ final public class Menu extends HashMap<Integer, MenuItem> {
         StringBuilder xmlBuilder = new StringBuilder();
         // don't use the id if not necessary
         if (mID == null || mID == mName) {
-            xmlBuilder.append(String.format(XML_MENU_TAG, MenuManager.escapeEntities(mName)));
+            xmlBuilder.append(String.format(XML_MENU_TAG, MenuManager.escapeEntities(mName),
+                    MenuManager.escapeEntities(mWallpaper)));
         } else {
             xmlBuilder.append(String.format(XML_MENU_TAG_WITH_ID,
-                    MenuManager.escapeEntities(mName), MenuManager.escapeEntities(mID)));
+                    MenuManager.escapeEntities(mName), MenuManager.escapeEntities(mWallpaper),
+                    MenuManager.escapeEntities(mID)));
         }
         ArrayList<Integer> keyList = new ArrayList<Integer>(keySet());
         Collections.sort(keyList);
