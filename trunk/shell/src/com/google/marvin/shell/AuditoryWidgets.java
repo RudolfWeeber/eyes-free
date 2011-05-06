@@ -15,6 +15,7 @@
  */
 package com.google.marvin.shell;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -37,6 +38,7 @@ import android.telephony.TelephonyManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 // Most of the logic for determining strength levels is based on the code here:
 // http://android.git.kernel.org/?p=platform/frameworks/base.git;a=blob_plain;f=services/java/com/android/server/status/StatusBarPolicy.java
@@ -45,6 +47,7 @@ import java.util.Calendar;
  * Collection of one shot speech widgets for the home screen
  * 
  * @author clchen@google.com (Charles L. Chen)
+ * @author credo@google.com (Tim Credo)
  */
 public class AuditoryWidgets {
     private TextToSpeech tts;
@@ -58,6 +61,26 @@ public class AuditoryWidgets {
     private int voiceSignalStrength;
 
     private int callState = TelephonyManager.CALL_STATE_IDLE;
+    
+    /**
+     * Map user-facing widget descriptions to the strings used to indicate them
+     * in XML.
+     */
+    public static HashMap<String,String> descriptionToWidget;
+    
+    static {
+        descriptionToWidget = new HashMap<String, String>();
+        descriptionToWidget.put("Applications", "APPLAUNCHER");
+        descriptionToWidget.put("Autosync Toggle", "TOGGLE_AUTOSYNC");
+        descriptionToWidget.put("Battery", "BATTERY");
+        descriptionToWidget.put("Blue Tooth Toggle", "TOGGLE_BLUETOOTH");
+        descriptionToWidget.put("Location", "LOCATION");
+        descriptionToWidget.put("Search Widget", "VOICE_SEARCH");
+        descriptionToWidget.put("Signal", "CONNECTIVITY");
+        descriptionToWidget.put("Time", "TIME_DATE");
+        descriptionToWidget.put("Voicemail", "VOICEMAIL");
+        descriptionToWidget.put("Wifi Toggle", "TOGGLE_WIFI");
+    }
 
     public AuditoryWidgets(TextToSpeech theTts, MarvinShell shell) {
         tts = theTts;
@@ -121,6 +144,35 @@ public class AuditoryWidgets {
         }
     }
 
+    /**
+     * Run the widget code corresponding to the given string.
+     */
+    public void runWidget(String widgetName) {
+        if (widgetName.equals("TIME_DATE")) {
+            announceTime();
+        } else if (widgetName.equals("BATTERY")) {
+            announceBattery();
+        } else if (widgetName.equals("VOICEMAIL")) {
+            tts.playEarcon(parent.getString(R.string.earcon_tick), TextToSpeech.QUEUE_FLUSH, null);
+            callVoiceMail();
+        } else if (widgetName.equals("LOCATION")) {
+            tts.playEarcon(parent.getString(R.string.earcon_tick), TextToSpeech.QUEUE_FLUSH, null);
+            speakLocation();
+        } else if (widgetName.equals("CONNECTIVITY")) {
+            announceConnectivity();
+        } else if (widgetName.equals("APPLAUNCHER")) {
+            startAppChooser();
+        } else if (widgetName.equals("VOICE_SEARCH")) {
+            launchVoiceSearch();
+        } else if (widgetName.equals("TOGGLE_BLUETOOTH")) {
+            toggleBluetooth();
+        } else if (widgetName.equals("TOGGLE_AUTOSYNC")) {
+            toggleAutosync();
+        } else if (widgetName.equals("TOGGLE_WIFI")) {
+            toggleWifi();
+        }
+    }
+    
     private void speakDataNetworkInfo() {
         String info = parent.getString(R.string.no_data_network);
         ConnectivityManager cManager = (ConnectivityManager) parent
@@ -144,7 +196,7 @@ public class AuditoryWidgets {
                         + " " + parent.getString(R.string.bars);
             }
         }
-        tts.speak(info, 1, null);
+        tts.speak(info, TextToSpeech.QUEUE_ADD, null);
     }
 
     private void speakVoiceNetworkInfo() {
@@ -155,7 +207,7 @@ public class AuditoryWidgets {
             voiceNetworkStrength = "";
         }
         String voiceNetworkInfo = voiceNetworkOperator + ", " + voiceNetworkStrength;
-        tts.speak(voiceNetworkInfo, 1, null);
+        tts.speak(voiceNetworkInfo, TextToSpeech.QUEUE_ADD, null);
     }
 
     public void announceConnectivity() {
@@ -178,8 +230,8 @@ public class AuditoryWidgets {
         tts.stop();
         speakVoiceNetworkInfo();
         speakDataNetworkInfo();
-        tts.speak(bluetooth, 1, null);
-        tts.speak(gps, 1, null);
+        tts.speak(bluetooth, TextToSpeech.QUEUE_ADD, null);
+        tts.speak(gps, TextToSpeech.QUEUE_ADD, null);
     }
 
     public void announceBattery() {
@@ -202,7 +254,7 @@ public class AuditoryWidgets {
                     // tts.speak(parent.getString(R.string.charging), 1, null);
                     message = message + " " + parent.getString(R.string.charging);
                 }
-                tts.speak(message, 0, null);
+                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null);
             }
         };
         IntentFilter battFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
@@ -231,11 +283,11 @@ public class AuditoryWidgets {
 
         String timeStr = Integer.toString(hour) + " " + Integer.toString(minutes) + " " + ampm;
 
-        tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), 0, null);
+        tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), TextToSpeech.QUEUE_FLUSH, null);
     }
 
     public void callVoiceMail() {
-        Uri phoneNumberURI = Uri.parse("tel:" + Uri.encode(parent.voiceMailNumber));
+        Uri phoneNumberURI = Uri.parse("voicemail:");
         Intent intent = new Intent(Intent.ACTION_CALL, phoneNumberURI);
         parent.startActivity(intent);
     }
@@ -257,12 +309,61 @@ public class AuditoryWidgets {
         try {
             parent.startActivityForResult(intent, MarvinShell.VOICE_RECO_CODE);
         } catch (ActivityNotFoundException anf) {
-            parent.tts.speak(parent.getString(R.string.search_not_available), 0, null);
+            parent.tts.speak(parent.getString(R.string.search_not_available), TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 
     public int getCallState() {
         return callState;
     }
-
+    
+    /**
+     * Toggles the state of the BluetoothAdapter.
+     */
+    public void toggleBluetooth() {
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter.isEnabled()) {
+            if (adapter.disable()) {
+                parent.tts.speak(parent.getString(R.string.bluetooth_turning_off), TextToSpeech.QUEUE_FLUSH, null);
+            }
+        } else {
+            if (adapter.enable()) {
+                parent.tts.speak(parent.getString(R.string.bluetooth_turning_on), TextToSpeech.QUEUE_FLUSH, null);
+            }
+        }
+    }
+    
+    /**
+     * Toggles the state of the WifiManager.
+     */
+    public void toggleWifi() {
+        WifiManager manager = (WifiManager) parent.getSystemService(Context.WIFI_SERVICE);
+        if (manager.isWifiEnabled()) {
+            if (manager.setWifiEnabled(false)) {
+                parent.tts.speak(parent.getString(R.string.wifi_off), TextToSpeech.QUEUE_FLUSH, null);
+            }
+        } else {
+            if (manager.setWifiEnabled(true)) {
+                parent.tts.speak(parent.getString(R.string.wifi_on), TextToSpeech.QUEUE_FLUSH, null);
+            }
+        }
+    }
+    
+    /**
+     * Toggles sync settings for apps. that request data in the background.
+     */
+    public void toggleAutosync() {
+        ConnectivityManager manager = (ConnectivityManager) parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean backgroundData = manager.getBackgroundDataSetting();
+        if (ContentResolver.getMasterSyncAutomatically()) {
+            ContentResolver.setMasterSyncAutomatically(false);
+            parent.tts.speak(parent.getString(R.string.autosync_off), TextToSpeech.QUEUE_FLUSH, null);
+        } else {
+            ContentResolver.setMasterSyncAutomatically(true);
+            parent.tts.speak(parent.getString(R.string.autosync_on), TextToSpeech.QUEUE_FLUSH, null);
+            if (!backgroundData) {
+                parent.tts.speak(parent.getString(R.string.background_data_warning), TextToSpeech.QUEUE_ADD, null);
+            }
+        }
+    }
 }

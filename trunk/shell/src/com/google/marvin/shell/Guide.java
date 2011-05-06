@@ -24,6 +24,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 
 /**
  * Guide uses the magnetic compass, GPS/Network location provider, and the
@@ -40,9 +41,9 @@ public class Guide implements Runnable, StreetLocatorListener {
                 if (!gotResponse) {
                     String heading = compass.getCurrentHeading();
                     if (heading.length() > 1) {
-                        parent.tts.speak(heading, 0, null);
+                        parent.tts.speak(heading, TextToSpeech.QUEUE_FLUSH, null);
                     }
-                    parent.tts.speak("Location not found.", 1, null);
+                    parent.tts.speak("Location not found.", TextToSpeech.QUEUE_ADD, null);
                     self.shutdown();
                 }
                 giveUpTimerThread = null;
@@ -94,7 +95,7 @@ public class Guide implements Runnable, StreetLocatorListener {
             gpsLoc = arg0;
             gpsLocLastUpdateTime = System.currentTimeMillis();
             gpsFixCount++;
-            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 1, null);
+            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), TextToSpeech.QUEUE_ADD, null);
             if (gpsFixCount > minFixCount) {
                 gotResponse = true;
                 giveUpTimerThread = null;
@@ -167,7 +168,7 @@ public class Guide implements Runnable, StreetLocatorListener {
 
     public void speakLocation(boolean useGps) {
         if (giveUpTimerThread != null) {
-            parent.tts.speak("Determining your location.", 0, null);
+            parent.tts.speak("Determining your location.", TextToSpeech.QUEUE_FLUSH, null);
             return;
         }
         giveUpTimerThread = new Thread(new GiveUpTimer());
@@ -210,7 +211,7 @@ public class Guide implements Runnable, StreetLocatorListener {
         currentLocation = null;
         boolean usingGPS = false;
         if ((networkLoc == null) && (gpsLoc == null)) {
-            parent.tts.speak("Location not found.", 1, null);
+            parent.tts.speak("Location not found.", TextToSpeech.QUEUE_ADD, null);
             self.shutdown();
             return;
         } else if ((networkLoc == null) && (gpsLoc != null)) {
@@ -229,19 +230,19 @@ public class Guide implements Runnable, StreetLocatorListener {
 
         String heading = compass.getCurrentHeading();
         if (heading.length() > 1) {
-            parent.tts.speak(heading, 0, null);
+            parent.tts.speak(heading, TextToSpeech.QUEUE_FLUSH, null);
         }
 
         if (usingGPS) {
-            parent.tts.speak("G P S", 1, null);
+            parent.tts.speak("G P S", TextToSpeech.QUEUE_ADD, null);
         } else {
-            parent.tts.speak("network", 1, null);
+            parent.tts.speak("network", TextToSpeech.QUEUE_ADD, null);
         }
         if (currentLocation != null) {
             locator.getAddressAsync(currentLocation.getLatitude(), currentLocation.getLongitude());
         } else {
             if (currentIntersection.length() + currentAddress.length() < 1) {
-                parent.tts.speak("Location not found.", 1, null);
+                parent.tts.speak("Location not found.", TextToSpeech.QUEUE_ADD, null);
                 self.shutdown();
             }
         }
@@ -291,7 +292,7 @@ public class Guide implements Runnable, StreetLocatorListener {
             stateZip = stateZip + zip;
             currentAddress = address.substring(0, address.lastIndexOf(",")) + ". " + stateZip;
 
-            parent.tts.speak("Near " + currentAddress, 1, null);
+            parent.tts.speak("Near " + currentAddress, TextToSpeech.QUEUE_ADD, null);
         }
 
         // If there was no location, just give up.
