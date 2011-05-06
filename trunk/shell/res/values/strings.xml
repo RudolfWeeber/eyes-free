@@ -60,6 +60,17 @@
     <string name="insert_menu_right">Insert Menu Right</string>
     <string name="new_menu">New Menu</string>
     <string name="no_short_answer">Sorry, no short answer for</string>
+    <string name="bluetooth_turning_off">Bluetooth turning off</string>
+    <string name="bluetooth_turning_on">Bluetooth turning on</string>
+    <string name="wifi_off">Wifi off</string>
+    <string name="wifi_on">Wifi on</string>
+    <string name="autosync_off">Autosync off</string>
+    <string name="autosync_on">Autosync on</string>
+    <string name="background_data_warning">Warning: background data disabled.</string>
+
+    <!-- The following strings are verbs to be followed by the name of a contact. -->
+    <string name="call">Call</string>
+    <string name="message">Message</string>
 
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>
@@ -70,4 +81,6 @@
 
     <!-- The following strings are used for the search URL. Use the localized language for better onebox triggering.  -->
     <string name="search_url">http://www.google.com/m?q=</string>
+    
+
 </resources>
