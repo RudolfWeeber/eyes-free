@@ -26,6 +26,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -282,9 +283,9 @@ public class AppChooserView extends TextView {
     public void speakCurrentApp(boolean interrupt) {
         String name = appList.get(appListIndex).getTitle();
         if (interrupt) {
-            parent.tts.speak(name, 0, null);
+            parent.tts.speak(name, TextToSpeech.QUEUE_FLUSH, null);
         } else {
-            parent.tts.speak(name, 1, null);
+            parent.tts.speak(name, TextToSpeech.QUEUE_ADD, null);
         }
         invalidate();
     }
@@ -298,10 +299,10 @@ public class AppChooserView extends TextView {
         currentString = "";
     }
 
-    public void removeMatchingApplications(AppEntry app) {
+    public void removePackage(String packageName) {
         synchronized (appList) {
             for (int i = 0; i < appList.size(); ++i) {
-                if (appList.get(i).equals(app)) {
+                if (appList.get(i).getPackageName().equals(packageName)) {
                     appList.remove(i);
                     i--;
                 }

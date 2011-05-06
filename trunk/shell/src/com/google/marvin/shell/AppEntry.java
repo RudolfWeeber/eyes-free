@@ -142,12 +142,6 @@ public class AppEntry implements Comparable<AppEntry> {
         return xmlBuilder.toString();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        AppEntry app = (AppEntry) o;
-        return this.getPackageName().equals(app.getPackageName());
-    }
-
     public int compareTo(AppEntry o) {
         String title0 = this.getTitle().toLowerCase();
         String title1 = o.getTitle().toLowerCase();
