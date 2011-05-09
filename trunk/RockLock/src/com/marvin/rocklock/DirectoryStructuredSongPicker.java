@@ -28,7 +28,8 @@ import java.io.FileFilter;
 /**
  * SongPicker implementation that uses the directory structure to organize the
  * music instead of using the tags in the music files. For music to be picked
- * up, it has to be put in the /sdcard/RockLock/.music directory.
+ * up, it has to be put in the /sdcard/RockLock/.music or /sdcard/RockLock/music
+ * directory.
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
@@ -39,8 +40,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
 
     private static final String PREF_TRACK = "DIR_TRACK";
 
-    private static final File musicDir = new File(Environment.getExternalStorageDirectory()
-            + "/RockLock/.music");
+    private File musicDir = new File(Environment.getExternalStorageDirectory() + "/RockLock/.music");
 
     private class DirectoryFilter implements FileFilter {
         public boolean accept(File pathname) {
@@ -71,6 +71,9 @@ public class DirectoryStructuredSongPicker implements SongPicker {
     public DirectoryStructuredSongPicker(Activity parentActivity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(parentActivity);
         editor = prefs.edit();
+        if (!musicDir.exists()) {
+            musicDir = new File(Environment.getExternalStorageDirectory() + "/RockLock/music");
+        }
         if (!musicDir.exists()) {
             musicDir.mkdirs();
         }
