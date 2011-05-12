@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<!--
+Google I/O 2011 HTML slides template
+Created by Luke Mahé (lukem@google.com) 
+and Marcin Wichary (mwichary@google.com).
+URL: http://go/io-html-slides
+-->
+<html>
+  <head>
+    <title> Leveraging Android Accessibility APIs To Create An Accessible  Experience</title>
+    <meta charset='utf-8' />
+    <script src='http://io-2011-slides.googlecode.com/svn/trunk/slides.js'></script>
+  </head>
+  <style>
+    /* Your individual styles here, or just use inline styles if that’s
+    what you want. */
+    .slides > article::before {
+      content: '';
+      display: block;
+      width: 500px;
+      height: 100px;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background: url(google_hubbell.png) 30px 20px no-repeat;
+    }    
+  </style>
+  <body style='display: none'>
+    <section class="slides">
+      <! -- Introduction: 4 slides -->
+      <article class='biglogo'></article>
+      <article>
+        <h1> Leveraging Android Accessibility APIs To Create An Accessible  Experience</h1>
+        <p>May 10, 2011 </p>
+        <p>Google I/O 2011</p>
+      </article>
+      <article>
+        <h3 id="sec-1">Speakers </h3>
+        <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+          <colgroup><col class="left" /><col class="left" />
+          </colgroup>
+          <tbody>
+            <tr><td class="left">Project</td><td class="left"><a href="http://eyes-free.googlecode.com">http://eyes-free.googlecode.com</a></td></tr>
+            <tr><td class="left">T. V. Raman</td><td class="left">raman@google.com</td></tr>
+            <tr><td class="left">Charles L Chen</td><td class="left">clchen@google.com</td></tr>
+            <tr><td class="left">Tim Credo</td><td class="left">credo@google.com</td></tr>
+            <tr><td class="left">Blog</td><td class="left"><a href="http://eyes-free.blogspot.com">http://eyes-free.blogspot.com</a></td></tr>
+          </tbody>
+        </table>
+        <br>
+<p>Please provide us feedback:</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups"
+       frame="hsides">
+<tr>
+<td>Feedback</td>
+<td><a href="http://goo.gl/AjOLf">http://goo.gl/AjOLf</a></td>
+</tr>
+<tr>
+<td>Twitter</td>
+<td>#io2011 #android #eyesfree </td>
+</tr>
+</table>
+      </article>
+      <article>
+        <h3 id="sec-2">Overview </h3>
+        <ul>
+          <li>
+            Motivation
+          </li>
+          <li>
+            Accessibility support in the Android framework
+          </li>
+          <li>
+            Accessibility Services
+          </li>
+          <li>
+            Making <i>inaccessible</i> applications <i>accessible</i>
+          </li>
+          <li>
+            Well-written apps that are accessible with zero effort
+          </li>
+          <li>
+            Testing for accessibility using freely available tools
+          </li>
+          <li>
+            Fluent eyes-free interaction
+          </li>
+          <li>
+            Developer resources
+          </li>
+        </ul>
+      </article>
+      <!-- Motivation: 3 slides -->
+      <article>
+        <h2>Motivation</h2>
+      </article>
+      <article>
+        <h3>Motivation</h3>
+        <ul>
+          <li>Applications <em>work out of the box</em> for blind/low-vision users</li>
+          <li>Make Android applications usable in more user contexts</li>
+          <li>Encourage redundancy in the UI for graceful degradation</li>
+        </ul>
+      </article>
+      <article>
+        <h3>Changing How We Work and Play </h3>
+        <ul>
+          <li>Mobile devices can sense user's environment</li>
+          <li> Can provide feedback via a multiplicity of modalities</li>
+          <li> Has a profound impact on independent living</li>
+        </ul>
+      </article>
+      <!-- Android Framework Access 5 slides-->
+      <article>
+        <h2>Accessibility in the Android Framework</h2>
+      </article>
+      <article>
+        <h3>Android Platform Accessibility</h3>
+        <ul>
+          <li>
+            First introduced in Android 1.6 &mdash; September 2009
+          </li>
+          <li><a href="http://developer.android.com/reference/android/speech/tts/TextToSpeech.html">Text-To-Speech API</a>
+            <ul>            
+              <li>
+                Enables applications to produce spoken feedback
+              </li>
+              <li>
+                Starting in 2.2, users can choose their voice
+              </li>
+            </ul>          
+          </li>
+          <li>
+            Platform API enables <a href="http://developer.android.com/reference/android/accessibilityservice/AccessibilityService.html">Accessibility Services</a> (TalkBack)
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Anatomy of an Accessibility Service</h3>
+        <ul>
+          <li>
+            Register with platform to receive <code>AccessibilityEvents</code>
+          </li>
+          <li>
+            Process event payload and produce feedback
+          </li>
+          <li>
+            Events are only dispatched when accessibility is enabled
+          </li>
+        </ul>
+      </article>
+      <article class="smaller">
+        <h3><a href="https://market.android.com/details?id=com.google.android.marvin.talkback">TalkBack: Accessibility Service</a></h3>
+        <ul>
+          <li>
+            Processes <code>AccessibilityEvents</code> depending on their types (<span style="text-decoration:underline;">selected</span>, <span style="text-decoration:underline;">clicked</span>,
+            etc.)
+            <ul>
+              <li>
+                No special commands; speech happens in response to user interaction
+              </li>
+              <li>
+                Enabling navigation with the trackball/d-pad is critical for accessibility
+              </li>
+            </ul>
+          </li>
+          <li>
+            Able to filter on package name for special cases
+            <ul>
+              <li>
+                Avoid doing voice recognition on the TTS inside Voice Search
+              </li>
+            </ul>
+          </li>
+          <li>
+            Recently added a talking keyboard with virtual d-pad feature
+          </li>
+          <li>
+            APIs being improved to enable spoken access to all on-screen content
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Features of an Accessible Android <code>View</code></h3>
+        <ul>
+          <li>
+            Responds consistently to D-Pad/Trackball interaction
+          </li>
+          <li>
+            Sets focus correctly as selection changes
+          </li>
+          <li>
+            Raises <code>AccessibilityEvents</code> during user interaction
+          </li>
+        </ul>
+      </article>
+      <!-- Creating Accessible UIs -->
+      <article>
+        <h2>Creating Accessible UIs</h2>
+      </article>
+      <article>
+        <h3>Standard <code>Views</code></h3>
+        <ul>
+          <li>
+            Most of the work has been done already, and styling it should not have any
+            adverse impact.
+          </li>
+          <li>
+            Make sure images, especially <code>ImageButtons</code>, are labeled with
+            <code>contentDescription</code>
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Modified <code>Views</code> Extended from Standard <code>Views</code></h3>
+        <ul>
+          <li>
+            Should mostly work
+          </li>
+          <li>
+            Check to see that your changes are not interfering with trackball/d-pad
+            navigation
+          </li>
+          <li>
+            If you also want to customize how your <code>View</code> speaks, override
+            <code>dispatchPopulateAccessibilityEvent</code>
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Completely Custom <code>Views</code><br>(Extended from the Base <code>View</code> Class)</h3>
+        <ul>
+          <li>
+            Make sure you support trackball/d-pad navigation
+          </li>
+          <li>
+            Implement <code>dispatchPopulateAccessibilityEvent</code>
+          </li>
+        </ul>
+      </article>
+      <!-- Examples 5 Slides-->
+      <article>
+        <h2>Example of Making Custom <code>Views</code> (More) Accessible</h2>
+      </article>
+      <article>
+        <h3>Background</h3>
+        <ul>
+          <li>
+             <a href="http://code.google.com/p/google-authenticator/">Google Authenticator</a> is an open source app that generates one-time passcodes for two-step verification.
+          </li>
+          <li>
+            <code>UserRowView</code> is a custom <code>View</code> that displays the username, the generated code, and a "Get code" button
+          </li>
+        </ul>
+        <p><img class="centered" style='height: 300px' src='google_auth.png' alt='Screenshot of Google Authenticator.'>
+        </p>
+      </article>
+      <article>
+        <h3>Default Behavior: Usable but Clunky</h3>
+        <ul>
+          <li>
+            Composite <code>View</code>; Android's platform accessibility tries to do what it can.
+          </li>
+          <li>
+            User hears: "username at domain. One hundred twenty three thousand four hundred fifty six. Get code."
+          </li>
+          <li>
+            Most users only have one account; hearing the username at domain at the start is a waste of time.
+          </li>
+          <li>
+            Parsing out the digits to type is difficult.
+          </li>
+          <li>
+            Can we do better?
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Yes! And Here's How:</h3>
+        <ul>
+          <li>
+            Override <code>dispatchPopulateAccessibilityEvent</code>
+          </li>
+          <li>
+            Optimize the text to be spoken
+          </li>
+          <ul>
+            <li>
+              Add spaces to the digits of the pin code so that it will not be spoken as a very large number
+            </li>
+            <li>
+              Move the username information to the end
+            </li>
+          </ul>
+          <li>
+            Code for doing this fits on a single slide (&lt;25 lines) 
+          </li>
+          <li>
+            See the <a href="http://google-authenticator.googlecode.com/hg/mobile/android/src/com/google/android/apps/authenticator/UserRowView.java"><code>UserRowView class </code></a>
+          </li>
+        </ul>
+      </article>
+      <article class="smaller">
+        <h3>Improving Accessibility for <code>UserRowView</code></h3>
+        <pre class="build"><span>
+          public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent accessEvent) {
+            Context ctx = this.getContext(); </span><span>
+            String message = "";
+            CharSequence pinText =
+                ((TextView) findViewById(R.id.pin_value)).getText();
+            if (ctx.getString(R.string.empty_pin).equals(pinText)){
+              message = ctx.getString(R.string.counter_pin);
+            } else {
+              for (int i = 0; i &lt; pinText.length(); i++) {
+                message = message + pinText.charAt(i) + " ";
+              }
+            } </span><span>            
+            CharSequence userText =
+              ((TextView) findViewById(R.id.current_user)).getText();
+            message = message + " " + userText; </span><span>            
+            accessEvent.setClassName(getClass().getName());
+            accessEvent.setPackageName(ctx.getPackageName());
+            accessEvent.getText().add(message);
+            return true;
+          }</span>
+        </pre>
+      </article>
+      <!-- Accessible Applications 3 Slides -->
+      <article>
+        <h2>Examples of Well Written Apps that are Accessible with Zero Effort</h2>
+      </article>
+      <article>
+        <h3>Accessible Applications on Android</h3>
+        <ul>
+          <li>
+            Many Android applications <i>work out of the box</i> with our
+            Accessibility APIs
+          </li>
+          <li>
+            The Bad News: Many applications do not work as expected
+          </li>
+          <li>
+            The Good News: This is really easy to fix
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3><a href="https://market.android.com/details?id=tunein.player">TuneIn Radio: An Accessible Android Application</a></h3>
+        <ul>
+          <li>
+            Raman's personal favorite radio tuner application 
+          </li>
+          <li>
+            We did not (initially) talk to the developer about accessibility
+          </li>
+          <li>
+            The application was usable <i>out of the box</i>
+          </li>
+          <li>
+            Application is built on top of platform <code>Views</code> that are already accessible by default
+          </li>
+          <li>
+            Interface is D-Pad/trackpad navigable
+          </li>
+          <li>
+            Most controls were correctly labeled
+          </li>
+        </ul>
+      </article>
+      <!-- Testing 3 slides -->
+      <article>
+        <h2>Testing for Accessibility</h2>
+      </article>
+      <article>
+        <h3>Testing by Doing</h3>
+        <ul>
+          <li>
+            Accessibility is built-in; makes testing easy!
+          </li>
+          <li>
+            Turn on Settings → Accessibility
+          </li>
+          <li>
+            Enable Accessibility
+          </li>
+          <li>
+            Enable TalkBack
+          </li>
+          <li>
+            Use your application via the D-Pad
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Checks to Perform</h3>
+        <ul>
+          <li>
+            All tasks can be completed via the D-Pad or trackball
+          </li>
+          <li>
+            All critical on-screen text is focusable
+          </li>
+          <li>
+            All user actions produce meaningful spoken output
+          </li>
+          <li>
+            There is meaningful spoken output as you navigate
+          </li>
+        </ul>
+        <p>
+          Extra Credit: All tasks can be completed <b>efficiently</b>
+        </p>
+      </article>
+      <!-- Eyes-Free Interaction 6 slides -->
+      <article>
+        <h2>Going the Extra Mile:<br>Fluent Eyes-Free Interaction</h2>
+      </article>
+      <article>
+        <h3>Eyes-Free Interaction</h3>
+        <ul>
+          <li>
+            TalkBack speech-enables standard visual user interfaces
+          </li>
+          <li>
+            Brings a consistent level of accessibility on the platform
+          </li>
+          <li>
+            Now, let's go the extra mile toward eyes-free interaction!
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Eyes-Free Tasks</h3>
+        <ul>
+          <li>
+            Obtaining feedback in eyes-busy environments
+          </li>
+          <li>
+            Minimizing interactions needed to perform a task
+          </li>
+          <li>
+            Leveraging voice interaction
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Obtaining Feedback in Eyes-Busy Environments</h3>
+        <ul>
+          <li>
+            Leverage built-in TTS APIs to generate speech
+          </li>
+          <li>
+            Leverage haptic feedback for additional eyes-free polish
+          </li>
+          <li>
+            Augment output with subtle auditory cues
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Minimizing Interactions Needed to Perform a Task</h3>
+        <ul>
+          <li>
+            Android devices have many  <i>eyes and ears</i> that can sense the environment
+          </li>
+          <li>
+            Android devices can catch user's attention in many ways
+          </li>
+          <li>
+            User interaction is about communicating user intent to the
+            device, and obtaining feedback
+          </li>
+          <li>
+            Leverage these features to minimize explicit user
+            interaction
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Leveraging Voice Interaction </h3>
+        <ul>
+          <li>
+            <a href="http://developer.android.com/reference/android/speech/RecognizerIntent.html">Speech recognition</a> is just one API call away
+          </li>
+          <li>
+            Use network-based speech recognition to easily
+            voice-enable your application
+          </li>
+        </ul>
+      </article>
+      <!-- examples: eyes-free 4 slides-->
+      <article>
+        <h2>Examples of Eyes-Free Applications</h2>
+      </article>
+      <article>
+        <h3><a href="https://market.android.com/details?id=com.marvin.rocklock">RockLock</a></h3>
+        <ul>
+          <li>
+            Eyes-Free access to your music collection on Android
+          </li>
+          <li>
+            Tap to play-pause music
+          </li>
+          <li>
+            Stroking in different directions lets you jump tracks, switch between artists/albums, and rewind/ff
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3><a href="https://market.android.com/details?id=com.googlecode.eyesfree.walkytalky">WalkyTalky</a></h3>
+        <ul>
+          <li>
+            Takes advantage of the Android Intents mechanism to have Google Maps Navigation provide the user with walking directions
+          </li>
+          <li>
+            Uses the GPS and the Google Maps API to periodically reverse geocode the user's current location and put it in the notification bar if it has changed
+          </li>
+          <li>
+            Since TalkBack speaks notifications, the user hears the addresses as they walk by
+          </li>
+          <li>
+            Useful for everyone
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3><a href="https://market.android.com/details?id=com.google.android.marvin.intersectionexplorer">Intersection Explorer</a></h3>
+        <ul>
+          <li>
+            Auditory StreetView-like experience that lets you virtually explore a place
+          </li>
+          <li>
+            Map starts centered at your current location
+          </li>
+          <li>
+            Stroke in a direction to hear where you would end up if you went that way
+          </li>
+          <li>
+            Lift up finger to move in that direction
+          </li>
+          <li>
+            Can virtually explore any location covered by Google Maps
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h2>Conclusion</h2>
+      </article>
+      <article>
+        <h3>Conclusion</h3>
+        <ul>
+          <li>
+            Android  has built-in accessibility support
+          </li>
+          <li>
+            Writing accessible Android applications is <b>easy</b>
+          </li>
+          <li>
+            Accessibility → Significantly increase your user base
+          </li>
+        </ul>
+      </article>
+      <article>
+        <h3>Developer Resources</h3>
+        <dl>
+        <dt>Eyes-Free Project</dt>
+        <a href="http://eyes-free.googlecode.com">http://eyes-free.googlecode.com</a>
+        <br><br>
+        <dt>Android Guide</dt>
+        <a href="http://d.android.com/guide/practices/design/accessibility.html">http://d.android.com/guide/practices/design/accessibility.html</a>
+        </dl>
+      </article>
+      <article>
+        <h3>Thank you!</h3>
+        <p><img class="centered" style='height: 350px' src='hubbell_flying.jpg' alt='Hubbell flying a plane.'>
+        </p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups"
+       frame="hsides">
+<tr>
+<td>Feedback</td>
+<td><a href="http://goo.gl/AjOLf">http://goo.gl/AjOLf</a></td>
+</tr>
+<tr>
+<td>Twitter</td>
+<td>#io2011 #android #eyesfree </td>
+</tr>
+</table>
+      </article>
+    </section>
+  </body>
+</html>
