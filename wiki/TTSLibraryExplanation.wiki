@@ -1,3 +1,4 @@
+#labels Deprecated
 =What is this TTS library for?=
 
 ===If you just downloaded the TTS library and you're feeling confused about how to use the TTS or what it is supposed to do, the following message is addressed to you.===
