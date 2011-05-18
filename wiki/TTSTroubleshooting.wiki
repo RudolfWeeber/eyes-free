@@ -1,3 +1,4 @@
+#labels Deprecated
 = Troubleshooting the TTS =
 
 99% of all issues with using the TTS is caused by the phone being unable to access the voice data stored on the SD card. Usually this is because there was a problem downloading the data in the first place, or the SD card is not seated well in the device.
