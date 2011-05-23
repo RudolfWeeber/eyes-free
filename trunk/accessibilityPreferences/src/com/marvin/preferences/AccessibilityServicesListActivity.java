@@ -134,7 +134,11 @@ public class AccessibilityServicesListActivity extends ListActivity {
             String result = mResolveInfo
                     .loadLabel(self.getPackageManager()).toString();
             if (result.length() == 0) {
-                result = mResolveInfo.activityInfo.name.toString();
+                if (mResolveInfo.activityInfo.labelRes != 0) {
+                    result = getString(mResolveInfo.activityInfo.labelRes);
+                } else {
+                    result = mResolveInfo.activityInfo.name.toString();
+                }
             }
             return String.format(self.getString(R.string.template_list_item_text), result);
         }
