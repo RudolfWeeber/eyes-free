@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.StaleDataException;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -225,6 +226,7 @@ public class ContactsView extends TextView {
 
     @Override
     public boolean onTrackballEvent(MotionEvent event) {
+        int action = event.getAction();
         if (trackballEnabled == false) {
             return true;
         }
@@ -238,6 +240,19 @@ public class ContactsView extends TextView {
             trackballEnabled = false;
             (new Thread(new trackballTimeout())).start();
             prevContact();
+        }
+        
+        if (action == MotionEvent.ACTION_DOWN) {
+            if (longPress == null) {
+                longPress = new LongPressDetector();
+            }
+            postDelayed(longPress, LONG_PRESS_THRESHOLD);
+            return true;
+        } else if (action == MotionEvent.ACTION_UP) {
+            if (longPress != null) {
+                removeCallbacks(longPress);
+            }
+            return true;
         }
         return true;
     }
@@ -337,6 +352,8 @@ public class ContactsView extends TextView {
             name = managedCursor.getString(NAME);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
+        } catch (StaleDataException e) {
+            e.printStackTrace();
         }
 
         if (TextUtils.isEmpty(name)) {
@@ -411,7 +428,7 @@ public class ContactsView extends TextView {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         final char keyLabel = event.getDisplayLabel();
-
+        
         if (Character.isLetterOrDigit(keyLabel)) {
             currentString = currentString + keyLabel;
             filteredContacts.filter(currentString);
