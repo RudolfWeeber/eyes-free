@@ -149,6 +149,8 @@ public class SpeechRule {
         sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_CHANGED", 16);
         sEventTypeNameToValueMap.put("TYPE_WINDOW_STATE_CHANGED", 32);
         sEventTypeNameToValueMap.put("TYPE_NOTIFICATION_STATE_CHANGED", 64);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_HOVER_ENTER", 128);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_HOVER_EXIT", 256);
     }
 
     /**
@@ -1008,22 +1010,17 @@ public class SpeechRule {
             List<StringPair> selectors = mSelectors;
             Object[] arguments = new Object[selectors.size()];
 
-            boolean hasContentDescriptionRule = false;
             for (int i = 0, count = selectors.size(); i < count; i++) {
                 StringPair selector = selectors.get(i);
                 String selectorType = selector.mFirst;
                 String selectorValue = selector.mSecond;
 
                 if (NODE_NAME_SPLIT.equals(selectorType)) {
-                    arguments = splitEventText(selectorValue, event);
+                    String text = Utils.getEventText(mContext, event).toString();
+                    arguments = text.split(selectorValue);
                     break;
-                }
-
-                if (NODE_NAME_PROPERTY.equals(selectorType)) {
+                } else if (NODE_NAME_PROPERTY.equals(selectorType)) {
                     Object propertyValue = getPropertyValue(selectorValue, event);
-                    if (PROPERTY_CONTENT_DESCRIPTION.equals(propertyValue)) {
-                        hasContentDescriptionRule = true;
-                    }
                     arguments[i] = propertyValue != null ? propertyValue : "";
                 } else if (NODE_NAME_REGEX.equals(selectorType)) {
                     arguments[i] = getEventTextRegExpMatch(event, selectorValue);
@@ -1034,15 +1031,6 @@ public class SpeechRule {
             }
 
             formatTemplateOrAppendSpaceSeparatedValueIfNoTemplate(utterance, arguments);
-
-            // prepend content description if such has non-empty value
-            // and the speech rule does not specify how it is to be handled
-            if (!hasContentDescriptionRule) {
-                CharSequence contentDescription = event.getContentDescription();
-                if (!TextUtils.isEmpty(contentDescription)) {
-                    utterance.getText().insert(0, contentDescription + SPACE);
-                }
-            }
         }
 
         /**
@@ -1067,18 +1055,6 @@ public class SpeechRule {
         }
 
         /**
-         * Splits the test of an <code>event</code> via a <code>regExp</code>.
-         * 
-         * @param event The event.
-         * @param regExp the regular expression.
-         * @return The split.
-         */
-        private String[] splitEventText(String regExp, AccessibilityEvent event) {
-            String text = Utils.getEventText(mContext, event).toString();
-            return text.split(regExp);
-        }
-
-        /**
          * Returns the value of a given <code>property</code> of an
          * <code>event</code>.
          * 
@@ -1095,7 +1071,13 @@ public class SpeechRule {
             } else if (PROPERTY_CLASS_NAME.equals(property)) {
                 return event.getClassName();
             } else if (PROPERTY_TEXT.equals(property)) {
-                return Utils.getEventText(mContext, event); // special case
+                // special case
+                CharSequence contentDesc = event.getContentDescription();
+                if (contentDesc != null && contentDesc.length() > 0) {
+                    return contentDesc;
+                } else {
+                    return Utils.getEventText(mContext, event);
+                }
             } else if (PROPERTY_BEFORE_TEXT.equals(property)) {
                 return event.getBeforeText();
             } else if (PROPERTY_CONTENT_DESCRIPTION.equals(property)) {

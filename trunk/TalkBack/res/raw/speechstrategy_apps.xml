@@ -918,11 +918,12 @@
   
   <!-- CALENDAR RULES -->
   
-  <!-- DayView (day/week version) -->
+  <!-- DayView (day/week version) (Gingerbread) -->
   <ss:rule>
     <ss:filter>
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
       <ss:className>com.android.calendar.DayView</ss:className>
+      <ss:platformSdk>9</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>

@@ -197,9 +197,11 @@ public class TalkBackService extends AccessibilityService {
     private static final Pattern sCamelCaseSuffixPattern = Pattern.compile("([A-Z])([a-z0-9])");
 
     /**
-     * To recognize string with only capital letters.
+     * To recognize strings with only capital letters, that have no vowels or
+     * are three letters or shorter. Use this to find acronyms that should be
+     * spelled out instead of spoken.
      */
-    private static final Pattern sAllCapsPattern = Pattern.compile("[A-Z]{2,}+");
+    private static final Pattern sAcronymPattern = Pattern.compile("\\b(([A-Z&&[^AEIOU]]{2,})|([A-Z]{2,3}))\\b");
 
     /**
      * To add spaces between two consecutive capital letters.
@@ -970,7 +972,6 @@ public class TalkBackService extends AccessibilityService {
      }
 
 
-
      /**
       * Displays a notification that TalkBack now offers customizable settings by
       * downloading the Accessibility Settings Manager application.
@@ -1354,7 +1355,7 @@ public class TalkBackService extends AccessibilityService {
     private void processAndRecycleEvent(AccessibilityEvent event, int queueMode, int action) {
         String currentActivity = "";
         List<ActivityManager.RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
-        if (tasks.size() >= 1) {
+        if (tasks != null && tasks.size() >= 1) {
             currentActivity = tasks.get(0).topActivity.getClassName();
         }
 
@@ -1658,14 +1659,14 @@ public class TalkBackService extends AccessibilityService {
      */
     public String cleanUpString(String text) {
         String cleanedText = text;
-        Matcher allCapsMatcher = sAllCapsPattern.matcher(cleanedText);
+        Matcher allCapsMatcher = sAcronymPattern.matcher(cleanedText);
         while (allCapsMatcher.find()) {
             String allCapsText = cleanedText
                     .substring(allCapsMatcher.start(), allCapsMatcher.end());
             Matcher consequtiveCapsMatcher = sConsecutiveCapsPattern.matcher(allCapsText);
             String formattedAllCapsText = consequtiveCapsMatcher.replaceAll("$1 ") + ", ";
             cleanedText = cleanedText.replaceAll(allCapsText, formattedAllCapsText);
-            allCapsMatcher = sAllCapsPattern.matcher(cleanedText);
+            allCapsMatcher = sAcronymPattern.matcher(cleanedText);
         }
 
         Matcher camelCasePrefix = sCamelCasePrefixPattern.matcher(cleanedText);
@@ -1932,7 +1933,7 @@ public class TalkBackService extends AccessibilityService {
                 utterance.getText().append(populatedTemplate);
                 return;
             default:
-                throw new IllegalArgumentException("Unknown ringer mode: " + ringerMode);
+                Log.e(LOG_TAG, "Unknown ringer mode: " + ringerMode);
         }
     }
 

@@ -7,6 +7,31 @@
   <!-- Rules specific to just one app should go in speechstrategy_apps.xml or -->
   <!-- speechstrategy_thirdparty.xml. -->
 
+  <!-- TYPE_VIEW_HOVER_ENTER -->
+  
+  <ss:rule>
+    <ss:metadata>
+      <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
+    </ss:metadata>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_HOVER_ENTER</ss:eventType>
+      <ss:className>android.widget.ListView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@com.google.android.marvin.talkback:string/template_announce_list_view_item</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+   
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_HOVER_ENTER</ss:eventType>
+    </ss:filter>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
   <!-- TYPE_VIEW_CLICKED -->
 
   <!-- CompoundButton checked -->
