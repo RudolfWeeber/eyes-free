@@ -15,4 +15,6 @@
     </string-array>
     <string name="cursor_at_start_position">Start of line</string>
     <string name="cursor_at_end_position">End of line</string>
+    <string name="alt_pressed">Alt</string>
+    <string name="shift_pressed">Shift</string>
 </resources>

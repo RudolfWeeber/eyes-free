@@ -36,40 +36,9 @@
     <integer name="key_call">-110</integer>
     <integer name="key_endcall">-111</integer>
     <integer name="key_alt">-112</integer>
-
-    <!-- Array used for mapping key codes to description strings. -->
-    <array name="key_descriptions">
-        <item>@integer/key_tab</item>
-        <item>@string/description_tab_key</item>
-        <item>@integer/key_return</item>
-        <item>@string/description_return_key</item>
-        <item>@integer/key_space</item>
-        <item>@string/description_space_key</item>
-        <item>@integer/key_shift</item>
-        <item>@string/description_shift_key</item>
-        <item>@integer/key_symbol</item>
-        <item>@string/description_symbol_key</item>
-        <item>@integer/key_delete</item>
-        <item>@string/description_delete_key</item>
-        <item>@integer/key_settings</item>
-        <item>@string/description_settings_key</item>
-        <item>@integer/key_voice</item>
-        <item>@string/description_voice_key</item>
-        <item>@integer/key_f1</item>
-        <item>@string/description_f1_key</item>
-        <item>@integer/key_back</item>
-        <item>@string/description_back_key</item>
-        <item>@integer/key_search</item>
-        <item>@string/description_search_key</item>
-        <item>@integer/key_home</item>
-        <item>@string/description_home_key</item>
-        <item>@integer/key_menu</item>
-        <item>@string/description_menu_key</item>
-        <item>@integer/key_call</item>
-        <item>@string/description_call_key</item>
-        <item>@integer/key_endcall</item>
-        <item>@string/description_endcall_key</item>
-        <item>@integer/key_alt</item>
-        <item>@string/description_alt_key</item>
-    </array>
+    <integer name="key_dpad_up">-113</integer>
+    <integer name="key_dpad_left">-114</integer>
+    <integer name="key_dpad_center">-115</integer>
+    <integer name="key_dpad_right">-116</integer>
+    <integer name="key_dpad_down">-117</integer>
 </resources>

@@ -27,7 +27,9 @@ import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceGroup;
 import android.speech.SpeechRecognizer;
+import android.text.AutoText;
 import android.util.Log;
 
 import com.googlecode.eyesfree.inputmethod.voice.SettingsUtil;
@@ -43,10 +45,10 @@ public class LatinIMESettings extends PreferenceActivity
         DialogInterface.OnDismissListener {
 
     private static final String VIBRATE_ON_KEY = "vibrate_on";
-    //private static final String QUICK_FIXES_KEY = "quick_fixes";
-    //private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
+    private static final String QUICK_FIXES_KEY = "quick_fixes";
+    private static final String PREDICTION_SETTINGS_KEY = "prediction_settings";
     private static final String VOICE_SETTINGS_KEY = "voice_mode";
-    /* package */ static final String PREF_SETTINGS_KEY = "settings_key";
+    /* package */static final String PREF_DPAD_KEYS = "dpad_keys";
 
     private static final String TAG = "LatinIMESettings";
 
@@ -54,9 +56,8 @@ public class LatinIMESettings extends PreferenceActivity
     private static final int VOICE_INPUT_CONFIRM_DIALOG = 0;
 
     private CheckBoxPreference mHapticPreference;
-    //private CheckBoxPreference mQuickFixes;
+    private CheckBoxPreference mQuickFixes;
     private ListPreference mVoicePreference;
-    private ListPreference mSettingsKeyPreference;
     private boolean mVoiceOn;
 
     private Vibrator mVibrator;
@@ -70,9 +71,8 @@ public class LatinIMESettings extends PreferenceActivity
         super.onCreate(icicle);
         addPreferencesFromResource(R.xml.prefs);
         mHapticPreference = (CheckBoxPreference) findPreference(VIBRATE_ON_KEY);
-        //mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
+        mQuickFixes = (CheckBoxPreference) findPreference(QUICK_FIXES_KEY);
         mVoicePreference = (ListPreference) findPreference(VOICE_SETTINGS_KEY);
-        mSettingsKeyPreference = (ListPreference) findPreference(PREF_SETTINGS_KEY);
         SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
         prefs.registerOnSharedPreferenceChangeListener(this);
 
@@ -87,20 +87,17 @@ public class LatinIMESettings extends PreferenceActivity
     @Override
     protected void onResume() {
         super.onResume();
-        // TODO: This (and related commented-out code) goes back in when we
-        // reconcile prediction with accessibility.
-        //int autoTextSize = AutoText.getSize(getListView());
-        //if (autoTextSize < 1) {
-        //    ((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
-        //            .removePreference(mQuickFixes);
-        //}
+        int autoTextSize = AutoText.getSize(getListView());
+        if (autoTextSize < 1) {
+            ((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
+                    .removePreference(mQuickFixes);
+        }
         if (!LatinIME.VOICE_INSTALLED
                 || !SpeechRecognizer.isRecognitionAvailable(this)) {
             getPreferenceScreen().removePreference(mVoicePreference);
         } else {
             updateVoiceModeSummary();
         }
-        updateSettingsKeySummary();
     }
 
     @Override
@@ -119,6 +116,7 @@ public class LatinIMESettings extends PreferenceActivity
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO);
     }
 
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if (supportsBackupManager()) {
             (new BackupManager(this)).dataChanged();
@@ -132,7 +130,6 @@ public class LatinIMESettings extends PreferenceActivity
         }
         mVoiceOn = !(prefs.getString(VOICE_SETTINGS_KEY, mVoiceModeOff).equals(mVoiceModeOff));
         updateVoiceModeSummary();
-        updateSettingsKeySummary();
     }
 
     private void updateHapticPreferenceVisibility() {
@@ -159,12 +156,6 @@ public class LatinIMESettings extends PreferenceActivity
         }
     }
 
-    private void updateSettingsKeySummary() {
-        mSettingsKeyPreference.setSummary(
-                getResources().getStringArray(R.array.settings_key_modes)
-                [mSettingsKeyPreference.findIndexOfValue(mSettingsKeyPreference.getValue())]);
-    }
-
     private void showVoiceConfirmation() {
         mOkClicked = false;
         showDialog(VOICE_INPUT_CONFIRM_DIALOG);
@@ -181,6 +172,7 @@ public class LatinIMESettings extends PreferenceActivity
         switch (id) {
             case VOICE_INPUT_CONFIRM_DIALOG:
                 DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (whichButton == DialogInterface.BUTTON_NEGATIVE) {
                             mVoicePreference.setValue(mVoiceModeOff);
@@ -230,6 +222,7 @@ public class LatinIMESettings extends PreferenceActivity
         }
     }
 
+    @Override
     public void onDismiss(DialogInterface dialog) {
         mLogger.settingsWarningDialogDismissed();
         if (!mOkClicked) {

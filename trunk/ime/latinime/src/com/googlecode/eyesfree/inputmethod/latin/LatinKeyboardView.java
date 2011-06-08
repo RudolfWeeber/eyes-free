@@ -32,21 +32,31 @@ import android.view.MotionEvent;
 import java.util.List;
 
 public class LatinKeyboardView extends LatinKeyboardBaseView {
-
-    static final int KEYCODE_OPTIONS = -100;
-    static final int KEYCODE_OPTIONS_LONGPRESS = -101;
-    static final int KEYCODE_VOICE = -102;
-    static final int KEYCODE_F1 = -103;
-    static final int KEYCODE_NEXT_LANGUAGE = -104;
-    static final int KEYCODE_PREV_LANGUAGE = -105;
-    static final int KEYCODE_BACK = -106;
-    static final int KEYCODE_SEARCH = -107;
-    static final int KEYCODE_HOME = -108;
-    static final int KEYCODE_MENU = -109;
-    static final int KEYCODE_CALL = -110;
-    static final int KEYCODE_ENDCALL = -111;
-    static final int KEYCODE_ALT = -112;
-    static final int KEYCODE_UNKNOWN = Integer.MIN_VALUE;
+    public static final int KEYCODE_TAB = 9;
+    public static final int KEYCODE_RETURN = 10;
+    public static final int KEYCODE_SPACE = 32;
+    public static final int KEYCODE_SHIFT = -1;
+    public static final int KEYCODE_SYMBOL = -2;
+    public static final int KEYCODE_DELETE = -5;
+    public static final int KEYCODE_OPTIONS = -100;
+    public static final int KEYCODE_OPTIONS_LONGPRESS = -101;
+    public static final int KEYCODE_VOICE = -102;
+    public static final int KEYCODE_F1 = -103;
+    public static final int KEYCODE_NEXT_LANGUAGE = -104;
+    public static final int KEYCODE_PREV_LANGUAGE = -105;
+    public static final int KEYCODE_BACK = -106;
+    public static final int KEYCODE_SEARCH = -107;
+    public static final int KEYCODE_HOME = -108;
+    public static final int KEYCODE_MENU = -109;
+    public static final int KEYCODE_CALL = -110;
+    public static final int KEYCODE_ENDCALL = -111;
+    public static final int KEYCODE_ALT = -112;
+    public static final int KEYCODE_DPAD_UP = -113;
+    public static final int KEYCODE_DPAD_LEFT = -114;
+    public static final int KEYCODE_DPAD_CENTER = -115;
+    public static final int KEYCODE_DPAD_RIGHT = -116;
+    public static final int KEYCODE_DPAD_DOWN = -117;
+    public static final int KEYCODE_UNKNOWN = Integer.MIN_VALUE;
 
     /**
      * Returns the key code from {@link KeyEvent} for a given internal key code.
@@ -68,6 +78,16 @@ public class LatinKeyboardView extends LatinKeyboardBaseView {
                 return KeyEvent.KEYCODE_ENDCALL;
             case KEYCODE_ALT:
                 return KeyEvent.KEYCODE_ALT_LEFT;
+            case KEYCODE_DPAD_UP:
+                return KeyEvent.KEYCODE_DPAD_UP;
+            case KEYCODE_DPAD_LEFT:
+                return KeyEvent.KEYCODE_DPAD_LEFT;
+            case KEYCODE_DPAD_CENTER:
+                return KeyEvent.KEYCODE_DPAD_CENTER;
+            case KEYCODE_DPAD_RIGHT:
+                return KeyEvent.KEYCODE_DPAD_RIGHT;
+            case KEYCODE_DPAD_DOWN:
+                return KeyEvent.KEYCODE_DPAD_DOWN;
             default:
                 return KeyEvent.KEYCODE_UNKNOWN;
         }

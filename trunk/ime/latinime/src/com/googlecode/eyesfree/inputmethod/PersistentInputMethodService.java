@@ -21,8 +21,10 @@ import com.google.android.marvin.aime.AccessibleInputMethodService;
 import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
@@ -34,6 +36,7 @@ import android.view.inputmethod.InputConnection;
  * @author alanv@google.com (Alan Viverette)
  */
 public class PersistentInputMethodService extends AccessibleInputMethodService {
+    private static final String TAG = "PersistentInputMethodService";
     private static final int LONGPRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
     private static final int TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
 
@@ -189,7 +192,11 @@ public class PersistentInputMethodService extends AccessibleInputMethodService {
         if (!isAccessibilityEnabled()) {
             super.showWindow(showInput);
         } else {
-            super.showWindow(true);
+            try {
+                super.showWindow(true);
+            } catch (WindowManager.BadTokenException e) {
+                Log.e(TAG, "Failed to show window", e);
+            }
         }
     }
 

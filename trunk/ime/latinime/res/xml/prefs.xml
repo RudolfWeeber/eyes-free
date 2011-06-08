@@ -34,6 +34,14 @@
             android:defaultValue="@bool/default_auto_switch"
             />
 
+    <CheckBoxPreference
+            android:key="dpad_keys"
+            android:title="@string/dpad_keys"
+            android:summary="@string/dpad_keys_summary"
+            android:persistent="true"
+            android:defaultValue="@bool/default_dpad_keys"
+            />
+
 <!--
     <CheckBoxPreference
             android:key="answer_calls"
@@ -85,15 +93,6 @@
             />
 
     <ListPreference
-            android:key="settings_key"
-            android:title="@string/prefs_settings_key"
-            android:persistent="true"
-            android:entryValues="@array/settings_key_modes_values"
-            android:entries="@array/settings_key_modes"
-            android:defaultValue="@string/settings_key_mode_auto"
-            />
-
-    <ListPreference
             android:key="voice_mode"
             android:title="@string/voice_input"
             android:persistent="true"
@@ -109,7 +108,7 @@
         <intent
                 android:action="com.googlecode.eyesfree.inputmethod.latin.INPUT_LANGUAGE_SELECTION"/>
     </PreferenceScreen>
-
+-->
     <PreferenceCategory
             android:title="@string/prediction_category"
             android:key="prediction_settings">
@@ -119,7 +118,7 @@
             android:title="@string/quick_fixes"
             android:summary="@string/quick_fixes_summary"
             android:persistent="true"
-            android:defaultValue="true"
+            android:defaultValue="@bool/default_quick_fixes"
             />
 
         <CheckBoxPreference
@@ -127,7 +126,7 @@
             android:title="@string/show_suggestions"
             android:summary="@string/show_suggestions_summary"
             android:persistent="true"
-            android:defaultValue="true"
+            android:defaultValue="@bool/default_show_suggestions"
             />
 
         <CheckBoxPreference
@@ -139,6 +138,5 @@
             android:dependency="show_suggestions"
             />
     </PreferenceCategory>            
- -->
  
 </PreferenceScreen>

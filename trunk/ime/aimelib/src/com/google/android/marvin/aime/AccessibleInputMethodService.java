@@ -50,6 +50,9 @@ import java.util.Locale;
  * @author alanv@google.com (Alan Viverette)
  */
 public abstract class AccessibleInputMethodService extends InputMethodService {
+    /** Whether the trackball can be used to control granularity. */
+    private static final boolean ENABLE_TRACKBALL = false;
+
     /** List of characters ignored by word iterator. */
     private final char[] ignoredCharForWords = {
         ' '
@@ -57,6 +60,12 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
 
     /** String to speak when granularity changes. */
     private String mGranularitySet;
+
+    /** String to speak when ALT key is pressed. */
+    private String mAltString;
+
+    /** String to speak when SHIFT key is pressed. */
+    private String mShiftString;
 
     /** Strings used to describe granularity changes. */
     private String[] mGranularityTypes;
@@ -80,7 +89,7 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
     private InputConnection mIC = null;
 
     /** Stored key down event. */
-    private KeyEvent mPreviousDownEvent;
+    private KeyEvent mPreviousDpadDownEvent;
 
     /** Stored meta key down event. */
     private KeyEvent mPreviousMetaDownEvent;
@@ -103,8 +112,11 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
         mGranularitySet = res.getString(R.string.set_granularity);
         mActionTypes = res.getStringArray(R.array.action_types);
         mActionSet = res.getString(R.string.set_action);
+        mAltString = res.getString(R.string.alt_pressed);
+        mShiftString = res.getString(R.string.shift_pressed);
 
-        mPreviousDownEvent = null;
+        mPreviousDpadDownEvent = null;
+        mWasUpDownPressed = false;
 
         mUserCommandHandler = new UserCommandHandler(this);
         mAccessibilityManager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
@@ -151,10 +163,17 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
 
-        // Interrupt ongoing accessibility events when we start a new view.
         if (mAccessibilityManager.isEnabled()) {
             mAccessibilityManager.interrupt();
         }
+    }
+
+    @Override
+    public void onFinishInput() {
+        super.onFinishInput();
+
+        // Reset state when leaving input field.
+        mWasUpDownPressed = false;
     }
 
     /**
@@ -176,8 +195,12 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
      * </ul>
      * </p>
      */
+    @SuppressWarnings("unused")
     @Override
     public boolean onTrackballEvent(MotionEvent event) {
+        if (!ENABLE_TRACKBALL)
+            return false;
+
         AccessibleInputConnection aic = getCurrentInputConnection();
         if (aic == null || !isInputViewShown()) {
             return super.onTrackballEvent(event);
@@ -233,54 +256,56 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
             return true;
         }
 
-        AccessibleInputConnection aic = getCurrentInputConnection();
+        final AccessibleInputConnection aic = getCurrentInputConnection();
         if (aic == null || !aic.hasExtractedText()) {
             return super.onKeyUp(keyCode, event);
         }
 
-        KeyEvent downEvent = mPreviousDownEvent;
-        mPreviousDownEvent = null;
+        final KeyEvent downEvent = mPreviousDpadDownEvent;
+        mPreviousDpadDownEvent = null;
 
-        KeyEvent metaDownEvent = mPreviousMetaDownEvent;
+        final KeyEvent metaDownEvent = mPreviousMetaDownEvent;
         mPreviousMetaDownEvent = null;
 
-        boolean captureEvent = false;
+        if (downEvent != null) {
+            boolean captureEvent = false;
 
-        switch (event.getKeyCode()) {
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                if (!event.isAltPressed()) {
-                    captureEvent = previousUnit(mGranularity, 1, event.isShiftPressed());
-                } else {
-                    mWasUpDownPressed = true;
-                }
-                break;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                if (!event.isAltPressed()) {
-                    captureEvent = nextUnit(mGranularity, 1, event.isShiftPressed());
-                } else {
-                    mWasUpDownPressed = true;
-                }
-                break;
-            case KeyEvent.KEYCODE_DPAD_UP:
-                if (event.isAltPressed()) {
-                    adjustGranularity(1);
-                    captureEvent = true;
-                } else {
-                    mWasUpDownPressed = true;
-                }
-                break;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-                if (event.isAltPressed()) {
-                    adjustGranularity(-1);
-                    captureEvent = true;
-                } else {
-                    mWasUpDownPressed = true;
-                }
-                break;
-        }
+            switch (downEvent.getKeyCode()) {
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    if (!event.isAltPressed()) {
+                        captureEvent = previousUnit(mGranularity, 1, event.isShiftPressed());
+                    } else {
+                        mWasUpDownPressed = true;
+                    }
+                    break;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    if (!event.isAltPressed()) {
+                        captureEvent = nextUnit(mGranularity, 1, event.isShiftPressed());
+                    } else {
+                        mWasUpDownPressed = true;
+                    }
+                    break;
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    if (event.isAltPressed()) {
+                        adjustGranularity(1);
+                        captureEvent = true;
+                    } else {
+                        mWasUpDownPressed = true;
+                    }
+                    break;
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    if (event.isAltPressed()) {
+                        adjustGranularity(-1);
+                        captureEvent = true;
+                    } else {
+                        mWasUpDownPressed = true;
+                    }
+                    break;
+            }
 
-        if (captureEvent) {
-            return true;
+            if (captureEvent) {
+                return true;
+            }
         }
 
         // If we didn't capture the meta event, attempt to send the previous
@@ -299,7 +324,11 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
             }
         }
 
-        return super.onKeyUp(keyCode, event);
+        if (!super.onKeyUp(keyCode, event)) {
+            aic.sendKeyEvent(event);
+        }
+
+        return true;
     }
 
     /**
@@ -317,8 +346,9 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
             return super.onKeyDown(keyCode, event);
         }
 
+        // If we've captured a meta key, capture all subsequent keys.
         if (mPreviousMetaDownEvent != null) {
-            mPreviousDownEvent = event;
+            mPreviousDpadDownEvent = event;
             return true;
         }
 
@@ -327,12 +357,20 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
             case KeyEvent.KEYCODE_DPAD_UP:
             case KeyEvent.KEYCODE_DPAD_LEFT:
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                mPreviousDownEvent = event;
+                mPreviousDpadDownEvent = event;
                 return true;
             case KeyEvent.KEYCODE_ALT_LEFT:
-            case KeyEvent.KEYCODE_ALT_RIGHT:
+            case KeyEvent.KEYCODE_ALT_RIGHT: {
+                mAIC.trySendAccessiblityEvent(mAltString);
                 mPreviousMetaDownEvent = event;
                 return true;
+            }
+            case KeyEvent.KEYCODE_SHIFT_LEFT:
+            case KeyEvent.KEYCODE_SHIFT_RIGHT: {
+                mAIC.trySendAccessiblityEvent(mShiftString);
+                mPreviousMetaDownEvent = event;
+                return true;
+            }
             default:
                 return super.onKeyDown(keyCode, event);
         }
@@ -574,6 +612,7 @@ public abstract class AccessibleInputMethodService extends InputMethodService {
         if (mWasUpDownPressed) {
             mWasUpDownPressed = false;
 
+            android.util.Log.e("AIME", "updown was pressed, speaking");
             mAIC.speakCurrentUnit(mGranularity);
         }
     }

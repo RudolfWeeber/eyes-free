@@ -31,8 +31,11 @@
     <bool name="default_recorrection_enabled">false</bool>
     <bool name="config_long_press_comma_for_settings_enabled">false</bool>
     <bool name="default_auto_switch">false</bool>
+    <bool name="default_dpad_keys">false</bool>
     <bool name="default_vibrate">true</bool>
     <bool name="default_sound">true</bool>
     <bool name="default_auto_cap">true</bool>
     <bool name="default_bigram_suggestions">false</bool>
+    <bool name="default_quick_fixes">false</bool>
+    <bool name="default_show_suggestions">false</bool>
 </resources>

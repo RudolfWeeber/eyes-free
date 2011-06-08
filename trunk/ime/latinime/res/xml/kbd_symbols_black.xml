@@ -68,9 +68,8 @@
     <Row>
         <Key
             android:keyLabel="\@"
+            android:horizontalGap="5%p"
             android:keyEdgeFlags="left" />
-        <Key
-            android:keyLabel="\#" />
         <Key
             android:keyLabel="$"
             android:popupKeyboard="@xml/kbd_popup_template"
@@ -139,33 +138,6 @@
             android:iconPreview="@drawable/sym_keyboard_feedback_delete"
             android:keyWidth="15%p"
             android:isRepeatable="true"
-            android:keyEdgeFlags="right" />
-    </Row>
-    <Row
-        android:keyboardMode="@+id/mode_symbols"
-        android:rowEdgeFlags="bottom"
-    >
-        <Key
-            android:codes="@integer/key_symbol"
-            android:keyLabel="@string/label_alpha_key"
-            android:keyWidth="20%p"
-            android:keyEdgeFlags="left" />
-        <Key
-            android:codes="@integer/key_f1" />
-        <Key
-            android:codes="@integer/key_space"
-            android:keyIcon="@drawable/sym_bkeyboard_space"
-            android:iconPreview="@drawable/sym_keyboard_feedback_space"
-            android:keyWidth="40%p" />
-        <Key
-            android:keyLabel="."
-            android:keyIcon="@drawable/hint_popup"
-            android:popupKeyboard="@xml/popup_punctuation" />
-        <Key
-            android:codes="@integer/key_return"
-            android:keyIcon="@drawable/sym_bkeyboard_return"
-            android:iconPreview="@drawable/sym_keyboard_feedback_return"
-            android:keyWidth="20%p"
             android:keyEdgeFlags="right" />
     </Row>
     <Row

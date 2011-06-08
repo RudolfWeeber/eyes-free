@@ -458,7 +458,7 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
         int selectionEnd = mExtractedText.selectionEnd;
         int textLength = mExtractedText.text.length();
 
-        if (selectionEnd == textLength) {
+        if (selectionEnd >= textLength) {
             // Handle corner case when cursor is at end of the text, Android implementation deviates
             // from standard Java implementation, check comments above.
             return null;
@@ -476,6 +476,12 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
                         unitEndIndex = nextLineIterator();
                     } else {
                         unitEndIndex = getCurrentIterator(granularity).next();
+                    }
+
+                    if (unitEndIndex < nextIndex) {
+                        Log.e(TAG, "Failed to obtain unit end index!");
+                        nextIndex = BreakIterator.DONE;
+                        break;
                     }
 
                     if (DEBUG) {
@@ -578,6 +584,12 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
                         unitEndIndex = getCurrentIterator(granularity).next();
                     }
 
+                    if (unitEndIndex < previousIndex) {
+                        Log.e(TAG, "Failed to obtain unit end index!");
+                        previousIndex = BreakIterator.DONE;
+                        break;
+                    }
+
                     if (DEBUG) {
                         Log.i(TAG, "previousIndex: " + previousIndex + " unitEndIndex: "
                                 + unitEndIndex);
@@ -658,8 +670,7 @@ public class AccessibleInputConnection extends InputConnectionWrapper implements
      */
     private Position getNextChar() {
         fetchTextFromView();
-        getCurrentIterator(TextNavigation.GRANULARITY_CHAR)
-                .setText(mExtractedText.text.toString());
+        getCurrentIterator(TextNavigation.GRANULARITY_CHAR).setText(mExtractedText.text.toString());
         int selectionStart = mExtractedText.selectionStart;
         int selectionEnd = mExtractedText.selectionEnd;
         int textLength = mExtractedText.text.length();

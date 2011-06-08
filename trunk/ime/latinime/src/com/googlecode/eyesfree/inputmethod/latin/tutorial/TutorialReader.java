@@ -46,7 +46,10 @@ public class TutorialReader
                 Context.ACCESSIBILITY_SERVICE);
         mSpeechQueue = new LinkedList<ReaderUnit>();
         mParams = new HashMap<String, String>();
-        mTts = new TextToSpeech(context, this);
+
+        synchronized(this) {
+            mTts = new TextToSpeech(context, this);
+        }
     }
 
     public void setListener(ReaderListener listener) {
@@ -117,7 +120,11 @@ public class TutorialReader
     public void onInit(int status) {
         LatinTutorialLogger.log(Log.DEBUG, "onInit(%d)", status);
 
-        mTts.setOnUtteranceCompletedListener(this);
+        // We have to synchronize because *somehow* the TTS engine is initializing before
+        // it can return to the constructor of TutorialReader and set mTts to itself.
+        synchronized (this) {
+            mTts.setOnUtteranceCompletedListener(this);
+        }
 
         switch (status) {
             case TextToSpeech.SUCCESS:

@@ -44,6 +44,10 @@
     <string name="auto_switch">Auto typing mode</string>
     <string name="auto_switch_summary">Switch to typing mode when entering edit boxes</string>
 
+    <!-- Option to show directional pad keys in navigation mode -->
+    <string name="dpad_keys">Show D-Pad keys</string>
+    <string name="dpad_keys_summary">Show directional pad keys in navigation mode (flick still enabled)</string>
+
     <!-- Option to provide vibrate/haptic feedback on keypress -->
     <string name="vibrate_on_keypress">Haptic feedback</string>
     <string name="vibrate_on_keypress_summary">Vibrate on keypress and directional pad events</string>
@@ -103,9 +107,9 @@
     <string name="quick_fixes_summary">Corrects commonly typed mistakes</string>
     
     <!-- Option to enable showing suggestions -->
-    <string name="show_suggestions">Show suggestions</string>
+    <string name="show_suggestions">Enable suggestions</string>
     <!-- Description for show suggestions -->
-    <string name="show_suggestions_summary">Display suggested words while typing</string>
+    <string name="show_suggestions_summary">Swipe upward from the keyboard area, then left or right to select suggested words</string>
     
     <!-- Option to enable auto completion -->
     <string name="auto_complete">Auto-complete</string>
@@ -213,65 +217,6 @@
     <string name="label_alpha_key">ABC</string>
     <!-- Label for ALT modifier key.  Must be short to fit on key! -->
     <string name="label_alt_key">Alt</string>
-    
-    <!-- Spoken text description for delete key. -->
-    <string name="description_delete_key">Delete</string>
-    <!-- Spoken text description for Alt key. -->
-    <string name="description_alt_key">Alt</string>
-    <!-- Spoken text description for F1 key. -->
-    <string name="description_f1_key">F1</string>
-    <!-- Spoken text description for return key. -->
-    <string name="description_return_key">Return</string>
-    <!-- Spoken text description for settings key. -->
-    <string name="description_settings_key">Settings</string>
-    <!-- Spoken text description for shift key. -->
-    <string name="description_shift_key">Shift</string>
-    <!-- Spoken text description for space key. -->
-    <string name="description_space_key">Space</string>
-    <!-- Spoken text description for symbols key. -->
-    <string name="description_symbol_key">Symbols</string>
-    <!-- Spoken text description for tab key. -->
-    <string name="description_tab_key">Tab</string>
-    <!-- Spoken text description for Back key. -->
-    <string name="description_back_key">Back</string>
-    <!-- Spoken text description for Search key. -->
-    <string name="description_search_key">Search</string>
-    <!-- Spoken text description for Home key. -->
-    <string name="description_home_key">Home</string>
-    <!-- Spoken text description for Menu key. -->
-    <string name="description_menu_key">Menu</string>
-    <!-- Spoken text description for Call key. -->
-    <string name="description_call_key">Call</string>
-    <!-- Spoken text description for Endcall key. -->
-    <string name="description_endcall_key">End call</string>
-    <!-- Spoken text description for voice input key. -->
-    <string name="description_voice_key">Voice Input</string>
-    <!-- Spoken text description for symbols mode on. -->
-    <string name="description_symbols_on">Symbols on</string>
-    <!-- Spoken text description for symbols mode off. -->
-    <string name="description_symbols_off">Symbols off</string>
-    <!-- Spoken text description for shift mode on. -->
-    <string name="description_shift_on">Shift on</string>
-    <!-- Spoken text description for shift mode locked. -->
-    <string name="description_shift_locked">Caps lock on</string>
-    <!-- Spoken text description for shift mode off. -->
-    <string name="description_shift_off">Shift off</string>
-    <!-- Spoken text description for Alt mode on. -->
-    <string name="description_alt_on">Alt on</string>
-    <!-- Spoken text description for Alt mode off. -->
-    <string name="description_alt_off">Alt off</string>
-    
-    <!-- Spoken text when setting hidden keyboard mode. -->
-    <string name="mode_switch_hidden">hidden</string>
-    <!-- Spoken text when setting directional pad mode. -->
-    <string name="mode_switch_dpad">navigating</string>
-    <!-- Spoken text when setting QWERTY keyboard mode. -->
-    <string name="mode_switch_keyboard">typing</string>
-    
-    <!-- Spoken text when leaving keyboard area. -->
-    <string name="current_contents">Entered text is \"%s\".</string>
-    <string name="current_contents_empty">No text entered.</string>
-    <string name="current_contents_missing">No text area selected.</string>
 
     <!-- Voice related labels -->
 

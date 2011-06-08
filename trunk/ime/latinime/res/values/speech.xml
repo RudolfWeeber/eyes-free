@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+**
+** Copyright 2011, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Spoken description for the currently entered text -->
+    <string name="spoken_current_text_is">Current text is "%s"</string>
+    <!-- Spoken description when there is no text entered -->
+    <string name="spoken_no_text_entered">No text entered</string>
+    <!-- Spoken description when there is no text areas selected -->
+    <string name="spoken_contents_missing">No text area selected.</string>
+
+    <!-- Spoken description for unknown keyboard keys. -->
+    <string name="spoken_description_unknown">Key code %d</string>
+    <!-- Spoken description for the "Shift" keyboard key. -->
+    <string name="spoken_description_shift">Shift</string>
+    <!-- Spoken description for the "Shift" keyboard key's pressed state. -->
+    <string name="spoken_description_shift_shifted">Shift enabled</string>
+    <!-- Spoken description for the "Shift" keyboard key's pressed state. -->
+    <string name="spoken_description_caps_lock">Caps lock enabled</string>
+    <!-- Spoken description for the "Delete" keyboard key. -->
+    <string name="spoken_description_delete">Delete</string>
+    <!-- Spoken description for the "To Symbol" keyboard key. -->
+    <string name="spoken_description_to_symbol">Symbols</string>
+    <!-- Spoken description for the "To Alpha" keyboard key. -->
+    <string name="spoken_description_to_alpha">Letters</string>
+    <!-- Spoken description for the "To Numbers" keyboard key. -->
+    <string name="spoken_description_to_numeric">Numbers</string>
+    <!-- Spoken description for the "Settings" keyboard key. -->
+    <string name="spoken_description_settings">Settings</string>
+    <!-- Spoken description for the "Tab" keyboard key. -->
+    <string name="spoken_description_tab">Tab</string>
+    <!-- Spoken description for the "Space" keyboard key. -->
+    <string name="spoken_description_space">Space</string>
+    <!-- Spoken description for the "Mic" keyboard key. -->
+    <string name="spoken_description_mic">Voice input</string>
+    <!-- Spoken description for the "Smiley" keyboard key. -->
+    <string name="spoken_description_smiley">Smiley face</string>
+    <!-- Spoken description for the "Return" keyboard key. -->
+    <string name="spoken_description_return">Return</string>
+    
+    <!-- Spoken text description for Back key. -->
+    <string name="spoken_description_back">Back</string>
+    <!-- Spoken text description for Search key. -->
+    <string name="spoken_description_search">Search</string>
+    <!-- Spoken text description for Home key. -->
+    <string name="spoken_description_home">Home</string>
+    <!-- Spoken text description for Menu key. -->
+    <string name="spoken_description_menu">Menu</string>
+    <!-- Spoken text description for Call key. -->
+    <string name="spoken_description_call">Call</string>
+    <!-- Spoken text description for Endcall key. -->
+    <string name="spoken_description_end_call">End call</string>
+
+    <!-- Spoken description for the "," keyboard key. -->
+    <string name="spoken_description_comma">Comma</string>
+    <!-- Spoken description for the "." keyboard key. -->
+    <string name="spoken_description_period">Period</string>
+    <!-- Spoken description for the "(" keyboard key. -->
+    <string name="spoken_description_left_parenthesis">Left parenthesis</string>
+    <!-- Spoken description for the ")" keyboard key. -->
+    <string name="spoken_description_right_parenthesis">Right parenthesis</string>
+    <!-- Spoken description for the ":" keyboard key. -->
+    <string name="spoken_description_colon">Colon</string>
+    <!-- Spoken description for the ";" keyboard key. -->
+    <string name="spoken_description_semicolon">Semicolon</string>
+    <!-- Spoken description for the "!" keyboard key. -->
+    <string name="spoken_description_exclamation_mark">Exclamation mark</string>
+    <!-- Spoken description for the "?" keyboard key. -->
+    <string name="spoken_description_question_mark">Question mark</string>
+    <!-- Spoken description for the """ keyboard key. -->
+    <string name="spoken_description_double_quote">Double quote</string>
+    <!-- Spoken description for the "'" keyboard key. -->
+    <string name="spoken_description_single_quote">Single quote</string>
+    <!-- Spoken description for the "•" keyboard key. -->
+    <string name="spoken_description_dot">Dot</string>
+    <!-- Spoken description for the "√" keyboard key. -->
+    <string name="spoken_description_square_root">Square root</string>
+    <!-- Spoken description for the "π" keyboard key. -->
+    <string name="spoken_description_pi">Pi</string>
+    <!-- Spoken description for the "Δ" keyboard key. -->
+    <string name="spoken_description_delta">Delta</string>
+    <!-- Spoken description for the "™" keyboard key. -->
+    <string name="spoken_description_trademark">Trademark</string>
+    <!-- Spoken description for the "℅" keyboard key. -->
+    <string name="spoken_description_care_of">Care of</string>
+    <!-- Spoken description for the "*" keyboard key. -->
+    <string name="spoken_description_star">Star</string>
+    <!-- Spoken description for the "#" keyboard key. -->
+    <string name="spoken_description_pound">Pound</string>
+    <!-- Spoken description for the "…" keyboard key. -->
+    <string name="spoken_description_ellipsis">Ellipsis</string>
+    <!-- Spoken description for the "„" keyboard key. -->
+    <string name="spoken_description_low_double_quote">Low double quote</string>
+
+    <!-- Spoken text description for symbols mode on. -->
+    <string name="spoken_description_symbols_on">Symbols on</string>
+    <!-- Spoken text description for symbols mode off. -->
+    <string name="spoken_description_symbols_off">Symbols off</string>
+    <!-- Spoken text description for shift mode on. -->
+    <string name="spoken_description_shift_on">Shift on</string>
+    <!-- Spoken text description for shift mode locked. -->
+    <string name="spoken_description_shift_locked">Caps lock on</string>
+    <!-- Spoken text description for shift mode off. -->
+    <string name="spoken_description_shift_off">Shift off</string>
+    <!-- Spoken text description for Alt mode on. -->
+    <string name="spoken_description_alt_on">Alt on</string>
+    <!-- Spoken text description for Alt mode off. -->
+    <string name="spoken_description_alt_off">Alt off</string>
+    
+    <!-- Spoken text when setting hidden keyboard mode. -->
+    <string name="spoken_mode_switch_hidden">hidden</string>
+    <!-- Spoken text when setting directional pad mode. -->
+    <string name="spoken_mode_switch_dpad">navigating</string>
+    <!-- Spoken text when setting QWERTY keyboard mode. -->
+    <string name="spoken_mode_switch_keyboard">typing</string>
+
+</resources>
