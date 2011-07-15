@@ -13,7 +13,10 @@
     <string name="more_apps_button_text">More apps</string>
     
     <!-- Toggle Freeze Frame Menu Button Text -->
-	<string name="toggle_freeze_frame_button_text">Toggle Freeze Frame</string>
+  <string name="toggle_freeze_frame_button_text">Toggle Freeze Frame</string>
+
+    <!-- Toggle Light Menu Button Text -->
+  <string name="toggle_light_button_text">Toggle Light</string>
 
     <!-- Market Launch Error Dialog Title -->
     <string name="market_launch_error_title">Error</string>

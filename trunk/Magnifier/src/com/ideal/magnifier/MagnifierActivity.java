@@ -189,9 +189,16 @@ public class MagnifierActivity extends Activity implements Callback {
             Display display = getWindowManager().getDefaultDisplay();
             int width = display.getWidth();
             int height = display.getHeight();
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            if (width * height > 643200) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            } else {
+                // TODO: We short-circuit the onMeasure if we have a screen size
+                // above a certain threshold. This keeps the system from silently
+                // killing our app for memory usage.
+                widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
+                heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
         }
     }
 
@@ -207,9 +214,16 @@ public class MagnifierActivity extends Activity implements Callback {
             Display display = getWindowManager().getDefaultDisplay();
             int width = display.getWidth();
             int height = display.getHeight();
-            widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            if (width * height > 643200) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            } else {
+                // TODO: We short-circuit the onMeasure if we have a screen size
+                // above a certain threshold. This keeps the system from silently
+                // killing our app for memory usage.
+                widthMeasureSpec = MeasureSpec.makeMeasureSpec(width * 2, MeasureSpec.EXACTLY);
+                heightMeasureSpec = MeasureSpec.makeMeasureSpec(height * 2, MeasureSpec.EXACTLY);
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            }
         }
     }
 
@@ -258,6 +272,14 @@ public class MagnifierActivity extends Activity implements Callback {
              */
             public void onPreviewFrame(byte[] data, Camera camera) {
                 Camera.Parameters parameters = camera.getParameters();
+
+                Camera.Size size = parameters.getPreviewSize();
+                if (size == null) {
+                    // We've failed to get preview frame data, so switch pack to
+                    // a live view.
+                    togglePausePreview(false);
+                    return;
+                }
 
                 // Generate a YuvImage from the camera data
                 int w = parameters.getPreviewSize().width;
@@ -389,7 +411,10 @@ public class MagnifierActivity extends Activity implements Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        mCamera = Camera.open();
+        if (mCamera == null) {
+            mCamera = Camera.open();
+        }
+        mCameraFocusing = false;
         try {
             mCamera.setPreviewDisplay(holder);
         } catch (IOException e) {
@@ -400,6 +425,7 @@ public class MagnifierActivity extends Activity implements Callback {
             initParams = mLastCameraParameters;
         } else {
             initParams = mCamera.getParameters();
+            mLastCameraParameters = initParams;
         }
         initParams.setPreviewFormat(ImageFormat.NV21);
         setParams(initParams);
@@ -472,7 +498,9 @@ public class MagnifierActivity extends Activity implements Callback {
                 android.R.drawable.ic_menu_manage);
         menu.add(0, 1, 0, getString(R.string.toggle_freeze_frame_button_text)).setIcon(
                 android.R.drawable.ic_menu_camera);
-        menu.add(0, 2, 0, getString(R.string.more_apps_button_text)).setIcon(
+        menu.add(0, 2, 0, getString(R.string.toggle_light_button_text)).setIcon(
+                android.R.drawable.ic_menu_view);
+        menu.add(0, 3, 0, getString(R.string.more_apps_button_text)).setIcon(
                 android.R.drawable.ic_menu_search);
         return true;
     }
@@ -493,6 +521,17 @@ public class MagnifierActivity extends Activity implements Callback {
                 togglePausePreview(!mMagnifierPaused);
                 return true;
             case 2:
+                Parameters params = mCamera.getParameters();
+                if (mTorch) {
+                    params.setFlashMode(Parameters.FLASH_MODE_OFF);
+                    mTorch = false;
+                } else {
+                    params.setFlashMode(Parameters.FLASH_MODE_TORCH);
+                    mTorch = true;
+                }
+                setParams(params);
+                break;
+            case 3:
                 String marketUrl = "market://search?q=pub:\"IDEAL Group, Inc. Android Development Team\"";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(marketUrl));
@@ -514,7 +553,7 @@ public class MagnifierActivity extends Activity implements Callback {
      * Toggles the freeze frame feature by removing the MagnificationView and
      * adding a MagnifiedImageView with a single scaled preview frame.
      */
-    public void togglePausePreview(boolean shouldPause) {
+    public synchronized void togglePausePreview(boolean shouldPause) {
         if (mMagnifierPaused == shouldPause) {
             return;
         }
