@@ -40,10 +40,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
-import android.view.View;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
-import android.view.View.OnLongClickListener;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -67,10 +67,22 @@ public class MagnifierActivity extends Activity implements Callback {
     public static final long FOCUS_INTERACTION_TIMEOUT_THRESHOLD = 750;
 
     /**
+     * The threshold time for which a finger must remain on the
+     * MagnifiedImageView before it is considered a long click and initiates a
+     * pause toggle event.
+     */
+    public static final long LONG_PRESS_INTERACTION_THRESHOLD = 1500;
+
+    /**
      * Runnable used to defer camera focusing until user interaction has stopped
      * for FOCUS_INTERACTION_TIMEOUT_THRESHOLD milliseconds.
      */
-    private Runnable mFocuserLocked;
+    private Runnable mFocuserLocked = null;
+
+    /**
+     * Runnable used to toggle the paused state of the MagnifiedImageView
+     */
+    private Runnable mPauser = null;
 
     /**
      * A flag indicating whether the camera is currently performing an
@@ -84,6 +96,13 @@ public class MagnifierActivity extends Activity implements Callback {
      * until the focus operation completes.
      */
     private boolean mParameterSettingDeferred = false;
+
+    /**
+     * The last set of camera parameters that was set successfully. Used to
+     * return the camera to its last known state when returning from a paused
+     * state.
+     */
+    private Parameters mLastCameraParameters = null;
 
     /**
      * The set of camera parameters to be applied after a focus operation
@@ -119,10 +138,10 @@ public class MagnifierActivity extends Activity implements Callback {
     private Camera mCamera = null;
 
     /**
-     * Handler for long click events
+     * Handler for touch events. Used for focusing and pausing the magnifier.
      */
-    private OnLongClickListener mLongClickListener = null;
-    
+    private OnTouchListener mTouchListener = null;
+
     /**
      * Callback used to obtain camera data for pausing the magnifier.
      */
@@ -202,16 +221,32 @@ public class MagnifierActivity extends Activity implements Callback {
         setContentView(R.layout.main);
         mPreview = new MagnificationView(this);
         mImagePreview = new MagnifiedImageView(this);
-        mLongClickListener = new OnLongClickListener() {
-            // When any view is long clicked, toggle pausing the magnifier.
+        mPauser = new Runnable() {
             @Override
-            public boolean onLongClick(View v) {
-                togglePausePreview();
-                return true;
+            public void run() {
+                togglePausePreview(true);
             }
         };
-        mPreview.setOnLongClickListener(mLongClickListener);
-        mImagePreview.setOnLongClickListener(mLongClickListener);
+        mTouchListener = new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mFocuserLocked.run();
+                        mPreview.postDelayed(mPauser, LONG_PRESS_INTERACTION_THRESHOLD);
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mPreview.removeCallbacks(mPauser);
+                        togglePausePreview(false);
+                        return true;
+                }
+
+                return false;
+            }
+        };
+        mPreview.setOnTouchListener(mTouchListener);
+        mImagePreview.setOnTouchListener(mTouchListener);
         mPreviewCallback = new PreviewCallback() {
             @Override
             /**
@@ -317,16 +352,10 @@ public class MagnifierActivity extends Activity implements Callback {
         if (keyCode == KeyEvent.KEYCODE_CAMERA || keyCode == KeyEvent.KEYCODE_ENTER
                 || keyCode == KeyEvent.KEYCODE_DPAD_CENTER
                 || (keyCode == KeyEvent.KEYCODE_BACK && mMagnifierPaused)) {
-            togglePausePreview();
+            togglePausePreview(!mMagnifierPaused);
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        mFocuserLocked.run();
-        return super.onTouchEvent(event);
     }
 
     private void setParams(Parameters params) {
@@ -350,6 +379,7 @@ public class MagnifierActivity extends Activity implements Callback {
             mCamera.stopPreview();
             mCamera.startPreview();
             mCamera.setParameters(params);
+            mLastCameraParameters = params;
         } else {
             mParameterSettingDeferred = true;
             mDeferredParameters = params;
@@ -357,6 +387,7 @@ public class MagnifierActivity extends Activity implements Callback {
         mPreview.postDelayed(mFocuserLocked, FOCUS_INTERACTION_TIMEOUT_THRESHOLD);
     }
 
+    @Override
     public void surfaceCreated(SurfaceHolder holder) {
         mCamera = Camera.open();
         try {
@@ -364,17 +395,24 @@ public class MagnifierActivity extends Activity implements Callback {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Parameters initParams = mCamera.getParameters();
+        Parameters initParams;
+        if (mLastCameraParameters != null) {
+            initParams = mLastCameraParameters;
+        } else {
+            initParams = mCamera.getParameters();
+        }
         initParams.setPreviewFormat(ImageFormat.NV21);
         setParams(initParams);
     }
 
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         mCamera.stopPreview();
         mCamera.release();
         mCamera = null;
     }
 
+    @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         mHolder.setFixedSize(w, h);
 
@@ -404,13 +442,14 @@ public class MagnifierActivity extends Activity implements Callback {
 
         List<String> effectsList = mCamera.getParameters().getSupportedColorEffects();
         String[] effects = {
-            ""
+                ""
         };
         effects = effectsList.toArray(effects);
         final String[] items = effects;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.color_effect_dialog_title));
         builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int item) {
                 Parameters params = mCamera.getParameters();
                 mCameraMode = items[item];
@@ -451,7 +490,7 @@ public class MagnifierActivity extends Activity implements Callback {
                 showEffectsList();
                 return true;
             case 1:
-                togglePausePreview();
+                togglePausePreview(!mMagnifierPaused);
                 return true;
             case 2:
                 String marketUrl = "market://search?q=pub:\"IDEAL Group, Inc. Android Development Team\"";
@@ -475,8 +514,11 @@ public class MagnifierActivity extends Activity implements Callback {
      * Toggles the freeze frame feature by removing the MagnificationView and
      * adding a MagnifiedImageView with a single scaled preview frame.
      */
-    public void togglePausePreview() {
-        mMagnifierPaused = !mMagnifierPaused;
+    public void togglePausePreview(boolean shouldPause) {
+        if (mMagnifierPaused == shouldPause) {
+            return;
+        }
+        mMagnifierPaused = shouldPause;
         if (!mMagnifierPaused) {
             mRootView.removeAllViews();
             mRootView.addView(mPreview);
