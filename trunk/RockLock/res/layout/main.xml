@@ -6,22 +6,4 @@
   <FrameLayout android:id="@+id/contentFrame" android:layout_width="fill_parent"
     android:layout_height="wrap_content" android:layout_weight="1" />
 
-
-
-  <LinearLayout android:layout_width="fill_parent"
-    android:layout_height="wrap_content" android:layout_gravity="bottom"
-    android:layout_alignParentBottom="true" android:orientation="vertical"
-    android:id="@+id/bottom_controls">
-    <LinearLayout android:layout_width="fill_parent"
-      android:layout_height="wrap_content" android:layout_gravity="bottom"
-      android:layout_alignParentBottom="true" android:orientation="horizontal">
-      <Button android:id="@+id/exitButton" android:layout_gravity="bottom"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_weight="1" android:text="Exit" />
-      <Button android:id="@+id/prefsButton" android:layout_gravity="top"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_weight="1" android:text="Preferences" />
-    </LinearLayout>
-  </LinearLayout>
-
 </RelativeLayout>

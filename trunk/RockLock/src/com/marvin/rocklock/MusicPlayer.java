@@ -92,6 +92,10 @@ public class MusicPlayer {
         }
     }
 
+    public int getSongPickerType(){
+        return songPickerType;
+    }
+    
     public int cycleSongPicker() {
         if (!tPickerAvailable && !dPickerAvailable) {
             return -1;

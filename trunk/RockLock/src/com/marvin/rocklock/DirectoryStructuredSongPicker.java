@@ -72,7 +72,7 @@ public class DirectoryStructuredSongPicker implements SongPicker {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(parentActivity);
         editor = prefs.edit();
         if (!musicDir.exists()) {
-            musicDir = new File(Environment.getExternalStorageDirectory() + "/RockLock/music");
+            musicDir = new File(Environment.getExternalStorageDirectory() + "/RockLock");
         }
         if (!musicDir.exists()) {
             musicDir.mkdirs();

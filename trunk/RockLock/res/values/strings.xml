@@ -15,4 +15,7 @@
   <string name="tagged_music_playlist">Tagged Music Playlist</string>
   <string name="playing">Playing</string>
   <string name="the_lock_that_rocks">The lock that rocks!</string>
+  <string name="preferences">Preferences</string>
+  <string name="toggle_playlist">Toggle Playlist Mode</string>
+  <string name="switch_to">Switch to</string>
 </resources>

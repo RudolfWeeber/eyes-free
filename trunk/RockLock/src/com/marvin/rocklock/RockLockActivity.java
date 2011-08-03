@@ -50,7 +50,7 @@ import java.util.Calendar;
  * pattern, Rock Lock will replace the lock screen entirely; dismissing Rock
  * Lock will unlock the phone. If there is a lock pattern, Rock Lock will put up
  * the default pattern locked screen when the user dismisses Rock Lock.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 public class RockLockActivity extends Activity {
@@ -58,18 +58,15 @@ public class RockLockActivity extends Activity {
 
     public static final String TICK_EARCON = "[TICK]";
 
-    private static final long[] VIBE_PATTERN = {
-            0, 10, 70, 80
-    };
+    private static final long[] VIBE_PATTERN = { 0, 10, 70, 80 };
 
     private RockLockActivity self;
+
     private boolean wasStartedByService = false;
+
     private boolean poked = false;
 
     private FrameLayout contentFrame;
-
-    private Button exitButton;
-    private Button prefsButton;
 
     private MusicPlayer mp;
 
@@ -132,10 +129,10 @@ public class RockLockActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         self = this;
-        
+
         wasStartedByService = getIntent().getBooleanExtra(EXTRA_STARTED_BY_SERVICE, false);
         Log.e("wasStartedByService", wasStartedByService + "");
-        
+
         // Start the service in case it is not already running
         startService(new Intent(this, ScreenOnHandlerService.class));
 
@@ -159,22 +156,6 @@ public class RockLockActivity extends Activity {
             }
         }, PhoneStateListener.LISTEN_CALL_STATE);
 
-        exitButton = (Button) findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View arg0) {
-                dismissSlideUnlockScreen();
-            }
-        });
-
-        prefsButton = (Button) findViewById(R.id.prefsButton);
-        prefsButton.setOnClickListener(new OnClickListener() {
-            public void onClick(View arg0) {
-                Intent i = new Intent(self, PrefsActivity.class);
-                self.startActivity(i);
-                finish();
-            }
-        });
-
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_MEDIA_BUTTON);
         filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
@@ -193,53 +174,53 @@ public class RockLockActivity extends Activity {
                 uiAnimation.setDirection(g);
                 switch (g) {
                     case Gesture.UPLEFT:
-                        updateDisplayText(getString(R.string.previous_artist), mp
-                                .getPrevArtistName(), true);
+                        updateDisplayText(
+                                getString(R.string.previous_artist), mp.getPrevArtistName(), true);
                         break;
                     case Gesture.UP:
                         if (seekingStopped) {
-                            updateDisplayText(getString(R.string.rewind), mp.getCurrentSongInfo(),
-                                    false);
+                            updateDisplayText(
+                                    getString(R.string.rewind), mp.getCurrentSongInfo(), false);
                             isSeeking = true;
                             new Thread(new Seeker(-1)).start();
                         }
                         break;
                     case Gesture.UPRIGHT:
-                        updateDisplayText(getString(R.string.next_artist), mp.getNextArtistName(),
-                                true);
+                        updateDisplayText(
+                                getString(R.string.next_artist), mp.getNextArtistName(), true);
                         break;
                     case Gesture.LEFT:
-                        updateDisplayText(getString(R.string.previous_track),
-                                mp.getPrevTrackName(), true);
+                        updateDisplayText(
+                                getString(R.string.previous_track), mp.getPrevTrackName(), true);
                         break;
                     case Gesture.CENTER:
                         if (mp.isPlaying()) {
-                            updateDisplayText(getString(R.string.pause), mp.getCurrentSongInfo(),
-                                    true);
+                            updateDisplayText(
+                                    getString(R.string.pause), mp.getCurrentSongInfo(), true);
                         } else {
-                            updateDisplayText(getString(R.string.play), mp.getCurrentSongInfo(),
-                                    true);
+                            updateDisplayText(
+                                    getString(R.string.play), mp.getCurrentSongInfo(), true);
                         }
                         break;
                     case Gesture.RIGHT:
-                        updateDisplayText(getString(R.string.next_track), mp.getNextTrackName(),
-                                true);
+                        updateDisplayText(
+                                getString(R.string.next_track), mp.getNextTrackName(), true);
                         break;
                     case Gesture.DOWNLEFT:
-                        updateDisplayText(getString(R.string.previous_album),
-                                mp.getPrevAlbumName(), true);
+                        updateDisplayText(
+                                getString(R.string.previous_album), mp.getPrevAlbumName(), true);
                         break;
                     case Gesture.DOWN:
                         if (seekingStopped) {
-                            updateDisplayText(getString(R.string.fast_forward), mp
-                                    .getCurrentSongInfo(), false);
+                            updateDisplayText(getString(R.string.fast_forward),
+                                    mp.getCurrentSongInfo(), false);
                             isSeeking = true;
                             new Thread(new Seeker(1)).start();
                         }
                         break;
                     case Gesture.DOWNRIGHT:
-                        updateDisplayText(getString(R.string.next_album), mp.getNextAlbumName(),
-                                true);
+                        updateDisplayText(
+                                getString(R.string.next_album), mp.getNextAlbumName(), true);
                         break;
                 }
             }
@@ -315,19 +296,51 @@ public class RockLockActivity extends Activity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(android.view.Menu menu) {
+        mp.stop();
+        menu.clear();
+        int NONE = android.view.Menu.NONE;
+
+        String togglePlaylistMode = getString(R.string.switch_to) + " "
+                + getString(R.string.rock_lock_playlist);
+        if (mp.getSongPickerType() == MusicPlayer.ROCKLOCK_PLAYLIST) {
+            togglePlaylistMode = getString(R.string.switch_to) + " "
+                    + getString(R.string.tagged_music_playlist);
+        }
+        menu.add(NONE, R.string.toggle_playlist, 0, togglePlaylistMode).setIcon(
+                android.R.drawable.ic_menu_rotate);
+
+        String preferences = getString(R.string.preferences);
+        menu.add(NONE, R.string.preferences, 1, preferences).setIcon(
+                android.R.drawable.ic_menu_preferences);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.string.toggle_playlist:
+                int songPickerType = mp.cycleSongPicker();
+                int songPickerTextResId = R.string.tagged_music_playlist;
+                if (songPickerType == MusicPlayer.ROCKLOCK_PLAYLIST) {
+                    songPickerTextResId = R.string.rock_lock_playlist;
+                }
+                updateDisplayText(
+                        getString(R.string.app_name), getString(songPickerTextResId), true);
+                break;
+            case R.string.preferences:
+                Intent i = new Intent(self, PrefsActivity.class);
+                self.startActivity(i);
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             dismissSlideUnlockScreen();
-            return true;
-        }
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            mp.stop();
-            int songPickerType = mp.cycleSongPicker();
-            int songPickerTextResId = R.string.tagged_music_playlist;
-            if (songPickerType == MusicPlayer.ROCKLOCK_PLAYLIST) {
-                songPickerTextResId = R.string.rock_lock_playlist;
-            }
-            updateDisplayText(getString(R.string.app_name), getString(songPickerTextResId), true);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -396,7 +409,7 @@ public class RockLockActivity extends Activity {
             }
         }
     }
-    
+
     private void dismissSlideUnlockScreen() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         // finish() must be called in another thread or else the addFlags
