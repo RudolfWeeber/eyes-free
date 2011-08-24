@@ -66,21 +66,7 @@ public class AuditoryWidgets {
      * Map user-facing widget descriptions to the strings used to indicate them
      * in XML.
      */
-    public static HashMap<String,String> descriptionToWidget;
-    
-    static {
-        descriptionToWidget = new HashMap<String, String>();
-        descriptionToWidget.put("Applications", "APPLAUNCHER");
-        descriptionToWidget.put("Autosync Toggle", "TOGGLE_AUTOSYNC");
-        descriptionToWidget.put("Battery", "BATTERY");
-        descriptionToWidget.put("Blue Tooth Toggle", "TOGGLE_BLUETOOTH");
-        descriptionToWidget.put("Location", "LOCATION");
-        descriptionToWidget.put("Search Widget", "VOICE_SEARCH");
-        descriptionToWidget.put("Signal", "CONNECTIVITY");
-        descriptionToWidget.put("Time", "TIME_DATE");
-        descriptionToWidget.put("Voicemail", "VOICEMAIL");
-        descriptionToWidget.put("Wifi Toggle", "TOGGLE_WIFI");
-    }
+    public HashMap<String,String> descriptionToWidget;
 
     public AuditoryWidgets(TextToSpeech theTts, MarvinShell shell) {
         tts = theTts;
@@ -123,6 +109,19 @@ public class AuditoryWidgets {
             }
         }, PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE
                 | PhoneStateListener.LISTEN_CALL_STATE);
+        
+        
+        descriptionToWidget = new HashMap<String, String>();
+        descriptionToWidget.put(parent.getString(R.string.applications), "APPLAUNCHER");
+        descriptionToWidget.put(parent.getString(R.string.autosync_toggle), "TOGGLE_AUTOSYNC");
+        descriptionToWidget.put(parent.getString(R.string.battery), "BATTERY");
+        descriptionToWidget.put(parent.getString(R.string.bluetooth_toggle), "TOGGLE_BLUETOOTH");
+        descriptionToWidget.put(parent.getString(R.string.location), "LOCATION");
+        descriptionToWidget.put(parent.getString(R.string.search_widget), "VOICE_SEARCH");
+        descriptionToWidget.put(parent.getString(R.string.signal), "CONNECTIVITY");
+        descriptionToWidget.put(parent.getString(R.string.time), "TIME_DATE");
+        descriptionToWidget.put(parent.getString(R.string.voicemail), "VOICEMAIL");
+        descriptionToWidget.put(parent.getString(R.string.wifi_toggle), "TOGGLE_WIFI");
     }
 
     public void shutdown() {
@@ -161,7 +160,7 @@ public class AuditoryWidgets {
         } else if (widgetName.equals("CONNECTIVITY")) {
             announceConnectivity();
         } else if (widgetName.equals("APPLAUNCHER")) {
-            startAppChooser();
+            parent.switchToAppChooserView();
         } else if (widgetName.equals("VOICE_SEARCH")) {
             launchVoiceSearch();
         } else if (widgetName.equals("TOGGLE_BLUETOOTH")) {
@@ -296,10 +295,6 @@ public class AuditoryWidgets {
         guide = new Guide(parent);
         guide.speakLocation(useGpsThisTime);
         useGpsThisTime = !useGpsThisTime;
-    }
-
-    public void startAppChooser() {
-        parent.switchToAppChooserView();
     }
 
     public void launchVoiceSearch() {

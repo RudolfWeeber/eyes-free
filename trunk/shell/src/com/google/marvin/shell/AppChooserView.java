@@ -140,7 +140,7 @@ public class AppChooserView extends TextView {
 
     private MarvinShell parent;
 
-    private ArrayList<AppEntry> appList;
+    private ArrayList<AppInfo> appList;
 
     private int appListIndex;
 
@@ -183,7 +183,7 @@ public class AppChooserView extends TextView {
     // Change this to true to enable shake to erase
     private static final boolean useShake = false;
 
-    public AppChooserView(Context context, ArrayList<AppEntry> installedApps) {
+    public AppChooserView(Context context, ArrayList<AppInfo> installedApps) {
         super(context);
 
         parent = ((MarvinShell) context);
@@ -290,7 +290,7 @@ public class AppChooserView extends TextView {
         invalidate();
     }
 
-    public void addApplication(AppEntry app) {
+    public void addApplication(AppInfo app) {
         synchronized (appList) {
             appList.add(app);
             Collections.sort(appList);
@@ -312,7 +312,7 @@ public class AppChooserView extends TextView {
         currentString = "";
     }
 
-    public boolean applicationExists(AppEntry app) {
+    public boolean applicationExists(AppInfo app) {
         return appList.contains(app);
     }
 
@@ -355,9 +355,7 @@ public class AppChooserView extends TextView {
                                 Thread.sleep(3000);
                                 if ((backKeyTimeDown > 0)
                                         && (System.currentTimeMillis() - backKeyTimeDown > 2500)) {
-                                    Intent systemHomeIntent = HomeLauncher
-                                            .getSystemHomeIntent(parent);
-                                    parent.startActivity(systemHomeIntent);
+                                    parent.startActivity(parent.getSystemHomeIntent());
                                     parent.finish();
                                 }
                             } catch (InterruptedException e) {

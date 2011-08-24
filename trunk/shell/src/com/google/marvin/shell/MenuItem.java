@@ -35,9 +35,9 @@ public class MenuItem {
 
     public String data;
 
-    public AppEntry appInfo;
+    public AppInfo appInfo;
 
-    public MenuItem(String itemLabel, String itemAction, String itemData, AppEntry applicationInfo) {
+    public MenuItem(String itemLabel, String itemAction, String itemData, AppInfo applicationInfo) {
         label = itemLabel;
         action = itemAction;
         data = itemData;

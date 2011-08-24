@@ -26,14 +26,6 @@
     <string name="signal">Signal</string>
     <string name="location">Location</string>
     <string name="wifi">WiFi</string>
-    <string name="button1_prompt">Application for button 1</string>
-    <string name="button2_prompt">Application for button 2</string>
-    <string name="button3_prompt">Application for button 3</string>
-    <string name="button4_prompt">Application for button 4</string>
-    <string name="button6_prompt">Application for button 6</string>
-    <string name="button7_prompt">Application for button 7</string>
-    <string name="button8_prompt">Application for button 8</string>
-    <string name="button9_prompt">Application for button 9</string>
     <string name="period">Period</string>
     <string name="question_mark">Question Mark</string>
     <string name="exclamation_point">Exclamation Point</string>
@@ -42,6 +34,7 @@
     <string name="save_shortcuts">Save Shortcuts</string>
     <string name="time">Time</string>
     <string name="search">Search</string>
+    <string name="search_widget">Search widget</string>
     <string name="search_not_available">Voice search is not available on this device.</string>
     <string name="uninstall">Uninstall</string>
     <string name="details_for">Details for</string>
@@ -58,15 +51,31 @@
     <string name="rename_menu">Rename Menu</string>
     <string name="insert_menu_left">Insert Menu Left</string>
     <string name="insert_menu_right">Insert Menu Right</string>
+    <string name="enter_new_menu_name">Enter new menu name</string>
     <string name="new_menu">New Menu</string>
+    <string name="add_to_shell">Add to shell</string>
     <string name="no_short_answer">Sorry, no short answer for</string>
-    <string name="bluetooth_turning_off">Bluetooth turning off</string>
-    <string name="bluetooth_turning_on">Bluetooth turning on</string>
+    <string name="bluetooth_toggle">Blue tooth toggle</string>
+    <string name="bluetooth_turning_off">Blue tooth turning off</string>
+    <string name="bluetooth_turning_on">Blue tooth turning on</string>
+    <string name="wifi_toggle">Wifi toggle</string>
     <string name="wifi_off">Wifi off</string>
     <string name="wifi_on">Wifi on</string>
+    <string name="autosync_toggle">Autosync toggle</string>
     <string name="autosync_off">Autosync off</string>
     <string name="autosync_on">Autosync on</string>
     <string name="background_data_warning">Warning: background data disabled.</string>
+    <string name="gmail">Gmail</string>
+    
+    <!-- The following strings are possible types of shortcuts. -->
+    <string name="application">Application</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="contact">Contact</string>
+    <string name="direct_dial">Direct Dial</string>
+    <string name="direct_message">Direct Message</string>
+    <string name="eyes_free_widget">Eyes-free Widget</string>
+    <string name="settings">Settings</string>
+    <string name="gmail_label">Gmail Label</string>
 
     <!-- The following strings are verbs to be followed by the name of a contact. -->
     <string name="call">Call</string>

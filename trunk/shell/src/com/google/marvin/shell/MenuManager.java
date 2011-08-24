@@ -33,7 +33,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -43,7 +42,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * Manages a set of menus and provides functions for saving/loading XML and
  * editing menus.
  *
- * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
+ * @author clchen@google.com (Charles L. Chen)
+ * @author credo@google.com (Tim Credo)
  */
 public final class MenuManager extends HashMap<String, Menu> {
 
@@ -216,10 +216,9 @@ public final class MenuManager extends HashMap<String, Menu> {
                 if (dataAttrNode != null) {
                     data = dataAttrNode.getNodeValue();
                 }
-                AppEntry appInfo = null;
-                if (action.equalsIgnoreCase("launch") || action.equalsIgnoreCase("ase")) {
+                AppInfo appInfo = null;
+                if (action.equalsIgnoreCase("launch")) {
                     Node appInfoNode = null;
-                    ArrayList<Param> params = new ArrayList<Param>();
                     NodeList nodes = itemNodes.item(i).getChildNodes();
                     for (int j = 0; j < nodes.getLength(); j++) {
                         Node currentNode = nodes.item(j);
@@ -228,12 +227,6 @@ public final class MenuManager extends HashMap<String, Menu> {
                         if (tagName != null) {
                             if (tagName.equalsIgnoreCase("appInfo")) {
                                 appInfoNode = currentNode;
-                            } else if (tagName.equalsIgnoreCase("param")) {
-                                NamedNodeMap paramAttr = currentNode.getAttributes();
-                                Param param = new Param();
-                                param.name = paramAttr.getNamedItem("name").getNodeValue();
-                                param.value = paramAttr.getNamedItem("value").getNodeValue();
-                                params.add(param);
                             }
                         }
                     }
@@ -248,12 +241,7 @@ public final class MenuManager extends HashMap<String, Menu> {
                     if (classAttrNode != null) {
                         className = classAttrNode.getNodeValue();
                     }
-                    String scriptName = "";
-                    Node scriptAttrNode = appInfoAttr.getNamedItem("script");
-                    if (scriptAttrNode != null) {
-                        scriptName = scriptAttrNode.getNodeValue();
-                    }
-                    appInfo = new AppEntry(null, packageName, className, scriptName, null, params);
+                    appInfo = new AppInfo(null, packageName, className);
 
                     // Check to see if the package is still installed
                     if (packageExists(context, appInfo)) {
@@ -271,7 +259,7 @@ public final class MenuManager extends HashMap<String, Menu> {
     /**
      * Check to see if application is installed.
      */
-    private static boolean packageExists(Context context, AppEntry application) {
+    private static boolean packageExists(Context context, AppInfo application) {
         PackageManager manager = context.getPackageManager();
         try {
             manager.getApplicationInfo(application.getPackageName(), 0);
