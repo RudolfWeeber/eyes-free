@@ -1,6 +1,21 @@
-// Copyright 2009 Google Inc. All Rights Reserved.
+/*
+ * Copyright (C) 2009 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 
 /**
+ * UI for launching WalkyTalky.
  *
  * @author clchen@google.com (Charles L. Chen), hiteshk@google.com (Hitesh Khandelwal)
  */
@@ -13,8 +28,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.speech.RecognizerIntent;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,14 +42,15 @@ import android.view.View.OnKeyListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
- * Allows users to search for new locations. Mark locations as favorite, browse recent locations,
- * delete locations from favorite. Returns (Lat, Lon) pair corresponding to the searched address, to
- * the caller Activity.
+ * Allows users to search for new locations. Mark locations as favorite, browse
+ * recent locations, delete locations from favorite. Returns (Lat, Lon) pair
+ * corresponding to the searched address, to the caller Activity.
  */
 public class NewLocationActivity extends Activity {
     private static final int MAX_RECENT_DEST_COUNT = 10;
@@ -49,6 +69,8 @@ public class NewLocationActivity extends Activity {
 
     private ArrayList<String> favoriteDestinations;
 
+    private HashMap<String, String> contactDestinations;
+
     private AutoCompleteTextView destinationEditText;
 
     private Button goTextInputButton;
@@ -56,6 +78,8 @@ public class NewLocationActivity extends Activity {
     private Button goFavoriteButton;
 
     private Button goRecentButton;
+
+    private Button goContactButton;
 
     private Button markFavoriteButton;
 
@@ -68,20 +92,22 @@ public class NewLocationActivity extends Activity {
         self = this;
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+        loadContactAddresses();
+
         setContentView(R.layout.new_loc);
 
         destinationEditText = (AutoCompleteTextView) findViewById(R.id.dest_EditText);
         destinationEditText.setOnKeyListener(new OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                  // Perform action on key press
+                if ((event.getAction() == KeyEvent.ACTION_DOWN)
+                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
                     String dest = destinationEditText.getText().toString();
                     if (dest.length() > 0) {
                         returnToCaller(dest);
                     }
-                  return true;
+                    return true;
                 }
                 return false;
             }
@@ -111,6 +137,14 @@ public class NewLocationActivity extends Activity {
             @Override
             public void onClick(View v) {
                 goRecentHandler();
+            }
+        });
+
+        goContactButton = (Button) findViewById(R.id.goContact_Button);
+        goContactButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goContactHandler();
             }
         });
 
@@ -156,7 +190,8 @@ public class NewLocationActivity extends Activity {
             doReco();
             return true;
         } else if (keyCode == KeyEvent.KEYCODE_BACK) {
-            // Back button pressed in NewLocationActivity, caller application may also exit.
+            // Back button pressed in NewLocationActivity, caller application
+            // may also exit.
             setResult(RESULT_FIRST_USER, getIntent());
             finish();
             return true;
@@ -221,7 +256,7 @@ public class NewLocationActivity extends Activity {
 
     private void goFavoriteHandler() {
         int favoriteDestinationsSize = favoriteDestinations.size();
-        if(favoriteDestinationsSize == 0) {
+        if (favoriteDestinationsSize == 0) {
             return;
         }
 
@@ -246,7 +281,7 @@ public class NewLocationActivity extends Activity {
 
     private void goRecentHandler() {
         int recentDestinationsSize = recentDestinations.size();
-        if(recentDestinationsSize == 0) {
+        if (recentDestinationsSize == 0) {
             return;
         }
 
@@ -271,7 +306,7 @@ public class NewLocationActivity extends Activity {
 
     private void markFavoriteHandler() {
         int recentDestinationsSize = recentDestinations.size();
-        if(recentDestinationsSize == 0) {
+        if (recentDestinationsSize == 0) {
             return;
         }
 
@@ -294,7 +329,7 @@ public class NewLocationActivity extends Activity {
 
     private void removeFavoriteHandler() {
         int favoriteDestinationsSize = favoriteDestinations.size();
-        if(favoriteDestinationsSize == 0) {
+        if (favoriteDestinationsSize == 0) {
             return;
         }
 
@@ -321,9 +356,69 @@ public class NewLocationActivity extends Activity {
         dialog.show();
     }
 
+    private void loadContactAddresses() {
+        contactDestinations = new HashMap<String, String>();
+        // Get the base URI for People table in Contacts content provider.
+        // ie. content://contacts/people/
+        Uri mContacts = StructuredPostal.CONTENT_URI;
+
+        // An array specifying which columns to return.
+        String[] projection = new String[] {
+                StructuredPostal.DISPLAY_NAME, StructuredPostal.FORMATTED_ADDRESS
+        };
+
+        // Best way to retrieve a query; returns a managed query.
+        Cursor managedCursor = managedQuery(mContacts, projection, // Which
+                // columns
+                // to return.
+                null, // WHERE clause--we won't specify.
+                null, // no selection args
+                Phone.DISPLAY_NAME + " ASC"); // Order-by clause.
+        boolean moveSucceeded = managedCursor.moveToFirst();
+
+        ArrayList<String> contactNames = new ArrayList<String>();
+        while (moveSucceeded) {
+            contactDestinations.put(managedCursor.getString(0) + " at "
+                    + managedCursor.getString(1), managedCursor.getString(1));
+            moveSucceeded = managedCursor.moveToNext();
+        }
+    }
+
+    private void goContactHandler() {
+        int contactDestinationsSize = contactDestinations.size();
+        if (contactDestinationsSize == 0) {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(self);
+        final CharSequence[] items = new CharSequence[contactDestinationsSize];
+
+        Iterator<Entry<String, String>> it = contactDestinations.entrySet().iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Entry<String, String> entry = it.next();
+            items[i] = entry.getKey();
+            i++;
+        }
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String dest = contactDestinations.get(items[which]);
+                if (dest.length() > 0) {
+                    returnToCaller(dest);
+                }
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.getListView().setTextFilterEnabled(true);
+        dialog.show();
+    }
+
     /**
-     * Returns (Lat, Lon) pair corresponding to the searched address, to the caller Activity.
-     *
+     * Returns (Lat, Lon) pair corresponding to the searched address, to the
+     * caller Activity.
+     * 
      * @param destination Address to search
      */
     private void returnToCaller(String destination) {

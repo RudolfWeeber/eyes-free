@@ -21,6 +21,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 public class Compass {
     public interface HeadingListener {
@@ -37,7 +38,7 @@ public class Compass {
     private float mCurrentHeading = 0;
 
     private boolean mSensorOk = false;
-
+ 
     float mLastStableHeading = 0;
 
     int mStableCount = 0;
@@ -46,7 +47,7 @@ public class Compass {
 
     int MIN_STABLECOUNT = 50;
 
-    float STABLE_TOLERANCE = 5;
+    float STABLE_TOLERANCE = 20;
 
     private HeadingListener mHeadingListener;
 

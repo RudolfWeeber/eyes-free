@@ -58,7 +58,7 @@ public class Address {
                         if (typeStr.equals("route")) {
                             route = obj.getString("long_name");
                             if (route.length() > 0){
-                                route = StreetLocator.extendShorts(route);
+                                route = ReverseGeocoder.extendShorts(route);
                             }
                             break;
                         }

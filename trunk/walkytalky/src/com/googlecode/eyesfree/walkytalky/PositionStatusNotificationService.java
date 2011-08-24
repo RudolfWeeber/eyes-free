@@ -16,6 +16,9 @@
 
 package com.googlecode.eyesfree.walkytalky;
 
+import com.googlecode.eyesfree.walkytalky.Compass.HeadingListener;
+import com.googlecode.eyesfree.walkytalky.ReverseGeocoder.OnAddressLocatedListener;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,26 +29,24 @@ import android.content.SharedPreferences;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
-import com.googlecode.eyesfree.walkytalky.Compass.HeadingListener;
-import com.googlecode.eyesfree.walkytalky.StreetLocator.StreetLocatorListener;
-import com.whereabout.location.LocationManager;
-
-import java.util.ArrayList;
 
 /**
- * Service that will take the user's current location and place it in the status notification bar.
- * Note that if the user is running TalkBack, the location will automatically be spoken because of
- * the way TalkBack handles status notifications.
- *
- * @author clchen@google.com (Charles L. Chen), hiteshk@google.com (Hitesh Khandelwal)
+ * Service that will take the user's current location and place it in the status
+ * notification bar. Note that if the user is running TalkBack, the location
+ * will automatically be spoken because of the way TalkBack handles status
+ * notifications.
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ * @author hiteshk@google.com (Hitesh Khandelwal)
+ * @author credo@google.com (Tim Credo)
  */
 
-public class PositionStatusNotificationService extends Service implements StreetLocatorListener {
-    private boolean isIndoors = false;
+public class PositionStatusNotificationService extends Service implements OnAddressLocatedListener {
 
     private boolean needReset = true;
 
@@ -54,7 +55,7 @@ public class PositionStatusNotificationService extends Service implements Street
     private boolean mSpeak = false;
 
     private TextToSpeech mTts;
-    
+
     private Compass mCompass;
 
     private boolean mPostMessage = true;
@@ -62,8 +63,6 @@ public class PositionStatusNotificationService extends Service implements Street
     private PositionStatusNotificationService self;
 
     NotificationManager mNotificationManager;
-
-    Location location;
 
     long locLastUpdateTime = 0;
 
@@ -73,43 +72,32 @@ public class PositionStatusNotificationService extends Service implements Street
 
     private LocationManager locationManager;
 
-    private WifiPointsOfInterestLocator wifiPoiLocator;
+    private ReverseGeocoder locator = null;
 
-    private ArrayList<String> previousWifiPoi;
-
-    private StreetLocator locator = null;
-
-    private String currentAddress = "";
-
-    private String currentIntersection = "";
-
-    private String previousPostalCode = "";
-    private String previousCity = "";
+    private Address lastAddress = null;
 
     private LocationListener locationListener = new LocationListener() {
         /*
-         * Use GPS signal by default, fallbacks to network signal if GPS is unavailable
+         * Use GPS signal by default, fallbacks to network signal if GPS is
+         * unavailable
          */
-        public void onLocationChanged(Location arg0) {
-            location = arg0;
-            if (!isIndoors
-                    && (locLastUpdateTime + locationUpdateWaitTime < System.currentTimeMillis())) {
+        public void onLocationChanged(Location location) {
+            if (locLastUpdateTime + locationUpdateWaitTime < System.currentTimeMillis()) {
                 locLastUpdateTime = System.currentTimeMillis();
                 if (location.getProvider().equals("gps")) {
                     // GPS signal
-                    updateLocationString();
+                    locator.getAddressAsync(location.getLatitude(), location.getLongitude());
                     gpsLocLastUpdateTime = System.currentTimeMillis();
                 } else if (gpsLocLastUpdateTime + 2 * locationUpdateWaitTime < System
                         .currentTimeMillis()) {
                     // Network signal
-                    updateLocationString();
+                    locator.getAddressAsync(location.getLatitude(), location.getLongitude());
                 }
             }
         }
 
         public void onProviderDisabled(String arg0) {
-            unregisterLocationServices();
-            location = null;
+            locationManager.removeUpdates(locationListener);
             gpsLocLastUpdateTime = -1;
             locLastUpdateTime = -1;
         }
@@ -129,57 +117,13 @@ public class PositionStatusNotificationService extends Service implements Street
         }
     };
 
-    private LocationListener mWifiLocationListener = new LocationListener() {
-        public void onLocationChanged(final Location loc) {
-            boolean hasNewPoints = false;
-            ArrayList<String> pointsOfInterest = wifiPoiLocator.getWifiLocationsOfInterest(loc);
-            if (pointsOfInterest == null) {
-                isIndoors = false;
-                return;
-            } else {
-                isIndoors = true;
-            }
-            if (pointsOfInterest.size() > 0) {
-                for (int i = 0; i < pointsOfInterest.size(); i++) {
-                    if (!previousWifiPoi.contains(pointsOfInterest.get(i))) {
-                        hasNewPoints = true;
-                        break;
-                    }
-                }
-            }
-            if (hasNewPoints) {
-                String message = "Near ";
-                for (int i = 0; i < pointsOfInterest.size(); i++) {
-                    message = message + pointsOfInterest.get(i) + " and ";
-                }
-                message = message.substring(0, message.lastIndexOf(" and "));
-                sendNotification(message, message, "", message);
-                previousWifiPoi = pointsOfInterest;
-            }
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-    };
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-    }
-    
-    public HeadingListener mHeadingListener = new HeadingListener(){
+    public HeadingListener mHeadingListener = new HeadingListener() {
         @Override
         public void onHeadingChanged(String heading) {
-            if (mPrefs.getBoolean("enable_compass", false) && (mTts != null)){
+            if (mPrefs.getBoolean("enable_compass", false) && (mTts != null)) {
                 mTts.speak("Heading " + heading, 0, null);
             }
-        }        
+        }
     };
 
     @Override
@@ -189,140 +133,53 @@ public class PositionStatusNotificationService extends Service implements Street
 
         String action = intent.getExtras().getString("ACTION");
         if (action.equals("STOP")) {
-            unregisterLocationServices();
-            if (mNotificationManager != null) {
-                mNotificationManager.cancel(1);
-            }
+            shutdown();
             final Service self = this;
             this.stopSelf();
             return;
         }
 
-        mTts = new TextToSpeech(getApplicationContext(), null);
-        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mCompass = new Compass(this, mHeadingListener);
+        // Need to do null checks here since it is possible that these
+        // are already initialized. For example, if the user goes into
+        // navigation and then turns off the screen.
+        if (mTts == null) {
+            mTts = new TextToSpeech(getApplicationContext(), null);
+        }
+        if (mPrefs == null) {
+            mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        }
+        if (mCompass == null) {
+            mCompass = new Compass(this, mHeadingListener);
+        }
 
         if (needReset) {
             self = this;
             needReset = false;
-            previousWifiPoi = new ArrayList<String>();
-            wifiPoiLocator = new WifiPointsOfInterestLocator();
-            mNotificationManager = (NotificationManager) getSystemService(
-                    Context.NOTIFICATION_SERVICE);
-            locator = new StreetLocator(self);
-            locationManager = new LocationManager(this);
+            mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            locator = new ReverseGeocoder(self);
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER,
                     1000, 1, locationListener);
             locationManager.requestLocationUpdates(
                     android.location.LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
             locationManager.addGpsStatusListener(mGpsStatusListener);
-            // Turned off for now - will enable once we push out a stable version of wifi localizer service
-            // Enable wifi indoor location
-            /*
-             locationManager.startWifiService();
-             locationManager.requestLocationUpdates(LocationManager.INDOOR_WIFI_LOCATION_PROVIDER,
-             1000, 0, mWifiLocationListener);
-            Bundle extras = new Bundle();
-            extras.putString(LocationManager.ROOT_DIR_NAME,
-                    Environment.getExternalStorageDirectory() + "/wifiscans");
-            // To load scans for a specific map, do: e.g.
-            // extras.putString(LocationManager.LOAD_FOR_AREA,
-            // "SF_Exploratorium_1.*");
-            // This will load all scans starting with "SF_Exploratorium_1".
-            extras.putString(LocationManager.LOAD_FOR_AREA, null);
-            locationManager.sendExtraCommand(LocationManager.INDOOR_WIFI_LOCATION_PROVIDER,
-                    LocationManager.COMMAND_LOAD_FOR, extras);
-            */
-        }
-    }
-
-    private void updateLocationString() {
-        Location currentLocation = null;
-        currentLocation = location;
-
-        if (currentLocation != null) {
-            locator.getAddressAsync(currentLocation.getLatitude(), currentLocation.getLongitude());
-            locator.getStreetIntersectionAsync(currentLocation.getLatitude(),
-                    currentLocation.getLongitude());
         }
     }
 
     public void onAddressLocated(Address address) {
-        currentAddress = "";
-        String rawAddress = "";
-        if ((address != null) && (address.isValid())) {
-            currentAddress = "Near " + address.getStreetNumber() + " " + address.getRoute();
-            // If either the city or the zip code changes, add both to the announcement
-            if (!address.getCity().equals(previousCity) ||
-                    !address.getPostalCode().equals(previousPostalCode)){
-                currentAddress = currentAddress + ", " + address.getCity() + " " + address.getPostalCode();
-                previousCity = address.getCity();
-                previousPostalCode = address.getPostalCode();
-            }
-            rawAddress = address.getStreetNumber() + " " + address.getRoute() + ", " + previousCity + ", " + previousPostalCode;
-            sendNotification(currentAddress, currentAddress, "", rawAddress);
-        }
-    }
-    
-    public void onIntersectionLocated(String[] streetnames) {
-        currentIntersection = "";
-        if (streetnames.length == 0) {
-            return;
-        }
-        currentIntersection = "";
-        for (String ad : streetnames) {
-            if (currentAddress.indexOf(ad) == -1) {
-                currentIntersection += ad + " and ";
-            }
-        }
-        if (currentIntersection.length() > 5) {
-            currentIntersection = currentIntersection.substring(0,
-                    currentIntersection.length() - 4);
-            currentIntersection = " Nearby streets are: " + currentIntersection;
-        }
-        if (currentIntersection.indexOf("Unknown road") != -1) {
-            currentIntersection = "";
-        }
-    }
+        if (address != null && address.isValid()) {
+            String addressString = "Near " + address.getStreetNumber() + " " + address.getRoute();
+            String fullAddress = address.getStreetNumber() + " " + address.getRoute() + ", "
+                    + address.getCity() + ", " + address.getPostalCode();
+            // If the city or postal code changes, announce the full address.
+            if (lastAddress == null || !address.getCity().equals(lastAddress.getCity())
+                    || !address.getPostalCode().equals(lastAddress.getPostalCode())) {
+                addressString = "Near " + fullAddress;
 
-    public void onFrontBackLocated(String[] streetsFront, String[] streetsBack) {
-        String currentFrontStreet = "";
-        String currentBackStreet = "";
-        if (streetsFront.length > 0) {
-            for (String ad : streetsFront) {
-                if (currentAddress.indexOf(ad) == -1) {
-                    currentFrontStreet += ad + " and ";
-                }
             }
-            if (currentFrontStreet.length() > 5) {
-                currentFrontStreet = currentFrontStreet.substring(0,
-                        currentFrontStreet.length() - 4);
-                currentFrontStreet = "Ahead. " + currentFrontStreet;
-            }
+            lastAddress = address;
+            sendNotification(addressString, addressString, "", fullAddress);
         }
-        if (currentFrontStreet.indexOf("Unknown road") != -1) {
-            currentFrontStreet = "";
-        }
-
-        if (streetsBack.length > 0) {
-            for (String ad : streetsBack) {
-                if (currentAddress.indexOf(ad) == -1) {
-                    currentBackStreet += ad + " and ";
-                }
-            }
-            if (currentBackStreet.length() > 5) {
-                currentBackStreet = currentBackStreet.substring(0, currentBackStreet.length() - 4);
-                currentBackStreet = " Behind. " + currentBackStreet;
-            }
-        }
-        if (currentBackStreet.indexOf("Unknown road") != -1) {
-            currentBackStreet = "";
-        }
-    }
-
-    private void unregisterLocationServices() {
-        locationManager.removeUpdates(locationListener);
-        locationManager.removeUpdates(mWifiLocationListener);
     }
 
     public void sendNotification(String ticker, String title, String text, String callbackMsg) {
@@ -338,8 +195,7 @@ public class PositionStatusNotificationService extends Service implements Street
 
             Intent notificationIntent = new Intent(self, LocationBookmarker.class);
             notificationIntent.putExtra("LOCATION", callbackMsg);
-            PendingIntent contentIntent =
-                    PendingIntent.getActivity(self, 0, notificationIntent, 0);
+            PendingIntent contentIntent = PendingIntent.getActivity(self, 0, notificationIntent, 0);
 
             notification.setLatestEventInfo(context, title, text, contentIntent);
             mNotificationManager.notify(1, notification);
@@ -350,23 +206,26 @@ public class PositionStatusNotificationService extends Service implements Street
             mTts.speak(ticker, 0, null);
         }
     }
-    
+
     @Override
     public void onDestroy() {
-        unregisterLocationServices();
+        shutdown();
+        super.onDestroy();
+    }
+
+    public void shutdown() {
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
         if (mNotificationManager != null) {
             mNotificationManager.cancel(1);
-        }
-        if (locationManager != null) {
-            locationManager.shutdown();
         }
         if (mTts != null) {
             mTts.shutdown();
         }
-        if (mCompass != null){
+        if (mCompass != null) {
             mCompass.shutdown();
         }
-        super.onDestroy();
     }
 
     @Override

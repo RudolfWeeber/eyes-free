@@ -17,16 +17,25 @@
 package com.googlecode.eyesfree.walkytalky;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
  * Generates status notifications of the user's position as they walk.
- *
- * @author clchen@google.com (Charles L. Chen), hiteshk@google.com (Hitesh Khandelwal)
+ * 
+ * @author clchen@google.com (Charles L. Chen)
+ * @author hiteshk@google.com (Hitesh Khandelwal)
  */
 
 public class WalkyTalky extends Activity {
@@ -37,6 +46,13 @@ public class WalkyTalky extends Activity {
     public static final String TAG = "WalkyTalky";
 
     private WalkyTalky self;
+    
+    private BroadcastReceiver mScreenOffReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context arg0, Intent arg1) {
+            startNotifications();
+        }
+    };
 
     @Override
     /** Called when the activity is first created. */
@@ -44,6 +60,10 @@ public class WalkyTalky extends Activity {
         super.onCreate(savedInstanceState);
         self = this;
 
+        registerReceiver(mScreenOffReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+    }
+
+    private void startNotifications() {
         // Start Position Notification service
         Intent iPSNS = new Intent(self, PositionStatusNotificationService.class);
         iPSNS.putExtra("ACTION", "Start");
@@ -65,7 +85,7 @@ public class WalkyTalky extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == NEW_LOCATION_REQUEST && (resultCode == RESULT_OK)) {
             launchDriveAbout(data.getStringExtra("LOC"));
-        } else if(requestCode == NEW_LOCATION_REQUEST && (resultCode == RESULT_FIRST_USER)) {
+        } else if (requestCode == NEW_LOCATION_REQUEST && (resultCode == RESULT_FIRST_USER)) {
             // Back button pressed in NewLocationActivity
             finish();
         }
@@ -88,7 +108,22 @@ public class WalkyTalky extends Activity {
 
         // Make DriveAbout do a warning chime before it speaks a direction
         iNavigate.putExtra("CHIME_BEFORE_SPEECH", true);
-        startActivity(iNavigate);
+        try {
+            startActivity(iNavigate);
+        } catch (ActivityNotFoundException e) {
+            // you need to install driveabout
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Google Maps required");
+            alertDialog.setMessage("Google Maps navigation is required to use this functionality.");
+            alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+        }
+
+        startNotifications();
     }
 
     @Override
@@ -96,6 +131,7 @@ public class WalkyTalky extends Activity {
         Intent i = new Intent(self, PositionStatusNotificationService.class);
         i.putExtra("ACTION", "STOP");
         self.startService(i);
+        unregisterReceiver(mScreenOffReceiver);
         super.onDestroy();
     }
 }

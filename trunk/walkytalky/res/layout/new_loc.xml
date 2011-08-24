@@ -67,6 +67,17 @@
     android:text=" "
     />
 <Button
+    android:id="@+id/goContact_Button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Go to contact destinations"
+    />
+<TextView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text=" "
+    />
+<Button
     android:id="@+id/markFavorite_Button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
