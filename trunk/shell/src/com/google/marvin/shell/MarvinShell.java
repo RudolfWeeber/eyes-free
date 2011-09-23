@@ -219,6 +219,11 @@ public class MarvinShell extends Activity {
         loadMenus();
         switchMenu(HOME_MENU);
 
+        IntentFilter mediaIntentFilter = new IntentFilter();
+        mediaIntentFilter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        mediaIntentFilter.addDataScheme("file");
+        registerReceiver(sdcardReceiver,mediaIntentFilter);
+
         new InitAppChooserTask().execute();
     }
 
@@ -290,6 +295,9 @@ public class MarvinShell extends Activity {
             if (appChangeReceiver != null) {
                 unregisterReceiver(appChangeReceiver);
             }
+            if (sdcardReceiver != null) {
+                unregisterReceiver(sdcardReceiver);
+            }
         } catch (IllegalArgumentException e) {
             /*
              * Sometimes there may be two shutdown requests, in which case the
@@ -319,6 +327,21 @@ public class MarvinShell extends Activity {
         }
     };
 
+    /**
+     * Listen for ACTION_MEDIA_MOUNTED broadcast to load shortcuts from card
+     * after mounting. This is necessary if the shell is the default home
+     * screen, since it will start before external storage is mounted.
+     */
+    private BroadcastReceiver sdcardReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context arg0, Intent intent) {
+            if (new File(shortcutsFilename).isFile()) {
+                loadMenus();
+                switchMenu(HOME_MENU);
+            }
+        }
+    };
+    
     /**
      * Listens for ACTION_SCREEN_ON broadcasts so we can prompt the user to
      * unlock the phone if the shell is not focused.
@@ -1042,13 +1065,15 @@ public class MarvinShell extends Activity {
     }
 
     private void setWallpaper(String filepath) {
-        Bitmap bmp = BitmapFactory.decodeFile(filepath);
-        if (bmp != null) {
-            wallpaperView.setVisibility(View.VISIBLE);
-            wallpaperView.setImageBitmap(bmp);
-        } else {
-            wallpaperView.setVisibility(View.GONE);
+        if (filepath != null && filepath.length() > 0) {
+            Bitmap bmp = BitmapFactory.decodeFile(filepath);
+            if (bmp != null) {
+                wallpaperView.setVisibility(View.VISIBLE);
+                wallpaperView.setImageBitmap(bmp);
+                return;
+            }
         }
+        wallpaperView.setVisibility(View.GONE);
     }
 
     /**
