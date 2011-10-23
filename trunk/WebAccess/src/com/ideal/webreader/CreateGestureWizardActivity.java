@@ -114,6 +114,8 @@ public class CreateGestureWizardActivity extends Activity {
         } else if (mCurrentGesture.equals("action")) {
             mCurrentGesture = "read all";
         } else if (mCurrentGesture.equals("read all")) {
+            mCurrentGesture = "switch web reader mode";
+        } else if (mCurrentGesture.equals("switch web reader mode")) {
             mCurrentGesture = "add bookmark";
         } else if (mCurrentGesture.equals("add bookmark")) {
             mCurrentGesture = "get definition";

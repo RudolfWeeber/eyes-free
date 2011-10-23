@@ -83,12 +83,14 @@
 	
 	
 		<!-- Plugin -->
+		<!-- 
 		<activity android:name=".StartIdealWebAccess" android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		 -->
 		<provider android:name=".LocalJsProvider"
 			android:authorities="com.ideal.webaccess.localjs" />
 		<provider android:name=".TtsContentProvider"

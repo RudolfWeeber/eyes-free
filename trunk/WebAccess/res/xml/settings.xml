@@ -14,6 +14,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:title="Settings">
+	<!--
 	<PreferenceCategory android:title="Lens Settings">
 
 		<CheckBoxPreference android:key="toggle_use_lens_settings"
@@ -29,6 +30,7 @@
 			android:entryValues="@array/color_entries" />
 
 	</PreferenceCategory>
+	-->
 
 	<PreferenceCategory android:title="Text Settings">
 		<ListPreference android:key="text_fg_color"

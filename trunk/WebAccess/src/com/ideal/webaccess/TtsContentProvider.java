@@ -19,6 +19,7 @@ package com.ideal.webaccess;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -27,6 +28,7 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 
 /**
  * Content Provider for wrapping the TextToSpeech library. Usage:
@@ -51,6 +53,10 @@ public class TtsContentProvider extends ContentProvider {
     private String startupMessage = "";
 
     private int startupQueueMode = 0;
+    
+    public static boolean isSpeaking = false;
+    
+    private HashMap<String, String> speechParams;
 
     private OnInitListener mTtsInitListener = new OnInitListener() {
         @Override
@@ -59,7 +65,16 @@ public class TtsContentProvider extends ContentProvider {
                 mTts = new TextToSpeech(getContext(), mTtsInitListener);
                 return;
             }
-            mTts.speak(startupMessage, startupQueueMode, null);
+            speechParams = new HashMap<String, String>();
+            speechParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "foo");
+            mTts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener(){
+                @Override
+                public void onUtteranceCompleted(String utteranceId) {
+                    isSpeaking = false;
+                }                    
+            });
+            isSpeaking = true;
+            mTts.speak(startupMessage, startupQueueMode, speechParams);
         }
     };
 
@@ -89,7 +104,8 @@ public class TtsContentProvider extends ContentProvider {
             startupQueueMode = queueMode;
             mTts = new TextToSpeech(getContext(), mTtsInitListener);
         } else {
-            mTts.speak(text, queueMode, null);
+            isSpeaking = true;
+            mTts.speak(text, queueMode, speechParams);
         }
         return null;
     }

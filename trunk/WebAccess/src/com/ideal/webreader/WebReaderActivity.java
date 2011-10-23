@@ -17,6 +17,7 @@
 package com.ideal.webreader;
 
 import com.ideal.webaccess.R;
+import com.ideal.webaccess.TtsContentProvider;
 import com.ideal.webaccess.Unzipper;
 
 import android.app.Activity;
@@ -54,8 +55,11 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
+import android.webkit.ConsoleMessage;
 import android.webkit.URLUtil;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -195,6 +199,15 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
 
         mWebView.setWebViewClient(mWebViewClient);
 
+//         mWebView.setWebChromeClient(new WebChromeClient() {
+//         public boolean onConsoleMessage(ConsoleMessage cm) {
+//         Log.e("ChromeVox", cm.message() + " -- From line "
+//         + cm.lineNumber() + " of "
+//         + cm.sourceId() );
+//         return true;
+//         }
+//         });
+
         String url = "";
         if (getIntent().getData() != null) {
             url = getIntent().getData().toString();
@@ -202,7 +215,22 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
         if (url.length() < 1) {
             url = "http://apps4android.org/web-reader-tutorial/index.htm";
         }
+        
+        mWebView.setOnKeyListener(new OnKeyListener(){
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (inWebReaderMode) {
+                    if (keyCode == KeyEvent.KEYCODE_M) {
+                        startAutoRead();
+                        return true;
+                    }
+                }
+                return false;
+            }            
+        });
+        
         mWebView.loadUrl(url);
+        inWebReaderMode = false;
     }
 
     private void loadGestures() {
@@ -231,16 +259,24 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
         settings.setDefaultFontSize(Integer.parseInt(mPrefs.getString("text_size", "20")));
 
         // Lens settings
-        if (mPrefs.getBoolean("toggle_use_lens_settings", true)) {
-            runScript("IDEAL_LENS_ENABLED=true;");
-        }
+        // Commented out since the ChromeVox lens is not optimized for mobile.
+//        if (mPrefs.getBoolean("toggle_use_lens_settings", true)) {
+//            runScript("IDEAL_LENS_ENABLED=true;");
+//        } else {
+//            runScript("IDEAL_LENS_ENABLED=false;");
+//        }
+        runScript("IDEAL_LENS_ENABLED=false;");
         String lensFontColor = mPrefs.getString("lens_fg_color", "default");
         if (!lensFontColor.equals("default")) {
             runScript("IDEAL_LENS_TEXTCOLOR='" + lensFontColor + "';");
+        } else {
+            runScript("IDEAL_LENS_TEXTCOLOR='yellow';");
         }
         String lensBgColor = mPrefs.getString("lens_bg_color", "default");
         if (!lensBgColor.equals("default")) {
             runScript("IDEAL_LENS_BGCOLOR='" + lensBgColor + "';");
+        } else {
+            runScript("IDEAL_LENS_BGCOLOR='black';");
         }
 
         // Web page settings
@@ -277,6 +313,7 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
         if ((intent != null) && (intent.getData() != null)) {
             String url = intent.getData().toString();
             mWebView.loadUrl(url);
+            inWebReaderMode = false;
         }
     }
 
@@ -291,6 +328,7 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
     @Override
     public void onPause() {
         super.onPause();
+        stopSpeech();
         if ((mWakeLock != null) && (mWakeLock.isHeld())) {
             mWakeLock.release();
         }
@@ -329,6 +367,7 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
                 speakDpadFocusedLink();
             }
         }
+
         return super.onKeyDown(keyCode, event);
     }
 
@@ -365,6 +404,7 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 mSessionHistory.remove(mSessionHistory.size() - 1);
                 mWebView.loadUrl(mSessionHistory.get(mSessionHistory.size() - 1));
+                inWebReaderMode = false;
                 return true;
             }
         }
@@ -392,6 +432,8 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
                     runScript("IDEAL_INTERFACE_LessGranular();");
                 } else if (prediction.name.equals("down")) {
                     runScript("IDEAL_INTERFACE_MoreGranular();");
+                } else if (prediction.name.equals("switch web reader mode")) {
+                    switchWebReaderMode();
                 } else if (prediction.name.equals("add bookmark")) {
                     bookmarkCurrentPage();
                 } else if (prediction.name.equals("get definition")) {
@@ -402,6 +444,17 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
                 }
             }
         }
+    }
+
+    private boolean inWebReaderMode = false;
+
+    public void switchWebReaderMode() {
+        if (inWebReaderMode) {
+            inWebReaderMode = false;
+        } else {
+            inWebReaderMode = true;
+        }
+        runScript("IDEAL_INTERFACE_SwitchWebReaderMode();");
     }
 
     public void runScript(String script) {
@@ -516,6 +569,7 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
         if (workingUrl.length() > 0) {
             mLastTriedUrl = target;
             mWebView.loadUrl(workingUrl);
+            inWebReaderMode = false;
         } else {
             doSearch(target);
         }
@@ -523,6 +577,7 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
 
     private void doSearch(String query) {
         mWebView.loadUrl("http://www.google.com/m?q=" + query);
+        inWebReaderMode = false;
     }
 
     private boolean keepAutoReading = false;
@@ -537,8 +592,15 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
             @Override
             public void run() {
                 if (keepAutoReading) {
-                    if (!mTts.isSpeaking()) {
-                        runScript("IDEAL_INTERFACE_ReadNext();");
+                    if (!TtsContentProvider.isSpeaking) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (!TtsContentProvider.isSpeaking) {
+                          runScript("IDEAL_INTERFACE_ReadNext();");
+                        }
                     }
                     try {
                         Thread.sleep(1000);
@@ -562,6 +624,7 @@ public class WebReaderActivity extends Activity implements OnGesturePerformedLis
                 // Safety check to avoid double-running our own script
                 if (!url.startsWith("javascript:")) {
                     mWebView.loadUrl(url);
+                    inWebReaderMode = false;
                 }
             }
         }
