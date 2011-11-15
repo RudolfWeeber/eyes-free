@@ -16,209 +16,150 @@
 
 package com.google.android.marvin.talkback;
 
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
-import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.PreferenceActivity;
+import android.preference.PreferenceGroup;
 
 /**
  * Activity used to set TalkBack's service preferences. This activity is loaded
  * when the TalkBackService is first connected to and allows the user to select
  * a font zoom size.
  * 
- * @author dmazzoni@google.com (Dominic Mazzoni)
+ * @author alanv@google.com (Alan Viverette)
  */
 public class TalkBackPreferencesActivity extends PreferenceActivity {
-
-    private static final String ACTION_ACCESSIBILITY_SETTINGS = "android.settings.ACCESSIBILITY_SETTINGS";
-
-    private ListPreference mScreenOff = null;
-
-    private String[] mScreenOffStrings = null;
-
-    private ListPreference mRinger = null;
-
-    private String[] mRingerStrings = null;
-
-    private CheckBoxPreference mCallerId = null;
-
-    private CheckBoxPreference mTtsExtended = null;
-
-    private CheckBoxPreference mProximity = null;
-
-    private PreferenceScreen mManagePluginsScreen = null;
-
-    private Handler mHandler = null;
-
     /**
      * Loads the preferences from the XML preference definition and defines an
      * onPreferenceChangeListener for the font zoom size that restarts the
      * TalkBack service.
      */
     @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        if (Build.VERSION.SDK_INT < 8) {
-            addPreferencesFromResource(R.xml.preferences_prefroyo);
-        } else {
-            addPreferencesFromResource(R.xml.preferences);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        addPreferencesFromResource(R.xml.preferences);
+
+        fixListSummaries(getPreferenceScreen());
+
+        checkVibrationSupport();
+        checkProximitySupport();
+        checkDeveloperSupport();
+    }
+
+    /**
+     * Since the "%s" summary is currently broken, this sets the preference
+     * change listener for all {@link ListPreference} views to fill in the
+     * summary with the current entry value.
+     */
+    private void fixListSummaries(PreferenceGroup group) {
+        if (group == null) {
+            return;
         }
 
-        mHandler = new Handler();
+        final int count = group.getPreferenceCount();
 
-        int valueIndex;
+        for (int i = 0; i < count; i++) {
+            final Preference preference = group.getPreference(i);
 
-        mScreenOff = (ListPreference) findPreference(getString(R.string.pref_speak_screenoff_key));
-        mScreenOffStrings = getResources().getStringArray(R.array.pref_speak_screenoff_entries);
-        valueIndex = mScreenOff.findIndexOfValue(mScreenOff.getValue());
-        if (valueIndex >= 0) {
-            mScreenOff.setSummary(mScreenOffStrings[valueIndex]);
+            if (preference instanceof PreferenceGroup) {
+                fixListSummaries((PreferenceGroup) preference);
+            } else if (preference instanceof ListPreference) {
+                preference.setOnPreferenceChangeListener(mPreferenceChangeListener);
+            }
         }
-        mScreenOff.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int valueIndex = mScreenOff.findIndexOfValue((String) newValue);
-                mScreenOff.setSummary(mScreenOffStrings[valueIndex]);
-                deferReloadPreferences();
-                return true;
-            }
-        });
+    }
 
-        mRinger = (ListPreference) findPreference(getString(R.string.pref_speak_ringer_key));
-        mRingerStrings = getResources().getStringArray(R.array.pref_speak_ringer_entries);
-        valueIndex = mRinger.findIndexOfValue(mRinger.getValue());
-        if (valueIndex >= 0) {
-            mRinger.setSummary(mRingerStrings[valueIndex]);
+    /**
+     * Ensure that the vibration setting does not appear on devices without a
+     * vibrator.
+     */
+    private void checkVibrationSupport() {
+        final Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        final PreferenceGroup category =
+                (PreferenceGroup) findPreferenceByResId(R.string.pref_category_feedback_key);
+        final CheckBoxPreference prefVibration =
+                (CheckBoxPreference) findPreferenceByResId(R.string.pref_vibration_key);
+        final Preference prefVibrationPatterns =
+                findPreferenceByResId(R.string.pref_vibration_patterns_key);
+
+        if (vibrator == null || !vibrator.hasVibrator()) {
+            prefVibration.setChecked(false);
+            category.removePreference(prefVibrationPatterns);
+            category.removePreference(prefVibration);
         }
-        mRinger.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                int valueIndex = mRinger.findIndexOfValue((String) newValue);
-                mRinger.setSummary(mRingerStrings[valueIndex]);
-                deferReloadPreferences();
-                return true;
-            }
-        });
+    }
 
-        mCallerId = (CheckBoxPreference) findPreference(getString(R.string.pref_caller_id_key));
-        mCallerId.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                deferReloadPreferences();
-                return true;
-            }
-        });
+    /**
+     * Ensure that the proximity sensor setting does not appear on devices
+     * without a proximity sensor.
+     */
+    private void checkProximitySupport() {
+        final SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        final Sensor proximity = manager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        final PreferenceGroup category =
+                (PreferenceGroup) findPreferenceByResId(R.string.pref_category_when_to_speak_key);
+        final CheckBoxPreference prefProximity =
+                (CheckBoxPreference) findPreferenceByResId(R.string.pref_proximity_key);
 
-        // TTS Extended only exists pre-Froyo.
-        if (Build.VERSION.SDK_INT < 8) {
-            mTtsExtended = (CheckBoxPreference) findPreference(getString(R.string.pref_tts_extended_key));
-            mTtsExtended.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+        if (proximity == null) {
+            prefProximity.setChecked(false);
+            category.removePreference(prefProximity);
+        }
+    }
+
+    /**
+     * Ensure that the developer settings category only appears on debug and
+     * engineering builds.
+     */
+    private void checkDeveloperSupport() {
+        final boolean isDebugBuild = Build.TYPE.contains("debug") || Build.TYPE.contains("eng");
+        final Preference developer = findPreferenceByResId(R.string.pref_category_developer_key);
+
+        if (!isDebugBuild) {
+            getPreferenceScreen().removePreference(developer);
+        }
+    }
+
+    /**
+     * Returns the preference associated with the specified resource identifier.
+     * 
+     * @param resId A string resource identifier.
+     * @return The preference associated with the specified resource identifier.
+     */
+    private Preference findPreferenceByResId(int resId) {
+        return findPreference(getString(resId));
+    }
+
+    /**
+     * Listens for preference changes and updates the summary to reflect the
+     * current setting. This shouldn't be necessary, since preferences are
+     * supposed to automatically do this when the summary is set to "%s".
+     */
+    private final OnPreferenceChangeListener mPreferenceChangeListener =
+            new OnPreferenceChangeListener() {
+                @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    deferReloadPreferences();
+                    if (preference instanceof ListPreference && newValue instanceof String) {
+                        final ListPreference listPreference = (ListPreference) preference;
+                        final int index = listPreference.findIndexOfValue((String) newValue);
+                        final CharSequence[] entries = listPreference.getEntries();
+
+                        if (index >= 0 && index < entries.length) {
+                            preference.setSummary(entries[index].toString().replaceAll("%", "%%"));
+                        } else {
+                            preference.setSummary("");
+                        }
+                    }
+
                     return true;
                 }
-            });
-        }
-
-        mProximity = (CheckBoxPreference) findPreference(getString(R.string.pref_proximity_key));
-        mProximity.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                deferReloadPreferences();
-                return true;
-            }
-        });
-
-        mManagePluginsScreen = (PreferenceScreen) findPreference(getString(R.string.pref_manage_plugins_key));
-    }
-
-    /**
-     * Checks if the TalkBack service is currently running and displays an
-     * AlertDialog directing the user to enable TalkBack from the accessibility
-     * settings menu.
-     */
-    @Override
-    public void onResume() {
-        super.onRestart();
-        if (!TalkBackService.isServiceInitialized()) {
-            createInactiveServiceAlert().show();
-        }
-        setManagePluginsPreferenceState();
-    }
-
-    /**
-     * Sets the state of the manage plug-ins preference.
-     */
-    private void setManagePluginsPreferenceState() {
-        boolean hasInstalledPlugins = !PluginManager.getPlugins(getPackageManager()).isEmpty();
-        mManagePluginsScreen.setEnabled(hasInstalledPlugins);
-        if (hasInstalledPlugins) {
-            mManagePluginsScreen.setIntent(new Intent(this, PluginPreferencesActivity.class));
-        }
-    }
-
-    /**
-     * Tell the service to reload preferences, but defer until the next event
-     * loop, because onPreferenceChange gets called before the preference
-     * changes, not after.
-     */
-    private void deferReloadPreferences() {
-        mHandler.post(new Runnable() {
-            public void run() {
-                if (TalkBackService.isServiceInitialized()) {
-                    TalkBackService.getInstance().reloadPreferences();
-                }
-            }
-        });
-    }
-
-    /**
-     * Constructs an AlertDialog that displays a warning when TalkBack is
-     * disabled. Clicking the "Yes" button launches the accessibility settings
-     * menu to enable the Talkback service.
-     * 
-     * @return an AlertDialog containing a warning message about TalkBack's
-     *         disabled state
-     */
-    private AlertDialog createInactiveServiceAlert() {
-        return new AlertDialog.Builder(this).setTitle(
-                getString(R.string.title_talkback_inactive_alert)).setMessage(
-                getString(R.string.message_talkback_inactive_alert)).setCancelable(false)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        /*
-                         * There is no guarantee that an accessibility settings
-                         * menu exists, so if the ACTION_ACCESSIBILITY_SETTINGS
-                         * intent doesn't match an activity, simply start the
-                         * main settings activity.
-                         */
-                        Intent launchSettings = new Intent(ACTION_ACCESSIBILITY_SETTINGS);
-                        try {
-                            startActivity(launchSettings);
-                        } catch (ActivityNotFoundException ae) {
-                            showNoAccessibilityWarning();
-                        }
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                }).create();
-    }
-
-    private void showNoAccessibilityWarning() {
-        new AlertDialog.Builder(this).setTitle(getString(R.string.title_no_accessibility_alert))
-                .setMessage(getString(R.string.message_no_accessibility_alert)).setPositiveButton(
-                        android.R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                TalkBackPreferencesActivity.this.finish();
-                            }
-                        }).create().show();
-    }
+            };
 }

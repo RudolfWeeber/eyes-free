@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="notification_type_text_message" msgid="2840489326612585077">"Textnachricht"</string>
-    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Nicht gesendete Textnachricht"</string>
+    <string name="talkback_service_description" msgid="983212841294665356">"Wenn TalkBack aktiviert ist, bietet das Gerät blinden Nutzern und Nutzern mit geringem Sehvermögen gesprochenes Feedback. So werden etwa die Elemente beschrieben, die Sie berühren, auswählen und aktivieren."</string>
+    <string name="notification_type_text_message" msgid="2840489326612585077">"SMS"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Nicht gesendete SMS"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"Entgangener Anruf"</string>
     <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB-Verbindung"</string>
     <string name="notification_type_status_mute" msgid="575502984311443548">"Stummschalten"</string>
@@ -16,7 +17,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Synchronisieren"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Mailbox"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Wiedergabe"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"Statusbenachrichtigung"</string>
     <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> ausgewählt"</string>
     <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> nicht ausgewählt"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Bearbeitungsfeld. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
@@ -24,12 +24,16 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Benachrichtigung <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> ersetzt durch <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> Zeichen durch <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> Zeichen ersetzt"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"<xliff:g id="PERCENT">%1$s</xliff:g> Prozent der Klingeltonlautstärke."</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"<xliff:g id="PERCENT">%d</xliff:g> Prozent der Klingeltonlautstärke."</string>
     <string name="template_dragging_icon" msgid="7633606891857792337">"Symbol <xliff:g id="TITLE">%1$s</xliff:g> wird verschoben."</string>
-    <string name="template_image_button" msgid="7981434777534909849">"Bild-Schaltfläche <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_button" msgid="5913853507836606140">"Schaltfläche <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_view" msgid="3085333029274972273">"Bild <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Bild <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"Bild <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Suchleiste <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <!-- String.format failed for translation -->
+    <!-- no translation found for template_percent (8298434876867671403) -->
+    <skip />
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Artikel <xliff:g id="FROM_INDEX">%d</xliff:g> bis <xliff:g id="TO_INDEX">%d</xliff:g> von <xliff:g id="TOTAL_COUNT">%d</xliff:g> werden angezeigt."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"Artikel <xliff:g id="FROM_INDEX">%d</xliff:g> von <xliff:g id="TOTAL_COUNT">%d</xliff:g> wird angezeigt."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Dropdown-Liste <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> Minuten"</string>
     <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> Stunden"</string>
@@ -37,6 +41,9 @@
     <string name="template_announce_week" msgid="8260793227327782733">"Wochenansicht von <xliff:g id="FROM_DATE">%1$s</xliff:g> bis <xliff:g id="TO_DATE">%2$s</xliff:g>"</string>
     <string name="template_announce_month" msgid="1949363379962245428">"Monatsansicht von <xliff:g id="MONTH">%1$s</xliff:g>"</string>
     <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> von <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="template_announce_disabled_control_hover" msgid="8348046264288231066">"<xliff:g id="DISABLED_CONTROL_TEXT">%1$s</xliff:g>, deaktiviert"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"Ausgewählte Zeichen: <xliff:g id="FROM_INDEX">%1$s</xliff:g> bis <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_announce_clickable_children" msgid="2387604554284732025">"<xliff:g id="NUMBER_CLICKABLE_CHILDREN">%1$s</xliff:g>, klickbare Elemente"</string>
     <string name="value_password" msgid="52094746222829357">"Passwort"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Schieberegler geöffnet"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Schieberegler"</string>
@@ -48,13 +55,17 @@
     <string name="value_password_character_typed" msgid="3384590085073731527">"Punkt"</string>
     <string name="value_checked" msgid="5234989698372864892">"ausgewählt"</string>
     <string name="value_not_checked" msgid="193134740901545340">"nicht ausgewählt"</string>
+    <string name="value_disabled" msgid="65077823320194685">"Deaktiviert"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"Anklickbar"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"Langer Klick möglich"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"Scrollen möglich"</string>
     <string name="value_clicked" msgid="8306469740150249879">"angeklickt"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"Vibration"</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"Klingelton lautlos"</string>
     <string name="value_ringer_normal" msgid="5319228013151793967">"Klingelton normal"</string>
     <string name="value_screen_on" msgid="6000430443458639755">"Bildschirm ein"</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Bildschirm aus"</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telefon entsperrt"</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"Gerät entsperrt"</string>
     <string name="value_dragging_widget" msgid="2839615701303758943">"Widget zum Ziehen"</string>
     <string name="value_web_view" msgid="8368045336469722566">"Webanzeige"</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"Unbekanntes Objekt"</string>
@@ -81,14 +92,12 @@
     <string name="value_decrement_day" msgid="6765872058795160928">"Tag verringern"</string>
     <string name="value_decrement_year" msgid="6888532808015558315">"Jahr verringern"</string>
     <string name="value_playlist" msgid="169034635850956540">"Playlist"</string>
-    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Zufallswiedergabe auswählen"</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Zufallsmix auswählen"</string>
     <string name="value_toggle_repeat" msgid="8873027804000805156">"Wiederholen auswählen"</string>
     <string name="value_rewind_button" msgid="5161645834242351385">"Schaltfläche zum Zurückspulen"</string>
     <string name="value_play_button" msgid="2701216749763299935">"Schaltfläche für Wiedergabe"</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Schaltfläche zum Vorspulen"</string>
     <string name="value_owner" msgid="2419158478547189476">"Eigentümer"</string>
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Beabsichtigte Befehle an TalkBack senden"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Ermöglicht einer Anwendung oder einem Service, TalkBack über beabsichtigte Broadcasts auszuführen und Informationen zum TalkBack-Status zu erhalten, wie beispielsweise den im Cache gespeicherten Benachrichtigungen."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Fragezeichen"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Leerzeichen"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Komma"</string>
@@ -103,30 +112,30 @@
     <item quantity="one" msgid="8890979114667202113">"Termin"</item>
     <item quantity="other" msgid="8275223643159991572">"Termine"</item>
   </plurals>
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBack-Einstellungen verfügbar"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Hier zum Download der Eingabehilfeneinstellungen-Anwendung klicken"</string>
-    <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack-Ausfallbericht verf."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack-Absturzbericht verf."</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Hier klicken, um TalkBack durch Senden von Ausfalldaten zu verbessern"</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Sprecheinstellungen"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Klingeltonlautstärke"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Bildschirmstatus"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Text-in-Sprache-Einst."</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"Anrufer-ID sprechen"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Erweiterte Text-in-Sprache verw."</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"Näherungssensor"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"Klingeltonlautstärke"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Sprechen/Bildschirm aus"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"Anrufer-ID sprechen"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"Näherungssensor verwenden"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Näherungssensor bewirkt Stummschaltung"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Näherungssensor wirkt sich nicht auf Sprache aus"</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Plug-ins"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Plug-ins verwalten"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Deinstallieren"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack deaktiviert!"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack ist derzeit deaktiviert. Möchten Sie die Eingabehilfeneinstellungen öffnen?"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Fehler"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Auf diesem Gerät sind keine Eingabehilfen vorhanden."</string>
-    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack-Ausfallbericht"</string>
-    <string name="header_crash_report_email" msgid="9218276172142314054">"Im Folgenden finden Sie einen Ausfallbericht für TalkBack. Durch Klicken auf die Schaltfläche \"Senden\" werden diese Daten an die Entwickler von TalkBack übermittelt."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Warnung"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Dieses TalkBack-Plug-in kann den gesamten von Ihnen eingegebenen Text erfassen, einschließlich persönlicher Daten wie Kreditkartennummern, jedoch keine Passwörter. Es kann auch Ihre Interaktionen auf der Benutzeroberfläche protokollieren. Es ist Teil der Anwendung <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Soll dieses Plug-in aktiviert werden?"</string>
+    <string name="title_pref_bluetooth" msgid="3475728515720218108">"Bluetooth-Ausgabe"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="655029542459409862">"Über das Bluetooth-Headset sprechen, wenn verfügbar"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="8270563973653936052">"Nie über das Bluetooth-Headsets sprechen"</string>
+    <string name="title_pref_category_feedback_settings" msgid="5588871484662795651">"Feedback-Einstellungen"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"Vibrations-Feedback"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Vibrationsmuster zuweisen"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Tippen &amp; Entdecken"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Klickbare Elemente suchen"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"Ton-Feedback"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Tonlautstärke"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Töne zuweisen"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Tippen &amp; Entdecken"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Klickbare Elemente suchen"</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack-Absturzbericht"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"Im Folgenden finden Sie einen Absturzbericht für TalkBack. Durch Klicken auf die Schaltfläche \"Senden\" werden diese Daten an die Entwickler von TalkBack übermittelt."\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"Von einem Zeichen zum nächsten navigieren"</string>
     <string name="axis_word" msgid="7745798763195184060">"Von einem Wort zum nächsten navigieren"</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Von einem Satz zum nächsten navigieren"</string>

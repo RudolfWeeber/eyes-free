@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Zakázať reč v tichom režime"</item>
     <item msgid="4945285159234224758">"Zákaz reči v režime Vibrovanie a v Tichom režime"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Povoliť reč pri vypnutej obrazovke"</item>
-    <item msgid="3411424877209877052">"Zakázať zvuk pri vypnutej obrazovke"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Zhodná s hlasitosťou reči"</item>
+    <item msgid="3474415020494727681">"75 % hlasitosti reči"</item>
+    <item msgid="3630774810523140800">"50 % hlasitosti reči"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Tlačidlo"</item>

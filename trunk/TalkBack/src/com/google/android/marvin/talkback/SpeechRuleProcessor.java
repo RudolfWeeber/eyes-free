@@ -16,26 +16,23 @@
 
 package com.google.android.marvin.talkback;
 
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * This class is a {@link SpeechRule} processor responsible for loading from
@@ -50,18 +47,13 @@ import javax.xml.parsers.ParserConfigurationException;
  * 
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
-public class SpeechRuleProcessor {
+class SpeechRuleProcessor {
 
     /**
      * Constant used for storing all speech rules that either do not
      * define a filter package or have custom filters.
      */
     private static final String UNDEFINED_PACKAGE_NAME = "undefined_package_name";
-
-    /**
-     * Tag for logging.
-     */
-    private static final String LOG_TAG = "SpeechRuleProcessor";
 
     /**
      * Mutex lock for accessing the speech rules.
@@ -81,7 +73,7 @@ public class SpeechRuleProcessor {
     /**
      * Creates a new instance.
      */
-    SpeechRuleProcessor(Context context) {
+    public SpeechRuleProcessor(Context context) {
         mContext = context;
     }
 
@@ -111,7 +103,8 @@ public class SpeechRuleProcessor {
             InputStream inputStream = new FileInputStream(file);
             addSpeechStrategy(mContext, speechStrategy, null, null, inputStream);
         } catch (FileNotFoundException fnfe) {
-            Log.e(LOG_TAG, "Error loading speech strategy: " + speechStrategy, fnfe);
+            LogUtils.log(SpeechRuleProcessor.class, Log.ERROR, "Error loading speech strategy: "
+                    + "%s\n%s", speechStrategy, fnfe.toString());
         }
     }
 
@@ -162,7 +155,8 @@ public class SpeechRuleProcessor {
                 addSpeechRuleLocked(speechRule);
             }
         }
-        Log.d(LOG_TAG, speechRules.size() + " speech rules appended form: " + speechStrategy);
+        LogUtils.log(SpeechRuleProcessor.class, Log.INFO, "%d speech rules appended from: %s",
+                speechRules.size(), speechStrategy);
     }
 
     /**
@@ -181,8 +175,9 @@ public class SpeechRuleProcessor {
                 }
             }
         }
-        Log.d(LOG_TAG, removedCount + " speech rules removed from: " + speechStrategy);
-    } 
+        LogUtils.log(SpeechRuleProcessor.class, Log.DEBUG, "%d speech rules removed from: %s",
+                removedCount, speechStrategy);
+    }
 
     /**
      * Adds a <code>speechRule</code>.
@@ -206,15 +201,15 @@ public class SpeechRuleProcessor {
         synchronized (mLock) {
             ArrayList<SpeechRule> speechRules = mPackageNameToSpeechRulesMap.remove(packageName);
             if (speechRules != null) {
-                Log.i(LOG_TAG, speechRules.size() + " speech rules removed");
+                LogUtils.log(SpeechRuleProcessor.class, Log.INFO, "%d speech rules removed",
+                        speechRules.size());
             }
             return (speechRules != null);
         }
     }
 
     /**
-     * Processes an <code>event</code> utilizing the optional
-     * <code>activity</code> name by sequentially trying to apply all
+     * Processes an <code>event</code> by sequentially trying to apply all
      * {@link SpeechRule}s in the order they are defined for the package source
      * of the event. If no package specific rules exist the default speech rules
      * are examined in the same manner. If a rule is successfully applied the
@@ -224,54 +219,58 @@ public class SpeechRuleProcessor {
      * 
      * @return True if the event was processed false otherwise.
      */
-    boolean processEvent(AccessibilityEvent event, String activity, Utterance utterance,
-            Map<Object, Object> filterArguments, Map<Object, Object> formatterArguments) {
+    boolean processEvent(AccessibilityEvent event, Utterance utterance, Bundle filterArguments,
+            Bundle formatterArguments) {
         synchronized (mLock) {
-            // try package specific speech rules first
+            // Try package specific speech rules first.
             ArrayList<SpeechRule> speechRules = mPackageNameToSpeechRulesMap
                     .get(event.getPackageName());
+            
             if (speechRules != null
-                    && processEvent(speechRules, event, activity, utterance, filterArguments,
+                    && processEvent(speechRules, event, utterance, filterArguments,
                             formatterArguments)) {
                 return true;
             }
-            // package specific rule not found - try undefined package ones
+
+            // Package specific rule not found; try undefined package ones.
             speechRules = mPackageNameToSpeechRulesMap.get(UNDEFINED_PACKAGE_NAME);
             if (speechRules != null
-                    && processEvent(speechRules, event, activity, utterance, filterArguments,
+                    && processEvent(speechRules, event, utterance, filterArguments,
                             formatterArguments)) {
                 return true;
             }
         }
+        
         return false;
     }
 
     /**
-     * Processes an <code>event</code> utilizing the optional
-     * <code>activity</code> name by sequentially trying to apply all
+     * Processes an <code>event</code> by sequentially trying to apply all
      * <code>speechRules</code> in the order they are defined for the package
      * source of the event. If no package specific rules exist the default
      * speech rules are examined in the same manner. If a rule is successfully
      * applied the result is used to populate an <code>utterance</code>. In
      * other words, the first matching rule wins. Optionally
-     * <code>filterArguments</code> and <code>formatterArguments</code> can
-     * be provided. 
-     *
-     * @return True if the event was processed false otherwise.
+     * <code>filterArguments</code> and <code>formatterArguments</code> can be
+     * provided.
+     * 
+     * @return {@code true} if the event was processed, {@code false} otherwise.
      */
     private boolean processEvent(ArrayList<SpeechRule> speechRules, AccessibilityEvent event,
-            String activity, Utterance utterance, Map<Object, Object> filterArguments,
-            Map<Object, Object> formatterArguments) {
+            Utterance utterance, Bundle filterArguments, Bundle formatterArguments) {
         for (int i = 0, count = speechRules.size(); i < count; i++) {
-            // make sure we never crash because of a bug in speech rules
+            // We should never crash because of a bug in speech rules.
             SpeechRule speechRule = speechRules.get(i);
             try {
-                if (speechRule.apply(event, activity, utterance, filterArguments,
-                        formatterArguments)) {
+                if (speechRule.apply(event, utterance, filterArguments, formatterArguments)) {
+                    LogUtils.log(SpeechRuleProcessor.class, Log.VERBOSE, "Processed event using "
+                            + "rule:\n%s", speechRule.asXmlString());
                     return true;
                 }
             } catch (Throwable t) {
-                Log.e(LOG_TAG, "Error while processing rule:\n" + speechRule.asXmlString(), t);
+                LogUtils.log(SpeechRuleProcessor.class, Log.ERROR, "Error while processing "
+                        + "rule:\n%s", speechRule.asXmlString());
+                t.printStackTrace();
             }
         }
         return false;
@@ -291,12 +290,9 @@ public class SpeechRuleProcessor {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             return builder.parse(inputStream);
-        } catch (IOException ioe) {
-            Log.e(LOG_TAG, "Could not open speechstrategy xml file", ioe);
-        } catch (ParserConfigurationException pce) {
-            Log.e(LOG_TAG, "Could not open speechstrategy xml file", pce);
-        } catch (SAXException se) {
-            Log.e(LOG_TAG, "Could not open speechstrategy xml file", se);
+        } catch (Exception e) {
+            LogUtils.log(SpeechRuleProcessor.class, Log.ERROR, "Could not open speechstrategy "
+                    + "xml file\n%s", e.toString());
         }
         return null;
     }

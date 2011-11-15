@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_service_description" msgid="983212841294665356">"When TalkBack is on, your device provides spoken feedback to help blind and low-vision users. For example, it describes what you touch, select and activate."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Text message"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Not-sent text message"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"Missed call"</string>
@@ -16,7 +17,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Sync"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Voicemail"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Playing"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"Status notification"</string>
     <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> ticked"</string>
     <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> not ticked"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Edit box. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
@@ -24,12 +24,14 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Alert <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> replaced with <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> characters replaced with <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> characters"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"Ringer <xliff:g id="PERCENT">%1$s</xliff:g> per cent."</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Ringer <xliff:g id="PERCENT">%d</xliff:g> per cent."</string>
     <string name="template_dragging_icon" msgid="7633606891857792337">"Dragging <xliff:g id="TITLE">%1$s</xliff:g> icon."</string>
-    <string name="template_image_button" msgid="7981434777534909849">"<xliff:g id="TITLE">%1$s</xliff:g> image button."</string>
-    <string name="template_button" msgid="5913853507836606140">"<xliff:g id="TITLE">%1$s</xliff:g> button."</string>
-    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> image."</string>
+    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> image"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"image <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> seek control."</string>
+    <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> per cent."</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Showing items <xliff:g id="FROM_INDEX">%d</xliff:g> to <xliff:g id="TO_INDEX">%d</xliff:g> of <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"Showing item <xliff:g id="FROM_INDEX">%d</xliff:g> of <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> drop-down list."</string>
     <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> minutes"</string>
     <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> hours"</string>
@@ -37,6 +39,9 @@
     <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> to <xliff:g id="TO_DATE">%2$s</xliff:g>, week view."</string>
     <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, month view."</string>
     <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> of <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="template_announce_disabled_control_hover" msgid="8348046264288231066">"<xliff:g id="DISABLED_CONTROL_TEXT">%1$s</xliff:g>, disabled"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"Selected characters <xliff:g id="FROM_INDEX">%1$s</xliff:g> to <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_announce_clickable_children" msgid="2387604554284732025">"<xliff:g id="NUMBER_CLICKABLE_CHILDREN">%1$s</xliff:g>, clickable items"</string>
     <string name="value_password" msgid="52094746222829357">"password"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Sliding drawer opened"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Sliding drawer handle"</string>
@@ -48,13 +53,17 @@
     <string name="value_password_character_typed" msgid="3384590085073731527">"full stop"</string>
     <string name="value_checked" msgid="5234989698372864892">"ticked"</string>
     <string name="value_not_checked" msgid="193134740901545340">"not ticked"</string>
+    <string name="value_disabled" msgid="65077823320194685">"disabled"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"clickable"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"long-clickable"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"scrollable"</string>
     <string name="value_clicked" msgid="8306469740150249879">"clicked"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"Ringer vibrate."</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"Ringer silent."</string>
     <string name="value_ringer_normal" msgid="5319228013151793967">"Ringer normal."</string>
     <string name="value_screen_on" msgid="6000430443458639755">"Screen on."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Screen off."</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"Phone unlocked."</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"Device unlocked."</string>
     <string name="value_dragging_widget" msgid="2839615701303758943">"Dragging widget."</string>
     <string name="value_web_view" msgid="8368045336469722566">"Web view."</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"Unknown object."</string>
@@ -87,8 +96,6 @@
     <string name="value_play_button" msgid="2701216749763299935">"Play button."</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Fast-forward button."</string>
     <string name="value_owner" msgid="2419158478547189476">"Owner"</string>
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Send intent commands to TalkBack"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Allows an application or service to drive TalkBack via intent broadcasts and potentially obtain information about the TalkBack state, for example, the cached notifications."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Question mark"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Space"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Comma"</string>
@@ -103,30 +110,30 @@
     <item quantity="one" msgid="8890979114667202113">"event"</item>
     <item quantity="other" msgid="8275223643159991572">"events"</item>
   </plurals>
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBack Preferences Available"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Click here to download the Accessibility Preferences application."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack Crash Data Available"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Click here to improve TalkBack by sending crash data."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"When to Speak"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Ringer Volume"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Screen Status"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"TTS Settings"</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"Speak Caller ID"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Use TTS Extended"</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"Proximity Sensor"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"Ringer volume"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Speak when screen is off"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"Speak caller ID"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"Use proximity sensor"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Proximity sensor silences speech"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Proximity sensor does not control speech"</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Plug-ins"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Manage plug-ins"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Uninstall"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack Disabled!"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack is currently disabled. Would you like to open accessibility settings?"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Error"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Accessibility is not supported on this device."</string>
+    <string name="title_pref_bluetooth" msgid="3475728515720218108">"Bluetooth output"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="655029542459409862">"Speak through Bluetooth when available"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="8270563973653936052">"Never speak through Bluetooth headsets"</string>
+    <string name="title_pref_category_feedback_settings" msgid="5588871484662795651">"Feedback Settings"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"Vibration feedback"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Assign vibration patterns"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Explore by touch"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Exploring clickable items"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"Sound feedback"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Sound volume"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Assign sounds"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Explore by touch"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Exploring clickable items"</string>
     <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack Crash Report"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"The following is a crash report for TalkBack. Clicking the \"Send\" button will transmit this data to the TalkBack developers."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Warning"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"This TalkBack plug-in may be able to collect all the text that you type, including personal data credit card numbers, except passwords. It may also log your user interface interactions. It comes from the application <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Enable this plug-in?"</string>
     <string name="axis_character" msgid="5059604520074645703">"Navigate by character."</string>
     <string name="axis_word" msgid="7745798763195184060">"Navigate by word."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Navigate by sentence."</string>

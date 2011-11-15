@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="value_amazon_go" msgid="4394074100082803216">"搜尋。"</string>
+    <string name="value_amazon_search" msgid="6434927954393699886">"搜尋。"</string>
+    <string name="template_amazon_quantity" msgid="6479878374510151419">"共計 <xliff:g id="COUNT">%1$s</xliff:g> 項"</string>
+    <string name="template_amazon_mp3_buy_button" msgid="3211627160627972269">"購買按鈕，<xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="value_camera_magic_take_picture" msgid="3348188942968677220">"[快門] 按鈕。"</string>
+    <string name="value_camera_magic_zoom_slider" msgid="9068720508404801914">"縮放滑桿。"</string>
+    <string name="value_file_manager_home" msgid="3221104680687868085">"[首頁] 按鈕。"</string>
+    <string name="value_file_manager_up" msgid="6532390888528162351">"[向上] 按鈕。"</string>
+    <string name="value_file_manager_multi_select" msgid="7202234365922477703">"切換多重選取。"</string>
+    <string name="value_file_manager_edit" msgid="6950401308694253576">"[編輯] 按鈕。"</string>
+    <string name="value_file_manager_bookmark" msgid="8039687460141246943">"[書籤] 按鈕。"</string>
+    <string name="value_file_manager_new_folder" msgid="7831830298976400348">"[新資料夾] 按鈕"</string>
+    <string name="value_file_manager_back" msgid="4409971220398537431">"[向後] 按鈕。"</string>
+    <string name="value_file_manager_forwards" msgid="2509760444137103469">"[向前] 按鈕。"</string>
+    <string name="value_file_manager_sort" msgid="7174008674937375487">"[排序] 按鈕。"</string>
+    <string name="value_file_manager_refresh" msgid="5921119137028689654">"[重新整理] 按鈕。"</string>
+    <string name="value_file_manager_help" msgid="5054016981865395456">"[說明] 按鈕。"</string>
+    <string name="value_facebook_post_status" msgid="8118977173989445501">"[留言狀態更新] 按鈕。"</string>
+    <string name="value_facebook_search" msgid="4808938297614670409">"[搜尋] 按鈕。"</string>
+    <string name="value_facebook_gallery_photo" msgid="6169119911043900106">"圖片庫相片。"</string>
+    <string name="value_facebook_home" msgid="4723428329772455197">"Facebook [首頁] 按鈕。"</string>
+    <string name="value_facebook_camera" msgid="5583147343352954089">"[相機] 按鈕。"</string>
+    <string name="value_facebook_compose" msgid="2373734201043407698">"[撰寫] 按鈕。"</string>
+    <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"[不喜歡] 按鈕。"</string>
+    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"[喜歡] 按鈕。"</string>
+    <string name="value_stitcher_star" msgid="4889938499496305463">"[星號] 按鈕。"</string>
+    <string name="value_stitcher_play" msgid="8953331682349687236">"[播放/暫停] 按鈕。"</string>
+    <string name="value_stitcher_next" msgid="2945481957178798103">"[下一個] 按鈕"</string>
+    <string name="value_google_voice_play_button" msgid="2873426918700224250">"[播放] 按鈕。"</string>
+    <string name="value_google_voice_speakerphone_button" msgid="4812261205507729876">"[手機喇叭] 切換按鈕。"</string>
+    <string name="value_google_voice_transcript" msgid="4984373756636020629">"語音轉換文字。"</string>
+</resources>

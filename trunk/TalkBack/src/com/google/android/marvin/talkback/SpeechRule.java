@@ -16,28 +16,34 @@
 
 package com.google.android.marvin.talkback;
 
+import android.content.Context;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
+import android.view.accessibility.AccessibilityEvent;
+
 import dalvik.system.DexFile;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-
-import android.content.Context;
-import android.os.Build;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.MissingFormatArgumentException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * This class represents a speech rule for an {@link AccessibilityEvent}. The
@@ -47,184 +53,145 @@ import java.util.regex.Pattern;
  * 
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
-public class SpeechRule {
-
-    /**
-     * log tag to associate log messages with this class
-     */
-    private static final String LOG_TAG = "SpeechRule";
+class SpeechRule {
 
     // string constants
-
     private static final String SPACE = " ";
-
     private static final String COLON = ":";
 
-    private static final String EMPTY_STRING = "";
-
     // node names
-
     private static final String NODE_NAME_METADATA = "metadata";
-
     private static final String NODE_NAME_FILTER = "filter";
-
     private static final String NODE_NAME_FORMATTER = "formatter";
-
     private static final String NODE_NAME_CUSTOM = "custom";
 
     // properties
-
     private static final String PROPERTY_EVENT_TYPE = "eventType";
-
     private static final String PROPERTY_PACKAGE_NAME = "packageName";
-
     private static final String PROPERTY_CLASS_NAME = "className";
-
     private static final String PROPERTY_TEXT = "text";
-
     private static final String PROPERTY_BEFORE_TEXT = "beforeText";
-
     private static final String PROPERTY_CONTENT_DESCRIPTION = "contentDescription";
-
     private static final String PROPERTY_EVENT_TIME = "eventTime";
-
     private static final String PROPERTY_ITEM_COUNT = "itemCount";
-
     private static final String PROPERTY_CURRENT_ITEM_INDEX = "currentItemIndex";
-
     private static final String PROPERTY_FROM_INDEX = "fromIndex";
-
+    private static final String PROPERTY_TO_INDEX = "toIndex";
+    private static final String PROPERTY_SCROLLABLE = "scrollable";
+    private static final String PROPERTY_SCROLL_X = "scrollX";
+    private static final String PROPERTY_SCROLL_Y = "scrollY";
+    private static final String PROPERTY_RECORD_COUNT = "recordCount";
     private static final String PROPERTY_CHECKED = "checked";
-
     private static final String PROPERTY_ENABLED = "enabled";
-
     private static final String PROPERTY_FULL_SCREEN = "fullScreen";
-
     private static final String PROPERTY_PASSWORD = "password";
-
     private static final String PROPERTY_ADDED_COUNT = "addedCount";
-
     private static final String PROPERTY_REMOVED_COUNT = "removedCount";
-
     private static final String PROPERTY_QUEUING = "queuing";
-
-    private static final String PROPERTY_ACTIVITY = "activity";
-
+    private static final String PROPERTY_EARCON = "earcon";
+    private static final String PROPERTY_VIBRATION = "vibration";
+    private static final String PROPERTY_CUSTOM_EARCON = "customEarcon";
+    private static final String PROPERTY_CUSTOM_VIBRATION = "customVibration";
     private static final String PROPERTY_VERSION_CODE = "versionCode";
-
     private static final String PROPERTY_VERSION_NAME = "versionName";
-
     private static final String PROPERTY_PLATFORM_RELEASE = "platformRelease";
-
     private static final String PROPERTY_PLATFORM_SDK = "platformSdk";
 
-    private static final String PROPERTY_SYSTEM_FEATURE = "systemFeature";
-
     /**
-     * Constant used for storing all speech rules that either do not
-     * define a filter package or have custom filters.
+     * Constant used for storing all speech rules that either do not define a
+     * filter package or have custom filters.
      */
     private static final String UNDEFINED_PACKAGE_NAME = "undefined_package_name";
 
-    /**
-     * reusable builder to avoid object creation
-     */
+    /** Reusable builder to avoid object creation. */
     private static final StringBuilder sTempBuilder = new StringBuilder();
 
-    /**
-     * standard, reusable string formatter for populating utterance template
-     */
-    private static final java.util.Formatter sStringFormatter = new java.util.Formatter();
-
-    /**
-     * Mapping from event type name to its type.
-     */
+    /** Mapping from event type name to its type. */
     private static final HashMap<String, Integer> sEventTypeNameToValueMap =
             new HashMap<String, Integer>();
     static {
-        sEventTypeNameToValueMap.put("TYPE_VIEW_CLICKED", 1);
-        sEventTypeNameToValueMap.put("TYPE_VIEW_LONG_CLICKED", 2);
-        sEventTypeNameToValueMap.put("TYPE_VIEW_SELECTED", 4);
-        sEventTypeNameToValueMap.put("TYPE_VIEW_FOCUSED", 8);
-        sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_CHANGED", 16);
-        sEventTypeNameToValueMap.put("TYPE_WINDOW_STATE_CHANGED", 32);
-        sEventTypeNameToValueMap.put("TYPE_NOTIFICATION_STATE_CHANGED", 64);
-        sEventTypeNameToValueMap.put("TYPE_VIEW_HOVER_ENTER", 128);
-        sEventTypeNameToValueMap.put("TYPE_VIEW_HOVER_EXIT", 256);
-    }
-
-    /**
-     * Mapping from feature type name to its value. Note: Use strings to avoid
-     * dependency on higher SDK version.
-     */
-    private static final HashMap<String, String> sFeatureTypeNameToValueMap = new HashMap<String, String>();
-    static {
-        sFeatureTypeNameToValueMap.put("FEATURE_BLUETOOTH", "android.hardware.bluetooth");
-        sFeatureTypeNameToValueMap.put("FEATURE_CAMERA", "android.hardware.camera.flash");
-        sFeatureTypeNameToValueMap.put("FEATURE_CAMERA_AUTOFOCUS",
-                "android.hardware.camera.autofocus");
-        sFeatureTypeNameToValueMap.put("FEATURE_CAMERA_FLASH", "android.hardware.camera.flash");
-        sFeatureTypeNameToValueMap.put("FEATURE_LIVE_WALLPAPER", "android.software.live_wallpaper");
-        sFeatureTypeNameToValueMap.put("FEATURE_LOCATION", "android.hardware.location");
-        sFeatureTypeNameToValueMap.put("FEATURE_LOCATION_GPS", "android.hardware.location.gps");
-        sFeatureTypeNameToValueMap.put("FEATURE_LOCATION_NETWORK",
-                "android.hardware.location.network");
-        sFeatureTypeNameToValueMap.put("FEATURE_MICROPHONE", "android.hardware.microphone");
-        sFeatureTypeNameToValueMap.put("FEATURE_SENSOR_ACCELEROMETER",
-                "android.hardware.sensor.accelerometer");
-        sFeatureTypeNameToValueMap.put("FEATURE_SENSOR_COMPASS", "android.hardware.sensor.compass");
-        sFeatureTypeNameToValueMap.put("FEATURE_SENSOR_LIGHT", "android.hardware.sensor.light");
-        sFeatureTypeNameToValueMap.put("FEATURE_SENSOR_PROXIMITY",
-                "android.hardware.sensor.proximity");
-        sFeatureTypeNameToValueMap.put("FEATURE_TELEPHONY", "android.hardware.telephony");
-        sFeatureTypeNameToValueMap.put("FEATURE_TELEPHONY_CDMA", "android.hardware.telephony.cdma");
-        sFeatureTypeNameToValueMap.put("FEATURE_TELEPHONY_GSM", "android.hardware.telephony.gsm");
-        sFeatureTypeNameToValueMap.put("FEATURE_TOUCHSCREEN", "android.hardware.touchscreen");
-        sFeatureTypeNameToValueMap.put("FEATURE_TOUCHSCREEN_MULTITOUCH",
-                "android.hardware.touchscreen.multitouch");
-        sFeatureTypeNameToValueMap.put("FEATURE_TOUCHSCREEN_MULTITOUCH_DISTINCT",
-                "android.hardware.touchscreen.multitouch.distinct");
+        sEventTypeNameToValueMap.put("TYPE_VIEW_CLICKED", AccessibilityEvent.TYPE_VIEW_CLICKED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_LONG_CLICKED",
+                AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_SELECTED", AccessibilityEvent.TYPE_VIEW_SELECTED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_FOCUSED", AccessibilityEvent.TYPE_VIEW_FOCUSED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_CHANGED",
+                AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+        sEventTypeNameToValueMap.put("TYPE_WINDOW_STATE_CHANGED",
+                AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
+        sEventTypeNameToValueMap.put("TYPE_NOTIFICATION_STATE_CHANGED",
+                AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_HOVER_ENTER",
+                AccessibilityEvent.TYPE_VIEW_HOVER_ENTER);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_HOVER_EXIT",
+                AccessibilityEvent.TYPE_VIEW_HOVER_EXIT);
+        sEventTypeNameToValueMap.put("TYPE_TOUCH_EXPLORATION_GESTURE_START",
+                AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_START);
+        sEventTypeNameToValueMap.put("TYPE_TOUCH_EXPLORATION_GESTURE_END",
+                AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_END);
+        sEventTypeNameToValueMap.put("TYPE_WINDOW_CONTENT_CHANGED",
+                AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_SCROLLED", AccessibilityEvent.TYPE_VIEW_SCROLLED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_SELECTION_CHANGED",
+                AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED);
     }
 
     /**
      * Mapping from queue mode names to queue modes.
      */
-    private static final HashMap<String, Integer> sQueueModeNameToQueueModeMap = new HashMap<String, Integer>();
+    private static final HashMap<String, Integer> sQueueModeNameToQueueModeMap =
+            new HashMap<String, Integer>();
     static {
         sQueueModeNameToQueueModeMap.put("INTERRUPT", 0);
         sQueueModeNameToQueueModeMap.put("QUEUE", 1);
-        sQueueModeNameToQueueModeMap.put("COMPUTE_FROM_EVENT_CONTEXT", 2);
-        sQueueModeNameToQueueModeMap.put("UNINTERRUPTIBLE", 3);
+        sQueueModeNameToQueueModeMap.put("UNINTERRUPTIBLE", 2);
     }
 
     /**
      * Meta-data of how the utterance should be spoken. It is a key value
      * mapping to enable extending the meta-data specification.
      */
-    private final HashMap<String, Object> mMetadata = new HashMap<String, Object>();
+    private final Bundle mMetadata = new Bundle();
 
     /**
-     * Mapping from property name to property matcher.
+     * List of earcons resource identifiers that should be played with an
+     * utterance.
      */
-    private final HashMap<String, PropertyMatcher> mPropertyMatchers = new HashMap<String, PropertyMatcher>();
+    private final List<Integer> mEarcons = new LinkedList<Integer>();
 
     /**
-     * filter for matching an event
+     * List of vibration pattern resource identifiers that should be played with
+     * an utterance.
      */
+    private final List<Integer> mVibrationPatterns = new LinkedList<Integer>();
+
+    /**
+     * List of resource identifiers for preference keys that correspond to
+     * custom earcons that should be played with an utterance.
+     */
+    private final List<Integer> mCustomEarcons = new LinkedList<Integer>();
+
+    /**
+     * List of resource identifiers for preference keys that correspond to
+     * custom vibration patterns that should be played with an utterance.
+     */
+    private final List<Integer> mCustomVibrations = new LinkedList<Integer>();
+
+    /** Mapping from property name to property matcher. */
+    private final HashMap<String, PropertyMatcher> mPropertyMatchers =
+            new HashMap<String, PropertyMatcher>();
+
+    /** Filter for matching an event. */
     private final Filter mFilter;
 
-    /**
-     * formatter for building an utterance
-     */
+    /** Formatter for building an utterance. */
     private final Formatter mFormatter;
 
-    // the index of this rule
+    /** The index of this rule within the global rule list. */
     private final int mRuleIndex;
 
-    /**
-     * The context in which this speech rule operates.
-     */
-    private final Context mContext;    
+    /** The context in which this speech rule operates. */
+    private final Context mContext;
 
     /**
      * The speech strategy defined the rule.
@@ -306,9 +273,22 @@ public class SpeechRule {
      * @return The XML representation of this rule.
      */
     public String asXmlString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        asXmlStringRecursive(mNode, stringBuilder);
-        return stringBuilder.toString();
+        try {
+            final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            final Transformer transformer = transformerFactory.newTransformer();
+            final DOMSource source = new DOMSource(mNode);
+            final StringWriter writer = new StringWriter();
+            final StreamResult result = new StreamResult(writer);
+
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.transform(source, result);
+
+            return writer.toString();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+
+            return "";
+        }
     }
 
     /**
@@ -323,41 +303,6 @@ public class SpeechRule {
      */
     public String getPackageName() {
         return mPackageName;
-    }
-
-    /**
-     * Returns the speech rule as an XML string.
-     * <p>
-     *   The implementation is simplified and utilizes knowledge about
-     *   speech rule syntax. Node attributes are not processed, empty
-     *   nodes are not avoided, and all nodes are assumed to be either
-     *   Element or Text. This is required since we build against 1.6
-     *   which does not support Node.getTextContent() API.
-     * </p>
-     * @param node The currently processed node.
-     * @param stringBuilder The builder which accumulates the XML string.
-     */
-    private void asXmlStringRecursive(Node node, StringBuilder stringBuilder) {
-        int nodeType = node.getNodeType();
-        switch (nodeType) {
-            case Node.ELEMENT_NODE:
-                stringBuilder.append("<");
-                stringBuilder.append(node.getNodeName());
-                stringBuilder.append(">");
-                NodeList childNodes = node.getChildNodes();
-                for (int i = 0, count = childNodes.getLength(); i < count; i++) {
-                    Node childNode = childNodes.item(i);
-                    asXmlStringRecursive(childNode, stringBuilder);
-                }
-                stringBuilder.append("</");
-                stringBuilder.append(node.getNodeName());
-                stringBuilder.append(">");
-                break;
-            case Node.TEXT_NODE:
-                Text text = (Text) node;
-                stringBuilder.append(text.getData());
-                break;
-        }
     }
 
     /**
@@ -380,28 +325,30 @@ public class SpeechRule {
      * populate a formatted {@link Utterance}.
      * 
      * @param event The event to which to apply the rule.
-     * @param activity The class name of the current activity.
      * @param utterance Utterance to populate if the event is accepted.
      * @param filterArgs Addition arguments to the filter.
      * @param formatterArgs Addition arguments to the formatter.
      * @return True if the event matched the filter, false otherwise.
      */
-    public boolean apply(AccessibilityEvent event, String activity, Utterance utterance,
-            Map<Object, Object> filterArgs, Map<Object, Object> formatterArgs) {
-        // no filter matches all events
-        // no formatter drops the event on the floor
-        boolean matched = (mFilter == null
-                || mFilter.accept(event, mContext, activity, filterArgs));
-        boolean hasFormatter = (mFormatter != null);
-
-        if (matched) {
-            utterance.getMetadata().putAll(mMetadata);
-            if (hasFormatter) {
-                mFormatter.format(event, mContext, utterance, formatterArgs);
-            }
+    public boolean apply(AccessibilityEvent event, Utterance utterance, Bundle filterArgs,
+            Bundle formatterArgs) {
+        // No filter matches all events.
+        if (mFilter != null && !mFilter.accept(event, mContext, filterArgs)) {
+            return false;
         }
 
-        return matched;
+        // No formatter means no utterance text.
+        if (mFormatter != null && !mFormatter.format(event, mContext, utterance, formatterArgs)) {
+            return false;
+        }
+
+        utterance.getMetadata().putAll(mMetadata);
+        utterance.getEarcons().addAll(mEarcons);
+        utterance.getVibrationPatterns().addAll(mVibrationPatterns);
+        utterance.getCustomEarcons().addAll(mCustomEarcons);
+        utterance.getCustomVibrations().addAll(mCustomVibrations);
+
+        return true;
     }
 
     /**
@@ -411,26 +358,36 @@ public class SpeechRule {
      * @param node The meta-data node to parse.
      */
     private void populateMetadata(Node node) {
-        NodeList metadata = node.getChildNodes();
+        final NodeList metadata = node.getChildNodes();
+        final int count = metadata.getLength();
 
-        for (int i = 0, count = metadata.getLength(); i < count; i++) {
-            Node child = metadata.item(i);
+        for (int i = 0; i < count; i++) {
+            final Node child = metadata.item(i);
 
             if (child.getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
 
-            String unqualifiedName = getUnqualifiedNodeName(child);
-            String textContent = getTextContent(child);
-            Object parsedValue = null;
+            final String unqualifiedName = getUnqualifiedNodeName(child);
+            final String textContent = getTextContent(child);
 
             if (PROPERTY_QUEUING.equals(unqualifiedName)) {
-                parsedValue = sQueueModeNameToQueueModeMap.get(textContent);
+                final int mode = sQueueModeNameToQueueModeMap.get(textContent);
+                mMetadata.putInt(unqualifiedName, mode);
+            } else if (PROPERTY_EARCON.equals(unqualifiedName)) {
+                final int resId = getResourceIdentifierContent(mContext, textContent);
+                mEarcons.add(resId);
+            } else if (PROPERTY_VIBRATION.equals(unqualifiedName)) {
+                final int resId = getResourceIdentifierContent(mContext, textContent);
+                mVibrationPatterns.add(resId);
+            } else if (PROPERTY_CUSTOM_EARCON.equals(unqualifiedName)) {
+                mCustomEarcons.add(getResourceIdentifierContent(mContext, textContent));
+            } else if (PROPERTY_CUSTOM_VIBRATION.equals(unqualifiedName)) {
+                mCustomVibrations.add(getResourceIdentifierContent(mContext, textContent));
             } else {
-                parsedValue = parsePropertyValue(unqualifiedName, textContent);
+                final String value = (String) parsePropertyValue(unqualifiedName, textContent);
+                mMetadata.putString(unqualifiedName, value);
             }
-
-            mMetadata.put(unqualifiedName, parsedValue);
         }
     }
 
@@ -442,24 +399,24 @@ public class SpeechRule {
      * @param value The property value.
      * @return The parsed value or null if parse error occurs.
      */
-    static Object parsePropertyValue(String name, String value) {
+    private static Comparable<?> parsePropertyValue(String name, String value) {
         if (PROPERTY_EVENT_TYPE.equals(name)) {
             return sEventTypeNameToValueMap.get(value);
-        } else if (PROPERTY_SYSTEM_FEATURE.equals(name)) {
-            return sFeatureTypeNameToValueMap.get(value);
         }
         if (isIntegerProperty(name)) {
             try {
                 return Integer.parseInt(value);
             } catch (NumberFormatException nfe) {
-                Log.w(LOG_TAG, "Property: '" + name + "' not interger. Ignoring!");
+                LogUtils.log(SpeechRule.class, Log.WARN, "Property: '%s' not interger. Ignoring!",
+                        name);
                 return null;
             }
         } else if (isFloatProperty(name)) {
             try {
                 return Float.parseFloat(value);
             } catch (NumberFormatException nfe) {
-                Log.w(LOG_TAG, "Property: '" + name + "' not float. Ignoring!");
+                LogUtils.log(SpeechRule.class, Log.WARN, "Property: '%s' not float. Ignoring!",
+                        name);
                 return null;
             }
         } else if (isBooleanProperty(name)) {
@@ -477,14 +434,17 @@ public class SpeechRule {
      * @param propertyName The property name.
      * @return True if the property is an integer, false otherwise.
      */
-    static boolean isIntegerProperty(String propertyName) {
+    private static boolean isIntegerProperty(String propertyName) {
         return (PROPERTY_EVENT_TYPE.equals(propertyName)
                 || PROPERTY_ITEM_COUNT.equals(propertyName)
                 || PROPERTY_CURRENT_ITEM_INDEX.equals(propertyName)
                 || PROPERTY_FROM_INDEX.equals(propertyName)
+                || PROPERTY_TO_INDEX.equals(propertyName) || PROPERTY_SCROLL_X.equals(propertyName)
+                || PROPERTY_SCROLL_Y.equals(propertyName)
+                || PROPERTY_RECORD_COUNT.equals(propertyName)
                 || PROPERTY_ADDED_COUNT.equals(propertyName)
-                || PROPERTY_REMOVED_COUNT.equals(propertyName)
-                || PROPERTY_QUEUING.equals(propertyName))
+                || PROPERTY_REMOVED_COUNT.equals(propertyName) || PROPERTY_QUEUING
+                    .equals(propertyName))
                 || PROPERTY_VERSION_CODE.equals(propertyName)
                 || PROPERTY_PLATFORM_SDK.equals(propertyName);
     }
@@ -495,7 +455,7 @@ public class SpeechRule {
      * @param propertyName The property name.
      * @return True if the property is a float, false otherwise.
      */
-    static boolean isFloatProperty(String propertyName) {
+    private static boolean isFloatProperty(String propertyName) {
         return PROPERTY_EVENT_TIME.equals(propertyName);
     }
 
@@ -505,16 +465,13 @@ public class SpeechRule {
      * @param propertyName The property name.
      * @return True if the property is a string, false otherwise.
      */
-    static boolean isStringProperty(String propertyName) {
+    private static boolean isStringProperty(String propertyName) {
         return (PROPERTY_PACKAGE_NAME.equals(propertyName)
-                || PROPERTY_CLASS_NAME.equals(propertyName)
-                || PROPERTY_TEXT.equals(propertyName)
+                || PROPERTY_CLASS_NAME.equals(propertyName) || PROPERTY_TEXT.equals(propertyName)
                 || PROPERTY_BEFORE_TEXT.equals(propertyName)
                 || PROPERTY_CONTENT_DESCRIPTION.equals(propertyName)
-                || PROPERTY_ACTIVITY.equals(propertyName))
                 || PROPERTY_VERSION_NAME.equals(propertyName)
-                || PROPERTY_PLATFORM_RELEASE.equals(propertyName)
-                || PROPERTY_SYSTEM_FEATURE.equals(propertyName);
+                || PROPERTY_PLATFORM_RELEASE.equals(propertyName));
     }
 
     /**
@@ -523,11 +480,11 @@ public class SpeechRule {
      * @param propertyName The property name.
      * @return True if the property is a boolean, false otherwise.
      */
-    static boolean isBooleanProperty(String propertyName) {
-        return (PROPERTY_CHECKED.equals(propertyName)
-                || PROPERTY_ENABLED.equals(propertyName)
+    private static boolean isBooleanProperty(String propertyName) {
+        return (PROPERTY_CHECKED.equals(propertyName) || PROPERTY_ENABLED.equals(propertyName)
                 || PROPERTY_FULL_SCREEN.equals(propertyName)
-                || PROPERTY_PASSWORD.equals(propertyName));
+                || PROPERTY_SCROLLABLE.equals(propertyName) || PROPERTY_PASSWORD
+                    .equals(propertyName));
     }
 
     /**
@@ -590,7 +547,8 @@ public class SpeechRule {
      */
     @SuppressWarnings("unchecked")
     // the possible ClassCastException is handled by the method
-    private <T> T createNewInstance(String className, Class<T> expectedClass) {
+            private
+            <T> T createNewInstance(String className, Class<T> expectedClass) {
         try {
             Class<T> clazz = null;
             // if we are loaded by the context class loader => use the latter
@@ -607,21 +565,9 @@ public class SpeechRule {
                 clazz = dexFile.loadClass(className, classLoader);
             }
             return clazz.newInstance();
-        } catch (ClassNotFoundException cnfe) {
-            Log.e(LOG_TAG, "Rule: #" + mRuleIndex + ". Could not load class: '" + className + "'.",
-                    cnfe);
-        } catch (InstantiationException ie) {
-            Log.e(LOG_TAG, "Rule: #" + mRuleIndex + ". Could not instantiate class: '" + className
-                    + "'.", ie);
-        } catch (IllegalAccessException iae) {
-            Log.e(LOG_TAG, "Rule: #" + mRuleIndex + ". Could not instantiate class: '" + className
-                    + "'.", iae);
-        } catch (IOException ioe) {
-            Log.e(LOG_TAG, "Rule: #" + mRuleIndex + ". Could not instantiate class: '" + className
-                    + "'.", ioe);
-        } catch (NullPointerException npe) {
-            Log.e(LOG_TAG, "Rule: #" + mRuleIndex + ". Could not instantiate class: '" + className
-                    + "'.", npe);
+        } catch (Exception e) {
+            LogUtils.log(SpeechRule.class, Log.ERROR, "Rule: #%d. Could not load class: '%s'.",
+                    mRuleIndex, className, e.toString());
         }
 
         return null;
@@ -632,11 +578,12 @@ public class SpeechRule {
      * of a speechstrategy.xml. This class does not verify if the
      * <code>document</code> is well-formed and it is responsibility of the
      * client to do that.
-     *
+     * 
      * @param context A {@link Context} instance for loading resources.
      * @param speechStrategy The speech strategy that defined the rules.
      * @param targetPackage The package targeted by the rules.
-     * @param publicSourceDir The location of the plug-in APK for loading classes.
+     * @param publicSourceDir The location of the plug-in APK for loading
+     *            classes.
      * @param document The parsed XML.
      * @return The list of loaded speech rules.
      */
@@ -657,7 +604,8 @@ public class SpeechRule {
                     speechRules.add(new SpeechRule(context, speechStrategy, targetPackage,
                             publicSourceDir, child, i));
                 } catch (IllegalStateException ise) {
-                    Log.w(LOG_TAG, "Failed loading speech rule: " + getTextContent(child), ise);
+                    LogUtils.log(SpeechRule.class, Log.WARN, "Failed loading speech rule: %s %s",
+                            getTextContent(child), ise.toString());
                 }
             }
         }
@@ -666,29 +614,37 @@ public class SpeechRule {
     }
 
     /**
-     * Returns the form the given <code>context</code> the text content of a
+     * Returns from the given <code>context</code> the text content of a
      * <code>node</code> after it has been localized.
      */
-    static String getLocalizedTextContent(Context context, Node node) {
-        String textContent = getTextContent(node);
-        return getStringResource(context, textContent);
+    private static String getLocalizedTextContent(Context context, Node node) {
+        final String textContent = getTextContent(node);
+        final int resId = getResourceIdentifierContent(context, textContent);
+
+        if (resId > 0) {
+            return context.getString(resId);
+        }
+
+        return textContent;
     }
 
     /**
-     * Returns a string resource from a <code>context</code> given its
-     * <code>resourceIndetifier</code>.
+     * Returns a resource identifier from the given <code>context</code> for the
+     * text content of a <code>node</code>.
      * <p>
-     * Note: The resource identifier format is: @<package name>:string/<resource
-     * name>
-     *</p>
+     * Note: The resource identifier format is: @&lt;package
+     * name&gt;:&lt;type&gt;/&lt;resource name&gt;
+     * </p>
      */
-    static String getStringResource(Context context, String resourceIdentifier) {
-        if (resourceIdentifier.startsWith("@")) {
-            int id = context.getResources().getIdentifier(resourceIdentifier.substring(1), null,
-                    null);
-            return context.getString(id);
+    private static int getResourceIdentifierContent(Context context, String resName) {
+        if (resName == null) {
+            return 0;
+        } else if (!resName.matches("@(\\w+:)?\\w+/\\w+")) {
+            return 0;
         }
-        return resourceIdentifier;
+
+        return context.getResources().getIdentifier(resName.substring(1), null,
+                context.getPackageName());
     }
 
     /**
@@ -745,9 +701,8 @@ public class SpeechRule {
      * Represents a default filter determining if the rule applies to a given
      * {@link AccessibilityEvent}.
      */
-    class DefaultFilter implements Filter {
-
-        DefaultFilter(Context context, Node node) {
+    private class DefaultFilter implements Filter {
+        public DefaultFilter(Context context, Node node) {
             NodeList properties = node.getChildNodes();
 
             for (int i = 0, count = properties.getLength(); i < count; i++) {
@@ -759,11 +714,12 @@ public class SpeechRule {
 
                 String unqualifiedName = getUnqualifiedNodeName(child);
                 String textContent = getTextContent(child);
-                PropertyMatcher propertyMatcher = new PropertyMatcher(context, unqualifiedName,
-                        textContent);
+                PropertyMatcher propertyMatcher =
+                        new PropertyMatcher(context, unqualifiedName, textContent);
                 mPropertyMatchers.put(unqualifiedName, propertyMatcher);
 
-                // if the speech rule specifies a target package we use that value
+                // if the speech rule specifies a target package we use that
+                // value
                 // rather the one passed as an argument to the rule constructor
                 if (PROPERTY_PACKAGE_NAME.equals(unqualifiedName)) {
                     mPackageName = textContent;
@@ -772,12 +728,11 @@ public class SpeechRule {
         }
 
         @Override
-        public boolean accept(AccessibilityEvent event, Context context, String activity,
-                Object args) {
+        public boolean accept(AccessibilityEvent event, Context context, Bundle args) {
             // the order here matters and is from most frequently used to less
             PropertyMatcher eventTypeMatcher = mPropertyMatchers.get(PROPERTY_EVENT_TYPE);
             if (eventTypeMatcher != null) {
-                int eventType = event.getEventType(); 
+                int eventType = event.getEventType();
                 if (!eventTypeMatcher.accept(eventType)) {
                     return false;
                 }
@@ -792,8 +747,8 @@ public class SpeechRule {
             // special case
             PropertyMatcher classNameMatcher = mPropertyMatchers.get(PROPERTY_CLASS_NAME);
             if (classNameMatcher != null) {
-                String eventClass = event.getClassName().toString();
-                String eventPackage = event.getPackageName().toString();
+                CharSequence eventClass = event.getClassName();
+                CharSequence eventPackage = event.getPackageName();
                 String filteringPackage = null;
                 if (packageNameMatcher != null) {
                     filteringPackage = (String) packageNameMatcher.getAcceptedValues()[0];
@@ -811,7 +766,7 @@ public class SpeechRule {
             }
             PropertyMatcher beforeTextMatcher = mPropertyMatchers.get(PROPERTY_BEFORE_TEXT);
             if (beforeTextMatcher != null) {
-                CharSequence beforeText = event.getBeforeText(); 
+                CharSequence beforeText = event.getBeforeText();
                 if (!beforeTextMatcher.accept(beforeText)) {
                     return false;
                 }
@@ -850,6 +805,41 @@ public class SpeechRule {
             if (fromIndexMatcher != null) {
                 int fromIndex = event.getFromIndex();
                 if (!fromIndexMatcher.accept(fromIndex)) {
+                    return false;
+                }
+            }
+            PropertyMatcher toIndexMatcher = mPropertyMatchers.get(PROPERTY_TO_INDEX);
+            if (toIndexMatcher != null) {
+                int toIndex = event.getToIndex();
+                if (!toIndexMatcher.accept(toIndex)) {
+                    return false;
+                }
+            }
+            PropertyMatcher scrollableMatcher = mPropertyMatchers.get(PROPERTY_SCROLLABLE);
+            if (scrollableMatcher != null) {
+                boolean scrollable = event.isScrollable();
+                if (!scrollableMatcher.accept(scrollable)) {
+                    return false;
+                }
+            }
+            PropertyMatcher scrollXMatcher = mPropertyMatchers.get(PROPERTY_SCROLL_X);
+            if (scrollXMatcher != null) {
+                int scrollX = event.getScrollX();
+                if (!scrollXMatcher.accept(scrollX)) {
+                    return false;
+                }
+            }
+            PropertyMatcher scrollYMatcher = mPropertyMatchers.get(PROPERTY_SCROLL_Y);
+            if (scrollYMatcher != null) {
+                int scrollY = event.getScrollY();
+                if (!scrollYMatcher.accept(scrollY)) {
+                    return false;
+                }
+            }
+            PropertyMatcher recordCountMatcher = mPropertyMatchers.get(PROPERTY_RECORD_COUNT);
+            if (recordCountMatcher != null) {
+                int recordCount = event.getRecordCount();
+                if (!recordCountMatcher.accept(recordCount)) {
                     return false;
                 }
             }
@@ -894,12 +884,6 @@ public class SpeechRule {
                 if (!removedCountMatcher.accept(removedCount)) {
                     return false;
                 }
-            }            
-            PropertyMatcher activityMatcher = mPropertyMatchers.get(PROPERTY_ACTIVITY);
-            if (activityMatcher != null) {
-                if (!activityMatcher.accept(activity)) {
-                    return false;
-                }
             }
             PropertyMatcher versionCodeMatcher = mPropertyMatchers.get(PROPERTY_VERSION_CODE);
             if (versionCodeMatcher != null) {
@@ -932,13 +916,6 @@ public class SpeechRule {
                     return false;
                 }
             }
-            // special case
-            PropertyMatcher systemFeatureMatcher = mPropertyMatchers.get(PROPERTY_SYSTEM_FEATURE);
-            if (systemFeatureMatcher != null) {
-                if (!systemFeatureMatcher.accept(null)) {
-                    return false;
-                }
-            }
             return true;
         }
     }
@@ -951,15 +928,11 @@ public class SpeechRule {
      * properties or regular expression selections are concatenated with space
      * as delimiter.
      */
-    class DefaultFormatter implements Formatter {
+    private class DefaultFormatter implements Formatter {
 
         // node names
 
         private static final String NODE_NAME_TEMPLATE = "template";
-
-        private static final String NODE_NAME_SPLIT = "split";
-
-        private static final String NODE_NAME_REGEX = "regex";
 
         private static final String NODE_NAME_PROPERTY = "property";
 
@@ -968,15 +941,15 @@ public class SpeechRule {
          */
         private final String mTemplate;
 
-        private final List<StringPair> mSelectors;
+        private final List<Pair<String, String>> mSelectors;
 
         /**
          * Creates a new formatter from a given DOM {@link Node}.
          * 
          * @param node The node.
          */
-        DefaultFormatter(Node node) {
-            mSelectors = new ArrayList<StringPair>();
+        public DefaultFormatter(Node node) {
+            mSelectors = new ArrayList<Pair<String, String>>();
             String template = null;
 
             NodeList children = node.getChildNodes();
@@ -992,12 +965,12 @@ public class SpeechRule {
                 // resource
                 if (NODE_NAME_TEMPLATE.equals(unqualifiedName)) {
                     template = getLocalizedTextContent(mContext, child);
-                } else if (NODE_NAME_PROPERTY.equals(unqualifiedName)
-                        || NODE_NAME_SPLIT.equals(unqualifiedName)) {
-                    mSelectors.add(new StringPair(unqualifiedName, getLocalizedTextContent(
-                            mContext, child)));
+                } else if (NODE_NAME_PROPERTY.equals(unqualifiedName)) {
+                    mSelectors.add(new Pair<String, String>(unqualifiedName,
+                            getLocalizedTextContent(mContext, child)));
                 } else {
-                    mSelectors.add(new StringPair(unqualifiedName, getTextContent(child)));
+                    mSelectors
+                            .add(new Pair<String, String>(unqualifiedName, getTextContent(child)));
                 }
             }
 
@@ -1005,53 +978,31 @@ public class SpeechRule {
         }
 
         @Override
-        public void format(AccessibilityEvent event, Context context, Utterance utterance,
-                Object args) {
-            List<StringPair> selectors = mSelectors;
+        public boolean format(AccessibilityEvent event, Context context, Utterance utterance,
+                Bundle args) {
+            List<Pair<String, String>> selectors = mSelectors;
             Object[] arguments = new Object[selectors.size()];
 
             for (int i = 0, count = selectors.size(); i < count; i++) {
-                StringPair selector = selectors.get(i);
-                String selectorType = selector.mFirst;
-                String selectorValue = selector.mSecond;
+                Pair<String, String> selector = selectors.get(i);
+                String selectorType = selector.first;
+                String selectorValue = selector.second;
 
-                if (NODE_NAME_SPLIT.equals(selectorType)) {
-                    String text = Utils.getEventText(mContext, event).toString();
-                    arguments = text.split(selectorValue);
-                    break;
-                } else if (NODE_NAME_PROPERTY.equals(selectorType)) {
+                if (NODE_NAME_PROPERTY.equals(selectorType)) {
                     Object propertyValue = getPropertyValue(selectorValue, event);
                     arguments[i] = propertyValue != null ? propertyValue : "";
-                } else if (NODE_NAME_REGEX.equals(selectorType)) {
-                    arguments[i] = getEventTextRegExpMatch(event, selectorValue);
                 } else {
-                    throw new IllegalArgumentException("Unknown selector type: [" + selector.mFirst
-                            + selector.mSecond + "]");
+                    throw new IllegalArgumentException("Unknown selector type: [" + selector.first
+                            + selector.second + "]");
                 }
             }
 
+            utterance.getEarcons().addAll(mEarcons);
+            utterance.getVibrationPatterns().addAll(mVibrationPatterns);
+
             formatTemplateOrAppendSpaceSeparatedValueIfNoTemplate(utterance, arguments);
-        }
-
-        /**
-         * Returns a substring from a <code>event</code> text that matches a
-         * given <code>regExp</code>. If the regular expression does not find a
-         * match the empty string is returned.
-         * 
-         * @param event The event.
-         * @param regExp The regular expression.
-         * @return The matched string, the empty string otherwise.
-         */
-        private String getEventTextRegExpMatch(AccessibilityEvent event, String regExp) {
-            StringBuilder text = Utils.getEventText(mContext, event);
-            Pattern pattern = Pattern.compile(regExp);
-            Matcher matcher = pattern.matcher(text);
-
-            if (matcher.find()) {
-                return text.substring(matcher.start(), matcher.end());
-            } else {
-                return EMPTY_STRING;
-            }
+            
+            return true;
         }
 
         /**
@@ -1071,13 +1022,7 @@ public class SpeechRule {
             } else if (PROPERTY_CLASS_NAME.equals(property)) {
                 return event.getClassName();
             } else if (PROPERTY_TEXT.equals(property)) {
-                // special case
-                CharSequence contentDesc = event.getContentDescription();
-                if (contentDesc != null && contentDesc.length() > 0) {
-                    return contentDesc;
-                } else {
-                    return Utils.getEventText(mContext, event);
-                }
+                return Utils.getEventText(mContext, event);
             } else if (PROPERTY_BEFORE_TEXT.equals(property)) {
                 return event.getBeforeText();
             } else if (PROPERTY_CONTENT_DESCRIPTION.equals(property)) {
@@ -1090,6 +1035,16 @@ public class SpeechRule {
                 return event.getCurrentItemIndex();
             } else if (PROPERTY_FROM_INDEX.equals(property)) {
                 return event.getFromIndex();
+            } else if (PROPERTY_TO_INDEX.equals(property)) {
+                return event.getToIndex();
+            } else if (PROPERTY_SCROLLABLE.equals(property)) {
+                return event.isScrollable();
+            } else if (PROPERTY_SCROLL_X.equals(property)) {
+                return event.getScrollX();
+            } else if (PROPERTY_SCROLL_Y.equals(property)) {
+                return event.getScrollY();
+            } else if (PROPERTY_RECORD_COUNT.equals(property)) {
+                return event.getRecordCount();
             } else if (PROPERTY_CHECKED.equals(property)) {
                 return event.isChecked();
             } else if (PROPERTY_ENABLED.equals(property)) {
@@ -1123,15 +1078,13 @@ public class SpeechRule {
 
             if (mTemplate != null) {
                 try {
-                    sStringFormatter.format(mTemplate, arguments);
-                    StringBuilder formatterBuilder = (StringBuilder) sStringFormatter.out();
-                    utteranceText.append(formatterBuilder);
-                    // clear the builder of the formatter
-                    formatterBuilder.delete(0, formatterBuilder.length());
+                    final String formatted = String.format(mTemplate, arguments);
+                    utteranceText.append(formatted);
                 } catch (MissingFormatArgumentException mfae) {
-                    Log.e(LOG_TAG, "Speech rule: '" + mRuleIndex + " has inconsistency between "
-                            + "template: '" + mTemplate + "' and arguments: '" + arguments
-                            + "'. Possibliy #template arguments does not match #parameters", mfae);
+                    LogUtils.log(DefaultFormatter.class, Log.ERROR, "Speech rule: '%d' has "
+                            + "inconsistency between template: '%s' and arguments: '%s'. "
+                            + "Possibliy #template arguments does not " + "match #parameters. %s",
+                            mRuleIndex, mTemplate, arguments, mfae.toString());
                 }
             } else {
                 for (Object arg : arguments) {
@@ -1143,32 +1096,12 @@ public class SpeechRule {
                 }
             }
         }
-
-        /**
-         * Utility class to store a pair of elements.
-         */
-        class StringPair {
-            String mFirst;
-
-            String mSecond;
-
-            /**
-             * Creates a new instance.
-             * 
-             * @param first The first element of the pair.
-             * @param second The second element of the pair.
-             */
-            StringPair(String first, String second) {
-                mFirst = first;
-                mSecond = second;
-            }
-        }
     }
 
     /**
      * Helper class for matching properties.
      */
-    static class PropertyMatcher {
+    private static class PropertyMatcher {
 
         /**
          * Match type if a property is equal to an expected value.
@@ -1176,12 +1109,14 @@ public class SpeechRule {
         private static final int TYPE_EQUALS = 0;
 
         /**
-         * Match type if a numeric property is less than or equal to an expected value.
+         * Match type if a numeric property is less than or equal to an expected
+         * value.
          */
         private static final int TYPE_LESS_THAN_OR_EQUAL = 1;
 
         /**
-         * Match type if a numeric property is greater than or equal to an expected value.
+         * Match type if a numeric property is greater than or equal to an
+         * expected value.
          */
         private static final int TYPE_GREATER_THAN_OR_EQUAL = 2;
 
@@ -1196,34 +1131,40 @@ public class SpeechRule {
         private static final int TYPE_GREATER_THAN = 4;
 
         /**
-         * Match type if a numeric property is equal to one of several expected values.
+         * Match type if a numeric property is equal to one of several expected
+         * values.
          */
         private static final int TYPE_OR = 5;
 
         /**
          * String for a regex pattern than matches float numbers.
          */
-        private static final String PATTERN_STRING_FLOAT = "(\\s)*([+-])?((\\d)+(\\.(\\d)+)?|\\.(\\d)+)(\\s)*";
+        private static final String PATTERN_STRING_FLOAT =
+                "(\\s)*([+-])?((\\d)+(\\.(\\d)+)?|\\.(\\d)+)(\\s)*";
 
         /**
          * Pattern to match a less than or equal a numeric value constraint.
          */
-        private static final Pattern PATTERN_LESS_THAN_OR_EQUAL = Pattern.compile("(\\s)*<=" + PATTERN_STRING_FLOAT);
+        private static final Pattern PATTERN_LESS_THAN_OR_EQUAL = Pattern.compile("(\\s)*<="
+                + PATTERN_STRING_FLOAT);
 
         /**
          * Pattern to match a greater than or equal a numeric value constraint.
          */
-        private static final Pattern PATTERN_GREATER_THAN_OR_EQUAL = Pattern.compile("(\\s)*>=" + PATTERN_STRING_FLOAT);
+        private static final Pattern PATTERN_GREATER_THAN_OR_EQUAL = Pattern.compile("(\\s)*>="
+                + PATTERN_STRING_FLOAT);
 
         /**
          * Pattern to match a less than a numeric value constraint.
          */
-        private static final Pattern PATTERN_LESS_THAN = Pattern.compile("(\\s)*<" + PATTERN_STRING_FLOAT);
+        private static final Pattern PATTERN_LESS_THAN = Pattern.compile("(\\s)*<"
+                + PATTERN_STRING_FLOAT);
 
         /**
          * Pattern to match a greater than a numeric value constraint.
          */
-        private static final Pattern PATTERN_GREATER_THAN = Pattern.compile("(\\s)*>" + PATTERN_STRING_FLOAT);
+        private static final Pattern PATTERN_GREATER_THAN = Pattern.compile("(\\s)*>"
+                + PATTERN_STRING_FLOAT);
 
         /**
          * Pattern to match an or constraint.
@@ -1277,12 +1218,12 @@ public class SpeechRule {
 
         /**
          * Creates a new instance.
-         *
+         * 
          * @param context The Context for accessing resources.
          * @param propertyName The name of the matched property.
          * @param acceptedValue The not parsed accepted value.
          */
-        PropertyMatcher(Context context, String propertyName, String acceptedValue) {
+        public PropertyMatcher(Context context, String propertyName, String acceptedValue) {
             mContext = context;
             mPropertyName = propertyName;
             if (acceptedValue == null) {
@@ -1350,10 +1291,6 @@ public class SpeechRule {
             if (mAcceptedValues == null) {
                 return true;
             }
-            // if checking system feature value can be null
-            if (PROPERTY_SYSTEM_FEATURE.equals(mPropertyName)) {
-                return acceptSystemFeatureProperty();
-            }
             if (value == null) {
                 return false;
             }
@@ -1382,10 +1319,12 @@ public class SpeechRule {
                 if (filteringClassName.equals(eventClassName)) {
                     return true;
                 }
-                Class<?> filteringClass = ClassLoadingManager.getInstance().loadOrGetCachedClass(
-                        mContext, filteringClassName, filteringPackageName);
-                Class<?> eventClass = ClassLoadingManager.getInstance().loadOrGetCachedClass(
-                        mContext, eventClassName.toString(), eventPackageName);
+                Class<?> filteringClass =
+                        ClassLoadingManager.getInstance().loadOrGetCachedClass(mContext,
+                                filteringClassName, filteringPackageName);
+                Class<?> eventClass =
+                        ClassLoadingManager.getInstance().loadOrGetCachedClass(mContext,
+                                eventClassName.toString(), eventPackageName);
                 if (filteringClass != null && eventClass != null) {
                     return (filteringClass.isAssignableFrom(eventClass));
                 }
@@ -1394,22 +1333,8 @@ public class SpeechRule {
         }
 
         /**
-         * @return True if the matcher accepts the {@link #PROPERTY_SYSTEM_FEATURE}
-         *         property.
-         */
-        private boolean acceptSystemFeatureProperty() {
-            for (Object acceptedValue : mAcceptedValues) {
-                String systemFeature = (String) acceptedValue; 
-                if (mContext.getPackageManager().hasSystemFeature(systemFeature)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /**
-         * @return True if this matcher accepts the given <code>value</code>
-         *         for the property it matches.
+         * @return True if this matcher accepts the given <code>value</code> for
+         *         the property it matches.
          */
         private boolean acceptProperty(Object value) {
             if (mType == TYPE_LESS_THAN_OR_EQUAL) {

@@ -2,13 +2,14 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"Mowa przy wszystkich poziomach głośności dzwonka"</item>
+    <item msgid="5487065349227839121">"Mów przy dowolnej głośności dzwonka"</item>
     <item msgid="7158875206945163928">"Nie mów w trybie cichym"</item>
-    <item msgid="4945285159234224758">"Brak mowy przy wibracjach i w trybie cichym"</item>
+    <item msgid="4945285159234224758">"Nie mów w trybie cichym z wibracjami"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Zezwalaj na mówienie, gdy ekran jest wyłączony"</item>
-    <item msgid="3411424877209877052">"Nie mów, gdy ekran jest wyłączony"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Dopasuj do głośności mowy."</item>
+    <item msgid="3474415020494727681">"75% głośności mowy"</item>
+    <item msgid="3630774810523140800">"50% głośności mowy"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Przycisk"</item>

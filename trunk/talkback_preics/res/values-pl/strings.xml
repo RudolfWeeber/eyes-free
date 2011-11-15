@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"Wiadomość tekstowa"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Niewysłana wiadomość tekstowa"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Nieodebrane połączenie"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"Podłączono USB"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"Zignoruj"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Czat"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Błąd"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Więcej"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"Karta SD"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"Karta SD USB"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"Synchronizacja"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"Nowa wiadomość e-mail"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Synchronizacja"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Poczta głosowa"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Odtwarzanie"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Powiadomienie o stanie"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> zaznaczono"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> nie zaznaczono"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Pole edycji. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Pole wyszukiwania. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Alert <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> zastąpiono przez <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"Znaki w liczbie <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> zastąpiono znakami w liczbie <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g>"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Dzwonek: <xliff:g id="PERCENT">%1$s</xliff:g> procent."</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"Przeciąganie ikony <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"Przycisk graficzny <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_button" msgid="5913853507836606140">"Przycisk <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"Zdjęcie: <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"Element sterujący przewijania <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"Lista rozwijana <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> min"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> godz."</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, widok dnia."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"Od <xliff:g id="FROM_DATE">%1$s</xliff:g> do <xliff:g id="TO_DATE">%2$s</xliff:g>, widok tygodnia."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, widok miesiąca."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> z <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"hasło"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Szuflada otwarta"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Uchwyt szuflady"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Sposób wprowadzania tekstu"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Pasek stanu"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Opcje."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"usunięte"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Podsumowanie powiadomień"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"kropka"</string>
+    <string name="value_checked" msgid="5234989698372864892">"zaznaczono"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"nie zaznaczono"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"kliknięto"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Dzwonek wibrujący."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Dzwonek wyciszony."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Dzwonek normalny."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Ekran włączony."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Ekran wyłączony."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telefon odblokowany."</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Przeciąganie widżetu"</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Widok strony."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Nieznany obiekt."</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Przycisk wyszukiwania."</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Przycisk wyboru lokalizacji początkowej."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Przycisk wyboru lokalizacji docelowej."</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"Przycisk Samochodem"</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Przycisk Publiczne środki transportu."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Przycisk Rowerem."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Przycisk wyboru trasy pieszej."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Samochodem, zaznaczono."</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Publiczne środki transportu, zaznaczono."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Rowerem, zaznaczono."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Pieszo, zaznaczono."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"gwiazdka"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Przyrost godzinny."</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Przyrost minutowy."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Spadek godzinny."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Spadek minutowy."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Przyrost miesięczny."</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Przyrost dzienny."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Przyrost roczny."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Spadek miesięczny."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Spadek dzienny."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Spadek roczny."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Playlista."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Przełącz odtwarzanie losowe."</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Przełącz powtarzanie."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Przycisk przewijania."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Przycisk odtwarzania."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Przycisk przewijania do przodu"</string>
+    <string name="value_owner" msgid="2419158478547189476">"Właściciel"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Wyślij zamierzone polecenia do funkcji TalkBack"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Umożliwia aplikacji lub usłudze kierowanie funkcji TalkBack przez zamierzone transmisje i potencjalnie uzyskiwanie informacji o stanie funkcji TalkBack, np. o powiadomieniach zapisanych w pamięci podręcznej."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Znak zapytania"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Spacja"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Przecinek"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Kropka"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Wykrzyknik"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Nawias otwierający"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Nawias zamykający"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Cudzysłów podwójny"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Średnik"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Dwukropek"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"wydarzenie"</item>
+    <item quantity="other" msgid="8275223643159991572">"wydarzenia"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Ustawienia TalkBack dostępne"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Kliknij tutaj, aby pobrać aplikację Accessibility Preferences."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"Dane awarii TalkBack dostępne"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Kliknij tutaj, aby ulepszyć wtyczkę TalkBack, wysyłając dane awarii."</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Kiedy mówić"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Głośność dzwonka"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Stan ekranu"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Ustawienia TTS"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Wł. identyfikator rozmówcy"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Użyj wer. rozszerzonej TTS"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Czujnik zbliżeniowy"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Czujnik zbliżeniowy wycisza mowę"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Czujnik zbliżeniowy nie kontroluje mowy"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Wtyczki"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Zarządzaj wtyczkami"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Odinstaluj"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"Wtyczka TalkBack wyłączona!"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"Wtyczka TalkBack jest aktualnie wyłączona. Czy chcesz otworzyć ustawienia ułatwień dostępu?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Błąd"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"To urządzenie nie obsługuje ułatwień dostępu."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"Zgłoszenie awarii wtyczki TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"To jest zgłoszenie awarii wtyczki TalkBack. Po kliknięciu przycisku „Wyślij” dane zostaną przesłane do programistów TalkBack."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Ostrzeżenie"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Ta wtyczka TalkBack może gromadzić cały wpisywany tekst, w tym dane osobiste w postaci numerów kart kredytowych, ale z wyłączeniem haseł. Może również śledzić działania w interfejsie użytkownika. Pochodzi ona z aplikacji <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Czy włączyć tę wtyczkę?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Nawiguj według znaku."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Nawiguj według słowa."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Nawiguj według zdania."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Nawiguj według nagłówka."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Nawiguj według elementów równorzędnych."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Nawiguj według dokumentu."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Nawiguj według domyślnego wyświetlania stron internetowych."</string>
+</resources>

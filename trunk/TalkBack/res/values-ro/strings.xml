@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_service_description" msgid="983212841294665356">"Atunci când funcţia TalkBack este activată, dispozitivul dvs. oferă feedback vorbit, pentru a-i ajuta pe utilizatorii nevăzători sau cu deficienţe de vedere. De exemplu, aceasta descrie elementele pe care le atingeţi, le selectaţi sau le activaţi."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Mesaj text"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Mesaj text netrimis"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"Apel nepreluat"</string>
@@ -16,7 +17,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Sincronizaţi"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Mesaj vocal"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"În curs de redare"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"Notificare privind starea"</string>
     <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> bifat"</string>
     <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> nu a fost bifat"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Casetă de editare. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
@@ -24,12 +24,14 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Alertă <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> a fost înlocuit cu <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caractere au fost înlocuite cu <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caractere"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"Sonerie <xliff:g id="PERCENT">%1$s</xliff:g> procente."</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Sonerie <xliff:g id="PERCENT">%d</xliff:g> procente."</string>
     <string name="template_dragging_icon" msgid="7633606891857792337">"Se glisează pictograma <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_button" msgid="7981434777534909849">"Buton imagine <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_button" msgid="5913853507836606140">"Butonul <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_view" msgid="3085333029274972273">"Imagine <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Imagine <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"imaginea <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Comanda Căutaţi <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> procente."</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Se afişează articolele <xliff:g id="FROM_INDEX">%d</xliff:g> – <xliff:g id="TO_INDEX">%d</xliff:g> din <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"Se afişează articolul <xliff:g id="FROM_INDEX">%d</xliff:g> din <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Listă derulantă <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> minute"</string>
     <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> ore"</string>
@@ -37,6 +39,9 @@
     <string name="template_announce_week" msgid="8260793227327782733">"De pe <xliff:g id="FROM_DATE">%1$s</xliff:g> până pe <xliff:g id="TO_DATE">%2$s</xliff:g>, afişare pe săptămâni."</string>
     <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, afişare pe luni."</string>
     <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> din <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="template_announce_disabled_control_hover" msgid="8348046264288231066">"<xliff:g id="DISABLED_CONTROL_TEXT">%1$s</xliff:g>, dezactivat"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"Caractere selectate de la <xliff:g id="FROM_INDEX">%1$s</xliff:g> la <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_announce_clickable_children" msgid="2387604554284732025">"<xliff:g id="NUMBER_CLICKABLE_CHILDREN">%1$s</xliff:g>, articole pe care se poate face clic"</string>
     <string name="value_password" msgid="52094746222829357">"parolă"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Secţiune culisantă deschisă"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Mânerul secţiunii culisante"</string>
@@ -48,13 +53,17 @@
     <string name="value_password_character_typed" msgid="3384590085073731527">"punct"</string>
     <string name="value_checked" msgid="5234989698372864892">"verificat"</string>
     <string name="value_not_checked" msgid="193134740901545340">"neverificat"</string>
+    <string name="value_disabled" msgid="65077823320194685">"dezactivat"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"se poate face clic"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"se poate face clic lung"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"derulant"</string>
     <string name="value_clicked" msgid="8306469740150249879">"s-a făcut clic"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"Vibrare sonerie."</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"Sonerie silenţioasă."</string>
     <string name="value_ringer_normal" msgid="5319228013151793967">"Sonerie normală."</string>
     <string name="value_screen_on" msgid="6000430443458639755">"Ecran activ."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Ecran dezactivat."</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telefon deblocat."</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"Dispozitiv deblocat."</string>
     <string name="value_dragging_widget" msgid="2839615701303758943">"Obiect widget Glisare."</string>
     <string name="value_web_view" msgid="8368045336469722566">"Afişare conţinut web."</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"Obiect necunoscut."</string>
@@ -87,8 +96,6 @@
     <string name="value_play_button" msgid="2701216749763299935">"Butonul Redaţi."</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Butonul Derulaţi rapid înainte."</string>
     <string name="value_owner" msgid="2419158478547189476">"Proprietar"</string>
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Trimiteţi comenzile de intenţie la TalkBack"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Permite unei aplicaţii sau unui serviciu să utilizeze TalkBack prin transmisii intenţionate şi, posibil, să obţină informaţii despre starea TalkBack, cum ar fi notificările stocate în memoria cache."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Semn de întrebare"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Spaţiu"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Virgulă"</string>
@@ -103,30 +110,30 @@
     <item quantity="one" msgid="8890979114667202113">"eveniment"</item>
     <item quantity="other" msgid="8275223643159991572">"evenimente"</item>
   </plurals>
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Aplicaţia Preferinţe TalkBack disponibilă"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Faceţi clic aici pt. a desc. aplicaţia Preferinţe de accesibilitate."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Sunt disponibile Date blocare TalkBack"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Îmbunătăţiţi TalkBack prin trimiterea datelor despre blocări."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Când să rostiţi"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Volum sonerie"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Starea ecranului"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Setări TTS"</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"Rostiţi ID-ul de apelant"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Utilizaţi TTS extins"</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"Senzor de proximitate"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"Volum sonerie"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Vorbiţi cu ecran inactiv"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"Rostiţi ID-ul apelantului"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"Util. senzor proximitate"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Senzorul de proximitate opreşte rostirea"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Senzorul de proximitate nu controlează rostirea"</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Pluginuri"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Gestionaţi pluginuri"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Dezinstalaţi"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack este dezactivat!"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack este în prezent dezactivat. Doriţi să deschideţi setările de accesibilitate?"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Eroare"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Accesibilitatea nu este acceptată pe acest dispozitiv."</string>
+    <string name="title_pref_bluetooth" msgid="3475728515720218108">"Ieşire Bluetooth"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="655029542459409862">"Se vorbeşte prin Bluetooth când opţiunea este disponibilă"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="8270563973653936052">"Nu se vorbeşte prin seturi căşti-microfon Bluetooth"</string>
+    <string name="title_pref_category_feedback_settings" msgid="5588871484662795651">"Setări pentru feedback"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"Feedback prin vibraţii"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Atrib. modele de vibraţii"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Exploraţi prin atingere"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Explor. artic. accesibile"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"Feedback prin sunet"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Volum sunet"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Atribuiţi sunete"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Exploraţi prin atingere"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Explor. artic. accesibile"</string>
     <string name="subject_crash_report_email" msgid="3043388136219501183">"Raport blocări TalkBack"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"Următorul este un raport despre blocări pentru TalkBack. Un clic pe butonul „Trimiteţi” va trimite aceste date dezvoltatorilor TalkBack."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Atenţie!"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Acest plugin TalkBack poate colecta integral textul pe care îl introduceţi, inclusiv datele personale, numerele cardurilor de credit, dar nu şi parolele. De asemenea, poate înregistra în jurnal interacţiunile dvs. cu interfaţa de utilizare. Pluginul provine de la aplicaţia <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Activaţi acest plugin?"</string>
     <string name="axis_character" msgid="5059604520074645703">"Navigaţi în funcţie de caracter."</string>
     <string name="axis_word" msgid="7745798763195184060">"Navigaţi în funcţie de cuvânt."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Navigaţi în funcţie de propoziţie."</string>

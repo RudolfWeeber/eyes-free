@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Parler quel que soit le volume de sonnerie"</item>
+    <item msgid="7158875206945163928">"Désactiver la voix en mode silencieux"</item>
+    <item msgid="4945285159234224758">"Aucun son en mode vibreur et en mode silencieux"</item>
+  </string-array>
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"Activer la voix lorsque l\'écran est verrouillé"</item>
+    <item msgid="3411424877209877052">"Désactiver la voix lorsque l\'écran est verrouillé"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"Bouton"</item>
+    <item msgid="2031284088774168661">"Case à cocher"</item>
+    <item msgid="9091685013189255594">"Sélecteur de couleur"</item>
+    <item msgid="7650731353307926535">"Commande de la date et de l\'heure"</item>
+    <item msgid="8280936284109186802">"Commande de la date et de l\'heure"</item>
+    <item msgid="6366195742201292951">"Commande de la date"</item>
+    <item msgid="4817890851441750596">"Texte de modification de l\'e-mail"</item>
+    <item msgid="5708434584742847903">"Sélection de fichier"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"Bouton"</item>
+    <item msgid="5468837159284323298">"Commande du mois"</item>
+    <item msgid="3604586918762860736">"Texte de modification (chiffres uniquement)"</item>
+    <item msgid="2268738486961365938">"Texte de modification du mot de passe"</item>
+    <item msgid="4054764445934639546">"Case d\'option"</item>
+    <item msgid="8620342430107579622">"Curseur"</item>
+    <item msgid="4526908839966163389">"Bouton de réinitialisation"</item>
+    <item msgid="6890269752295368575">"Texte de modification de la recherche"</item>
+    <item msgid="1732239384416208952">"Bouton"</item>
+    <item msgid="2844423601130585486">"Texte de modification du numéro de téléphone"</item>
+    <item msgid="4429211852856836454">"Texte de modification"</item>
+    <item msgid="6916351398697981908">"Texte de modification de l\'URL"</item>
+    <item msgid="7370324241352123803">"Commande de la semaine"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"Alerte"</item>
+    <item msgid="7079664451178245333">"Boîte de dialogue d\'alerte"</item>
+    <item msgid="7175460279619232788">"Bouton"</item>
+    <item msgid="7682652928153230885">"Case à cocher"</item>
+    <item msgid="6271342434037552568">"Liste déroulante"</item>
+    <item msgid="3816282149905203330">"Boîte de dialogue"</item>
+    <item msgid="3607246563706513907">"Cellule de grille"</item>
+    <item msgid="6690887636341505376">"Lien"</item>
+    <item msgid="8956345708233247462">"Journal"</item>
+    <item msgid="7023984577635455031">"Texte défilant"</item>
+    <item msgid="2455128273329194018">"Élément de menu"</item>
+    <item msgid="2579774298837415022">"Case à cocher d\'un élément de menu"</item>
+    <item msgid="8295115526987695111">"Case d\'option d\'un élément de menu"</item>
+    <item msgid="9208148803968404705">"Option"</item>
+    <item msgid="7278111388436893213">"Barre de progression"</item>
+    <item msgid="2040534193363832208">"Case d\'option"</item>
+    <item msgid="3518786141398291419">"Groupe de cases d\'option"</item>
+    <item msgid="3369418675400502879">"Barre de défilement"</item>
+    <item msgid="4160771832888077199">"Curseur"</item>
+    <item msgid="4913996245258357058">"Bouton spin"</item>
+    <item msgid="4720560353967686603">"État"</item>
+    <item msgid="8848835768265321609">"Onglet"</item>
+    <item msgid="1902084479060424039">"Panneau d\'onglets"</item>
+    <item msgid="1434580592616799847">"Zone de texte"</item>
+    <item msgid="2857905070846962311">"Minuteur"</item>
+    <item msgid="5359803593845515833">"Barre d\'outils"</item>
+    <item msgid="5431429272751911412">"Info-bulle"</item>
+    <item msgid="6370853370296882006">"Élément d\'arborescence"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"Lien"</item>
+    <item msgid="5377511479758471198">"Titre de niveau un"</item>
+    <item msgid="1326639266444424357">"Titre de niveau deux"</item>
+    <item msgid="1794794287319870162">"Titre de niveau trois"</item>
+    <item msgid="8913956457917314695">"Titre de niveau quatre"</item>
+    <item msgid="9214322369762997523">"Titre de niveau cinq"</item>
+    <item msgid="703456364875978891">"Titre de niveau six"</item>
+    <item msgid="1873899093503383879">"Bouton"</item>
+    <item msgid="397012629783441956">"Liste déroulante"</item>
+    <item msgid="130879601035659196">"Tableau"</item>
+    <item msgid="1026513754307890628">"Zone de texte"</item>
+  </string-array>
+</resources>

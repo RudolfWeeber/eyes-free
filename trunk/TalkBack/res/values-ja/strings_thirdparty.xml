@@ -25,7 +25,7 @@
     <string name="value_facebook_camera" msgid="5583147343352954089">"カメラボタン。"</string>
     <string name="value_facebook_compose" msgid="2373734201043407698">"作成ボタン。"</string>
     <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"イマイチボタン。"</string>
-    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"いいね！ボタン。"</string>
+    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"グッドボタン。"</string>
     <string name="value_stitcher_star" msgid="4889938499496305463">"スターボタン。"</string>
     <string name="value_stitcher_play" msgid="8953331682349687236">"一時停止ボタン。"</string>
     <string name="value_stitcher_next" msgid="2945481957178798103">"次へボタン。"</string>

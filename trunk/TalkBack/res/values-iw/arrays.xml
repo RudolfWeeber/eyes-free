@@ -6,16 +6,17 @@
     <item msgid="7158875206945163928">"אין דיבור במצב שקט"</item>
     <item msgid="4945285159234224758">"אין דיבור במצב רטט ובמצב שקט"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"אפשר דיבור כשהמסך כבוי"</item>
-    <item msgid="3411424877209877052">"אין דיבור כשהמסך כבוי"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"התאם עוצמת דיבור"</item>
+    <item msgid="3474415020494727681">"75% מעוצמת הדיבור"</item>
+    <item msgid="3630774810523140800">"50% מעוצמת הדיבור"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"לחצן"</item>
     <item msgid="2031284088774168661">"תיבת סימון"</item>
     <item msgid="9091685013189255594">"בוחר צבעים"</item>
-    <item msgid="7650731353307926535">"פקד \'תאריך ושעה\'"</item>
-    <item msgid="8280936284109186802">"פקד \'תאריך ושעה\'"</item>
+    <item msgid="7650731353307926535">"פקד תאריך ושעה"</item>
+    <item msgid="8280936284109186802">"פקד תאריך ושעה"</item>
     <item msgid="6366195742201292951">"פקד תאריך"</item>
     <item msgid="4817890851441750596">"ערוך טקסט עבור דוא\"ל"</item>
     <item msgid="5708434584742847903">"בחירת קובץ"</item>
@@ -23,7 +24,7 @@
     <item msgid="9133148733620281210">"לחצן"</item>
     <item msgid="5468837159284323298">"פקד תצוגה חודשית"</item>
     <item msgid="3604586918762860736">"ערוך ספרות טקסט בלבד"</item>
-    <item msgid="2268738486961365938">"עריכת טקסט סיסמה"</item>
+    <item msgid="2268738486961365938">"טקסט עריכת סיסמה"</item>
     <item msgid="4054764445934639546">"לחצן בחירה"</item>
     <item msgid="8620342430107579622">"מחוון"</item>
     <item msgid="4526908839966163389">"איפוס"</item>
@@ -61,7 +62,7 @@
     <item msgid="1434580592616799847">"תיבת טקסט"</item>
     <item msgid="2857905070846962311">"שעון עצר"</item>
     <item msgid="5359803593845515833">"סרגל כלים"</item>
-    <item msgid="5431429272751911412">"תיאור כלי"</item>
+    <item msgid="5431429272751911412">"הסבר קצר"</item>
     <item msgid="6370853370296882006">"פריט עץ"</item>
   </string-array>
   <string-array name="html_tag_to_desc_values">

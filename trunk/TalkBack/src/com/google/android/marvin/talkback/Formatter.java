@@ -17,6 +17,7 @@
 package com.google.android.marvin.talkback;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.accessibility.AccessibilityEvent;
 
 /**
@@ -26,7 +27,6 @@ import android.view.accessibility.AccessibilityEvent;
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public interface Formatter {
-
     /**
      * Formats an <code>utterance</code> form given <code>event</code>.
      * 
@@ -34,6 +34,7 @@ public interface Formatter {
      * @param context The context to be used for loading resources etc.
      * @param utterance The utterance instance to populate.
      * @param args Additional formatting arguments.
+     * @return {@code true} if the formatter produced output.
      */
-    public void format(AccessibilityEvent event, Context context, Utterance utterance, Object args);
+    public boolean format(AccessibilityEvent event, Context context, Utterance utterance, Bundle args);
 }

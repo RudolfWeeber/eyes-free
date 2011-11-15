@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Sessiz Mod\'da konuşma yok"</item>
     <item msgid="4945285159234224758">"Titreşimde ve Sessiz Modda konuşma yok"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Ekran kapalıyken konuşmaya izin ver"</item>
-    <item msgid="3411424877209877052">"Ekran kapalıyken konuşma yok"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Konuşma ses düzeyiyle aynı"</item>
+    <item msgid="3474415020494727681">"Konuşma ses düzeyinin %75\'i"</item>
+    <item msgid="3630774810523140800">"Konuşma ses düzeyinin %50\'si"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Düğme"</item>

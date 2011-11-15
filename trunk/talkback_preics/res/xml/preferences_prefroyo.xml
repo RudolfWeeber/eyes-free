@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/title_pref_category_when_to_speak">
+
+        <ListPreference
+                android:key="@string/pref_speak_ringer_key"
+                android:title="@string/title_pref_speak_ringer"
+                android:entries="@array/pref_speak_ringer_entries"
+                android:entryValues="@array/pref_speak_ringer_values"
+                android:dialogTitle="@string/title_pref_speak_ringer" />
+
+        <ListPreference
+                android:key="@string/pref_speak_screenoff_key"
+                android:title="@string/title_pref_speak_screenoff"
+                android:entries="@array/pref_speak_screenoff_entries"
+                android:entryValues="@array/pref_speak_screenoff_values"
+                android:dialogTitle="@string/title_pref_speak_screenoff" />
+
+        <CheckBoxPreference
+                android:key="@string/pref_caller_id_key"
+                android:title="@string/title_pref_caller_id" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_pref_category_tts_settings">
+
+        <CheckBoxPreference
+                android:key="@string/pref_tts_extended_key"
+                android:title="@string/title_pref_tts_extended" />
+
+        <CheckBoxPreference
+                android:key="@string/pref_proximity_key"
+                android:title="@string/title_pref_proximity"
+                android:summaryOn="@string/summaryOn_pref_proximity"
+                android:summaryOff="@string/summaryOff_pref_proximity" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/title_pref_category_plugins">
+
+        <PreferenceScreen
+                android:key="@string/pref_manage_plugins_key"
+                android:title="@string/title_pref_manage_plugins" />
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
+

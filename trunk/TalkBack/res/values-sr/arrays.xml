@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Нема говора у нечујном режиму"</item>
     <item msgid="4945285159234224758">"Нема говора у режиму вибрација и нечујном режиму"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Омогући говор када је екран искључен"</item>
-    <item msgid="3411424877209877052">"Нема говора када је екран искључен"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Изједначи са јачином звука говора"</item>
+    <item msgid="3474415020494727681">"75% јачине звука говора"</item>
+    <item msgid="3630774810523140800">"50% јачине звука говора"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Дугме"</item>

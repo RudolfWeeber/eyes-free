@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Ingen tale i stille modus"</item>
     <item msgid="4945285159234224758">"Ingen tale i stille- og vibreringsmodus"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Tillat tale når skjermen er av"</item>
-    <item msgid="3411424877209877052">"Ingen tale når skjermen er av"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Match talevolumet"</item>
+    <item msgid="3474415020494727681">"75 % av talevolumet"</item>
+    <item msgid="3630774810523140800">"50 % av talevolumet"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Knapp"</item>

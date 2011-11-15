@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_service_description" msgid="983212841294665356">"Si TalkBack està activat, el teu dispositiu et proporciona comentaris en veu alta per als usuaris cecs o amb visió disminuïda. Per exemple, descriu tot el que toques, selecciones i actives."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Missatge de text"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Missatge de text no enviat"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"Trucada perduda"</string>
@@ -16,7 +17,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Sincronització"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Correu de veu"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"S\'està reproduint"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"Notificació d\'estat"</string>
     <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> marcats"</string>
     <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> no marcat"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Quadre d\'edició. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
@@ -24,12 +24,14 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Alerta <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> substituït per <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caràcters substituïts per <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caràcters"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"Percentatge del to de trucada <xliff:g id="PERCENT">%1$s</xliff:g>."</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Percentatge del to de trucada <xliff:g id="PERCENT">%d</xliff:g>."</string>
     <string name="template_dragging_icon" msgid="7633606891857792337">"S\'està arrossegant la icona <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_button" msgid="7981434777534909849">"Botó d\'imatge <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_button" msgid="5913853507836606140">"Botó <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_view" msgid="3085333029274972273">"Imatge <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Imatge de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"imatge <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Control amb botó lliscant <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> per cent."</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"S\'estan mostrant els elements <xliff:g id="FROM_INDEX">%d</xliff:g> a <xliff:g id="TO_INDEX">%d</xliff:g> de: <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"S\'està mostrant l\'element <xliff:g id="FROM_INDEX">%d</xliff:g> de: <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Llista desplegable <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> minuts"</string>
     <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> hores"</string>
@@ -37,6 +39,9 @@
     <string name="template_announce_week" msgid="8260793227327782733">"Del dia <xliff:g id="FROM_DATE">%1$s</xliff:g> al dia <xliff:g id="TO_DATE">%2$s</xliff:g>, vista setmanal."</string>
     <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, vista mensual."</string>
     <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> de <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="template_announce_disabled_control_hover" msgid="8348046264288231066">"<xliff:g id="DISABLED_CONTROL_TEXT">%1$s</xliff:g>, desactivat"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"Caràcters seleccionats <xliff:g id="FROM_INDEX">%1$s</xliff:g> a <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_announce_clickable_children" msgid="2387604554284732025">"<xliff:g id="NUMBER_CLICKABLE_CHILDREN">%1$s</xliff:g>, elements en els quals es pot fer clic"</string>
     <string name="value_password" msgid="52094746222829357">"contrasenya"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Calaix lliscant obert"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Agafador del calaix lliscant"</string>
@@ -48,13 +53,17 @@
     <string name="value_password_character_typed" msgid="3384590085073731527">"punt"</string>
     <string name="value_checked" msgid="5234989698372864892">"marcat"</string>
     <string name="value_not_checked" msgid="193134740901545340">"no marcat"</string>
+    <string name="value_disabled" msgid="65077823320194685">"desactivat"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"s\'hi pot fer clic"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"s\'hi pot fer un clic llarg"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"desplaçable"</string>
     <string name="value_clicked" msgid="8306469740150249879">"s\'ha fet clic"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"Vibració del timbre."</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"Timbre en silenci."</string>
     <string name="value_ringer_normal" msgid="5319228013151793967">"Timbre normal."</string>
     <string name="value_screen_on" msgid="6000430443458639755">"Pantalla activada."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Pantalla desactivada."</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telèfon desbloquejat."</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"Dispositiu desbloquejat."</string>
     <string name="value_dragging_widget" msgid="2839615701303758943">"Arrossegar el widget."</string>
     <string name="value_web_view" msgid="8368045336469722566">"Visualització web."</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"Objecte desconegut."</string>
@@ -87,8 +96,6 @@
     <string name="value_play_button" msgid="2701216749763299935">"Reprodueix el botó."</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Botó d\'avançar ràpid."</string>
     <string name="value_owner" msgid="2419158478547189476">"Propietari"</string>
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Envia ordres d\'intenció a TalkBack"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Permet a una aplicació o a un servei controlar TalkBack mitjançant difusions d\'intenció i possiblement obtenir informació sobre l\'estat de TalkBack, per exemple, les notificacions emmagatzemades a la memòria cau."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Signe d\'interrogació"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Espai"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Coma"</string>
@@ -103,30 +110,30 @@
     <item quantity="one" msgid="8890979114667202113">"esdeveniment"</item>
     <item quantity="other" msgid="8275223643159991572">"esdeveniments"</item>
   </plurals>
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Preferències de TalkBack disponibles"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Fes clic aquí per baixar l\'aplicació de preferències d\'accessibilitat."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Dades de bloqueig de TalkBack disponibles"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Fes clic aquí per millorar TalkBack enviant dades de bloqueig."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Quan es pot parlar"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Volum del to de trucada"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Estat de pantalla"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Configuració TTS"</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"Digues ID persona que truca"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Utilitza TTS ampliat"</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"Sensor de proximitat"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"Volum del so de trucada"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Parla quan la pantalla estigui desactivada"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"Digues l\'ID de la persona que truca"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"Fes servir sensor proxim."</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"El sensor de proximitat silencia la veu"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"El sensor de proximitat no controla la veu"</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Connectors"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Gestiona els connectors"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Desinstal·la"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack desactivat!"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"Actualment, TalkBack està desactivat. Vols obrir la configuració d\'accessibilitat?"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Error"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"L\'accessibilitat no és compatible en aquest dispositiu."</string>
+    <string name="title_pref_bluetooth" msgid="3475728515720218108">"Sortida de Bluetooth"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="655029542459409862">"Parla mitjançant Bluetooth quan estigui disponible"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="8270563973653936052">"No parlis mai mitjançant auriculars amb Bluetooth"</string>
+    <string name="title_pref_category_feedback_settings" msgid="5588871484662795651">"Configuració avisos"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"Avisa amb vibració"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Assigna patrons de vibració"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Explora amb el tacte"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Explor. elem. clicables"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"Avisa amb so"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Volum del so"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Assigna sons"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Explora amb el tacte"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Explor. elements clicables"</string>
     <string name="subject_crash_report_email" msgid="3043388136219501183">"Informe de bloqueig de TalkBack"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"Això és un informe de bloqueig de TalkBack. Si fas clic al botó \"Envia\", es transmetran aquestes dades als desenvolupadors de TalkBack."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Advertiment"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Aquest connector de TalkBack és possible que pugui aplegar tot el text que escriguis, incloses les dades personals i els números de la targeta de crèdit, excepte les contrasenyes. També és possible que registri les interaccions de la teva interfície d\'usuari. Prové de l\'aplicació <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Vols activar aquest connector?"</string>
     <string name="axis_character" msgid="5059604520074645703">"Navega per caràcter."</string>
     <string name="axis_word" msgid="7745798763195184060">"Navega per paraula."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Navega per frase."</string>

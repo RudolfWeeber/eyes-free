@@ -16,6 +16,12 @@
 
 package com.google.android.marvin.talkback.formatter;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Xml;
+import android.view.accessibility.AccessibilityEvent;
+
 import com.google.android.marvin.talkback.Formatter;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.Utils;
@@ -23,11 +29,7 @@ import com.google.android.marvin.talkback.Utterance;
 
 import org.xml.sax.SAXException;
 
-import android.content.Context;
-import android.text.TextUtils;
-import android.util.Xml;
-import android.view.accessibility.AccessibilityEvent;
-
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -38,7 +40,6 @@ import java.util.regex.Pattern;
  */
 @SuppressWarnings("unused")
 public final class WebContentFormatter implements Formatter {
-    
     private static final int ACTION_SET_CURRENT_AXIS = 0;
     private static final int ACTION_TRAVERSE_CURRENT_AXIS = 1;
     private static final int ACTION_TRAVERSE_GIVEN_AXIS = 2;
@@ -57,75 +58,91 @@ public final class WebContentFormatter implements Formatter {
      * Regular expression that matches all HTML tags.
      */
     private final Pattern mStripMarkupPattern = Pattern.compile("<(.)+?>");
-    
+
     /**
      * Regular expression that matches all entity codes.
      */
     private final Pattern mStripEntitiesPattern = Pattern.compile("&(.)+?;");
-    
+
     /**
      * Regular expression that matches all div or span tags.
      */
-    private final Pattern mStripDivSpanPattern = Pattern.compile(
-            "</?(div|span).*?>", Pattern.CASE_INSENSITIVE);
+    private final Pattern mStripDivSpanPattern = Pattern.compile("</?(div|span).*?>",
+            Pattern.CASE_INSENSITIVE);
 
     /**
      * Regular expression that matches some common singleton tags.
      */
-    private final Pattern mCloseTagPattern = Pattern.compile(
-            "(<(img|input|br).+?)>", Pattern.CASE_INSENSITIVE);
+    private final Pattern mCloseTagPattern = Pattern.compile("(<(img|input|br).+?)>",
+            Pattern.CASE_INSENSITIVE);
 
     /**
      * A handler for processing HTML and generating output for speaking.
      */
     private WebContentHandler mHtmlHandler = null;
-    
-    
+
     private final Action mTempAction = new Action();
 
     @Override
-    public void format(AccessibilityEvent event, Context context, Utterance utterance,
-            Object args) {
+    public boolean format(AccessibilityEvent event, Context context, Utterance utterance, Bundle args) {
         // for now ... lookup and announce axis transitions
-        CharSequence contentDescription = event.getContentDescription();
+        final CharSequence contentDescription = event.getContentDescription();
         if (TextUtils.isEmpty(contentDescription)) {
-            return;
+            return false;
         }
-        Action action = mTempAction;
+
+        final Action action = mTempAction;
         action.init(contentDescription.toString());
-        int actionCode = mTempAction.mActionCode;
+
+        final int actionCode = mTempAction.mActionCode;
         if (actionCode == ACTION_PERFORM_AXIS_TRANSITION) {
-            String axisAnnouncement = getAxisAnnouncement(context, action.mSecondArgument);
+            final String axisAnnouncement = getAxisAnnouncement(context, action.mSecondArgument);
             utterance.getText().append(axisAnnouncement);
-            return;
+            return true;
         }
+
         // for now ... disregard content description
-        String markup = Utils.getEventText(context, event).toString();
-        String noTags = mStripMarkupPattern.matcher(markup).replaceAll("");
-        String cleaned = cleanMarkup(markup);
+        final String markup = Utils.getEventText(context, event).toString();
+        final String noTags = mStripMarkupPattern.matcher(markup).replaceAll("");
+        final String cleaned = cleanMarkup(markup);
+
         if (mHtmlHandler == null) {
-            mHtmlHandler = new TalkBackWebContentHandler(context.getResources()); 
+            final Map<String, String> htmlInputMap =
+                    Utils.loadMapFromStringArrays(context, R.array.html_input_to_desc_keys,
+                            R.array.html_input_to_desc_values);
+            final Map<String, String> htmlRoleMap =
+                    Utils.loadMapFromStringArrays(context, R.array.html_role_to_desc_keys,
+                            R.array.html_role_to_desc_values);
+            final Map<String, String> htmlTagMap =
+                    Utils.loadMapFromStringArrays(context, R.array.html_tag_to_desc_keys,
+                            R.array.html_tag_to_desc_values);
+
+            mHtmlHandler = new WebContentHandler(htmlInputMap, htmlRoleMap, htmlTagMap);
         }
+
         try {
             Xml.parse(cleaned, mHtmlHandler);
-            String speech = mHtmlHandler.getOutput();
+            final String speech = mHtmlHandler.getOutput();
             utterance.getText().append(speech);
-        } catch (SAXException e) {
+        } catch (final SAXException e) {
             e.printStackTrace();
             utterance.getText().append(noTags);
         }
+        
+        return true;
     }
-    
+
     /**
      * Process HTML to remove markup that can't be handled by the SAX parser.
-     * 
+     *
      * @param markup Input HTML generated by system.
      * @return A string of cleaned HTML.
      */
     public String cleanMarkup(String markup) {
-        String noDivOrSpan = mStripDivSpanPattern.matcher(markup).replaceAll("");
-        String noEntities = mStripEntitiesPattern.matcher(noDivOrSpan).replaceAll(" ");
-        String tagsClosed = mCloseTagPattern.matcher(noEntities).replaceAll("$1/>");
+        final String noDivOrSpan = mStripDivSpanPattern.matcher(markup).replaceAll("");
+        final String noEntities = mStripEntitiesPattern.matcher(noDivOrSpan).replaceAll(" ");
+        final String tagsClosed = mCloseTagPattern.matcher(noEntities).replaceAll("$1/>");
+
         return String.format(XML_TEMPLATE, tagsClosed);
     }
 
@@ -138,17 +155,19 @@ public final class WebContentFormatter implements Formatter {
      */
     private String getAxisAnnouncement(Context context, int axisCode) {
         if (sAxisNames == null) {
-            sAxisNames = new String[] {
-                    context.getString(R.string.axis_character),
-                    context.getString(R.string.axis_word),
-                    context.getString(R.string.axis_sentence),
-                    context.getString(R.string.axis_heading),
-                    context.getString(R.string.axis_sibling),
-                    context.getString(R.string.axis_parent_first_child),
-                    context.getString(R.string.axis_document),
-                    context.getString(R.string.axis_default_web_view_behavior)
-            };
+            sAxisNames =
+                    new String[] {
+                            context.getString(R.string.axis_character),
+                            context.getString(R.string.axis_word),
+                            context.getString(R.string.axis_sentence),
+                            context.getString(R.string.axis_heading),
+                            context.getString(R.string.axis_sibling),
+                            context.getString(R.string.axis_parent_first_child),
+                            context.getString(R.string.axis_document),
+                            context.getString(R.string.axis_default_web_view_behavior)
+                    };
         }
+
         return sAxisNames[axisCode];
     }
 
@@ -175,12 +194,14 @@ public final class WebContentFormatter implements Formatter {
 
         public void init(String encodedActionString) {
             int encodedAction = 0;
+
             try {
                 // hack
                 encodedAction = Integer.decode("0x" + encodedActionString);
-            } catch (NumberFormatException nfe) {
+            } catch (final NumberFormatException nfe) {
                 return;
             }
+
             mActionCode = (encodedAction & ACTION_MASK) >> ACTION_OFFSET;
             mFirstArgument = (encodedAction & FIRST_ARGUMENT_MASK) >> FIRST_ARGUMENT_OFFSET;
             mSecondArgument = (encodedAction & SECOND_ARGUMENT_MASK) >> SECOND_ARGUMENT_OFFSET;

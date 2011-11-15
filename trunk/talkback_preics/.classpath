@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="lib" path="libs/TTS_library_stub_3.0_market.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/actionslib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/commandslib"/>
+	<classpathentry kind="src" path="commandslib_src"/>
+	<classpathentry kind="src" path="actionslib_src"/>
+	<classpathentry kind="src" path="latinime_src"/>
+	<classpathentry kind="src" path="aimelib_src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/latinime"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

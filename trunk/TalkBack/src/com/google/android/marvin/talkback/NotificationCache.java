@@ -29,14 +29,15 @@ import java.util.Map;
  * 
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  */
-public class NotificationCache {
-
-    private Map<NotificationType, List<String>> mTypeToMessageMap = new HashMap<NotificationType, List<String>>();
+class NotificationCache {
+    /** Map of notification types to cached messages. */
+    private Map<NotificationType, List<String>> mTypeToMessageMap =
+            new HashMap<NotificationType, List<String>>();
 
     /**
      * Creates a new instance.
      */
-    NotificationCache() {
+    public NotificationCache() {
         /* do nothing */
     }
 
@@ -49,10 +50,13 @@ public class NotificationCache {
      */
     public boolean addNotification(NotificationType type, String notification) {
         List<String> notifications = mTypeToMessageMap.get(type);
+
         if (notifications == null) {
             notifications = new ArrayList<String>();
+
             mTypeToMessageMap.put(type, notifications);
         }
+
         return notifications.add(notification);
     }
 
@@ -76,9 +80,11 @@ public class NotificationCache {
      */
     public List<String> getNotificationsForType(NotificationType type) {
         List<String> notifications = mTypeToMessageMap.get(type);
+
         if (notifications == null) {
             notifications = Collections.emptyList();
         }
+
         return notifications;
     }
 
@@ -99,9 +105,11 @@ public class NotificationCache {
      */
     public List<String> getNotificationsAll() {
         List<String> notifications = new ArrayList<String>();
+
         for (NotificationType type : mTypeToMessageMap.keySet()) {
             notifications.addAll(getNotificationsForType(type));
         }
+
         return notifications;
     }
 
@@ -119,14 +127,16 @@ public class NotificationCache {
      * @return The formatted string.
      */
     public String getFormattedForType(NotificationType type) {
-        StringBuilder formatted = new StringBuilder();
-        List<String> notifications = getNotificationsForType(type);
+        final StringBuilder formatted = new StringBuilder();
+        final List<String> notifications = getNotificationsForType(type);
+
         for (String notification : notifications) {
             formatted.append(getStringForResourceId(type.getValue()));
             formatted.append(" ");
             formatted.append(notification);
             formatted.append(" ");
         }
+
         return formatted.toString();
     }
 
@@ -136,10 +146,12 @@ public class NotificationCache {
      * @return The formatted string.
      */
     public String getFormattedAll() {
-        StringBuilder formatted = new StringBuilder();
+        final StringBuilder formatted = new StringBuilder();
+
         for (NotificationType type : mTypeToMessageMap.keySet()) {
             formatted.append(getFormattedForType(type));
         }
+
         return formatted.toString();
     }
 
@@ -149,19 +161,24 @@ public class NotificationCache {
      * @return The summary.
      */
     public String getFormattedSummary() {
-        StringBuilder summary = new StringBuilder();
+        final StringBuilder summary = new StringBuilder();
+
         for (Map.Entry<NotificationType, List<String>> entry : mTypeToMessageMap.entrySet()) {
-            int count = entry.getValue().size();
+            final int count = entry.getValue().size();
+
             if (count > 0 && entry.getKey() != null) {
                 summary.append(count);
                 summary.append(" ");
                 summary.append(getStringForResourceId(entry.getKey().getValue()));
+
                 if (count > 1) {
                     summary.append("s");
                 }
+
                 summary.append("\n");
             }
         }
+
         return summary.toString();
     }
 

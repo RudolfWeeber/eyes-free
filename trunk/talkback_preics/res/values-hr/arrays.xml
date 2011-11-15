@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Govori pri svim jačinama softvera zvona"</item>
+    <item msgid="7158875206945163928">"U bešumnom načinu nema govora"</item>
+    <item msgid="4945285159234224758">"Nema govora u načinima Vibracije i Bešumno"</item>
+  </string-array>
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"Omogući govor kada je zaslon isključen"</item>
+    <item msgid="3411424877209877052">"Nema govora kada je zaslon isključen"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"Gumb"</item>
+    <item msgid="2031284088774168661">"Okvir za izbor"</item>
+    <item msgid="9091685013189255594">"Birač boje"</item>
+    <item msgid="7650731353307926535">"Upravljanje datumom i vremenom"</item>
+    <item msgid="8280936284109186802">"Upravljanje datumom i vremenom"</item>
+    <item msgid="6366195742201292951">"Upravljanje datumom"</item>
+    <item msgid="4817890851441750596">"Uređivanje teksta za e-poštu"</item>
+    <item msgid="5708434584742847903">"Izbor datoteka"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"Gumb"</item>
+    <item msgid="5468837159284323298">"Upravljanje mjesecima"</item>
+    <item msgid="3604586918762860736">"Samo numeričko uređivanje teksta"</item>
+    <item msgid="2268738486961365938">"Tekst uređivanja zaporke"</item>
+    <item msgid="4054764445934639546">"Radiogumb"</item>
+    <item msgid="8620342430107579622">"Kliznik"</item>
+    <item msgid="4526908839966163389">"Poništi"</item>
+    <item msgid="6890269752295368575">"Uređivanje teksta za pretraživanje"</item>
+    <item msgid="1732239384416208952">"Gumb"</item>
+    <item msgid="2844423601130585486">"Uređivanje teksta za telefonski broj"</item>
+    <item msgid="4429211852856836454">"Uređivanje teksta"</item>
+    <item msgid="6916351398697981908">"Uređivanje teksta za URL"</item>
+    <item msgid="7370324241352123803">"Upravljanje tjednom u godini"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"Upozorenje"</item>
+    <item msgid="7079664451178245333">"Dijalog upozorenja"</item>
+    <item msgid="7175460279619232788">"Gumb"</item>
+    <item msgid="7682652928153230885">"Okvir za izbor"</item>
+    <item msgid="6271342434037552568">"Kombinirani okvir"</item>
+    <item msgid="3816282149905203330">"Dijalog"</item>
+    <item msgid="3607246563706513907">"Ćelija u rešetki"</item>
+    <item msgid="6690887636341505376">"Veza"</item>
+    <item msgid="8956345708233247462">"Dnevnik"</item>
+    <item msgid="7023984577635455031">"Pomični tekst"</item>
+    <item msgid="2455128273329194018">"Stavka izbornika"</item>
+    <item msgid="2579774298837415022">"Okvir za izbor stavke izbornika"</item>
+    <item msgid="8295115526987695111">"Radiogumb stavke izbornika"</item>
+    <item msgid="9208148803968404705">"Opcija"</item>
+    <item msgid="7278111388436893213">"Traka napretka"</item>
+    <item msgid="2040534193363832208">"Radiogumb"</item>
+    <item msgid="3518786141398291419">"Grupa radiogumba"</item>
+    <item msgid="3369418675400502879">"Klizač"</item>
+    <item msgid="4160771832888077199">"Kliznik"</item>
+    <item msgid="4913996245258357058">"Okretni gumb"</item>
+    <item msgid="4720560353967686603">"Status"</item>
+    <item msgid="8848835768265321609">"Kartica"</item>
+    <item msgid="1902084479060424039">"Ploča kartice"</item>
+    <item msgid="1434580592616799847">"Tekstni okvir"</item>
+    <item msgid="2857905070846962311">"Mjerač vremena"</item>
+    <item msgid="5359803593845515833">"Alatna traka"</item>
+    <item msgid="5431429272751911412">"Savjet za alat"</item>
+    <item msgid="6370853370296882006">"Stavka stabla"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"Veza"</item>
+    <item msgid="5377511479758471198">"Prvi naslov"</item>
+    <item msgid="1326639266444424357">"Drugi naslov"</item>
+    <item msgid="1794794287319870162">"Treći naslov"</item>
+    <item msgid="8913956457917314695">"Četvrti naslov"</item>
+    <item msgid="9214322369762997523">"Peti naslov"</item>
+    <item msgid="703456364875978891">"Šesti naslov"</item>
+    <item msgid="1873899093503383879">"Gumb"</item>
+    <item msgid="397012629783441956">"Kombinirani okvir"</item>
+    <item msgid="130879601035659196">"Tablica"</item>
+    <item msgid="1026513754307890628">"Područje teksta"</item>
+  </string-array>
+</resources>

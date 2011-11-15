@@ -3,12 +3,13 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string-array name="pref_speak_ringer_entries">
     <item msgid="5487065349227839121">"모든 벨소리 볼륨에서 말하기"</item>
-    <item msgid="7158875206945163928">"무음 모드에서 소리 안남"</item>
+    <item msgid="7158875206945163928">"무음 모드에서 말하지 않음"</item>
     <item msgid="4945285159234224758">"진동 및 무음 모드에서 말하지 않음"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"화면이 꺼져 있을 때 소리 허용"</item>
-    <item msgid="3411424877209877052">"화면이 꺼져 있을 때 소리 안남"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"음성 볼륨과 일치"</item>
+    <item msgid="3474415020494727681">"음성 볼륨의 75%"</item>
+    <item msgid="3630774810523140800">"음성 볼륨의 50 %"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"버튼"</item>

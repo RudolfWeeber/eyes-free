@@ -2,13 +2,14 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"พูดที่ทุกระดับความดังของเสียงเรียกเข้า"</item>
+    <item msgid="5487065349227839121">"พูดตามระดับความดังของเสียงเรียกเข้า"</item>
     <item msgid="7158875206945163928">"ไม่มีเสียงเมื่อปิดเสียงเรียกเข้า"</item>
     <item msgid="4945285159234224758">"ไม่มีเสียงพูดเมื่อใช้ระบบสั่นและเมื่อปิดเสียงเรียกเข้า"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"อนุญาตเสียงพูดเมื่อหน้าจอปิดทำงาน"</item>
-    <item msgid="3411424877209877052">"ไม่มีเสียงเมื่อหน้าจอปิดทำงาน"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"เท่ากับระดับเสียงพูด"</item>
+    <item msgid="3474415020494727681">"75% ของระดับเสียงพูด"</item>
+    <item msgid="3630774810523140800">"50% ของระดับเสียงพูด"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"ปุ่ม"</item>

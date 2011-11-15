@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="value_amazon_go" msgid="4394074100082803216">"Sākt."</string>
+    <string name="value_amazon_search" msgid="6434927954393699886">"Meklēt."</string>
+    <string name="template_amazon_quantity" msgid="6479878374510151419">"Skaits: <xliff:g id="COUNT">%1$s</xliff:g>"</string>
+    <string name="template_amazon_mp3_buy_button" msgid="3211627160627972269">"Poga Pirkt, <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="value_camera_magic_take_picture" msgid="3348188942968677220">"Poga Slēdzis."</string>
+    <string name="value_camera_magic_zoom_slider" msgid="9068720508404801914">"Tālummaiņas slīdnis."</string>
+    <string name="value_file_manager_home" msgid="3221104680687868085">"Poga Sākums."</string>
+    <string name="value_file_manager_up" msgid="6532390888528162351">"Poga Augšup."</string>
+    <string name="value_file_manager_multi_select" msgid="7202234365922477703">"Pārslēgt vairākatlasi."</string>
+    <string name="value_file_manager_edit" msgid="6950401308694253576">"Poga Rediģēt."</string>
+    <string name="value_file_manager_bookmark" msgid="8039687460141246943">"Poga Izveidot grāmatzīmi."</string>
+    <string name="value_file_manager_new_folder" msgid="7831830298976400348">"Poga Jauna mape."</string>
+    <string name="value_file_manager_back" msgid="4409971220398537431">"Poga Atpakaļ."</string>
+    <string name="value_file_manager_forwards" msgid="2509760444137103469">"Poga Pārtīt uz priekšu."</string>
+    <string name="value_file_manager_sort" msgid="7174008674937375487">"Poga Kārtot."</string>
+    <string name="value_file_manager_refresh" msgid="5921119137028689654">"Poga Atsvaidzināt."</string>
+    <string name="value_file_manager_help" msgid="5054016981865395456">"Poga Palīdzība."</string>
+    <string name="value_facebook_post_status" msgid="8118977173989445501">"Poga Publicēt statusa atjauninājumu."</string>
+    <string name="value_facebook_search" msgid="4808938297614670409">"Poga Meklēt."</string>
+    <string name="value_facebook_gallery_photo" msgid="6169119911043900106">"Galerijas fotoattēls."</string>
+    <string name="value_facebook_home" msgid="4723428329772455197">"Poga Facebook sākums."</string>
+    <string name="value_facebook_camera" msgid="5583147343352954089">"Poga Kamera."</string>
+    <string name="value_facebook_compose" msgid="2373734201043407698">"Poga Rakstīt."</string>
+    <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"Poga Nepiekrītu."</string>
+    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"Poga Piekrītu."</string>
+    <string name="value_stitcher_star" msgid="4889938499496305463">"Poga Pievienot zvaigznīti."</string>
+    <string name="value_stitcher_play" msgid="8953331682349687236">"Poga Pauzēt atskaņošanu."</string>
+    <string name="value_stitcher_next" msgid="2945481957178798103">"Poga Tālāk."</string>
+    <string name="value_google_voice_play_button" msgid="2873426918700224250">"Poga Atskaņot."</string>
+    <string name="value_google_voice_speakerphone_button" msgid="4812261205507729876">"Poga Pārslēgt skaļruni."</string>
+    <string name="value_google_voice_transcript" msgid="4984373756636020629">"Atšifrējums."</string>
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Magsalita sa lahat ng mga volume ng ringer"</item>
+    <item msgid="7158875206945163928">"Walang pagsasalita sa Silent Mode"</item>
+    <item msgid="4945285159234224758">"Walang pagsasalita sa Vibrate at Silent Mode"</item>
+  </string-array>
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"Payagan ang pagsasalita kapag naka-off ang screen"</item>
+    <item msgid="3411424877209877052">"Walang pagsasalita kapag naka-off ang screen"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"Pindutan"</item>
+    <item msgid="2031284088774168661">"Check box"</item>
+    <item msgid="9091685013189255594">"Color picker"</item>
+    <item msgid="7650731353307926535">"Pagkontrol ng oras ng petsa"</item>
+    <item msgid="8280936284109186802">"Pagkontrol ng oras ng petsa"</item>
+    <item msgid="6366195742201292951">"Pakontrol ng petsa"</item>
+    <item msgid="4817890851441750596">"I-edit ang teksto para sa email"</item>
+    <item msgid="5708434584742847903">"Pagpipiliang file"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"Pindutan"</item>
+    <item msgid="5468837159284323298">"Pagkontrol ng buwan"</item>
+    <item msgid="3604586918762860736">"I-edit ang teksto nang numeric lamang"</item>
+    <item msgid="2268738486961365938">"Teksto sa pag-edit ng password"</item>
+    <item msgid="4054764445934639546">"Radio button"</item>
+    <item msgid="8620342430107579622">"Slider"</item>
+    <item msgid="4526908839966163389">"I-reset"</item>
+    <item msgid="6890269752295368575">"I-edit ang teksto para sa paghahanap"</item>
+    <item msgid="1732239384416208952">"Pindutan"</item>
+    <item msgid="2844423601130585486">"I-edit ang teksto para sa numero ng telepono"</item>
+    <item msgid="4429211852856836454">"I-edit ang teksto"</item>
+    <item msgid="6916351398697981908">"I-edit ang teksto para sa URL"</item>
+    <item msgid="7370324241352123803">"Pagkontrol sa linggo ng taon"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"Alerto"</item>
+    <item msgid="7079664451178245333">"Dialog ng alerto"</item>
+    <item msgid="7175460279619232788">"Pindutan"</item>
+    <item msgid="7682652928153230885">"Check box"</item>
+    <item msgid="6271342434037552568">"Combo box"</item>
+    <item msgid="3816282149905203330">"Dialog"</item>
+    <item msgid="3607246563706513907">"Grid cell"</item>
+    <item msgid="6690887636341505376">"Link"</item>
+    <item msgid="8956345708233247462">"Log"</item>
+    <item msgid="7023984577635455031">"Marquee"</item>
+    <item msgid="2455128273329194018">"Item ng menu"</item>
+    <item msgid="2579774298837415022">"Check box ng item ng menu"</item>
+    <item msgid="8295115526987695111">"Radio button ng item ng menu"</item>
+    <item msgid="9208148803968404705">"Pagpipilian"</item>
+    <item msgid="7278111388436893213">"Progress bar"</item>
+    <item msgid="2040534193363832208">"Radio button"</item>
+    <item msgid="3518786141398291419">"Pangkat ng radio button"</item>
+    <item msgid="3369418675400502879">"Scroll bar"</item>
+    <item msgid="4160771832888077199">"Slider"</item>
+    <item msgid="4913996245258357058">"Spin button"</item>
+    <item msgid="4720560353967686603">"Katayuan"</item>
+    <item msgid="8848835768265321609">"Tab"</item>
+    <item msgid="1902084479060424039">"Panel ng tab"</item>
+    <item msgid="1434580592616799847">"Kahon ng teksto"</item>
+    <item msgid="2857905070846962311">"Timer"</item>
+    <item msgid="5359803593845515833">"Tool bar"</item>
+    <item msgid="5431429272751911412">"Tool tip"</item>
+    <item msgid="6370853370296882006">"Tree item"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"Link"</item>
+    <item msgid="5377511479758471198">"Heading isa"</item>
+    <item msgid="1326639266444424357">"Heading dalawa"</item>
+    <item msgid="1794794287319870162">"Heading tatlo"</item>
+    <item msgid="8913956457917314695">"Heading apat"</item>
+    <item msgid="9214322369762997523">"Heading lima"</item>
+    <item msgid="703456364875978891">"Heading anim"</item>
+    <item msgid="1873899093503383879">"Pindutan"</item>
+    <item msgid="397012629783441956">"Combo box"</item>
+    <item msgid="130879601035659196">"Talahanayan"</item>
+    <item msgid="1026513754307890628">"Lugar ng teksto"</item>
+  </string-array>
+</resources>

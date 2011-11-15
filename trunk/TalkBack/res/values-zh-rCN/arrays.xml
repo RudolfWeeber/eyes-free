@@ -2,13 +2,14 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"所有音量级别均响铃"</item>
-    <item msgid="7158875206945163928">"静音模式下不允许说话"</item>
-    <item msgid="4945285159234224758">"在“振动”和“静音”模式下不响铃"</item>
+    <item msgid="5487065349227839121">"不管铃声大小一律说话"</item>
+    <item msgid="7158875206945163928">"静音模式下不说话"</item>
+    <item msgid="4945285159234224758">"在“振动”和“静音”模式下不说话"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"屏幕关闭时允许说话"</item>
-    <item msgid="3411424877209877052">"屏幕关闭时不允许说话"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"与说话音量一致"</item>
+    <item msgid="3474415020494727681">"说话音量的 75％"</item>
+    <item msgid="3630774810523140800">"说话音量的 50％"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"按钮"</item>

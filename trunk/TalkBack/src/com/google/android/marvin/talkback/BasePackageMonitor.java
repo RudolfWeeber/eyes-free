@@ -24,13 +24,16 @@ import android.net.Uri;
 
 /**
  * Helper class for monitoring packages on the system.
+ * 
+ * @author svetoslavganov@google.com (Svetoslav R. Ganov)
+ * @author alanv@google.com (Alan Viverette)
  */
-public class BasePackageMonitor extends BroadcastReceiver {
+abstract class BasePackageMonitor extends BroadcastReceiver {
 
     /**
      * The intent filter to match package modifications.
      */
-    final IntentFilter mPackageFilter = new IntentFilter();
+    private final IntentFilter mPackageFilter;
 
     /**
      * The context in which this monitor is registered.
@@ -41,6 +44,7 @@ public class BasePackageMonitor extends BroadcastReceiver {
      * Creates a new instance.
      */
     public BasePackageMonitor() {
+        mPackageFilter = new IntentFilter();
         mPackageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
         mPackageFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
         mPackageFilter.addAction(Intent.ACTION_PACKAGE_CHANGED);
@@ -48,31 +52,36 @@ public class BasePackageMonitor extends BroadcastReceiver {
     }
 
     /**
-     * Register this monitor via the given <code>context</code>.
+     * Register this monitor via the given <code>context</code>. Throws an
+     * {@link IllegalStateException} if this monitor was already registered.
      */
     public void register(Context context) {
         if (mRegisteredContext != null) {
             throw new IllegalStateException("Already registered");
         }
+
         mRegisteredContext = context;
         context.registerReceiver(this, mPackageFilter);
     }
 
     /**
-     * Unregister this monitor.
+     * Unregister this monitor. Throws an {@link IllegalStateException} if this
+     * monitor wasn't registered.
      */
     public void unregister() {
         if (mRegisteredContext == null) {
             throw new IllegalStateException("Not registered");
         }
+
         mRegisteredContext.unregisterReceiver(this);
         mRegisteredContext = null;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String packageName = getPackageName(intent);
-        String action = intent.getAction();
+        final String packageName = getPackageName(intent);
+        final String action = intent.getAction();
+
         if (Intent.ACTION_PACKAGE_ADDED.equals(action)) {
             onPackageAdded(packageName);
         } else if (Intent.ACTION_PACKAGE_REMOVED.equals(action)) {
@@ -85,24 +94,36 @@ public class BasePackageMonitor extends BroadcastReceiver {
     /**
      * @return The name of the package from an <code>intent</code>.
      */
-    private String getPackageName(Intent intent) {
-        Uri uri = intent.getData();
-        String packageName = uri != null ? uri.getSchemeSpecificPart() : null;
-        return packageName;
+    private static String getPackageName(Intent intent) {
+        final Uri uri = intent.getData();
+
+        if (uri == null) {
+            return null;
+        }
+
+        return uri.getSchemeSpecificPart();
     }
 
     /**
-     * Called when a <code>packageName</code> is added.
+     * Called when a new application package has been installed on the device.
+     * 
+     * @param packageName The name of the package that was added.
      */
-    protected void onPackageAdded(String packageName) {}
+    protected abstract void onPackageAdded(String packageName);
 
     /**
-     * Called when a <code>packageName</code> is removed.
+     * Called when an existing application package has been removed from the
+     * device.
+     * 
+     * @param packageName The name of the package that was removed.
      */
-    protected void onPackageRemoved(String packageName) {}
+    protected abstract void onPackageRemoved(String packageName);
 
     /**
-     * Called when a <code>packageName</code> is changes.
+     * Called when an existing application package has been changed (e.g. a
+     * component has been disabled or enabled).
+     * 
+     * @param packageName The name of the package that was changed.
      */
-    protected void onPackageChanged(String packageName) {}
+    protected abstract void onPackageChanged(String packageName);
 }

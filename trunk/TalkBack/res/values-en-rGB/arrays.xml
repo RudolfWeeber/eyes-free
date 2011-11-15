@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"No speech in Silent Mode"</item>
     <item msgid="4945285159234224758">"No speech in Vibrate and Silent Mode"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Allow speech when screen is off"</item>
-    <item msgid="3411424877209877052">"No speech when screen is off"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Match speech volume"</item>
+    <item msgid="3474415020494727681">"75% of speech volume"</item>
+    <item msgid="3630774810523140800">"50% of speech volume"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Button"</item>

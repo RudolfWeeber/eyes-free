@@ -16,16 +16,17 @@
 
 package com.google.android.marvin.talkback;
 
-import java.util.HashMap;
+import android.os.Bundle;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * This class represents an utterance composed of text to be spoken
- * and meta data about how this text to be spoken. The utterances
- * are cached in a pool of instances to be reused as an optimization
- * to reduce new object instantiation.
- *
+ * This class represents an utterance composed of text to be spoken and meta
+ * data about how this text to be spoken. The utterances are cached in a pool of
+ * instances to be reused as an optimization to reduce new object instantiation.
+ * 
  * @author svetoslavganov@google.com (Svetoslav Ganov)
- *
  */
 public class Utterance {
 
@@ -33,6 +34,11 @@ public class Utterance {
      * Key for obtaining the queuing meta-data property.
      */
     public static final String KEY_METADATA_QUEUING = "queuing";
+
+    /**
+     * Key for obtaining the earcon rate meta-data property.
+     */
+    public static final String KEY_METADATA_EARCON_RATE = "earcon_rate";
 
     /**
      * The maximal size of the pool with cached utterances.
@@ -55,6 +61,36 @@ public class Utterance {
     private static int sPoolSize;
 
     /**
+     * The text of the utterance.
+     */
+    private final StringBuilder mText = new StringBuilder();
+
+    /**
+     * Meta-data of how the utterance should be spoken.
+     */
+    private final Bundle mMetadata = new Bundle();
+
+    /**
+     * The list of resource identifiers for this utterance's earcons.
+     */
+    private final List<Integer> mEarcons = new LinkedList<Integer>();
+
+    /**
+     * The list of resource identifiers for this utterance's vibration patterns.
+     */
+    private final List<Integer> mVibrationPatterns = new LinkedList<Integer>();
+
+    /**
+     * The list of resource identifiers for this utterance's earcons.
+     */
+    private final List<Integer> mCustomEarcons = new LinkedList<Integer>();
+
+    /**
+     * The list of resource identifiers for this utterance's vibration patterns.
+     */
+    private final List<Integer> mCustomVibrations = new LinkedList<Integer>();
+
+    /**
      * The next cached utterance
      */
     private Utterance mNext;
@@ -65,26 +101,16 @@ public class Utterance {
     private boolean mIsInPool;
 
     /**
-     * The text of the utterance.
-     */
-    private final StringBuilder mText = new StringBuilder();
-
-    /**
-     * Meta-data of how the utterance should be spoken.
-     */
-    private final HashMap<String, Object> mMetadata = new HashMap<String, Object>();
-
-    /**
      * Creates a new instance.
      */
     private Utterance() {
-       /* do nothing - reducing constructor visibility */ 
+        /* do nothing - reducing constructor visibility */
     }
 
     /**
-     * Returns a cached instance if such is available or a new
-     * one is instantiated.
-     *
+     * Returns a cached instance if such is available or a new one is
+     * instantiated.
+     * 
      * @return An instance.
      */
     public static Utterance obtain() {
@@ -92,9 +118,9 @@ public class Utterance {
     }
 
     /**
-     * Returns a cached instance if such is available or a new
-     * one is instantiated and sets its <code>text</code>.
-     *
+     * Returns a cached instance if such is available or a new one is
+     * instantiated and sets its <code>text</code>.
+     * 
      * @param text The text of the returned utterance.
      * @return An instance.
      */
@@ -114,7 +140,7 @@ public class Utterance {
 
     /**
      * Gets the text of this utterance.
-     *
+     * 
      * @return The utterance text.
      */
     public StringBuilder getText() {
@@ -122,11 +148,45 @@ public class Utterance {
     }
 
     /**
-     * Gets the mets-data of this utterance.
-     *
+     * Gets the list of earcons for this utterance.
+     * 
+     * @return A list of sound resource identifiers.
+     */
+    public List<Integer> getEarcons() {
+        return mEarcons;
+    }
+
+    /**
+     * Gets the list of vibration patterns for this utterance.
+     * 
+     * @return A list of vibration pattern resource identifiers.
+     */
+    public List<Integer> getVibrationPatterns() {
+        return mVibrationPatterns;
+    }
+
+    /**
+     * @return A list of preference identifiers that correspond to earcon
+     *         resource identifiers.
+     */
+    public List<Integer> getCustomEarcons() {
+        return mCustomEarcons;
+    }
+
+    /**
+     * @return A list of preference identifiers that correspond to vibration
+     *         pattern resource identifiers.
+     */
+    public List<Integer> getCustomVibrations() {
+        return mCustomVibrations;
+    }
+
+    /**
+     * Gets the meta-data of this utterance.
+     * 
      * @return The utterance meta-data.
      */
-    public HashMap<String, Object> getMetadata() {
+    public Bundle getMetadata() {
         return mMetadata;
     }
 
@@ -156,5 +216,19 @@ public class Utterance {
     private void clear() {
         mText.delete(0, mText.length());
         mMetadata.clear();
+        mEarcons.clear();
+        mVibrationPatterns.clear();
+        mCustomEarcons.clear();
+        mCustomVibrations.clear();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Text:{");
+        builder.append(mText);
+        builder.append("}, Metadata:");
+        builder.append(mMetadata);
+        return builder.toString();
     }
 }

@@ -23,6 +23,8 @@ import com.google.android.marvin.talkback.Utils;
 import com.google.android.marvin.talkback.Utterance;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
 import java.util.HashMap;
@@ -34,43 +36,47 @@ import java.util.Map;
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public final class TextFormatters {
-
-    private static final String SPACE = " ";
+    private static final Context CONTEXT = TalkBackService.asContext();
+    private static final String SEPARATOR = " ";
 
     /**
      * This table will force the TTS to speak out the punctuation by mapping
      * punctuation to its spoken equivalent.
      */
-    private static final HashMap<String, String> sPunctuationSpokenEquivalentsMap = new HashMap<String, String>();
+    private static final HashMap<String, CharSequence> sPunctuationSpokenEquivalentsMap =
+            new HashMap<String, CharSequence>();
 
-    /**
-     * Creates a new instance.
-     */
-    private TextFormatters() { /* hide constructor */}
+    private TextFormatters() {
+        // Not publicly instantiable.
+    }
 
     /**
      * Formatter that returns an utterance to announce text addition.
      */
     public static final class AddedTextFormatter implements Formatter {
-
         @Override
-        public void format(AccessibilityEvent event, Context context, Utterance utterance,
-                Object args) {
+        public boolean format(AccessibilityEvent event, Context context, Utterance utterance,
+                Bundle args) {
+            final StringBuilder utteranceText = utterance.getText();
+
             if (event.isPassword()) {
-                String message = context.getString(R.string.value_password_character_typed);
-                utterance.getText().append(message);
-            } else {
-                StringBuilder text = Utils.getEventText(context, event);
-                int begIndex = event.getFromIndex();
-                int endIndex = begIndex + event.getAddedCount();                
-                if (begIndex >= 0 && endIndex <= text.length()) {
-                    CharSequence addedText = text.subSequence(begIndex, endIndex);
-                    if (addedText.length() == 1) {
-                        addedText = getCharacterSpokenEquivalent(addedText);
-                    }
-                    utterance.getText().append(addedText);
-                }
+                final String message = context.getString(R.string.value_password_character_typed);
+                utteranceText.append(message);
+                return true;
             }
+
+            final CharSequence text = Utils.getEventAggregateText(context, event);
+            final int begIndex = event.getFromIndex();
+            final int endIndex = begIndex + event.getAddedCount();
+
+            if ((begIndex < 0) || (endIndex > text.length())) {
+                return false;
+            }
+
+            final CharSequence addedText = text.subSequence(begIndex, endIndex);
+            utteranceText.append(formatForSpeech(addedText));
+
+            return true;
         }
     }
 
@@ -78,27 +84,30 @@ public final class TextFormatters {
      * Formatter that returns an utterance to announce text removing.
      */
     public static final class RemovedTextFormatter implements Formatter {
-
         @Override
-        public void format(AccessibilityEvent event, Context context, Utterance utterance,
-                Object args) {
+        public boolean format(AccessibilityEvent event, Context context, Utterance utterance,
+                Bundle args) {
+            final StringBuilder utteranceText = utterance.getText();
+
             if (event.isPassword()) {
-                utterance.getText().append(context.getString(R.string.value_text_removed));
-            } else {
-                CharSequence beforeText = event.getBeforeText();
-                int begIndex = event.getFromIndex();
-                int endIndex = begIndex + event.getRemovedCount();
-
-                CharSequence removedText = beforeText.subSequence(begIndex, endIndex);
-                if (removedText.length() == 1) {
-                    removedText = getCharacterSpokenEquivalent(removedText);
-                }
-
-                StringBuilder utteranceText = utterance.getText();
-                utteranceText.append(getCharacterSpokenEquivalent(removedText));
-                utteranceText.append(SPACE);
                 utteranceText.append(context.getString(R.string.value_text_removed));
+                return true;
             }
+
+            final CharSequence beforeText = event.getBeforeText();
+            final int begIndex = event.getFromIndex();
+            final int endIndex = begIndex + event.getRemovedCount();
+
+            if ((begIndex < 0) || (endIndex > beforeText.length())) {
+                return false;
+            }
+
+            final CharSequence removedText = beforeText.subSequence(begIndex, endIndex);
+            utteranceText.append(formatForSpeech(removedText));
+            utteranceText.append(SEPARATOR);
+            utteranceText.append(context.getString(R.string.value_text_removed));
+
+            return true;
         }
     }
 
@@ -106,68 +115,97 @@ public final class TextFormatters {
      * Formatter that returns an utterance to announce text replacement.
      */
     public static final class ReplacedTextFormatter implements Formatter {
-
         @Override
-        public void format(AccessibilityEvent event, Context context, Utterance utterance,
-                Object args) {
-            StringBuilder utteranceText = utterance.getText();
+        public boolean format(AccessibilityEvent event, Context context, Utterance utterance,
+                Bundle args) {
+            final StringBuilder utteranceText = utterance.getText();
 
             if (event.isPassword()) {
-                String template = context.getString(R.string.template_replaced_characters);
-                String populatedTemplate = String.format(template, event.getRemovedCount(), event
-                        .getAddedCount());
-                utteranceText.append(populatedTemplate);
-            } else {
-                String text = Utils.getEventText(context, event).toString();
-                String beforeText = event.getBeforeText().toString();
-
-                if (isTypedCharacter(text, beforeText)) {
-                    // This happens if the application replaces the entire text
-                    // while the user is typing. This logic leads to missing
-                    // the very rare case of the user replacing text with the
-                    // same text plus a single character but handles the much
-                    // more frequent case mentioned above.
-                    int begIndex = text.length() - 1;
-                    int endIndex = begIndex + 1;
-                    
-                    // TODO(svetoslavganov): Remove the following check once bug
-                    // 2513822 is resolved with a framework patch.
-                    if (endIndex <= AccessibilityEvent.MAX_TEXT_LENGTH) {
-                        CharSequence addedText = text.subSequence(begIndex, endIndex);
-                        utteranceText.append(getCharacterSpokenEquivalent(addedText));
-                    }
-                } else if (isRemovedCharacter(text, beforeText)) {
-                    // This happens if the application replaces the entire text
-                    // while the user is typing. This logic leads to missing
-                    // the very rare case of the user replacing text with the
-                    // same text minus a single character but handles the much
-                    // more frequent case mentioned above.
-                    int begIndex = beforeText.length() - 1;
-                    int endIndex = begIndex + 1;
-                    CharSequence removedText = beforeText.subSequence(begIndex, endIndex); 
-                    utteranceText.append(getCharacterSpokenEquivalent(removedText));
-                    utteranceText.append(SPACE);
-                    utteranceText.append(context.getString(R.string.value_text_removed));
-                } else {
-                    int beforeBegIndex = event.getFromIndex();
-                    int beforeEndIndex = beforeBegIndex + event.getRemovedCount();
-                    CharSequence removedText = beforeText.subSequence(beforeBegIndex,
-                            beforeEndIndex);
-
-                    int addedBegIndex = event.getFromIndex();
-                    int addedEndIndex = addedBegIndex + event.getAddedCount();
-
-                    // TODO(svetoslavganov): Remove the following check once bug
-                    // 2513822 is resolved with a framework patch.
-                    if (addedEndIndex <= AccessibilityEvent.MAX_TEXT_LENGTH) {
-                        CharSequence addedText = text.subSequence(addedBegIndex, addedEndIndex);
-
-                        String template = context.getString(R.string.template_text_replaced);
-                        String populatedTemplate = String.format(template, removedText, addedText);
-                        utteranceText.append(populatedTemplate);
-                    }
-                }
+                final int removed = event.getRemovedCount();
+                final int added = event.getAddedCount();
+                final String formattedText =
+                        context.getString(R.string.template_replaced_characters, removed, added);
+                utteranceText.append(formattedText);
+                return true;
             }
+
+            final String text = Utils.getEventText(context, event).toString();
+            final String beforeText = event.getBeforeText().toString();
+
+            if (isTypedCharacter(text, beforeText)) {
+                final CharSequence appendText = formatCharacterChange(text);
+
+                if (TextUtils.isEmpty(appendText)) {
+                    return false;
+                }
+
+                utteranceText.append(appendText);
+            } else if (isRemovedCharacter(text, beforeText)) {
+                final CharSequence appendText = formatCharacterChange(beforeText);
+
+                if (TextUtils.isEmpty(appendText)) {
+                    return false;
+                }
+
+                utteranceText.append(appendText);
+                utteranceText.append(SEPARATOR);
+                utteranceText.append(context.getString(R.string.value_text_removed));
+            } else {
+                final CharSequence appendText = formatTextChange(event, context, text, beforeText);
+
+                if (TextUtils.isEmpty(appendText)) {
+                    return false;
+                }
+
+                utteranceText.append(appendText);
+            }
+
+            return true;
+        }
+
+        private CharSequence formatTextChange(AccessibilityEvent event, Context context,
+                String text, String beforeText) {
+            final int beforeBegIndex = event.getFromIndex();
+            final int beforeEndIndex = beforeBegIndex + event.getRemovedCount();
+
+            if (beforeBegIndex < 0 || beforeEndIndex > beforeText.length()) {
+                return null;
+            }
+
+            final CharSequence removedText =
+                    formatForSpeech(beforeText.subSequence(beforeBegIndex, beforeEndIndex));
+
+            final int addedBegIndex = event.getFromIndex();
+            final int addedEndIndex = addedBegIndex + event.getAddedCount();
+
+            if (addedBegIndex < 0 || addedEndIndex > text.length()) {
+                return null;
+            }
+
+            final CharSequence addedText =
+                    formatForSpeech(text.subSequence(addedBegIndex, addedEndIndex));
+
+            final CharSequence formattedText =
+                    context.getString(R.string.template_text_replaced, removedText, addedText);
+            return formattedText;
+        }
+
+        private CharSequence formatCharacterChange(String text) {
+            // This happens if the application replaces the entire text
+            // while the user is typing. This logic leads to missing
+            // the very rare case of the user replacing text with the
+            // same text plus a single character but handles the much
+            // more frequent case mentioned above.
+            final int begIndex = text.length() - 1;
+            final int endIndex = begIndex + 1;
+
+            if ((begIndex < 0) || (endIndex > text.length())) {
+                return null;
+            }
+
+            final CharSequence addedText = text.subSequence(begIndex, endIndex);
+
+            return formatForSpeech(addedText);
         }
 
         /**
@@ -175,9 +213,10 @@ public final class TextFormatters {
          * the event <code>beforeText</code>.
          */
         private boolean isTypedCharacter(String text, String beforeText) {
-            if (text.length() != beforeText.length() + 1) {
+            if (text.length() != (beforeText.length() + 1)) {
                 return false;
             }
+
             return text.startsWith(beforeText);
         }
 
@@ -186,29 +225,51 @@ public final class TextFormatters {
          * given the event <code>beforeText</code>.
          */
         private boolean isRemovedCharacter(String text, String beforeText) {
-            if (text.length() + 1 != beforeText.length()) {
+            if ((text.length() + 1) != beforeText.length()) {
                 return false;
             }
+
             return beforeText.startsWith(text);
         }
     }
 
     /**
+     * Formatter that returns an utterance to announce text selection.
+     */
+    public static final class SelectedTextFormatter implements Formatter {
+        @Override
+        public boolean format(AccessibilityEvent event, Context context, Utterance utterance,
+                Bundle args) {
+            final CharSequence text = Utils.getEventText(context, event);
+            final int begIndex = event.getFromIndex();
+            final int endIndex = event.getToIndex();
+
+            if ((begIndex < 0) || (endIndex > text.length()) || (begIndex >= endIndex)) {
+                return false;
+            }
+
+            final CharSequence selectedText = text.subSequence(begIndex, endIndex);
+            utterance.getText().append(formatForSpeech(selectedText));
+            
+            return true;
+        }
+    }
+
+    /**
      * Gets the spoken equivalent of a character. Passing an argument longer
-     * that one return the argument itself as the spoken equivalent.
-     * </p>
-     * Note: The argument is a {@link CharSequence} for efficiency to avoid
-     *       multiple string creation.
-     *
+     * that one return the argument itself as the spoken equivalent. </p> Note:
+     * The argument is a {@link CharSequence} for efficiency to avoid multiple
+     * string creation.
+     * 
      * @param character The character to transform.
      * @return The spoken equivalent.
      */
-    private static CharSequence getCharacterSpokenEquivalent(CharSequence character) {
+    private static CharSequence formatForSpeech(CharSequence character) {
         if (character.length() != 1) {
             return character;
         }
 
-        String mapping = getPunctuationSpokenEquivalentMap().get(character);
+        final CharSequence mapping = getPunctuationSpokenEquivalentMap().get(character);
         if (mapping != null) {
             return mapping;
         }
@@ -217,38 +278,30 @@ public final class TextFormatters {
     }
 
     /**
-     * Gets the spoken equivalent map. If the map is not initialized
-     * it is first create and populated.
-     *
+     * Gets the spoken equivalent map. If the map is not initialized it is first
+     * create and populated.
+     * 
      * @return The spoken equivalent map.
      */
-    private static Map<String, String> getPunctuationSpokenEquivalentMap() {
+    private static Map<String, CharSequence> getPunctuationSpokenEquivalentMap() {
         if (sPunctuationSpokenEquivalentsMap.isEmpty()) {
-            // intentional use of the TalkBack context
-            Context context = TalkBackService.asContext();
-
-            sPunctuationSpokenEquivalentsMap.put("?",
-                context.getString(R.string.punctuation_questionmark));
-            sPunctuationSpokenEquivalentsMap.put(" ",
-                context.getString(R.string.punctuation_space));
-            sPunctuationSpokenEquivalentsMap.put(",",
-                context.getString(R.string.punctuation_comma));
-            sPunctuationSpokenEquivalentsMap.put(".",
-                context.getString(R.string.punctuation_dot));
-            sPunctuationSpokenEquivalentsMap.put("!",
-                context.getString(R.string.punctuation_exclamation));
-            sPunctuationSpokenEquivalentsMap.put("(",
-                context.getString(R.string.punctuation_open_paren));
-            sPunctuationSpokenEquivalentsMap.put(")",
-                context.getString(R.string.punctuation_close_paren));
-            sPunctuationSpokenEquivalentsMap.put("\"",
-                context.getString(R.string.punctuation_double_quote));
-            sPunctuationSpokenEquivalentsMap.put(";",
-                context.getString(R.string.punctuation_semicolon));
-            sPunctuationSpokenEquivalentsMap.put(":",
-                context.getString(R.string.punctuation_colon));
+            loadMapping("?", R.string.punctuation_questionmark);
+            loadMapping(" ", R.string.punctuation_space);
+            loadMapping(",", R.string.punctuation_comma);
+            loadMapping(".", R.string.punctuation_dot);
+            loadMapping("!", R.string.punctuation_exclamation);
+            loadMapping("(", R.string.punctuation_open_paren);
+            loadMapping(")", R.string.punctuation_close_paren);
+            loadMapping("\"", R.string.punctuation_double_quote);
+            loadMapping(";", R.string.punctuation_semicolon);
+            loadMapping(":", R.string.punctuation_colon);
         }
 
-        return sPunctuationSpokenEquivalentsMap; 
+        return sPunctuationSpokenEquivalentsMap;
+    }
+
+    private static void loadMapping(String text, int resId) {
+        final CharSequence spoken = CONTEXT.getString(resId);
+        sPunctuationSpokenEquivalentsMap.put(text, spoken);
     }
 }

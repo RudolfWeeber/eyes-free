@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"Текстуална порука"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Нема послатих текстуалних порука"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Пропуштен позив"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB је повезан"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"Искључи звук"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Ћаскање"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Грешка"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Још"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD картица"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"USB SD картице"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"Синхронизуј"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"Нова адреса е-поште"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Синхронизуј"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Гласовна пошта"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Репродуковање"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Обавештење о статусу"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> је изабрано"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> није проверено"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Поље Измени <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Оквир за претрагу. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Обавештење <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> замењено са <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> знакова замењено је са <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> знакова"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Проценат звона <xliff:g id="PERCENT">%1$s</xliff:g>"</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"Превлачење иконе <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"дугме слике <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_button" msgid="5913853507836606140">"дугме <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> слика."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> тражење контроле."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> падајућа листа."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> минута"</string>
+    <string name="template_hours" msgid="8134792651564545111">"сати: <xliff:g id="HOURS">%1$s</xliff:g>"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, дневни приказ."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> до <xliff:g id="TO_DATE">%2$s</xliff:g>, недељни приказ."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, месечни приказ."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> од <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"лозинка"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Отворена су клизећа вратанца"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Ручка клизних вратанаца"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Метод уноса"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Статусна трака"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Опције."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"избрисано"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Резиме обавештења"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"тачка"</string>
+    <string name="value_checked" msgid="5234989698372864892">"изабрано"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"није потврђено"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"кликнуто"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Вибрација звона."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Нечујно звоно."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Стандардно звоно."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Екран је укључен."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Екран је искључен."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Телефон је откључан."</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Добијени виџет."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Веб приказ."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Непознат објекат."</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Дугме Претражи."</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Дугме Одабери почетну локацију."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Дугме Одабери одредишну локацију."</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"дугме за избор Вожња."</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Дугме за избор Јавни превоз."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Дугме за избор Вожња бицикла."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Дугме за избор Ходање."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Вожња, означено."</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Јавни превоз, означен."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Вожња бицикла, изабарано."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Ходање, означено."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"звездица"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Сати повећања."</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Минути повећања."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Сати смањeња."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Минути смањeња."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Месец повећања."</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Дан повећања."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Година повећања."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Месец смањeња."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Дан смањeња."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Година смањeња."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Плејлиста."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Укључи насумично."</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Укључи понављање."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Дугме Премотај."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Дугме Пусти."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Дугме за премотавање"</string>
+    <string name="value_owner" msgid="2419158478547189476">"Власник"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Слање команди намере у TalkBack"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Омогућава апликацији или услузи да користи TalkBack преко циљаних мрежа и да потенцијално добије информације о TalkBack стању, на пример за кеширана обавештења."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Упитник"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Размак"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Зарез"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Тачка"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Узвик"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Отворена заграда"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Затворена заграда"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Дупли наводници"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Тачка и зарез"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Две тачке"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"догађај"</item>
+    <item quantity="other" msgid="8275223643159991572">"догађаји"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Доступна су подешавања за TalkBack"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Кликните овде да бисте преузели апликацију за подешавање жељених опција."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"Доступни су подаци о грешци TalkBack-а"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Кликните овде да бисте побољшали TalkBack тако што ћете послати податке о грешци."</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Када говорити"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Јачина звона"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Статус екрана"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"TTS подешавања"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Изговори ИД позиваоца"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Користи проширени TTS"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Сензор за близину"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Сензор за близину утишава говор"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Сензор за близину не контролише говор"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Додатне компоненте"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Управљање додатним компонентама"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Деинсталирај"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack је онемогућен!"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack је тренутно онемогућен. Желите ли да отворите подешавања доступности?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Грешка"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Доступност није подржана на овом уређају."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack извештај о грешци"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"Следеће је извештај о грешци за TalkBack. Кликом на дугме „Пошаљи“ подаци ће се послати TalkBack програмерима."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Упозорење"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Ова TalkBack додатна компонента може да сакупи сав текст који унесете, укључујући личне податке као што је број кредитне картице, осим лозинки. Такође може да евидентира интеракције корисничког интерфејса. Потиче из апликације <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Желите ли да омогућите ову додатну компоненту?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Померајте према знацима."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Померајте према речима."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Померајте према реченицама."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Померајте према насловима."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Померајте према брату/сестри."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Померајте према документима."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Померајте према подразумеваном понашању веб приказа."</string>
+</resources>

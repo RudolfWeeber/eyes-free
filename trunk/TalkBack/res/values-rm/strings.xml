@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- no translation found for talkback_service_description (983212841294665356) -->
+    <skip />
     <string name="notification_type_text_message" msgid="2840489326612585077">"Messadi SMS"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"SMS betg tramess"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"Clom manchentà"</string>
@@ -17,7 +19,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Sincronisaziun"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Mailbox"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"En reproducziun"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"Avis da status"</string>
     <!-- no translation found for template_compound_button_checked (8969457633214121273) -->
     <skip />
     <!-- no translation found for template_compound_button_not_checked (2022559641068252555) -->
@@ -36,13 +37,17 @@
     <skip />
     <!-- no translation found for template_dragging_icon (7633606891857792337) -->
     <skip />
-    <!-- no translation found for template_image_button (7981434777534909849) -->
+    <!-- no translation found for template_image_view (4213590103284596735) -->
     <skip />
-    <!-- no translation found for template_button (5913853507836606140) -->
-    <skip />
-    <!-- no translation found for template_image_view (3085333029274972273) -->
+    <!-- no translation found for template_unlabeled_image_view (1433983285490648415) -->
     <skip />
     <!-- no translation found for template_seek_bar (8598603084443742698) -->
+    <skip />
+    <!-- no translation found for template_percent (8298434876867671403) -->
+    <skip />
+    <!-- no translation found for template_scroll_from_to_count (3686789962835061906) -->
+    <skip />
+    <!-- no translation found for template_scroll_from_count (677594507054979865) -->
     <skip />
     <!-- no translation found for template_spinner (3914981448273826697) -->
     <skip />
@@ -58,6 +63,12 @@
     <skip />
     <!-- no translation found for template_announce_item_index (5245551532025107789) -->
     <skip />
+    <!-- no translation found for template_announce_disabled_control_hover (8348046264288231066) -->
+    <skip />
+    <!-- no translation found for template_password_selected (7528235887386963927) -->
+    <skip />
+    <!-- no translation found for template_announce_clickable_children (2387604554284732025) -->
+    <skip />
     <string name="value_password" msgid="52094746222829357">"pled-clav"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Reglader ruschnant avert"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Tegn dal reglader ruschnant"</string>
@@ -69,13 +80,22 @@
     <string name="value_password_character_typed" msgid="3384590085073731527">"punct"</string>
     <string name="value_checked" msgid="5234989698372864892">"tschernì"</string>
     <string name="value_not_checked" msgid="193134740901545340">"betg tschernì"</string>
+    <!-- no translation found for value_disabled (65077823320194685) -->
+    <skip />
+    <!-- no translation found for value_clickable (7427194667856810494) -->
+    <skip />
+    <!-- no translation found for value_long_clickable (6317377901757976390) -->
+    <skip />
+    <!-- no translation found for value_scrollable (2310899165772659098) -->
+    <skip />
     <string name="value_clicked" msgid="8306469740150249879">"cliccà"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"Scalin en modus da vibraziun"</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"Scalin en modus silenzius"</string>
     <string name="value_ringer_normal" msgid="5319228013151793967">"Tun da scalin normal"</string>
     <string name="value_screen_on" msgid="6000430443458639755">"Visur activà"</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Visur stizzà."</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telefon debloccà"</string>
+    <!-- no translation found for value_device_unlocked (1424846510201818289) -->
+    <skip />
     <string name="value_dragging_widget" msgid="2839615701303758943">"Widget per trair."</string>
     <string name="value_web_view" msgid="8368045336469722566">"Vista da web."</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"Object nunenconuschent."</string>
@@ -109,8 +129,6 @@
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Buttun per far ir enavant svelt."</string>
     <!-- no translation found for value_owner (2419158478547189476) -->
     <skip />
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Trametter cumonds d\'intenziun a TalkBack"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"\"Permetta ad ina applicaziun u ad in servetsch da controllar TalkBack cun trametter intenziuns e retschaiver infurmaziuns davart il status da TalkBack, sco per exempel ils avis en il cache.\""</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Segn da dumonda"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Spazi"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Comma"</string>
@@ -123,30 +141,43 @@
     <string name="punctuation_colon" msgid="4212987887163582631">"Punct dubel"</string>
     <!-- no translation found for plural_event:one (8890979114667202113) -->
     <!-- no translation found for plural_event:other (8275223643159991572) -->
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Preferenzas TalkBack disponiblas."</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Cliccai qua per telechargiar l\'applicaziun Preferenzas d\'agids d\'access"</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Datas dal collaps da TalkBack disponiblas"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Cliccai qua per meglierar TalkBack cun trametter rapports da collaps."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Cura discurrer"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Volumen dal tun da scalin"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Status dal visur"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Parameters da la sintesa vocala"</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"Pronunziar la ID dal clamader"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Sintesa vocala extendida"</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"Sensur da proximitad"</string>
+    <!-- outdated translation 4166340335462900044 -->     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Volumen dal tun da scalin"</string>
+    <!-- outdated translation 9028437778107614413 -->     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Status dal visur"</string>
+    <!-- outdated translation 2074176178525278688 -->     <string name="title_pref_caller_id" msgid="1414845059814636961">"Pronunziar la ID dal clamader"</string>
+    <!-- outdated translation 2074129049942782489 -->     <string name="title_pref_proximity" msgid="4957940010293002852">"Sensur da proximitad"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Il sensur da proximitad deactivescha il discurrer"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Il sensur da proximitad na controllescha betg il discurrer"</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Plug-ins"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Administrar ils plug-ins"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Deinstallar"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack deactivà!"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack è actualmain deactivà. Vulais Vus avrir ils parameters dals agids d\'access?"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Errur"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Agids d\'access na vegnan betg sustegnids da quest telefonin."</string>
+    <!-- no translation found for title_pref_bluetooth (3475728515720218108) -->
+    <skip />
+    <!-- no translation found for summaryOn_pref_bluetooth (655029542459409862) -->
+    <skip />
+    <!-- no translation found for summaryOff_pref_bluetooth (8270563973653936052) -->
+    <skip />
+    <!-- no translation found for title_pref_category_feedback_settings (5588871484662795651) -->
+    <skip />
+    <!-- no translation found for title_pref_vibration (3844312655168149890) -->
+    <skip />
+    <!-- no translation found for title_pref_vibration_patterns (2883907174568613798) -->
+    <skip />
+    <!-- no translation found for title_pref_patterns_hover (1028955563101936030) -->
+    <skip />
+    <!-- no translation found for title_pref_patterns_actionable (4119848460907205018) -->
+    <skip />
+    <!-- no translation found for title_pref_soundback (4700299128916932277) -->
+    <skip />
+    <!-- no translation found for title_pref_soundback_volume (7800640782909840723) -->
+    <skip />
+    <!-- no translation found for title_pref_soundback_sounds (4085905099641175573) -->
+    <skip />
+    <!-- no translation found for title_pref_sounds_hover (7541705161020400291) -->
+    <skip />
+    <!-- no translation found for title_pref_sounds_actionable (309050969670809224) -->
+    <skip />
     <string name="subject_crash_report_email" msgid="3043388136219501183">"Rapport da collaps TalkBack"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"Qua sutvart suonda in rapport da collaps da TalkBack. Cliccai sin il buttun Trametter per transmetter questas datas als sviluppaders da l\'applicaziun."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Avertiment"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"\"Quest plug-in da TalkBack po rimnar l\'entir text che Vus endatais, inclus Vossas datas persunalas sco numers da cartas da credit, dentant nagins pleds-clav. El po era protocollar Vossas interacziuns cun l\'interfatscha d\'utilisader. Questa metoda deriva da l\'applicaziun <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Vulais Vus activar quest plug-in?\""</string>
     <!-- no translation found for axis_character (5059604520074645703) -->
     <skip />
     <!-- no translation found for axis_word (7745798763195184060) -->

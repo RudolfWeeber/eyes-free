@@ -30,22 +30,12 @@ import java.util.Arrays;
  *
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
-public class SpeechRuleLoader implements InfrastructureStateListener {
-
-    /**
-     * Tag used for logging.
-     */
-    private static final String LOG_TAG = SpeechRuleLoader.class.getSimpleName();
+class SpeechRuleLoader implements InfrastructureStateListener {
 
     /**
      * The {@link SpeechRuleProcessor} that manages speech rules.
      */
     private final SpeechRuleProcessor mSpeechRuleProcessor;
-
-    /**
-     * Flag if the device is a phone.
-     */
-    private final boolean mDeviceIsPhone;
 
     /**
      * The directory that contains external speech strategies.
@@ -64,10 +54,9 @@ public class SpeechRuleLoader implements InfrastructureStateListener {
      * @param speechRuleProcessor The {@link SpeechRuleProcessor} to which to add rules.
      * @param deviceIsPhone Flag if the device is a phone.
      */
-    SpeechRuleLoader(String packageName, SpeechRuleProcessor speechRuleProcessor,
+    public SpeechRuleLoader(String packageName, SpeechRuleProcessor speechRuleProcessor,
             boolean deviceIsPhone) {
         mSpeechRuleProcessor = speechRuleProcessor;
-        mDeviceIsPhone = deviceIsPhone;
         mExternalSpeechStrategyDirectory = new File(Environment.getExternalStorageDirectory(),
                 "/Android/data/" + packageName + "/speechstrategy");
 
@@ -103,18 +92,8 @@ public class SpeechRuleLoader implements InfrastructureStateListener {
             createExternalSpeechRulesDirectory();
         }
 
-        // add speech strategy for third-party apps; later this may be loaded
-        // dynamically from another file
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_thirdparty);
-
         // add speech strategy for specific built-in Android apps
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_apps);
-
-        if (!mDeviceIsPhone) {
-            // add the speech strategy for Google TV; this should always be
-            // after the application specific ones but before the generic
-            mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_googletv);
-        }
 
         // add generic speech strategy for views in any app; this should always
         // be last so that the app-specific rules above can override the
@@ -130,15 +109,16 @@ public class SpeechRuleLoader implements InfrastructureStateListener {
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             try {
                 if (mExternalSpeechStrategyDirectory.mkdirs()) {
-                    Log.d(LOG_TAG, "Created external speech rules directory: "
-                            + mExternalSpeechStrategyDirectory);
+                    LogUtils.log(SpeechRuleLoader.class, Log.DEBUG, "Created external speech "
+                            + "rules directory: %s", mExternalSpeechStrategyDirectory);
                 }
             } catch (SecurityException se) {
-                Log.w(LOG_TAG, "Could not create external speech rules directory.", se);
+                LogUtils.log(SpeechRuleLoader.class, Log.WARN, "Could not create external "
+                        + "speech rules directory.\n%s", se.toString());
             }
         } else {
-            Log.w(LOG_TAG, "Could not create external speech rules directory."
-                    + " No external storage.");
+            LogUtils.log(SpeechRuleLoader.class, Log.WARN, "Could not create external speech "
+                    + "rules directory: No external storage.");
         }
     }
 
@@ -174,7 +154,8 @@ public class SpeechRuleLoader implements InfrastructureStateListener {
         File speechStrategyFile = new File(mExternalSpeechStrategyDirectory,
                 speechStrategyRelativePath);
         mSpeechRuleProcessor.addSpeechStrategy(speechStrategyFile);
-        Log.i(LOG_TAG, "Loaded external speech strategy: " + speechStrategyRelativePath);   
+        LogUtils.log(SpeechRuleLoader.class, Log.INFO, "Loaded external speech strategy: %s",
+                speechStrategyRelativePath);
     }
 
     /**
@@ -185,7 +166,8 @@ public class SpeechRuleLoader implements InfrastructureStateListener {
         File speechStrategyFile = new File(mExternalSpeechStrategyDirectory,
                 speechStrategyRelativePath);
         mSpeechRuleProcessor.removeSpeechStrategy(speechStrategyFile);
-        Log.i(LOG_TAG, "Removed external speech strategy: " + speechStrategyRelativePath);
+        LogUtils.log(SpeechRuleLoader.class, Log.INFO, "Removed external speech strategy: %s",
+                speechStrategyRelativePath);
     }
 
     @Override

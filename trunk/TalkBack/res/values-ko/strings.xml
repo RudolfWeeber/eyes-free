@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_service_description" msgid="983212841294665356">"Talkback을 사용하면 기기에서 시각 장애인을 위한 음성 피드백을 제공합니다. 예를 들어 사용자가 터치하거나 선택하거나 활성화한 항목을 설명해 줍니다."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"문자 메시지"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"문자 메시지를 보내지 못함"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"부재중 전화"</string>
@@ -16,7 +17,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"동기화"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"음성사서함"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"재생 중"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"상태 알림"</string>
     <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> 선택됨"</string>
     <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> 선택 안 됨"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"수정 창. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
@@ -24,12 +24,16 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"<xliff:g id="MESSAGE">%1$s</xliff:g> 알림"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g>을(를) <xliff:g id="NEW_TEXT">%2$s</xliff:g>(으)로 대체"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> 문자를 <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> 문자로 바꿨습니다."</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"벨소리 <xliff:g id="PERCENT">%1$s</xliff:g>퍼센트"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"벨소리 <xliff:g id="PERCENT">%d</xliff:g>퍼센트"</string>
     <string name="template_dragging_icon" msgid="7633606891857792337">"<xliff:g id="TITLE">%1$s</xliff:g> 아이콘 드래그"</string>
-    <string name="template_image_button" msgid="7981434777534909849">"<xliff:g id="TITLE">%1$s</xliff:g> 이미지 버튼"</string>
-    <string name="template_button" msgid="5913853507836606140">"<xliff:g id="TITLE">%1$s</xliff:g> 버튼"</string>
-    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> 이미지"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> 이미지"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"이미지 <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> 찾기 컨트롤"</string>
+    <!-- String.format failed for translation -->
+    <!-- no translation found for template_percent (8298434876867671403) -->
+    <skip />
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"<xliff:g id="TOTAL_COUNT">%d</xliff:g>개 항목 중 <xliff:g id="FROM_INDEX">%d</xliff:g> - <xliff:g id="TO_INDEX">%d</xliff:g> 표시 중"</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"<xliff:g id="TOTAL_COUNT">%d</xliff:g>개 항목 중 <xliff:g id="FROM_INDEX">%d</xliff:g> 표시 중"</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> 드롭다운 목록"</string>
     <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g>분"</string>
     <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g>시간"</string>
@@ -37,6 +41,9 @@
     <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> ~ <xliff:g id="TO_DATE">%2$s</xliff:g>, 주간 보기"</string>
     <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, 월간 보기"</string>
     <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g>/<xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="template_announce_disabled_control_hover" msgid="8348046264288231066">"<xliff:g id="DISABLED_CONTROL_TEXT">%1$s</xliff:g>, 사용 안함"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"<xliff:g id="FROM_INDEX">%1$s</xliff:g>에서 <xliff:g id="TO_INDEX">%1$s</xliff:g>까지 선택된 문자"</string>
+    <string name="template_announce_clickable_children" msgid="2387604554284732025">"<xliff:g id="NUMBER_CLICKABLE_CHILDREN">%1$s</xliff:g>, 클릭 가능한 항목"</string>
     <string name="value_password" msgid="52094746222829357">"비밀번호"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"슬라이딩 드로어 열림"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"슬라이딩 드로어 핸들"</string>
@@ -48,13 +55,17 @@
     <string name="value_password_character_typed" msgid="3384590085073731527">"점"</string>
     <string name="value_checked" msgid="5234989698372864892">"선택함"</string>
     <string name="value_not_checked" msgid="193134740901545340">"선택 안함"</string>
+    <string name="value_disabled" msgid="65077823320194685">"사용 안함"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"클릭 가능"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"길게 클릭 가능"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"스크롤할 수 있음"</string>
     <string name="value_clicked" msgid="8306469740150249879">"클릭함"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"벨소리 장치 진동."</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"벨소리 장치 무음."</string>
     <string name="value_ringer_normal" msgid="5319228013151793967">"벨소리 장치 보통."</string>
     <string name="value_screen_on" msgid="6000430443458639755">"화면 켜짐."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"화면 꺼짐."</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"휴대전화 잠금 해제됨."</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"기기가 잠금 해제되었습니다."</string>
     <string name="value_dragging_widget" msgid="2839615701303758943">"위젯 드래그"</string>
     <string name="value_web_view" msgid="8368045336469722566">"웹 뷰"</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"알 수 없는 개체"</string>
@@ -87,8 +98,6 @@
     <string name="value_play_button" msgid="2701216749763299935">"재생 버튼"</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"빨리 감기 버튼"</string>
     <string name="value_owner" msgid="2419158478547189476">"소유자"</string>
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"TalkBack에 인텐트 명령 보내기"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"애플리케이션이나 서비스가 인텐트 브로드캐스트를 통해 TalkBack을 실행하고 저장된 알림과 같은 TalkBack 상태에 대한 정보를 가져올 수 있도록 허용합니다."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"물음표"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"공백"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"쉼표"</string>
@@ -103,30 +112,30 @@
     <item quantity="one" msgid="8890979114667202113">"일정"</item>
     <item quantity="other" msgid="8275223643159991572">"일정"</item>
   </plurals>
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBack 환결설정 사용 가능"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"접근성 서비스 환경설정 애플리케이션을 다운로드하려면 여기를 클릭하세요."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack 충돌 데이터 사용 가능"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"충돌 데이터를 보내 TalkBack의 기능을 향상하려면 여기를 클릭하세요."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"말하기 설정"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"벨소리 볼륨"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"화면 상태"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"TTS 설정"</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"발신자 ID 말하기"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"TTS 확장 사용"</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"근접 센서"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"벨소리 볼륨"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"화면이 꺼져 있을 때 말하기"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"발신자 번호 말하기"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"근접 센서 사용"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"근접 센서에서 음성 기능을 중지함"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"근접 센서에서 음성 기능을 조절할 수 없습니다."</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"플러그인"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"플러그인 관리"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"제거"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack 사용 중지됨"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"현재 TalkBack 사용이 중지되었습니다. 접근성 서비스 설정을 여시겠습니까?"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"오류"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"접근성 서비스는 이 기기에서 지원되지 않습니다."</string>
+    <string name="title_pref_bluetooth" msgid="3475728515720218108">"블루투스 출력"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="655029542459409862">"가능한 경우 블루투스로 음성 출력합니다."</string>
+    <string name="summaryOff_pref_bluetooth" msgid="8270563973653936052">"블루투스 헤드셋으로 음성 출력하지 않습니다."</string>
+    <string name="title_pref_category_feedback_settings" msgid="5588871484662795651">"피드백 설정"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"진동 확인"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"진동 패턴 지정"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"터치하여 탐색"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"클릭 가능한 항목 탐색"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"소리 확인"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"소리 볼륨"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"소리 지정"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"터치하여 탐색"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"클릭 가능한 항목 탐색"</string>
     <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack 충돌 보고"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"다음은 TalkBack에 대한 충돌 보고서입니다. \'보내기\' 버튼을 클릭하면 데이터가 TalkBack 개발자에게 전송됩니다."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"경고"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"TalkBack 플러그인은 비밀번호를 제외한 개인 데이터 신용카드 번호 등과 같이 사용자가 입력한 모든 텍스트를 수집할 수 있습니다. 또한 사용자 인터페이스 상호 작용을 기록할 수도 있습니다. 이 플러그인은 <xliff:g id="PLUGIN_NAME">%1$s</xliff:g> 애플리케이션에서 제공합니다. 플러그인을 사용하시겠습니까?"</string>
     <string name="axis_character" msgid="5059604520074645703">"문자별로 탐색"</string>
     <string name="axis_word" msgid="7745798763195184060">"단어별로 탐색"</string>
     <string name="axis_sentence" msgid="5569363499210008882">"문장별로 탐색"</string>

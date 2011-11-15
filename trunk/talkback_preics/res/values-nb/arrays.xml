@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Snakk uavhengig av gjeldende ringevolum"</item>
+    <item msgid="7158875206945163928">"Ingen tale i stille modus"</item>
+    <item msgid="4945285159234224758">"Ingen tale i stille- og vibreringsmodus"</item>
+  </string-array>
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"Tillat tale når skjermen er av"</item>
+    <item msgid="3411424877209877052">"Ingen tale når skjermen er av"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"Knapp"</item>
+    <item msgid="2031284088774168661">"Avmerkingsboks"</item>
+    <item msgid="9091685013189255594">"Fargevelger"</item>
+    <item msgid="7650731353307926535">"Kontroll for dato og klokkeslett"</item>
+    <item msgid="8280936284109186802">"Kontroll for dato og klokkeslett"</item>
+    <item msgid="6366195742201292951">"Datokontroll"</item>
+    <item msgid="4817890851441750596">"Rediger tekst for e-post"</item>
+    <item msgid="5708434584742847903">"Filvalg"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"Knapp"</item>
+    <item msgid="5468837159284323298">"Månedskontroll"</item>
+    <item msgid="3604586918762860736">"Rediger tekst som er kun for tall"</item>
+    <item msgid="2268738486961365938">"Passordredigeringstekst"</item>
+    <item msgid="4054764445934639546">"Alternativknapp"</item>
+    <item msgid="8620342430107579622">"Glidebryter"</item>
+    <item msgid="4526908839966163389">"Tilbakestilling"</item>
+    <item msgid="6890269752295368575">"Rediger tekst for søk"</item>
+    <item msgid="1732239384416208952">"Knapp"</item>
+    <item msgid="2844423601130585486">"Rediger tekst for telefonnummer"</item>
+    <item msgid="4429211852856836454">"Rediger tekst"</item>
+    <item msgid="6916351398697981908">"Rediger tekst for nettadresse"</item>
+    <item msgid="7370324241352123803">"Ukenummerkontroll"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"Varsel"</item>
+    <item msgid="7079664451178245333">"Varselsdialog"</item>
+    <item msgid="7175460279619232788">"Knapp"</item>
+    <item msgid="7682652928153230885">"Avmerkingsboks"</item>
+    <item msgid="6271342434037552568">"Kombinasjonsboks"</item>
+    <item msgid="3816282149905203330">"Dialog"</item>
+    <item msgid="3607246563706513907">"Rutenettcelle"</item>
+    <item msgid="6690887636341505376">"Kobling"</item>
+    <item msgid="8956345708233247462">"Logg"</item>
+    <item msgid="7023984577635455031">"Rulletekst"</item>
+    <item msgid="2455128273329194018">"Menyelement"</item>
+    <item msgid="2579774298837415022">"Avmerkingsboks for menyelement"</item>
+    <item msgid="8295115526987695111">"Alternativknapp for menyelement"</item>
+    <item msgid="9208148803968404705">"Alternativ"</item>
+    <item msgid="7278111388436893213">"Fremdriftslinje"</item>
+    <item msgid="2040534193363832208">"Alternativknapp"</item>
+    <item msgid="3518786141398291419">"Gruppe av alternativknapper"</item>
+    <item msgid="3369418675400502879">"Rullefelt"</item>
+    <item msgid="4160771832888077199">"Glidebryter"</item>
+    <item msgid="4913996245258357058">"Verdisettingsknapp"</item>
+    <item msgid="4720560353967686603">"Status"</item>
+    <item msgid="8848835768265321609">"Fane"</item>
+    <item msgid="1902084479060424039">"Fanepanel"</item>
+    <item msgid="1434580592616799847">"Tekstfelt"</item>
+    <item msgid="2857905070846962311">"Tidtaker"</item>
+    <item msgid="5359803593845515833">"Verktøylinje"</item>
+    <item msgid="5431429272751911412">"Verktøytips"</item>
+    <item msgid="6370853370296882006">"Treelement"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"Kobling"</item>
+    <item msgid="5377511479758471198">"Overskrift en"</item>
+    <item msgid="1326639266444424357">"Overskrift to"</item>
+    <item msgid="1794794287319870162">"Overskrift tre"</item>
+    <item msgid="8913956457917314695">"Overskrift fire"</item>
+    <item msgid="9214322369762997523">"Overskrift fem"</item>
+    <item msgid="703456364875978891">"Overskrift seks"</item>
+    <item msgid="1873899093503383879">"Knapp"</item>
+    <item msgid="397012629783441956">"Kombinasjonsboks"</item>
+    <item msgid="130879601035659196">"Tabell"</item>
+    <item msgid="1026513754307890628">"Tekstområde"</item>
+  </string-array>
+</resources>

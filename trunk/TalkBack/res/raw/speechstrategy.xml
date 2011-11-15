@@ -7,28 +7,25 @@
   <!-- Rules specific to just one app should go in speechstrategy_apps.xml or -->
   <!-- speechstrategy_thirdparty.xml. -->
 
-  <!-- TYPE_VIEW_HOVER_ENTER -->
-  
+  <!-- Custom formatter for notification bar -->
+
   <ss:rule>
-    <ss:metadata>
-      <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
-    </ss:metadata>
     <ss:filter>
-      <ss:eventType>TYPE_VIEW_HOVER_ENTER</ss:eventType>
-      <ss:className>android.widget.ListView</ss:className>
+      <ss:custom>com.google.android.marvin.talkback.formatter.TouchExplorationSystemUiFormatter</ss:custom>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_list_view_item</ss:template>
-      <ss:property>text</ss:property>
+      <ss:custom>com.google.android.marvin.talkback.formatter.TouchExplorationSystemUiFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
-   
+
+  <!-- TYPE_VIEW_SCROLLED -->
+  
   <ss:rule>
     <ss:filter>
-      <ss:eventType>TYPE_VIEW_HOVER_ENTER</ss:eventType>
+      <ss:eventType>TYPE_VIEW_SCROLLED</ss:eventType>
     </ss:filter>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:custom>com.google.android.marvin.talkback.formatter.ScrollFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -42,7 +39,7 @@
       <ss:checked>true</ss:checked>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_checked</ss:template>
+      <ss:template>@string/value_checked</ss:template>
     </ss:formatter>
   </ss:rule>
 
@@ -52,8 +49,12 @@
       <ss:eventType>TYPE_VIEW_CLICKED</ss:eventType>
       <ss:className>android.widget.CompoundButton</ss:className>
     </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_clicked_pattern</ss:vibration>
+      <ss:earcon>@raw/button</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_not_checked</ss:template>
+      <ss:template>@string/value_not_checked</ss:template>
     </ss:formatter>
   </ss:rule>
 
@@ -62,187 +63,29 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_CLICKED</ss:eventType>
     </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_clicked_pattern</ss:vibration>
+      <ss:earcon>@raw/button</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_clicked</ss:template>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- TYPE_VIEW_FOCUSED -->
-
-  <!-- CompoundButton - checked -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.CompoundButton</ss:className>
-      <ss:checked>true</ss:checked>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_compound_button_checked</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- CompoundButton - not checked -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.CompoundButton</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_compound_button_not_checked</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- EditText - password -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.EditText</ss:className>
-      <ss:password>true</ss:password>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_password</ss:template>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- EditText - not password -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.EditText</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_edit_box</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- ImageButton -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.ImageButton</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_image_button</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- Button -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.Button</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_button</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- ImageView -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.ImageView</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_image_view</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- SeekBar -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.SeekBar</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_seek_bar</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- Spinner -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.Spinner</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_spinner</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- WebView -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.webkit.WebView</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_web_view</ss:template>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- Focused object without text or description -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:text></ss:text>
-      <ss:contentDescription></ss:contentDescription>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_unknown_object</ss:template>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- Focused object with text or description -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-    </ss:filter>
-    <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:template>@string/value_clicked</ss:template>
     </ss:formatter>
   </ss:rule>
 
   <!-- TYPE_VIEW_SELECTED -->
 
-  <!-- Spinner (sometimes gets selected event instead of focused event) -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
-      <ss:className>android.widget.Spinner</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_spinner</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
   <!-- WebView -->
   <ss:rule>
     <ss:filter>
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
       <ss:className>android.webkit.WebView</ss:className>
     </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:earcon>@raw/select</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
-       <ss:custom>com.google.android.marvin.talkback.formatter.WebContentFormatter</ss:custom>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- All other objects -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
-    </ss:filter>
-    <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:custom>com.google.android.marvin.talkback.formatter.WebContentFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -254,8 +97,12 @@
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>android.app.Dialog</ss:className>
     </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_notification_or_window_state_changed_pattern</ss:vibration>
+      <ss:earcon>@raw/open</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_alert_dialog_template</ss:template>
+      <ss:template>@string/template_alert_dialog_template</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
   </ss:rule>
@@ -266,8 +113,12 @@
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>com.android.internal.view.menu.IconMenuView</ss:className>
     </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_notification_or_window_state_changed_pattern</ss:vibration>
+      <ss:earcon>@raw/open</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_options_menu_open</ss:template>
+      <ss:template>@string/value_options_menu_open</ss:template>
     </ss:formatter>
   </ss:rule>
 
@@ -277,16 +128,35 @@
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>android.widget.SlidingDrawer</ss:className>
     </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_notification_or_window_state_changed_pattern</ss:vibration>
+      <ss:earcon>@raw/open</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/value_sliding_drawer_opened</ss:template>
+      <ss:template>@string/value_sliding_drawer_opened</ss:template>
     </ss:formatter>
   </ss:rule>
 
-  <!-- LinearLayout -->
+  <!-- All other state changes -->
   <ss:rule>
     <ss:filter>
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
-      <ss:className>android.widget.LinearLayout</ss:className>
+    </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_notification_or_window_state_changed_pattern</ss:vibration>
+      <ss:earcon>@raw/open</ss:earcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- TYPE_WINDOW_CONTENT_CHANGED -->
+
+  <!-- All -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_CONTENT_CHANGED</ss:eventType>
     </ss:filter>
     <ss:formatter>
       <ss:property>text</ss:property>
@@ -301,6 +171,9 @@
       <ss:eventType>TYPE_VIEW_TEXT_CHANGED</ss:eventType>
       <ss:removedCount>0</ss:removedCount>
     </ss:filter>
+    <ss:metadata>
+      <ss:earcon>@raw/item</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$AddedTextFormatter</ss:custom>
     </ss:formatter>
@@ -312,6 +185,9 @@
       <ss:eventType>TYPE_VIEW_TEXT_CHANGED</ss:eventType>
       <ss:addedCount>0</ss:addedCount>
     </ss:filter>
+    <ss:metadata>
+      <ss:earcon>@raw/item</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$RemovedTextFormatter</ss:custom>
     </ss:formatter>
@@ -322,8 +198,35 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_TEXT_CHANGED</ss:eventType>
     </ss:filter>
+    <ss:metadata>
+      <ss:earcon>@raw/item</ss:earcon>
+    </ss:metadata>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$ReplacedTextFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+  
+  <!-- TYPE_VIEW_TEXT_SELECTION_CHANGED -->
+
+  <!-- Password selected -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_TEXT_SELECTION_CHANGED</ss:eventType>
+      <ss:password>true</ss:password>
+    </ss:filter>
+    <ss:formatter>
+      <ss:template>@string/template_password_selected</ss:template>
+      <ss:property>fromIndex</ss:property>
+      <ss:property>toIndex</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_TEXT_SELECTION_CHANGED</ss:eventType>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$SelectedTextFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -334,8 +237,27 @@
     <ss:filter>
       <ss:eventType>TYPE_NOTIFICATION_STATE_CHANGED</ss:eventType>
     </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_notification_or_window_state_changed_pattern</ss:vibration>
+      <ss:earcon>@raw/working</ss:earcon>
+      <ss:queuing>QUEUE</ss:queuing>
+    </ss:metadata>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.phone.NotificationFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.talkback.formatter.NotificationFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- DEFAULT -->
+
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_TOUCH_EXPLORATION_GESTURE_START||TYPE_TOUCH_EXPLORATION_GESTURE_END||TYPE_VIEW_HOVER_ENTER||TYPE_VIEW_HOVER_EXIT||TYPE_VIEW_FOCUSED||TYPE_VIEW_SELECTED</ss:eventType>
+    </ss:filter>
+    <ss:metadata>
+      <ss:queuing>INTERRUPT</ss:queuing>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.TouchExplorationFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Tal uafhængigt af lydstyrke på ring"</item>
+    <item msgid="7158875206945163928">"Ingen tale i lydløs tilstand"</item>
+    <item msgid="4945285159234224758">"Ingen tale i vibrer og lydløs tilstand"</item>
+  </string-array>
+  <string-array name="pref_speak_screenoff_entries">
+    <item msgid="7614504368332803511">"Tillad tale, når skærmen er slukket"</item>
+    <item msgid="3411424877209877052">"Ingen tale når skærmen er slukket"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"Knap"</item>
+    <item msgid="2031284088774168661">"Afkrydsningsfelt"</item>
+    <item msgid="9091685013189255594">"Farvevælger"</item>
+    <item msgid="7650731353307926535">"Kontrol af dato og tid"</item>
+    <item msgid="8280936284109186802">"Kontrol af dato og tid"</item>
+    <item msgid="6366195742201292951">"Datokontrol"</item>
+    <item msgid="4817890851441750596">"Rediger tekst til e-mail"</item>
+    <item msgid="5708434584742847903">"Filvalg"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"Knap"</item>
+    <item msgid="5468837159284323298">"Månedlig kontrol"</item>
+    <item msgid="3604586918762860736">"Rediger kun tal i tekst"</item>
+    <item msgid="2268738486961365938">"Tekst om redigering af adgangskode"</item>
+    <item msgid="4054764445934639546">"Alternativknap"</item>
+    <item msgid="8620342430107579622">"Skyder"</item>
+    <item msgid="4526908839966163389">"Nulstil"</item>
+    <item msgid="6890269752295368575">"Rediger tekst til søgning"</item>
+    <item msgid="1732239384416208952">"Knap"</item>
+    <item msgid="2844423601130585486">"Rediger tekst for telefonnummer"</item>
+    <item msgid="4429211852856836454">"Rediger tekst"</item>
+    <item msgid="6916351398697981908">"Rediger tekst for webadresse"</item>
+    <item msgid="7370324241352123803">"Kontrol for en uge om året"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"Underretning"</item>
+    <item msgid="7079664451178245333">"Underretningsdialogboks"</item>
+    <item msgid="7175460279619232788">"Knap"</item>
+    <item msgid="7682652928153230885">"Afkrydsningsfelt"</item>
+    <item msgid="6271342434037552568">"Kombinationsfelt"</item>
+    <item msgid="3816282149905203330">"Dialogboks"</item>
+    <item msgid="3607246563706513907">"Gittercelle"</item>
+    <item msgid="6690887636341505376">"Link"</item>
+    <item msgid="8956345708233247462">"Logfil"</item>
+    <item msgid="7023984577635455031">"Rullende tekst"</item>
+    <item msgid="2455128273329194018">"Menupunkt"</item>
+    <item msgid="2579774298837415022">"Afkrydsningsfelt til menupunkter"</item>
+    <item msgid="8295115526987695111">"Alternativknap til menupunkt"</item>
+    <item msgid="9208148803968404705">"Valgmulighed"</item>
+    <item msgid="7278111388436893213">"Statuslinje"</item>
+    <item msgid="2040534193363832208">"Alternativknap"</item>
+    <item msgid="3518786141398291419">"Gruppe af alternativknapper"</item>
+    <item msgid="3369418675400502879">"Rullepanel"</item>
+    <item msgid="4160771832888077199">"Skyder"</item>
+    <item msgid="4913996245258357058">"Skalafelt"</item>
+    <item msgid="4720560353967686603">"Status"</item>
+    <item msgid="8848835768265321609">"Fane"</item>
+    <item msgid="1902084479060424039">"Fanepanel"</item>
+    <item msgid="1434580592616799847">"Tekstfelt"</item>
+    <item msgid="2857905070846962311">"Timer"</item>
+    <item msgid="5359803593845515833">"Værktøjslinje"</item>
+    <item msgid="5431429272751911412">"Værktøjstip"</item>
+    <item msgid="6370853370296882006">"Træelement"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"Link"</item>
+    <item msgid="5377511479758471198">"Overskrift på niveau ét"</item>
+    <item msgid="1326639266444424357">"Overskrift på niveau to"</item>
+    <item msgid="1794794287319870162">"Overskrift på niveau tre"</item>
+    <item msgid="8913956457917314695">"Overskrift på niveau fire"</item>
+    <item msgid="9214322369762997523">"Overskrift på niveau fem"</item>
+    <item msgid="703456364875978891">"Overskrift på niveau seks"</item>
+    <item msgid="1873899093503383879">"Knap"</item>
+    <item msgid="397012629783441956">"Kombinationsfelt"</item>
+    <item msgid="130879601035659196">"Tabel"</item>
+    <item msgid="1026513754307890628">"Tekstområde"</item>
+  </string-array>
+</resources>

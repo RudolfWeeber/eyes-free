@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"Pesan teks"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Pesan teks yang tidak terkirim"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Panggilan tak terjawab"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB terhubung"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"Bisukan"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Ngobrol"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Galat"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Lainnya"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"Kartu SD"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"USB kartu SD"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"Sinkron"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"Email baru"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Sinkron"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Kotak Pesan"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Tengah Dimainkan"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Pemberitahuan status"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> dicentang"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> tidak diperiksa"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Kotak edit. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Kotak telusur. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Lansiran <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> diganti dengan <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> karakter diganti dengan <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> karakter"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Pendering <xliff:g id="PERCENT">%1$s</xliff:g> persen."</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"Menyeret ikon <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"Tombol gambar <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_button" msgid="5913853507836606140">"Tombol <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"Gambar <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> kontrol pencari."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> daftar tarik turun."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> menit"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> jam"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, tampilan harian."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> hingga <xliff:g id="TO_DATE">%2$s</xliff:g>, tampilan mingguan."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, tampilan bulanan."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> dari <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"sandi"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Laci geser terbuka"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Gagang laci geser"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Metode masukan"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Bilah status"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Opsi."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"dihapus"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Ringkasan pemberitahuan"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"titik"</string>
+    <string name="value_checked" msgid="5234989698372864892">"diperiksa"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"tidak diperiksa"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"diklik"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Pendering bergetar."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Pendering senyap."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Pendering normal."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Layar aktif."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Layar mati."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Ponsel tidak dikunci."</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Menyeret widget."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Tampilan web."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Objek tak diketahui."</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Tombol penelusuran"</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Pilih tombol Mulai Lokasi."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Pilih tombol Lokasi Tujuan."</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"Tombol radio mengemudi."</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Tombol radio transportasi publik."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Tombol radio bersepeda."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Tombol radio berjalan."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Mengemudi, diperiksa."</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Transportasi publik, diperiksa."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Bersepeda, diperiksa."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Berjalan, diperiksa."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"bintang"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Jam penambahan."</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Menit penambahan."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Jam pengurangan."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Menit pengurangan."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Bulan tambahan."</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Hari penambahan."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Tahun penambahan."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Bulan pengurangan."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Hari pengurangan."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Tahun pengurangan."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Daftar putar."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Ubah acak."</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Ubah berulang."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Tombol putar ulang."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Tombol putar."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Tombol maju cepat"</string>
+    <string name="value_owner" msgid="2419158478547189476">"Pemilik"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Kirim perintah tetap ke TalkBack"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Mengizinkan aplikasi atau layanan untuk menggerakkan TalkBack melalui siaran tetap dan kemungkinan memperoleh informasi tentang status TalkBack untuk contoh pemberitahuan dalam tembolok."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Tanda tanya"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Spasi"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Koma"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Titik"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Tanda seru"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Buka kurung"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Tutup kurung"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Tanda petik"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Titik koma"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Titik Dua"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"acara"</item>
+    <item quantity="other" msgid="8275223643159991572">"acara"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Preferensi TalkBack Tersedia"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Klik di sini untuk mengunduh aplikasi Preferensi Aksesibilitas"</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"Data Mogol TalkBack Tersedia"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Klik di sini untuk meningkatkan TalkBack dengan mengirim data mogok."</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Ketika Bicara"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Volume pendering"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Status Layar"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Setelan TTS"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Ucapkan Nomor Penelepon"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Gunakan TTS Extended"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Sensor Kedekatan"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Sensor kedekatan mensenyapkan suara"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Sensor kedekatan tidak mengontrol suara"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Pengaya"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Kelola pengaya"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Copot pemasangan"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack Dinonaktifkan!"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"Saat ini TalkBack dinonaktifkan. Anda ingin membuka setelan aksesibilitas?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Galat"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Aksesibilitas tidak didukung pada perangkat ini."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"Laporan Mogol TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"Berikut adalah laporan mogok untuk TalkBack. Mengeklik tombol \"Kirim\" akan mengirimkan data ini ke pengembang TalkBack."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Peringatan"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Pengaya TalkBack ini mungkin dapat mengumpulkan semua teks yang Anda ketik, termasuk di antaranya data nomor kartu kredit data pribadi kecuali sandi. Pengaya ini juga dapat mencatat interaksi antarmuka pengguna. Ini berasal dari aplikasi <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Aktifkan pengaya ini?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Navigasi berdasarkan karakter."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Navigasi berdasarkan kata."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Navigasi dengan kalimat."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Navigasi berdasarkan heading."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Navigasi berdasarkan saudara kandung."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Navigasi berdasarkan dokumen."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Navigasi berdasarkan perilaku tampilan web bawaan."</string>
+</resources>

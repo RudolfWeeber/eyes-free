@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"Sms"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Ikke-sendt sms"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Ubesvaret opkald"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB tilsluttet"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"Slå lyd fra"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Chat"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Fejl"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Flere"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD-kort"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"SD-kort USB"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"Synkroniser"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"Ny e-mail"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Synkroniser"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Voicemail"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Afspiller"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Statusmeddelelse"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> kontrolleret"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> ikke kontrolleret"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Redigeringsfelt. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Søgefelt. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Underretning <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> erstattet med <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> tegn erstattet med <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> tegn"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Ringer <xliff:g id="PERCENT">%1$s</xliff:g> procent."</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"Trækker ikonet for <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"<xliff:g id="TITLE">%1$s</xliff:g> billedknap."</string>
+    <string name="template_button" msgid="5913853507836606140">"Knappen <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> billede."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> søg kontrol."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"Rullemenuen <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> minutter"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> timer"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, dagsvisning."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> til den <xliff:g id="TO_DATE">%2$s</xliff:g>, ugevisning."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, månedsvisning."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> ud af <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"adgangskode"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Glider åbnet"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Glidende tegnehåndtag"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Inputmetode"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Statuslinje"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Indstillinger."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"slettet"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Oversigt over meddelelser"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"prik"</string>
+    <string name="value_checked" msgid="5234989698372864892">"kontrolleret"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"ikke kontrolleret"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"klikket"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Ringervibrering."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Ringeren er lydløs."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Ringer er normal."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Skærmen er slået til."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Skærmen er slået fra."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Telefonen er låst op."</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Trækker widget."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Webvisning."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Ukendt objekt."</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Knappen Søg."</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Vælg knap for startplacering."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Vælg knap for destinationsplacering."</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"Alternativknap for bil."</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Alternativknap for offentlig transport."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Alternativknap for cykel."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Knappen Til fods."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Bilkørsel, kontrolleret."</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Offentlig transport, kontrolleret."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Cykel, kontrolleret."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Til fods, kontrolleret."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"stjernemarker"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Tilføj timer."</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Tilføj minutter."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Fjern timer."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Fjern minutter."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Tilføj måned."</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Tilføj dag."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Tilføj år."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Fjern måned."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Fjern dag."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Fjern år."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Afspilningsliste."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Slå Bland til/fra."</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Slå Gentag til/fra."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Knappen Tilbage."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Knappen Afspil."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Knappen Hurtigt frem."</string>
+    <string name="value_owner" msgid="2419158478547189476">"Ejer"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Send hensigtskommandoer til TalkBack"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Tillader et program eller en tjeneste at køre TalkBack via Intent Broadcasts og evt. få information om TalkBack-tilstanden for f.eks. cachede meddelelser."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Spørgsmålstegn"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Mellemrum"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Komma"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Punktum"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Udråbstegn"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Parentes start"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Parentes slut"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Anførselstegn"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Semikolon"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Kolon"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"begivenhed"</item>
+    <item quantity="other" msgid="8275223643159991572">"begivenheder"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBack-indstillinger tilg."</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Klik her for at downloade programmet Tilgængelighedspræferencer."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack-nedbrudsdata tilg."</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Klik for at forbedre TalkBack ved at sende nedbrudsdata."</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Hvornår skal du tale"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Lydstyrke for opkald"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Skærmstatus"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Indstillinger for TTS"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Oplæs opkalds-id"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Brug TTS Extended"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Nærhedssensor"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Nærhedssensor slukker for tale"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Nærhedssensor styrer ikke tale"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Plugins"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Administrer plugins"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Afinstaller"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack er deaktiveret!"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack er i øjeblikket deaktiveret. Vil du åbne tilgængelighedsindstillingerne?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Fejl"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Tilgængelighed understøttes ikke på denne enhed."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"Nedbrudsrapport for TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"Følgende er en nedbrudsrapport for TalkBack. Klik på knappen \"Send\" sender disse data til udviklerne af TalkBack."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Advarsel"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Dette TalkBack-plugin kan indsamle al indtastet tekst, bl.a. personlige data og kreditkortoplysninger undtagen adgangskoder. Det kan også registrere dine interaktioner. Det kommer fra programmet <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Vil du aktivere dette plugin?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Naviger efter karakter."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Naviger efter ord."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Naviger efter sætning."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Naviger efter overskrift."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Naviger efter bror eller søster."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Naviger efter dokument."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Naviger som standard efter webvisningsadfærd."</string>
+</resources>

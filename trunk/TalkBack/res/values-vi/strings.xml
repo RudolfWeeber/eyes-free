@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_service_description" msgid="983212841294665356">"Khi bật Talkback, thiết bị của bạn sẽ cung cấp phản hồi bằng giọng nói để trợ giúp người mù và người khiếm thị. Ví dụ: tính năng này mô tả mục bạn chạm, chọn và kích hoạt."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Tin nhắn văn bản"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Không có tin nhắn văn bản đã gửi nào"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"Cuộc gọi nhỡ"</string>
@@ -16,7 +17,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Đồng bộ hoá"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Thư thoại"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Đang phát"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"Thông báo trạng thái"</string>
     <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> đã kiểm tra"</string>
     <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> chưa được kiểm tra"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Hộp chỉnh sửa. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
@@ -24,12 +24,16 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Cảnh báo <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> được thay bằng <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"Ký tự <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> được thay bằng ký tự <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g>"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"Trình tạo nhạc chuông <xliff:g id="PERCENT">%1$s</xliff:g> %."</string>
+    <!-- String.format failed for translation -->
+    <!-- no translation found for template_ringer_volume (5136691769333649340) -->
+    <skip />
     <string name="template_dragging_icon" msgid="7633606891857792337">"Đang kéo biểu tượng <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_button" msgid="7981434777534909849">"Nút hình ảnh <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_button" msgid="5913853507836606140">"Nút <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_view" msgid="3085333029274972273">"Hình ảnh <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Hình ảnh <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"ảnh <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Kiểm soát tìm kiếm <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> phần trăm."</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Hiển thị mục từ <xliff:g id="FROM_INDEX">%d</xliff:g> tới <xliff:g id="TO_INDEX">%d</xliff:g> trong tổng số <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"Hiển thị mục từ <xliff:g id="FROM_INDEX">%d</xliff:g> trong tổng số <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Danh sách thả xuống <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> phút"</string>
     <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> giờ"</string>
@@ -37,24 +41,31 @@
     <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> tới <xliff:g id="TO_DATE">%2$s</xliff:g>, chế độ xem theo tuần."</string>
     <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, chế độ xem theo tháng."</string>
     <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> trong tổng số <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="template_announce_disabled_control_hover" msgid="8348046264288231066">"<xliff:g id="DISABLED_CONTROL_TEXT">%1$s</xliff:g>, đã bị vô hiệu"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"Các ký tự đã chọn <xliff:g id="FROM_INDEX">%1$s</xliff:g> tới <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_announce_clickable_children" msgid="2387604554284732025">"<xliff:g id="NUMBER_CLICKABLE_CHILDREN">%1$s</xliff:g>, các mục có thể nhấp"</string>
     <string name="value_password" msgid="52094746222829357">"mật khẩu"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Đã mở ngăn kéo dạng trượt"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Xử dụng ngăn kéo dạng trượt"</string>
     <string name="value_input_method_shown" msgid="2510296343794293380">"Phương thức nhập"</string>
     <string name="value_status_bar_opened" msgid="8045746361335399437">"Thanh trạng thái"</string>
-    <string name="value_options_menu_open" msgid="8668502811176292723">"Tuỳ chọn."</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Tùy chọn."</string>
     <string name="value_text_removed" msgid="2700105425865376595">"đã xoá"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"Tóm tắt thông báo"</string>
     <string name="value_password_character_typed" msgid="3384590085073731527">"dấu chấm"</string>
     <string name="value_checked" msgid="5234989698372864892">"đã kiểm tra"</string>
     <string name="value_not_checked" msgid="193134740901545340">"chưa chọn"</string>
+    <string name="value_disabled" msgid="65077823320194685">"đã tắt"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"có thể nhấp"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"có thể nhấp lâu"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"có thể cuộn"</string>
     <string name="value_clicked" msgid="8306469740150249879">"đã nhấp"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"Chuông rung."</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"Chuông im lặng."</string>
     <string name="value_ringer_normal" msgid="5319228013151793967">"Chuông bình thường."</string>
     <string name="value_screen_on" msgid="6000430443458639755">"Màn hình bật."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Màn hình tắt."</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"Điện thoại đã mở khoá."</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"Đã mở khóa thiết bị."</string>
     <string name="value_dragging_widget" msgid="2839615701303758943">"Tiện ích kéo."</string>
     <string name="value_web_view" msgid="8368045336469722566">"Chế độ xem web."</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"Đối tượng không xác định."</string>
@@ -87,8 +98,6 @@
     <string name="value_play_button" msgid="2701216749763299935">"Nút phát."</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Nút tua đi."</string>
     <string name="value_owner" msgid="2419158478547189476">"Chủ nhân"</string>
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Gửi lệnh có mục đích đến TalkBack"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Cho phép ứng dụng hoặc dịch vụ hướng TalkBack qua truyền phát có mục đích hoặc có thể lấy thông tin về trạng thái TlakBack, ví dụ: các thông báo đã được lưu trong bộ nhớ cache."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Dấu chấm hỏi"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Dấu cách"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Dấu phẩy"</string>
@@ -103,30 +112,30 @@
     <item quantity="one" msgid="8890979114667202113">"sự kiện"</item>
     <item quantity="other" msgid="8275223643159991572">"sự kiện"</item>
   </plurals>
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Sẵn có tùy chọn TalkBack"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Nhấp vào đây để tải xuống ứng dụng Tùy chọn khả năng truy cập."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Sẵn có dữ liệu sự cố TalkBack"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Nhấp vào đây để cải thiện TalkBack bằng cách gửi dữ liệu sự cố."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Thời điểm nói"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Â.lượng trình tạo nh.chuông"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Trạng thái màn hình"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Cài đặt TTS"</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"Nói ID người gọi"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Sử dụng TTS mở rộng"</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"Cảm biến độ gần"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"Âm lượng chuông"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Nói khi màn hình tắt"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"Nói ID người gọi"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"Sử dụng cảm biến tiệm cận"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Cảm biến độ gần tắt âm lời thoại"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Cảm biến độ gần không kiểm soát lời thoại"</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Trình cắm"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Quản lý trình cắm"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Gỡ cài đặt"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack bị vô hiệu hóa!"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack hiện bị vô hiệu hóa. Bạn có muốn mở cài đặt khả năng truy cập không?"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Lỗi"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Khả năng truy cập không được hỗ trợ trên điện thoại này."</string>
+    <string name="title_pref_bluetooth" msgid="3475728515720218108">"Thiết bị ra Bluetooth"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="655029542459409862">"Nói qua Bluetooth khi khả dụng"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="8270563973653936052">"Không bao giờ nói qua tai nghe Bluetooth"</string>
+    <string name="title_pref_category_feedback_settings" msgid="5588871484662795651">"Cài đặt phản hồi"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"Phản hồi bằng rung"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Gán mẫu rung"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Khám phá bằng cách chạm"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Khám phá các mục có thể nhấp"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"Phản hồi bằng âm thanh"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Âm lượng âm thanh"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Gán âm thanh"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Khám phá bằng cách chạm"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Khám phá các mục có thể nhấp"</string>
     <string name="subject_crash_report_email" msgid="3043388136219501183">"Báo cáo sự cố TalkBack"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"Dưới đây là báo cáo sự cố dành cho TalkBack. Nhấp vào nút \"Gửi\" sẽ truyền dữ liệu này cho các nhà phát triển TalkBack."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Cảnh báo"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Trình cắm TalkBack này có thể thu thập tất cả văn bản bạn nhập, bao gồm dữ liệu cá nhân, số thẻ tín dụng ngoại trừ mật khẩu. Dịch vụ cũng có thể ghi các tương tác giao diện người dùng của bạn. Dịch vụ xuất phát từ ứng dụng <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Bật trình cắm này?"</string>
     <string name="axis_character" msgid="5059604520074645703">"Điều hướng theo ký tự."</string>
     <string name="axis_word" msgid="7745798763195184060">"Điều hướng theo từ."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Điều hướng theo câu."</string>

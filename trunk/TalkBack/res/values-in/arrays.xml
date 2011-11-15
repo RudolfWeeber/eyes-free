@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Tidak ada suara dalam Mode Senyap"</item>
     <item msgid="4945285159234224758">"Tidak ada suara dalam Mode Senyap dan Getar"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Izinkan suara ketika layar mati"</item>
-    <item msgid="3411424877209877052">"Tidak ada suara ketika layar mati"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Cocokkan volume ucapan"</item>
+    <item msgid="3474415020494727681">"75% dari volume ucapan"</item>
+    <item msgid="3630774810523140800">"50% dari volume ucapan"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Tombol"</item>
@@ -61,7 +62,7 @@
     <item msgid="1434580592616799847">"Kotak teks"</item>
     <item msgid="2857905070846962311">"Pewaktu"</item>
     <item msgid="5359803593845515833">"Bilah alat"</item>
-    <item msgid="5431429272751911412">"Tips alat"</item>
+    <item msgid="5431429272751911412">"Kiat alat"</item>
     <item msgid="6370853370296882006">"Item pohon"</item>
   </string-array>
   <string-array name="html_tag_to_desc_values">

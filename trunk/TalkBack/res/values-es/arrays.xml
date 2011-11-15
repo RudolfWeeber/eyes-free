@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Sin conversación en modo silencio"</item>
     <item msgid="4945285159234224758">"Sin conversación en modo vibración o silencio"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Permitir conversación con pantalla desactivada"</item>
-    <item msgid="3411424877209877052">"Sin conversación si la pantalla está desactivada"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Usar volumen de voz"</item>
+    <item msgid="3474415020494727681">"75% del volumen de voz"</item>
+    <item msgid="3630774810523140800">"50% del volumen de voz"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Botón"</item>

@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Negalima kalbėti tyliu režimu"</item>
     <item msgid="4945285159234224758">"Negalima kalbėti vibravimo ir tyliu režimu"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Leisti kalbėti, kai ekranas išjungtas"</item>
-    <item msgid="3411424877209877052">"Negalima kalbėti, kai ekranas išjungtas"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Atitikti kalbos garsumą"</item>
+    <item msgid="3474415020494727681">"75 proc. kalbos garsumo"</item>
+    <item msgid="3630774810523140800">"50 proc. kalbos garsumo"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Mygtukas"</item>

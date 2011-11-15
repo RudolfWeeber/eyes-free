@@ -2,13 +2,14 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"Να ακούγεται σε κάθε ένταση ειδοποιήσεων ήχου"</item>
+    <item msgid="5487065349227839121">"Να ακούγεται σε κάθε ένταση ήχου ειδοποίησης"</item>
     <item msgid="7158875206945163928">"Όχι ομιλία στην αθόρυβη λειτουργία"</item>
     <item msgid="4945285159234224758">"Να μην ακούγεται σε Λειτ. δόνησης και Αθόρυβη"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Να επιτρέπεται η ομιλία όταν η οθόνη είναι σβηστή"</item>
-    <item msgid="3411424877209877052">"Όχι ομιλία όταν η οθόνη είναι σβηστή"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Αντιστοίχιση έντασης ομιλίας"</item>
+    <item msgid="3474415020494727681">"75% της έντασης ομιλίας"</item>
+    <item msgid="3630774810523140800">"50% της έντασης ομιλίας"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Κουμπί"</item>

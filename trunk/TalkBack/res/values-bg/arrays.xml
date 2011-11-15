@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Без говор в тих режим"</item>
     <item msgid="4945285159234224758">"Без говор при вибриране и в тих режим"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Разрешаване на говор, когато екранът е изключен"</item>
-    <item msgid="3411424877209877052">"Без говор, когато екранът е изключен"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"В съответствие със силата на звука на говора"</item>
+    <item msgid="3474415020494727681">"75% от силата на звука на говора"</item>
+    <item msgid="3630774810523140800">"50% от силата на звука на говора"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Бутон"</item>

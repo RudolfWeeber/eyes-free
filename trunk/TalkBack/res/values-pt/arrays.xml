@@ -6,9 +6,10 @@
     <item msgid="7158875206945163928">"Sem som no modo silencioso"</item>
     <item msgid="4945285159234224758">"Sem som nos modos silencioso e vibrar"</item>
   </string-array>
-  <string-array name="pref_speak_screenoff_entries">
-    <item msgid="7614504368332803511">"Permitir som quando a tela estiver desativada"</item>
-    <item msgid="3411424877209877052">"Sem som quando a tela estiver desativada"</item>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Corresponder ao volume da fala"</item>
+    <item msgid="3474415020494727681">"75% do volume da voz"</item>
+    <item msgid="3630774810523140800">"50% do volume da voz"</item>
   </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Botão"</item>

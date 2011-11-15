@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.android.marvin.talkback"
+    android:sharedUserId="com.google.android.marvin.feedback"
+    android:versionCode="24"
+    android:versionName="2.7.8">
+
+    <uses-sdk android:minSdkVersion="7" />
+
+    <!-- Permissions from TalkBack keyboard's AndroidManifest.xml -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST" />
+    <uses-permission android:name="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK" />
+
+    <!-- Allows third party applications to send Intent broadcast commands to LatinIME. -->
+    <permission android:name="com.googlecode.eyesfree.inputmethod.latin.PERMISSION_REQUEST"
+            android:protectionLevel="dangerous"
+            android:label="@string/permlab_sendIntentBroadcastCommandsToLatinIME"
+            android:description="@string/permdesc_sendIntentBroadcastCommandsToLatinIME" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Google TV Market compatibility -->
+    <uses-feature android:name="android.hardware.faketouch" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+
+    <!-- Allows third party applications to send Intent broadcast commands to TalkBack. -->
+    <permission android:name="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK"
+            android:protectionLevel="dangerous"
+            android:label="@string/permlab_sendIntentBroadcastCommandsToTalkBack"
+            android:description="@string/permdesc_sendIntentBroadcastCommandsToTalkBack" />
+
+    <application android:label="@string/talkback_setup_title" android:icon="@drawable/icon" android:process="com.google.android.marvin.feedback">
+
+        <receiver android:name=".TalkBackService$CommandInterfaceBroadcastReceiver"
+                android:permission="com.google.android.marvin.talkback.PERMISSION_SEND_INTENT_BROADCAST_COMMANDS_TO_TALKBACK">
+            <intent-filter>
+                <action android:name="com.google.android.marvin.talkback.ACTION_ANNOUNCE_STATUS_SUMMARY_COMMAND"/>
+                <action android:name="com.google.android.marvin.commands.TALKBACK_USER_EVENT_COMMAND"/>
+                <action android:name="com.google.android.marvin.talkback.ACTION_RESET_TALKBACK_COMMAND"/>
+                <!-- TODO(caseyburkhardt): Remove the following action when we decide to no longer support intent broadcasts for querying the current state of TalkBack. -->
+                <action android:name="com.google.android.marvin.talkback.ACTION_QUERY_TALKBACK_ENABLED_COMMAND"/>
+            </intent-filter>
+        </receiver>
+        
+        <receiver android:name="com.google.android.marvin.commands.UtilityCommandsBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.google.android.marvin.commands.UTILITY_USER_EVENT_COMMAND"/>
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".TalkBackService">
+             <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <category android:name="android.accessibilityservice.category.FEEDBACK_SPOKEN" />
+                <action android:name="com.google.android.marvin.talkback.ACTION_TALKBACK_AS_NOTIFICATION_STATE" />
+            </intent-filter>
+        </service>
+
+        <activity android:name=".TalkBackPreferencesActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.accessibilityservice.SERVICE_SETTINGS" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name="com.google.android.marvin.commands.preferences.CommandsPreferenceActivity"
+                android:label="@string/preferences_label">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.accessibilityservice.SERVICE_SETTINGS" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".PluginPreferencesActivity" />
+
+        <!-- Begin activities for Talking Keyboard -->
+
+        <service android:name="com.googlecode.eyesfree.inputmethod.latin.LatinIME"
+                android:label="@string/english_ime_name"
+                android:permission="android.permission.BIND_INPUT_METHOD"
+                android:icon="@drawable/ime_icon">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data android:name="android.view.im" android:resource="@xml/method" />
+        </service>
+
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.LatinIMESettings"
+                 android:label="@string/english_ime_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.LatinIMEDebugSettings"
+                 android:label="@string/english_ime_debug_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.InputLanguageSelection"
+                android:label="@string/language_selection_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="com.googlecode.eyesfree.inputmethod.latin.INPUT_LANGUAGE_SELECTION"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinTutorialDialog"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.tutorial.LatinIMETutorial"
+                android:label="@string/tutorial_name"
+                android:windowSoftInputMode="adjustResize|stateAlwaysVisible"
+                android:configChanges="orientation|keyboard|keyboardHidden"
+                android:theme="@android:style/Theme.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.googlecode.eyesfree.inputmethod.latin.tutorial.LAUNCH_TUTORIAL"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <receiver android:name="com.googlecode.eyesfree.inputmethod.latin.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.BootActivity"
+                android:theme="@android:style/Theme.Dialog"
+                android:label="@string/wizard_name"
+                android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- End activities for Talking Keyboard -->
+
+        <provider android:name=".StatusProvider"
+                android:authorities="com.google.android.marvin.talkback.providers.StatusProvider"  />
+                
+        <provider android:name="com.google.android.marvin.commands.providers.CommandsContentProvider"
+            android:authorities="com.google.android.marvin.commands.providers.CommandsContentProvider"/>
+    </application>
+
+</manifest>

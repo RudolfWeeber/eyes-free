@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"Text message"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Hindi nagpadala ng text message"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Hindi nasagot na tawag"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"Nakakonekta ang USB"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"I-mute"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Makipag-chat"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Error"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Higit pa"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD card"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"USB ng SD card"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"I-sync"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"Bagong email"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"I-sync"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Voicemail"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Nagpe-play"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Notification sa katayuan"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> nasuri"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"Hindi nasuri ang <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Kahon sa pag-edit. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Box para sa paghahanap. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Alerto <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"Pinalitan ang <xliff:g id="OLD_TEXT">%1$s</xliff:g> ng <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"Pinalitan ang <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> na character ng <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> na character"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Ringer <xliff:g id="PERCENT">%1$s</xliff:g> na porsyento."</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"Dina-drag ang icon na <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"Pindutan na larawan ng <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_button" msgid="5913853507836606140">"<xliff:g id="TITLE">%1$s</xliff:g> na pindutan."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> larawan."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"Kontrol sa paghahanap ng <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"Drop down list ng <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> (na) minuto"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> (na) oras"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, view ng araw."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> hanggang <xliff:g id="TO_DATE">%2$s</xliff:g>, view ng linggo."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, view ng buwan."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> ng <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"password"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"bukas ang sliding drawer"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Handle ng sliding drawer"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Pamamaraan ng input"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Status bar"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Mga Pagpipilian."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"tinanggal"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Buod ng notification"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"dot"</string>
+    <string name="value_checked" msgid="5234989698372864892">"nasuri"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"hindi sinuri"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"na-click"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Naka-vibrate ang ringer."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Naka-silent ang ringer."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Normal ang ringer."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Naka-on ang screen."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Naka-off ang screen."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Naka-unlock ang telepono."</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Dina-drag ang widget."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Pagtingin na web."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Di-kilalang bagay."</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Pindutan na paghahanap."</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Piliin ang pindutan na Lokasyon ng Pagsisimula."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Pumili ng pindutan na Lokasyon ng Destinasyon."</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"Radio button sa pagmamaneho."</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Radio button ng pampublikong sasakyan."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Radio button sa pagbibisikleta."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Radio button sa paglalakad."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Pagmamaneho, nasuri"</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Pampublikong sasakyan, nasuri."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Pagbibisikleta, nasuri."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Paglalakad, nasuri."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"bituin"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Mga oras ng pagdaragdag"</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Mga minuto ng pagdaragdag."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Mga oras ng pagbawas."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Mga minuto ng pagbawas."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Dagdag na buwan."</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Araw ng pagdaragdag."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Taon ng pagdaragdag."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Buwan ng pagbawas."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Araw ng pagbawas."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Taon ng pagbawas."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Playlist."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"I-toggle ang shuffle."</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Ulitin ang pag-toggle."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Pindutan na i-rewind."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Pindutan na i-play."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Pindutan na fast forward."</string>
+    <string name="value_owner" msgid="2419158478547189476">"May-ari"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Magpadala ng mga makabuluhang command sa TalkBack"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Pinapayagan ang application o serbisyo na isulong ang TalkBack sa pamamagitan ng mga makabuluhang pag-broadcast at potensyal na makuha ang impormasyon tungkol sa katayuan ng TalkBack, halimbawa ang mga notification na naka-cache."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Tandang pananong"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Puwang"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Kuwit"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Dot"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Tandang padamdam"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Open paren"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Close paren"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Dobleng quote"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Tuldukuwit"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Tutuldok"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"kaganapan"</item>
+    <item quantity="other" msgid="8275223643159991572">"mga kaganapan"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBack Preferences Available"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Mag-click at i-download ang application na Accessibility Preferences."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack Crash Data Available"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Mag-click upang pagbutihin ang TalkBack sa pagpapadala ng crash data."</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Kailan Magsasalita"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Volume ng Ringer"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Katayuan ng Screen"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Mga Setting ng TTS"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Sabihin ang Caller ID"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Gamitin ang Pinalawak na TTS"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Sensor ng Pagiging Malapit"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Pinapatahimik ng sensor ng pagiging malapit ang pagsasalita"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Hindi kinokontrol ng sensor ng pagiging malapit ang pagsasalita"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Mga plug-in"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Pamahalaan ang plug-ins"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"I-uninstall"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"Hindi Pinagana ang TalkBack!"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"Kasalukuyang hindi pinagana ang TalkBack. Gusto mo bang buksan ang mga setting ng accessibility?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Error"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Hindi suportado sa device na ito ang pagiging naa-access."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"Ulat ng Pag-crash ng TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"Ang sumusunod ay ulat ng pag-crash para sa TalkBack. Ipapadala ng pag-click sa pindutan na \"Ipadala\" ang data na ito sa mga nag-develop ng TalkBack."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Babala"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Maaaring kolektahin ng TalkBack plug-in na ito ang lahat ng tekstong tina-type mo, kabilang ang personal na mga numero ng data credit card hindi kabilang ang mga password. Maaari rin nitong i-log ang iyong mga pakikipag-ugnayan ng user interface. Nagmumula ito mula sa application na <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Paganahin ang plug-in na ito?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Mag-navigate ayon sa character."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Mag-navigate ayon sa salita."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Mag-navigate ayon sa pangungusap."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Mag-navigate ayon sa heading."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Mag-navigate ayon sa kapatid."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Mag-navigate ayon sa dokumento."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Mag-navigate ayon sa default na pag-uugali ng pag-view sa web."</string>
+</resources>

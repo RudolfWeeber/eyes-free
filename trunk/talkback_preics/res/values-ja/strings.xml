@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"テキストメッセージ"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"テキストメッセージを送信できませんでした"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"不在着信"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB接続済み"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"ミュート"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"チャット"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"エラー"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"その他"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SDカード"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"SDカードUSB"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"同期"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"新着メール"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"同期"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"ボイスメール"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"再生中"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"ステータス通知"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g>オン"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g>オフ"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"編集ボックス。<xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"検索ボックス。<xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"アラート<xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g>を<xliff:g id="NEW_TEXT">%2$s</xliff:g>に変更しました。"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g>文字を<xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g>文字に変更しました"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"着信音量<xliff:g id="PERCENT">%1$s</xliff:g>パーセント。"</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"<xliff:g id="TITLE">%1$s</xliff:g>アイコンをドラッグしています"</string>
+    <string name="template_image_button" msgid="7981434777534909849">"<xliff:g id="TITLE">%1$s</xliff:g>画像ボタン。"</string>
+    <string name="template_button" msgid="5913853507836606140">"<xliff:g id="TITLE">%1$s</xliff:g>ボタン。"</string>
+    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g>画像。"</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g>スライダー。"</string>
+    <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g>プルダウンリスト。"</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g>分"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g>時間"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>の日ビューです。"</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g>から<xliff:g id="TO_DATE">%2$s</xliff:g>の週ビューです。"</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>の月ビューです。"</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_COUNT">%2$s</xliff:g>件中<xliff:g id="ITEM_INDEX">%1$s</xliff:g>件"</string>
+    <string name="value_password" msgid="52094746222829357">"パスワード"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"引き出しを開きました"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"引き出しの取っ手"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"入力方法"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"ステータスバー"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"オプション"</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"削除済み"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"通知の概要"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"ドット"</string>
+    <string name="value_checked" msgid="5234989698372864892">"オン"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"オフ"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"クリック"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"バイブレーション着信。"</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"マナーモード着信。"</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"通常着信。"</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"画面ON。"</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"画面OFF。"</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"携帯のロックが解除されました。"</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"ウィジェットをドラッグしています。"</string>
+    <string name="value_web_view" msgid="8368045336469722566">"ウェブ表示。"</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"不明なオブジェクト"</string>
+    <string name="value_market_search" msgid="5962672691633469998">"検索ボタン。"</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"出発地選択ボタン。"</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"目的地選択ボタン。"</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"車ラジオボタン。"</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"公共交通機関ラジオボタン。"</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"自転車ラジオボタン。"</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"徒歩ラジオボタン。"</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"車、選択"</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"公共交通機関、選択"</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"自転車、選択"</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"徒歩、選択"</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"星印"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"1時間進める。"</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"1分進める。"</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"1時間戻す。"</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"1分戻す。"</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"1か月進める。"</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"1日進める。"</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"1年進める。"</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"1か月戻す。"</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"1日戻す。"</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"1年戻す。"</string>
+    <string name="value_playlist" msgid="169034635850956540">"プレイリスト。"</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"シャッフルの切り替え。"</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"繰り返しの切り替え。"</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"巻き戻しボタン。"</string>
+    <string name="value_play_button" msgid="2701216749763299935">"再生ボタン。"</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"早送りボタン。"</string>
+    <string name="value_owner" msgid="2419158478547189476">"所有者"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"intentコマンドをTalkBackに送信する"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"intentブロードキャストでTalkBackを使用し、キャッシュ済みのお知らせなどのTalkBackの状態を取得することをアプリケーションやサービスに許可します。"</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"疑問符"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"スペース"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"カンマ"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"ドット"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"感嘆符"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"かっこ開き"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"かっこ閉じ"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"二重引用符"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"セミコロン"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"コロン"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"件の予定"</item>
+    <item quantity="other" msgid="8275223643159991572">"件の予定"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"TalkBackを設定できます"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"ユーザー補助設定アプリをダウンロードするにはここをタップします。"</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBackクラッシュデータあり"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"クラッシュデータを送信してTalkBackを向上するにはここをタップします。"</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"音声入力のタイミング"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"着信音量"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"画面の状態"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"テキスト読み上げの設定"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"発信者番号を音声入力"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"TTS拡張を使用"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"近接センサー"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"近接センサーにより音声を停止します"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"近接センサーは音声を制御しません"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"プラグイン"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"プラグインの管理"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"アンインストール"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBackが無効です"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"現在TalkBackは無効です。ユーザー補助設定を開きますか？"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"エラー"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"このデバイスではユーザー補助がサポートされていません。"</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBackクラッシュレポート"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"これはTalkBackのクラッシュレポートです。[送信]ボタンを押すとこのデータをTalkBack開発者に送信します。"\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"警告"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"このTalkBackプラグインを選択すると、入力する全テキストの収集をアプリケーション（<xliff:g id="PLUGIN_NAME">%1$s</xliff:g>）に許可することになります。これにはクレジットカード番号などの個人情報（パスワードを除く）も含まれます。また、ユーザーインターフェースでのやり取りも記録されます。このプラグインを有効にしますか？"</string>
+    <string name="axis_character" msgid="5059604520074645703">"文字ごとに移動します。"</string>
+    <string name="axis_word" msgid="7745798763195184060">"語句ごとに移動します。"</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"文ごとに移動します。"</string>
+    <string name="axis_heading" msgid="8928386537164255063">"見出しごとに移動します。"</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"兄弟ノードごとに移動します。"</string>
+    <string name="axis_document" msgid="1581988340856497809">"文書ごとに移動します。"</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"デフォルトのウェブ表示動作ごとに移動します。"</string>
+</resources>

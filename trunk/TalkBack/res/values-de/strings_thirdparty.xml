@@ -24,8 +24,8 @@
     <string name="value_facebook_home" msgid="4723428329772455197">"Schaltfläche für Facebook-Startseite"</string>
     <string name="value_facebook_camera" msgid="5583147343352954089">"Schaltfläche für Kamera"</string>
     <string name="value_facebook_compose" msgid="2373734201043407698">"Schaltfläche zum Schreiben"</string>
-    <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"Schaltfläche für \"Daumen runter\""</string>
-    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"Schaltfläche für \"Daumen hoch\""</string>
+    <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"Schaltfläche für \"Mag ich nicht\""</string>
+    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"Schaltfläche für \"Mag ich\""</string>
     <string name="value_stitcher_star" msgid="4889938499496305463">"Schaltfläche zum Markieren"</string>
     <string name="value_stitcher_play" msgid="8953331682349687236">"Schaltfläche für Pause"</string>
     <string name="value_stitcher_next" msgid="2945481957178798103">"Schaltfläche für \"Weiter\""</string>

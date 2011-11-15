@@ -33,28 +33,40 @@
     <item translatable="false">1</item>
     <item translatable="false">2</item>
   </string-array>
-
-  <string-array name="pref_speak_screenoff_entries">
-    <!--
-      Source: The description of one possible choice of an item in the
-      preferences screen, in the category "when to speak". Description:
-      Indicates that this app should speak out loud even when the screen is off.
-      [CHAR LIMIT=50]
-    -->
-    <item>Allow speech when screen is off</item>
+  
+  <string-array name="pref_soundback_volume_entries">
 
     <!--
       Source: The description of one possible choice of an item in the
-      preferences screen, in the category "when to speak". Description:
-      Indicates that this app should not speak out loud when the screen is off.
+      preferences screen, in the category "sound feedback volume".
+      Description: Indicates that sound feedback volume should match
+      speech volume. [CHAR LIMIT=50]
+    -->
+    <item>Match speech volume</item>
+
+    <!--
+      Source: The description of one possible choice of an item in the
+      preferences screen, in the category "sound feedback volume".
+      Description: Indicates that sound feedback volume should be
+      75% of speech volume.
       [CHAR LIMIT=50]
     -->
-    <item>No speech when screen is off</item>
+    <item>75% of speech volume</item>
+
+    <!--
+      Source: The description of one possible choice of an item in the
+      preferences screen, in the category "sound feedback volume".
+      Description: Indicates that sound feedback volume should be
+      50% of speech volume.
+      [CHAR LIMIT=50]
+    -->
+    <item>50% of speech volume</item>
   </string-array>
 
-  <string-array translatable="false" name="pref_speak_screenoff_values">
-    <item translatable="false">0</item>
-    <item translatable="false">1</item>
+  <string-array translatable="false" name="pref_soundback_volume_values">
+    <item translatable="false">100</item>
+    <item translatable="false">75</item>
+    <item translatable="false">50</item>
   </string-array>
 
   <string-array translatable="false" name="html_input_to_desc_keys">

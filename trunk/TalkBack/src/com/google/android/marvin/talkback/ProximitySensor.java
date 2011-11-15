@@ -27,51 +27,86 @@ import android.hardware.SensorManager;
  * 
  * @author clchen@google.com (Charles L. Chen)
  */
-
-public class ProximitySensor {
-
-    /**
-     * Callback for when the proximity sensor detects a change
-     */
-    public interface ProximityChangeListener {
-        public void onProximityChanged(float proximity);
-    }
-    
-    /**
-     * State where the proximity sensor is inactive and uninitialized
-     */
-    public static final int STATE_STOPPED = 0;
-    
-    /**
-     * State where the proximity sensor is initialized but not detecting
-     */
-    public static final int STATE_STANDBY = 1;
-    
-    /**
-     * State where the proximity sensor is active and detecting
-     */
-    public static final int STATE_RUNNING = 2;
-
-    private SensorManager mSensorManager;
-
-    private Sensor mSensor;
-
-    private float mFarValue;
-    
-    private boolean mIgnoreCallbackOnRegistration;
-    
-    private boolean mIgnoreNextCallback;
-    
-    private int mCurrentState = STATE_STOPPED;
+class ProximitySensor {
+    private final SensorManager mSensorManager;
+    private final Sensor mSensor;
+    private final boolean mIgnoreCallbackOnRegistration;
+    private final float mFarValue;
 
     private ProximityChangeListener mCallback;
 
+    private boolean mIgnoreNextCallback;
+    private boolean mActive;
     private boolean mClose;
 
-    SensorEventListener listener = new SensorEventListener() {
+    /**
+     * Constructor for ProximitySensor
+     * 
+     * @param context The parent context.
+     * @param ignoreCallbackOnRegistration Flag indicating whether or not to
+     *            drop the first callback event after registering the listener.
+     */
+    public ProximitySensor(Context context, boolean ignoreCallbackOnRegistration) {
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        mIgnoreCallbackOnRegistration = ignoreCallbackOnRegistration;
+
+        if (mSensor != null) {
+            mFarValue = mSensor.getMaximumRange();
+        } else {
+            mFarValue = 0;
+        }
+    }
+
+    public void setProximityChangeListener(ProximityChangeListener listener) {
+        mCallback = listener;
+    }
+
+    /**
+     * Checks if something is close to the proximity sensor
+     * 
+     * @return {@code true} if there is something close to the proximity sensor
+     */
+    public boolean isClose() {
+        return mClose;
+    }
+
+    /**
+     * @return the current state of the proximity sensor
+     */
+    public boolean isActive() {
+        return mActive;
+    }
+
+    /**
+     * Stops listening for sensor events.
+     */
+    public void stop() {
+        if (mSensor != null) {
+            mSensorManager.unregisterListener(mSensorEventListener);
+            mActive = false;
+        }
+    }
+
+    /**
+     * Starts listening for sensor events.
+     */
+    public void start() {
+        if (mSensor != null) {
+            mSensorManager.registerListener(mSensorEventListener, mSensor,
+                    SensorManager.SENSOR_DELAY_UI);
+            mActive = true;
+
+            if (mIgnoreCallbackOnRegistration) {
+                mIgnoreNextCallback = true;
+            }
+        }
+    }
+
+    private final SensorEventListener mSensorEventListener = new SensorEventListener() {
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Ignoring this for now
+            // Do nothing.
         }
 
         @Override
@@ -82,87 +117,18 @@ public class ProximitySensor {
             }
             if (event.values[0] < mFarValue) {
                 mClose = true;
-                mCallback.onProximityChanged(0);
+                mCallback.onProximityChanged(mClose);
             } else {
                 mClose = false;
-                mCallback.onProximityChanged(1);
+                mCallback.onProximityChanged(mClose);
             }
         }
     };
 
     /**
-     * Constructor for ProximitySensor
-     *
-     * @param ctx The Context of the app using the proximity sensor
-     * @param ignoreCallbackOnRegistration Flag indicating whether or not to
-     *            drop the first callback event after registering the listener.
-     * @param proximityChangeListener Callback that will be invoked when a
-     *            change is detected.
+     * Callback for when the proximity sensor detects a change
      */
-    public ProximitySensor(Context ctx, boolean ignoreCallbackOnRegistration,
-            ProximityChangeListener proximityChangeListener) {
-        mCallback = proximityChangeListener;
-        mIgnoreCallbackOnRegistration = ignoreCallbackOnRegistration;
-        mClose = false;
-        mSensorManager = (SensorManager) ctx.getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        if (mSensor != null) {
-            mFarValue = mSensor.getMaximumRange();
-            mCurrentState = STATE_STANDBY;
-        }
-    }
-
-    /**
-     * Checks if something is close to the proximity sensor
-     *
-     * @return True if there is something close to the proximity sensor
-     */
-    public boolean isClose() {
-        return mClose;
-    }
-    
-    /**
-     * @return the current state of the proximity sensor
-     */
-    public int getState() {
-        return mCurrentState;
-    }
-                          
-    /**
-     * Shuts down the sensor, but keeps the instance around for easy resume
-     */
-    public void standby() {
-        if (mCurrentState == STATE_RUNNING) {
-            if (mSensor != null) {
-                mSensorManager.unregisterListener(listener);
-                mCurrentState = STATE_STANDBY;
-            }
-        }
-    }
-
-    /**
-     * Re-registers the listener on the sensor, resuming from standby state.
-     */
-    public void resume() {
-        if (mCurrentState == STATE_STANDBY) {
-            if (mSensor != null && mSensor != null) {
-                mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_UI);
-                mCurrentState = STATE_RUNNING;
-                if (mIgnoreCallbackOnRegistration) {
-                    mIgnoreNextCallback = true;
-                }
-            }
-        }
-    }
-
-    /**
-     * The app using the ProximitySensor must shut it down when it is done using it.
-     */
-    public void shutdown() {
-        if (mSensor != null) {
-            mSensorManager.unregisterListener(listener);
-            mSensor = null;
-            mCurrentState = STATE_STOPPED;
-        }
+    public interface ProximityChangeListener {
+        public void onProximityChanged(boolean close);
     }
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_service_description" msgid="983212841294665356">"Όταν το Talkback είναι ενεργοποιημένο, η συσκευή σάς παρέχει φωνητικές οδηγίες για χρήστες με απώλεια όρασης ή με περιορισμένη όραση. Για παράδειγμα, περιγράφει αυτό που αγγίζετε, επιλέγετε και ενεργοποιείτε."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Μήνυμα κειμένου"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Μήνυμα κειμένου που δεν εστάλη"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"Αναπάντητη κλήση"</string>
@@ -16,7 +17,6 @@
     <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Συγχρονισμός"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Αυτόματος τηλεφωνητής"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Αναπαραγωγή"</string>
-    <string name="notification_type_status_notification" msgid="9030505284302678172">"Ειδοποίηση κατάστασης"</string>
     <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> επιλέχθηκε"</string>
     <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> δεν επιλέχθηκε"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Πλαίσιο επεξεργασίας. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
@@ -24,12 +24,14 @@
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Προειδοποίηση <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> αντικαταστάθηκε από <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"Αντικαταστάθηκαν <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> χαρακτήρες με <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> χαρακτήρες"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"Ειδοποίηση <xliff:g id="PERCENT">%1$s</xliff:g> τοις εκατό."</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Ήχος ειδοποίησης <xliff:g id="PERCENT">%d</xliff:g> τοις εκατό."</string>
     <string name="template_dragging_icon" msgid="7633606891857792337">"Μεταφορά του εικονιδίου <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_button" msgid="7981434777534909849">"Κουμπί εικόνας <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_button" msgid="5913853507836606140">"Κουμπί <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> εικόνα."</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Εικόνα <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"εικόνα <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Στοιχείο ελέγχου αναζήτησης <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> τοις εκατό."</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Εμφάνιση στοιχείων <xliff:g id="FROM_INDEX">%d</xliff:g> έως <xliff:g id="TO_INDEX">%d</xliff:g> από <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"Εμφάνιση στοιχείου <xliff:g id="FROM_INDEX">%d</xliff:g> από <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Αναπτυσσόμενη λίστα <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> λεπτά"</string>
     <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> ώρες"</string>
@@ -37,6 +39,9 @@
     <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> έως <xliff:g id="TO_DATE">%2$s</xliff:g>, εβδομαδιαία προβολή."</string>
     <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, μηνιαία προβολή."</string>
     <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> από <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="template_announce_disabled_control_hover" msgid="8348046264288231066">"<xliff:g id="DISABLED_CONTROL_TEXT">%1$s</xliff:g> , απενεργοποιημένο"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"Επιλεγμένοι χαρακτήρες <xliff:g id="FROM_INDEX">%1$s</xliff:g> έως <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_announce_clickable_children" msgid="2387604554284732025">"<xliff:g id="NUMBER_CLICKABLE_CHILDREN">%1$s</xliff:g>, στοιχεία με δυνατότητα κλικ"</string>
     <string name="value_password" msgid="52094746222829357">"κωδικός πρόσβασης"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Το συρτάρι άνοιξε"</string>
     <string name="value_handle_view" msgid="4485214410029604290">"Λαβή συρταριού"</string>
@@ -48,13 +53,17 @@
     <string name="value_password_character_typed" msgid="3384590085073731527">"κουκίδα"</string>
     <string name="value_checked" msgid="5234989698372864892">"επιλέχθηκε"</string>
     <string name="value_not_checked" msgid="193134740901545340">"δεν επιλέχθηκε"</string>
+    <string name="value_disabled" msgid="65077823320194685">"απενεργοποίηση"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"με δυνατότητα κλικ"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"με δυνατότητα παρατεταμένου κλικ"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"δυνατότητα κύλισης"</string>
     <string name="value_clicked" msgid="8306469740150249879">"έγινε κλικ"</string>
-    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Ειδοποίηση ήχου στη δόνηση."</string>
-    <string name="value_ringer_silent" msgid="672965424730167385">"Ειδοποίηση ήχου στο αθόρυβο."</string>
-    <string name="value_ringer_normal" msgid="5319228013151793967">"Ειδοποίηση ήχου στο κανονικό."</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Ήχος ειδοποίησης: Δόνηση"</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Ήχος ειδοποίησης: Αθόρυβο"</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Ήχος ειδοποίησης: Κανονικό"</string>
     <string name="value_screen_on" msgid="6000430443458639755">"Οθόνη ενεργοποιημένη."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Οθόνη απενεργοποιημένη."</string>
-    <string name="value_phone_unlocked" msgid="7550105156417722443">"Το τηλέφωνο ξεκλειδώθηκε."</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"Η συσκευή ξεκλειδώθηκε."</string>
     <string name="value_dragging_widget" msgid="2839615701303758943">"Μεταφορά γραφικού στοιχείου."</string>
     <string name="value_web_view" msgid="8368045336469722566">"Προβολή ιστού."</string>
     <string name="value_unknown_object" msgid="7353842829622995954">"Άγνωστο αντικείμενο."</string>
@@ -87,8 +96,6 @@
     <string name="value_play_button" msgid="2701216749763299935">"Κουμπί αναπαραγωγής."</string>
     <string name="value_fast_forward_button" msgid="8502328522663492005">"Κουμπί γρήγορης προώθησης."</string>
     <string name="value_owner" msgid="2419158478547189476">"Κάτοχος"</string>
-    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Αποστολή εντολών στόχων στο TalkBack"</string>
-    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Δίνει τη δυνατότητα σε μια εφαρμογή ή σε μια υπηρεσία να οδηγήσει το TalkBack μέσω μετάδοσης στόχων και να αποκτήσει δυνητικά πληροφορίες σχετικά με την κατάσταση του TalkBack, όπως π.χ. τις προσωρινά αποθηκευμένες ειδοποιήσεις."</string>
     <string name="punctuation_questionmark" msgid="179720356310397041">"Ερωτηματικό"</string>
     <string name="punctuation_space" msgid="2858396268976961492">"Κενό"</string>
     <string name="punctuation_comma" msgid="5904123197868367248">"Κόμμα"</string>
@@ -103,30 +110,30 @@
     <item quantity="one" msgid="8890979114667202113">"συμβάν"</item>
     <item quantity="other" msgid="8275223643159991572">"συμβάντα"</item>
   </plurals>
-    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Διαθέσιμες προτιμήσεις TalkBack"</string>
-    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Πατήστε εδώ για λήψη της εφαρμογής \"Προτιμήσεις προσιτότητας\"."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Διαθ. δεδομ. σφάλμ. TalkBack"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Πατήστε για βελτίωση του TalkBack με αποστολή δεδομένων σφάλματος."</string>
     <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Χρόνος εκκίνησης ομιλίας"</string>
-    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Ένταση ειδοποίησης ήχου"</string>
-    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Κατάσταση οθόνης"</string>
-    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Ρυθμίσεις TTS"</string>
-    <string name="title_pref_caller_id" msgid="2074176178525278688">"Αναγνώριση κλήσης καλούντος"</string>
-    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Χρήση του TTS Extended"</string>
-    <string name="title_pref_proximity" msgid="2074129049942782489">"Αισθητήρας εγγύτητας"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"Ένταση ήχου ειδοποίησης"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Μιλήστε όταν η οθόνη είναι απενεργοποιημένη"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"Αναγνώριση κλήσης καλούντος"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"Χρήση του αισθητήρα εγγύτητας"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Ο αισθητήρας εγγύτητας θέτει την ομιλία σε κατάσταση σίγασης"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Ο αισθητήρας εγγύτητας δεν ελέγχει την ομιλία"</string>
-    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Προσθήκες"</string>
-    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Διαχείριση προσθηκών"</string>
-    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Κατάργηση εγκατάστασης"</string>
-    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"Το TalkBack απενεργοποιήθηκε!"</string>
-    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"Η εφαρμογή TalkBack είναι απενεργοποιημένη. Θα θέλατε να μεταβείτε στις ρυθμίσεις προσβασιμότητας;"</string>
-    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Σφάλμα"</string>
-    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"Η προσβασιμότητα δεν υποστηρίζεται για αυτή τη συσκευή."</string>
+    <string name="title_pref_bluetooth" msgid="3475728515720218108">"Έξοδος Bluetooth"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="655029542459409862">"Μιλήστε μέσω Bluetooth όταν αυτό είναι διαθέσιμο"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="8270563973653936052">"Η ομιλία δεν θα πραγματοποιείται ποτέ μέσω των ακουστικών Bluetooth"</string>
+    <string name="title_pref_category_feedback_settings" msgid="5588871484662795651">"Ρυθμίσεις ανάδρασης"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"Ανάδραση με δόνηση"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Ορισμός μοτίβων δόνησης"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Εξερεύνηση μέσω αφής"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Εξερεύνηση στοιχείων με δυνατότητα κλικ"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"Ηχητική ανάδραση"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Ένταση ήχου"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Ορισμός ήχων"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Εξερεύνηση μέσω αφής"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Εξερεύνηση στοιχείων με δυνατότητα κλικ"</string>
     <string name="subject_crash_report_email" msgid="3043388136219501183">"Αναφορά σφάλματος TalkBack"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"Ακολουθεί αναφορά σφάλματος για την εφαρμογή TalkBack. Πατήστε στο κουμπί \"Αποστολή\" για να γίνει μεταφορά των δεδομένων στους προγραμματιστές του TalkBack."\n\n</string>
-    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Προειδοποίηση"</string>
-    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Η προσθήκη TalkBack ενδέχεται να έχει τη δυνατότητα συλλογής όλων των κειμένων που πληκτρολογείτε, καθώς και των προσωπικών δεδομένων και των αριθμών πιστωτικών καρτών εκτός των κωδικών πρόσβασης. Ενδέχεται επίσης να καταγράφει τις δραστηριότητες της επιφάνειας χρήστη. Αυτή η λειτουργία προέρχεται από την εφαρμογή <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Να ενεργοποιηθεί η προσθήκη;"</string>
     <string name="axis_character" msgid="5059604520074645703">"Πλοήγηση βάσει χαρακτήρα."</string>
     <string name="axis_word" msgid="7745798763195184060">"Πλοήγηση βάσει λέξης."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Πλοήγηση βάσει πρότασης."</string>

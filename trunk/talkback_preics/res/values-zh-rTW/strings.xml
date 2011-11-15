@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"簡訊"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"未傳送簡訊"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"未接來電"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"已連接 USB"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"靜音"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"即時通訊"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"錯誤"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"更多"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD 卡"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"SD 卡 USB"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"同步處理"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"新郵件"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"同步處理"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"語音信箱"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"播放中"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"狀態通知"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"已勾選 <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"未勾選 <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"編輯方塊。<xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"搜尋框。<xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"警示 <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"以 <xliff:g id="NEW_TEXT">%2$s</xliff:g> 取代 <xliff:g id="OLD_TEXT">%1$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"以 <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> 個字元取代原有的 <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> 個字元"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"鈴聲音量為百分之 <xliff:g id="PERCENT">%1$s</xliff:g>。"</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"正在拖曳 <xliff:g id="TITLE">%1$s</xliff:g> 圖示。"</string>
+    <string name="template_image_button" msgid="7981434777534909849">"<xliff:g id="TITLE">%1$s</xliff:g> 圖片按鈕。"</string>
+    <string name="template_button" msgid="5913853507836606140">"<xliff:g id="TITLE">%1$s</xliff:g> 按鈕。"</string>
+    <string name="template_image_view" msgid="3085333029274972273">"<xliff:g id="TITLE">%1$s</xliff:g> 圖片。"</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> 搜尋控制介面。"</string>
+    <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> 下拉式清單。"</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> 分鐘"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> 小時"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>，按日檢視。"</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> 至 <xliff:g id="TO_DATE">%2$s</xliff:g>，按週檢視。"</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>，按月檢視。"</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"第 <xliff:g id="ITEM_INDEX">%1$s</xliff:g> 則活動，共 <xliff:g id="ITEM_COUNT">%2$s</xliff:g> 則"</string>
+    <string name="value_password" msgid="52094746222829357">"密碼"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"已開啟滑動繪圖器"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"滑動繪圖器把手"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"輸入方式"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"狀態列"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"選項。"</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"已刪除"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"通知摘要"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"點"</string>
+    <string name="value_checked" msgid="5234989698372864892">"已勾選"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"未勾選"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"已按下"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"鈴聲震動。"</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"鈴聲靜音。"</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"鈴聲正常。"</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"螢幕開啟。"</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"螢幕已關。"</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"手機已解除鎖定。"</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"正在拖曳小工具。"</string>
+    <string name="value_web_view" msgid="8368045336469722566">"網頁畫面。"</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"未知的物件。"</string>
+    <string name="value_market_search" msgid="5962672691633469998">"[搜尋] 按鈕。"</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"[選擇起點位置] 按鈕。"</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"[選擇目的地] 按鈕。"</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"[開車] 圓形按鈕。"</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"[搭乘大眾運輸工具] 圓形按鈕。"</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"[騎乘腳踏車] 圓形按鈕。"</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"[步行] 圓形按鈕。"</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"已勾選開車。"</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"已勾選乘坐大眾運輸工具。"</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"已勾選騎乘腳踏車。"</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"已勾選步行。"</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"星號"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"增加時數。"</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"增加分鐘數。"</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"減少時數。"</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"減少分鐘數。"</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"增加月份。"</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"增加天數。"</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"增加年份。"</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"減少月份。"</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"減少天數。"</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"減少年份。"</string>
+    <string name="value_playlist" msgid="169034635850956540">"播放清單。"</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"切換為隨機播放。"</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"切換為重複播放。"</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"[倒轉] 按鈕。"</string>
+    <string name="value_play_button" msgid="2701216749763299935">"[播放] 按鈕。"</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"[快轉] 按鈕。"</string>
+    <string name="value_owner" msgid="2419158478547189476">"擁有者"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"已傳送目的指令給「當機回報員」"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"允許應用程式或服務透過目的廣播執行「當機回報員」，並可能取得有關「當機回報員」狀態的資訊，例如快取通知。"</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"問號"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"空格"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"逗號"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"點"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"驚嘆號"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"左括號"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"右括號"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"雙引號"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"分號"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"冒號"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"活動"</item>
+    <item quantity="other" msgid="8275223643159991572">"活動"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"可使用 TalkBack 偏好設定"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"按一下這裡下載協助工具偏好設定應用程式。"</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"可取得 TalkBack 當機報告"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"按一下這裡傳送當機資料，協助改善 TalkBack 的品質。"</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"說話時間"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"鈴聲音量"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"畫面狀態"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"文字轉語音設定"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"說出來電顯示內容"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"使用擴充式文字轉語音功能"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"鄰近感應器"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"鄰近感應器會關閉語音服務"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"鄰近感應器不會影響語音服務"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"外掛程式"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"管理外掛程式"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"解除安裝"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack 已停用！"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"TalkBack 目前已停用，您要開啟協助工具設定嗎？"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"錯誤"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"此裝置未支援協助工具設定。"</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack 當機報告。"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"以下為 TalkBack 的當機報告。按一下 [傳送] 按鈕會將此資料傳輸給 TalkBack 的開發人員。"\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"警告"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"TalkBack 外掛程式可能會收集您輸入的所有文字，包括個人資料及信用卡號碼，但不會收集您輸入的密碼。此外，它還可能會記錄您的使用者介面互動行為。該程式是由應用程式「<xliff:g id="PLUGIN_NAME">%1$s</xliff:g>」所提供，要啟動這個外掛程式嗎？"</string>
+    <string name="axis_character" msgid="5059604520074645703">"依字元進行導覽。"</string>
+    <string name="axis_word" msgid="7745798763195184060">"依單詞進行導覽。"</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"依句子進行導覽。"</string>
+    <string name="axis_heading" msgid="8928386537164255063">"依標題進行導覽。"</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"依同層級的項目進行導覽。"</string>
+    <string name="axis_document" msgid="1581988340856497809">"依文件進行導覽。"</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"依預設的網路瀏覽行為進行導覽。"</string>
+</resources>

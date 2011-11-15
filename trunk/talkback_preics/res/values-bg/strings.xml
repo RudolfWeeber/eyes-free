@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="notification_type_text_message" msgid="2840489326612585077">"Текстово съобщение"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Неизпратено текстово съобщение"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"Пропуснато обаждане"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"Връзка през USB"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"Без звук"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"Разговор"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"Грешка"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"Още"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD карта"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"USB за SD карта"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"Синхронизиране"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"Нов имейл"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"Синхронизиране"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Гласова поща"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"Възпроизвежда се"</string>
+    <string name="notification_type_status_notification" msgid="9030505284302678172">"Известие за състояние"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> e отметнато"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> не е отметнато"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"Поле за редактиране. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_search_box" msgid="374713873976390037">"Поле за търсене. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"Сигнал: <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> е заменено със <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> знака са заменени със <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> знака"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"Сила на звука при звънене <xliff:g id="PERCENT">%1$s</xliff:g> процента."</string>
+    <string name="template_dragging_icon" msgid="7633606891857792337">"Иконата на <xliff:g id="TITLE">%1$s</xliff:g> се премества."</string>
+    <string name="template_image_button" msgid="7981434777534909849">"Бутон за изображение за <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_button" msgid="5913853507836606140">"Бутон за <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_image_view" msgid="3085333029274972273">"Изображение за <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"Контрола плъзгач за <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"Падащ списък за <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_minutes" msgid="7785580701367168753">"<xliff:g id="MINUTES">%1$s</xliff:g> минути"</string>
+    <string name="template_hours" msgid="8134792651564545111">"<xliff:g id="HOURS">%1$s</xliff:g> часа"</string>
+    <string name="template_announce_day" msgid="2697007626595567773">"<xliff:g id="DATE">%1$s</xliff:g>, дневен изглед."</string>
+    <string name="template_announce_week" msgid="8260793227327782733">"<xliff:g id="FROM_DATE">%1$s</xliff:g> до <xliff:g id="TO_DATE">%2$s</xliff:g>, седмичен изглед."</string>
+    <string name="template_announce_month" msgid="1949363379962245428">"<xliff:g id="MONTH">%1$s</xliff:g>, месечен изглед."</string>
+    <string name="template_announce_item_index" msgid="5245551532025107789">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> от <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"парола"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Издърпващото се чекмедже е отворено"</string>
+    <string name="value_handle_view" msgid="4485214410029604290">"Дръжка на издърпващото се чекмедже"</string>
+    <string name="value_input_method_shown" msgid="2510296343794293380">"Метод на въвеждане"</string>
+    <string name="value_status_bar_opened" msgid="8045746361335399437">"Лента на състоянието"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"Опции."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"изтрита"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"Обобщена информация за известия"</string>
+    <string name="value_password_character_typed" msgid="3384590085073731527">"точка"</string>
+    <string name="value_checked" msgid="5234989698372864892">"с отметка"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"няма отметка"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"кликнат"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"Вибрира при звънене."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"Звънене в тих режим."</string>
+    <string name="value_ringer_normal" msgid="5319228013151793967">"Нормално звънене."</string>
+    <string name="value_screen_on" msgid="6000430443458639755">"Включване на екрана."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"Екранът е изключен."</string>
+    <string name="value_phone_unlocked" msgid="7550105156417722443">"Телефонът е отключен."</string>
+    <string name="value_dragging_widget" msgid="2839615701303758943">"Приспособлението се премества."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"Изглед в мрежата."</string>
+    <string name="value_unknown_object" msgid="7353842829622995954">"Неизвестен обект."</string>
+    <string name="value_market_search" msgid="5962672691633469998">"Бутон за търсене."</string>
+    <string name="value_maps_choose_start" msgid="2446857840351856118">"Бутон за начално местоположение."</string>
+    <string name="value_maps_choose_destination" msgid="7597325109784367823">"Бутон за избор на местоположение на дестинацията."</string>
+    <string name="value_maps_driving" msgid="17682521549267904">"Бутон за избор за упътвания за шофьори."</string>
+    <string name="value_maps_public_transport" msgid="4853965273701512693">"Бутон за избор за упътвания за обществения транспорт."</string>
+    <string name="value_maps_bicycling" msgid="3373483282987467511">"Бутон за избор за упътвания за велосипедисти."</string>
+    <string name="value_maps_walking" msgid="4266344744219840236">"Бутон за избор за упътвания за пешеходци."</string>
+    <string name="value_maps_driving_checked" msgid="5433513572249853506">"Упътвания за шофьори, отметнато."</string>
+    <string name="value_maps_public_transport_checked" msgid="8304476990748308126">"Упътвания за обществен транспорт, отметнато."</string>
+    <string name="value_maps_bicycling_checked" msgid="7554345318572740886">"Упътвания за велосипедисти, отметнато."</string>
+    <string name="value_maps_walking_checked" msgid="1515076165963612327">"Упътвания за пешеходци, отметнато."</string>
+    <string name="value_phone_incall_star" msgid="2693353543372512851">"звезда"</string>
+    <string name="value_increment_hours" msgid="7158276085728574637">"Увеличаване на часовете."</string>
+    <string name="value_increment_minutes" msgid="6165324977047656454">"Увеличаване на минутите."</string>
+    <string name="value_decrement_hours" msgid="441296968884730689">"Намаляване на часовете."</string>
+    <string name="value_decrement_minutes" msgid="8498790312841197460">"Намаляване на минутите."</string>
+    <string name="value_increment_month" msgid="5454425189529249656">"Увеличаване на месеца."</string>
+    <string name="value_increment_day" msgid="3105875429979308831">"Увеличаване на деня."</string>
+    <string name="value_increment_year" msgid="2817702366437069114">"Увеличаване на годината."</string>
+    <string name="value_decrement_month" msgid="8924970351354671861">"Намаляване на месеца."</string>
+    <string name="value_decrement_day" msgid="6765872058795160928">"Намаляване на деня."</string>
+    <string name="value_decrement_year" msgid="6888532808015558315">"Намаляване на годината."</string>
+    <string name="value_playlist" msgid="169034635850956540">"Плейлист."</string>
+    <string name="value_toggle_shuffle" msgid="3396915142517587583">"Превключване на разбъркването."</string>
+    <string name="value_toggle_repeat" msgid="8873027804000805156">"Превключване на повтарянето."</string>
+    <string name="value_rewind_button" msgid="5161645834242351385">"Бутон за превъртане назад."</string>
+    <string name="value_play_button" msgid="2701216749763299935">"Бутон за пускане."</string>
+    <string name="value_fast_forward_button" msgid="8502328522663492005">"Бутон за бързо превъртане напред."</string>
+    <string name="value_owner" msgid="2419158478547189476">"Собственик"</string>
+    <string name="permlab_sendIntentBroadcastCommandsToTalkBack" msgid="3184434105583429592">"Изпращане на преднамерени команди към TalkBack"</string>
+    <!-- outdated translation 7116495433045146292 -->     <string name="permdesc_sendIntentBroadcastCommandsToTalkBack" msgid="6134561147096578027">"Позволява на приложение или услуга да бъдат драйвери наTalkBack чрез преднамерени предавания и потенциално да получават информация за състоянието на TalkBack, например кешираните известия."</string>
+    <string name="punctuation_questionmark" msgid="179720356310397041">"Въпросителен знак"</string>
+    <string name="punctuation_space" msgid="2858396268976961492">"Интервал"</string>
+    <string name="punctuation_comma" msgid="5904123197868367248">"Запетая"</string>
+    <string name="punctuation_dot" msgid="5613956000742145839">"Точка"</string>
+    <string name="punctuation_exclamation" msgid="5087215816659188811">"Удивителен знак"</string>
+    <string name="punctuation_open_paren" msgid="1087551343442146730">"Отваряща скоба"</string>
+    <string name="punctuation_close_paren" msgid="8180528806258316143">"Затваряща скоба"</string>
+    <string name="punctuation_double_quote" msgid="5451902512870494782">"Кавички"</string>
+    <string name="punctuation_semicolon" msgid="2970948646830240735">"Точка и запетая"</string>
+    <string name="punctuation_colon" msgid="4212987887163582631">"Двоеточие"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="8890979114667202113">"събитие"</item>
+    <item quantity="other" msgid="8275223643159991572">"събития"</item>
+  </plurals>
+    <string name="title_talkback_settings_available" msgid="4405797779993860783">"Има предпочитания за TalkBack"</string>
+    <string name="message_talkback_settings_available" msgid="3073212089159547463">"Кликнете, за да изтеглите приложението за предпочитания за достъпност."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"Има данни за срив в TalkBack"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"Кликнете тук, за да подобрите TalkBack, изпращайки данни за сривове."</string>
+    <string name="title_pref_category_when_to_speak" msgid="1720405045631424064">"Кога да се говори"</string>
+    <string name="title_pref_speak_ringer" msgid="4166340335462900044">"Сила на звука при звънене"</string>
+    <string name="title_pref_speak_screenoff" msgid="9028437778107614413">"Състояние на екрана"</string>
+    <string name="title_pref_category_tts_settings" msgid="4451374891076937625">"Настройки за СГ"</string>
+    <string name="title_pref_caller_id" msgid="2074176178525278688">"Изговаряне на името на обаждащия се"</string>
+    <string name="title_pref_tts_extended" msgid="3575787698372364355">"Да се ползва TTS Extended"</string>
+    <string name="title_pref_proximity" msgid="2074129049942782489">"Сензор за близост"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Сензорът за близост заглушава говора"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Сензорът за близост не контролира говора"</string>
+    <string name="title_pref_category_plugins" msgid="1814360382704814668">"Приставки"</string>
+    <string name="title_pref_manage_plugins" msgid="8859821963030140877">"Управление на приставките"</string>
+    <string name="title_uninstall_plugin" msgid="8034480031728764190">"Деинсталиране"</string>
+    <string name="title_talkback_inactive_alert" msgid="6863405328162570213">"TalkBack е деактивирано!"</string>
+    <string name="message_talkback_inactive_alert" msgid="4618141745593778043">"Понастоящем приложението TalkBack е деактивирано. Искате ли да отворите настройките за достъпност?"</string>
+    <string name="title_no_accessibility_alert" msgid="3854928935920775093">"Грешка"</string>
+    <string name="message_no_accessibility_alert" msgid="8090527713370798145">"На това устройство не се поддържа достъпност."</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"Сигнал за срив в TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"Следва сигнал за срив в TalkBack. Кликването върху бутона „Изпращане“ ще изпрати тези данни до програмистите на TalkBack."\n\n</string>
+    <string name="title_warning_talkback_plugin_security" msgid="4058317690233608531">"Предупреждение"</string>
+    <string name="message_warning_talkback_plugin_security" msgid="7622424149639111854">"Възможно е тази приставка за TalkBack да е в състояние да събира целия въведен от вас текст, включително лични данни, номера на кредитни карти, но без пароли. Може също да регистрира взаимодействията ви с потребителския интерфейс. Тя идва от приложението <xliff:g id="PLUGIN_NAME">%1$s</xliff:g>. Искате ли да я активирате?"</string>
+    <string name="axis_character" msgid="5059604520074645703">"Придвижване по знак."</string>
+    <string name="axis_word" msgid="7745798763195184060">"Придвижване по дума."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"Придвижване по изречение."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"Придвижване по заглавие."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"Придвижване по хоризонтала."</string>
+    <string name="axis_document" msgid="1581988340856497809">"Придвижване по документ."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Придвижване по поведение по подразбиране на изгледа в мрежата."</string>
+</resources>

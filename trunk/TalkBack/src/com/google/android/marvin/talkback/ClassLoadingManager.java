@@ -16,12 +16,11 @@
 
 package com.google.android.marvin.talkback;
 
-import com.google.android.marvin.talkback.TalkBackService.InfrastructureStateListener;
-
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
+
+import com.google.android.marvin.talkback.TalkBackService.InfrastructureStateListener;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,15 +28,11 @@ import java.util.List;
 
 /**
  * This class manages efficient loading of classes.
- *
+ * 
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
+ * @author alanv@google.com (Alan Viverette)
  */
-public class ClassLoadingManager implements InfrastructureStateListener {
-
-    /**
-     * Tag used for logging.
-     */
-    private static final String LOG_TAG = "ClassLoadingManager";
+class ClassLoadingManager implements InfrastructureStateListener {
 
     /**
      * The singleton instance of this class.
@@ -47,13 +42,15 @@ public class ClassLoadingManager implements InfrastructureStateListener {
     /**
      * Mapping from class names to classes form outside packages.
      */
-    private final HashMap<String, Class<?>> mClassNameToOutsidePackageClassMap = new HashMap<String, Class<?>>();
+    private final HashMap<String, Class<?>> mClassNameToOutsidePackageClassMap =
+            new HashMap<String, Class<?>>();
 
     /**
      * A set of classes not found to be loaded. Used to avoid multiple attempts
      * that will fail.
      */
-    private final HashSet<String> mNotFoundClassesSet = new HashSet<String>();
+    private final HashMap<String, HashSet<String>> mNotFoundClassesMap =
+            new HashMap<String, HashSet<String>>();
 
     /**
      * Cache of installed packages to avoid class loading attempts
@@ -61,19 +58,9 @@ public class ClassLoadingManager implements InfrastructureStateListener {
     private final HashSet<String> mInstalledPackagesSet = new HashSet<String>();
 
     /**
-     * Lock for mutex access to the cache.
-     */
-    private final Object mLock = new Object();
-
-    /**
      * {@link Context} for accessing
      */
     private final Context mContext;
-
-    /**
-     * Monitor to keep track of the installed packages;
-     */
-    private final BasePackageMonitor mPackageMonitor;
 
     /**
      * The singleton instance of this class.
@@ -92,23 +79,6 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      */
     private ClassLoadingManager() {
         mContext = TalkBackService.asContext();
-        mPackageMonitor = new BasePackageMonitor() {
-            @Override
-            protected void onPackageAdded(String packageName) {
-                synchronized (mLock) {
-                    mInstalledPackagesSet.add(packageName);
-                    // TODO (svetoslavganov): we can be more efficient
-                    mNotFoundClassesSet.clear();
-                }
-            }
-
-            @Override
-            protected void onPackageRemoved(String packageName) {
-                synchronized (mLock) {
-                    mInstalledPackagesSet.remove(packageName);
-                }
-            }
-        };
     }
 
     @Override
@@ -126,9 +96,9 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      * Builds a cache of installed packages.
      */
     private void buildInstalledPackagesCache() {
-        synchronized (mLock) {
-            List<PackageInfo> installedPackages = mContext.getPackageManager()
-                    .getInstalledPackages(0);
+        synchronized (this) {
+            List<PackageInfo> installedPackages =
+                    mContext.getPackageManager().getInstalledPackages(0);
             for (PackageInfo installedPackage : installedPackages) {
                 mInstalledPackagesSet.add(installedPackage.packageName);
             }
@@ -139,7 +109,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      * Clears the installed package cache.
      */
     private void clearInstalledPackagesCache() {
-        synchronized (mLock) {
+        synchronized (this) {
             mInstalledPackagesSet.clear();
         }
     }
@@ -158,55 +128,108 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      * @param packageName The name of the package to which the class belongs.
      * @return The class if loaded successfully, null otherwise.
      */
-    public Class<?> loadOrGetCachedClass(Context context, String className, String packageName) {
-        // if we failed once loading this class - no bother trying again
-        if (mNotFoundClassesSet.contains(className)) {
+    public Class<?> loadOrGetCachedClass(Context context, CharSequence className,
+            CharSequence packageName) {
+        if (className == null) {
+            LogUtils.log(Log.DEBUG, "Class name was null. Failed to load class: %s", className);
             return null;
         }
-        try {
-            // try the current ClassLoader first
-            return context.getClassLoader().loadClass(className);
-        } catch (ClassNotFoundException cnfe) {
-            // do we have a cached class
-            Class<?> clazz = mClassNameToOutsidePackageClassMap.get(className);
-            if (clazz != null) {
-                return clazz;
-            }
-            // no package - get it from the class name
-            if (packageName == null) {
-                int lastDotIndex = className.lastIndexOf(".");
-                if (lastDotIndex > -1) {
-                    packageName = className.substring(0, lastDotIndex);
-                } else {
-                    return null;
-                }
-            }
-            // no cached class - check if the package is installed first
-            if (!mInstalledPackagesSet.contains(packageName)) {
+
+        final String classNameStr = className.toString();
+        final String packageNameStr;
+
+        // If we don't know the package name, get it from the class name.
+        if (packageName == null) {
+            final int lastDotIndex = classNameStr.lastIndexOf(".");
+
+            if (lastDotIndex < 0) {
+                LogUtils.log(Log.DEBUG, "Missing package name. Failed to load class: %s",
+                        className);
                 return null;
             }
-            // all failed - try via creating a package context
-            try {
-                int flags = (Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
-                try {
-                    Context packageContext = context.getApplicationContext().createPackageContext(
-                            packageName, flags);
-                    clazz = packageContext.getClassLoader().loadClass(className);
-                    mClassNameToOutsidePackageClassMap.put(className, clazz);
-                } catch (NullPointerException npe) {
-                    String s = "";
-                }
-                return clazz;
-            } catch (NameNotFoundException nnfe) {
-                Log.e(LOG_TAG, "Error during loading an event source class: " + className + " "
-                        + nnfe);
-            } catch (ClassNotFoundException cnfe2) {
-                Log.e(LOG_TAG, "Error during loading an event source class: " + className + " "
-                        + cnfe);
-                mNotFoundClassesSet.add(className);
-            }
 
+            packageNameStr = classNameStr.substring(0, lastDotIndex);
+        } else {
+            packageNameStr = packageName.toString();
+        }
+
+        // If we failed loading this class once, don't bother trying again.
+        HashSet<String> notFoundClassesSet = mNotFoundClassesMap.get(packageName);
+        if (notFoundClassesSet != null && notFoundClassesSet.contains(className)) {
             return null;
         }
+
+        // Try the current ClassLoader.
+        try {
+            return context.getClassLoader().loadClass(classNameStr);
+        } catch (ClassNotFoundException e) {
+            // Do nothing.
+        }
+
+        // See if we have a cached class.
+        final Class<?> clazz = mClassNameToOutsidePackageClassMap.get(className);
+        if (clazz != null) {
+            return clazz;
+        }
+
+        // Check if the package is installed before attempting to load.
+        if (!mInstalledPackagesSet.contains(packageName)) {
+            LogUtils.log(Log.DEBUG, "Package not installed. Failed to load class: %s", className);
+            return null;
+        }
+
+        // Attempt to load class by creating a package context.
+        try {
+            final int flags = (Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+            final Context packageContext =
+                    context.getApplicationContext().createPackageContext(packageNameStr, flags);
+            final Class<?> outsideClazz = packageContext.getClassLoader().loadClass(classNameStr);
+
+            mClassNameToOutsidePackageClassMap.put(classNameStr, outsideClazz);
+
+            if (outsideClazz != null) {
+                return outsideClazz;
+            }
+        } catch (Exception e) {
+            LogUtils.log(ClassLoadingManager.class, Log.ERROR,
+                    "Error encountered. Failed to load outside class: %s", className);
+        }
+
+        if (notFoundClassesSet == null) {
+            notFoundClassesSet = new HashSet<String>();
+
+            mNotFoundClassesMap.put(packageNameStr, notFoundClassesSet);
+        }
+
+        notFoundClassesSet.add(classNameStr);
+
+        LogUtils.log(Log.DEBUG, "Failed to load class: %s", className);
+
+        return null;
     }
+
+    /**
+     * Monitor to keep track of the installed packages;
+     */
+    private final BasePackageMonitor mPackageMonitor = new BasePackageMonitor() {
+        @Override
+        protected void onPackageAdded(String packageName) {
+            synchronized (this) {
+                mInstalledPackagesSet.add(packageName);
+                mNotFoundClassesMap.remove(packageName);
+            }
+        }
+
+        @Override
+        protected void onPackageRemoved(String packageName) {
+            synchronized (this) {
+                mInstalledPackagesSet.remove(packageName);
+            }
+        }
+
+        @Override
+        protected void onPackageChanged(String packageName) {
+            // Do nothing.
+        }
+    };
 }
