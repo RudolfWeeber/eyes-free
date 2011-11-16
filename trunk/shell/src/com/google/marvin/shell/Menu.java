@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -24,7 +24,7 @@ import java.util.Iterator;
 /**
  * A class for representing menus as a HashMap mapping gesture codes to
  * MenuItems.
- * 
+ *
  * @author credo@google.com (Tim Credo)
  */
 public final class Menu extends HashMap<Integer, MenuItem> {
@@ -89,12 +89,12 @@ public final class Menu extends HashMap<Integer, MenuItem> {
         StringBuilder xmlBuilder = new StringBuilder();
         // don't use the id if not necessary
         if (mID == null || mID == mName) {
-            xmlBuilder.append(String.format(XML_MENU_TAG, MenuManager.escapeEntities(mName),
-                    MenuManager.escapeEntities(mWallpaper)));
+            xmlBuilder.append(
+                    String.format(XML_MENU_TAG, MenuManager.escapeEntities(mName),
+                            MenuManager.escapeEntities(mWallpaper)));
         } else {
-            xmlBuilder.append(String.format(XML_MENU_TAG_WITH_ID,
-                    MenuManager.escapeEntities(mName), MenuManager.escapeEntities(mWallpaper),
-                    MenuManager.escapeEntities(mID)));
+            xmlBuilder.append(String.format(XML_MENU_TAG_WITH_ID, MenuManager.escapeEntities(mName),
+                    MenuManager.escapeEntities(mWallpaper), MenuManager.escapeEntities(mID)));
         }
         ArrayList<Integer> keyList = new ArrayList<Integer>(keySet());
         Collections.sort(keyList);

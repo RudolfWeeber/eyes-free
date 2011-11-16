@@ -16,8 +16,6 @@
 
 package com.google.marvin.talkingdialer;
 
-import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,6 +34,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.TextView;
+
+import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
+import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -61,12 +62,8 @@ public class ContactsView extends TextView {
 
     private static void initCompatibility() {
         try {
-            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] {
-                Integer.TYPE
-            });
-            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] {
-                Integer.TYPE
-            });
+            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] { Integer.TYPE });
+            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] { Integer.TYPE });
             /* success, this is a newer device */
         } catch (NoSuchMethodException nsme) {
             /* failure, must be older device */
@@ -107,9 +104,7 @@ public class ContactsView extends TextView {
 
     // END OF WORKAROUND FOR DONUT COMPATIBILITY
 
-    private static final long[] PATTERN = {
-            0, 1, 40, 41
-    };
+    private static final long[] PATTERN = { 0, 1, 40, 41 };
 
     private static final int NAME = 0;
     private static final int NUMBER = 1;
@@ -135,8 +130,7 @@ public class ContactsView extends TextView {
 
     // An array specifying which columns to return.
     private static final String[] PROJECTION = new String[] {
-            Phone.DISPLAY_NAME, Phone.NUMBER, Phone.TYPE, Phone.RAW_CONTACT_ID
-    };
+            Phone.DISPLAY_NAME, Phone.NUMBER, Phone.TYPE, Phone.RAW_CONTACT_ID };
 
     private SlideDial parent;
 
@@ -191,7 +185,7 @@ public class ContactsView extends TextView {
 
         // Best way to retrieve a query; returns a managed query.
         managedCursor = parent.managedQuery(mContacts, PROJECTION, // Which
-                // columns
+        // columns
                 // to return.
                 null, // WHERE clause--we won't specify.
                 null, // no selection args
@@ -241,7 +235,7 @@ public class ContactsView extends TextView {
             (new Thread(new trackballTimeout())).start();
             prevContact();
         }
-        
+
         if (action == MotionEvent.ACTION_DOWN) {
             if (longPress == null) {
                 longPress = new LongPressDetector();
@@ -284,7 +278,7 @@ public class ContactsView extends TextView {
         }
     }
 
-    private void nextContact() {
+    public void nextContact() {
         currentString = "";
         // Make sure we don't try to act on an empty table
         if (managedCursor.getCount() > 0) {
@@ -303,7 +297,7 @@ public class ContactsView extends TextView {
         }
     }
 
-    private void prevContact() {
+    public void prevContact() {
         currentString = "";
         // Make sure we don't try to act on an empty table
         if (managedCursor.getCount() > 0) {
@@ -386,9 +380,11 @@ public class ContactsView extends TextView {
     }
 
     /**
-     * Speaks the currently selected contact and sets the internal current contact.
+     * Speaks the currently selected contact and sets the internal current
+     * contact.
      *
-     * @param interrupt Set to {@code true} to flush queued speech and speak immediately.
+     * @param interrupt Set to {@code true} to flush queued speech and speak
+     *            immediately.
      */
     private void speakCurrentContact(boolean interrupt) {
         final String contact = getCurrentContact();
@@ -406,13 +402,16 @@ public class ContactsView extends TextView {
         invalidate();
     }
 
-    private void dialActionHandler() {
+    public void dialActionHandler() {
         if (!confirmed) {
             if (!TextUtils.isEmpty(currentContact)) {
                 if (parent.contactsPickerMode) {
-                    parent.tts.speak(parent.getString(R.string.you_have_selected, currentContact), 0, null);
+                    parent.tts.speak(
+                            parent.getString(R.string.you_have_selected, currentContact), 0, null);
                 } else {
-                    parent.tts.speak(parent.getString(R.string.you_are_about_to_dial, currentContact), 0, null);
+                    parent.tts.speak(
+                            parent.getString(R.string.you_are_about_to_dial, currentContact), 0,
+                            null);
                 }
                 confirmed = true;
             } else {
@@ -428,7 +427,7 @@ public class ContactsView extends TextView {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         final char keyLabel = event.getDisplayLabel();
-        
+
         if (Character.isLetterOrDigit(keyLabel)) {
             currentString = currentString + keyLabel;
             filteredContacts.filter(currentString);
@@ -505,6 +504,10 @@ public class ContactsView extends TextView {
         currentCharacter = "";
     }
 
+    public boolean onHoverEvent(MotionEvent event) {
+        return onTouchEvent(event);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction();
@@ -538,14 +541,35 @@ public class ContactsView extends TextView {
             }
         }
 
-        if (action == MotionEvent.ACTION_DOWN) {
+        if ((action == MotionEvent.ACTION_UP)
+                || (action == MotionEventCompatUtils.ACTION_HOVER_EXIT)) {
+            if (x > 650) {
+                nextContact();
+                return true;
+            }
+            if (x < 100) {
+                prevContact();
+                return true;
+            }
+        } else {
+            if (x > 650) {
+                return true;
+            }
+            if (x < 100) {
+                return true;
+            }
+        }
+
+        if ((action == MotionEvent.ACTION_DOWN)
+                || (action == MotionEventCompatUtils.ACTION_HOVER_ENTER)) {
             initiateMotion(x, y);
             if (longPress == null) {
                 longPress = new LongPressDetector();
             }
             postDelayed(longPress, LONG_PRESS_THRESHOLD);
             return true;
-        } else if (action == MotionEvent.ACTION_UP) {
+        } else if ((action == MotionEvent.ACTION_UP)
+                || (action == MotionEventCompatUtils.ACTION_HOVER_EXIT)) {
             if (inDPadMode == false) {
                 confirmEntry();
             } else {
@@ -793,21 +817,21 @@ public class ContactsView extends TextView {
 
         if (!screenIsBeingTouched) {
             x = 5;
-            y = getHeight() - 60;
+            y = getHeight() - 260;
             paint.setTextSize(20);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
             canvas.drawText("Press MENU for dialing mode.", x, y, paint);
 
             x = 5;
-            y = getHeight() - 40;
+            y = getHeight() - 240;
             paint.setTextSize(20);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
             canvas.drawText("Scroll contacts with trackball.", x, y, paint);
 
             x = 5;
-            y = getHeight() - 20;
+            y = getHeight() - 220;
             paint.setTextSize(20);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
@@ -905,8 +929,8 @@ public class ContactsView extends TextView {
         }
     }
 
-    private void drawCharacter(String character, int x, int y, Canvas canvas, Paint paint,
-            boolean isSelected) {
+    private void drawCharacter(
+            String character, int x, int y, Canvas canvas, Paint paint, boolean isSelected) {
         int regSize = 50;
         int selectedSize = regSize * 2;
         if (isSelected) {
@@ -938,11 +962,11 @@ public class ContactsView extends TextView {
 
     public void displayContactDetails() {
         if (!managedCursor.isAfterLast()) {
-            final String text = parent.getString(R.string.load_detail,
-                    managedCursor.getString(NAME));
+            final String text = parent.getString(
+                    R.string.load_detail, managedCursor.getString(NAME));
             parent.tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-            final String uri = parent.getString(R.string.people_uri,
-                    managedCursor.getString(PERSON_ID));
+            final String uri = parent.getString(
+                    R.string.people_uri, managedCursor.getString(PERSON_ID));
             final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
             parent.startActivity(intent);
         }

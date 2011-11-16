@@ -22,7 +22,7 @@ import android.net.Uri;
 
 /**
  * Talking dialer for eyes-free dialing
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 public class TalkingDialer extends Activity {

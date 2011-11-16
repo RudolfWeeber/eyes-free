@@ -1,18 +1,19 @@
 /*
  * Copyright (C) 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.google.marvin.shell;
 
 import android.bluetooth.BluetoothAdapter;
@@ -36,6 +37,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -45,7 +47,7 @@ import java.util.HashMap;
 
 /**
  * Collection of one shot speech widgets for the home screen
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  * @author credo@google.com (Tim Credo)
  */
@@ -61,12 +63,12 @@ public class AuditoryWidgets {
     private int voiceSignalStrength;
 
     private int callState = TelephonyManager.CALL_STATE_IDLE;
-    
+
     /**
      * Map user-facing widget descriptions to the strings used to indicate them
      * in XML.
      */
-    public HashMap<String,String> descriptionToWidget;
+    public HashMap<String, String> descriptionToWidget;
 
     public AuditoryWidgets(TextToSpeech theTts, MarvinShell shell) {
         tts = theTts;
@@ -107,10 +109,10 @@ public class AuditoryWidgets {
             public void onCallStateChanged(int state, String incomingNumber) {
                 callState = state;
             }
-        }, PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE
-                | PhoneStateListener.LISTEN_CALL_STATE);
-        
-        
+        },
+                PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE
+                        | PhoneStateListener.LISTEN_CALL_STATE);
+
         descriptionToWidget = new HashMap<String, String>();
         descriptionToWidget.put(parent.getString(R.string.applications), "APPLAUNCHER");
         descriptionToWidget.put(parent.getString(R.string.autosync_toggle), "TOGGLE_AUTOSYNC");
@@ -122,6 +124,8 @@ public class AuditoryWidgets {
         descriptionToWidget.put(parent.getString(R.string.time), "TIME_DATE");
         descriptionToWidget.put(parent.getString(R.string.voicemail), "VOICEMAIL");
         descriptionToWidget.put(parent.getString(R.string.wifi_toggle), "TOGGLE_WIFI");
+        descriptionToWidget.put(
+                parent.getString(R.string.open_notifications), "OPEN_NOTIFICATIONS");
     }
 
     public void shutdown() {
@@ -129,8 +133,8 @@ public class AuditoryWidgets {
             guide.shutdown();
         }
         try {
-            TelephonyManager tm = (TelephonyManager) parent
-                    .getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) parent.getSystemService(
+                    Context.TELEPHONY_SERVICE);
             tm.listen(new PhoneStateListener() {
             }, PhoneStateListener.LISTEN_NONE);
         } catch (RuntimeException e) {
@@ -169,19 +173,21 @@ public class AuditoryWidgets {
             toggleAutosync();
         } else if (widgetName.equals("TOGGLE_WIFI")) {
             toggleWifi();
+        } else if (widgetName.equals("OPEN_NOTIFICATIONS")) {
+            openNotifications();
         }
     }
-    
+
     private void speakDataNetworkInfo() {
         String info = parent.getString(R.string.no_data_network);
-        ConnectivityManager cManager = (ConnectivityManager) parent
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cManager = (ConnectivityManager) parent.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cManager.getActiveNetworkInfo();
         if (networkInfo != null) {
             if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
                 info = parent.getString(R.string.mobile_data_network);
-                TelephonyManager tm = (TelephonyManager) parent
-                        .getSystemService(Context.TELEPHONY_SERVICE);
+                TelephonyManager tm = (TelephonyManager) parent.getSystemService(
+                        Context.TELEPHONY_SERVICE);
                 if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS) {
                     info = parent.getString(R.string.threeg_data_network);
                 } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) {
@@ -282,7 +288,8 @@ public class AuditoryWidgets {
 
         String timeStr = Integer.toString(hour) + " " + Integer.toString(minutes) + " " + ampm;
 
-        tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), TextToSpeech.QUEUE_FLUSH, null);
+        tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), TextToSpeech.QUEUE_FLUSH,
+                null);
     }
 
     public void callVoiceMail() {
@@ -299,19 +306,20 @@ public class AuditoryWidgets {
 
     public void launchVoiceSearch() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
+        intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         try {
             parent.startActivityForResult(intent, MarvinShell.VOICE_RECO_CODE);
         } catch (ActivityNotFoundException anf) {
-            parent.tts.speak(parent.getString(R.string.search_not_available), TextToSpeech.QUEUE_FLUSH, null);
+            parent.tts.speak(parent.getString(R.string.search_not_available),
+                    TextToSpeech.QUEUE_FLUSH, null);
         }
     }
 
     public int getCallState() {
         return callState;
     }
-    
+
     /**
      * Toggles the state of the BluetoothAdapter.
      */
@@ -319,15 +327,17 @@ public class AuditoryWidgets {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         if (adapter.isEnabled()) {
             if (adapter.disable()) {
-                parent.tts.speak(parent.getString(R.string.bluetooth_turning_off), TextToSpeech.QUEUE_FLUSH, null);
+                parent.tts.speak(parent.getString(R.string.bluetooth_turning_off),
+                        TextToSpeech.QUEUE_FLUSH, null);
             }
         } else {
             if (adapter.enable()) {
-                parent.tts.speak(parent.getString(R.string.bluetooth_turning_on), TextToSpeech.QUEUE_FLUSH, null);
+                parent.tts.speak(parent.getString(R.string.bluetooth_turning_on),
+                        TextToSpeech.QUEUE_FLUSH, null);
             }
         }
     }
-    
+
     /**
      * Toggles the state of the WifiManager.
      */
@@ -335,30 +345,49 @@ public class AuditoryWidgets {
         WifiManager manager = (WifiManager) parent.getSystemService(Context.WIFI_SERVICE);
         if (manager.isWifiEnabled()) {
             if (manager.setWifiEnabled(false)) {
-                parent.tts.speak(parent.getString(R.string.wifi_off), TextToSpeech.QUEUE_FLUSH, null);
+                parent.tts.speak(
+                        parent.getString(R.string.wifi_off), TextToSpeech.QUEUE_FLUSH, null);
             }
         } else {
             if (manager.setWifiEnabled(true)) {
-                parent.tts.speak(parent.getString(R.string.wifi_on), TextToSpeech.QUEUE_FLUSH, null);
+                parent.tts.speak(
+                        parent.getString(R.string.wifi_on), TextToSpeech.QUEUE_FLUSH, null);
             }
         }
     }
-    
+
     /**
      * Toggles sync settings for apps. that request data in the background.
      */
     public void toggleAutosync() {
-        ConnectivityManager manager = (ConnectivityManager) parent.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager manager = (ConnectivityManager) parent.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
         boolean backgroundData = manager.getBackgroundDataSetting();
         if (ContentResolver.getMasterSyncAutomatically()) {
             ContentResolver.setMasterSyncAutomatically(false);
-            parent.tts.speak(parent.getString(R.string.autosync_off), TextToSpeech.QUEUE_FLUSH, null);
+            parent.tts.speak(
+                    parent.getString(R.string.autosync_off), TextToSpeech.QUEUE_FLUSH, null);
         } else {
             ContentResolver.setMasterSyncAutomatically(true);
-            parent.tts.speak(parent.getString(R.string.autosync_on), TextToSpeech.QUEUE_FLUSH, null);
+            parent.tts.speak(
+                    parent.getString(R.string.autosync_on), TextToSpeech.QUEUE_FLUSH, null);
             if (!backgroundData) {
-                parent.tts.speak(parent.getString(R.string.background_data_warning), TextToSpeech.QUEUE_ADD, null);
+                parent.tts.speak(parent.getString(R.string.background_data_warning),
+                        TextToSpeech.QUEUE_ADD, null);
             }
+        }
+    }
+
+    /**
+     * Opens the notifications status bar.
+     */
+    public void openNotifications() {
+        try {
+            Object service = parent.getSystemService("statusbar");
+            Class<?> statusBarManager = Class.forName("android.app.StatusBarManager");
+            Method expand = statusBarManager.getMethod("expand");
+            expand.invoke(service);
+        } catch (Exception e) {
         }
     }
 }

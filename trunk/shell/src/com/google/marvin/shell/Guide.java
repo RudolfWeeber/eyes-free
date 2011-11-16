@@ -1,21 +1,20 @@
 /*
  * Copyright (C) 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.google.marvin.shell;
 
-import com.google.marvin.shell.StreetLocator.StreetLocatorListener;
+package com.google.marvin.shell;
 
 import android.content.Context;
 import android.location.GpsStatus;
@@ -26,11 +25,13 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 
+import com.google.marvin.shell.StreetLocator.StreetLocatorListener;
+
 /**
  * Guide uses the magnetic compass, GPS/Network location provider, and the
  * Google Maps API to generate a meaningful spoken string to let users know
  * where they are.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 public class Guide implements Runnable, StreetLocatorListener {
@@ -63,8 +64,8 @@ public class Guide implements Runnable, StreetLocatorListener {
                 gotResponse = true;
                 giveUpTimerThread = null;
                 unregisterLocationServices();
-                log("Network location", "Lat: " + arg0.getLatitude() + ", Long: "
-                        + arg0.getLongitude());
+                log("Network location",
+                        "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());
                 log("Network location", "Accuracy: " + arg0.getAccuracy());
                 (new Thread(self)).start();
             }
@@ -95,13 +96,14 @@ public class Guide implements Runnable, StreetLocatorListener {
             gpsLoc = arg0;
             gpsLocLastUpdateTime = System.currentTimeMillis();
             gpsFixCount++;
-            parent.tts.playEarcon(parent.getString(R.string.earcon_tock), TextToSpeech.QUEUE_ADD, null);
+            parent.tts.playEarcon(
+                    parent.getString(R.string.earcon_tock), TextToSpeech.QUEUE_ADD, null);
             if (gpsFixCount > minFixCount) {
                 gotResponse = true;
                 giveUpTimerThread = null;
                 unregisterLocationServices();
-                log("GPS location", "Lat: " + arg0.getLatitude() + ", Long: "
-                        + arg0.getLongitude());
+                log("GPS location",
+                        "Lat: " + arg0.getLatitude() + ", Long: " + arg0.getLongitude());
                 log("GPS location", "Accuracy: " + arg0.getAccuracy());
                 (new Thread(self)).start();
             }
@@ -162,8 +164,8 @@ public class Guide implements Runnable, StreetLocatorListener {
         parent = parentActivity;
         locator = new StreetLocator(this);
         compass = new Compass(parent);
-        LocationManager locationManager = (LocationManager) parent
-                .getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) parent.getSystemService(
+                Context.LOCATION_SERVICE);
     }
 
     public void speakLocation(boolean useGps) {
@@ -175,8 +177,8 @@ public class Guide implements Runnable, StreetLocatorListener {
         giveUpTimerThread.start();
         gotResponse = false;
 
-        LocationManager locationManager = (LocationManager) parent
-                .getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) parent.getSystemService(
+                Context.LOCATION_SERVICE);
 
         networkLocLastUpdateTime = -1;
         gpsLocLastUpdateTime = -1;
@@ -189,11 +191,11 @@ public class Guide implements Runnable, StreetLocatorListener {
         currentIntersection = "";
 
         if (useGps) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
-                    gpsLocationListener);
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 0, 0, gpsLocationListener);
         } else {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0,
-                    networkLocationListener);
+            locationManager.requestLocationUpdates(
+                    LocationManager.NETWORK_PROVIDER, 0, 0, networkLocationListener);
         }
     }
 
@@ -250,8 +252,8 @@ public class Guide implements Runnable, StreetLocatorListener {
     }
 
     private void unregisterLocationServices() {
-        LocationManager locationManager = (LocationManager) parent
-                .getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) parent.getSystemService(
+                Context.LOCATION_SERVICE);
         locationManager.removeUpdates(networkLocationListener);
         locationManager.removeUpdates(gpsLocationListener);
         locationManager.removeGpsStatusListener(dummyGpsStatusListener);

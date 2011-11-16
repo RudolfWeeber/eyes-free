@@ -21,9 +21,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
+
+import com.google.marvin.talkingdialer.RunButton.OnHoverListener;
+import com.google.marvin.talkingdialer.ScrollSidebarView.OnScrollDetectedListener;
 
 /**
  * Enables the user to dial without looking at the phone. The spot the user
@@ -40,7 +46,7 @@ public class SlideDial extends Activity {
     private static final int DIALING_VIEW = 0;
     private static final int CONTACTS_VIEW = 1;
 
-    private SlideDialView mView;
+    private SlideDialView dialerView;
     private ContactsView contactsView;
     private SharedPreferences prefs;
 
@@ -49,7 +55,52 @@ public class SlideDial extends Activity {
     public TextToSpeech tts;
 
     boolean contactsPickerMode = false;
-    
+
+    FrameLayout mFrameLayout;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        mFrameLayout = (FrameLayout) findViewById(R.id.frameLayout);
+        RunButton callButton = (RunButton) findViewById(R.id.callButton);
+        callButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (contactsView != null) {
+                    contactsView.dialActionHandler();
+                } else if (dialerView != null) {
+                    dialerView.callCurrentNumber();
+                }
+            }
+        });
+        callButton.setOnHoverListener(new OnHoverListener() {
+            @Override
+            public void onHoverEnter() {
+                if (contactsView != null) {
+                    contactsView.dialActionHandler();
+                } else if (dialerView != null) {
+                    dialerView.callCurrentNumber();
+                }
+            }
+
+            @Override
+            public void onHoverExit() {
+            }
+        });
+    }
+
+    private OnScrollDetectedListener scrollListener = new OnScrollDetectedListener() {
+        @Override
+        public void onScrollDetected(int direction) {
+            if (direction > 0) {
+                contactsView.nextContact();
+            } else {
+                contactsView.prevContact();
+            }
+        }
+    };
+
     @Override
     public void onResume() {
         super.onResume();
@@ -81,7 +132,7 @@ public class SlideDial extends Activity {
             }
         }
     }
-    
+
     private OnInitListener ttsInitListener = new OnInitListener() {
         @Override
         public void onInit(int status) {
@@ -98,7 +149,7 @@ public class SlideDial extends Activity {
         setResult(RESULT_OK, dummyIntent);
         finish();
     }
-    
+
     public void returnResults(String dialedNumber, String contactName) {
         dialedNumber = dialedNumber.replaceAll("[^0-9*#,;]", "");
         Intent dummyIntent = new Intent();
@@ -110,20 +161,39 @@ public class SlideDial extends Activity {
 
     public void switchToContactsView() {
         removeViews();
+        ScrollSidebarView lScroll = (ScrollSidebarView) findViewById(R.id.lScroll);
+        lScroll.setVisibility(View.VISIBLE);
+        lScroll.setOnScrollDetectedListener(scrollListener);
+        ScrollSidebarView rScroll = (ScrollSidebarView) findViewById(R.id.rScroll);
+        rScroll.setVisibility(View.VISIBLE);
+        rScroll.setOnScrollDetectedListener(scrollListener);
         if (contactsView == null) {
             contactsView = new ContactsView(this);
         }
-        setContentView(contactsView);
+        if (mFrameLayout.getChildCount() > 1) {
+            mFrameLayout.removeViewAt(0);
+        }
+        mFrameLayout.addView(contactsView, 0);
+        // setContentView(contactsView);
         currentView = CONTACTS_VIEW;
         tts.speak(getString(R.string.phonebook), 0, null);
     }
 
     public void switchToDialingView() {
         removeViews();
-        if (mView == null) {
-            mView = new SlideDialView(this);
+        ScrollSidebarView lScroll = (ScrollSidebarView) findViewById(R.id.lScroll);
+        lScroll.setVisibility(View.INVISIBLE);
+        ScrollSidebarView rScroll = (ScrollSidebarView) findViewById(R.id.rScroll);
+        rScroll.setVisibility(View.INVISIBLE);
+
+        if (dialerView == null) {
+            dialerView = new SlideDialView(this);
         }
-        setContentView(mView);
+        // setContentView(mView);
+        if (mFrameLayout.getChildCount() > 1) {
+            mFrameLayout.removeViewAt(0);
+        }
+        mFrameLayout.addView(dialerView, 0);
         currentView = DIALING_VIEW;
         tts.speak(getString(R.string.dialing_mode), 0, null);
     }
@@ -134,10 +204,10 @@ public class SlideDial extends Activity {
             contactsView.setVisibility(View.GONE);
             contactsView = null;
         }
-        if (mView != null) {
-            mView.shutdown();
-            mView.setVisibility(View.GONE);
-            mView = null;
+        if (dialerView != null) {
+            dialerView.shutdown();
+            dialerView.setVisibility(View.GONE);
+            dialerView = null;
         }
     }
 

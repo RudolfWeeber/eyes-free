@@ -66,7 +66,12 @@
     <string name="autosync_on">Autosync on</string>
     <string name="background_data_warning">Warning: background data disabled.</string>
     <string name="gmail">Gmail</string>
-    
+    <string name="open_notifications">Open notifications</string>
+
+    <!-- The following strings are for the app chooser view. -->
+    <string name="save">\n\nSave\n\n</string>
+    <string name="run">\n\nRun\n\n</string> 
+
     <!-- The following strings are possible types of shortcuts. -->
     <string name="application">Application</string>
     <string name="bookmark">Bookmark</string>
@@ -76,10 +81,12 @@
     <string name="eyes_free_widget">Eyes-free Widget</string>
     <string name="settings">Settings</string>
     <string name="gmail_label">Gmail Label</string>
+    <string name="video_chat">Video Chat</string>
 
     <!-- The following strings are verbs to be followed by the name of a contact. -->
     <string name="call">Call</string>
     <string name="message">Message</string>
+    <string name="video_call">Video call</string>
 
     <!-- The following strings are displayed but never spoken  -->
     <string name="app_name">Eyes-Free Shell</string>

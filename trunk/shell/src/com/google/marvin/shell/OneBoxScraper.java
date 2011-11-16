@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -19,8 +19,6 @@ package com.google.marvin.shell;
 import org.htmlparser.parserapplications.StringExtractor;
 import org.htmlparser.util.ParserException;
 
-import android.util.Log;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
@@ -28,7 +26,7 @@ import java.util.regex.Pattern;
 
 /**
  * Utility class for scraping the one box and finding the result
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 final public class OneBoxScraper {
@@ -45,7 +43,7 @@ final public class OneBoxScraper {
 
             // Uncomment this line to see the raw dump;
             // very useful when trying to come up with scraping rules
-            Log.e("OneBoxScraper Debug", results);
+            // Log.e("OneBoxScraper Debug", results);
 
             /* Check for known one box types */
             // Weather
@@ -61,8 +59,8 @@ final public class OneBoxScraper {
             // Flight tracker
             if ((processedResult.length() < 1) && (results.indexOf("Track status of ") != -1)) {
                 int indexOfTrackStatus = results.indexOf("Track status of ");
-                int indexOfFlightTracker = results.indexOf("www.flightstats.com",
-                        indexOfTrackStatus);
+                int indexOfFlightTracker = results.indexOf(
+                        "www.flightstats.com", indexOfTrackStatus);
                 if (indexOfFlightTracker != -1) {
                     processedResult = results.substring(indexOfTrackStatus, indexOfFlightTracker);
                 }
@@ -203,8 +201,8 @@ final public class OneBoxScraper {
                 // <wtai://wp/mc;6509881841>(650) 9881841 - Ratings: 3/5
                 String thirdLine = results.substring(secondLineBreak + 1, thirdLineBreak);
 
-                Pattern addressPattern = Pattern
-                        .compile("[0-9a-zA-Z ]+, [a-zA-Z ]+, [a-zA-Z. ]+ [0-9]+");
+                Pattern addressPattern = Pattern.compile(
+                        "[0-9a-zA-Z ]+, [a-zA-Z ]+, [a-zA-Z. ]+ [0-9]+");
                 Matcher addressMatcher = addressPattern.matcher(secondLine);
                 Pattern phonePattern = Pattern.compile("\\([0-9][0-9][0-9]\\) [0-9-]+");
                 Matcher phoneMatcher = phonePattern.matcher(thirdLine);
@@ -241,9 +239,8 @@ final public class OneBoxScraper {
                 int firstLineBreak = results.indexOf("\n");
                 String firstLine = results.substring(0, firstLineBreak);
                 if (firstLine.indexOf("<http://www.youtube.com/watch?") == 0) {
-                    processedResult = "PAW_YOUTUBE:"
-                            + firstLine.substring(firstLine.indexOf("<") + 1, firstLine
-                                    .indexOf(">"));
+                    processedResult = "PAW_YOUTUBE:" + firstLine.substring(
+                            firstLine.indexOf("<") + 1, firstLine.indexOf(">"));
                 }
             }
             // Try to read the first result if there is no preceding link
@@ -253,12 +250,14 @@ final public class OneBoxScraper {
                 if (endIndex != -1) {
                     processedResult = results.substring(0, endIndex + 1);
                 }
-                // If this is the weather box, try to trim it down by cutting it off at humidity
-                if ((processedResult.length() > 1) && (processedResult.indexOf("%") != -1)){
-                    processedResult = processedResult.substring(0, processedResult.indexOf("%") + 1);
+                // If this is the weather box, try to trim it down by cutting it
+                // off at humidity
+                if ((processedResult.length() > 1) && (processedResult.indexOf("%") != -1)) {
+                    processedResult = processedResult.substring(
+                            0, processedResult.indexOf("%") + 1);
                 }
             }
-            Log.e("processedResultLength", processedResult.length() + "");
+            // Log.e("processedResultLength", processedResult.length() + "");
         } catch (ParserException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {

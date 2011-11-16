@@ -20,11 +20,13 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
+
 /**
  * A transparent overlay which catches all touch events and uses a call back to
- * return the gesture that the user performed.
- * 
- * @author clchen@google.com (Charles L. Chen)
+ * return the gesture that the user performed. Includes edge events.
+ *
+ * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
  */
 
 public class GestureOverlay extends View {
@@ -46,6 +48,10 @@ public class GestureOverlay extends View {
         public static final int DOWN = 8;
 
         public static final int DOWNRIGHT = 9;
+
+        public static final int EDGELEFT = 10;
+
+        public static final int EDGERIGHT = 11;
     }
 
     /**
@@ -87,6 +93,10 @@ public class GestureOverlay extends View {
 
     private int radiusThreshold = 30;
 
+    private boolean edgeGesture = false;
+
+    int leftEdge, rightEdge;
+
     public GestureOverlay(Context context, GestureListener callback) {
         super(context);
         cb = callback;
@@ -103,6 +113,11 @@ public class GestureOverlay extends View {
     public void setMinimumRadius(int minRadius) {
         radiusThreshold = minRadius;
     }
+    
+    // @Override (only in API 13+)
+    public boolean onHoverEvent(MotionEvent event) {
+        return onTouchEvent(event);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -111,14 +126,26 @@ public class GestureOverlay extends View {
         float y = event.getY();
         int prevGesture = -1;
         switch (action) {
+            case MotionEventCompatUtils.ACTION_HOVER_ENTER:
             case MotionEvent.ACTION_DOWN:
                 downX = x;
                 downY = y;
-                currentGesture = Gesture.CENTER;
-                if (cb != null) {
-                    cb.onGestureStart(currentGesture);
+                leftEdge = getWidth() / 7;
+                rightEdge = getWidth() - getWidth() / 7;
+                if (x < leftEdge) {
+                    currentGesture = Gesture.EDGELEFT;
+                    edgeGesture = true;
+                } else if (x > rightEdge) {
+                    currentGesture = Gesture.EDGERIGHT;
+                    edgeGesture = true;
+                } else {
+                    currentGesture = Gesture.CENTER;
+                    edgeGesture = false;
                 }
+                if (cb != null)
+                    cb.onGestureStart(currentGesture);
                 break;
+            case MotionEventCompatUtils.ACTION_HOVER_EXIT:
             case MotionEvent.ACTION_UP:
                 prevGesture = currentGesture;
                 currentGesture = evalMotion(x, y);
@@ -151,6 +178,16 @@ public class GestureOverlay extends View {
     public int evalMotion(double x, double y) {
         float rTolerance = radiusThreshold;
         double thetaTolerance = (Math.PI / 12);
+
+        if (edgeGesture) {
+            if (x < leftEdge && downX < leftEdge) {
+                return Gesture.EDGELEFT;
+            } else if (x > rightEdge && downX > rightEdge) {
+                return Gesture.EDGERIGHT;
+            } else {
+                edgeGesture = false;
+            }
+        }
 
         double r = Math.sqrt(((downX - x) * (downX - x)) + ((downY - y) * (downY - y)));
 

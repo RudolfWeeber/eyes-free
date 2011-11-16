@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -16,16 +16,16 @@
 
 package com.google.marvin.shell;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+
 import com.google.marvin.widget.GestureOverlay.Gesture;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -87,7 +87,7 @@ public final class MenuManager extends HashMap<String, Menu> {
      * Insert a new menu.
      */
     public void insertMenu(Menu currentMenu, Integer gesture, String menuName) {
-        
+
         String id = menuName;
         int n = 1;
         // if the id is a duplicate, add a number
@@ -112,8 +112,7 @@ public final class MenuManager extends HashMap<String, Menu> {
         put(id, newMenu);
         newMenu.setID(id);
         MenuItem link = new MenuItem(menuName, "MENU", id, null);
-        MenuItem homeLink = new MenuItem(
-                currentMenu.getName(), "MENU", currentMenu.getID(), null);
+        MenuItem homeLink = new MenuItem(currentMenu.getName(), "MENU", currentMenu.getID(), null);
         currentMenu.put(gesture, link);
         newMenu.put(oppositeGesture, homeLink);
         if (nextMenu != null) {
@@ -180,13 +179,13 @@ public final class MenuManager extends HashMap<String, Menu> {
                     Node idAttrNode = attribs.getNamedItem("id");
                     if (idAttrNode != null) {
                         String id = idAttrNode.getNodeValue();
-                        Menu menu = new Menu(label, readItems(context,
-                                menus.item(i).getChildNodes()), wallpaper);
+                        Menu menu = new Menu(label,
+                                readItems(context, menus.item(i).getChildNodes()), wallpaper);
                         menu.setID(id);
                         shortcutMenus.put(id, menu);
                     } else {
-                        Menu menu = new Menu(label, readItems(context,
-                                menus.item(i).getChildNodes()), wallpaper);
+                        Menu menu = new Menu(label,
+                                readItems(context, menus.item(i).getChildNodes()), wallpaper);
                         shortcutMenus.put(label, menu);
                     }
                 }
@@ -268,15 +267,12 @@ public final class MenuManager extends HashMap<String, Menu> {
             return false;
         }
     }
-    
+
     /**
      * Escape entities in text for XML.
      */
     public static String escapeEntities(String string) {
-        return string.replaceAll("\"", "&quot;")
-                     .replaceAll("<", "&lt;")
-                     .replaceAll(">", "&gt;")
-                     .replaceAll("'", "&apos;")
-                     .replaceAll("&", "&amp;");
+        return string.replaceAll("\"", "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+                .replaceAll("'", "&apos;").replaceAll("&", "&amp;");
     }
 }

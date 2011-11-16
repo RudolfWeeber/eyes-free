@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    />
-</LinearLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/frameLayout"
+  android:layout_width="fill_parent" android:layout_height="fill_parent">
+  <LinearLayout android:orientation="vertical"
+    android:layout_width="fill_parent" android:layout_height="fill_parent" >
+    <LinearLayout android:orientation="horizontal"
+    android:layout_width="fill_parent" android:layout_height="1dip" android:layout_weight="1">
+    <com.google.marvin.talkingdialer.ScrollSidebarView android:id="@+id/lScroll" android:background="#00FF0000"
+    android:layout_width="1dip" android:layout_height="fill_parent" android:layout_weight="10" android:visibility="invisible"/>
+    <View 
+    android:layout_width="1dip" android:layout_height="fill_parent" android:layout_weight="80"/>
+    <com.google.marvin.talkingdialer.ScrollSidebarView android:id="@+id/rScroll" android:background="#00FF0000"
+    android:layout_width="1dip" android:layout_height="fill_parent" android:layout_weight="10" android:visibility="invisible"/>
+    
+    
+  </LinearLayout>
+    <com.google.marvin.talkingdialer.RunButton android:layout_width="fill_parent" android:layout_height="wrap_content"
+      android:id="@+id/callButton" android:text="\n\nCall\n\n" />
+  </LinearLayout>
+</FrameLayout>

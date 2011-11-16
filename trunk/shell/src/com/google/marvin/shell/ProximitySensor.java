@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2010 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -24,7 +24,7 @@ import android.hardware.SensorManager;
 
 /**
  * Convenience class for working with the ProximitySensor
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 
@@ -36,17 +36,17 @@ public class ProximitySensor {
     public interface ProximityChangeListener {
         public void onProximityChanged(float proximity);
     }
-    
+
     /**
      * State where the proximity sensor is inactive and uninitialized
      */
     public static final int STATE_STOPPED = 0;
-    
+
     /**
      * State where the proximity sensor is initialized but not detecting
      */
     public static final int STATE_STANDBY = 1;
-    
+
     /**
      * State where the proximity sensor is active and detecting
      */
@@ -57,11 +57,11 @@ public class ProximitySensor {
     private Sensor mSensor;
 
     private float mFarValue;
-    
+
     private boolean mIgnoreCallbackOnRegistration;
-    
+
     private boolean mIgnoreNextCallback;
-    
+
     private int mCurrentState = STATE_STOPPED;
 
     private ProximityChangeListener mCallback;
@@ -120,14 +120,14 @@ public class ProximitySensor {
     public boolean isClose() {
         return mClose;
     }
-    
+
     /**
      * @return the current state of the proximity sensor
      */
     public int getState() {
         return mCurrentState;
     }
-                          
+
     /**
      * Shuts down the sensor, but keeps the instance around for easy resume
      */
@@ -156,7 +156,8 @@ public class ProximitySensor {
     }
 
     /**
-     * The app using the ProximitySensor must shut it down when it is done using it.
+     * The app using the ProximitySensor must shut it down when it is done using
+     * it.
      */
     public void shutdown() {
         if (mSensor != null) {

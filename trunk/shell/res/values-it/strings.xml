@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="please_unlock">Prego sbloccare.</string>
+    <string name="you_have_new_voicemail">Hai nuovi messaggi in segreteria.</string>
+    <string name="application_not_installed">Applicazione non installata.</string>
+    <string name="compass">Compass</string>
+    <string name="battery">Batteria</string>
+    <string name="midnight">mezzanotte</string>
+    <string name="noon">noon</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <string name="applications">Applicazioni</string>
+    <string name="applist_reload">Applicazioni ricaricate</string>
+    <string name="shortcuts">Collegamenti</string>
+    <string name="voicemail">Segreteria</string>
+    <string name="marvin_intro_snd_">[marvin intro]</string>
+    <string name="charging">in carica</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="gps">GPS</string>
+    <string name="no_data_network">Nessuna rete dati</string>
+    <string name="mobile_data_network">Rete dati cellulare</string>
+    <string name="threeg_data_network">Rete dati 3g</string>
+    <string name="edge_data_network">Rete dati EDGE</string>
+    <string name="bars">barre.</string>
+    <string name="deleted">.  cancellato.</string>
+    <string name="signal">Segnale</string>
+    <string name="location">Localita\'</string>
+    <string name="wifi">WiFi</string>
+    <string name="period">Punto</string>
+    <string name="question_mark">Punto interrogativo</string>
+    <string name="exclamation_point">Punto esclamativo</string>
+    <string name="comma">Virgola</string>
+    <string name="backspace">Backspace</string>
+    <string name="save_shortcuts">Salva collegamenti</string>
+    <string name="time">Orologio</string>
+    <string name="search">Ricerca</string>
+    <string name="search_widget">Widget ricerca</string>
+    <string name="search_not_available">La ricerca vocale non ï¿½ disponibile su questo telefono.</string>
+    <string name="uninstall">Disinstalla</string>
+    <string name="details_for">Dettagli per</string>
+    <string name="entering_edit_mode">In modalita\' modifica</string>
+    <string name="exiting_edit_mode">Esco dalla modalita\' modifica</string>
+    <string name="none">Nessuno</string>
+    <string name="unable_to_continue">Impossibile continuare.</string>
+    <string name="tts_required">E\' richiesto il componente TextToSpeech. Prego installarlo.</string>
+    <string name="quit">Esci</string>
+    <string name="cannot_edit_this_item">Non posso modificare questo oggetto.</string>
+    <string name="restore_default_menus">Ripristina menu\' di default</string>
+    <string name="edit_menus">Modifica menu\'</string>
+    <string name="editing">Sto modificando</string>
+    <string name="rename_menu">Rinomina Menu</string>
+    <string name="insert_menu_left">Inserisci Menu\' a sinistra</string>
+    <string name="insert_menu_right">Inserisci menï¿½ a destra</string>
+    <string name="enter_new_menu_name">Inserisci nuovo nome menï¿½</string>
+    <string name="new_menu">Nuovo menï¿½</string>
+    <string name="add_to_shell">Aggiungi alla shell</string>
+    <string name="no_short_answer">Spiacente, nessuna risposta breve per</string>
+    <string name="bluetooth_toggle">Cambia stato Blue tooth</string>
+    <string name="bluetooth_turning_off">Disattivo il Blue tooth</string>
+    <string name="bluetooth_turning_on">Attivo il Blue tooth</string>
+    <string name="wifi_toggle">Cambia stato wifi</string>
+    <string name="wifi_off">Wifi spento</string>
+    <string name="wifi_on">Wifi acceso</string>
+    <string name="autosync_toggle">Cambia stato autosync</string>
+    <string name="autosync_off">Autosync spento</string>
+    <string name="autosync_on">Autosync acceso</string>
+    <string name="background_data_warning">Attenzione: dati in background disabilitati.</string>
+    <string name="gmail">Gmail</string>
+
+    <!-- The following strings are possible types of shortcuts. -->
+    <string name="applicazione">Application</string>
+    <string name="bookmark">Preferito</string>
+    <string name="contact">Contatto</string>
+    <string name="direct_dial">Composizione Diretta</string>
+    <string name="direct_message">Messaggio Diretto</string>
+    <string name="eyes_free_widget">Widget Eyes-free</string>
+    <string name="settings">Impostazioni</string>
+    <string name="gmail_label">Etichetta Gmail</string>
+
+    <!-- The following strings are verbs to be followed by the name of a contact. -->
+    <string name="call">Chiama</string>
+    <string name="message">Messaggio a</string>
+
+    <!-- The following strings are displayed but never spoken -->
+    <string name="app_name">Eyes-Free Shell</string>
+
+    <!-- The following strings are used for earcons -->
+    <string name="earcon_tick">[TICK]</string>
+    <string name="earcon_tock">[TOCK]</string>
+
+    <!-- The following strings are used for the search URL. Use the localized language for better onebox triggering. -->
+    <string name="search_url">http://www.google.it/m?q=</string>
+
+</resources>

@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2008 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -15,8 +15,6 @@
  */
 
 package com.google.marvin.shell;
-
-import com.google.marvin.shell.ShakeDetector.ShakeListener;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,11 +25,16 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.util.AttributeSet;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
+
+import com.google.marvin.shell.ShakeDetector.ShakeListener;
+import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -41,26 +44,27 @@ import java.util.Collections;
 /**
  * Allows the user to select the application they wish to start by moving
  * through the list of applications.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 public class AppChooserView extends TextView {
-    // BEGIN OF WORKAROUND FOR DONUT COMPATIBILITY
+    // BEGIN OF WORKAROUND FOR BACKWARDS COMPATIBILITY (up to Donut)
     private static Method MotionEvent_getX;
 
     private static Method MotionEvent_getY;
+
+    private static Method AccessibilityManager_isTouchExplorationEnabled;
+
     static {
         initCompatibility();
     }
 
     private static void initCompatibility() {
         try {
-            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] {
-                Integer.TYPE
-            });
-            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] {
-                Integer.TYPE
-            });
+            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] { Integer.TYPE });
+            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] { Integer.TYPE });
+            AccessibilityManager_isTouchExplorationEnabled = AccessibilityManager.class.getMethod(
+                    "isTouchExplorationEnabled");
             /* success, this is a newer device */
         } catch (NoSuchMethodException nsme) {
             /* failure, must be older device */
@@ -99,16 +103,30 @@ public class AppChooserView extends TextView {
         return -1;
     }
 
+    private static boolean isTouchExplorationEnabled(AccessibilityManager am) {
+        try {
+            if (AccessibilityManager_isTouchExplorationEnabled != null) {
+                Object retobj = AccessibilityManager_isTouchExplorationEnabled.invoke(am);
+                return (Boolean) retobj;
+            }
+        } catch (IllegalAccessException ie) {
+            System.err.println("unexpected " + ie);
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     // END OF WORKAROUND FOR DONUT COMPATIBILITY
 
-    private static final char alphabet[] = {
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-            'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-    };
+    private static final char alphabet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+            'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
-    private static final long[] PATTERN = {
-            0, 1, 40, 41
-    };
+    private static final long[] PATTERN = { 0, 1, 40, 41 };
 
     private static final int AE = 0;
 
@@ -179,18 +197,25 @@ public class AppChooserView extends TextView {
     private ShakeDetector shakeDetector;
 
     private long backKeyTimeDown;
-    
+
+    private long lastTapTime = 0;
+
+    private long doubleTapWindow = 700;
+
+    private AccessibilityManager accessibilityManager;
+
     // Change this to true to enable shake to erase
     private static final boolean useShake = false;
 
-    public AppChooserView(Context context, ArrayList<AppInfo> installedApps) {
-        super(context);
+    public AppChooserView(Context context, AttributeSet attrs) {
+        super(context, attrs);
 
         parent = ((MarvinShell) context);
         vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        accessibilityManager = (AccessibilityManager) context.getSystemService(
+                Context.ACCESSIBILITY_SERVICE);
 
         // Build app list here
-        appList = installedApps;
         appListIndex = 0;
         currentString = "";
 
@@ -198,6 +223,10 @@ public class AppChooserView extends TextView {
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
+    }
+
+    public void setAppList(ArrayList<AppInfo> installedApps) {
+        appList = installedApps;
     }
 
     @Override
@@ -234,7 +263,7 @@ public class AppChooserView extends TextView {
         }
     }
 
-    private void nextApp() {
+    public void nextApp() {
         appListIndex++;
         if (appListIndex >= appList.size()) {
             appListIndex = 0;
@@ -243,7 +272,7 @@ public class AppChooserView extends TextView {
         speakCurrentApp(true);
     }
 
-    private void prevApp() {
+    public void prevApp() {
         appListIndex--;
         if (appListIndex < 0) {
             appListIndex = appList.size() - 1;
@@ -316,7 +345,7 @@ public class AppChooserView extends TextView {
         return appList.contains(app);
     }
 
-    private void startActionHandler() {
+    public void startActionHandler() {
         currentString = "";
         // Launch app here
         parent.onAppSelected(appList.get(appListIndex));
@@ -408,6 +437,13 @@ public class AppChooserView extends TextView {
         if (currentCharacter.equals("<-")) {
             currentCharacter = "";
             backspace();
+        } else if (currentCharacter.equals("TAP")) {
+            if (lastTapTime + doubleTapWindow > System.currentTimeMillis()) {
+                startActionHandler();
+                return;
+            } else {
+                lastTapTime = System.currentTimeMillis();
+            }
         } else {
             if (currentCharacter.equals("SPACE")) {
                 currentString = currentString + " ";
@@ -435,29 +471,42 @@ public class AppChooserView extends TextView {
         currentCharacter = "";
     }
 
+    public boolean onHoverEvent(MotionEvent event) {
+        return onTouchEvent(event);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        boolean touchExploring = isTouchExplorationEnabled(accessibilityManager);
+
         int action = event.getAction();
         float x = event.getX();
         float y = event.getY();
 
+        int secondFingerId = 1;
+        if (touchExploring) {
+            secondFingerId = 0;
+        }
+
         // Treat the screen as a dpad
-        if (action == 261) { // 261 == ACTION_POINTER_2_DOWN - using number for
-            // Android 1.6 compat
+        if ((action == 261) || (touchExploring && action == MotionEvent.ACTION_DOWN)) {
+            // 261 == ACTION_POINTER_2_DOWN - using number for Android 1.6
+            // compat
             // Track the starting location of the second touch point.
             inDPadMode = false;
             gestureHadSecondPoint = true;
             screenIsBeingTouched = false;
             currentWheel = NONE;
-            p2DownX = getX(event, 1);
-            p2DownY = getY(event, 1);
+            p2DownX = getX(event, secondFingerId);
+            p2DownY = getY(event, secondFingerId);
             vibe.vibrate(PATTERN, -1);
             invalidate();
-        } else if (action == 262) { // 262 == MotionEvent.ACTION_POINTER_2_UP -
-            // using number for Android 1.6 compat
-            // Second touch point has lifted, so process the gesture
-            float p2DeltaX = getX(event, 1) - p2DownX;
-            float p2DeltaY = getY(event, 1) - p2DownY;
+        } else if ((action == 262) || (touchExploring && action == MotionEvent.ACTION_UP)) {
+            // 262 == MotionEvent.ACTION_POINTER_2_UP - using number for Android
+            // 1.6 compat
+            // Second touch point has lifted, so process the gesture.
+            float p2DeltaX = getX(event, secondFingerId) - p2DownX;
+            float p2DeltaY = getY(event, secondFingerId) - p2DownY;
             if (Math.abs(p2DeltaX) > Math.abs(p2DeltaY)) {
                 if (p2DeltaX < -200) {
                     backspace();
@@ -471,10 +520,12 @@ public class AppChooserView extends TextView {
             }
         }
 
-        if (action == MotionEvent.ACTION_DOWN) {
+        if ((action == MotionEvent.ACTION_DOWN)
+                || (action == MotionEventCompatUtils.ACTION_HOVER_ENTER)) {
             initiateMotion(x, y);
             return true;
-        } else if (action == MotionEvent.ACTION_UP) {
+        } else if ((action == MotionEvent.ACTION_UP)
+                || (action == MotionEventCompatUtils.ACTION_HOVER_EXIT)) {
             if (gestureHadSecondPoint == false) {
                 if (inDPadMode == false) {
                     confirmEntry();
@@ -654,7 +705,7 @@ public class AppChooserView extends TextView {
                         return "";
                 }
             default:
-                return "";
+                return "TAP";
         }
     }
 
@@ -825,8 +876,8 @@ public class AppChooserView extends TextView {
         }
     }
 
-    private void drawCharacter(String character, int x, int y, Canvas canvas, Paint paint,
-            boolean isSelected) {
+    private void drawCharacter(
+            String character, int x, int y, Canvas canvas, Paint paint, boolean isSelected) {
         int regSize = 50;
         int selectedSize = regSize * 2;
         if (isSelected) {
@@ -875,15 +926,15 @@ public class AppChooserView extends TextView {
         super.onWindowVisibilityChanged(visibility);
     }
 
-    public void uninstallCurrentApp(){
+    public void uninstallCurrentApp() {
         String targetPackageName = appList.get(appListIndex).getPackageName();
         Intent i = new Intent();
         i.setAction("android.intent.action.DELETE");
-        i.setData(Uri.parse("package:" + targetPackageName));        
+        i.setData(Uri.parse("package:" + targetPackageName));
         parent.startActivity(i);
     }
-    
-    public void showCurrentAppInfo(){
+
+    public void showCurrentAppInfo() {
         String targetPackageName = appList.get(appListIndex).getPackageName();
         Intent i = new Intent();
         i.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
@@ -892,11 +943,10 @@ public class AppChooserView extends TextView {
         // under
         // http://android.git.kernel.org/?p=platform/packages/apps/Settings.git
         i.putExtra("pkg", targetPackageName);
-        parent.startActivity(i);        
+        parent.startActivity(i);
     }
-    
 
-    public String getCurrentAppTitle(){
+    public String getCurrentAppTitle() {
         return appList.get(appListIndex).getTitle();
     }
 }

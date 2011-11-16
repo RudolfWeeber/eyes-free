@@ -1,0 +1,4 @@
+This directory contains generic support utilities --- and is not
+for running on the Android platform.
+
+  make_sounds.py: Generate wave files from TTS. This utility is Mac-specific.

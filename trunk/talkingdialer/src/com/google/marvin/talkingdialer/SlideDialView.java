@@ -16,8 +16,6 @@
 
 package com.google.marvin.talkingdialer;
 
-import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,6 +29,9 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
+import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
+import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
+
 /**
  * Implements the user interface for doing slide dialing.
  *
@@ -42,15 +43,9 @@ public class SlideDialView extends TextView {
     private static final int SOUND_RESOURCE_TYPED = R.raw.keypress;
     private static final int SOUND_RESOURCE_DELETED = R.raw.delete;
 
-    private static final long[] VIBRATE_PATTERN_FOCUSED = new long[] {
-            0, 30
-    };
-    private static final long[] VIBRATE_PATTERN_TYPED = new long[] {
-            0, 40
-    };
-    private static final long[] VIBRATE_PATTERN_DELETED = new long[] {
-            0, 50
-    };
+    private static final long[] VIBRATE_PATTERN_FOCUSED = new long[] { 0, 30 };
+    private static final long[] VIBRATE_PATTERN_TYPED = new long[] { 0, 40 };
+    private static final long[] VIBRATE_PATTERN_DELETED = new long[] { 0, 50 };
 
     /**
      * Edge touch tolerance in inches. Used for edge-based commands like delete.
@@ -128,8 +123,10 @@ public class SlideDialView extends TextView {
             }
         });
 
-        mEdgeTolerance = (int) (EDGE_TOLERANCE_INCHES * getResources().getDisplayMetrics().densityDpi);
-        mRadiusTolerance = (int) (RADIUS_TOLERANCE_INCHES * getResources().getDisplayMetrics().densityDpi);
+        mEdgeTolerance = (int) (EDGE_TOLERANCE_INCHES
+                * getResources().getDisplayMetrics().densityDpi);
+        mRadiusTolerance = (int) (RADIUS_TOLERANCE_INCHES
+                * getResources().getDisplayMetrics().densityDpi);
 
         setClickable(true);
         setFocusable(true);
@@ -143,6 +140,10 @@ public class SlideDialView extends TextView {
         mShakeDetector.shutdown();
     }
 
+    public boolean onHoverEvent(MotionEvent event) {
+        return onTouchEvent(event);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Inputting a new number invalidates the confirmation
@@ -152,15 +153,17 @@ public class SlideDialView extends TextView {
         float x = event.getX();
         float y = event.getY();
         String prevVal = "";
+        String digit = "";
 
         switch (action) {
-            case MotionEvent.ACTION_UP: {
+            case MotionEventCompatUtils.ACTION_HOVER_EXIT:
+            case MotionEvent.ACTION_UP:
                 if (mDownEvent != null) {
                     mDownEvent.recycle();
                     mDownEvent = null;
                 }
 
-                String digit = evalMotion(x, y);
+                digit = evalMotion(x, y);
 
                 // Do some correction if the user lifts UP on deadspace
                 if (digit.length() == 0) {
@@ -171,12 +174,14 @@ public class SlideDialView extends TextView {
 
                 mPreviousValue = "";
                 break;
-            }
+
+            case MotionEventCompatUtils.ACTION_HOVER_ENTER:
             case MotionEvent.ACTION_DOWN:
                 mDownEvent = MotionEvent.obtain(event);
                 //$FALL-THROUGH$
+            case MotionEventCompatUtils.ACTION_HOVER_MOVE:
             case MotionEvent.ACTION_MOVE: {
-                String digit = evalMotion(x, y);
+                digit = evalMotion(x, y);
 
                 // Do nothing since we want a deadzone here;
                 // restore the state to the previous value.
@@ -310,21 +315,21 @@ public class SlideDialView extends TextView {
             canvas.drawText(mDialedNumber, x, y, paint);
 
             x = 5;
-            y = getHeight() - 60;
+            y = getHeight() - 260;
             paint.setTextSize(20);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
             canvas.drawText("Press MENU for phonebook.", x, y, paint);
 
             x = 5;
-            y = getHeight() - 40;
+            y = getHeight() - 240;
             paint.setTextSize(20);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
             canvas.drawText("Stroke the screen to dial.", x, y, paint);
             x = 5;
 
-            y = getHeight() - 20;
+            y = getHeight() - 220;
             paint.setTextSize(20);
             paint.setTextAlign(Paint.Align.LEFT);
             y -= paint.ascent() / 2;
@@ -484,7 +489,7 @@ public class SlideDialView extends TextView {
         }
     }
 
-    private void callCurrentNumber() {
+    public void callCurrentNumber() {
         if (!mNumberConfirmed) {
             if (mDialedNumber.length() == 0) {
                 mParent.switchToContactsView();
@@ -501,11 +506,10 @@ public class SlideDialView extends TextView {
                 }
                 final String text;
                 if (mParent.contactsPickerMode) {
-                    text = getContext().getString(R.string.you_have_selected,
-                        builder.toString());
+                    text = getContext().getString(R.string.you_have_selected, builder.toString());
                 } else {
-                    text = getContext().getString(R.string.you_are_about_to_dial,
-                            builder.toString());
+                    text = getContext().getString(
+                            R.string.you_are_about_to_dial, builder.toString());
                 }
                 speak(text, TextToSpeech.QUEUE_FLUSH, 100);
                 mNumberConfirmed = true;

@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2008 Google Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -16,10 +16,10 @@
 
 package com.google.marvin.shell;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.net.URL;
 /**
  * This class implements methods to get street address from lat-lon using
  * reverse geocoding API through HTTP.
- * 
+ *
  * @author chaitanyag@google.com (Chaitanya Gharpure)
  */
 public class StreetLocator {
@@ -54,7 +54,7 @@ public class StreetLocator {
     /**
      * Queries the map server and obtains the reverse geocoded address of the
      * specified location.
-     * 
+     *
      * @param lat The latitude in degrees
      * @param lon The longitude in degrees
      */
@@ -75,7 +75,7 @@ public class StreetLocator {
     /**
      * Queries the map server and obtains the reverse geocoded address of the
      * specified location.
-     * 
+     *
      * @param lat The latitude in degrees
      * @param lon The longitude in degrees
      * @return Returns the reverse geocoded address
@@ -86,8 +86,8 @@ public class StreetLocator {
             JSONObject jsonObj = new JSONObject(resp);
             int code = jsonObj.getJSONObject("Status").getInt("code");
             if (code == 200) {
-                return extendShorts(jsonObj.getJSONArray("Placemark").getJSONObject(0).getString(
-                        "address"));
+                return extendShorts(
+                        jsonObj.getJSONArray("Placemark").getJSONObject(0).getString("address"));
             }
         } catch (MalformedURLException mue) {
             Log.d("Locator", "Malformed URL: " + mue.getMessage());
@@ -102,7 +102,7 @@ public class StreetLocator {
     /**
      * Sends a request to the specified URL and obtains the result from the
      * sever.
-     * 
+     *
      * @param url The URL to connect to
      * @return the server response
      * @throws IOException
@@ -120,7 +120,7 @@ public class StreetLocator {
     /**
      * Prepares the URL to connect to the reverse geocoding server from the
      * specified location coordinates.
-     * 
+     *
      * @param lat latitude in degrees of the location to reverse geocode
      * @param lon longitude in degrees of the location to reverse geocode
      * @return URL The Geo URL created based on the given lat/lon
@@ -134,7 +134,7 @@ public class StreetLocator {
 
     /**
      * Reads an InputStream and returns its contents as a String.
-     * 
+     *
      * @param inputStream The InputStream to read from.
      * @return The contents of the InputStream as a String.
      */
@@ -142,7 +142,8 @@ public class StreetLocator {
         StringBuilder outputBuilder = new StringBuilder();
         String string;
         if (inputStream != null) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, ENCODING));
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(inputStream, ENCODING));
             while (null != (string = reader.readLine())) {
                 outputBuilder.append(string).append('\n');
             }
@@ -153,7 +154,7 @@ public class StreetLocator {
     /**
      * Replaces the short forms in the address by their longer forms, so that
      * TTS speaks the addresses properly
-     * 
+     *
      * @param addr The address from which to replace short forms
      * @return the modified address string
      */
