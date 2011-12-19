@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"Tafadhali fungua."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"Una ujumbe mpya wa sauti."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"Programu haijasakinishwa."</string>
+    <string name="compass" msgid="8750992021021133710">"Dira"</string>
+    <string name="battery" msgid="504393301120218841">"Betri"</string>
+    <string name="midnight" msgid="823708676542012468">"usiku wa manane"</string>
+    <string name="noon" msgid="8691597485483233355">"adhuhuri"</string>
+    <string name="am" msgid="1335477392441532734">"AM"</string>
+    <string name="pm" msgid="4558817601126723904">"PM"</string>
+    <string name="applications" msgid="5932623028136955799">"Programu"</string>
+    <string name="applist_reload" msgid="414133960959011310">"Programu Zimepakiwa Upya"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"Njia za mkato"</string>
+    <string name="voicemail" msgid="2728241956154985766">"Ujumbe wa sauti"</string>
+    <string name="charging" msgid="1866903547832856576">"inachaji"</string>
+    <string name="bluetooth" msgid="2711622144183637014">"Bluetooth"</string>
+    <string name="gps" msgid="3600070788552034387">"GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"Hakuna mtandao wa data"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"Mtandao wa data ya simu ya mkononi"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"Mtandao wa data wa 3G"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"Mtandao wa data wa EDGE"</string>
+    <string name="bars" msgid="7483881590990918525">"Pau <xliff:g id="NUMBER">%d</xliff:g>."</string>
+    <string name="deleted" msgid="7861515902560721140">"<xliff:g id="TEXT">%s</xliff:g>. imefutwa."</string>
+    <string name="signal" msgid="205310807240313207">"Mawimbi"</string>
+    <string name="location" msgid="2677990188462642571">"Eneo"</string>
+    <string name="wifi" msgid="682418583409240494">"WiFi"</string>
+    <string name="period" msgid="8258846275720885441">"Muda"</string>
+    <string name="question_mark" msgid="2702061276573162041">"Alama ya Kiulizio"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"Alama ya Mshangao"</string>
+    <string name="comma" msgid="7708024257606893483">"Koma"</string>
+    <string name="backspace" msgid="4090990621501398294">"Futa"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"Hifadhi Njia za mkato"</string>
+    <string name="time" msgid="292946509905481903">"Saa"</string>
+    <string name="search" msgid="7359257903874015321">"Tafuta"</string>
+    <string name="search_widget" msgid="2706011530309391436">"Wijeti ya utafutaji"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"Utafutaji kwa sauti haupatikani kwenye kifaa hiki."</string>
+    <string name="uninstall" msgid="7668601340053785736">"Sanidua"</string>
+    <string name="details_for" msgid="21073196480430350">"Maelezo ya <xliff:g id="APP_NAME">%s</xliff:g>"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"Inaingia katika hali ya kuhariri"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"Inatoka katika hali ya kuhariri"</string>
+    <string name="none" msgid="2549066898380735259">"Hakuna"</string>
+    <string name="tts_required" msgid="7598033865290124596">"TextToSpeech ni kijenzi kinachohitajika. Tafadhali kisakinishe kwanza."</string>
+    <string name="quit" msgid="6472236766275676713">"Toka"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"Haiwezi kuhariri kipengee hiki."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"Rejesha Menyu Chaguo-msingi"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"Hariri Menyu"</string>
+    <string name="editing" msgid="5063919894976972137">"Kuhariri"</string>
+    <string name="rename_menu" msgid="992842791797896454">"Pea Menyu Jina mpya"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"Ingiza Menyu Kushoto"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"Ingiza Menyu Kulia"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"Ingiza jina jipya la menyu"</string>
+    <string name="new_menu" msgid="6501694107597317096">"Menyu Mpya"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"Ongeza njia ya mkato"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"Samahani, hakuna jibu fupi la"</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"Geuza Blue tooth"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"Blue tooth inazimwa"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"Blue tooth inawashwa"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"Geuza Wifi"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"Wifi imezimwa"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"Wifi imewashwa"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"Geuza ulandanishi otomatiki"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"Ulandanishi otomatiki umezimwa"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"Ulandanishi otomatiki umewashwa"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"Ilani: data ya usuli imelemazwa."</string>
+    <string name="gmail" msgid="991932383972966864">"Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"Fungua arifa"</string>
+    <string name="save" msgid="2389796015807831702">"Hifadhi"</string>
+    <string name="run" msgid="2666885736055379870">"Endesha"</string>
+    <string name="application" msgid="4134860023801858659">"Programu"</string>
+    <string name="bookmark" msgid="1475053585102538399">"Alamisho"</string>
+    <string name="contact" msgid="3967189141295438609">"Mwasiliani"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"Upigaji wa Moja kwa Moja"</string>
+    <string name="direct_message" msgid="6883856830119989502">"Ujumbe wa Moja kwa Moja"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Wijeti Isiyotumia Macho"</string>
+    <string name="settings" msgid="2547811091322397443">"Mipangilio"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Lebo ya Gmail"</string>
+    <string name="video_chat" msgid="1400713274879951497">"Soga ya Video"</string>
+    <string name="call" msgid="4657819819700891468">"Pigia <xliff:g id="NAME">%s</xliff:g> simu"</string>
+    <string name="message" msgid="6532533046559751182">"Tuma ujumbe kwa <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="video_call" msgid="375680197155815761">"Piga simu ya video kwa <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="app_name" msgid="2842226161122377485">"Bupu lisilotumia Macho"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
+</resources>

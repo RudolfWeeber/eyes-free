@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"Sicela uvule."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"Une meyili yephimbo entsha."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"Uhlelo lokusebenza alufakiwe."</string>
+    <string name="compass" msgid="8750992021021133710">"I-Compass"</string>
+    <string name="battery" msgid="504393301120218841">"Ibhetri"</string>
+    <string name="midnight" msgid="823708676542012468">"ebusuku"</string>
+    <string name="noon" msgid="8691597485483233355">"mini"</string>
+    <string name="am" msgid="1335477392441532734">"AM"</string>
+    <string name="pm" msgid="4558817601126723904">"PM"</string>
+    <string name="applications" msgid="5932623028136955799">"Izinhlelo zokusebenza"</string>
+    <string name="applist_reload" msgid="414133960959011310">"Izinhlelo zolayishwe kabusha"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"Izinqamuleli"</string>
+    <string name="voicemail" msgid="2728241956154985766">"Ivoyisimeyili"</string>
+    <string name="charging" msgid="1866903547832856576">"iyashaja"</string>
+    <string name="bluetooth" msgid="2711622144183637014">"I-Bluetooth"</string>
+    <string name="gps" msgid="3600070788552034387">"i-GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"Ayikho inethiwekhi yedatha"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"Inethiwekhi yedatha yeselula"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"Inethiwekhoi yedatha ye-3G"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"Inethiwekhi yadatha ye-EDGE"</string>
+    <string name="bars" msgid="7483881590990918525">"Imigqa e ngu-<xliff:g id="NUMBER">%d</xliff:g>."</string>
+    <string name="deleted" msgid="7861515902560721140">"U-<xliff:g id="TEXT">%s</xliff:g>. usuliwe."</string>
+    <string name="signal" msgid="205310807240313207">"ISiginali"</string>
+    <string name="location" msgid="2677990188462642571">"Indawo"</string>
+    <string name="wifi" msgid="682418583409240494">"I-WiFi"</string>
+    <string name="period" msgid="8258846275720885441">"Isikhathi"</string>
+    <string name="question_mark" msgid="2702061276573162041">"Imaki yombuzo"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"Umbabazi"</string>
+    <string name="comma" msgid="7708024257606893483">"Ikhefu"</string>
+    <string name="backspace" msgid="4090990621501398294">"Isikhala"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"Gcina isinqamuleli"</string>
+    <string name="time" msgid="292946509905481903">"Isikhathi"</string>
+    <string name="search" msgid="7359257903874015321">"Sesha"</string>
+    <string name="search_widget" msgid="2706011530309391436">"Sesha i-widget"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"I-Voice search ayitholakali kule divayisi."</string>
+    <string name="uninstall" msgid="7668601340053785736">"Khipha"</string>
+    <string name="details_for" msgid="21073196480430350">"Imininingwane ye-<xliff:g id="APP_NAME">%s</xliff:g>"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"Ifaka imodi yokuhlela"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"Phuma emodini yokuhlela"</string>
+    <string name="none" msgid="2549066898380735259">"Lutho"</string>
+    <string name="tts_required" msgid="7598033865290124596">"I-TextToSpeech into edingekayo. Sicela uyifake kuqala."</string>
+    <string name="quit" msgid="6472236766275676713">"Yeka"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"Ayikwazi ukuhlela le nto."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"Buyisa amamenu wangokwakhona"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"Amamenu okuhlela"</string>
+    <string name="editing" msgid="5063919894976972137">"Ukuhlela"</string>
+    <string name="rename_menu" msgid="992842791797896454">"Qamba kabusha imenu"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"Imenu Yokifaka Kwesobunxele"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"Imenu Yokufaka Ngekwesokudla"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"Faka igama elisha lememu"</string>
+    <string name="new_menu" msgid="6501694107597317096">"Imenu entsha"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"Yengeza isinqamuleli"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"Uxolo, ayikho impendulo efushane ye"</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"I-Blue tooth toggle"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"I-Blue tooth iyacima"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"I-Blue tooth iyakhanyiswa"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"I-Wifi toggle"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"I-Wifi icishiwe"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"I-Wifi iyasebenza"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"I-Autosync toggle"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"I-Autosync icishiwe"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"I-Autosync iyakhanya"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"Isexwayiso: idatha yokwangasemuva ikhubaziwe."</string>
+    <string name="gmail" msgid="991932383972966864">"I-Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"Vula izaziso"</string>
+    <string name="save" msgid="2389796015807831702">"Gcina"</string>
+    <string name="run" msgid="2666885736055379870">"Sebenzisa"</string>
+    <string name="application" msgid="4134860023801858659">"Uhlelo lokusebenza"</string>
+    <string name="bookmark" msgid="1475053585102538399">"Ibhukumaka"</string>
+    <string name="contact" msgid="3967189141295438609">"Oxhumana nabo"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"Ukudayela okuqondile"</string>
+    <string name="direct_message" msgid="6883856830119989502">"Umlayezo oqondile"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"I-Widget engenamehlo"</string>
+    <string name="settings" msgid="2547811091322397443">"Izilungiselelo"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Ilebula ye-Gmail"</string>
+    <string name="video_chat" msgid="1400713274879951497">"Ingxoxo Yezwi"</string>
+    <string name="call" msgid="4657819819700891468">"Shayela u-<xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="message" msgid="6532533046559751182">"Umyelezo <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="video_call" msgid="375680197155815761">"Ucingo levidiyo <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="app_name" msgid="2842226161122377485">"Indlwana enganamehlo"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer-array name="pattern_vibe">
+        <item>0</item>
+        <item>80</item>
+    </integer-array>
+    <integer-array name="pattern_center">
+        <item>0</item>
+        <item>40</item>
+        <item>40</item>
+        <item>40</item>
+        <item>40</item>
+        <item>40</item>
+    </integer-array>
+    <integer-array name="pattern_app_chooser">
+        <item>0</item>
+        <item>1</item>
+        <item>40</item>
+        <item>41</item>
+    </integer-array>
+
+</resources>

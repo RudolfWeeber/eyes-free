@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The following strings are used for earcons -->
+    <string name="earcon_tick">[TICK]</string>
+    <string name="earcon_tock">[TOCK]</string>
+    <string name="marvin_intro_snd_">[marvin intro]</string>
+
+</resources>

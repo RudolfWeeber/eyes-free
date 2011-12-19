@@ -62,6 +62,7 @@ public class StreetLocator {
         final double latitude = lat;
         final double longitude = lon;
         class AddressThread implements Runnable {
+            @Override
             public void run() {
                 String address = getAddress(latitude, longitude);
                 if (address != null) {

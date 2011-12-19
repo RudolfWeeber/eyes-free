@@ -52,6 +52,7 @@ public class ShakeDetector {
 
             private int shakeCountTimeout = 500;
 
+            @Override
             public void onSensorChanged(SensorEvent event) {
                 float[] values = event.values;
                 if ((values[1] > deletionForce) && !lastShakePositive) {
@@ -69,10 +70,12 @@ public class ShakeDetector {
                 }
             }
 
+            @Override
             public void onAccuracyChanged(Sensor arg0, int arg1) {
             }
 
             class resetShakeCount implements Runnable {
+                @Override
                 public void run() {
                     try {
                         Thread.sleep(shakeCountTimeout);

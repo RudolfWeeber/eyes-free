@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"Vui lòng mở khóa."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"Bạn có thư thoại mới."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"Chưa cài đặt ứng dụng."</string>
+    <string name="compass" msgid="8750992021021133710">"La bàn"</string>
+    <string name="battery" msgid="504393301120218841">"Pin"</string>
+    <string name="midnight" msgid="823708676542012468">"nửa đêm"</string>
+    <string name="noon" msgid="8691597485483233355">"chiều"</string>
+    <string name="am" msgid="1335477392441532734">"SA"</string>
+    <string name="pm" msgid="4558817601126723904">"CH"</string>
+    <string name="applications" msgid="5932623028136955799">"Ứng dụng"</string>
+    <string name="applist_reload" msgid="414133960959011310">"Các ứng dụng đã được tải lại"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"Lối tắt"</string>
+    <string name="voicemail" msgid="2728241956154985766">"Thư thoại"</string>
+    <string name="charging" msgid="1866903547832856576">"đang sạc"</string>
+    <string name="bluetooth" msgid="2711622144183637014">"Bluetooth"</string>
+    <string name="gps" msgid="3600070788552034387">"GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"Không có mạng dữ liệu"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"Mạng dữ liệu di động"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"Mạng dữ liệu 3G"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"Mạng dữ liệu EDGE"</string>
+    <string name="bars" msgid="7483881590990918525">"<xliff:g id="NUMBER">%d</xliff:g> thanh."</string>
+    <string name="deleted" msgid="7861515902560721140">"<xliff:g id="TEXT">%s</xliff:g>. đã xóa."</string>
+    <string name="signal" msgid="205310807240313207">"Tín hiệu"</string>
+    <string name="location" msgid="2677990188462642571">"Vị trí"</string>
+    <string name="wifi" msgid="682418583409240494">"WiFi"</string>
+    <string name="period" msgid="8258846275720885441">"Giai đoạn"</string>
+    <string name="question_mark" msgid="2702061276573162041">"Dấu chấm hỏi"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"Dấu chấm than"</string>
+    <string name="comma" msgid="7708024257606893483">"Dấu phẩy"</string>
+    <string name="backspace" msgid="4090990621501398294">"Backspace"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"Lưu lối tắt"</string>
+    <string name="time" msgid="292946509905481903">"Thời gian"</string>
+    <string name="search" msgid="7359257903874015321">"Tìm kiếm"</string>
+    <string name="search_widget" msgid="2706011530309391436">"Tiện ích Tìm kiếm"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"Thiết bị này không có Tìm kiếm bằng giọng nói."</string>
+    <string name="uninstall" msgid="7668601340053785736">"Gỡ cài đặt"</string>
+    <string name="details_for" msgid="21073196480430350">"Thông tin chi tiết cho <xliff:g id="APP_NAME">%s</xliff:g>"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"Đang vào chế độ chỉnh sửa"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"Đang thoát khỏi chế độ chỉnh sửa"</string>
+    <string name="none" msgid="2549066898380735259">"Bỏ chọn tất cả"</string>
+    <string name="tts_required" msgid="7598033865290124596">"TextToSpeech là cấu phần bắt buộc. Vui lòng tải cấu phần này trước tiên."</string>
+    <string name="quit" msgid="6472236766275676713">"Thoát"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"Không thể chỉnh sửa mục này."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"Khôi phục các trình đơn mặc định"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"Chỉnh sửa trình đơn"</string>
+    <string name="editing" msgid="5063919894976972137">"Chỉnh sửa"</string>
+    <string name="rename_menu" msgid="992842791797896454">"Đổi tên trình đơn"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"Chèn trình đơn sang trái"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"Chèn trình đơn sang phải"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"Nhập tên trình đơn mới"</string>
+    <string name="new_menu" msgid="6501694107597317096">"Trình đơn mới"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"Thêm lối tắt"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"Rất tiếc, không có câu trả lời ngắn cho"</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"Chuyển đổi Bluetooth"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"Đang tắt Bluetooth"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"Đang bật Bluetooth"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"Chuyển đổi Wifi"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"Đã tắt WiFi"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"Đang bật WiFi"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"Chuyển đổi Tự động đồng bộ hóa"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"Đã tắt Tự động đồng bộ hóa"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"Đang bật Tự động đồng bộ hóa"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"Cảnh báo: dữ liệu nền đã bị tắt."</string>
+    <string name="gmail" msgid="991932383972966864">"Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"Mở thông báo"</string>
+    <string name="save" msgid="2389796015807831702">"Lưu"</string>
+    <string name="run" msgid="2666885736055379870">"Chạy"</string>
+    <string name="application" msgid="4134860023801858659">"Ứng dụng"</string>
+    <string name="bookmark" msgid="1475053585102538399">"Dấu trang"</string>
+    <string name="contact" msgid="3967189141295438609">"Liên hệ"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"Quay số trực tiếp"</string>
+    <string name="direct_message" msgid="6883856830119989502">"Tin nhắn trực tiếp"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Tiện ích Eyes-Free"</string>
+    <string name="settings" msgid="2547811091322397443">"Cài đặt"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Nhãn Gmail"</string>
+    <string name="video_chat" msgid="1400713274879951497">"Trò chuyện video"</string>
+    <string name="call" msgid="4657819819700891468">"Gọi cho <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="message" msgid="6532533046559751182">"Nhắn tin cho <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="video_call" msgid="375680197155815761">"Gọi video cho <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
+</resources>

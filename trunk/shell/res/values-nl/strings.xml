@@ -1,95 +1,85 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="please_unlock">Ontgrendel nu \'t scherm.</string>
-    <string name="you_have_new_voicemail">Er is nieuwe voice mail.</string>
-    <string name="application_not_installed">De toepassing is niet geīnstalleerd.</string>
-    <string name="compass">Kompas</string>
-    <string name="battery">Batterij</string>
-    <string name="midnight">middernacht</string>
-    <string name="noon">12 uur</string>
-    <string name="am">\'s ochtends</string>
-    <string name="pm">\'s middags</string>
-    <string name="applications">Toepassingen</string>
-    <string name="applist_reload">Toepassingenlijst herladen.</string>
-    <string name="shortcuts">Snelkoppelingen</string>
-    <string name="voicemail">Voice Mail</string>
-    <string name="marvin_intro_snd_">[marvin intro]</string>
-    <string name="charging">bezig met opladen</string>
-    <string name="bluetooth">Bluetooth</string>
-    <string name="gps">GPS</string>
-    <string name="no_data_network">Geen data netwerk</string>
-    <string name="mobile_data_network">Mobiele netwerk</string>
-    <string name="threeg_data_network">3G netwerk</string>
-    <string name="edge_data_network">EDGE</string>
-    <string name="bars">streepjes.</string>
-    <string name="deleted">.  Verwijderd.</string>
-    <string name="signal">Signaal</string>
-    <string name="location">Locatie</string>
-    <string name="wifi">WiFi</string>
-    <string name="period">punt</string>
-    <string name="question_mark">vraagteken</string>
-    <string name="exclamation_point">uitroepteken</string>
-    <string name="comma">komma</string>
-    <string name="backspace">backspace</string>
-    <string name="save_shortcuts">Snelkoppelingen opslaan</string>
-    <string name="time">Tijd</string>
-    <string name="search">Zoeken</string>
-    <string name="search_widget">Zoeken-widget</string>
-    <string name="search_not_available">Spraakgestuurd zoeken is niet beschikbaar op dit toestel.</string>
-    <string name="uninstall">Installatie ongedaan maken</string>
-    <string name="details_for">Details tonen</string>
-    <string name="entering_edit_mode">Tekst invoeren</string>
-    <string name="exiting_edit_mode">Einde tekstinvoer</string>
-    <string name="none">Leeg</string>
-    <string name="unable_to_continue">Doorgaan niet mogelijk.</string>
-    <string name="tts_required">Tekst naar Spraak vereist.  Eerst TTS-module installeren.</string>
-    <string name="quit">Afsluiten</string>
-    <string name="cannot_edit_this_item">Kan deze bewerking niet uitvoeren.</string>
-    <string name="restore_default_menus">Standaardmenu\'s terugzetten</string>
-    <string name="edit_menus">Menu\'s bewerken</string>
-    <string name="editing">Bewerken</string>
-    <string name="rename_menu">Naam menu wijzigen</string>
-    <string name="insert_menu_left">Menu links invoegen.</string>
-    <string name="insert_menu_right">Menu rechts invoegen</string>
-    <string name="enter_new_menu_name">Nieuwe menunaam invoeren</string>
-    <string name="new_menu">Nieuw menu</string>
-    <string name="add_to_shell">Aan shell toevoegen</string>
-    <string name="no_short_answer">Kan dit niet beantwoorden</string>
-    <string name="bluetooth_toggle">Bluetooth aan/uit-knop</string>
-    <string name="bluetooth_turning_off">Bluetooth wordt uitgeschakeld</string>
-    <string name="bluetooth_turning_on">Bluetooth wordt ingeschakeld</string>
-    <string name="wifi_toggle">Wifi aan/uit-knop</string>
-    <string name="wifi_off">Wifi uit</string>
-    <string name="wifi_on">Wifi aan</string>
-    <string name="autosync_toggle">Autosync aan/uit-knop</string>
-    <string name="autosync_off">Autosync uit</string>
-    <string name="autosync_on">Autosync aan</string>
-    <string name="background_data_warning">Let op! Dataverbinding staat uit.</string>
-    <string name="gmail">Gmail</string>
-
-    <!-- The following strings are possible types of shortcuts. -->
-    <string name="application">Toepassing</string>
-    <string name="bookmark">Bladwijzer</string>
-    <string name="contact">Contactpersoon</string>
-    <string name="direct_dial">Nummer bellen</string>
-    <string name="direct_message">Rechtstreeks bericht aan</string>
-    <string name="eyes_free_widget">Eyes-free widget</string>
-    <string name="settings">Instellingen</string>
-    <string name="gmail_label">Gmail label</string>
-
-    <!-- The following strings are verbs to be followed by the name of a contact. -->
-    <string name="call">Bel</string>
-    <string name="message">Stuur bericht aan</string>
-
-    <!-- The following strings are displayed but never spoken -->
-    <string name="app_name">Eyes-Free Shell</string>
-
-    <!-- The following strings are used for earcons -->
-    <string name="earcon_tick">[TICK]</string>
-    <string name="earcon_tock">[TOCK]</string>
-
-    <!-- The following strings are used for the search URL. Use the localized language for better onebox triggering. -->
-    <string name="search_url">http://www.google.nl/m?q=</string>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"Ontgrendelen."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"U heeft nieuwe voicemail."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"App niet geïnstalleerd."</string>
+    <string name="compass" msgid="8750992021021133710">"Kompas"</string>
+    <string name="battery" msgid="504393301120218841">"Accu"</string>
+    <string name="midnight" msgid="823708676542012468">"middernacht"</string>
+    <string name="noon" msgid="8691597485483233355">"twaalf uur \'s middags"</string>
+    <string name="am" msgid="1335477392441532734">"AM"</string>
+    <string name="pm" msgid="4558817601126723904">"PM"</string>
+    <string name="applications" msgid="5932623028136955799">"Apps"</string>
+    <string name="applist_reload" msgid="414133960959011310">"Apps opnieuw geladen"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"Sneltoetsen"</string>
+    <string name="voicemail" msgid="2728241956154985766">"Voicemail"</string>
+    <string name="charging" msgid="1866903547832856576">"opladen"</string>
+    <string name="bluetooth" msgid="2711622144183637014">"Bluetooth"</string>
+    <string name="gps" msgid="3600070788552034387">"GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"Geen gegevensnetwerk"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"Mobiel gegevensnetwerk"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"3G-gegevensnetwerk"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"EDGE-gegevensnetwerk"</string>
+    <string name="bars" msgid="7483881590990918525">"<xliff:g id="NUMBER">%d</xliff:g> balken."</string>
+    <string name="deleted" msgid="7861515902560721140">"<xliff:g id="TEXT">%s</xliff:g>. verwijderd."</string>
+    <string name="signal" msgid="205310807240313207">"Signaal"</string>
+    <string name="location" msgid="2677990188462642571">"Locatie"</string>
+    <string name="wifi" msgid="682418583409240494">"Wifi"</string>
+    <string name="period" msgid="8258846275720885441">"Punt"</string>
+    <string name="question_mark" msgid="2702061276573162041">"Vraagteken"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"Uitroepteken"</string>
+    <string name="comma" msgid="7708024257606893483">"Komma"</string>
+    <string name="backspace" msgid="4090990621501398294">"Backspace"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"Sneltoetsen opslaan"</string>
+    <string name="time" msgid="292946509905481903">"Tijd"</string>
+    <string name="search" msgid="7359257903874015321">"Zoeken"</string>
+    <string name="search_widget" msgid="2706011530309391436">"Zoekwidget"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"Spraakgestuurd zoeken is niet beschikbaar op dit apparaat."</string>
+    <string name="uninstall" msgid="7668601340053785736">"Verwijderen"</string>
+    <string name="details_for" msgid="21073196480430350">"Details voor <xliff:g id="APP_NAME">%s</xliff:g>"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"Bewerkingsmodus openen"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"Bewerkingsmodus afsluiten"</string>
+    <string name="none" msgid="2549066898380735259">"Geen"</string>
+    <string name="tts_required" msgid="7598033865290124596">"Tekst-naar-spraak is een vereist onderdeel. Installeer dit eerst."</string>
+    <string name="quit" msgid="6472236766275676713">"Sluiten"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"Kan dit item niet bewerken."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"Standaardmenu\'s herstellen"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"Menu\'s bewerken"</string>
+    <string name="editing" msgid="5063919894976972137">"Bewerken"</string>
+    <string name="rename_menu" msgid="992842791797896454">"Naam van menu wijzigen"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"Menu links invoegen"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"Menu rechts invoegen"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"Nieuwe menunaam opgeven"</string>
+    <string name="new_menu" msgid="6501694107597317096">"Nieuw menu"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"Snelkoppeling toevoegen"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"Geen kort antwoord voor"</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"Bluetooth in-/uitschakelen"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"Bluetooth uitschakelen"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"Bluetooth inschakelen"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"Wifi in-/uitschakelen"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"Wifi uit"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"Wifi aan"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"Automatische synchronisatie in-/uitschakelen"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"Automatische synchronisatie uit"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"Automatische synchronisatie aan"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"Waarschuwing: achtergrondgegevens uitgeschakeld."</string>
+    <string name="gmail" msgid="991932383972966864">"Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"Meldingen openen"</string>
+    <string name="save" msgid="2389796015807831702">"Opslaan"</string>
+    <string name="run" msgid="2666885736055379870">"Uitvoeren"</string>
+    <string name="application" msgid="4134860023801858659">"App"</string>
+    <string name="bookmark" msgid="1475053585102538399">"Bladwijzer"</string>
+    <string name="contact" msgid="3967189141295438609">"Contact"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"Direct bellen"</string>
+    <string name="direct_message" msgid="6883856830119989502">"Direct bericht"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Eyes-Free Widget"</string>
+    <string name="settings" msgid="2547811091322397443">"Instellingen"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Label van Gmail"</string>
+    <string name="video_chat" msgid="1400713274879951497">"Videochat"</string>
+    <string name="call" msgid="4657819819700891468">"<xliff:g id="NAME">%s</xliff:g> bellen"</string>
+    <string name="message" msgid="6532533046559751182">"<xliff:g id="NAME">%s</xliff:g> een bericht sturen"</string>
+    <string name="video_call" msgid="375680197155815761">"Video-oproep <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

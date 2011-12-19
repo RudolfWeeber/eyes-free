@@ -38,13 +38,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.provider.ContactsContract;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -60,6 +58,7 @@ import com.google.marvin.shell.ScrollSidebarView.OnScrollDetectedListener;
 import com.google.marvin.widget.GestureOverlay;
 import com.google.marvin.widget.GestureOverlay.Gesture;
 import com.google.marvin.widget.GestureOverlay.GestureListener;
+import com.googlecode.eyesfree.utils.FeedbackController;
 
 import java.io.File;
 import java.io.InputStream;
@@ -121,6 +120,8 @@ public class MarvinShell extends Activity {
     private AppChooserView appChooserView;
 
     public TextToSpeech tts;
+    
+    private FeedbackController feedbackController;
 
     public boolean isFocused;
 
@@ -145,16 +146,6 @@ public class MarvinShell extends Activity {
      * the Shell has just started up.
      */
     private boolean justStarted;
-
-    private Vibrator vibe;
-
-    private static final long[] VIBE_PATTERN = {
-            0, 80
-    };
-
-    private static final long[] CENTER_PATTERN = {
-            0, 40, 40, 40, 40, 40
-    };
 
     private GestureOverlay gestureOverlay;
 
@@ -196,7 +187,7 @@ public class MarvinShell extends Activity {
         });
 
         tts = new TextToSpeech(this, ttsInitListener);
-        vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        feedbackController = FeedbackController.getInstance(this);
         mTelephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setVolumeControlStream(AudioManager.STREAM_RING);
@@ -319,6 +310,7 @@ public class MarvinShell extends Activity {
      * clip. ("Here I am, brain the size of a planet ...")
      */
     private OnInitListener ttsInitListener = new OnInitListener() {
+        @Override
         public void onInit(int status) {
             switch (status) {
                 case TextToSpeech.SUCCESS:
@@ -520,6 +512,7 @@ public class MarvinShell extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(self);
         builder.setTitle("Select widget");
         builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int item) {
                 String widgetData = widgets.descriptionToWidget.get(items[item]);
                 if (widgetData != null) {
@@ -536,23 +529,25 @@ public class MarvinShell extends Activity {
       private long lastCenterUpTime = 0;
       private long doubleTapWindow = 500;
 
+      @Override
         public void onGestureStart(int g) {
             setVolumeControlStream(AudioManager.STREAM_MUSIC);
             if (g == GestureOverlay.Gesture.CENTER) {
                 // If the gesture starts in the middle, don't start speaking.
-                vibe.vibrate(CENTER_PATTERN, -1);
+                feedbackController.playVibration(R.array.pattern_center);
             } else {
                 onGestureChange(g);
             }
         }
 
+      @Override
         public void onGestureChange(int g) {
             String feedback;
             if (g == GestureOverlay.Gesture.CENTER) {
-                vibe.vibrate(CENTER_PATTERN, -1);
+                feedbackController.playVibration(R.array.pattern_center);
                 feedback = currentMenu.getName();
             } else {
-                vibe.vibrate(VIBE_PATTERN, -1);
+                feedbackController.playVibration(R.array.pattern_center);
                 MenuItem item = currentMenu.get(g);
                 if (item != null) {
                     feedback = item.label;
@@ -570,6 +565,7 @@ public class MarvinShell extends Activity {
             tts.speak(feedback, TextToSpeech.QUEUE_FLUSH, null);
         }
 
+      @Override
         public void onGestureFinish(int g) {
             setVolumeControlStream(AudioManager.STREAM_RING);
             
@@ -683,6 +679,7 @@ public class MarvinShell extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(self);
         builder.setTitle(getString(R.string.add_to_shell));
         builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
             public void onClick(DialogInterface dialog, int item) {
                 String action = shortcutDescriptionToAction.get(items[item]);
                 if (action.equals("LAUNCH")) {
@@ -801,6 +798,7 @@ public class MarvinShell extends Activity {
                 if (backKeyTimeDown == -1) {
                     backKeyTimeDown = System.currentTimeMillis();
                     class QuitCommandWatcher implements Runnable {
+                        @Override
                         public void run() {
                             try {
                                 Thread.sleep(3000);
@@ -929,7 +927,7 @@ public class MarvinShell extends Activity {
                             .getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
                     phoneNumber = c.getString(c
                             .getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    menuItem = new MenuItem(getString(R.string.call) + " " + name, "CALL",
+                    menuItem = new MenuItem(getString(R.string.call, name), "CALL",
                             phoneNumber, null);
                 }
                 break;
@@ -940,7 +938,7 @@ public class MarvinShell extends Activity {
                             .getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
                     phoneNumber = c.getString(c
                             .getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    menuItem = new MenuItem(getString(R.string.message) + " " + name, "SMS",
+                    menuItem = new MenuItem(getString(R.string.message, name), "SMS",
                             phoneNumber, null);
                 }
                 break;
@@ -949,7 +947,7 @@ public class MarvinShell extends Activity {
                 label = data.getStringExtra("label");
                 if (label == null)
                     label = number;
-                menuItem = new MenuItem(getString(R.string.call) + " " + label, "CALL", number,
+                menuItem = new MenuItem(getString(R.string.call, label), "CALL", number,
                         null);
                 break;
             case REQUEST_CODE_TALKING_DIALER_MESSAGE:
@@ -957,7 +955,7 @@ public class MarvinShell extends Activity {
                 label = data.getStringExtra("label");
                 if (label == null)
                     label = number;
-                menuItem = new MenuItem(getString(R.string.message) + " " + label, "SMS", number,
+                menuItem = new MenuItem(getString(R.string.message, label), "SMS", number,
                         null);
                 break;
             case REQUEST_CODE_PICK_GMAIL_LABEL:
@@ -970,7 +968,7 @@ public class MarvinShell extends Activity {
             case REQUEST_CODE_PICK_VIDEO_CHAT:  
                 name = data.getStringExtra("name"); 
                 String address = data.getStringExtra("address");    
-                menuItem = new MenuItem(getString(R.string.video_call) + " " + name, "VIDEO_CHAT",  
+                menuItem = new MenuItem(getString(R.string.video_call, name), "VIDEO_CHAT",  
                 address, null); 
                 break;                
         }
@@ -1049,8 +1047,8 @@ public class MarvinShell extends Activity {
             case APPLAUNCHER_VIEW:
                 String uninstallText = getString(R.string.uninstall) + " "
                         + appChooserView.getCurrentAppTitle();
-                String detailsFor = getString(R.string.details_for) + " "
-                        + appChooserView.getCurrentAppTitle();
+                String detailsFor =
+                        getString(R.string.details_for, appChooserView.getCurrentAppTitle());
                 menu.add(NONE, R.string.details_for, 0, detailsFor).setIcon(
                         android.R.drawable.ic_menu_info_details);
                 menu.add(NONE, R.string.uninstall, 1, uninstallText).setIcon(
@@ -1253,6 +1251,7 @@ public class MarvinShell extends Activity {
             q = query;
         }
 
+        @Override
         public void run() {
             String contents = OneBoxScraper.processGoogleResults(q, getString(R.string.search_url));
             if (contents.length() > 0) {

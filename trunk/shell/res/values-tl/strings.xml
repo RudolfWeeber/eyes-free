@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"Paki-unlock."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"May bago kang voicemail."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"Hindi na-install ang application."</string>
+    <string name="compass" msgid="8750992021021133710">"Compass"</string>
+    <string name="battery" msgid="504393301120218841">"Baterya"</string>
+    <string name="midnight" msgid="823708676542012468">"hatinggabi"</string>
+    <string name="noon" msgid="8691597485483233355">"tanghali"</string>
+    <string name="am" msgid="1335477392441532734">"AM"</string>
+    <string name="pm" msgid="4558817601126723904">"PM"</string>
+    <string name="applications" msgid="5932623028136955799">"Mga Application"</string>
+    <string name="applist_reload" msgid="414133960959011310">"Na-reload ang mga Application"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"Mga Shortcut"</string>
+    <string name="voicemail" msgid="2728241956154985766">"Voicemail"</string>
+    <string name="charging" msgid="1866903547832856576">"nagcha-charge"</string>
+    <string name="bluetooth" msgid="2711622144183637014">"Bluetooth"</string>
+    <string name="gps" msgid="3600070788552034387">"GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"Walang network ng data"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"Network ng mobile data"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"Network ng data na 3G"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"Network ng data na EDGE"</string>
+    <string name="bars" msgid="7483881590990918525">"<xliff:g id="NUMBER">%d</xliff:g> (na) bar."</string>
+    <string name="deleted" msgid="7861515902560721140">"Tinanggal ang <xliff:g id="TEXT">%s</xliff:g>."</string>
+    <string name="signal" msgid="205310807240313207">"Signal"</string>
+    <string name="location" msgid="2677990188462642571">"Lokasyon"</string>
+    <string name="wifi" msgid="682418583409240494">"WiFi"</string>
+    <string name="period" msgid="8258846275720885441">"Tuldok"</string>
+    <string name="question_mark" msgid="2702061276573162041">"Tandang Pananong"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"Tandang Padamdam"</string>
+    <string name="comma" msgid="7708024257606893483">"Kuwit"</string>
+    <string name="backspace" msgid="4090990621501398294">"Backspace"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"I-save ang Mga Shortcut"</string>
+    <string name="time" msgid="292946509905481903">"Oras"</string>
+    <string name="search" msgid="7359257903874015321">"Maghanap"</string>
+    <string name="search_widget" msgid="2706011530309391436">"Widget sa paghahanap"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"Hindi available ang Paghahanap gamit ang boses sa device na ito."</string>
+    <string name="uninstall" msgid="7668601340053785736">"I-uninstall"</string>
+    <string name="details_for" msgid="21073196480430350">"Mga detalye para sa <xliff:g id="APP_NAME">%s</xliff:g>"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"Pumapasok sa mode ng pag-edit"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"Lumalabas sa mode ng pag-edit"</string>
+    <string name="none" msgid="2549066898380735259">"Wala"</string>
+    <string name="tts_required" msgid="7598033865290124596">"Ang TextToSpeech ay isang kinakailangang bahagi. Paki-install muna ito."</string>
+    <string name="quit" msgid="6472236766275676713">"Lumabas"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"Hindi ma-edit ang item na ito."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"Ipanumbalik ang Mga Default na Menu"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"I-edit ang Mga Menu"</string>
+    <string name="editing" msgid="5063919894976972137">"Ine-edit"</string>
+    <string name="rename_menu" msgid="992842791797896454">"Palitan ang Pangalan ng Menu"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"Ipasok ang Menu sa Kaliwa"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"Ipasok ang Menu sa Kanan"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"Maglagay ng bagong pangalan ng menu"</string>
+    <string name="new_menu" msgid="6501694107597317096">"Bagong Menu"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"Magdagdag ng shortcut"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"Paumanhin, walang maikling sagot para sa"</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"Toogle ng Blue tooth"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"Nag-o-off ang Blue tooth"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"Nag-o-on ang Blue tooth"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"Toggle ng Wifi"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"Naka-off ang Wifi"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"Naka-on ang Wifi"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"Toggle ng autosync"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"Naka-off ang autosync"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"Naka-on ang autosync"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"Babala: hindi pinagana ang data ng background."</string>
+    <string name="gmail" msgid="991932383972966864">"Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"Buksan ang notification"</string>
+    <string name="save" msgid="2389796015807831702">"I-save"</string>
+    <string name="run" msgid="2666885736055379870">"Patakbuhin"</string>
+    <string name="application" msgid="4134860023801858659">"Application"</string>
+    <string name="bookmark" msgid="1475053585102538399">"Bookmark"</string>
+    <string name="contact" msgid="3967189141295438609">"Contact"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"Direktang Pag-dial"</string>
+    <string name="direct_message" msgid="6883856830119989502">"Direktang Mensahe"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Eyes-Free Widget"</string>
+    <string name="settings" msgid="2547811091322397443">"Mga Setting"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Label ng Gmail"</string>
+    <string name="video_chat" msgid="1400713274879951497">"Video Chat"</string>
+    <string name="call" msgid="4657819819700891468">"Tawagan si <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="message" msgid="6532533046559751182">"Padalhan ng mensahe si <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="video_call" msgid="375680197155815761">"I-video call si <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
+</resources>

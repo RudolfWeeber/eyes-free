@@ -36,6 +36,7 @@ import com.google.marvin.shell.StreetLocator.StreetLocatorListener;
  */
 public class Guide implements Runnable, StreetLocatorListener {
     class GiveUpTimer implements Runnable {
+        @Override
         public void run() {
             try {
                 Thread.sleep(10000);
@@ -55,6 +56,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     }
 
     private LocationListener networkLocationListener = new LocationListener() {
+        @Override
         public void onLocationChanged(Location arg0) {
             networkLoc = arg0;
             networkLocLastUpdateTime = System.currentTimeMillis();
@@ -71,15 +73,18 @@ public class Guide implements Runnable, StreetLocatorListener {
             }
         }
 
+        @Override
         public void onProviderDisabled(String arg0) {
             unregisterLocationServices();
             networkLoc = null;
             networkLocLastUpdateTime = -1;
         }
 
+        @Override
         public void onProviderEnabled(String arg0) {
         }
 
+        @Override
         public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
             if (arg1 != LocationProvider.AVAILABLE) {
                 unregisterLocationServices();
@@ -92,6 +97,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     };
 
     private LocationListener gpsLocationListener = new LocationListener() {
+        @Override
         public void onLocationChanged(Location arg0) {
             gpsLoc = arg0;
             gpsLocLastUpdateTime = System.currentTimeMillis();
@@ -109,15 +115,18 @@ public class Guide implements Runnable, StreetLocatorListener {
             }
         }
 
+        @Override
         public void onProviderDisabled(String arg0) {
             unregisterLocationServices();
             gpsLoc = null;
             gpsLocLastUpdateTime = -1;
         }
 
+        @Override
         public void onProviderEnabled(String arg0) {
         }
 
+        @Override
         public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
         }
     };
@@ -125,6 +134,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     // This is a fix for the Droid - the status listener must be set or GPS will
     // not work right.
     GpsStatus.Listener dummyGpsStatusListener = new GpsStatus.Listener() {
+        @Override
         public void onGpsStatusChanged(int event) {
         }
     };
@@ -199,6 +209,7 @@ public class Guide implements Runnable, StreetLocatorListener {
         }
     }
 
+    @Override
     public synchronized void run() {
         locate();
     }
@@ -277,11 +288,26 @@ public class Guide implements Runnable, StreetLocatorListener {
 
     private String currentIntersection;
 
+    @Override
     public void onAddressLocated(String address) {
         currentAddress = "";
         if (address.length() > 0) {
+            currentAddress = cleanupSpokenAddress(address);
+            parent.tts.speak("Near " + currentAddress, TextToSpeech.QUEUE_ADD, null);
+        }
+
+        // If there was no location, just give up.
+        // Otherwise, try to get the intersection.
+        if (currentLocation == null) {
+            self.shutdown();
+        }
+    }
+
+    // Cleans up the spoken address for US style addresses.
+    private String cleanupSpokenAddress(String originalAddress) {
+        try {
             // Drop the country
-            address = address.substring(0, address.lastIndexOf(","));
+            String address = originalAddress.substring(0, originalAddress.lastIndexOf(","));
             // Extract the state and zip and insert spaces in the state name
             // that the synthesizer will do the right thing.
             String rawStateZip = address.substring(address.lastIndexOf(",") + 1);
@@ -292,15 +318,9 @@ public class Guide implements Runnable, StreetLocatorListener {
                 stateZip = stateZip + state.charAt(i) + " ";
             }
             stateZip = stateZip + zip;
-            currentAddress = address.substring(0, address.lastIndexOf(",")) + ". " + stateZip;
-
-            parent.tts.speak("Near " + currentAddress, TextToSpeech.QUEUE_ADD, null);
-        }
-
-        // If there was no location, just give up.
-        // Otherwise, try to get the intersection.
-        if (currentLocation == null) {
-            self.shutdown();
+            return address.substring(0, address.lastIndexOf(",")) + ". " + stateZip;
+        } catch (StringIndexOutOfBoundsException e) {
+            return originalAddress;
         }
     }
 }

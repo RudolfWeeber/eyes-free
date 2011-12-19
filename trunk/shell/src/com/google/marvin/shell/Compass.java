@@ -54,11 +54,13 @@ public class Compass {
      * Handles the sensor events for changes to readings and accuracy
      */
     private final SensorEventListener mListener = new SensorEventListener() {
+        @Override
         public void onSensorChanged(SensorEvent event) {
             // Values are yaw (heading), pitch, and roll.
             currentHeading = event.values[0];
         }
 
+        @Override
         public void onAccuracyChanged(Sensor arg0, int arg1) {
             sensorOk = (arg1 == SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
         }

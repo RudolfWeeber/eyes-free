@@ -1,102 +1,415 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user turns on their device and the screen is locked.
+    -->
     <string name="please_unlock">Please unlock.</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user has new voicemail.
+    -->
     <string name="you_have_new_voicemail">You have new voicemail.</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user attempts to open a shortcut to an application that is not installed.
+    -->
     <string name="application_not_installed">Application not installed.</string>
+    <!--
+        Source: Label for Compass shortcut.
+        Description: This speaks the device's current location.
+    -->
     <string name="compass">Compass</string>
+    <!--
+        Source: Label for Battery status shortcut.
+        Description: This speaks the device's current battery charging status.
+    -->
     <string name="battery">Battery</string>
+    <!--
+        Source: Spoken description of the current time.
+        Description: Label for 12:00 AM (midnight).
+    -->
     <string name="midnight">midnight</string>
+    <!--
+        Source: Spoken description of the current time.
+        Description: Label for 12:00 PM (noon).
+    -->
     <string name="noon">noon</string>
+    <!--
+        Source: Spoken description of the current time.
+        Description: Label for time (AM).
+    -->
     <string name="am">AM</string>
+    <!--
+        Source: Spoken description of the current time.
+        Description: Label for time (PM).
+    -->
     <string name="pm">PM</string>
+    <!--
+        Source: Label for Applications. 
+        Description: This allows the user to select and run an installed application.
+    -->
     <string name="applications">Applications</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the cached list of applications has been reloaded. [CHAR LIMIT="NONE"]
+    -->
     <string name="applist_reload">Applications Reloaded</string>
+    <!--
+        Source: Label for Shortcuts.
+        Description: This allows the user to select and run a custom shortcut.
+    -->
     <string name="shortcuts">Shortcuts</string>
+    <!--
+        Source: Label for Voicemail shortcut.
+        Description: This opens the user's voicemail.
+    -->
     <string name="voicemail">Voicemail</string>
-    <string name="marvin_intro_snd_">[marvin intro]</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user checks battery status while the phone is charging.
+    -->
     <string name="charging">charging</string>
+    <!--
+        Source: Label for Bluetooth.
+        Description: This speaks Bluetooth status.
+    -->
     <string name="bluetooth">Bluetooth</string>
+    <!--
+        Source: Label for GPS.
+        Description: This speaks GPS status.
+    -->
     <string name="gps">GPS</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when there is no data network available. [CHAR LIMIT="NONE"]
+    -->
     <string name="no_data_network">No data network</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user is connected to an data network of unknown type. [CHAR LIMIT="NONE"]
+    -->
     <string name="mobile_data_network">Mobile data network</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user is connected to a 3G data network. [CHAR LIMIT="NONE"]
+    -->
     <string name="threeg_data_network">3G data network</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user is connected to an EDGE data network. [CHAR LIMIT="NONE"]
+    -->
     <string name="edge_data_network">EDGE data network</string>
-    <string name="bars">bars.</string>
-    <string name="deleted">.  deleted.</string>
+    <!--
+        Source: Speech feedback for network signal.
+        Description: Used when describing the data network signal, e.g. "4 bars". [CHAR LIMIT="NONE"]
+    -->
+    <string name="bars"><xliff:g id="number" example="4">%d</xliff:g> bars.</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when text is deleted. This is preceded by the deleted character or text, ex. "H. deleted.".
+    -->
+    <string name="deleted"><xliff:g id="text" example="H">%s</xliff:g>.  deleted.</string>
+    <!--
+        Source: Label for Network Signal shortcut.
+        Description: This speaks the cellphone network signal status.
+    -->
     <string name="signal">Signal</string>
+    <!--
+        Source: Label for Location shortcut.
+        Description: This speaks the device's current location.
+    -->
     <string name="location">Location</string>
+    <!--
+        Source: Label for Wi-Fi shortcut.
+        Description: This speaks the Wi-Fi signal status.
+    -->
     <string name="wifi">WiFi</string>
+    <!--
+        Source: Keyboard key.
+        Description: Spoken description for the "." keyboard key.
+    -->
     <string name="period">Period</string>
+    <!--
+        Source: Keyboard key.
+        Description: Spoken description for the "?" keyboard key.
+    -->
     <string name="question_mark">Question Mark</string>
+    <!--
+        Source: Keyboard key.
+        Description: Spoken description for the "!" keyboard key.
+    -->
     <string name="exclamation_point">Exclamation Point</string>
+    <!--
+        Source: Keyboard key.
+        Description: Spoken description for the "," keyboard key.
+    -->
     <string name="comma">Comma</string>
+    <!--
+        Source: Keyboard key.
+        Description: Spoken description for the backspace keyboard key.
+    -->
     <string name="backspace">Backspace</string>
+    <!--
+        Source: Label for the button to save shortcuts. Shown when editing shortcuts.
+        Description: This saves the current shortcuts.
+    -->
     <string name="save_shortcuts">Save Shortcuts</string>
+    <!--
+        Source: Label for Time shortcut.
+        Description: This speaks the current time.
+    -->
     <string name="time">Time</string>
+    <!--
+        Source: Label for Search shortcut.
+        Description: This opens a dialog to perform a Google search.
+    -->
     <string name="search">Search</string>
+    <!--
+        Source: Label for Voice Search shortcut.
+        Description: This opens a dialog to perform a voice search.
+    -->
     <string name="search_widget">Search widget</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user attempts to launch voice search and it is not available.
+    -->
     <string name="search_not_available">Voice search is not available on this device.</string>
+    <!--
+        Source: Label for the button to uninstall an application.
+        Description: This removes the selected application from the device.
+    -->
     <string name="uninstall">Uninstall</string>
-    <string name="details_for">Details for</string>
+    <!--
+        Source: Dialog title.
+        Description: Title for dialog that displays application details. 
+    -->
+    <string name="details_for">Details for <xliff:g id="app_name" example="Gmail">%s</xliff:g></string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user enters the menu editor.
+    -->
     <string name="entering_edit_mode">Entering edit mode</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user exits the menu editor.
+    -->
     <string name="exiting_edit_mode">Exiting edit mode</string>
+    <!--
+        Source: Label for an empty shortcut.
+        Description: This does not perform an action.
+    -->
     <string name="none">None</string>
-    <string name="unable_to_continue">Unable to continue.</string>
+    <!--
+        Source: Alert dialog text.
+        Description: Text shown to the user when the Text-To-Speech service is not available.
+    -->
     <string name="tts_required">TextToSpeech is a required component. Please install it first.</string>
+    <!--
+        Source: Label for the button to quit menu editing mode.
+        Description: Quits menu editing mode, returns to shortcut selection mode.
+    -->
     <string name="quit">Quit</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user attempts to edit an item that is not editable.
+    -->
     <string name="cannot_edit_this_item">Cannot edit this item.</string>
+    <!--
+        Source: Button label.
+        Description: Label for the button to restore the default application menus.
+    -->
     <string name="restore_default_menus">Restore Default Menus</string>
+    <!--
+        Source: Button label.
+        Description: Label for the button to edit the application menus.
+    -->
     <string name="edit_menus">Edit Menus</string>
+    <!--
+        Source: Status text.
+        Description: Text shown when the user is in menu editing mode.
+    -->
     <string name="editing">Editing</string>
+    <!--
+        Source: Button label.
+        Description: Action in the menu editor. Renames an existing menu.
+    -->
     <string name="rename_menu">Rename Menu</string>
+    <!--
+        Source: Button label.
+        Description: Action in the menu editor. Inserts a menu to the left.
+    -->
     <string name="insert_menu_left">Insert Menu Left</string>
+    <!--
+        Source: Button label.
+        Description: Action in the menu editor. Inserts a menu to the right.
+    -->
     <string name="insert_menu_right">Insert Menu Right</string>
+    <!--
+        Source: Dialog prompt.
+        Description: Prompt displayed to the user when creating a new menu.
+    -->
     <string name="enter_new_menu_name">Enter new menu name</string>
+    <!--
+        Source: Button label.
+        Description: Action in the menu editor. Creates a new menu.
+    -->
     <string name="new_menu">New Menu</string>
-    <string name="add_to_shell">Add to shell</string>
+    <!--
+        Source: Dialog title.
+        Description: Title for the dialog that allows the user to add a shortcut to the home screen. [CHAR LIMIT="NONE"]
+    -->
+    <string name="add_to_shell">Add shortcut</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the OneBox scraper is unable to condense Google search results into a single sentence answer. It is followed by the search query text.
+    -->
     <string name="no_short_answer">Sorry, no short answer for</string>
+    <!--
+        Source: Shortcut title.
+        Description: Title for the widget that toggles Bluetooth on and off. [CHAR LIMIT="NONE"]
+    -->
     <string name="bluetooth_toggle">Blue tooth toggle</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user turns Bluetooth off. [CHAR LIMIT="NONE"]
+    -->
     <string name="bluetooth_turning_off">Blue tooth turning off</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user turns Bluetooth on. [CHAR LIMIT="NONE"]
+    -->
     <string name="bluetooth_turning_on">Blue tooth turning on</string>
+    <!--
+        Source: Shortcut title.
+        Description: Title for the widget that toggles Wi-Fi on and off. [CHAR LIMIT="NONE"]
+    -->
     <string name="wifi_toggle">Wifi toggle</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user turns Wi-Fi off. [CHAR LIMIT="NONE"]
+    -->
     <string name="wifi_off">Wifi off</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user turns Wi-Fi on. [CHAR LIMIT="NONE"]
+    -->
     <string name="wifi_on">Wifi on</string>
+    <!--
+        Source: Shortcut title.
+        Description: Title for the widget that toggles background data synchronization on and off. [CHAR LIMIT="NONE"]
+    -->
     <string name="autosync_toggle">Autosync toggle</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user turns background data synchronization off. [CHAR LIMIT="NONE"]
+    -->
     <string name="autosync_off">Autosync off</string>
+    <!--
+        Source: Speech feedback.
+        Description: Spoken when the user turns background data synchronization on. [CHAR LIMIT="NONE"]
+    -->
     <string name="autosync_on">Autosync on</string>
+    <!--
+        Source: Speech feedback.
+        Description: Warning spoken when the user turns off background data synchronization. [CHAR LIMIT="NONE"]
+    -->
     <string name="background_data_warning">Warning: background data disabled.</string>
+    <!--
+        Source: Shortcut title.
+        Description: Label for the Gmail application. [CHAR LIMIT="NONE"]
+    -->
     <string name="gmail">Gmail</string>
+    <!--
+        Source: Shortcut title.
+        Description: Title for the widget that displays notifications. [CHAR LIMIT="NONE"]
+    -->
     <string name="open_notifications">Open notifications</string>
-
-    <!-- The following strings are for the app chooser view. -->
-    <string name="save">\n\nSave\n\n</string>
-    <string name="run">\n\nRun\n\n</string> 
-
-    <!-- The following strings are possible types of shortcuts. -->
+    <!--
+        Source: Save option in the application picker dialog.
+        Description: Clicking this saves the application shortcut. [CHAR LIMIT="NONE"]
+    -->
+    <string name="save">Save</string>
+    <!--
+        Source: Run option in the application picker dialog.
+        Description: Clicking this runs the selected application. [CHAR LIMIT="NONE"]
+    -->
+    <string name="run">Run</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that runs an application. [CHAR LIMIT="NONE"]
+    -->
     <string name="application">Application</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that opens a bookmark. [CHAR LIMIT="NONE"]
+    -->
     <string name="bookmark">Bookmark</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that opens a contact. [CHAR LIMIT="NONE"]
+    -->
     <string name="contact">Contact</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that dials a contact. [CHAR LIMIT="NONE"]
+    -->
     <string name="direct_dial">Direct Dial</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that opens a text message compose dialog. [CHAR LIMIT="NONE"]
+    -->
     <string name="direct_message">Direct Message</string>
-    <string name="eyes_free_widget">Eyes-free Widget</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that is specific to Eyes-Free Shell (ex. location, battery status, etc.). [CHAR LIMIT="NONE"]
+    -->
+    <string name="eyes_free_widget">Eyes-Free Widget</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that opens a Settings page. [CHAR LIMIT="NONE"]
+    -->
     <string name="settings">Settings</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that opens a specific label view in Gmail. [CHAR LIMIT="NONE"]
+    -->
     <string name="gmail_label">Gmail Label</string>
+    <!--
+        Source: Type of shortcut.
+        Description: A type of shortcut that starts a video chat. [CHAR LIMIT="NONE"]
+    -->
     <string name="video_chat">Video Chat</string>
-
-    <!-- The following strings are verbs to be followed by the name of a contact. -->
-    <string name="call">Call</string>
-    <string name="message">Message</string>
-    <string name="video_call">Video call</string>
-
-    <!-- The following strings are displayed but never spoken  -->
+    <!--
+        Source: Shortcut title.
+        Description: Label for the calling action. Includes the name of a contact.
+    -->
+    <string name="call">Call <xliff:g id="name">%s</xliff:g></string>
+    <!--
+        Source: Shortcut title.
+        Description: Label for the messaging action. Includes the name of a contact.
+    -->
+    <string name="message">Message <xliff:g id="name" example="Larry">%s</xliff:g></string>
+    <!--
+        Source: Shortcut title.
+        Description: Label for the video calling action. Includes the name of a contact.
+    -->
+    <string name="video_call">Video call <xliff:g id="name" example="Larry">%s</xliff:g></string>
+    <!--
+        Source: Shortcut title.
+        Description: Label for starting the built-in Android launcher.
+    -->
+    <string name="android_launcher">Android Launcher</string>
+    <!--
+        Source: Application name.
+        Description: The name of this application.
+    -->
     <string name="app_name">Eyes-Free Shell</string>
-
-    <!-- The following strings are used for earcons  -->
-    <string name="earcon_tick">[TICK]</string>
-    <string name="earcon_tock">[TOCK]</string>
-
-    <!-- The following strings are used for the search URL. Use the localized language for better onebox triggering.  -->
+    <!--
+        Source: The Google search URL.
+        Description: Use the localized Google domain (ex. google.fr) for better OneBox triggering.
+    -->
     <string name="search_url">http://www.google.com/m?q=</string>
-    
 
 </resources>

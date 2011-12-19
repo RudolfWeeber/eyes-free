@@ -55,6 +55,7 @@ public class AppInfo implements Comparable<AppInfo> {
         return className;
     }
 
+    @Override
     public int compareTo(AppInfo o) {
         String title0 = this.getTitle().toLowerCase();
         String title1 = o.getTitle().toLowerCase();

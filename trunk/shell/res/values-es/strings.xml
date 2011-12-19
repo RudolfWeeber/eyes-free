@@ -1,58 +1,85 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<resources>
-
-  <string name="home">Inicio</string>
-  <string name="please_unlock">Favor de desbloquear.</string>
-  <string name="you_have_new_voicemail">Hay correo de voz nuevo.</string>
-  <string name="application_not_installed">Aplicación no instalada.</string>
-  <string name="compass">Grújula</string>
-  <string name="battery">Batería</string>
-  <string name="midnight">las doce de la noche</string>
-  <string name="noon">las doce del día</string>
-  <string name="am">AM</string>
-  <string name="pm">PM</string>
-  <string name="applications">Aplicaciones</string>
-  <string name="applist_reload">Aplicaciones reiniciadas</string>
-  <string name="shortcuts">Atajos</string>
-  <string name="voicemail">Correo de voz</string>
-  <string name="marvin_intro_snd_">[marvin intro]</string>
-  <string name="charging">cargando</string>
-  <string name="bluetooth">Bluetooth</string>
-  <string name="gps">GPS</string>
-  <string name="no_data_network">No hay red de datos</string>
-  <string name="mobile_data_network">Red de datos móviles</string>
-  <string name="threeg_data_network">Red de datos 3G</string>
-  <string name="edge_data_network">Red de datos EDGE</string>
-  <string name="bars">barras.</string>
-  <string name="deleted">. eliminado.</string>
-  <string name="signal">Señal</string>
-  <string name="location">Ubicación</string>
-  <string name="wifi">WiFi</string>
-  <string name="button1_prompt">Aplicación para botón 1</string>
-  <string name="button2_prompt">Aplicación para botón 2</string>
-  <string name="button3_prompt">Aplicación para botón 3</string>
-  <string name="button4_prompt">Aplicación para botón 4</string>
-  <string name="button6_prompt">Aplicación para botón 6</string>
-  <string name="button7_prompt">Aplicación para botón 7</string>
-  <string name="button8_prompt">Aplicación para botón 8</string>
-  <string name="button9_prompt">Aplicación para botón 9</string>
-  <string name="period">Punto</string>
-  <string name="question_mark">Interrogación</string>
-  <string name="exclamation_point">Admiración</string>
-  <string name="comma">Coma</string>
-  <string name="backspace">Retroceso</string>
-  <string name="confirm">Confirmar</string>
-  <string name="time">La hora</string>
-
-  <string name="search">Búsqueda</string>
-  <string name="search_not_available">La búsqueda por voz no está disponible en este dispositivo.</string>
-
-  <!-- The following strings are displayed but never spoken -->
-  <string name="app_name">Escritorio Eyes-Free Shell</string>
-  <string name="shortcutsManager">Gestor de atajos de Eyes-Free Shell</string>
-
-  <!-- The following strings are used for earcons -->
-  <string name="earcon_tick">[TICK]</string>
-  <string name="earcon_tock">[TOCK]</string>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"Desbloquea la pantalla."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"Tienes nuevos mensajes de voz."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"Aplicación no instalada"</string>
+    <string name="compass" msgid="8750992021021133710">"Brújula"</string>
+    <string name="battery" msgid="504393301120218841">"Batería"</string>
+    <string name="midnight" msgid="823708676542012468">"medianoche"</string>
+    <string name="noon" msgid="8691597485483233355">"mediodía"</string>
+    <string name="am" msgid="1335477392441532734">"a m"</string>
+    <string name="pm" msgid="4558817601126723904">"p m"</string>
+    <string name="applications" msgid="5932623028136955799">"Aplicaciones"</string>
+    <string name="applist_reload" msgid="414133960959011310">"Las aplicaciones se han vuelto a cargar"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"Accesos directos"</string>
+    <string name="voicemail" msgid="2728241956154985766">"Mensaje de voz"</string>
+    <string name="charging" msgid="1866903547832856576">"cargando..."</string>
+    <string name="bluetooth" msgid="2711622144183637014">"Bluetooth"</string>
+    <string name="gps" msgid="3600070788552034387">"GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"No hay redes de datos"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"Red de datos móviles"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"Red de datos 3G"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"Red de datos EDGE"</string>
+    <string name="bars" msgid="7483881590990918525">"<xliff:g id="NUMBER">%d</xliff:g> barras"</string>
+    <string name="deleted" msgid="7861515902560721140">"<xliff:g id="TEXT">%s</xliff:g>. eliminado"</string>
+    <string name="signal" msgid="205310807240313207">"Señal"</string>
+    <string name="location" msgid="2677990188462642571">"Ubicación"</string>
+    <string name="wifi" msgid="682418583409240494">"Wi-Fi"</string>
+    <string name="period" msgid="8258846275720885441">"Punto"</string>
+    <string name="question_mark" msgid="2702061276573162041">"Signo de interrogación"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"Signo de exclamación"</string>
+    <string name="comma" msgid="7708024257606893483">"Coma"</string>
+    <string name="backspace" msgid="4090990621501398294">"Tecla de retroceso"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"Guardar accesos directos"</string>
+    <string name="time" msgid="292946509905481903">"Hora"</string>
+    <string name="search" msgid="7359257903874015321">"Buscar"</string>
+    <string name="search_widget" msgid="2706011530309391436">"Widget de búsqueda"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"La búsqueda por voz no está disponible en este dispositivo."</string>
+    <string name="uninstall" msgid="7668601340053785736">"Desinstalar"</string>
+    <string name="details_for" msgid="21073196480430350">"Detalles de <xliff:g id="APP_NAME">%s</xliff:g>"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"Cambiando al modo de edición"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"Saliendo del modo de edición"</string>
+    <string name="none" msgid="2549066898380735259">"Ninguno"</string>
+    <string name="tts_required" msgid="7598033865290124596">"Se requiere el componente TextToSpeech. Instálalo primero."</string>
+    <string name="quit" msgid="6472236766275676713">"Salir"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"Este elemento no se puede editar."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"Restaurar menús predeterminados"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"Editar menús"</string>
+    <string name="editing" msgid="5063919894976972137">"Edición"</string>
+    <string name="rename_menu" msgid="992842791797896454">"Cambiar nombre de menú"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"Insertar menú a la izquierda"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"Insertar menú a la derecha"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"Introduce el nombre del nuevo menú."</string>
+    <string name="new_menu" msgid="6501694107597317096">"Nuevo menú"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"Añadir acceso directo"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"No hay ninguna respuesta corta para"</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"Activar o desactivar Bluetooth"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"Desactivando Bluetooth"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"Activando Bluetooth"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"Activar o desactivar Wi-Fi"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"Wi-Fi desactivado"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"Wi-Fi activado"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"Activar o desactivar la sincronización automática"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"Sincronización automática desactivada"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"Sincronización automática activada"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"Advertencia: los datos de referencia están inhabilitados."</string>
+    <string name="gmail" msgid="991932383972966864">"Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"Abrir notificaciones"</string>
+    <string name="save" msgid="2389796015807831702">"Guardar"</string>
+    <string name="run" msgid="2666885736055379870">"Ejecutar"</string>
+    <string name="application" msgid="4134860023801858659">"Aplicación"</string>
+    <string name="bookmark" msgid="1475053585102538399">"Marcador"</string>
+    <string name="contact" msgid="3967189141295438609">"Contacto"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"Llamada directa"</string>
+    <string name="direct_message" msgid="6883856830119989502">"Mensaje directo"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Widget de Interfaz accesible"</string>
+    <string name="settings" msgid="2547811091322397443">"Ajustes"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Etiqueta de Gmail"</string>
+    <string name="video_chat" msgid="1400713274879951497">"Chat de vídeo"</string>
+    <string name="call" msgid="4657819819700891468">"Llamar a <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="message" msgid="6532533046559751182">"Mandar un mensaje a <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="video_call" msgid="375680197155815761">"Hacer una videollamada a <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="app_name" msgid="2842226161122377485">"Interfaz accesible"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

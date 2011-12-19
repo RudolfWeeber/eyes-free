@@ -16,6 +16,7 @@
 
 package com.google.marvin.shell;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -23,7 +24,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
 import android.view.KeyCharacterMap;
@@ -34,6 +34,7 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 
 import com.google.marvin.shell.ShakeDetector.ShakeListener;
+import com.googlecode.eyesfree.utils.FeedbackController;
 import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -126,8 +127,6 @@ public class AppChooserView extends TextView {
     private static final char alphabet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
             'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
-    private static final long[] PATTERN = { 0, 1, 40, 41 };
-
     private static final int AE = 0;
 
     private static final int IM = 1;
@@ -176,8 +175,6 @@ public class AppChooserView extends TextView {
 
     private boolean gestureHadSecondPoint;
 
-    private Vibrator vibe;
-
     private int currentWheel;
 
     private String currentCharacter;
@@ -204,6 +201,8 @@ public class AppChooserView extends TextView {
 
     private AccessibilityManager accessibilityManager;
 
+    private FeedbackController feedbackController;
+
     // Change this to true to enable shake to erase
     private static final boolean useShake = false;
 
@@ -211,7 +210,7 @@ public class AppChooserView extends TextView {
         super(context, attrs);
 
         parent = ((MarvinShell) context);
-        vibe = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        feedbackController = FeedbackController.getInstance(context);
         accessibilityManager = (AccessibilityManager) context.getSystemService(
                 Context.ACCESSIBILITY_SERVICE);
 
@@ -253,6 +252,7 @@ public class AppChooserView extends TextView {
     }
 
     class trackballTimeout implements Runnable {
+        @Override
         public void run() {
             try {
                 Thread.sleep(trackballTimeout);
@@ -268,7 +268,7 @@ public class AppChooserView extends TextView {
         if (appListIndex >= appList.size()) {
             appListIndex = 0;
         }
-        vibe.vibrate(PATTERN, -1);
+        feedbackController.playVibration(R.array.pattern_app_chooser);
         speakCurrentApp(true);
     }
 
@@ -277,7 +277,7 @@ public class AppChooserView extends TextView {
         if (appListIndex < 0) {
             appListIndex = appList.size() - 1;
         }
-        vibe.vibrate(PATTERN, -1);
+        feedbackController.playVibration(R.array.pattern_app_chooser);
         speakCurrentApp(true);
     }
 
@@ -379,6 +379,7 @@ public class AppChooserView extends TextView {
                 if (backKeyTimeDown == -1) {
                     backKeyTimeDown = System.currentTimeMillis();
                     class QuitCommandWatcher implements Runnable {
+                        @Override
                         public void run() {
                             try {
                                 Thread.sleep(3000);
@@ -499,7 +500,7 @@ public class AppChooserView extends TextView {
             currentWheel = NONE;
             p2DownX = getX(event, secondFingerId);
             p2DownY = getY(event, secondFingerId);
-            vibe.vibrate(PATTERN, -1);
+            feedbackController.playVibration(R.array.pattern_app_chooser);
             invalidate();
         } else if ((action == 262) || (touchExploring && action == MotionEvent.ACTION_UP)) {
             // 262 == MotionEvent.ACTION_POINTER_2_UP - using number for Android
@@ -579,7 +580,7 @@ public class AppChooserView extends TextView {
                         }
                     }
                 }
-                vibe.vibrate(PATTERN, -1);
+                feedbackController.playVibration(R.array.pattern_app_chooser);
             }
         }
         return true;
@@ -897,7 +898,7 @@ public class AppChooserView extends TextView {
         if (!deletedCharacter.equals("")) {
             // parent.tts.speak(deletedCharacter, 0, new String[]
             // {TTSParams.VOICE_ROBOT.toString()});
-            parent.tts.speak(deletedCharacter + parent.getString(R.string.deleted), 0, null);
+            parent.tts.speak(parent.getString(R.string.deleted, deletedCharacter), 0, null);
         } else {
             parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
             parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 1, null);
@@ -916,6 +917,7 @@ public class AppChooserView extends TextView {
         }
         if (visibility == View.VISIBLE) {
             shakeDetector = new ShakeDetector(parent, new ShakeListener() {
+                @Override
                 public void onShakeDetected() {
                     if (useShake) {
                         backspace();
@@ -937,13 +939,25 @@ public class AppChooserView extends TextView {
     public void showCurrentAppInfo() {
         String targetPackageName = appList.get(appListIndex).getPackageName();
         Intent i = new Intent();
-        i.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
-        // "pkg" is a magic key - see ManageApplications.APP_PKG_NAME in:
-        // src/com/android/settings/ManageApplications.java
-        // under
-        // http://android.git.kernel.org/?p=platform/packages/apps/Settings.git
-        i.putExtra("pkg", targetPackageName);
-        parent.startActivity(i);
+        try {
+            // android.settings.APPLICATION_DETAILS_SETTINGS is the correct, SDK
+            // blessed way of doing this - but it is only available starting in
+            // GINGERBREAD.
+            i.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            i.setData(Uri.parse("package:" + targetPackageName));
+            parent.startActivity(i);
+        } catch (ActivityNotFoundException e){
+            try {
+                // If it isn't possible to use android.settings.APPLICATION_DETAILS_SETTINGS,
+                // try it again with the "pkg" magic key. See ManageApplications.APP_PKG_NAME in:
+                // src/com/android/settings/ManageApplications.java
+                // under http://android.git.kernel.org/?p=platform/packages/apps/Settings.git
+                i.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
+                i.putExtra("pkg", targetPackageName);
+                parent.startActivity(i);
+            } catch (ActivityNotFoundException e2) {
+            }
+        }
     }
 
     public String getCurrentAppTitle() {

@@ -126,6 +126,8 @@ public class AuditoryWidgets {
         descriptionToWidget.put(parent.getString(R.string.wifi_toggle), "TOGGLE_WIFI");
         descriptionToWidget.put(
                 parent.getString(R.string.open_notifications), "OPEN_NOTIFICATIONS");
+        descriptionToWidget.put(
+                parent.getString(R.string.android_launcher), "ANDROID_LAUNCHER");
     }
 
     public void shutdown() {
@@ -175,6 +177,8 @@ public class AuditoryWidgets {
             toggleWifi();
         } else if (widgetName.equals("OPEN_NOTIFICATIONS")) {
             openNotifications();
+        }  else if (widgetName.equals("ANDROID_LAUNCHER")) {
+            launchDefaultHomeScreen();
         }
     }
 
@@ -197,8 +201,8 @@ public class AuditoryWidgets {
                 WifiManager wManager = (WifiManager) parent.getSystemService(Context.WIFI_SERVICE);
                 WifiInfo wInfo = wManager.getConnectionInfo();
                 int wifiSignalStrength = WifiManager.calculateSignalLevel(wInfo.getRssi(), 4);
-                info = parent.getString(R.string.wifi) + wInfo.getSSID() + " " + wifiSignalStrength
-                        + " " + parent.getString(R.string.bars);
+                info = parent.getString(R.string.wifi) + wInfo.getSSID() + " "
+                            + parent.getString(R.string.bars, wifiSignalStrength);
             }
         }
         tts.speak(info, TextToSpeech.QUEUE_ADD, null);
@@ -207,7 +211,7 @@ public class AuditoryWidgets {
     private void speakVoiceNetworkInfo() {
         TelephonyManager tm = (TelephonyManager) parent.getSystemService(Context.TELEPHONY_SERVICE);
         String voiceNetworkOperator = tm.getNetworkOperatorName();
-        String voiceNetworkStrength = voiceSignalStrength + " " + parent.getString(R.string.bars);
+        String voiceNetworkStrength = parent.getString(R.string.bars, voiceSignalStrength);
         if (voiceSignalStrength == -1) {
             voiceNetworkStrength = "";
         }
@@ -314,6 +318,10 @@ public class AuditoryWidgets {
             parent.tts.speak(parent.getString(R.string.search_not_available),
                     TextToSpeech.QUEUE_FLUSH, null);
         }
+    }
+
+    public void launchDefaultHomeScreen() {
+        parent.startActivity(parent.getSystemHomeIntent());
     }
 
     public int getCallState() {

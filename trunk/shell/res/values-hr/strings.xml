@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"Otključajte."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"Imate novu govornu poštu."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"Aplikacija nije instalirana"</string>
+    <string name="compass" msgid="8750992021021133710">"Kompas"</string>
+    <string name="battery" msgid="504393301120218841">"Baterija"</string>
+    <string name="midnight" msgid="823708676542012468">"ponoć"</string>
+    <string name="noon" msgid="8691597485483233355">"podne"</string>
+    <string name="am" msgid="1335477392441532734">"ujutro"</string>
+    <string name="pm" msgid="4558817601126723904">"poslije podne"</string>
+    <string name="applications" msgid="5932623028136955799">"Aplikacije"</string>
+    <string name="applist_reload" msgid="414133960959011310">"Ponovno učitane aplikacije"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"Prečaci"</string>
+    <string name="voicemail" msgid="2728241956154985766">"Govorna pošta"</string>
+    <string name="charging" msgid="1866903547832856576">"punjenje"</string>
+    <string name="bluetooth" msgid="2711622144183637014">"Bluetooth"</string>
+    <string name="gps" msgid="3600070788552034387">"GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"Nema mreža za prijenos podataka"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"Mobilna mreža za prijenos podataka"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"Mreža za prijenos podataka 3G"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"Mreža za prijenos podataka EDGE"</string>
+    <string name="bars" msgid="7483881590990918525">"Broj crtica: <xliff:g id="NUMBER">%d</xliff:g>."</string>
+    <string name="deleted" msgid="7861515902560721140">"<xliff:g id="TEXT">%s</xliff:g>. izbrisano."</string>
+    <string name="signal" msgid="205310807240313207">"Signal"</string>
+    <string name="location" msgid="2677990188462642571">"Lokacija"</string>
+    <string name="wifi" msgid="682418583409240494">"WiFi"</string>
+    <string name="period" msgid="8258846275720885441">"Točka"</string>
+    <string name="question_mark" msgid="2702061276573162041">"Upitnik"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"Uskličnik"</string>
+    <string name="comma" msgid="7708024257606893483">"Zarez"</string>
+    <string name="backspace" msgid="4090990621501398294">"Backspace"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"Spremanje prečaca"</string>
+    <string name="time" msgid="292946509905481903">"Vrijeme"</string>
+    <string name="search" msgid="7359257903874015321">"Pretraživanje"</string>
+    <string name="search_widget" msgid="2706011530309391436">"Widget za pretraživanje"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"Na ovom uređaju glasovno pretraživanje nije dostupno."</string>
+    <string name="uninstall" msgid="7668601340053785736">"Deinstaliraj"</string>
+    <string name="details_for" msgid="21073196480430350">"Pojedinosti aplikacije <xliff:g id="APP_NAME">%s</xliff:g>"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"Unos načina uređivanja"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"Izlaz iz načina uređivanja"</string>
+    <string name="none" msgid="2549066898380735259">"Ništa"</string>
+    <string name="tts_required" msgid="7598033865290124596">"Komponenta TextToSpeech obavezna je. Prvo je instalirajte."</string>
+    <string name="quit" msgid="6472236766275676713">"Izlaz"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"Nije moguće urediti stavku."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"Vraćanje zadanih izbornika"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"Uređivanje izbornika"</string>
+    <string name="editing" msgid="5063919894976972137">"Uređivanje"</string>
+    <string name="rename_menu" msgid="992842791797896454">"Preimenovanje izbornika"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"Umetanje izbornika lijevo"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"Umetanje izbornika desno"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"Unesite novi naziv izbornika"</string>
+    <string name="new_menu" msgid="6501694107597317096">"Novi izbornik"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"Dodaj prečac"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"Nema kratkog odgovora za"</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"Prikaži/sakrij Bluetooth"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"Isključivanje Bluetootha"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"Uključivanje Bluetootha"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"Prikaži/sakrij Wifi"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"Wifi isključen"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"Wifi uključen"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"Prikaži/sakrij automatsku sinkronizaciju"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"Automatska sinkronizacija isključena"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"Automatska sinkronizacija uključena"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"Upozorenje: Pozadinski su podaci onemogućeni."</string>
+    <string name="gmail" msgid="991932383972966864">"Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"Otvori obavijesti"</string>
+    <string name="save" msgid="2389796015807831702">"Spremi"</string>
+    <string name="run" msgid="2666885736055379870">"Pokreni"</string>
+    <string name="application" msgid="4134860023801858659">"Aplikacija"</string>
+    <string name="bookmark" msgid="1475053585102538399">"Knjižna oznaka"</string>
+    <string name="contact" msgid="3967189141295438609">"Kontakt"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"Izravan poziv"</string>
+    <string name="direct_message" msgid="6883856830119989502">"Izravna poruka"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Widget Eyes-Free"</string>
+    <string name="settings" msgid="2547811091322397443">"Postavke"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Oznaka Gmail"</string>
+    <string name="video_chat" msgid="1400713274879951497">"Videochat"</string>
+    <string name="call" msgid="4657819819700891468">"Pozovi: <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="message" msgid="6532533046559751182">"Poruka: <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="video_call" msgid="375680197155815761">"Videopoziv <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="app_name" msgid="2842226161122377485">"Programska ovojnica za uporabu bez gledanja"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
+</resources>

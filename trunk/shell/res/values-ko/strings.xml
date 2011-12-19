@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="please_unlock" msgid="6365667699763427870">"잠금 해제하세요."</string>
+    <string name="you_have_new_voicemail" msgid="5227108155355706109">"새 음성사서함이 있습니다."</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"애플리케이션이 설치되지 않았습니다."</string>
+    <string name="compass" msgid="8750992021021133710">"나침반"</string>
+    <string name="battery" msgid="504393301120218841">"배터리"</string>
+    <string name="midnight" msgid="823708676542012468">"자정"</string>
+    <string name="noon" msgid="8691597485483233355">"정오"</string>
+    <string name="am" msgid="1335477392441532734">"AM"</string>
+    <string name="pm" msgid="4558817601126723904">"PM"</string>
+    <string name="applications" msgid="5932623028136955799">"애플리케이션"</string>
+    <string name="applist_reload" msgid="414133960959011310">"애플리케이션이 새로 로드됨"</string>
+    <string name="shortcuts" msgid="6219208659294016638">"바로가기"</string>
+    <string name="voicemail" msgid="2728241956154985766">"음성사서함"</string>
+    <string name="charging" msgid="1866903547832856576">"충전 중"</string>
+    <string name="bluetooth" msgid="2711622144183637014">"블루투스"</string>
+    <string name="gps" msgid="3600070788552034387">"GPS"</string>
+    <string name="no_data_network" msgid="8150710306964403880">"데이터 네트워크 없음"</string>
+    <string name="mobile_data_network" msgid="2622761636793887834">"모바일 데이터 네트워크"</string>
+    <string name="threeg_data_network" msgid="6188999477941727500">"3G 데이터 네트워크"</string>
+    <string name="edge_data_network" msgid="552736890988647134">"EDGE 데이터 네트워크"</string>
+    <string name="bars" msgid="7483881590990918525">"신호 막대가 <xliff:g id="NUMBER">%d</xliff:g>개입니다."</string>
+    <string name="deleted" msgid="7861515902560721140">"<xliff:g id="TEXT">%s</xliff:g>. 삭제되었습니다."</string>
+    <string name="signal" msgid="205310807240313207">"신호"</string>
+    <string name="location" msgid="2677990188462642571">"위치"</string>
+    <string name="wifi" msgid="682418583409240494">"Wi-Fi"</string>
+    <string name="period" msgid="8258846275720885441">"기간"</string>
+    <string name="question_mark" msgid="2702061276573162041">"물음표"</string>
+    <string name="exclamation_point" msgid="5481614909785209706">"느낌표"</string>
+    <string name="comma" msgid="7708024257606893483">"쉼표"</string>
+    <string name="backspace" msgid="4090990621501398294">"백스페이스"</string>
+    <string name="save_shortcuts" msgid="494791313516799237">"바로가기 저장"</string>
+    <string name="time" msgid="292946509905481903">"시간"</string>
+    <string name="search" msgid="7359257903874015321">"검색"</string>
+    <string name="search_widget" msgid="2706011530309391436">"검색 위젯"</string>
+    <string name="search_not_available" msgid="8231151438034118078">"이 기기에서는 음성검색을 사용할 수 없습니다."</string>
+    <string name="uninstall" msgid="7668601340053785736">"제거"</string>
+    <string name="details_for" msgid="21073196480430350">"<xliff:g id="APP_NAME">%s</xliff:g> 세부정보"</string>
+    <string name="entering_edit_mode" msgid="2574144493378186124">"수정 모드 시작 중"</string>
+    <string name="exiting_edit_mode" msgid="3586821704856453338">"수정 모드 종료 중"</string>
+    <string name="none" msgid="2549066898380735259">"없음"</string>
+    <string name="tts_required" msgid="7598033865290124596">"TextToSpeech는 필수 구성요소입니다. 먼저 설치해 주세요."</string>
+    <string name="quit" msgid="6472236766275676713">"종료"</string>
+    <string name="cannot_edit_this_item" msgid="4362692259938436489">"이 항목을 수정할 수 없습니다."</string>
+    <string name="restore_default_menus" msgid="6131634808298258773">"기본 메뉴 복원"</string>
+    <string name="edit_menus" msgid="8061593458432567129">"메뉴 수정"</string>
+    <string name="editing" msgid="5063919894976972137">"수정"</string>
+    <string name="rename_menu" msgid="992842791797896454">"메뉴 이름 바꾸기"</string>
+    <string name="insert_menu_left" msgid="1335030346524350165">"왼쪽에 메뉴 삽입"</string>
+    <string name="insert_menu_right" msgid="4699406229188817726">"오른쪽에 메뉴 삽입"</string>
+    <string name="enter_new_menu_name" msgid="4840721837641971483">"새 메뉴 이름 입력"</string>
+    <string name="new_menu" msgid="6501694107597317096">"새 메뉴"</string>
+    <string name="add_to_shell" msgid="5483725001349349500">"바로가기 추가"</string>
+    <string name="no_short_answer" msgid="7070537814031016515">"죄송합니다. 짧은 답변이 없습니다."</string>
+    <string name="bluetooth_toggle" msgid="5577610239407451137">"블루투스 전환"</string>
+    <string name="bluetooth_turning_off" msgid="8670710401436197835">"블루투스 끄는 중"</string>
+    <string name="bluetooth_turning_on" msgid="5144773565728392606">"블루투스 켜는 중"</string>
+    <string name="wifi_toggle" msgid="1356220350075404753">"Wi-Fi 전환"</string>
+    <string name="wifi_off" msgid="6209107193043060185">"Wi-Fi 사용 안함"</string>
+    <string name="wifi_on" msgid="6007404904656123347">"Wi-Fi 사용"</string>
+    <string name="autosync_toggle" msgid="5470046051705873167">"자동 동기화 전환"</string>
+    <string name="autosync_off" msgid="6925786056800587563">"자동 동기화 사용 안함"</string>
+    <string name="autosync_on" msgid="3075881915422637695">"자동 동기화"</string>
+    <string name="background_data_warning" msgid="1946054374981563408">"경고: 백그라운드 데이터 사용 안함"</string>
+    <string name="gmail" msgid="991932383972966864">"Gmail"</string>
+    <string name="open_notifications" msgid="6089702592555917155">"알림 열기"</string>
+    <string name="save" msgid="2389796015807831702">"저장"</string>
+    <string name="run" msgid="2666885736055379870">"실행"</string>
+    <string name="application" msgid="4134860023801858659">"애플리케이션"</string>
+    <string name="bookmark" msgid="1475053585102538399">"북마크"</string>
+    <string name="contact" msgid="3967189141295438609">"주소록"</string>
+    <string name="direct_dial" msgid="6760324712299461726">"바로 전화 걸기"</string>
+    <string name="direct_message" msgid="6883856830119989502">"바로 메시지 보내기"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"아이프리(Eyes-free) 위젯"</string>
+    <string name="settings" msgid="2547811091322397443">"설정"</string>
+    <string name="gmail_label" msgid="461187592270143564">"Gmail 라벨"</string>
+    <string name="video_chat" msgid="1400713274879951497">"영상 채팅"</string>
+    <string name="call" msgid="4657819819700891468">"<xliff:g id="NAME">%s</xliff:g>님에게 전화걸기"</string>
+    <string name="message" msgid="6532533046559751182">"<xliff:g id="NAME">%s</xliff:g>님에게 메시지 보내기"</string>
+    <string name="video_call" msgid="375680197155815761">"<xliff:g id="NAME">%s</xliff:g>님과 영상통화"</string>
+    <string name="app_name" msgid="2842226161122377485">"아이프리 쉘(Eyes-Free Shell)"</string>
+    <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
+</resources>
