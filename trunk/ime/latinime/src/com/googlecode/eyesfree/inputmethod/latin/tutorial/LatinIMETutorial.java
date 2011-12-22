@@ -173,10 +173,9 @@ public class LatinIMETutorial extends Activity
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tutorial_instructions:
-                mReader.next();
-                return;
+        if (v.getId() == R.id.tutorial_instructions) {
+            mReader.next();
+            return;
         }
 
         if (mActiveModule != null && mActiveModule instanceof View.OnClickListener) {

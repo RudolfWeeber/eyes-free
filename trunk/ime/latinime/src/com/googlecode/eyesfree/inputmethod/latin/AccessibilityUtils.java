@@ -159,8 +159,11 @@ public class AccessibilityUtils {
                 .obtain(AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
         event.setPackageName(mContext.getPackageName());
         event.setClassName(getClass().getName());
-        event.setAddedCount(description.length());
         event.setEventTime(SystemClock.uptimeMillis());
+        event.setBeforeText("");
+        event.setAddedCount(description.length());
+        event.setRemovedCount(0);
+        event.setFromIndex(0);
         event.getText().add(description);
 
         mAccessibilityManager.sendAccessibilityEvent(event);

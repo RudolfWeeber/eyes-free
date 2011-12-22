@@ -161,6 +161,7 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
     private static final String PREF_AUTO_COMPLETE = "auto_complete";
     private static final String PREF_BIGRAM_SUGGESTIONS = "bigram_suggestion";
     private static final String PREF_VOICE_MODE = "voice_mode";
+    private static final String PREF_LINEAR_NAVIGATION = "linear_navigation";
 
     // Whether or not the user has used voice input before (and thus, whether to
     // show the first-run warning dialog or not).
@@ -215,8 +216,8 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
             switch (state) {
                 case TelephonyManager.CALL_STATE_IDLE:
                     // This is a no-op if the cache has been invalidated.
-                    requestKeyboardMode(mCachedForcedMode);
                     mInCallScreen = false;
+                    requestKeyboardMode(mCachedForcedMode);
                     break;
                 case TelephonyManager.CALL_STATE_RINGING:
                     // Cache the current forced mode and switch to FORCE_HIDDEN.
@@ -674,7 +675,7 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
         } catch (IllegalArgumentException e) {
             // Ignore the case where broadcast receiver is already unregistered.
         }
-        
+
         if (VOICE_INSTALLED && mVoiceInput != null) {
             mVoiceInput.destroy();
         }
@@ -1986,6 +1987,9 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
 
     private void updateSuggestions() {
         LatinKeyboardView inputView = mKeyboardSwitcher.getInputView();
+        if (inputView == null || inputView.getKeyboard() == null) {
+            return;
+        }
         ((LatinKeyboard) inputView.getKeyboard()).setPreferredLetters(null);
 
         // Check if we have a suggestion engine attached.
@@ -2707,6 +2711,12 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
         mBigramSuggestionEnabled = sp.getBoolean(PREF_BIGRAM_SUGGESTIONS,
                 mResources.getBoolean(R.bool.default_bigram_suggestions))
                 & mShowSuggestions;
+
+        final boolean linearNavigation =
+                sp.getBoolean(PREF_LINEAR_NAVIGATION,
+                        mResources.getBoolean(R.bool.default_linear_navigation));
+        setLinearNavigationEnabled(linearNavigation);
+
         updateCorrectionMode();
         updateAutoTextEnabled(mResources.getConfiguration().locale);
         mLanguageSwitcher.loadLocales(sp);
@@ -2852,7 +2862,7 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
             mFeedbackUtil.vibrate(VIBRATE_PATTERN_SWIPE);
             final boolean isAltOn = !mKeyboardSwitcher.isAlphabetMode()
                     && mKeyboardSwitcher.isShiftedOrShiftLocked();
-            final int metaState = (isAltOn | pointerCount == 2) ? KeyEvent.META_ALT_ON : 0;
+            final int metaState = (isAltOn | pointerCount >= 2) ? KeyEvent.META_ALT_ON : 0;
             sendDownUpKeyEventsPreIme(keyCode, metaState);
             return true;
         }
@@ -2921,30 +2931,21 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
 
         @Override
         public void enteredSegment(int segment) {
-            final AccessibleInputConnection aic = getCurrentInputConnection();
-
-            if (!aic.hasExtractedText() || !isCandidateStripVisible())
+            if (segment < 0) {
+                speakCurrentText();
+                return;
+            }
+            
+            if (!isCandidateStripVisible())
                 return;
 
-            CharSequence text;
+            final List<CharSequence> suggestions = mCandidateView.getSuggestions();
+            final int index = Math.min(segment, suggestions.size() - 1);
 
-            if (segment >= 0) {
-                final List<CharSequence> suggestions = mCandidateView.getSuggestions();
-                final int index = Math.min(segment, suggestions.size() - 1);
+            final CharSequence text = suggestions.get(index);
 
-                text = suggestions.get(index);
-
-                mFeedbackUtil.vibrate(VIBRATE_PATTERN_TAP);
-                mFeedbackUtil.playSound(SOUND_RESOURCE_TAP);
-            } else {
-                text = aic.getExtractedText();
-
-                if (!TextUtils.isEmpty(text)) {
-                    text = getString(R.string.spoken_current_text_is, text);
-                } else {
-                    text = getString(R.string.spoken_no_text_entered);
-                }
-            }
+            mFeedbackUtil.vibrate(VIBRATE_PATTERN_TAP);
+            mFeedbackUtil.playSound(SOUND_RESOURCE_TAP);
 
             mAccessibilityUtils.speakDescription(text);
         }
@@ -2968,8 +2969,6 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
 
         @Override
         public void leftKeyboardArea() {
-            final AccessibleInputConnection aic = getCurrentInputConnection();
-
             sendBroadcast(new Intent(BROADCAST_LEFT_KEYBOARD_AREA), PERMISSION_REQUEST);
 
             mFeedbackUtil.vibrate(VIBRATE_PATTERN_LEFT);
@@ -2977,22 +2976,27 @@ public class LatinIME extends PersistentInputMethodService implements VoiceInput
 
             if (isCandidateStripVisible())
                 return;
+            
+            speakCurrentText();
+        }
+        
+        private void speakCurrentText() {
 
-            CharSequence text;
+            final AccessibleInputConnection aic = getCurrentInputConnection();
+            final ExtractedText extracted =
+                    aic.getExtractedText(new ExtractedTextRequest(), 0);
 
-            if (!aic.hasExtractedText()) {
-                text = getString(R.string.spoken_contents_missing);
-            } else {
-                text = aic.getExtractedText();
+            if (extracted != null && extracted.text != null) {
+                final CharSequence text;
 
-                if (!TextUtils.isEmpty(text)) {
-                    text = getString(R.string.spoken_current_text_is, text);
+                if (extracted != null && !TextUtils.isEmpty(extracted.text)) {
+                    text = getString(R.string.spoken_current_text_is, extracted.text);
                 } else {
                     text = getString(R.string.spoken_no_text_entered);
                 }
-            }
 
-            mAccessibilityUtils.speakDescription(text);
+                mAccessibilityUtils.speakDescription(text);
+            }
         }
 
         @Override

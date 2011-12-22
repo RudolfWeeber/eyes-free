@@ -69,44 +69,33 @@ public class LatinTutorialModule3 extends TutorialModule implements View.OnClick
 
     @Override
     public void onInstructionRead(int resId) {
-        switch (resId) {
-            case R.string.tutorial_3_message_1:
-                findViewById(R.id.tutorial_3_edittext).requestFocusFromTouch();
-                addInstruction(R.string.tutorial_3_message_2);
-                break;
-            case R.string.tutorial_3_message_3:
-                addInstruction(R.string.tutorial_3_message_4);
-                break;
-            case R.string.tutorial_3_message_4:
-                addInstruction(R.string.tutorial_3_message_5);
-                setFlag(FLAG_HELLO_READY, true);
-                break;
+        if (resId == R.string.tutorial_3_message_1) {
+            findViewById(R.id.tutorial_3_edittext).requestFocusFromTouch();
+            addInstruction(R.string.tutorial_3_message_2);
+        } else if (resId == R.string.tutorial_3_message_3) {
+            addInstruction(R.string.tutorial_3_message_4);
+        } else if (resId == R.string.tutorial_3_message_4) {
+            addInstruction(R.string.tutorial_3_message_5);
+            setFlag(FLAG_HELLO_READY, true);
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tutorial_previous:
-                getController().previous();
-                break;
-            case R.id.tutorial_continue:
-                getController().next();
-                break;
+        if (v.getId() == R.id.tutorial_previous) {
+            getController().previous();
+        } else if (v.getId() == R.id.tutorial_continue) {
+            getController().next();
         }
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        switch (v.getId()) {
-            case R.id.tutorial_3_edittext:
-                if (hasFlag(FLAG_TYPED_NOTHING) && !hasFlag(FLAG_OUTSIDE) && !hasFocus) {
-                    setFlag(FLAG_OUTSIDE, true);
-                    addInstruction(R.string.tutorial_3_outside);
-                }
-                // TODO(alanv): Do focus and selection need to be different
-                // prompts?
-                break;
+        if (v.getId() == R.id.tutorial_3_edittext) {
+            if (hasFlag(FLAG_TYPED_NOTHING) && !hasFlag(FLAG_OUTSIDE) && !hasFocus) {
+                setFlag(FLAG_OUTSIDE, true);
+                addInstruction(R.string.tutorial_3_outside);
+            }
         }
     }
 

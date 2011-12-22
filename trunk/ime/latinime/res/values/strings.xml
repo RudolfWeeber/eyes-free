@@ -19,22 +19,22 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Title for Latin keyboard  -->
-    <string name="english_ime_name">TalkBack keyboard</string>
+    <string name="english_ime_name">Eyes-Free keyboard</string>
     <!-- Title for Latin keyboard settings activity / dialog -->
-    <string name="english_ime_settings">TalkBack keyboard settings</string>
+    <string name="english_ime_settings">Eyes-Free keyboard settings</string>
     <!-- Title for Latin keyboard input options dialog -->
     <string name="english_ime_input_options">Input options</string>
     <!-- Title for Accessibility settings dialog -->
     <string name="accessibility_settings">Accessibility settings</string>
     
     <!-- Permission for sending and receiving LatinIME broadcasts -->
-    <string name="permlab_sendIntentBroadcastCommandsToLatinIME">Send commands to TalkBack keyboard</string>
+    <string name="permlab_sendIntentBroadcastCommandsToLatinIME">Send commands to Eyes-Free keyboard</string>
     <string name="permdesc_sendIntentBroadcastCommandsToLatinIME">Allows an application or service
     to change the keyboard mode (ex. from navigating to hidden).</string>
 
     <!-- Option to launch tutorial -->
     <string name="launch_tutorial">Launch tutorial</string>
-    <string name="launch_tutorial_summary">Learn how to use the TalkBack keyboard</string>
+    <string name="launch_tutorial_summary">Learn how to use the Eyes-Free keyboard</string>
 
     <!-- Option to answer calls using the volume buttons -->
     <string name="answer_calls">Volume to answer calls</string>
@@ -47,6 +47,12 @@
     <!-- Option to show directional pad keys in navigation mode -->
     <string name="dpad_keys">Show D-Pad keys</string>
     <string name="dpad_keys_summary">Show directional pad keys in navigation mode (flick still enabled)</string>
+
+    <!-- Option to use linear forward/back instead of left/right in navigation mode -->
+    <string name="linear_navigation">Use linear navigation</string>
+    <string name="linear_navigation_summary">Use left and right gesture to move through UI elements</string>
+    <string name="linear_navigation_missing">Requires Linear Navigation service. Click to install.</string>
+    <string name="linear_navigation_disabled">Linear Navigation service must be enabled. Click to enable.</string>
 
     <!-- Option to provide vibrate/haptic feedback on keypress -->
     <string name="vibrate_on_keypress">Haptic feedback</string>
@@ -395,6 +401,6 @@
     <string name="subtype_mode_voice">voice</string>
 
     <!-- Title for Latin keyboard debug settings activity / dialog -->
-    <string name="english_ime_debug_settings" translatable="false">TalkBack keyboard Debug settings</string>
+    <string name="english_ime_debug_settings" translatable="false">Eyes-Free keyboard Debug settings</string>
     <string name="prefs_debug_mode" translatable="false">Debug Mode</string>
 </resources>

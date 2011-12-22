@@ -52,6 +52,7 @@ import com.googlecode.eyesfree.inputmethod.MultitouchGestureDetector;
 import com.googlecode.eyesfree.inputmethod.SegmentDetector;
 import com.googlecode.eyesfree.inputmethod.SegmentDetector.SegmentListener;
 import com.googlecode.eyesfree.inputmethod.SimpleMultitouchGestureListener;
+import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -1486,6 +1487,21 @@ public class LatinKeyboardBaseView extends View implements PointerTracker.UIProx
         }
 
         return pointers.get(id);
+    }
+    
+    /**
+     * Handles HOVER type events in API 14+.
+     * 
+     * @param e The hover motion event.
+     * @return True if the event was handled, false otherwise.
+     */
+    public boolean onHoverEvent(MotionEvent e) {
+        final MotionEvent touchEvent = MotionEventCompatUtils.convertHoverToTouch(e);
+        final boolean result = onTouchEvent(touchEvent);
+
+        touchEvent.recycle();
+
+        return result;
     }
 
     @Override

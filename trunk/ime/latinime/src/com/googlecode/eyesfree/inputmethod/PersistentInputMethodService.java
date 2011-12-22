@@ -16,8 +16,6 @@
 
 package com.googlecode.eyesfree.inputmethod;
 
-import com.google.android.marvin.aime.AccessibleInputMethodService;
-
 import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Message;
@@ -28,14 +26,16 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
+import com.google.android.marvin.aime.AccessibleInputMethodService;
+
 /**
  * This class extends {@link AccessibleInputMethodService} by overriding methods
  * related to hiding the input window. It allows the input method to be forced
  * open by long-pressing the MENU key.
- *
+ * 
  * @author alanv@google.com (Alan Viverette)
  */
-public class PersistentInputMethodService extends AccessibleInputMethodService {
+public class PersistentInputMethodService extends LinearNavigationInputMethodService {
     private static final String TAG = "PersistentInputMethodService";
     private static final int LONGPRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
     private static final int TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
@@ -51,7 +51,7 @@ public class PersistentInputMethodService extends AccessibleInputMethodService {
      */
     private KeyEvent mDownEvent;
 
-    private boolean mInLongPress = false;
+    private boolean mInLongPress;
 
     private class LongPressHandler extends Handler {
         LongPressHandler() {

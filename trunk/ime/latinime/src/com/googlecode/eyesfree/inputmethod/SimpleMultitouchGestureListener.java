@@ -21,9 +21,6 @@ import android.view.MotionEvent;
 
 import com.googlecode.eyesfree.inputmethod.MultitouchGestureDetector.MultitouchGestureListener;
 
-/**
- * @author alanv@google.com (Your Name Here)
- */
 public abstract class SimpleMultitouchGestureListener implements MultitouchGestureListener {
     public static final int FLICK_LEFT = 0;
     public static final int FLICK_DOWN = 1;
@@ -33,8 +30,9 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
     @Override
     public boolean onDown(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
+        int pointerCount = getFakePointerCount(ev);
 
-        return onSimpleDown(ev.getPointerCount(), centroid.x, centroid.y);
+        return onSimpleDown(pointerCount, centroid.x, centroid.y);
     }
 
     public abstract boolean onSimpleDown(int pointerCount, float centroidX, float centroidY);
@@ -42,13 +40,16 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
     @Override
     public boolean onTap(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
+        int pointerCount = getFakePointerCount(ev);
 
-        return onSimpleTap(ev.getPointerCount(), centroid.x, centroid.y);
+        return onSimpleTap(pointerCount, centroid.x, centroid.y);
     }
 
     @Override
     public boolean onSlideTap(MotionEvent ev) {
-        return onSimpleTap(ev.getPointerCount(), ev.getX(), ev.getX());
+        int pointerCount = getFakePointerCount(ev);
+
+        return onSimpleTap(pointerCount, ev.getX(), ev.getX());
     }
 
     public abstract boolean onSimpleTap(int pointerCount, float centroidX, float centroidY);
@@ -56,8 +57,9 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
     @Override
     public boolean onDoubleTap(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
+        int pointerCount = getFakePointerCount(ev);
 
-        return onSimpleDoubleTap(ev.getPointerCount(), centroid.x, centroid.y);
+        return onSimpleDoubleTap(pointerCount, centroid.x, centroid.y);
     }
 
     public abstract boolean onSimpleDoubleTap(int pointerCount, float centroidX, float centroidY);
@@ -65,8 +67,9 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
     @Override
     public boolean onLongPress(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
+        int pointerCount = getFakePointerCount(ev);
 
-        return onSimpleLongPress(ev.getPointerCount(), centroid.x, centroid.y);
+        return onSimpleLongPress(pointerCount, centroid.x, centroid.y);
     }
 
     public abstract boolean onSimpleLongPress(int pointerCount, float centroidX, float centroidY);
@@ -74,8 +77,9 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
     @Override
     public boolean onMove(MotionEvent ev) {
         PointF centroid = pointerCentroid(ev);
+        int pointerCount = getFakePointerCount(ev);
 
-        return onSimpleMove(ev.getPointerCount(), centroid.x, centroid.y);
+        return onSimpleMove(pointerCount, centroid.x, centroid.y);
     }
 
     public abstract boolean onSimpleMove(int pointerCount, float centroidX, float centroidY);
@@ -91,7 +95,7 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
         boolean a = (deltaY > deltaX);
         boolean b = (deltaY > -deltaX);
 
-        int pointerCount = e1.getPointerCount();
+        int pointerCount = getFakePointerCount(e1);
         int direction = (a ? 2 : 0) | (b ? 1 : 0);
 
         return onSimpleFlick(pointerCount, direction);
@@ -113,5 +117,19 @@ public abstract class SimpleMultitouchGestureListener implements MultitouchGestu
         y /= ev.getPointerCount();
 
         return new PointF(x, y);
+    }
+
+    public static void setFakePointerCount(MotionEvent e, int pointerCount) {
+        e.setEdgeFlags((pointerCount << 4) | e.getEdgeFlags());
+    }
+
+    public static int getFakePointerCount(MotionEvent e) {
+        final int fakePointerCount = (e.getEdgeFlags() >> 4);
+
+        if (fakePointerCount == 0) {
+            return e.getPointerCount();
+        }
+
+        return fakePointerCount;
     }
 }

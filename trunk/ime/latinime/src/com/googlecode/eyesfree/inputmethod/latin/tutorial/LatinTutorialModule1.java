@@ -59,23 +59,17 @@ public class LatinTutorialModule1 extends TutorialModule implements View.OnClick
 
     @Override
     public void onInstructionRead(int resId) {
-        switch (resId) {
-            case R.string.tutorial_1_message_1:
-                addInstruction(R.string.tutorial_1_message_2);
-                break;
-            case R.string.tutorial_1_message_2:
-                addInstruction(R.string.tutorial_1_message_3);
-                break;
+        if (resId == R.string.tutorial_1_message_1) {
+            addInstruction(R.string.tutorial_1_message_2);
+        } else if (resId == R.string.tutorial_1_message_2) {
+            addInstruction(R.string.tutorial_1_message_3);
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tutorial_1_content:
-            case R.id.tutorial_continue:
-                getController().next();
-                break;
+        if (v.getId() == R.id.tutorial_1_content || v.getId() == R.id.tutorial_continue) {
+            getController().next();
         }
     }
 }

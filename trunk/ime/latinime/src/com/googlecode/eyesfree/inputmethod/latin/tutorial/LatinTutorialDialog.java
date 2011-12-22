@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.view.WindowManager;
 
 import com.googlecode.eyesfree.inputmethod.latin.R;
 
@@ -34,11 +35,15 @@ public class LatinTutorialDialog extends Activity {
     protected void onResume() {
         super.onResume();
 
-        new AlertDialog.Builder(this).setTitle(R.string.tutorial_name).setMessage(
-                R.string.tutorial_first_time).setCancelable(true).setNegativeButton(
-                android.R.string.no, dialogClickListener).setPositiveButton(
-                android.R.string.ok, dialogClickListener).setOnCancelListener(dialogCancelListener)
-                .show();
+        final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.tutorial_name)
+                .setMessage(R.string.tutorial_first_time)
+                .setCancelable(true).setNegativeButton(android.R.string.no, dialogClickListener)
+                .setPositiveButton(android.R.string.ok, dialogClickListener)
+                .setOnCancelListener(dialogCancelListener)
+                .create();
+        
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        dialog.show();
     }
 
     private final OnCancelListener dialogCancelListener = new OnCancelListener() {

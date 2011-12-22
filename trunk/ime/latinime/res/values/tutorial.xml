@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tutorial_name">TalkBack keyboard tutorial</string>
+    <string name="tutorial_name">Eyes-Free keyboard tutorial</string>
     <string name="tutorial_continue">Continue</string>
     <string name="tutorial_continue_hint">Click to move to the next lesson.</string>
     <string name="tutorial_previous">Go back</string>
@@ -11,7 +11,7 @@
     <string name="tutorial_exit_hint">Click to finish and exit the tutorial.</string>
     <string name="tutorial_speak_text">Speak text</string>
     <string name="tutorial_instructions">Instructions</string>
-    <string name="tutorial_first_time">It looks like this is your first time using the TalkBack keyboard. Would you like to run the tutorial?\n\nYou can also run the tutorial later from the TalkBack keyboard settings screen.</string>
+    <string name="tutorial_first_time">It looks like this is your first time using the Eyes-Free keyboard. Would you like to run the tutorial?\n\nYou can also run the tutorial later from the Eyes-Free keyboard settings screen.</string>
     
     <!-- Lessons list -->
     <string name="tutorial_lessons_title">Available lessons</string>
@@ -23,14 +23,14 @@
     </declare-styleable>
     
     <!-- Lesson 1: Introduction -->
-    <string name="tutorial_1_title">Welcome to the Eyes-Free TalkBack keyboard tutorial</string>
-    <string name="tutorial_1_message_1">Welcome to the Eyes-Free TalkBack keyboard tutorial.</string>
-    <string name="tutorial_1_message_2">In this tutorial, you will have the opportunity to learn about and practice using the TalkBack keyboard\'s navigation and editing features.</string>
+    <string name="tutorial_1_title">Welcome to the Eyes-Free Eyes-Free keyboard tutorial</string>
+    <string name="tutorial_1_message_1">Welcome to the Eyes-Free Eyes-Free keyboard tutorial.</string>
+    <string name="tutorial_1_message_2">In this tutorial, you will have the opportunity to learn about and practice using the Eyes-Free keyboard\'s navigation and editing features.</string>
     <string name="tutorial_1_message_3">Click the Continue button at the bottom-right of the screen to start the first lesson.</string>
     
     <!-- Lesson 2: Virtual D-Pad -->
     <string name="tutorial_2_title">Using the virtual D-pad</string>
-    <string name="tutorial_2_message_1">When activated, the TalkBack keyboard provides a virtual directional pad on the bottom one-third of the screen.</string>
+    <string name="tutorial_2_message_1">When activated, the Eyes-Free keyboard provides a virtual directional pad on the bottom one-third of the screen.</string>
     <string name="tutorial_2_message_2">In this area, you can flick one finger up, down, left, or right to simulate directional pad presses.</string>
     <string name="tutorial_2_message_3">You can also tap the virtual d-pad area to simulate a center click.</string>
     <string name="tutorial_2_message_4">The virtual d-pad has been opened for you below. Use flick and tap gestures to select the button labeled \"First\".</string>
@@ -66,18 +66,25 @@
     <string name="tutorial_4_title">Navigating with the keyboard</string>
     <string name="tutorial_4_message_1">When editing text, you can use left and right flick gestures to move the cursor forward and backward by single characters.</string>
     <string name="tutorial_4_message_2">The editable text area at the top of the screen has been filled and activated for you. Try flicking to move forward and backward by character.</string>
-    <string name="tutorial_4_character_ok">The TalkBack keyboard also allows you to move by larger units of text. Tap using two fingers to switch to word navigation.</string>
+    <string name="tutorial_4_character_ok">The Eyes-Free keyboard also allows you to move by larger units of text. Tap using two fingers to switch to word navigation.</string>
     <string name="tutorial_4_word_mode">When word navigation is set, flicking left and right will move by words. Try flicking right twice to move two words to the right.</string>
     <string name="tutorial_4_word_ok">Double-tap using two fingers to go back to character navigation mode.</string>
     <string name="tutorial_4_char_mode">You\'ve completed the last lesson. When you\'re confident navigating text, find and click the \"Finish\" button.</string>
     <string name="tutorial_4_text">This is sample text.</string>
     
+    <string name="boot_activity_name">Loading keyboard...</string>
+    
     <!-- DefaultIMEWizard resources -->
-    <string name="wizard_name">Loading input method...</string>
-    <string name="need_accessibility_title">Enable accessibility</string>
-    <string name="need_accessibility_message">Accessibility must be enabled to use the TalkBack keyboard tutorial. Please enable accessibility in the Settings application.</string>
-    <string name="need_enable_title">Enable input method</string>
-    <string name="need_enable_message">The TalkBack keyboard must be enabled and set as your default input method before you can use the tutorial. Please enable the keyboard in the Settings application, then set it as your default keyboard by long-clicking in an edit field and selecting Input Method.</string>
-    <string name="need_default_title">Set default input method</string>
-    <string name="need_default_message">The TalkBack keyboard must be set as your default input method before you can use the tutorial. Please set it as your default keyboard by long-clicking in an edit field and selecting Input Method.</string>
+    <string name="wizard_name">Eyes-Free Keyboard Wizard</string>
+    <string name="need_accessibility_title">Enable Accessibility</string>
+    <string name="need_accessibility_message">Accessibility must be enabled to use the Eyes-Free keyboard. Please enable an Accessibility service in the Settings application.</string>
+    <string name="need_accessibility_positive">Accessibility Settings</string>
+    <string name="need_enable_title">Enable Input Method</string>
+    <string name="need_enable_message">The Eyes-Free keyboard must be enabled and set as your default input method. Please enable the keyboard in the Settings application.</string>
+    <string name="need_enable_positive">Input Method Settings</string>
+    <string name="need_default_title">Set Default Input Method</string>
+    <string name="need_default_message">The Eyes-Free keyboard must be set as your default input method. Please set it as your default keyboard.</string>
+    <string name="need_default_positive">Input Method Picker</string>
+    <string name="wizard_failed_title">Setup Wizard Failed</string>
+    <string name="wizard_failed_message">Sorry, the setup wizard failed to open Eyes-Free keyboard.</string>
 </resources>

@@ -403,10 +403,8 @@ public class VoiceInput implements OnClickListener {
      * Handle the cancel button.
      */
     public void onClick(View view) {
-        switch(view.getId()) {
-            case R.id.button:
-                cancel();
-                break;
+        if (view.getId() == R.id.button) {
+            cancel();
         }
     }
 

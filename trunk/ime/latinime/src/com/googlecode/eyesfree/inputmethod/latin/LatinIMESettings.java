@@ -20,29 +20,49 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.backup.BackupManager;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
+import android.provider.Settings;
 import android.speech.SpeechRecognizer;
 import android.text.AutoText;
 import android.util.Log;
 
 import com.googlecode.eyesfree.inputmethod.voice.SettingsUtil;
 import com.googlecode.eyesfree.inputmethod.voice.VoiceInputLogger;
+import com.googlecode.eyesfree.utils.PackageManagerUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class LatinIMESettings extends PreferenceActivity
-        implements SharedPreferences.OnSharedPreferenceChangeListener,
-        DialogInterface.OnDismissListener {
+public class LatinIMESettings extends PreferenceActivity implements
+        SharedPreferences.OnSharedPreferenceChangeListener, DialogInterface.OnDismissListener {
+    /** The package that provides the Linear Navigation service. */
+    public static final String LINEAR_NAVIGATION_PACKAGE =
+            "com.googlecode.eyesfree.linearnavigation";
+
+    /** The URI string for launching the App Market. */
+    private static final String MARKET_URI = "market://details?id=";
+
+    /** Request code for accessibility settings activity. */
+    private static final int REQUEST_ACCESSIBILITY_SETTINGS = 1;
+
+    /** Request code for Market install activity. */
+    private static final int REQUEST_MARKET_INSTALL = 2;
+    
+    /** Preference ordering for Linear Navigation setting. */
+    private static final int LINEAR_NAVIGATION_ORDER = 7;
 
     private static final String VIBRATE_ON_KEY = "vibrate_on";
     private static final String QUICK_FIXES_KEY = "quick_fixes";
@@ -81,7 +101,19 @@ public class LatinIMESettings extends PreferenceActivity
         mLogger = VoiceInputLogger.getLogger(this);
         mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
+        updateLinearNavigationPreference();
         updateHapticPreferenceVisibility();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_ACCESSIBILITY_SETTINGS:
+            case REQUEST_MARKET_INSTALL:
+                updateLinearNavigationPreference();
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -92,8 +124,7 @@ public class LatinIMESettings extends PreferenceActivity
             ((PreferenceGroup) findPreference(PREDICTION_SETTINGS_KEY))
                     .removePreference(mQuickFixes);
         }
-        if (!LatinIME.VOICE_INSTALLED
-                || !SpeechRecognizer.isRecognitionAvailable(this)) {
+        if (!LatinIME.VOICE_INSTALLED || !SpeechRecognizer.isRecognitionAvailable(this)) {
             getPreferenceScreen().removePreference(mVoicePreference);
         } else {
             updateVoiceModeSummary();
@@ -108,9 +139,11 @@ public class LatinIMESettings extends PreferenceActivity
     }
 
     /**
-     * Returns <code>true</code> if this Android build supports {@link BackupManager}.
-     *
-     * @return <code>true</code> if this Android build supports {@link BackupManager}
+     * Returns <code>true</code> if this Android build supports
+     * {@link BackupManager}.
+     * 
+     * @return <code>true</code> if this Android build supports
+     *         {@link BackupManager}
      */
     private static boolean supportsBackupManager() {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO);
@@ -123,8 +156,7 @@ public class LatinIMESettings extends PreferenceActivity
         }
         // If turning on voice input, show dialog
         if (key.equals(VOICE_SETTINGS_KEY) && !mVoiceOn) {
-            if (!prefs.getString(VOICE_SETTINGS_KEY, mVoiceModeOff)
-                    .equals(mVoiceModeOff)) {
+            if (!prefs.getString(VOICE_SETTINGS_KEY, mVoiceModeOff).equals(mVoiceModeOff)) {
                 showVoiceConfirmation();
             }
         }
@@ -156,15 +188,86 @@ public class LatinIMESettings extends PreferenceActivity
         }
     }
 
+    /**
+     * Disables the "Linear navigation" preference, if applicable.
+     */
+    private void updateLinearNavigationPreference() {
+        final Preference existingPreference = findPreference("linear_navigation");
+        
+        if (existingPreference != null) {
+            getPreferenceScreen().removePreference(existingPreference);
+        }
+
+        final boolean serviceSupported = Build.VERSION.SDK_INT >= 14;
+
+        if (!serviceSupported) {
+            return;
+        }
+
+        final boolean serviceInstalled =
+                PackageManagerUtils.hasPackage(this, LINEAR_NAVIGATION_PACKAGE);
+
+        if (!serviceInstalled) {
+            final Preference installPreference = new Preference(this);
+            installPreference.setKey("linear_navigation");
+            installPreference.setTitle(R.string.linear_navigation);
+            installPreference.setSummary(R.string.linear_navigation_missing);
+            installPreference.setOrder(LINEAR_NAVIGATION_ORDER);
+            installPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final Intent intent =
+                            new Intent(Intent.ACTION_VIEW, Uri.parse(MARKET_URI
+                                    + LINEAR_NAVIGATION_PACKAGE));
+                    startActivityForResult(intent, REQUEST_ACCESSIBILITY_SETTINGS);
+                    return true;
+                }
+            });
+            getPreferenceScreen().addPreference(installPreference);
+            return;
+        }
+
+        final String enabledServices =
+                Settings.Secure.getString(getContentResolver(),
+                        Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        final boolean serviceEnabled =
+                (enabledServices != null) && enabledServices.contains(LINEAR_NAVIGATION_PACKAGE);
+
+        if (!serviceEnabled) {
+            final Preference enablePreference = new Preference(this);
+            enablePreference.setKey("linear_navigation");
+            enablePreference.setTitle(R.string.linear_navigation);
+            enablePreference.setSummary(R.string.linear_navigation_disabled);
+            enablePreference.setOrder(LINEAR_NAVIGATION_ORDER);
+            enablePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    final Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    startActivityForResult(intent, REQUEST_ACCESSIBILITY_SETTINGS);
+                    return true;
+                }
+            });
+            getPreferenceScreen().addPreference(enablePreference);
+            return;
+        }
+
+        final CheckBoxPreference defaultPreference = new CheckBoxPreference(this);
+        defaultPreference.setKey("linear_navigation");
+        defaultPreference.setTitle(R.string.linear_navigation);
+        defaultPreference.setSummary(R.string.linear_navigation_summary);
+        defaultPreference.setOrder(LINEAR_NAVIGATION_ORDER);
+        getPreferenceScreen().addPreference(defaultPreference);
+    }
+
     private void showVoiceConfirmation() {
         mOkClicked = false;
         showDialog(VOICE_INPUT_CONFIRM_DIALOG);
     }
 
     private void updateVoiceModeSummary() {
-        mVoicePreference.setSummary(
-                getResources().getStringArray(R.array.voice_input_modes_summary)
-                [mVoicePreference.findIndexOfValue(mVoicePreference.getValue())]);
+        mVoicePreference.setSummary(getResources()
+                .getStringArray(R.array.voice_input_modes_summary)[mVoicePreference
+                .findIndexOfValue(mVoicePreference.getValue())]);
     }
 
     @Override
@@ -184,31 +287,36 @@ public class LatinIMESettings extends PreferenceActivity
                         updateVoicePreference();
                     }
                 };
-                AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                        .setTitle(R.string.voice_warning_title)
-                        .setPositiveButton(android.R.string.ok, listener)
-                        .setNegativeButton(android.R.string.cancel, listener);
+                AlertDialog.Builder builder =
+                        new AlertDialog.Builder(this).setTitle(R.string.voice_warning_title)
+                                .setPositiveButton(android.R.string.ok, listener)
+                                .setNegativeButton(android.R.string.cancel, listener);
 
-                // Get the current list of supported locales and check the current locale against
-                // that list, to decide whether to put a warning that voice input will not work in
-                // the current language as part of the pop-up confirmation dialog.
-                String supportedLocalesString = SettingsUtil.getSettingsString(
-                        getContentResolver(),
-                        SettingsUtil.LATIN_IME_VOICE_INPUT_SUPPORTED_LOCALES,
-                        LatinIME.DEFAULT_VOICE_INPUT_SUPPORTED_LOCALES);
+                // Get the current list of supported locales and check the
+                // current locale against
+                // that list, to decide whether to put a warning that voice
+                // input will not work in
+                // the current language as part of the pop-up confirmation
+                // dialog.
+                String supportedLocalesString =
+                        SettingsUtil.getSettingsString(getContentResolver(),
+                                SettingsUtil.LATIN_IME_VOICE_INPUT_SUPPORTED_LOCALES,
+                                LatinIME.DEFAULT_VOICE_INPUT_SUPPORTED_LOCALES);
                 ArrayList<String> voiceInputSupportedLocales =
                         LatinIME.newArrayList(supportedLocalesString.split("\\s+"));
-                boolean localeSupported = voiceInputSupportedLocales.contains(
-                        Locale.getDefault().toString());
+                boolean localeSupported =
+                        voiceInputSupportedLocales.contains(Locale.getDefault().toString());
 
                 if (localeSupported) {
-                    String message = getString(R.string.voice_warning_may_not_understand) + "\n\n" +
-                            getString(R.string.voice_hint_dialog_message);
+                    String message =
+                            getString(R.string.voice_warning_may_not_understand) + "\n\n"
+                                    + getString(R.string.voice_hint_dialog_message);
                     builder.setMessage(message);
                 } else {
-                    String message = getString(R.string.voice_warning_locale_not_supported) +
-                            "\n\n" + getString(R.string.voice_warning_may_not_understand) + "\n\n" +
-                            getString(R.string.voice_hint_dialog_message);
+                    String message =
+                            getString(R.string.voice_warning_locale_not_supported) + "\n\n"
+                                    + getString(R.string.voice_warning_may_not_understand) + "\n\n"
+                                    + getString(R.string.voice_hint_dialog_message);
                     builder.setMessage(message);
                 }
 

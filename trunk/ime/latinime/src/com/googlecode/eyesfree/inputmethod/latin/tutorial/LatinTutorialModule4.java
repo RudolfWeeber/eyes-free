@@ -75,61 +75,51 @@ public class LatinTutorialModule4 extends TutorialModule implements View.OnClick
 
     @Override
     public void onInstructionRead(int resId) {
-        switch (resId) {
-            case R.string.tutorial_4_message_1:
-                setFlag(FLAG_CHAR_READY, true);
-                addInstruction(R.string.tutorial_4_message_2);
-                findViewById(R.id.tutorial_4_edittext).requestFocusFromTouch();
-                findViewById(R.id.tutorial_4_edittext).performClick();
-                break;
+        if (resId == R.string.tutorial_4_message_1) {
+            setFlag(FLAG_CHAR_READY, true);
+            addInstruction(R.string.tutorial_4_message_2);
+            findViewById(R.id.tutorial_4_edittext).requestFocusFromTouch();
+            findViewById(R.id.tutorial_4_edittext).performClick();
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tutorial_previous:
-                getController().previous();
-                break;
-            case R.id.tutorial_exit:
-                getController().finish();
-                break;
+        if (v.getId() == R.id.tutorial_previous) {
+            getController().previous();
+        } else if (v.getId() == R.id.tutorial_exit) {
+            getController().finish();
         }
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        switch (v.getId()) {
-            case R.id.tutorial_4_edittext:
-                // TODO(alanv): Do focus and selection need to be different
-                // prompts?
-                break;
+        if (v.getId() == R.id.tutorial_4_edittext) {
+            // TODO(alanv): Do focus and selection need to be different
+            // prompts?
         }
     }
 
     @Override
     public void onSelectionChanged(
             SelectionEditText editText, int oldSelStart, int oldSelEnd, int selStart, int selEnd) {
-        switch (editText.getId()) {
-            case R.id.tutorial_4_edittext:
-                int diff = Math.abs((selStart - oldSelStart) + (selEnd - oldSelEnd));
+        if (editText.getId() == R.id.tutorial_4_edittext) {
+            int diff = Math.abs((selStart - oldSelStart) + (selEnd - oldSelEnd));
+            if (diff == 2 && hasFlag(FLAG_CHAR_READY) && !hasFlag(FLAG_CHAR_DONE)) {
+                mDpadUseCount++;
 
-                if (diff == 2 && hasFlag(FLAG_CHAR_READY) && !hasFlag(FLAG_CHAR_DONE)) {
-                    mDpadUseCount++;
-
-                    if (mDpadUseCount >= DPAD_USE_TRIGGER) {
-                        setFlag(FLAG_CHAR_DONE, true);
-                        addInstruction(R.string.tutorial_4_character_ok);
-                    }
-                } else if (diff > 2 && hasFlag(FLAG_CHAR_DONE) && !hasFlag(FLAG_WORD_DONE)) {
-                    mAltDpadUseCount++;
-
-                    if (mAltDpadUseCount >= ALT_DPAD_USE_TRIGGER) {
-                        setFlag(FLAG_WORD_DONE, true);
-                        addInstruction(R.string.tutorial_4_word_ok);
-                    }
+                if (mDpadUseCount >= DPAD_USE_TRIGGER) {
+                    setFlag(FLAG_CHAR_DONE, true);
+                    addInstruction(R.string.tutorial_4_character_ok);
                 }
-                break;
+            } else if (diff > 2 && hasFlag(FLAG_CHAR_DONE) && !hasFlag(FLAG_WORD_DONE)) {
+                mAltDpadUseCount++;
+
+                if (mAltDpadUseCount >= ALT_DPAD_USE_TRIGGER) {
+                    setFlag(FLAG_WORD_DONE, true);
+                    addInstruction(R.string.tutorial_4_word_ok);
+                }
+            }
         }
     }
 

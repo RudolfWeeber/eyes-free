@@ -23,6 +23,11 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.accessibility.AccessibilityManager;
+
+import com.googlecode.eyesfree.utils.compat.AccessibilityManagerCompatUtils;
+import com.googlecode.eyesfree.utils.compat.InputDeviceCompatUtils;
+import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
 
 /**
  * Detects various gestures and events using the supplied {@link MotionEvent}s.
@@ -59,8 +64,10 @@ public class MultitouchGestureDetector {
 
     private static final int LONGPRESS_TIMEOUT = ViewConfiguration.getLongPressTimeout();
     private static final int TAP_TIMEOUT = ViewConfiguration.getTapTimeout();
-    private static final int FLICK_TIMEOUT = ViewConfiguration.getDoubleTapTimeout();
     private static final int DOUBLE_TAP_TIMEOUT = ViewConfiguration.getDoubleTapTimeout();
+
+    /** The maximum duration of a flick gesture in milliseconds. */
+    private static final int FLICK_TIMEOUT = 250;
 
     // constants for Message.what used by GestureHandler below
     private static final int LONG_PRESS = 1;
@@ -70,6 +77,8 @@ public class MultitouchGestureDetector {
     private static final int SHOW_PRESS = 5;
 
     private final Handler mHandler;
+    private final AccessibilityManager mAccessibilityManager;
+
     private MultitouchGestureListener mListener;
 
     private boolean mInLongPress;
@@ -91,10 +100,11 @@ public class MultitouchGestureDetector {
      */
     private boolean mIsDoubleTapping;
 
-    /**
-     * True when the user is still holding a finger on the screen.
-     */
+    /** Whether the user is still holding a finger on the screen. */
     private boolean mIsStillDown;
+
+    /** The event time from the last received event. */
+    private long mLastEventTime;
 
     private boolean mIsLongPressEnabled;
     private boolean mIsDoubleTapEnabled;
@@ -168,14 +178,16 @@ public class MultitouchGestureDetector {
      * @param listener the listener invoked for all the callbacks
      * @param handler the handler to use
      */
-    public MultitouchGestureDetector(
-            Context context, MultitouchGestureListener listener, Handler handler) {
+    public MultitouchGestureDetector(Context context, MultitouchGestureListener listener,
+            Handler handler) {
         if (handler != null) {
             mHandler = new MultitouchGestureHandler(handler);
         } else {
             mHandler = new MultitouchGestureHandler();
         }
 
+        mAccessibilityManager =
+                (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
         mListener = listener;
 
         init(context);
@@ -196,7 +208,7 @@ public class MultitouchGestureDetector {
         mDoubleTapMinFingers = 1;
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
-        final int touchSlop = configuration.getScaledTouchSlop();
+        final int touchSlop = (int) (0.5 * configuration.getScaledTouchSlop());
         final int doubleTapSlop = configuration.getScaledDoubleTapSlop();
 
         mTouchSlopSquare = touchSlop * touchSlop;
@@ -257,6 +269,15 @@ public class MultitouchGestureDetector {
             return false;
         }
 
+        // If touch exploration is enabled, use the following workarounds:
+        // 1. Detect two-finger scroll and adjust the pointer count.
+        // 2. Detect hover to touch transition and drop extra up event.
+        if (AccessibilityManagerCompatUtils.isTouchExplorationEnabled(mAccessibilityManager)) {
+            handleTouchExploration(ev);
+        }
+
+        mLastEventTime = ev.getEventTime();
+
         final int action = ev.getAction();
         final float y = ev.getY();
         final float x = ev.getX();
@@ -280,8 +301,8 @@ public class MultitouchGestureDetector {
                         mIsDoubleTapping = true;
                         mHandler.removeMessages(SHOW_PRESS);
                     } else {
-                        mHandler.sendEmptyMessageAtTime(
-                                FIRST_TAP, ev.getEventTime() + DOUBLE_TAP_TIMEOUT);
+                        mHandler.sendEmptyMessageAtTime(FIRST_TAP, ev.getEventTime()
+                                + DOUBLE_TAP_TIMEOUT);
                     }
                 }
 
@@ -295,8 +316,8 @@ public class MultitouchGestureDetector {
 
                 if (mIsLongPressEnabled) {
                     mHandler.removeMessages(LONG_PRESS);
-                    mHandler.sendEmptyMessageAtTime(
-                            LONG_PRESS, ev.getDownTime() + TAP_TIMEOUT + LONGPRESS_TIMEOUT);
+                    mHandler.sendEmptyMessageAtTime(LONG_PRESS, ev.getDownTime() + TAP_TIMEOUT
+                            + LONGPRESS_TIMEOUT);
                 }
 
                 mHandler.sendEmptyMessageAtTime(FLICK, ev.getDownTime() + FLICK_TIMEOUT);
@@ -400,9 +421,28 @@ public class MultitouchGestureDetector {
                 break;
             case MotionEvent.ACTION_CANCEL:
                 cancel();
+                break;
+            case MotionEvent.ACTION_OUTSIDE:
+                // Consume and ignore this action.
+                handled = true;
+                break;
         }
 
         return handled;
+    }
+
+    private void handleTouchExploration(MotionEvent ev) {
+        // Cancel duplicate events, these are touch exploration bugs.
+        if (ev.getEventTime() == mLastEventTime) {
+            ev.setAction(MotionEvent.ACTION_OUTSIDE);
+            return;
+        }
+
+        // Adjust the pointer count on single-touch events.
+        if ((ev.getPointerCount() == 1)
+                && (MotionEventCompatUtils.getSource(ev) == InputDeviceCompatUtils.SOURCE_TOUCHSCREEN)) {
+            SimpleMultitouchGestureListener.setFakePointerCount(ev, 2);
+        }
     }
 
     private void setFirstUpEvent(MotionEvent ev) {
@@ -453,18 +493,24 @@ public class MultitouchGestureDetector {
     }
 
     private void cancel() {
-        mHandler.removeMessages(LONG_PRESS);
+        // Remove all pending messages.
+        mHandler.removeMessages(SHOW_PRESS);
         mHandler.removeMessages(FIRST_TAP);
+        mHandler.removeMessages(LONG_PRESS);
+        mHandler.removeMessages(FLICK);
+        
+        // Clear the velocity tracker.
         mVelocityTracker.recycle();
         mVelocityTracker = null;
+        
+        // Clear the current state.
         mIsDoubleTapping = false;
-        if (mInLongPress) {
-            mInLongPress = false;
-        }
+        mInLongPress = false;
+        mIsStillDown = false;
     }
 
-    private boolean isConsideredDoubleTap(
-            MotionEvent firstDown, MotionEvent firstUp, MotionEvent secondDown) {
+    private boolean isConsideredDoubleTap(MotionEvent firstDown, MotionEvent firstUp,
+            MotionEvent secondDown) {
         if (!mAlwaysInDoubleTapRegion) {
             return false;
         }

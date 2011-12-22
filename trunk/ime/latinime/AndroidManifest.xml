@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.googlecode.eyesfree.inputmethod.latin"
-      android:versionCode="1"
-      android:versionName="1.0">
+      android:versionCode="4"
+      android:versionName="1.1.2">
 
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
@@ -21,13 +21,13 @@
             android:description="@string/permdesc_sendIntentBroadcastCommandsToLatinIME" />
 
     <application android:label="@string/english_ime_name"
+            android:icon="@drawable/ime_icon"
             android:backupAgent="LatinIMEBackupAgent"
             android:killAfterRestore="false">
 
         <service android:name="com.googlecode.eyesfree.inputmethod.latin.LatinIME"
                 android:label="@string/english_ime_name"
-                android:permission="android.permission.BIND_INPUT_METHOD"
-                android:icon="@drawable/ime_icon">
+                android:permission="android.permission.BIND_INPUT_METHOD">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
@@ -79,11 +79,22 @@
         
         <activity android:name="com.googlecode.eyesfree.inputmethod.latin.BootActivity"
                 android:theme="@android:style/Theme.Dialog"
-                android:label="@string/wizard_name"
+                android:label="@string/boot_activity_name"
+                android:excludeFromRecents="true"
                 android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name="com.googlecode.eyesfree.inputmethod.latin.SetupWizardActivity"
+                android:theme="@android:style/Theme.Dialog"
+                android:label="@string/wizard_name"
+                android:windowSoftInputMode="adjustResize|stateAlwaysVisible">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

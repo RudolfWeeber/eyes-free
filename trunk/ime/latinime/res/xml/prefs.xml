@@ -42,6 +42,14 @@
             android:defaultValue="@bool/default_dpad_keys"
             />
 
+    <CheckBoxPreference
+            android:key="linear_navigation"
+            android:title="@string/linear_navigation"
+            android:summary="@string/linear_navigation_summary"
+            android:persistent="true"
+            android:defaultValue="@bool/default_linear_navigation"
+            />
+
 <!--
     <CheckBoxPreference
             android:key="answer_calls"

@@ -69,62 +69,49 @@ public class LatinTutorialModule2 extends TutorialModule implements View.OnClick
 
     @Override
     public void onInstructionRead(int resId) {
-        switch (resId) {
-            case R.string.tutorial_2_message_1:
-                addInstruction(R.string.tutorial_2_message_2);
-                break;
-            case R.string.tutorial_2_message_2:
-                addInstruction(R.string.tutorial_2_message_3);
-                break;
-            case R.string.tutorial_2_message_3:
-                addInstruction(R.string.tutorial_2_message_4);
-                setFlag(FLAG_FIRST_FOCUS_READY, true);
-                break;
-            case R.string.tutorial_2_second_tapped:
-                addInstruction(R.string.tutorial_2_second_tapped_2);
-                setFlag(FLAG_LEFT_DPAD_READY, true);
-                break;
-            case R.string.tutorial_2_entered_dpad:
-                addInstruction(R.string.tutorial_2_dpad_buttons);
-                break;
+        if (resId == R.string.tutorial_2_message_1) {
+            addInstruction(R.string.tutorial_2_message_2);
+        } else if (resId == R.string.tutorial_2_message_2) {
+            addInstruction(R.string.tutorial_2_message_3);
+        } else if (resId == R.string.tutorial_2_message_3) {
+            addInstruction(R.string.tutorial_2_message_4);
+            setFlag(FLAG_FIRST_FOCUS_READY, true);
+        } else if (resId == R.string.tutorial_2_second_tapped) {
+            addInstruction(R.string.tutorial_2_second_tapped_2);
+            setFlag(FLAG_LEFT_DPAD_READY, true);
+        } else if (resId == R.string.tutorial_2_entered_dpad) {
+            addInstruction(R.string.tutorial_2_dpad_buttons);
         }
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        switch (v.getId()) {
-            case R.id.tutorial_2_first:
-                if (hasFlag(FLAG_FIRST_FOCUS_READY) && !hasFlag(FLAG_FIRST_FOCUS_DONE)) {
-                    addInstruction(R.string.tutorial_2_first_selected);
-                    v.setContentDescription(null);
-                    setFlag(FLAG_FIRST_FOCUS_DONE, true);
-                }
-                break;
-            case R.id.tutorial_2_second:
-                if (hasFlag(FLAG_FIRST_FOCUS_DONE) && !hasFlag(FLAG_SECOND_FOCUS_DONE)) {
-                    addInstruction(R.string.tutorial_2_second_selected);
-                    setFlag(FLAG_SECOND_FOCUS_DONE, true);
-                }
-                break;
+        if (v.getId() == R.id.tutorial_2_first) {
+            if (hasFlag(FLAG_FIRST_FOCUS_READY) && !hasFlag(FLAG_FIRST_FOCUS_DONE)) {
+                addInstruction(R.string.tutorial_2_first_selected);
+                v.setContentDescription(null);
+                setFlag(FLAG_FIRST_FOCUS_DONE, true);
+            }
+        } else if (v.getId() == R.id.tutorial_2_second) {
+            if (hasFlag(FLAG_FIRST_FOCUS_DONE) && !hasFlag(FLAG_SECOND_FOCUS_DONE)) {
+                addInstruction(R.string.tutorial_2_second_selected);
+                setFlag(FLAG_SECOND_FOCUS_DONE, true);
+            }
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.tutorial_previous:
-                getController().previous();
-                break;
-            case R.id.tutorial_continue:
-                getController().next();
-                break;
-            case R.id.tutorial_2_second:
-                if (hasFlag(FLAG_SECOND_FOCUS_DONE) && !hasFlag(FLAG_SECOND_CLICK_DONE)) {
-                    addInstruction(R.string.tutorial_2_second_tapped);
-                    v.setContentDescription(null);
-                    setFlag(FLAG_SECOND_CLICK_DONE, true);
-                }
-                break;
+        if (v.getId() == R.id.tutorial_previous) {
+            getController().previous();
+        } else if (v.getId() == R.id.tutorial_continue) {
+            getController().next();
+        } else if (v.getId() == R.id.tutorial_2_second) {
+            if (hasFlag(FLAG_SECOND_FOCUS_DONE) && !hasFlag(FLAG_SECOND_CLICK_DONE)) {
+                addInstruction(R.string.tutorial_2_second_tapped);
+                v.setContentDescription(null);
+                setFlag(FLAG_SECOND_CLICK_DONE, true);
+            }
         }
     }
 
