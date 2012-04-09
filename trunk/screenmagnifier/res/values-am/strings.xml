@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"የማሳያ-ላይ ይዘትን ያጎላል። "\n\n"ማጉላትን ለጊዜው ለማብራት የአጉላ አዶን ጠቅ አድርግ። ማሳያውን በምትነካበት ጊዜ ማጉሊያው እጅህን ይከተላል። ከማጉላት ለመውጣት ማሳያውን መንካት አቁም። "\n\n" በማሳያው ላይ የአዶውን አቀማመጥ ለመለወጥ የማጉሊያውን አዶ ተጫን እና ያዝ። "\n\n"በማጉላት ጊዜ ንጽጽር እና የብርሃን መጠንን ለመለወጥ፣ የቅንጅቶች ገጽ ተመልከት።"</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"ቀለም"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"ከፍተኛ-ንጽጽር"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"በማጉላት ጊዜ ንጽጽርን ይጨምራል"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"የብርሃን መጠንን ገልብጥ"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"ደማቅ  ቀለሞችን ወደ ፈዛዛነት ይለውጣል(እና በተገላቢጦሽ ይሆናል)"</string>
+</resources>

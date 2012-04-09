@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Consente di ingrandire i contenuti sullo schermo."\n\n"Fai clic sull\'icona lente d\'ingrandimento per attivare temporaneamente l\'ingrandimento. Quando toccherai lo schermo, la lente d\'ingrandimento seguirà il tuo dito. Non toccare più lo schermo per uscire dall\'ingrandimento."\n\n"Premi e tieni premuta l\'icona lente d\'ingrandimento per cambiare la posizione dell\'icona sullo schermo."\n\n"Per modificare contrasto e luminosità durante l\'ingrandimento, visualizza la pagina Impostazioni."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Colore"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Alto contrasto"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Consente di aumentare il contrasto durante l\'ingrandimento"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Inverti luminosità"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Consente di invertire colori scuri e chiari"</string>
+</resources>

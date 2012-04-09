@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Phóng đại nội dung trên màn hình."\n\n"Nhấp vào biểu tượng kính lúp để tạm thời bật chế độ phóng đại. Khi bạn chạm vào màn hình, kính lúp sẽ đi theo ngón tay của bạn. Ngừng chạm vào màn hình để thoát khỏi chế độ phóng đại."\n\n"Nhấn và giữ biểu tượng kính lúp để thay đổi vị trí của biểu tượng trên màn hình."\n\n"Để thay đổi độ tương phản và độ sáng khi phóng đại, hãy xem trang Cài đặt."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Màu sắc"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Độ tương phản cao"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Tăng độ tương phản khi phóng đại"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Đảo ngược độ sáng"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Thay đổi màu tối thành màu sáng (và ngược lại)"</string>
+</resources>

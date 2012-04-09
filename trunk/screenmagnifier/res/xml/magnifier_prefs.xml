@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/magnifier_name" >
+
+    <PreferenceCategory android:title="@string/pref_category_color" >
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_contrast_default"
+            android:key="@string/pref_contrast_key"
+            android:persistent="true"
+            android:summary="@string/pref_contrast_summary"
+            android:title="@string/pref_contrast_title" />
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_invert_default"
+            android:key="@string/pref_invert_key"
+            android:persistent="true"
+            android:summary="@string/pref_invert_summary"
+            android:title="@string/pref_invert_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

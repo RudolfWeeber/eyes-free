@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Ikhulisa okuqukethwe kwesikrini."\n\n"Chofoza isithonjana sokukhulisa ukuze ukhanyise ukukhulisa. Uma uthinta isikrini, isikhulisi sizolandela umunwe wakho. Yeka ukuthinta isikrini ukuze uphume ekukhuliseni."\n\n"Cindezela futhi ubambe isithonjana sesikhulisi ukuze ushintshe indawo yesikhulisi esikrinini."\n\n"Ukuze ushintshe ukukhanya phakathi kokukhulisa, bona Ikhasi lezilungiselelo."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Umbala"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Ukukhanya okuphezulu"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Khulisa ukukhanya phakathi kokukhulisa"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Faka ukukhanya"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Shinstsha imibala emnyama kuya kwekhanyayo"</string>
+</resources>

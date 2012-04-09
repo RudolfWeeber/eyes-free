@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"מגדיל תוכן על המסך."\n\n"לחץ על סמל זכוכית המגדלת כדי להפעיל הגדלה באופן זמני. כשתיגע במסך, זכוכית המגדלת תעקוב אחרי האצבע שלך. הסר את האצבע מהמסך כדי לצאת מההגדלה."\n\n"לחץ על סמל זכוכית המגדלת והחזק אותו כדי לשנות את מיקום הסמל במסך."\n\n"כדי לשנות את הניגודיות והבהירות בזמן ההגדלה, ראה את דף הגדרות."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"צבע"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"ניגודיות גבוהה"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"מגביר את הניגודיות בזמן ההגדלה"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"הפוך בהירות"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"משנה צבעים כהים לבהירים (ולהיפך)"</string>
+</resources>

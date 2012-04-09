@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Suurentaa näytön sisällön."\n\n"Ota suurennus tilapäisesti käyttöön napsauttamalla suurentajan kuvaketta. Suurentaja seuraa sormeasi, kun kosketat näyttöä. Suurennus loppuu, kun et enää kosketa näyttöä."\n\n"Kosketa suurentajan kuvaketta pitkään, niin voit siirtää sitä ruudulla."\n\n"Voit muuttaa suurennuksen aikaista kontrastia ja kirkkautta Asetukset-sivulla."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Väri"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Voimakas kontrasti"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Lisää kontrastia suurennuksen aikana"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Käänteinen kirkkaus"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Vaihtaa tummat värit vaaleiksi ja päinvastoin"</string>
+</resources>

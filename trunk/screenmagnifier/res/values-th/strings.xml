@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"ขยายเนื้อหาบนหน้าจอ"\n\n"คลิกไอคอนแว่นขยายเพื่อเปิดการขยายชั่วคราว เมื่อคุณแตะที่หน้าจอ แว่นขยายจะตามนิ้วคุณไป หยุดแตะหน้าจอเพื่อออกจากการขยาย"\n\n"กดไอคอนแว่นขยายค้างไว้เพื่อเปลี่ยนตำแหน่งของไอคอนบนหน้าจอ"\n\n"หากต้องการเปลี่ยนความคมชัดและความสว่างในระหว่างการขยาย ให้ดูในหน้าการตั้งค่า"</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"สี"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"ความคมชัดสูง"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"เพิ่มความคมชัดในระหว่างการขยาย"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"สลับความสว่าง"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"เปลี่ยนสีเข้มเป็นสีอ่อน (และกลับกัน)"</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Vergroot inhoud op die skerm."\n\n"Klik die vergroter om vergroting tydelik aan te skakel. As jy die skerm raak, sal die vergroter jou vinger volg. Laat los die skerm om vergroting te verlaat."\n\n"Druk en hou die vergroter-ikoon om die ikoon se posisie op die skerm te verander."\n\n"Om kontras en helderheid te verander tydens vergroting, sien die Instellings-bladsy."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Kleur"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Hoë kontras"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Verhoog kontras tydens vergroting"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Keer helderheid om"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Verander donker kleure na ligte kleure (en andersom)"</string>
+</resources>

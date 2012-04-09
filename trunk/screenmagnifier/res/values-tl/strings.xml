@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Mina-magnify ang on-screen na nilalaman."\n\n"I-click ang icon na magnifier upang pansamantalang i-on ang pag-magnify. Kapag hinawakan mo ang screen, susundan ng magnifier ang iyong daliri. Ihinto ang paghawak sa screen upang lumabas sa pag-magnify."\n\n"Pindutin nang matagal ang icon na magnifier upang mabago ang posisyon ng icon sa screen."\n\n"Upang baguhin ang contrast at liwanag sa panahon ng pag-magnify, tingnan ang pahina ng Mga Setting."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Kulay"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"High-contrast"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Dinaragdagan ang contrast sa panahon ng pag-magnify"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Baliktarin ang liwanag"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Binabago ang maiiitim na kulay patungong mapupusyaw (at kabaliktaran)"</string>
+</resources>

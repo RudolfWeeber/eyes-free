@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Zvětší obsah na obrazovce."\n\n"Kliknutím na ikonu lupy zvětšení dočasně zapnete. Pokud se dotknete obrazovky, bude lupa sledovat váš prst. Když se obrazovky přestanete dotýkat, opustíte režim zvětšení."\n\n"Chcete-li změnit pozici ikony lupy na obrazovce, stiskněte a podržte ikonu."\n\n"Chcete-li během zvětšení změnit kontrast a jas, přejděte na stránku Nastavení."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Barva"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Vysoký kontrast"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Při zvětšení zvýší kontrast"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Invertovat jas"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Změní tmavé barvy na světlé (a naopak)"</string>
+</resources>

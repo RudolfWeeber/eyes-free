@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Powiększa zawartość ekranu."\n\n"Kliknij ikonę lupy, by tymczasowo włączyć powiększenie. Kiedy dotkniesz ekranu, lupa będzie podążać za Twoim palcem. Gdy odsuniesz palec, powiększenie wyłączy się."\n\n"Naciśnij i przytrzymaj ikonę lupy, by zmienić jej położenie na ekranie."\n\n"Informacje o zmienianiu kontrastu i jasności podczas powiększania znajdziesz na stronie Ustawienia."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Kolor"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Wysoki kontrast"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Zwiększa kontrast podczas powiększania."</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Odwróć jasność."</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Zmienia ciemne kolory na jasne (i odwrotnie)."</string>
+</resources>

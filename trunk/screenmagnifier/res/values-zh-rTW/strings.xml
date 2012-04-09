@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"放大螢幕內容。"\n\n"只要按一下放大鏡圖示，即可暫時啟用放大模式。當您輕觸螢幕時，放大鏡會隨著您的手指移動。如要離開放大模式，請停止觸碰螢幕。"\n\n"按住放大鏡圖示即可改變圖示在螢幕上的位置。"\n\n"如要調整放大模式的對比和亮度，請前往「設定」頁面。"</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"色彩"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"高對比"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"調高放大模式的對比"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"反轉亮度"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"將暗色轉換成亮色 (反之亦然)"</string>
+</resources>

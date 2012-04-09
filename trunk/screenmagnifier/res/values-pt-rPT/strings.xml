@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Amplia o conteúdo no ecrã."\n\n"Clique no ícone de lupa para ativar temporariamente a ampliação. Quando tocar no ecrã, a lupa seguirá o seu dedo. Pare de tocar no ecrã para sair de ampliação."\n\n"Mantenha premido o ícone de lupa para alterar a posição do ícone no ecrã."\n\n"Para alterar o contraste e o brilho durante a ampliação, consulte a página de Definições."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Cor"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Alto contraste"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Aumenta o contraste durante a ampliação"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Inverter o brilho"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Muda de cores escuras para claras (e vice-versa)"</string>
+</resources>

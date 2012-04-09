@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Membesarkan kandungan pada skrin."\n\n"Klik pada ikon kanta pembesar untuk menghidupkan pembesaran buat sementara waktu. Apabila anda menyentuh skrin, kanta pembesar akan mengikuti jari anda. Berhenti menyentuh skrin untuk keluar dari pembesaran."\n\n"Tekan dan tahan ikon kanta pembesar untuk menukar kedudukan ikon pada skrin."\n\n"Untuk menukar kontras dan kecerahan semasa pembesaran, lihat halaman Tetapan."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Warna"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Kontras tinggi"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Meningkatkan kontras semasa pembesaran"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Terbalikkan kecerahan"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Menukar warna gelap kepada warna terang (dan sebaliknya)"</string>
+</resources>

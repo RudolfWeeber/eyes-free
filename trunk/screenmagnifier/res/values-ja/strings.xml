@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"画面上のコンテンツを拡大します。"\n\n"虫めがねアイコンをタップすると、拡大が一時的にONになります。画面上に指を置いて動かすと虫めがねがついてきます。画面から指を離すと拡大が終了します。"\n\n"虫めがねアイコンを押し続けるとアイコンの位置を変更できます。"\n\n"拡大時のコントラストや輝度を変更するには[設定]ページをご覧ください。"</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"色"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"高コントラスト"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"拡大時のコントラストを高くします"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"輝度反転"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"暗い色を明るく、明るい色を暗くします"</string>
+</resources>

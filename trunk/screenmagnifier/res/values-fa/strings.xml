@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"محتوای روی صفحه را بزرگنمایی می‌کند."\n\n" برای فعال کردن موقتی بزرگنمایی بر روی نماد ذره‌بین کلیک کنید. زمانی که صفحه را لمس می‌کنید، ذره‌بین انگشت شما را دنبال می‌کند. برای خروج از بزرگنمایی دیگر صفحه را لمس نکنید."\n\n"نماد ذره‌بین را فشار داده و نگه دارید تا مکان آن را بر روی صفحه تغییر دهید."\n\n"برای تغییر روشنایی و کنتراست در حین بزرگنمایی، به صفحه تنظیمات مراجعه کنید."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"رنگ"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"کنتراست زیاد"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"کنتراست را در حین بزرگنمایی افزایش می‌دهد"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"معکوس کردن روشنایی"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"رنگ‌های تیره را به روشن تغییر می‌دهد (و بالعکس)"</string>
+</resources>

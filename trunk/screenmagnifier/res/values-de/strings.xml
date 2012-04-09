@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Vergrößert die Inhalte des Bildschirms."\n\n"Klicken Sie auf das Lupensymbol, um die Vergrößerung vorübergehend zu aktivieren. Wenn Sie den Bildschirm berühren, folgt die Lupe Ihrem Finger. Lassen Sie den Bildschirm los, um die Vergrößerung zu beenden."\n\n"Halten Sie das Lupensymbol gedrückt, um die Position des Symbols auf dem Bildschirm zu ändern."\n\n"Zum Ändern des Kontrastes und der Helligkeit während der Vergrößerung gehen Sie zur Seite \"Einstellungen\"."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Farbe"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Kontrastreich"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Verstärkt den Kontrast während der Vergrößerung"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Helligkeit umkehren"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Ändert dunkle Farben in helle und umgekehrt"</string>
+</resources>

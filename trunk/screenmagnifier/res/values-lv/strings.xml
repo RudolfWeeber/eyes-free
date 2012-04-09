@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Tiek palielināts ekrānā redzamais saturs."\n\n"Lai īslaicīgi ieslēgtu palielināšanu, noklikšķiniet uz palielināšanas ikonas. Pieskaroties ekrānam, tiks palielināts zem pirksta esošais ekrāna saturs. Lai pārtrauktu palielināšanu, noņemiet pirkstu no ekrāna."\n\n"Lai mainītu palielināšanas ikonas pozīciju ekrānā, nospiediet un turiet to."\n\n"Lai palielināšanas laikā mainītu kontrastu un spilgtumu, skatiet lapu Iestatījumi."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Krāsa"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Liels kontrasts"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Palielināšanas laikā tiek mainīts kontrasts."</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Mainīt spilgtumu"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Tumšās krāsas tiek mainītas uz gaišām (un otrādi)."</string>
+</resources>

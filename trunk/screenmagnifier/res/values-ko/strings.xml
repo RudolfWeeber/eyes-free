@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"화면 콘텐츠를 확대합니다."\n\n"돋보기 아이콘을 클릭하여 화면을 일시적으로 확대하세요. 화면을 터치하면 돋보기가 손가락을 따라 움직입니다. 화면에서 손가락을 떼면 확대가 중지됩니다."\n\n"화면에서 아이콘 위치를 변경하려면 돋보기 아이콘을 길게 누르세요."\n\n"확대 시 대비와 밝기를 변경하려면 설정 페이지를 참조하세요."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"색상"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"높은 대비"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"확대시 대비 높임"</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"밝기 반전"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"어두운 색상을 밝은 색상으로 변경(및 그 반대로 변경)"</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="magnifier_description" msgid="2200839537277721438">"Agrandit le contenu à l\'écran."\n\n"Cliquez sur l\'icône Loupe pour activer temporairement le grossissement. Lorsque vous appuyez sur l\'écran, la loupe suit votre doigt. Retirez votre doigt de l\'écran pour quitter le grossissement."\n\n"Appuyez de manière prolongée sur l\'icône Loupe pour modifier la position de celle-ci sur l\'écran."\n\n"Pour modifier le contraste et la luminosité au cours de l\'utilisation de la loupe, veuillez accéder à la page \"Paramètres\"."</string>
+    <string name="pref_category_color" msgid="6051931053185407970">"Couleur"</string>
+    <string name="pref_contrast_title" msgid="3368395965119793612">"Contraste élevé"</string>
+    <string name="pref_contrast_summary" msgid="6139733928212444237">"Augmente le contraste pendant l\'utilisation de la loupe."</string>
+    <string name="pref_invert_title" msgid="228744273678790520">"Inverser la luminosité"</string>
+    <string name="pref_invert_summary" msgid="545028538679170545">"Les couleurs sombres deviennent claires, et inversement."</string>
+</resources>
