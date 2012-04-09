@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"علامة الاقتباس المفردة"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"علامة العطف"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"قوس الزاوية اليسرى"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"قوس الزاوية اليمنى"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"العلامة النجمية"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"علامة @"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"شرطة مائلة للخلف"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"نقطة"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"علامة الإقحام"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"سنت"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"نقطتان"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"فاصلة"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"حقوق الطبع والنشر"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"قوس متعرج أيسر"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"قوس متعرج أيمن"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"درجة"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"علامة الدولار"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"علامة حذف"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"شرطة طويلة"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"شرطة قصيرة"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"يورو"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"علامة التعجب"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"العلامة النطقية"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"شرطة"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"علامة الاقتباس المزدوجة السفلية"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"علامة الفقرة"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"قوس أيسر"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"قوس أيمن"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"نسبة مئوية"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"نقطة"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"باي"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"باوند"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"جنيه إسترليني"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"علامة استفهام"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"علامة اقتباس"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"علامة تجارية مسجلة"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"فاصلة منقوطة"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"شرطة مائلة"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"وجه مبتسم"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"مفتاح المسافة"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"قوس مربع أيسر"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"قوس مربع أيمن"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"جذر تربيعي"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"علامة تجارية"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"شرطة سفلية"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"شريط عمودي"</string>
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"גרש בודד"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"אמפרסנד"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"סוגר זוויתי שמאלי"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"סוגר זוויתי ימני"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"כוכבית"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"שטרודל"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"קו נטוי הפוך"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"נקודה"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"קארה"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"סנט"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"נקודתיים"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"פסיק"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"זכויות יוצרים"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"סוגר מסולסל שמאלי"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"סוגר מסולסל ימני"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"מעלות"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"סימן דולר"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"שלוש נקודות"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"מקף ארוך"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"מקף בינוני"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"יורו"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"סימן קריאה"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"סימון הטעמה מסוג Grave"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"מקף"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"מירכאות כפולות תחתונות"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"סימן פיסקה"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"סוגר שמאלי"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"סוגר ימני"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"אחוז"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"נקודה"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"פי"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"סולמית"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"לירה שטרלינג"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"סימן שאלה"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"גרש"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"סימן מסחרי רשום"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"נקודה ופסיק"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"קו נטוי"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"פרצוף סמיילי"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"רווח"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"סוגר מרובע שמאלי"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"סוגר מרובע ימני"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"שורש ריבועי"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"סימן מסחרי"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"מקף תחתון"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"קו אנכי"</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="value_googletv_screen_saver" msgid="7606891976410178548">"Bildschirmschoner"</string>
+    <string name="value_googletv_pressed" msgid="8679484892224394463">"Gedrückt"</string>
+    <string name="value_googletv_not_pressed" msgid="8661244427580894507">"Nicht gedrückt"</string>
+    <string name="value_googletv_my_stocks" msgid="8832793884298580811">"Meine Aktien"</string>
+    <string name="value_googletv_hot_stocks" msgid="616107007357439987">"Beliebte Aktien"</string>
+    <string name="value_googletv_videos" msgid="4408492788292106149">"Videos"</string>
+    <string name="value_googletv_edit_button" msgid="6784445529125123628">"Schaltfläche für Bearbeiten"</string>
+    <string name="value_googletv_cnbc_tv" msgid="1746362593607981332">"C N B C T V"</string>
+    <string name="value_googletv_weather_fahrenheit" msgid="778968630458968127">"Schaltfläche für Fahrenheit"</string>
+    <string name="value_googletv_weather_celsius" msgid="363996111478821554">"Schaltfläche für Celsius"</string>
+    <string name="value_googletv_weather_play_top_story" msgid="8430886627965455913">"Schaltfläche für Wiedergabe des Top-Beitrags"</string>
+    <string name="value_googletv_toggle_button" msgid="7650900371608352384">"Schaltfläche zum Umschalten"</string>
+    <string name="template_googletv_item_position" msgid="7835147103209751523">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> von <xliff:g id="ITEM_COUNT">%2$s</xliff:g>."</string>
+    <string name="template_googletv_stock_quote" msgid="7033268671714732984">"<xliff:g id="STOCK_ABBREVIATION">%1$s</xliff:g> <xliff:g id="STOCK_DESCRIPTION">%2$s</xliff:g>. Zuletzt <xliff:g id="STOCK_PRICE_0">%3$s</xliff:g>, Änderung <xliff:g id="ABSOLUTE_STOCK_PRICE_CHANGE">%4$s</xliff:g> bzw. <xliff:g id="RELATIVE_STOCK_PRICE_CHANGE">%5$s</xliff:g>."</string>
+</resources>

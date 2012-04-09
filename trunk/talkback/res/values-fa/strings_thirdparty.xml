@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="value_amazon_go" msgid="4394074100082803216">"برو."</string>
+    <string name="value_amazon_search" msgid="6434927954393699886">"جستجو."</string>
+    <string name="template_amazon_quantity" msgid="6479878374510151419">"تعداد <xliff:g id="COUNT">%1$s</xliff:g>"</string>
+    <string name="template_amazon_mp3_buy_button" msgid="3211627160627972269">"دکمه خرید، <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="value_camera_magic_take_picture" msgid="3348188942968677220">"دکمه شاتر."</string>
+    <string name="value_camera_magic_zoom_slider" msgid="9068720508404801914">"اسلایدر بزرگنمایی."</string>
+    <string name="value_file_manager_home" msgid="3221104680687868085">"دکمه صفحه اصلی."</string>
+    <string name="value_file_manager_up" msgid="6532390888528162351">"دکمه بالا."</string>
+    <string name="value_file_manager_multi_select" msgid="7202234365922477703">"تغییر انتخاب چند تایی."</string>
+    <string name="value_file_manager_edit" msgid="6950401308694253576">"دکمه ویرایش."</string>
+    <string name="value_file_manager_bookmark" msgid="8039687460141246943">"دکمه نشانک گذاری."</string>
+    <string name="value_file_manager_new_folder" msgid="7831830298976400348">"دکمه پوشه جدید."</string>
+    <string name="value_file_manager_back" msgid="4409971220398537431">"دکمه برگشت."</string>
+    <string name="value_file_manager_forwards" msgid="2509760444137103469">"دکمه رفتن به جلو."</string>
+    <string name="value_file_manager_sort" msgid="7174008674937375487">"دکمه مرتب سازی"</string>
+    <string name="value_file_manager_refresh" msgid="5921119137028689654">"دکمه تازه کردن."</string>
+    <string name="value_file_manager_help" msgid="5054016981865395456">"دکمه راهنما."</string>
+    <string name="value_facebook_post_status" msgid="8118977173989445501">"دکمه پست به روزرسانی وضعیت."</string>
+    <string name="value_facebook_search" msgid="4808938297614670409">"دکمه جستجو."</string>
+    <string name="value_facebook_gallery_photo" msgid="6169119911043900106">"عکس گالری."</string>
+    <string name="value_facebook_home" msgid="4723428329772455197">"دکمه صفحه اصلی Facebook."</string>
+    <string name="value_facebook_camera" msgid="5583147343352954089">"دکمه دوربین."</string>
+    <string name="value_facebook_compose" msgid="2373734201043407698">"دکمه نگارش."</string>
+    <string name="value_stitcher_thumbs_down" msgid="5244328224027809491">"دکمه رد کردن."</string>
+    <string name="value_stitcher_thumbs_up" msgid="8378442707688014658">"دکمه قبول کردن."</string>
+    <string name="value_stitcher_star" msgid="4889938499496305463">"دکمه شروع."</string>
+    <string name="value_stitcher_play" msgid="8953331682349687236">"دکمه توقف موقت پخش."</string>
+    <string name="value_stitcher_next" msgid="2945481957178798103">"دکمه بعدی."</string>
+    <string name="value_google_voice_play_button" msgid="2873426918700224250">"دکمه پخش."</string>
+    <string name="value_google_voice_speakerphone_button" msgid="4812261205507729876">"دکمه تغییر گوشی دارای آیفون."</string>
+    <string name="value_google_voice_transcript" msgid="4984373756636020629">"رونوشت."</string>
+</resources>

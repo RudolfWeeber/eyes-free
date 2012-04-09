@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"อัญประกาศเดี่ยว"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"แอมเพอร์แซนด์"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"วงเล็บมุมเปิด"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"วงเล็บมุมปิด"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"ดอกจัน"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"แอท"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"ทับย้อนกลับ"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"จุด"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"แคเร็ต"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"เซนต์"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"ทวิภาค"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"จุลภาค"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"ลิขสิทธิ์"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"วงเล็บปีกกาเปิด"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"วงเล็บปีกกาปิด"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"องศา"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"สัญลักษณ์ดอลลาร์"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"จุดไข่ปลา"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"ยัติภาคขนาด M"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"ยัติภาคขนาด N"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"ยูโร"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"อัศเจรีย์"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"เครื่องหมายเน้นเสียง"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"ยัติภาค"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"อัญประกาศล่าง"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"เครื่องหมายขึ้นต้นย่อหน้า"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"วงเล็บเปิด"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"วงเล็บปิด"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"เปอร์เซ็นต์"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"มหัพภาค"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"พาย"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"ปอนด์"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"ปอนด์สเตอร์ลิง"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"เครื่องหมายคำถาม"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"อัญประกาศ"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"เครื่องหมายการค้าจดทะเบียน"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"อัฒภาค"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"ทับ"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"หน้ายิ้ม"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"ช่องว่าง"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"วงเล็บเหลี่ยมเปิด"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"วงเล็บเหลี่ยมปิด"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"รากที่สอง"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"เครื่องหมายการค้า"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"ขีดล่าง"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"แถบแนวตั้ง"</string>
+</resources>

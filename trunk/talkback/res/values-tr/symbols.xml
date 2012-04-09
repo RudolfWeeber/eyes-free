@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"Tek tırnak"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"Ve işareti"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Sol açılı ayraç"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Sağ açılı ayraç"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"Yıldız işareti"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"At"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"Ters eğik çizgi"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"Madde işareti"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"Düzeltme işareti"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"Sent işareti"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"İki nokta"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"Virgül"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"Telif hakkı işareti"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Sol kıvrık ayraç"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Sağ kıvrık ayraç"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"Derece"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"Dolar işareti"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"Üç nokta"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"Uzun çizgi"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"Orta çizgi"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"Avro işareti"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"Ünlem işareti"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"Aksan işareti"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Kısa çizgi"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"Alt çift tırnak"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Paragraf işareti"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Sol parantez"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Sağ parantez"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"Yüzde"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"Nokta"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"Pi"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"Kare"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"Pound sterlin işareti"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"Soru işareti"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"Tırnak"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"Tescilli ticari marka"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"Noktalı virgül"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"Eğik çizgi"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"Gülen yüz"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"Boşluk"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"Sol köşeli ayraç"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"Sağ köşeli ayraç"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"Karekök"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"Ticari marka işareti"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"Alt çizgi"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"Dikey çubuk"</string>
+</resources>

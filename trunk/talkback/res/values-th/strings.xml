@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_shortcut_title" msgid="6374632335119573898">"ทางลัด TalkBack"</string>
+    <string name="talkback_service_description" msgid="983212841294665356">"เมื่อเปิดใช้งาน Talkback อุปกรณ์ของคุณจะให้การตอบสนองด้วยเสียงพูดเพื่อช่วยเหลือผู้ใช้ที่พิการทางสายตาและผู้ที่มีปัญหาทางสายตา ตัวอย่างเช่น อุปกรณ์จะอธิบายว่าคุณแตะ เลือก และเปิดใช้งานสิ่งใด"</string>
+    <string name="notification_type_text_message" msgid="2840489326612585077">"ข้อความตัวอักษร"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"ไม่ได้ส่งข้อความตัวอักษร"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"สายที่ไม่ได้รับ"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"เชื่อมต่อ USB แล้ว"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"ปิดเสียง"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"แชท"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"ข้อผิดพลาด"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"เพิ่มเติม"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"การ์ด SD"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"USB ของการ์ด SD"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"ซิงค์"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"อีเมลใหม่"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"ซิงค์"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"ข้อความเสียง"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"กำลังเล่น"</string>
+    <string name="template_current_tts_engine" msgid="2402080656466274253">"กำลังใช้ <xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"เลือก <xliff:g id="TITLE">%1$s</xliff:g> ไว้"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"ไม่ได้เลือก <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"ช่องแก้ไข <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"การเตือน <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> แทนที่ด้วย <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"แทนที่ <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> อักขระด้วย <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> อักขระ"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"เสียงเรียกเข้า <xliff:g id="PERCENT">%d</xliff:g> เปอร์เซ็นต์"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"ภาพ <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <!-- no translation found for template_long_clicked (915072513538350747) -->
+    <skip />
+    <string name="template_button" msgid="6774709818484366257">"ปุ่ม <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"ภาพ <xliff:g id="TITLE">%d</xliff:g>"</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"ตัวควบคุมการค้นหา <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> เปอร์เซ็นต์"</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"กำลังแสดงรายการที่ <xliff:g id="FROM_INDEX">%d</xliff:g> ถึง <xliff:g id="TO_INDEX">%d</xliff:g> จาก <xliff:g id="TOTAL_COUNT">%d</xliff:g>"</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"กำลังแสดงรายการที่ <xliff:g id="FROM_INDEX">%d</xliff:g> จาก <xliff:g id="TOTAL_COUNT">%d</xliff:g>"</string>
+    <string name="template_spinner" msgid="3914981448273826697">"รายการ <xliff:g id="TITLE">%1$s</xliff:g> แบบเลื่อนลง"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"อักขระที่เลือกจาก <xliff:g id="FROM_INDEX">%1$s</xliff:g> ถึง <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_capital_letter" msgid="9151240217884890264">"ตัวพิมพ์ใหญ่ <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"รหัสผ่าน"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"เปิดบานเลื่อนแล้ว"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"ตัวเลือก"</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"ลบแล้ว"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"สรุปการแจ้งเตือน"</string>
+    <!-- no translation found for value_selected (6785267365387973217) -->
+    <skip />
+    <string name="value_checked" msgid="5234989698372864892">"เลือกไว้"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"ไม่ได้ตรวจสอบ"</string>
+    <string name="value_disabled" msgid="65077823320194685">"ปิดใช้งานแล้ว"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"คลิกได้"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"คลิกได้นาน"</string>
+    <string name="value_checkable" msgid="7938829961210181795">"ทำเครื่องหมายได้"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"เลื่อนได้"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"คลิกแล้ว"</string>
+    <string name="value_unlabeled" msgid="687358669952513717">"ไม่มีป้ายกำกับ"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"เสียงเรียกเข้าแบบสั่น"</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"เสียงเรียกเข้าแบบปิดเสียง"</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"ปิดหน้าจอ"</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"ปลดล็อกอุปกรณ์แล้ว"</string>
+    <string name="value_web_view" msgid="8368045336469722566">"มุมมองเว็บ"</string>
+    <!-- outdated translation 7353842829622995954 -->     <string name="value_unknown_object" msgid="3589473667352440925">"ไม่รู้จักออบเจ็กต์"</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"มีข้อมูลการขัดข้องของ TalkBack"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"คลิกที่นี่เพื่อปรับปรุง TalkBack โดยการส่งข้อมูลการขัดข้อง"</string>
+    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"พูดเมื่อใด"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"ความดังของเสียงเรียกเข้า"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"พูดเมื่อหน้าจอปิด"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"บอกหมายเลขผู้โทร"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"ใช้พร็อกซิมิตีเซ็นเซอร์"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"พร็อกซิมิตีเซ็นเซอร์ปิดเสียงพูด"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"พร็อกซิมิตีเซ็นเซอร์ไม่ควบคุมเสียงพูด"</string>
+    <string name="title_pref_bluetooth" msgid="7738175584293158995">"ใช้หูฟังโทรศัพท์บลูทูธ"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"พูดผ่านหูฟังโทรศัพท์บลูทูธแบบไม่ใช่ A2DP (โมโน) เมื่อสามารถใช้งานได้"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"ไม่ใช้การพูดผ่านหูฟังโทรศัพท์บลูทูธแบบไม่ใช่ A2DP (โมโน)"</string>
+    <string name="title_pref_intonation" msgid="7762392438106753854">"ใช้การเปลี่ยนแปลงระดับเสียงสูงต่ำ"</string>
+    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
+    <skip />
+    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
+    <skip />
+    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"แป้นพิมพ์ลัด"</string>
+    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"ฟีดแบ็ก"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"การสั่นเตือน"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"กำหนดรูปแบบการสั่น"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"สำรวจโดยการแตะ"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"การสำรวจรายการที่คลิกได้"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"เสียงเตือน"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"ระดับเสียง"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"กําหนดเสียง"</string>
+    <string name="value_play_button" msgid="3816799051654747674">"เล่น"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"สำรวจโดยการแตะ"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"การสำรวจรายการที่คลิกได้"</string>
+    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"เมื่อคลิก"</string>
+    <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"เบ็ดเตล็ด"</string>
+    <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"การตั้งค่าสำหรับนักพัฒนาซอฟต์แวร์"</string>
+    <string name="title_pref_log_level" msgid="1608733715034404715">"ระดับของการบันทึกเอาต์พุต"</string>
+    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"ไฮไลต์แหล่งที่มาของกิจกรรม"</string>
+    <string name="title_pref_tts_overlay" msgid="7821227047722471620">"แสดงเอาต์พุตของการพูด"</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"รายงานการขัดข้องของ TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"ต่อไปนี้เป็นรายงานการขัดข้องสำหรับ TalkBack การคลิกปุ่ม \"ส่ง\" จะเป็นการส่งข้อมูลนี้ถึงนักพัฒนาซอฟต์แวร์ TalkBack"\n\n</string>
+    <string name="axis_character" msgid="5059604520074645703">"นำทางตามอักขระ"</string>
+    <string name="axis_word" msgid="7745798763195184060">"นำทางตามคำ"</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"นำทางตามประโยค"</string>
+    <string name="axis_heading" msgid="8928386537164255063">"นำทางตามหัวเรื่อง"</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"นำทางตามเครือเดียวกัน"</string>
+    <string name="axis_document" msgid="1581988340856497809">"นำทางตามเอกสาร"</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"นำทางตามมุมมองเว็บค่าเริ่มต้น"</string>
+    <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"พูดคำสุดท้ายอีกครั้ง"</string>
+    <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"สะกดคำสุดท้ายที่พูด"</string>
+</resources>

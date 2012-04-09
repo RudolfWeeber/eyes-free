@@ -1,0 +1,34 @@
+Building TalkBack from the command line using Ant
+-------------------------------------------------
+
+To get started with Ant, first make sure you have the latest version of Ant 
+installed. If not:
+
+sudo apt-get install ant1.8
+
+The default version on Linux is 1.7, which is too old for the latest Android 
+SDK. 
+
+First, you'll need to have screenmagnifier and utils checked out from marvin.
+Next, generate the required build scripts with the Android tools.
+
+From the utils directory, run:
+
+android update project --path . --target android-4 --name utils
+
+From the screenmagnifier directory, run:
+
+android update project --path . --target android-14 --name screenmagnifier
+
+From the talkback directory, run:
+
+android update project --path . --target android-14 --name talkback
+
+This will create or update some default build files for Android. These are
+build.xml, project.properties, and local.properties. Now you can build an
+unsigned TalkBack APK by running:
+
+ant release
+
+The resulting APK can be found at bin/Talkback-unsigned.apk, ready to be 
+signed, zipaligned, and installed on a phone.

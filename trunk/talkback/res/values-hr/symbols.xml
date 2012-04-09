@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"Jednostruki navodnici"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"Ampersand"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Lijeva izlomljena zagrada"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Desna izlomljena zagrada"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"Zvjezdica (*)"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"Znak et"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"Kosa crtica prema natrag"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"Točka"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"Karet"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"Cent"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"Dvotočka"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"Zarez"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"Znak za autorsko pravo"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Lijeva vitičasta zagrada"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Desna vitičasta zagrada"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"Stupanj"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"Znak za dolar"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"Tri točke"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"Duga crtica"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"Kratka crtica"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"Euro"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"Uskličnik"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"Kratkouzlazni naglasak"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Crtica"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"Donji dvostruki navodnici"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Oznaka odlomka"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Lijeva zagrada"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Desna zagrada"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"Postotak"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"Točka"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"Pi"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"Funta"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"Britanska funta"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"Upitnik"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"Navodnik"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"Registrirani zaštitni znak"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"Točka-zarez"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"Kosa crta"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"Smješko"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"Razmak"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"Lijeva uglata zagrada"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"Desna uglata zagrada"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"Kvadratni korijen"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"Zaštitni znak"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"Podvlaka"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"Okomita traka"</string>
+</resources>

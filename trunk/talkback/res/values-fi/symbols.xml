@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"Puolilainausmerkki"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"Et-merkki"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Vasen kulmasulje"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Oikea kulmasulje"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"Tähti"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"At"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"Kenoviiva"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"Piste"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"Poisjääntimerkki"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"Sentti"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"Kaksoispiste"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"Pilkku"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"Tekijänoikeusmerkki"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Vasen kaarisulje"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Oikea kaarisulje"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"Aste"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"Dollarimerkki"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"Ellipsi"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"Em-viiva"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"En-viiva"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"Euro"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"Huutomerkki"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"Gravisaksentti"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Yhdysviiva"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"Rivinalinen lainausmerkki"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Kappalemerkki"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Vasen sulje"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Oikea sulje"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"Prosentti"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"Piste"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"Pii"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"Ristikkomerkki"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"Englannin punta"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"Kysymysmerkki"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"Lainaus"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"Rekisteröity tavaramerkki"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"Puolipiste"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"Vinoviiva"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"Hymiö"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"Välilyönti"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"Vasen hakasulje"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"Oikea hakasulje"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"Neliöjuuri"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"Tavaramerkki"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"Alaviiva"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"Pystysuora palkki"</string>
+</resources>

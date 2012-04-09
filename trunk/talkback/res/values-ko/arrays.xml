@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"모든 벨소리 볼륨에서 말하기"</item>
+    <item msgid="7158875206945163928">"무음 모드에서 말하지 않음"</item>
+    <item msgid="4945285159234224758">"진동 및 무음 모드에서 말하지 않음"</item>
+  </string-array>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"음성 볼륨과 일치"</item>
+    <item msgid="3474415020494727681">"음성 볼륨의 75%"</item>
+    <item msgid="3630774810523140800">"음성 볼륨의 50 %"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"버튼"</item>
+    <item msgid="2031284088774168661">"확인란"</item>
+    <item msgid="9091685013189255594">"색상 선택기"</item>
+    <item msgid="7650731353307926535">"날짜 시간 컨트롤"</item>
+    <item msgid="8280936284109186802">"날짜 시간 컨트롤"</item>
+    <item msgid="6366195742201292951">"날짜 컨트롤"</item>
+    <item msgid="4817890851441750596">"이메일 텍스트 수정"</item>
+    <item msgid="5708434584742847903">"파일 선택"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"버튼"</item>
+    <item msgid="5468837159284323298">"월 컨트롤"</item>
+    <item msgid="3604586918762860736">"텍스트 숫자만 수정"</item>
+    <item msgid="2268738486961365938">"비밀번호 수정 텍스트"</item>
+    <item msgid="4054764445934639546">"라디오 버튼"</item>
+    <item msgid="8620342430107579622">"슬라이더"</item>
+    <item msgid="4526908839966163389">"재설정"</item>
+    <item msgid="6890269752295368575">"검색할 텍스트 수정"</item>
+    <item msgid="1732239384416208952">"버튼"</item>
+    <item msgid="2844423601130585486">"전화번호에 대한 텍스트 수정"</item>
+    <item msgid="4429211852856836454">"텍스트 수정"</item>
+    <item msgid="6916351398697981908">"URL에 대한 텍스트 수정"</item>
+    <item msgid="7370324241352123803">"해당 연도의 주 컨트롤"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"알림"</item>
+    <item msgid="7079664451178245333">"알림 대화상자"</item>
+    <item msgid="7175460279619232788">"버튼"</item>
+    <item msgid="7682652928153230885">"확인란"</item>
+    <item msgid="6271342434037552568">"콤보 상자"</item>
+    <item msgid="3816282149905203330">"대화상자"</item>
+    <item msgid="3607246563706513907">"바둑판식 셀"</item>
+    <item msgid="6690887636341505376">"링크"</item>
+    <item msgid="8956345708233247462">"로그"</item>
+    <item msgid="7023984577635455031">"마키"</item>
+    <item msgid="2455128273329194018">"메뉴 항목"</item>
+    <item msgid="2579774298837415022">"메뉴 항목 확인란"</item>
+    <item msgid="8295115526987695111">"메뉴 항목 버튼"</item>
+    <item msgid="9208148803968404705">"옵션"</item>
+    <item msgid="7278111388436893213">"진행률 표시줄"</item>
+    <item msgid="2040534193363832208">"라디오 버튼"</item>
+    <item msgid="3518786141398291419">"라디오 버튼 그룹"</item>
+    <item msgid="3369418675400502879">"스크롤바"</item>
+    <item msgid="4160771832888077199">"슬라이더"</item>
+    <item msgid="4913996245258357058">"스핀 버튼"</item>
+    <item msgid="4720560353967686603">"상태"</item>
+    <item msgid="8848835768265321609">"탭"</item>
+    <item msgid="1902084479060424039">"탭 패널"</item>
+    <item msgid="1434580592616799847">"입력란"</item>
+    <item msgid="2857905070846962311">"타이머"</item>
+    <item msgid="5359803593845515833">"툴바"</item>
+    <item msgid="5431429272751911412">"툴팁"</item>
+    <item msgid="6370853370296882006">"트리 항목"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"링크"</item>
+    <item msgid="5377511479758471198">"제목 1"</item>
+    <item msgid="1326639266444424357">"제목 2"</item>
+    <item msgid="1794794287319870162">"제목 3"</item>
+    <item msgid="8913956457917314695">"제목 4"</item>
+    <item msgid="9214322369762997523">"제목 5"</item>
+    <item msgid="703456364875978891">"제목 6"</item>
+    <item msgid="1873899093503383879">"버튼"</item>
+    <item msgid="397012629783441956">"콤보 상자"</item>
+    <item msgid="130879601035659196">"표"</item>
+    <item msgid="1026513754307890628">"텍스트 영역"</item>
+  </string-array>
+</resources>

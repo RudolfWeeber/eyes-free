@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Ongea katika viwango vyote vya sauti ya mlio"</item>
+    <item msgid="7158875206945163928">"Hakuna usemi katika Hali ya Kimya"</item>
+    <item msgid="4945285159234224758">"Hakuna hotuba ya Kutetema na Mtindo Kimya"</item>
+  </string-array>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Linganisha sauti ya kunena"</item>
+    <item msgid="3474415020494727681">"75% ya sauti ya kunena"</item>
+    <item msgid="3630774810523140800">"50% ya sauti ya kunena"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"Kitufe"</item>
+    <item msgid="2031284088774168661">"Kagua kikasha"</item>
+    <item msgid="9091685013189255594">"Kichukuzi cha rangi"</item>
+    <item msgid="7650731353307926535">"Dhibiti tarehe na saa"</item>
+    <item msgid="8280936284109186802">"Dhibiti tarehe na saa"</item>
+    <item msgid="6366195742201292951">"Dhibiti tarehe"</item>
+    <item msgid="4817890851441750596">"Hariri maandishi ya barua pepe"</item>
+    <item msgid="5708434584742847903">"Uchaguzi wa faili"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"Kitufe"</item>
+    <item msgid="5468837159284323298">"Dhibiti mwezi"</item>
+    <item msgid="3604586918762860736">"Hariri maandishi nambari pekee"</item>
+    <item msgid="2268738486961365938">"Matini ya kuhariri nenosiri"</item>
+    <item msgid="4054764445934639546">"Kitufe cha redio"</item>
+    <item msgid="8620342430107579622">"Kitelezi"</item>
+    <item msgid="4526908839966163389">"Weka upya"</item>
+    <item msgid="6890269752295368575">"Hariri maandishi ya utafutaji"</item>
+    <item msgid="1732239384416208952">"Kitufe"</item>
+    <item msgid="2844423601130585486">"Hariri maandishi ya nambari ya simu"</item>
+    <item msgid="4429211852856836454">"Hariri maandishi"</item>
+    <item msgid="6916351398697981908">"Hariri maandishi ya KISARA"</item>
+    <item msgid="7370324241352123803">"Kidhibiti juma la mwaka"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"Tahadhari"</item>
+    <item msgid="7079664451178245333">"Mazungumzo ya tahadhari"</item>
+    <item msgid="7175460279619232788">"Kitufe"</item>
+    <item msgid="7682652928153230885">"Kagua kikasha"</item>
+    <item msgid="6271342434037552568">"Kikasha cha combo"</item>
+    <item msgid="3816282149905203330">"Mazungumzo"</item>
+    <item msgid="3607246563706513907">"Seli gridi"</item>
+    <item msgid="6690887636341505376">"Kiungo"</item>
+    <item msgid="8956345708233247462">"Ingia"</item>
+    <item msgid="7023984577635455031">"Marquee"</item>
+    <item msgid="2455128273329194018">"Menyu ya kipengee"</item>
+    <item msgid="2579774298837415022">"Kikasha cha kukagua menyu ya kipengee"</item>
+    <item msgid="8295115526987695111">"Kichupo cha redio cha menyu ya kipengee"</item>
+    <item msgid="9208148803968404705">"Chaguo la"</item>
+    <item msgid="7278111388436893213">"Bonyeza kiambaa"</item>
+    <item msgid="2040534193363832208">"Kitufe cha redio"</item>
+    <item msgid="3518786141398291419">"Vikundi vya vitufe vya redio"</item>
+    <item msgid="3369418675400502879">"Teremsha kiambaa"</item>
+    <item msgid="4160771832888077199">"Kitelezi"</item>
+    <item msgid="4913996245258357058">"Kitufe cha kuzungusha"</item>
+    <item msgid="4720560353967686603">"Hali"</item>
+    <item msgid="8848835768265321609">"Kichupo"</item>
+    <item msgid="1902084479060424039">"Paneli ya tab"</item>
+    <item msgid="1434580592616799847">"Chaguo"</item>
+    <item msgid="2857905070846962311">"Kipima wakati"</item>
+    <item msgid="5359803593845515833">"Kifaa cha kiambaa"</item>
+    <item msgid="5431429272751911412">"Rambaza kwa sentensi"</item>
+    <item msgid="6370853370296882006">"Kifaa mti"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"Kiungo"</item>
+    <item msgid="5377511479758471198">"Kicha  kimoja"</item>
+    <item msgid="1326639266444424357">"Kicha cha pili"</item>
+    <item msgid="1794794287319870162">"Kicha cha tatu"</item>
+    <item msgid="8913956457917314695">"Kicha cha nne"</item>
+    <item msgid="9214322369762997523">"Kicha cha tano"</item>
+    <item msgid="703456364875978891">"Kicha cha sita"</item>
+    <item msgid="1873899093503383879">"Kitufe"</item>
+    <item msgid="397012629783441956">"Kikasha cha combo"</item>
+    <item msgid="130879601035659196">"Jedwali"</item>
+    <item msgid="1026513754307890628">"Sehemu ya matini"</item>
+  </string-array>
+</resources>

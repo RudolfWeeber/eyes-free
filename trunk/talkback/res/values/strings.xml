@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!--The human-readable name of this service. Do not translate. -->
+    <string name="talkback_title" translatable="false">TalkBack</string>
+    <!--
+      Source: Title for the activity that allows the user to select a keyboard shortcut.
+      Description: This is presented to the user when assigning a keyboard shortcut. [CHAR LIMIT="NONE"]
+    -->
+    <string name="talkback_shortcut_title">TalkBack shortcut</string>
+    <!--
+      Source: A brief description of TalkBack.
+      Description: This is presented to the user on the accessibility settings view. [CHAR LIMIT="NONE"]
+    -->
+    <string name="talkback_service_description">When TalkBack is on, your device provides spoken feedback to help blind and low-vision users. For example, it describes what you touch, select, and activate.</string>
+    <!-- NOTIFICATIONS -->
+    <!--
+      Source: A notification for a new text message (SMS) has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_text_message">Text message</string>
+    <!--
+      Source: A notification for a failed-to-be-send text message (SMS) has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_failed_text_message">Not sent text message</string>
+    <!--
+      Source: A notification for a missed call has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_missed_call">Missed call</string>
+    <!--
+      Source: A notification for a USB cable connected to the device has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_usb_connected">USB connected</string>
+    <!--
+      Source: A notification for muted state of the device has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_mute">Mute</string>
+    <!--
+      Source: A notification for a new chat message has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_chat">Chat</string>
+    <!--
+      Source: A notification for an error has appeared on the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_error">Error</string>
+    <!--
+      Source: A notification for more (collapsed) icons has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_more">More</string>
+    <!--
+      Source: A notification that it is safe to remove a SD card has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_sdcard">SD card</string>
+    <!--
+      Source: A notification that an empty (no file system) USB card is present has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_sdcard_usb">SD card USB</string>
+    <!--
+      Source: A notification that the device is synchronizing has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_status_sync">Sync</string>
+    <!--
+      Source: A notification that the user received an email has appeared in the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_new_email">New email</string>
+    <!--
+      Source: A notification that the device is synchronizing has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_sync_noanim">Sync</string>
+    <!--
+      Source: A notification for a new voice mail has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_type_status_voicemail">Voicemail</string>
+    <!--
+      Source: A notification that the device is playing media has appeared the status bar.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="notification_status_play">Playing</string>
+    <!-- TEMPLATES -->
+    <!--
+      Source: An utterance template for announcing the current text-to-speech engine.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_current_tts_engine">Using <xliff:g id="engine_name">%1$s</xliff:g></string>
+    <!--
+      Source: An utterance template for announcing the checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_compound_button_checked"><xliff:g id="title">%1$s</xliff:g> checked</string>
+    <!--
+      Source: An utterance template for announcing the not checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_compound_button_not_checked"><xliff:g id="title">%1$s</xliff:g> not checked</string>
+    <!--
+      Source: An utterance template for announcing an edit-box.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_edit_box">Edit box. <xliff:g id="text_content">%1$s</xliff:g></string>
+    <!--
+      Source: An utterance template for announcing an alert/pop-up message.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_alert_dialog_template">Alert <xliff:g id="message">%1$s</xliff:g></string>
+    <!--
+      Source: An utterance template for announcing a text replacement (during edit).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_text_replaced"><xliff:g id="old_text">%1$s</xliff:g> replaced with <xliff:g id="new_text">%2$s</xliff:g></string>
+    <!--
+      Source: An utterance template for announcing a character sequence replacement (used for password fields).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_replaced_characters"><xliff:g id="old_text_length">%1$s</xliff:g> characters replaced with <xliff:g id="new_text_length">%2$s</xliff:g> characters</string>
+    <!--
+      Source: An utterance template for announcing the ringer volume.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_ringer_volume">Ringer <xliff:g id="percent">%d</xliff:g> percent.</string>
+    <!--
+      Source: An utterance template for announcing an image.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_image_view"><xliff:g id="title">%1$s</xliff:g> image </string>
+    <!--
+      Source: An utterance template for announcing a list.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_list_view"><xliff:g id="title">%1$s</xliff:g> list </string>
+    <!--
+      Source: An utterance template for announcing that the system has recognized a long-click gesture on an item. The result of long-click varies from initiating drag-and-drop to opening a copy/paste menu.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_long_clicked">Long-pressed <xliff:g id="title">%1$s</xliff:g></string>
+    <!--
+      Source: An utterance template for announcing a button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_button"><xliff:g id="title">%1$s</xliff:g> button </string>
+    <!--
+      Source: An utterance template for announcing an image that has no label.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_unlabeled_image_view">image <xliff:g id="title">%d</xliff:g> </string>
+    <!--
+      Source: An utterance template for announcing a seek-bar (slider).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_seek_bar"><xliff:g id="title">%1$s</xliff:g> seek control.</string>
+    <!--
+      Source: An utterance template for announcing the progress of a seek-bar (slider).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_percent"><xliff:g id="percentage">%1$s</xliff:g> percent.</string>
+    <!--
+      Source: An utterance template for announcing the visible range of items within a list view.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_scroll_from_to_count">Showing items <xliff:g id="from_index">%d</xliff:g> to <xliff:g id="to_index">%d</xliff:g> of <xliff:g id="total_count">%d</xliff:g>.</string>
+    <!--
+      Source: An utterance template for announcing the visible item within a list view.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_scroll_from_count">Showing item <xliff:g id="from_index">%d</xliff:g> of <xliff:g id="total_count">%d</xliff:g>.</string>
+    <!--
+      Source: An utterance template for announcing a spinner/drop-down list.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_spinner"><xliff:g id="title">%1$s</xliff:g> drop down list.</string>
+    <!--
+      Source: String spoken when a user as selected some characters in a password
+      field, indicating the start and end point of the selection cursor.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+     -->
+    <string name="template_password_selected">Selected characters <xliff:g id="from_index">%1$s</xliff:g> to <xliff:g id="to_index">%1$s</xliff:g></string>
+    <!--
+      Source: An utterance template for announcing a single upper-case (capital) letter.
+      Description: This is spoken to the user. May not be translatable for some languages. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_capital_letter">capital <xliff:g id="uppercase_character">%1$s</xliff:g></string>
+    <!-- VALUES -->
+    <!--
+      Source: A value for announcing a password field.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_password">password</string>
+    <!--
+      Source: A value for announcing a sliding-drawer opening (widget that slides open to reveal a grid of applications).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_sliding_drawer_opened">Sliding drawer opened</string>
+    <!--
+      Source: A value for announcing opening the activity options (shown on a press of the menu button).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_options_menu_open">Options.</string>
+    <!--
+      Source: A value for announcing text deletion.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_text_removed">deleted</string>
+    <!--
+      Source: A value for announcing the pending notifications summary.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_notification_summary">Notification summary</string>
+    <!--
+      Source: A value for announcing the selected state of a list item.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_selected">selected</string>
+    <!--
+      Source: A value for announcing the checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_checked">checked</string>
+    <!--
+      Source: A value for announcing the not checked state of a check-box/radio-button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_not_checked">not checked</string>
+    <!--
+      Source: A value for announcing the disabled state of a control.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_disabled">disabled</string>
+    <!--
+      Source: A value for announcing that a view can be clicked.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_clickable">clickable</string>
+    <!--
+      Source: A value for announcing that a view can be long clicked.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_long_clickable">long clickable</string>
+    <!--
+      Source: A value for announcing that a view can be checked or unchecked.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_checkable">checkable</string>
+    <!--
+      Source: A value for announcing that a view can be scrolled.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_scrollable">scrollable</string>
+    <!--
+      Source: A value for announcing the action of clicking on something.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_clicked">clicked</string>
+    <!--
+      Source: A value for announcing a view that doesn't have any text.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_unlabeled">unlabeled</string>
+    <!--
+      Source: A value for announcing the vibrate ringer mode.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_ringer_vibrate">Ringer vibrate.</string>
+    <!--
+      Source: A value for announcing the silent ringer mode.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_ringer_silent">Ringer silent.</string>
+    <!--
+      Source: A value for announcing turning on the screen.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_screen_off">Screen off.</string>
+    <!--
+      Source: A value for announcing unlocking of the device.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_device_unlocked">Device unlocked.</string>
+    <!--
+      Source: A value for announcing a web view (a view with web content).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_web_view">Web view.</string>
+    <!--
+      Source: A value for announcing an item without a label.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_unknown_object">Unlabelled item.</string>
+    <!-- SETTINGS MANAGEMENT -->
+    <!--
+      Source: Title of a notification that information about a TalkBack crash is present.
+      Description: The user may choose to upload the crash information. [CHAR LIMIT=30]
+    -->
+    <string name="title_talkback_crash">TalkBack Crash Data Available</string>
+    <!--
+      Source: Description of a notification that information about a TalkBack crash is present.
+      Description: The user may choose to upload the crash information.
+      CHAR LIMIT=70
+    -->
+    <string name="message_talkback_crash">Click here to improve TalkBack by sending crash data.</string>
+    <!-- PREFERENCES -->
+    <!--
+      Source: Preference category for customizing when to speak.
+      Description: Contains preferences for customizing when to speak. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_category_when_to_speak">When to speak</string>
+    <!--
+      Source: Preference for customizing how to speak for a given ringer mode.
+      Description: The user can select one of several options. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_speak_ringer">Ringer volume</string>
+    <!--
+      Source: Preference for customizing how to speak when the screen is off.
+      Description: The user can check or not check this. [CHAR LIMIT=40]
+    -->
+    <string name="title_pref_speak_screenoff">Speak when screen is off</string>
+    <!--
+      Source: Preference for setting up if to announce the caller ID.
+      Description: The user can check or not check this. [CHAR LIMIT=40]
+    -->
+    <string name="title_pref_caller_id">Speak caller ID</string>
+    <!--
+      Source: Preference for using the proximity sensor to silence speech output.
+      Description: The user can check or not check this. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_proximity">Use proximity sensor</string>
+    <!--
+      Source: Summary subtext for the Proximity Sensor setting.
+      Description: Explains that the proximity sensor will be used to stop speech. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOn_pref_proximity">Proximity sensor silences speech</string>
+    <!--
+      Source: Summary subtext for the Proximity Sensor setting.
+      Description: Explains that the proximity sensor will not have any effect on speech. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOff_pref_proximity">Proximity sensor does not control speech</string>
+    <!--
+      Source: Preference for speaking through a non-A2DP (mono) Bluetooth earpiece when available.
+      Description: The user can check or not check this. [CHAR LIMIT=40]
+    -->
+    <string name="title_pref_bluetooth">Use Bluetooth earpiece</string>
+    <!--
+      Source: Summary subtext for the "Use Bluetooth earpiece" setting.
+      Description: Explains that speech will be output through a non-A2DP (mono) Bluetooth earpiece when one is connected. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOn_pref_bluetooth">Speak through non-A2DP (mono) Bluetooth earpieces when available</string>
+    <!--
+      Source: Summary subtext for the "Use Bluetooth earpiece" setting.
+      Description: Explains that speech will never be output through a non-A2DP (mono) Bluetooth earpiece. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOff_pref_bluetooth">Never speak through non-A2DP (mono) Bluetooth earpieces</string>
+    <!--
+      Source: Preference for changing the pitch of spoken feedback for typed keys.
+      Description: The user can check or not check this. [CHAR LIMIT=40]
+    -->
+    <string name="title_pref_intonation">Use pitch changes</string>
+    <!--
+      Source: Summary subtext for the "Use pitch changes" setting.
+      Description: Explains that feedback from the keyboard, e.g. when a user types "A" and the phone speaks "A", will be spoken in a lower pitched voice. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOn_pref_intonation">Speak keyboard feedback in a lower-pitched voice</string>
+    <!--
+      Source: Summary subtext for the "Use pitch changes" setting.
+      Description: Explains that the pitch of the phone's speech will not change. [CHAR LIMIT="NONE"]
+    -->
+    <string name="summaryOff_pref_intonation">Don\'t change voice pitch when speaking</string>
+    <!--
+      Source: Preference for assigning keyboard shortcuts.
+      Description: The user can click this to assign keyboard shortcuts. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_keyboard_shortcuts">Keyboard shortcuts</string>
+    <!--
+      Source: Preference category for customizing the sound and vibration feedback.
+      Description: Contains preferences for customizing sound and vibration feedback. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_category_feedback_settings">Feedback</string>
+    <!--
+      Source: Preference for whether to provide vibration feedback in response to system events.
+      Description: The user can check or not check this. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_vibration">Vibration feedback</string>
+    <!--
+      Source: Preference for opening the vibration patterns selection screen.
+      Description: Allows the user to assign specific vibration patterns to actions. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_vibration_patterns">Assign vibration patterns</string>
+    <!--
+      Source: Preference for changing the vibration feedback for "explore by touch" events.
+      Description: Allows the user to assign a specific vibration pattern to the touch exploration action. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_patterns_hover">Explore by touch</string>
+    <!--
+      Source: Preference for changing the vibration feedback for "explore by touch" events involving clickable items.
+      Description: Allows the user to assign a specific vibration pattern to the touch exploration action. [CHAR LIMIT=40]
+    -->
+    <string name="title_pref_patterns_actionable">Exploring clickable items</string>
+    <!--
+      Source: Preference for whether to provide sound feedback in response to system events.
+      Description: The user can check or not check this. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_soundback">Sound feedback</string>
+    <!--
+      Source: Preference for changing the volume of sound feedback.
+      Description: Contains a list of volume settings. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_soundback_volume">Sound volume</string>
+    <!--
+      Source: Preference for opening the sound feedback selection screen.
+      Description: Allows the user to assign specific sounds to actions. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_soundback_sounds">Assign sounds</string>
+    <!--
+      Source: Description for button that allows users to play a sound.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_play_button">Play</string>
+    <!--
+      Source: Preference for changing the sound feedback for "explore by touch" events.
+      Description: Allows the user to assign a specific sound to the touch exploration action. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_sounds_hover">Explore by touch</string>
+    <!--
+      Source: Preference for changing the sound feedback for "explore by touch" events involving clickable items.
+      Description: Allows the user to assign a specific sound to the touch exploration action. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_sounds_actionable">Exploring clickable items</string>
+    <!--
+      Source: Preference for changing the sound feedback for click events.
+      Description: Allows the user to assign a specific sound to the clicked action. [CHAR LIMIT=25]
+    -->
+    <string name="title_pref_sounds_clicked">Clicked</string>
+    <!--
+      Source: Preference category title.
+      Description: Preference category for miscellaneous settings.
+    -->
+    <string name="title_pref_category_miscellaneous_settings">Miscellaneous</string>
+    <!--
+      Source: Preference category title.
+      Description: Preference category for developer options.
+    -->
+    <string name="title_pref_category_developer_settings">Developer settings</string>
+    <!--
+      Source: Preference title.
+      Description: Preference for controlling the amount of log output. 
+    -->
+    <string name="title_pref_log_level">Log output level</string>
+    <!--
+      Source: Preference title.
+      Description: This preference allows the user to turn on visual indicators to help debug accessibility problems. -->
+    <string name="title_pref_developer_overlay">Highlight event sources</string>
+    <!--
+      Source: Preference title.
+      Description: This preference allows the user to show speech output on the screen. -->
+    <string name="title_pref_tts_overlay">Display speech output</string>
+    <!-- ALERTS  -->
+    <!--
+      Source: Email subject for TalkBack crash report.
+      Description: The user can optionally submit a TalkBack crash report. [CHAR LIMIT=50]
+    -->
+    <string name="subject_crash_report_email">TalkBack Crash Report</string>
+    <!--
+      Source: Header for TalkBack crash report messages
+      Description: The user can optionally submit a TalkBack crash report. [CHAR LIMIT=200]
+    -->
+    <string name="header_crash_report_email">The following is a crash report for TalkBack. Clicking 
+        the \"Send\" button will transmit this data to the TalkBack developers.\n\n</string>
+    <!-- AXIS  -->
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to character. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_character">Navigate by character.</string>
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to word. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_word">Navigate by word.</string>
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to sentence. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_sentence">Navigate by sentence.</string>
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to heading. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_heading">Navigate by heading.</string>
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to sibling. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_sibling">Navigate by sibling.</string>
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to parent first child. This
+      axis is deprecated so this string is not translated. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_parent_first_child" translatable="false">Navigate by parent first child.</string>
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to document. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_document">Navigate by document.</string>
+    <!--
+      Source: When the user pressed a key combo while exploring a web page.
+      Description: Announced when the user changes the granularity of reading a web page to the default webview behavior. [CHAR LIMIT="NONE"]
+    -->
+    <string name="axis_default_web_view_behavior">Navigate by default web view behavior.</string>
+    <!--
+      Source: The list of available TalkBack shortcut commands.
+      Description: This shortcut repeats the last thing that TalkBack spoke aloud.
+    -->
+    <string name="shortcut_repeat_last_utterance">Repeat last utterance</string>
+    <!--
+      Source: The list of available TalkBack shortcut commands.
+      Description: This shortcut spells aloud the last thing that TalkBack spoke aloud.
+    -->
+    <string name="shortcut_spell_last_utterance">Spell last utterance</string>
+</resources>

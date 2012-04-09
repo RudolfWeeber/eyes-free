@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Discurrer cun tut il volumens dal tun da scalin"</item>
+    <item msgid="7158875206945163928">"Betg discurrer en il modus silenzius"</item>
+    <item msgid="4945285159234224758">"Betg discurrer en il modus da vibrar e silenzius"</item>
+  </string-array>
+    <!-- no translation found for pref_soundback_volume_entries:0 (2451786172783948232) -->
+    <!-- no translation found for pref_soundback_volume_entries:1 (3474415020494727681) -->
+    <!-- no translation found for pref_soundback_volume_entries:2 (3630774810523140800) -->
+    <!-- no translation found for html_input_to_desc_values:0 (2793341578357584466) -->
+    <!-- no translation found for html_input_to_desc_values:1 (2031284088774168661) -->
+    <!-- no translation found for html_input_to_desc_values:2 (9091685013189255594) -->
+    <!-- no translation found for html_input_to_desc_values:3 (7650731353307926535) -->
+    <!-- no translation found for html_input_to_desc_values:4 (8280936284109186802) -->
+    <!-- no translation found for html_input_to_desc_values:5 (6366195742201292951) -->
+    <!-- no translation found for html_input_to_desc_values:6 (4817890851441750596) -->
+    <!-- no translation found for html_input_to_desc_values:7 (5708434584742847903) -->
+    <!-- no translation found for html_input_to_desc_values:9 (9133148733620281210) -->
+    <!-- no translation found for html_input_to_desc_values:10 (5468837159284323298) -->
+    <!-- no translation found for html_input_to_desc_values:11 (3604586918762860736) -->
+    <!-- no translation found for html_input_to_desc_values:12 (2268738486961365938) -->
+    <!-- no translation found for html_input_to_desc_values:13 (4054764445934639546) -->
+    <!-- no translation found for html_input_to_desc_values:14 (8620342430107579622) -->
+    <!-- no translation found for html_input_to_desc_values:15 (4526908839966163389) -->
+    <!-- no translation found for html_input_to_desc_values:16 (6890269752295368575) -->
+    <!-- no translation found for html_input_to_desc_values:17 (1732239384416208952) -->
+    <!-- no translation found for html_input_to_desc_values:18 (2844423601130585486) -->
+    <!-- no translation found for html_input_to_desc_values:19 (4429211852856836454) -->
+    <!-- no translation found for html_input_to_desc_values:20 (6916351398697981908) -->
+    <!-- no translation found for html_input_to_desc_values:21 (7370324241352123803) -->
+    <!-- no translation found for html_role_to_desc_values:0 (3576890934970356898) -->
+    <!-- no translation found for html_role_to_desc_values:1 (7079664451178245333) -->
+    <!-- no translation found for html_role_to_desc_values:2 (7175460279619232788) -->
+    <!-- no translation found for html_role_to_desc_values:3 (7682652928153230885) -->
+    <!-- no translation found for html_role_to_desc_values:4 (6271342434037552568) -->
+    <!-- no translation found for html_role_to_desc_values:5 (3816282149905203330) -->
+    <!-- no translation found for html_role_to_desc_values:6 (3607246563706513907) -->
+    <!-- no translation found for html_role_to_desc_values:7 (6690887636341505376) -->
+    <!-- no translation found for html_role_to_desc_values:8 (8956345708233247462) -->
+    <!-- no translation found for html_role_to_desc_values:9 (7023984577635455031) -->
+    <!-- no translation found for html_role_to_desc_values:10 (2455128273329194018) -->
+    <!-- no translation found for html_role_to_desc_values:11 (2579774298837415022) -->
+    <!-- no translation found for html_role_to_desc_values:12 (8295115526987695111) -->
+    <!-- no translation found for html_role_to_desc_values:13 (9208148803968404705) -->
+    <!-- no translation found for html_role_to_desc_values:14 (7278111388436893213) -->
+    <!-- no translation found for html_role_to_desc_values:15 (2040534193363832208) -->
+    <!-- no translation found for html_role_to_desc_values:16 (3518786141398291419) -->
+    <!-- no translation found for html_role_to_desc_values:17 (3369418675400502879) -->
+    <!-- no translation found for html_role_to_desc_values:18 (4160771832888077199) -->
+    <!-- no translation found for html_role_to_desc_values:19 (4913996245258357058) -->
+    <!-- no translation found for html_role_to_desc_values:20 (4720560353967686603) -->
+    <!-- no translation found for html_role_to_desc_values:21 (8848835768265321609) -->
+    <!-- no translation found for html_role_to_desc_values:22 (1902084479060424039) -->
+    <!-- no translation found for html_role_to_desc_values:23 (1434580592616799847) -->
+    <!-- no translation found for html_role_to_desc_values:24 (2857905070846962311) -->
+    <!-- no translation found for html_role_to_desc_values:25 (5359803593845515833) -->
+    <!-- no translation found for html_role_to_desc_values:26 (5431429272751911412) -->
+    <!-- no translation found for html_role_to_desc_values:27 (6370853370296882006) -->
+    <!-- no translation found for html_tag_to_desc_values:0 (6249748634825725696) -->
+    <!-- no translation found for html_tag_to_desc_values:1 (5377511479758471198) -->
+    <!-- no translation found for html_tag_to_desc_values:2 (1326639266444424357) -->
+    <!-- no translation found for html_tag_to_desc_values:3 (1794794287319870162) -->
+    <!-- no translation found for html_tag_to_desc_values:4 (8913956457917314695) -->
+    <!-- no translation found for html_tag_to_desc_values:5 (9214322369762997523) -->
+    <!-- no translation found for html_tag_to_desc_values:6 (703456364875978891) -->
+    <!-- no translation found for html_tag_to_desc_values:7 (1873899093503383879) -->
+    <!-- no translation found for html_tag_to_desc_values:8 (397012629783441956) -->
+    <!-- no translation found for html_tag_to_desc_values:9 (130879601035659196) -->
+    <!-- no translation found for html_tag_to_desc_values:10 (1026513754307890628) -->
+</resources>

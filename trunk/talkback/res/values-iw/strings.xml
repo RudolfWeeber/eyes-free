@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="talkback_shortcut_title" msgid="6374632335119573898">"קיצור דרך ל-TalkBack"</string>
+    <string name="talkback_service_description" msgid="983212841294665356">"כאשר Talkback מופעל, המכשיר מספק משוב מילולי המסייע למשתמשים עיוורים ובעלי ראייה מוגבלת. לדוגמה, המשוב מתאר את הפריטים שבהם המשתמש נוגע, בוחר ומפעיל."</string>
+    <string name="notification_type_text_message" msgid="2840489326612585077">"הודעת טקסט"</string>
+    <string name="notification_type_failed_text_message" msgid="3279662617442887805">"הודעת טקסט שלא נשלחה"</string>
+    <string name="notification_type_missed_call" msgid="4227042474220035667">"שיחה שלא נענתה"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB מחובר"</string>
+    <string name="notification_type_status_mute" msgid="575502984311443548">"השתק"</string>
+    <string name="notification_type_status_chat" msgid="6270641711377218448">"צ\'אט"</string>
+    <string name="notification_type_status_error" msgid="9106600515811868558">"שגיאה"</string>
+    <string name="notification_type_status_more" msgid="3191659976249507098">"עוד"</string>
+    <string name="notification_type_status_sdcard" msgid="2268627072134312579">"כרטיס SD"</string>
+    <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"USB של כרטיס SD"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"סינכרון"</string>
+    <string name="notification_type_new_email" msgid="207543580986817175">"דוא\"ל חדש"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"סינכרון"</string>
+    <string name="notification_type_status_voicemail" msgid="7888717277194798847">"דואר קולי"</string>
+    <string name="notification_status_play" msgid="5444333019485373575">"מפעיל"</string>
+    <string name="template_current_tts_engine" msgid="2402080656466274253">"באמצעות <xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
+    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> מסומן"</string>
+    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> לא סומן"</string>
+    <string name="template_edit_box" msgid="8644462446565912356">"תיבת עריכה. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
+    <string name="template_alert_dialog_template" msgid="578525726030867650">"התראה <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> הוחלף בטקסט <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> תווים הוחלפו ב- <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> תווים"</string>
+    <string name="template_ringer_volume" msgid="5136691769333649340">"צלצול ב-<xliff:g id="PERCENT">%d</xliff:g> אחוזים."</string>
+    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> תמונה"</string>
+    <!-- no translation found for template_long_clicked (915072513538350747) -->
+    <skip />
+    <string name="template_button" msgid="6774709818484366257">"לחצן <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"תמונה <xliff:g id="TITLE">%d</xliff:g>"</string>
+    <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> מבקש שליטה."</string>
+    <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> אחוזים."</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"מציג פריטים <xliff:g id="FROM_INDEX">%d</xliff:g> עד <xliff:g id="TO_INDEX">%d</xliff:g> מתוך <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"מציג פריט <xliff:g id="FROM_INDEX">%d</xliff:g> מתוך <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_spinner" msgid="3914981448273826697">"הרשימה הנפתחת <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"תווים שנבחרו <xliff:g id="FROM_INDEX">%1$s</xliff:g> עד <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_capital_letter" msgid="9151240217884890264">"אות גדולה <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
+    <string name="value_password" msgid="52094746222829357">"סיסמה"</string>
+    <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"מגירה נפתחה"</string>
+    <string name="value_options_menu_open" msgid="8668502811176292723">"אפשרויות."</string>
+    <string name="value_text_removed" msgid="2700105425865376595">"נמחק"</string>
+    <string name="value_notification_summary" msgid="1053258094292920648">"סיכום התראות"</string>
+    <!-- no translation found for value_selected (6785267365387973217) -->
+    <skip />
+    <string name="value_checked" msgid="5234989698372864892">"מסומן"</string>
+    <string name="value_not_checked" msgid="193134740901545340">"לא מסומן"</string>
+    <string name="value_disabled" msgid="65077823320194685">"מושבת"</string>
+    <string name="value_clickable" msgid="7427194667856810494">"מאפשר לחיצה"</string>
+    <string name="value_long_clickable" msgid="6317377901757976390">"מאפשר לחיצה ארוכה"</string>
+    <string name="value_checkable" msgid="7938829961210181795">"ניתן לסימון"</string>
+    <string name="value_scrollable" msgid="2310899165772659098">"ניתן לגלילה"</string>
+    <string name="value_clicked" msgid="8306469740150249879">"נלחץ"</string>
+    <string name="value_unlabeled" msgid="687358669952513717">"ללא תווית"</string>
+    <string name="value_ringer_vibrate" msgid="4632889587347385751">"צלצול ורטט."</string>
+    <string name="value_ringer_silent" msgid="672965424730167385">"צלצול שקט."</string>
+    <string name="value_screen_off" msgid="8705438751467344903">"מסך כבוי."</string>
+    <string name="value_device_unlocked" msgid="1424846510201818289">"מכשיר נעול."</string>
+    <string name="value_web_view" msgid="8368045336469722566">"תצוגת אינטרנט."</string>
+    <!-- outdated translation 7353842829622995954 -->     <string name="value_unknown_object" msgid="3589473667352440925">"אובייקט לא ידוע."</string>
+    <string name="title_talkback_crash" msgid="1342512684382958066">"נתוני קריסה של TalkBack זמינים"</string>
+    <string name="message_talkback_crash" msgid="8552017712769665127">"לחץ כאן כדי לשפר את TalkBack על ידי שליחת נתונים על קריסה."</string>
+    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"מתי לדבר"</string>
+    <string name="title_pref_speak_ringer" msgid="129787842665516896">"עוצמת הקול של תוכנת הצלצול"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"דבר כשהמסך כבוי"</string>
+    <string name="title_pref_caller_id" msgid="1414845059814636961">"אמור את זהות המתקשר"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"השתמש בחיישן קירבה"</string>
+    <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"חיישן קירבה משתיק דיבור"</string>
+    <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"חיישן קירבה לא שולט בדיבור"</string>
+    <string name="title_pref_bluetooth" msgid="7738175584293158995">"השתמש באוזניית Bluetooth"</string>
+    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"כשניתן, דבר באמצעות אוזניות Bluetooth שאינן A2DP (מונו)"</string>
+    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"לעולם על תדבר באמצעות אוזניות Bluetooth שאינן A2DP (מונו)"</string>
+    <string name="title_pref_intonation" msgid="7762392438106753854">"השתמש בשינויי גובה צליל"</string>
+    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
+    <skip />
+    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
+    <skip />
+    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"מקשי קיצור"</string>
+    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"פידבק"</string>
+    <string name="title_pref_vibration" msgid="3844312655168149890">"משוב ברטט"</string>
+    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"הקצאת דפוסי רטט"</string>
+    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"גילוי באמצעות מגע"</string>
+    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"גילוי פריטים שניתנים ללחיצה"</string>
+    <string name="title_pref_soundback" msgid="4700299128916932277">"משוב קולי"</string>
+    <string name="title_pref_soundback_volume" msgid="7800640782909840723">"עוצמת הצליל"</string>
+    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"הקצאת צלילים"</string>
+    <string name="value_play_button" msgid="3816799051654747674">"הפעל"</string>
+    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"גילוי באמצעות מגע"</string>
+    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"גילוי פריטים שניתנים ללחיצה"</string>
+    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"נלחץ"</string>
+    <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"שונות"</string>
+    <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"הגדרות מפתח"</string>
+    <string name="title_pref_log_level" msgid="1608733715034404715">"רמה של פלט רישום ביומן"</string>
+    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"הדגש מקורות אירוע"</string>
+    <string name="title_pref_tts_overlay" msgid="7821227047722471620">"הצג פלט קולי"</string>
+    <string name="subject_crash_report_email" msgid="3043388136219501183">"דוח קריסות מחשב של TalkBack"</string>
+    <string name="header_crash_report_email" msgid="9218276172142314054">"בהמשך מופיע דוח קריסות מחשב של TalkBack. לחיצה על לחצן \'שלח\' תשדר נתונים אלה למפתחי TalkBack‏."\n\n</string>
+    <string name="axis_character" msgid="5059604520074645703">"נווט לפי תו."</string>
+    <string name="axis_word" msgid="7745798763195184060">"נווט לפי מילה."</string>
+    <string name="axis_sentence" msgid="5569363499210008882">"נווט לפי משפט."</string>
+    <string name="axis_heading" msgid="8928386537164255063">"נווט לפי כותרת."</string>
+    <string name="axis_sibling" msgid="7260754205862306385">"נווט לפי פריט אח."</string>
+    <string name="axis_document" msgid="1581988340856497809">"נווט לפי מסמך."</string>
+    <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"נווט לפי אופן פעולה המוגדר כברירת מחדל של תצוגת אינטרנט."</string>
+    <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"חזור על ביטוי אחרון"</string>
+    <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"איות ביטוי אחרון"</string>
+</resources>

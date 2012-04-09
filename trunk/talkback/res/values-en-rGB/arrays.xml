@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"Speak at all ringer volumes"</item>
+    <item msgid="7158875206945163928">"No speech in Silent Mode"</item>
+    <item msgid="4945285159234224758">"No speech in Vibrate and Silent Mode"</item>
+  </string-array>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"Match speech volume"</item>
+    <item msgid="3474415020494727681">"75% of speech volume"</item>
+    <item msgid="3630774810523140800">"50% of speech volume"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"Button"</item>
+    <item msgid="2031284088774168661">"Checkbox"</item>
+    <item msgid="9091685013189255594">"Colour picker"</item>
+    <item msgid="7650731353307926535">"Date time control"</item>
+    <item msgid="8280936284109186802">"Date time control"</item>
+    <item msgid="6366195742201292951">"Date control"</item>
+    <item msgid="4817890851441750596">"Edit text for email"</item>
+    <item msgid="5708434584742847903">"File selection"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"Button"</item>
+    <item msgid="5468837159284323298">"Month control"</item>
+    <item msgid="3604586918762860736">"Edit text numeric only"</item>
+    <item msgid="2268738486961365938">"Password edit text"</item>
+    <item msgid="4054764445934639546">"Radio button"</item>
+    <item msgid="8620342430107579622">"Slider"</item>
+    <item msgid="4526908839966163389">"Reset"</item>
+    <item msgid="6890269752295368575">"Edit text for search"</item>
+    <item msgid="1732239384416208952">"Button"</item>
+    <item msgid="2844423601130585486">"Edit text for telephone number"</item>
+    <item msgid="4429211852856836454">"Edit text"</item>
+    <item msgid="6916351398697981908">"Edit text for URL"</item>
+    <item msgid="7370324241352123803">"Week of the year control"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"Alert"</item>
+    <item msgid="7079664451178245333">"Alert dialogue"</item>
+    <item msgid="7175460279619232788">"Button"</item>
+    <item msgid="7682652928153230885">"Checkbox"</item>
+    <item msgid="6271342434037552568">"Combo box"</item>
+    <item msgid="3816282149905203330">"Dialogue"</item>
+    <item msgid="3607246563706513907">"Grid cell"</item>
+    <item msgid="6690887636341505376">"Link"</item>
+    <item msgid="8956345708233247462">"Log"</item>
+    <item msgid="7023984577635455031">"Marquee"</item>
+    <item msgid="2455128273329194018">"Menu item"</item>
+    <item msgid="2579774298837415022">"Menu item checkbox"</item>
+    <item msgid="8295115526987695111">"Menu item radio button"</item>
+    <item msgid="9208148803968404705">"Option"</item>
+    <item msgid="7278111388436893213">"Progress bar"</item>
+    <item msgid="2040534193363832208">"Radio button"</item>
+    <item msgid="3518786141398291419">"Radio button group"</item>
+    <item msgid="3369418675400502879">"Scroll bar"</item>
+    <item msgid="4160771832888077199">"Slider"</item>
+    <item msgid="4913996245258357058">"Spin button"</item>
+    <item msgid="4720560353967686603">"Status"</item>
+    <item msgid="8848835768265321609">"Tab"</item>
+    <item msgid="1902084479060424039">"Tab panel"</item>
+    <item msgid="1434580592616799847">"Text box"</item>
+    <item msgid="2857905070846962311">"Timer"</item>
+    <item msgid="5359803593845515833">"Tool bar"</item>
+    <item msgid="5431429272751911412">"Tool tip"</item>
+    <item msgid="6370853370296882006">"Tree item"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"Link"</item>
+    <item msgid="5377511479758471198">"Heading one"</item>
+    <item msgid="1326639266444424357">"Heading two"</item>
+    <item msgid="1794794287319870162">"Heading three"</item>
+    <item msgid="8913956457917314695">"Heading four"</item>
+    <item msgid="9214322369762997523">"Heading five"</item>
+    <item msgid="703456364875978891">"Heading six"</item>
+    <item msgid="1873899093503383879">"Button"</item>
+    <item msgid="397012629783441956">"Combo box"</item>
+    <item msgid="130879601035659196">"Table"</item>
+    <item msgid="1026513754307890628">"Text area"</item>
+  </string-array>
+</resources>

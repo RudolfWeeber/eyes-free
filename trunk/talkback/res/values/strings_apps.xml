@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- VALUES for the Google search box -->
+
+    <!--
+      Source: Description for icon that changes search category.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_change_search_category">Change search category</string>
+    <!--
+      Source: Description for Google search box widget.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_search_box">Search box</string>
+    <!--
+      Source: Description for Voice Search icon.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_voice_search">Voice search</string>
+
+    <!-- VALUES for the Launcher -->
+
+    <!--
+      Source: An utterance template for announcing dragging an icon on the home screen.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_dragging_icon">Dragging <xliff:g id="title">%1$s</xliff:g> icon.</string>
+
+    <!-- VALUES for the Date picker -->
+
+    <!--
+      Source: A value for announcing an increment hours button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_hours">Increase hours.</string>
+
+    <!--
+      Source: A value for announcing an increment minutes button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_minutes">Increase minutes.</string>
+
+    <!--
+      Source: A value for announcing an decrement hours button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_hours">Decrease hours.</string>
+
+    <!--
+      Source: A value for announcing an decrement minutes button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_minutes">Decrease minutes.</string>
+
+    <!--VALUES for the setting the date -->
+
+    <!--
+      Source: A value for announcing an increment month button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_month">Increase month.</string>
+
+    <!--
+      Source: A value for announcing an increment day button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_day">Increase day.</string>
+
+    <!--
+      Source: A value for announcing an increment year button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_increment_year">Increase year.</string>
+
+    <!--
+      Source: A value for announcing an decrement month button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_month">Decrease month.</string>
+
+    <!--
+      Source: A value for announcing an decrement day button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_day">Decrease day.</string>
+
+    <!--
+      Source: A value for announcing an decrement year button.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_decrement_year">Decrease year.</string>
+
+    <!-- Volume manager -->
+
+    <!--
+      Source: An utterance template for announcing the current volume for a particular stream (e.g. music, alarm, etc) before changes are made.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_stream_volume"><xliff:g id="stream_name">%s</xliff:g> volume <xliff:g id="percent">%d</xliff:g> percent, press volume buttons to change.</string>
+
+    <!--
+      Source: An utterance template for announcing the current volume for a particular stream (e.g. music, alarm, etc) after changes have been made.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_stream_volume_set"><xliff:g id="stream_name">%s</xliff:g> volume set to <xliff:g id="percent">%d</xliff:g> percent.</string>
+
+    <!--
+      Source: A value for announcing the "master" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_master">Master</string>
+
+    <!--
+      Source: A value for announcing the "voice call" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_voice_call">Phone call</string>
+
+    <!--
+      Source: A value for announcing the "system" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_system">System sound</string>
+
+    <!--
+      Source: A value for announcing the "ring" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_ring">Ring tone</string>
+
+    <!--
+      Source: A value for announcing the "music" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_music">Music</string>
+
+    <!--
+      Source: A value for announcing the "alarm" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_alarm">Alarm</string>
+
+    <!--
+      Source: A value for announcing the "notification" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_notification">Notification</string>
+
+    <!--
+      Source: A value for announcing the "DTMF" volume stream.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_stream_dtmf">Touch tone dialing</string>
+
+    <!-- VALUE for the Calendar -->
+
+    <!--
+      Source: An utterance template for announcing a day time range.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_day"><xliff:g id="date">%1$s</xliff:g>, day view.</string>
+
+    <!--
+      Source: An utterance template for announcing the a week time range.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_week"><xliff:g id="from_date">%1$s</xliff:g> to <xliff:g id="to_date">%2$s</xliff:g>, week view.</string>
+
+    <!--
+      Source: An utterance template for announcing a month time range.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_month"><xliff:g id="month">%1$s</xliff:g>, month view.</string>
+
+    <!--
+      Source: A value for announcing the current event index (example: 2 of 6).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="template_announce_item_index"><xliff:g id="item_index">%1$s</xliff:g> of <xliff:g id="item_count">%2$s</xliff:g></string>
+
+    <!--
+      Source: A value for announcing to whom a calendar belongs.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_owner">Owner</string>
+
+    <!-- PLURALS -->
+
+    <!--
+      Source: A plural for announcing the number of event(s) on a calendar day.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <plurals name="plural_event">
+        <item quantity="one">event</item>
+        <item quantity="other">events</item>
+    </plurals>
+
+    <!-- VALUES for System UI -->
+
+    <!--
+      Source: A value for announcing opening the status-bar (for notifications on the top of the screen).
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_status_bar_opened">Status bar opened</string>
+
+    <!-- VALUES for GoogleTV -->
+
+    <!--
+      Source: A value for announcing that the screen saver is active.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_googletv_screen_saver">Screen saver</string>
+</resources>

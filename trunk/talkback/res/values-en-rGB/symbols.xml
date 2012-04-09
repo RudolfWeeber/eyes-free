@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"Single quote"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"Ampersand"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Left-angle bracket"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Right-angle bracket"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"Asterisk"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"At"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"Back slash"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"Dot"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"Caret/chevron"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"Cent"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"Colon"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"Comma"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"Copyright"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Left curly bracket"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Right curly bracket"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"Degree"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"Dollar sign"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"Ellipsis"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"Em dash"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"En dash"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"Euro"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"Exclamation mark"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"Grave accent"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Dash"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"Low double quote"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Paragraph mark"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Left parenthesis"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Right parenthesis"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"Per cent"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"Full stop"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"Pi"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"Hash"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"Pound sterling"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"Question mark"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"Quote"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"Registered trademark"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"Semi-colon"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"Slash"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"Smiley face"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"Space"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"Left square bracket"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"Right square bracket"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"Square root"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"Trademark"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"Underscore"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"Vertical bar"</string>
+</resources>

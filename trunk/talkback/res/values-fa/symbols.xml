@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"علامت نقل قول تکی"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"امپرساند"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"آکولاد زاویه چپ"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"براکت زاویه راست"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"ستاره"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"At"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"ممیز وارونه"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"نقطه"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"هشتک"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"سنت"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"دو نقطه"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"کاما"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"حق نسخه‌برداری"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"آکولاد چپ"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"آکولاد راست"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"درجه"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"علامت دلار"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"سه نقطه"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"خط تیره Em"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"خط تیره En"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"یورو"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"علامت تعجب"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"آکسان گراو"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"خط‌ فاصله"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"علامت نقل قول پایین"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"علامت پاراگراف"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"پرانتز چپ"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"پرانتز راست"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"درصد"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"نقطه"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"پی"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"پوند"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"پوند استرلینگ"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"علامت سؤال"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"نقل قول"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"علامت تجاری ثبت شده"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"نقطه ویرگول"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"خط مورب"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"شکلک"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"فاصله"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"براکت چپ"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"براکت راست"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"ریشه دوم"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"علامت تجاری"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"زیرخط"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"نوار عمودی"</string>
+</resources>

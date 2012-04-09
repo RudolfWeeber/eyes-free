@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"單引號"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"AND 符號"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"左角括號"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"右角括號"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"星號"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"小老鼠"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"反斜線"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"圓點符號"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"脫字符號"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"美分符號"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"冒號"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"英文逗號"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"版權符號"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"左大括號"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"右大括號"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"度數符號"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"錢幣符號"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"省略符號"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"全形破折號"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"半形破折號"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"歐元符號"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"驚嘆號"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"重音符號"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"破折號"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"下雙引號"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"段落標記"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"左括弧"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"右括弧"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"百分比符號"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"英文句號"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"圓周率符號"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"井字鍵"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"英鎊符號"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"問號"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"引號"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"註冊商標"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"分號"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"斜線"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"笑臉符號"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"空格"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"左方括號"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"右方括號"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"平方根號"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"商標符號"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"底線"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"垂直線"</string>
+</resources>

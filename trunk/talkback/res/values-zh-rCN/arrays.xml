@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="pref_speak_ringer_entries">
+    <item msgid="5487065349227839121">"不管铃声大小一律说话"</item>
+    <item msgid="7158875206945163928">"静音模式下不说话"</item>
+    <item msgid="4945285159234224758">"在“振动”和“静音”模式下不说话"</item>
+  </string-array>
+  <string-array name="pref_soundback_volume_entries">
+    <item msgid="2451786172783948232">"与说话音量一致"</item>
+    <item msgid="3474415020494727681">"说话音量的 75％"</item>
+    <item msgid="3630774810523140800">"说话音量的 50％"</item>
+  </string-array>
+  <string-array name="html_input_to_desc_values">
+    <item msgid="2793341578357584466">"按钮"</item>
+    <item msgid="2031284088774168661">"复选框"</item>
+    <item msgid="9091685013189255594">"颜色选择器"</item>
+    <item msgid="7650731353307926535">"日期时间控件"</item>
+    <item msgid="8280936284109186802">"日期时间控件"</item>
+    <item msgid="6366195742201292951">"日期控件"</item>
+    <item msgid="4817890851441750596">"电子邮件的编辑文本"</item>
+    <item msgid="5708434584742847903">"选择的文件"</item>
+    <item msgid="6588178056570524624"></item>
+    <item msgid="9133148733620281210">"按钮"</item>
+    <item msgid="5468837159284323298">"月控件"</item>
+    <item msgid="3604586918762860736">"只有数字的编辑文本"</item>
+    <item msgid="2268738486961365938">"密码编辑文本"</item>
+    <item msgid="4054764445934639546">"单选按钮"</item>
+    <item msgid="8620342430107579622">"滑块"</item>
+    <item msgid="4526908839966163389">"重置"</item>
+    <item msgid="6890269752295368575">"搜索的编辑文本"</item>
+    <item msgid="1732239384416208952">"按钮"</item>
+    <item msgid="2844423601130585486">"电话号码的编辑文本"</item>
+    <item msgid="4429211852856836454">"编辑文本"</item>
+    <item msgid="6916351398697981908">"网址的编辑文本"</item>
+    <item msgid="7370324241352123803">"该年周编号控件"</item>
+  </string-array>
+  <string-array name="html_role_to_desc_values">
+    <item msgid="3576890934970356898">"提醒"</item>
+    <item msgid="7079664451178245333">"提醒对话框"</item>
+    <item msgid="7175460279619232788">"按钮"</item>
+    <item msgid="7682652928153230885">"复选框"</item>
+    <item msgid="6271342434037552568">"组合框"</item>
+    <item msgid="3816282149905203330">"对话框"</item>
+    <item msgid="3607246563706513907">"网格单元"</item>
+    <item msgid="6690887636341505376">"链接"</item>
+    <item msgid="8956345708233247462">"日志"</item>
+    <item msgid="7023984577635455031">"滚动字幕"</item>
+    <item msgid="2455128273329194018">"菜单项"</item>
+    <item msgid="2579774298837415022">"菜单项复选框"</item>
+    <item msgid="8295115526987695111">"菜单项单选按钮"</item>
+    <item msgid="9208148803968404705">"选项"</item>
+    <item msgid="7278111388436893213">"进度栏"</item>
+    <item msgid="2040534193363832208">"单选按钮"</item>
+    <item msgid="3518786141398291419">"单选按钮组"</item>
+    <item msgid="3369418675400502879">"滚动条"</item>
+    <item msgid="4160771832888077199">"滑块"</item>
+    <item msgid="4913996245258357058">"旋钮"</item>
+    <item msgid="4720560353967686603">"状态"</item>
+    <item msgid="8848835768265321609">"标签"</item>
+    <item msgid="1902084479060424039">"标签面板"</item>
+    <item msgid="1434580592616799847">"文本框"</item>
+    <item msgid="2857905070846962311">"计时器"</item>
+    <item msgid="5359803593845515833">"工具栏"</item>
+    <item msgid="5431429272751911412">"工具提示"</item>
+    <item msgid="6370853370296882006">"树状项"</item>
+  </string-array>
+  <string-array name="html_tag_to_desc_values">
+    <item msgid="6249748634825725696">"链接"</item>
+    <item msgid="5377511479758471198">"一级标题"</item>
+    <item msgid="1326639266444424357">"二级标题"</item>
+    <item msgid="1794794287319870162">"三级标题"</item>
+    <item msgid="8913956457917314695">"四级标题"</item>
+    <item msgid="9214322369762997523">"五级标题"</item>
+    <item msgid="703456364875978891">"六级标题"</item>
+    <item msgid="1873899093503383879">"按钮"</item>
+    <item msgid="397012629783441956">"组合框"</item>
+    <item msgid="130879601035659196">"表格"</item>
+    <item msgid="1026513754307890628">"文本区域"</item>
+  </string-array>
+</resources>

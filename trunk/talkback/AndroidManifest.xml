@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.google.android.marvin.talkback"
+    android:sharedUserId="com.google.android.marvin.feedback"
+    android:versionCode="44"
+    android:versionName="3.0.8_b1" >
+
+    <uses-sdk
+        android:minSdkVersion="4"
+        android:targetSdkVersion="14" />
+
+    <!-- Required for Bluetooth SCO headset support. -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- Required to monitor phone busy state. -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- Required for haptic feedback. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Required for screen magnification. -->
+    <uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
+
+    <!-- Required for developer debug overlay. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Hardware compatibility -->
+    <uses-feature
+        android:name="android.hardware.faketouch"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+
+    <application
+        android:icon="@drawable/icon"
+        android:label="@string/talkback_title" >
+
+        <!-- TalkBack -->
+        <service
+            android:name=".TalkBackService"
+            android:settingsActivity="com.google.android.marvin.talkback.TalkBackPreferencesActivity" >
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+
+                <category android:name="android.accessibilityservice.category.FEEDBACK_SPOKEN" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibilityservice" />
+        </service>
+
+        <!-- TalkBack Preferences -->
+        <activity
+            android:name=".TalkBackPreferencesActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.accessibilityservice.SERVICE_SETTINGS" />
+            </intent-filter>
+        </activity>
+
+        <!-- TalkBack Shortcut Activity -->
+        <activity
+            android:name=".TalkBackShortcutActivity"
+            android:label="@string/talkback_shortcut_title"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- TalkBack Shortcut Handler -->
+        <activity
+            android:name=".TalkBackShortcutHandler"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="com.google.android.marvin.talkback.SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- Screen Magnifier Preferences -->
+        <activity
+            android:name="com.googlecode.eyesfree.screenmagnifier.MagnifierPreferencesActivity"
+            android:enabled="@bool/magnifier_enabled"
+            android:icon="@drawable/magnifier_icon"
+            android:label="@string/magnifier_name" >
+        </activity>
+
+        <!-- Screen Magnifier Service -->
+        <service
+            android:name="com.googlecode.eyesfree.screenmagnifier.MagnifierService"
+            android:enabled="@bool/magnifier_enabled"
+            android:icon="@drawable/magnifier_icon"
+            android:label="@string/magnifier_name" >
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+
+                <category android:name="android.accessibilityservice.category.FEEDBACK_VISUAL" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/magnifier_service" />
+        </service>
+
+        <!-- Test Activities -->
+        <activity android:name="com.google.android.marvin.talkback.test.TextActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

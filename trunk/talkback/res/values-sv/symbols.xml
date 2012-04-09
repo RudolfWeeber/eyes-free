@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="symbol_apostrophe" msgid="1918560887723790157">"Enkla citattecken"</string>
+    <string name="symbol_ampersand" msgid="5698645694023845951">"Et-tecken"</string>
+    <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Vänster vinkelparentes"</string>
+    <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Höger vinkelparentes"</string>
+    <string name="symbol_asterisk" msgid="6899588751917310921">"Asterisk"</string>
+    <string name="symbol_at_sign" msgid="4119576952183181755">"Snabel-a"</string>
+    <string name="symbol_backslash" msgid="7724827547647422722">"Omvänt snedstreck"</string>
+    <string name="symbol_bullet" msgid="7202475090589298539">"Punkt"</string>
+    <string name="symbol_caret" msgid="3701748999835671059">"Inskjutningstecken"</string>
+    <string name="symbol_cent" msgid="837913106634164879">"Cent"</string>
+    <string name="symbol_colon" msgid="1766173490108112841">"Kolon"</string>
+    <string name="symbol_comma" msgid="7243221681903156668">"Komma"</string>
+    <string name="symbol_copyright" msgid="6068444819135113413">"Upphovsrätt"</string>
+    <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Vänster klammerparentes"</string>
+    <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Höger klammerparentes"</string>
+    <string name="symbol_degree" msgid="7006804982085051639">"Grad"</string>
+    <string name="symbol_dollar_sign" msgid="4816772894471123223">"Dollartecken"</string>
+    <string name="symbol_ellipsis" msgid="3891332472133850270">"Ellips"</string>
+    <string name="symbol_em_dash" msgid="658543896507447622">"Långt bindestreck"</string>
+    <string name="symbol_en_dash" msgid="234490117412068534">"Kort bindestreck"</string>
+    <string name="symbol_euro" msgid="8754914286710071533">"Euro"</string>
+    <string name="symbol_exclamation_mark" msgid="1423755347958355783">"Utropstecken"</string>
+    <string name="symbol_grave_accent" msgid="6594493842492693387">"Grav accent"</string>
+    <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Bindestreck"</string>
+    <string name="symbol_low_double_quote" msgid="1677227578460338049">"Nedre dubbla citattecken"</string>
+    <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Styckemarkering"</string>
+    <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Vänsterparentes"</string>
+    <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Högerparentes"</string>
+    <string name="symbol_percent" msgid="798679652539918927">"Procent"</string>
+    <string name="symbol_period" msgid="5069898565390445839">"Punkt"</string>
+    <string name="symbol_pi" msgid="6899622292494510231">"Pi"</string>
+    <string name="symbol_pound" msgid="1635411027540923886">"Fyrkant"</string>
+    <string name="symbol_pound_sterling" msgid="6433746765884232219">"Brittiskt pund"</string>
+    <string name="symbol_question_mark" msgid="1666021876560174073">"Frågetecken"</string>
+    <string name="symbol_quotation_mark" msgid="4210926032013869946">"Citattecken"</string>
+    <string name="symbol_registered_trademark" msgid="2461061529593236186">"Registrerat varumärke"</string>
+    <string name="symbol_semicolon" msgid="1433521326404786767">"Semikolon"</string>
+    <string name="symbol_slash" msgid="3965129865291400067">"Snedstreck"</string>
+    <string name="symbol_smiley" msgid="747615636574539315">"Uttryckssymbol"</string>
+    <string name="symbol_space" msgid="5943066533922386082">"Mellanslag"</string>
+    <string name="symbol_square_bracket_left" msgid="4651446946636041863">"Vänster hakparentes"</string>
+    <string name="symbol_square_bracket_right" msgid="4383765695828692950">"Höger hakparentes"</string>
+    <string name="symbol_square_root" msgid="2765967632052613827">"Kvadratrot"</string>
+    <string name="symbol_trademark" msgid="7855500032009132790">"Varumärke"</string>
+    <string name="symbol_underscore" msgid="4704253128574141726">"Understreck"</string>
+    <string name="symbol_vertical_bar" msgid="1048988153298679308">"Vertikalt streck"</string>
+</resources>

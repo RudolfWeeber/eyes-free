@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Vibration pattern for haptic feedback when view hovered. -->
+    <integer-array name="view_hovered_pattern">
+        <item>0</item>
+        <item>30</item>
+        <item>10</item>
+        <item>10</item>
+    </integer-array>
+
+    <!-- Vibration pattern for haptic feedback when actionable view hovered or focused. -->
+    <integer-array name="view_actionable_pattern">
+        <item>0</item>
+        <item>80</item>
+    </integer-array>
+
+    <!-- Vibration pattern for haptic feedback when view focused or selected. -->
+    <integer-array name="view_focused_or_selected_pattern">
+        <item>0</item>
+        <item>15</item>
+        <item>10</item>
+        <item>15</item>
+    </integer-array>
+
+    <!-- Vibration pattern for haptic feedback when view clicked. -->
+    <integer-array name="view_clicked_pattern">
+        <item>0</item>
+        <item>60</item>
+        <item>10</item>
+        <item>20</item>
+        <item>0</item>
+        <item>10</item>
+        <item>0</item>
+        <item>20</item>
+        <item>10</item>
+        <item>60</item>
+    </integer-array>
+
+    <!-- Vibration pattern for haptic feedback when window state changes. -->
+    <integer-array name="notification_or_window_state_changed_pattern">
+        <item>0</item>
+        <item>10</item>
+        <item>50</item>
+        <item>20</item>
+        <item>40</item>
+        <item>30</item>
+        <item>30</item>
+        <item>40</item>
+    </integer-array>
+
+</resources>
