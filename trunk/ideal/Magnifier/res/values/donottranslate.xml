@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Zoom Level Preference -->
+    <string name="zoom_level_pref">zoom_level_pref</string>
+
+    <!-- Camera Mode Preference -->
+    <string name="camera_mode_pref">camera_mode_pref</string>
+</resources>

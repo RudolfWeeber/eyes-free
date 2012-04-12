@@ -1,0 +1,128 @@
+<html>
+  <head>
+    <title>Press P to proceed through this tutorial on Web Access.</title>
+  </head>
+  <body>
+
+<h1>Introduction</h1>
+<p>
+<span>
+IDEAL Group, in partnership with Raising the Floor, is pleased to present the Web Access application for Android. 
+</span>
+<span>
+This tutorial will explain how you can use Web Access to surf the net with your Android device.
+</span>
+</p>
+
+<h1>Usage</h1>
+<p>
+<span>
+The controls for this tutorial are simple. 
+</span>
+<span>
+Press P to proceed. 
+</span>
+<span>
+Press Q to go backwards. 
+</span>
+<span>
+Press Space to interact with the current item. 
+</span>
+<span>
+By the way, in case you did not realize it yet, you have already begun using Web Access to browse HTML documents. This entire tutorial is nothing more than a web page being displayed inside an Android application. 
+</span>
+<span>
+This tutorial is able to take advantage of Web Access because it includes one extra JavaScript tag that is triggering the Web Access functionality.
+</span>
+</p>
+
+
+<h1>Setting up Web Access to work with your browser</h1>
+<p>
+<span>
+Most pages on the web do not include the one special bit of JavaScript needed to enable Web Access. 
+</span>
+<span>
+Here are two easy ways for you to add that JavaScript tag yourself.
+</span>
+</p>
+<p>
+<span>
+One: You can use the Web Access bookmarklet from inside the standard Android Browser.  
+</span>
+<span>
+<ul>
+<li>Start the Browser</li>
+<li>"Menu", then "Bookmarks"</li>
+<li>Go to the "Most visited" tab and you should find "IDEAL Web Access" as the top item in that list.</li>
+<li>Click on "IDEAL Web Access".</li>
+</ul>
+</span>
+<span>
+At this point, you will have Web Access running. You can navigate with P and Q, and hit Space to interact with elements on the page.
+</span>
+<span>
+This gives you access to the standard Browser. However, you will have to run the bookmarklet on each page that you visit. 
+</span>
+<span>
+If you would like the bookmarklet to automatically run on each page, we urge you to use the next method.
+</span>
+</p>
+
+<p>
+<span>
+Two: You can use a browser like OilCan or WebVox to automatically run the bookmarklet each time. 
+</span>
+<span>
+OilCan and WebVox are browsers that are based off the same code as the regular Android Browser, except they have the ability to automatically run scripts, much like Greasemonkey on the Desktop. 
+</span>
+<span>
+WebVox comes from Google's Eyes-Free Project. However, unlike the Eyes-Free Project's other apps, WebVox has not been released on Market although it is readily available from the eyes-free code repository. 
+</span>
+<span>
+<a href="http://apps4android.org/web-access/WebVox.apk">To save you the trouble of compiling WebVox for yourself, we have posted a compiled version of WebVox. You can download it by pressing Space now.</a> 
+</span>
+<span>
+After installing WebVox, you will probably be prompted a few times when trying to open various types of web content regarding which application to choose for the task. 
+</span>
+<span>
+We recommend setting WebVox to be the default application; after setting WebVox as the default application for a particular type of content, you will not be prompted again for that same type of content again.
+</span>
+</p>
+
+
+
+<h1>Tips</h1>
+<p>
+<span>
+We have found some quirks in WebVox. Here are some of the common things that you might run into and how to deal with them.
+</span>
+<ul>
+<li>To type something into an input field, just press Space when you are on the input field and you will hear it switch to "Forms Mode".</li>
+<li>To continue reading after having gone into "Forms Mode", press Shift twice. You should hear it go back into "Browse Mode". If you don't, try scrolling the trackball/d-pad randomly, then press Shift twice again. Note that it is fine to scroll the trackball/d-pad randomly as you will not lose your place since you will be repositioned to where you left off as soon as you go back into "Browse Mode".</li>
+<li>The "Back" button seems a bit too sensitive. We have noticed Web Vox responding to the "Back" button a little too aggressively. For example, backing out of Bookmarks seems to quit the app. This is a WebVox quirk and is outside of our control. If you accidentally back out of Web Vox, going back immediately seems to retain your place.</li>
+</ul>
+</p>
+
+
+<h1>Credits</h1>
+<p>
+<span>
+We would like to thank <a href="http://raisingthefloor.net">Raising the Floor</a> for partnering with us to deliver this open source application, and Google (especially the <a href="http://eyes-free.googlecode.com">Eyes-Free Team</a>) for creating an outstanding smartphone platform with great accessibility features. 
+</span>
+<span>We would also like to give special thanks to Charles L. Chen, whose <a href="http://firevox.clcworld.net">Fire Vox</a> work was heavily referenced and copied by our developers in writing the JavaScript portion of Web Access.
+</span>
+</p>
+
+<script>
+function loadScript(){
+  var scriptNode = document.createElement("script");
+  scriptNode.src = "content://com.ideal.webaccess.localjs/ideal-webaccess.user.js";
+  document.body.appendChild(scriptNode);
+}
+window.setTimeout(loadScript, 1000);
+</script>
+</body>
+
+
+</html>
