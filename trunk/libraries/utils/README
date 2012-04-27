@@ -1,4 +1,2 @@
-This directory contains generic support utilities --- and is not
-for running on the Android platform.
-
-  make_sounds.py: Generate wave files from TTS. This utility is Mac-specific.
+This project contains utility classes used in various Eyes-Free projects. It
+builds against Donut (1.6) and requires the compatutils project.

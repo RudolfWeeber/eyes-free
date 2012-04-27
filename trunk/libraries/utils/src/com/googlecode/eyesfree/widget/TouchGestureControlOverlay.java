@@ -1,4 +1,4 @@
-package com.google.marvin.widget;
+package com.googlecode.eyesfree.widget;
 
 
 import android.content.Context;
