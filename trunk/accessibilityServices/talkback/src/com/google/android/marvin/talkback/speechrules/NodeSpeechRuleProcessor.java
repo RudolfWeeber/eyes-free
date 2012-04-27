@@ -43,7 +43,7 @@ public class NodeSpeechRuleProcessor {
 
     /**
      * Returns the best description for a node.
-     * 
+     *
      * @param node The node to describe.
      * @param event The source event, may be {@code null} when called with
      *            non-source nodes.
@@ -98,7 +98,7 @@ public class NodeSpeechRuleProcessor {
 
     /**
      * Processes the specified node using a series of speech rules.
-     * 
+     *
      * @param node The node to process.
      * @param event The source event, may be {@code null} when called with
      *            non-source nodes.
@@ -117,7 +117,7 @@ public class NodeSpeechRuleProcessor {
 
     /**
      * Returns the verbose description for a node.
-     * 
+     *
      * @param node The node to describe.
      * @return The verbose description for a node.
      */
@@ -126,18 +126,17 @@ public class NodeSpeechRuleProcessor {
 
         final StringBuilder populator = new StringBuilder();
 
-        // Append control's interaction capabilities or disabled state
+        // Append hints for clickable, long-clickable, etc.
         if (node.isEnabled()) {
-            if (node.isClickable()) {
-                appendTextToBuilder(context.getString(R.string.value_clickable), populator);
+            // Don't read both the checkable AND clickable hints!
+            if (node.isCheckable()) {
+                appendTextToBuilder(context.getString(R.string.hint_checkable), populator);
+            } else if (node.isClickable()) {
+                appendTextToBuilder(context.getString(R.string.hint_clickable), populator);
             }
 
             if (node.isLongClickable()) {
-                appendTextToBuilder(context.getString(R.string.value_long_clickable), populator);
-            }
-
-            if (node.isCheckable()) {
-                appendTextToBuilder(context.getString(R.string.value_checkable), populator);
+                appendTextToBuilder(context.getString(R.string.hint_long_clickable), populator);
             }
         }
 
@@ -147,7 +146,7 @@ public class NodeSpeechRuleProcessor {
     /**
      * Helper for appending the given {@link String} to the existing text in an
      * {@link Utterance}. Also adds a punctuation separator.
-     * 
+     *
      * @param text {@link String} of text to append.
      * @param builder {@link StringBuilder} to which text is appended.
      */

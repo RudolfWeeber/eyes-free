@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd">
+
+  <!-- TYPE_VIEW_FOCUSED -->
+
+  <!-- CompoundButton - checked -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.CompoundButton</ss:className>
+      <ss:platformSdk>&gt;=16</ss:platformSdk>
+      <ss:checked>true</ss:checked>
+    </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:template>@string/template_compound_button_checked</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- CompoundButton - not checked -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.CompoundButton</ss:className>
+      <ss:platformSdk>&gt;=16</ss:platformSdk>
+    </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:template>@string/template_compound_button_not_checked</ss:template>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+</ss:speechstrategy>

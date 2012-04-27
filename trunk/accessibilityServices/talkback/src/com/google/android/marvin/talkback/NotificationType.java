@@ -24,7 +24,7 @@ import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
  * Type safe enumeration for various notification types.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  */
 public enum NotificationType {
@@ -59,9 +59,6 @@ public enum NotificationType {
     private static final int ICON_SYNC_NOANIM = android.R.drawable.stat_notify_sync_noanim;
     private static final int ICON_VOICEMAIL = android.R.drawable.stat_notify_voicemail;
 
-    /** The resource identifier for the phone call notification icon. */
-    public static final int ICON_PHONE_CALL = android.R.drawable.stat_sys_phone_call;
-
     private static final int INVALID_ICON = -1;
 
     /** The resource identifier for this notification type. */
@@ -69,7 +66,7 @@ public enum NotificationType {
 
     /**
      * Creates a new notification type using the specified resource identifier.
-     * 
+     *
      * @param resId The resource identifier that describes this type of
      *            notification.
      */
@@ -106,7 +103,7 @@ public enum NotificationType {
 
     /**
      * Returns the notification type for a given icon.
-     * 
+     *
      * @param icon The notification icon to examine.
      * @return The notification type, or {@code null} if the notification type
      *         was not recognized.
@@ -155,7 +152,7 @@ public enum NotificationType {
 
     /**
      * Loads the specified icon from the package, class, and field.
-     * 
+     *
      * @param packageName The package containing the icon.
      * @param className The class name containing the icon.
      * @param fieldName The field containing the icon resource identifier.

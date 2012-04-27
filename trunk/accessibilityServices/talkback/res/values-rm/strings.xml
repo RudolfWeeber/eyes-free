@@ -39,6 +39,8 @@
     <skip />
     <!-- no translation found for template_image_view (4213590103284596735) -->
     <skip />
+    <!-- no translation found for template_list_view (4569888407076618446) -->
+    <skip />
     <!-- no translation found for template_long_clicked (915072513538350747) -->
     <skip />
     <!-- no translation found for template_button (6774709818484366257) -->
@@ -70,11 +72,11 @@
     <string name="value_not_checked" msgid="193134740901545340">"betg tschernì"</string>
     <!-- no translation found for value_disabled (65077823320194685) -->
     <skip />
-    <!-- no translation found for value_clickable (7427194667856810494) -->
+    <!-- no translation found for hint_clickable (5722744901089685155) -->
     <skip />
-    <!-- no translation found for value_long_clickable (6317377901757976390) -->
+    <!-- no translation found for hint_long_clickable (8223088419179222819) -->
     <skip />
-    <!-- no translation found for value_checkable (7938829961210181795) -->
+    <!-- no translation found for hint_checkable (3455044599190977740) -->
     <skip />
     <!-- no translation found for value_scrollable (2310899165772659098) -->
     <skip />

@@ -35,6 +35,10 @@
             android:summaryOff="@string/summaryOff_pref_bluetooth"
             android:summaryOn="@string/summaryOn_pref_bluetooth"
             android:title="@string/title_pref_bluetooth" />
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_caller_id_default"
+            android:key="@string/pref_caller_id_key"
+            android:title="@string/title_pref_caller_id" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="@string/pref_category_feedback_key"

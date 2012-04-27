@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caracteres sustituidos por <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caracteres"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"<xliff:g id="PERCENT">%d</xliff:g> por ciento de timbre"</string>
     <string name="template_image_view" msgid="4213590103284596735">"Imagen de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Lista de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Pulsación prolongada en <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Botón <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"imagen <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Control de búsqueda de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
@@ -47,9 +47,9 @@
     <string name="value_checked" msgid="5234989698372864892">"seleccionado"</string>
     <string name="value_not_checked" msgid="193134740901545340">"no seleccionado"</string>
     <string name="value_disabled" msgid="65077823320194685">"inhabilitado"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"se puede tocar para seleccionar"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"se puede mantener pulsada"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"se puede activar"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Toca para hacer clic."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Mantén pulsado el elemento."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Toca para activar."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"desplazable"</string>
     <string name="value_clicked" msgid="8306469740150249879">"se ha hecho clic"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"sin etiqueta"</string>
@@ -72,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Hablar a través de auriculares Bluetooth que no sean A2DP (mono) cuando estén disponibles"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"No hablar nunca a través de auriculares  Bluetooth que no sean A2DP (mono)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Usar cambios de tono"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Decir tecla pulsada en un tono inferior"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"No cambiar el tono al hablar"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Combinaciones de teclas"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Comentarios"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Vibración"</string>

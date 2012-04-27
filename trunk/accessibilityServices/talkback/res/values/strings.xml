@@ -133,22 +133,22 @@
       Source: An utterance template for announcing an image.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="template_image_view"><xliff:g id="title">%1$s</xliff:g> image </string>
+    <string name="template_image_view"><xliff:g id="title" example="Save">%1$s</xliff:g> image </string>
     <!--
       Source: An utterance template for announcing a list.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="template_list_view"><xliff:g id="title">%1$s</xliff:g> list </string>
+    <string name="template_list_view"><xliff:g id="title" example="Settings">%1$s</xliff:g> list </string>
     <!--
       Source: An utterance template for announcing that the system has recognized a long-click gesture on an item. The result of long-click varies from initiating drag-and-drop to opening a copy/paste menu.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="template_long_clicked">Long-pressed <xliff:g id="title">%1$s</xliff:g></string>
+    <string name="template_long_clicked">Long-pressed <xliff:g id="title" example="Cancel button">%1$s</xliff:g></string>
     <!--
       Source: An utterance template for announcing a button.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="template_button"><xliff:g id="title">%1$s</xliff:g> button </string>
+    <string name="template_button"><xliff:g id="title" example="Cancel">%1$s</xliff:g> button </string>
     <!--
       Source: An utterance template for announcing an image that has no label.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
@@ -237,20 +237,20 @@
     -->
     <string name="value_disabled">disabled</string>
     <!--
-      Source: A value for announcing that a view can be clicked.
+      Source: Hint spoken when the user pauses over an item that can be clicked.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="value_clickable">clickable</string>
+    <string name="hint_clickable">Tap to click.</string>
     <!--
-      Source: A value for announcing that a view can be long clicked.
+      Source: Hint spoken when the user pauses over an item that can be long-clicked. Long-click can activate icon dragging, contextual menus, etc.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="value_long_clickable">long clickable</string>
+    <string name="hint_long_clickable">Tap and hold to long-click.</string>
     <!--
-      Source: A value for announcing that a view can be checked or unchecked.
+      Source: Hint spoken when the user pauses over a check box.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="value_checkable">checkable</string>
+    <string name="hint_checkable">Tap to toggle.</string>
     <!--
       Source: A value for announcing that a view can be scrolled.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]

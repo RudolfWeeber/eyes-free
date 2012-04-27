@@ -16,6 +16,7 @@
 
 package com.google.android.marvin.talkback;
 
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -85,14 +86,14 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
      */
     public RingerModeAndScreenMonitor(Context context,
             PreferenceFeedbackController feedbackController, SpeechController speechController,
-            AudioManager audioManager, TelephonyManager telephonyManager,
             NotificationCache notificationCache) {
         mContext = context;
         mFeedbackController = feedbackController;
         mSpeechController = speechController;
-        mAudioManager = audioManager;
-        mTelephonyManager = telephonyManager;
         mNotificationCache = notificationCache;
+
+        mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
+        mTelephonyManager = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
 
         mPhoneStateChangeFilter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         mPhoneStateChangeFilter.addAction(Intent.ACTION_SCREEN_ON);

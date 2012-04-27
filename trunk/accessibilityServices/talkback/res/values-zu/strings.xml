@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> izinhlamvu ezibuyiselwe ngezinhlamvu ezingu- <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g>"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Iphesenti <xliff:g id="PERCENT">%d</xliff:g> yesikhali."</string>
     <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> umfanekiso"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Uhlu lwe-<xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Kucindezelwe isikhathi u-<xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Inkinobho ka-<xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"Umfanekiso <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> funa ukulawula."</string>
@@ -47,9 +47,9 @@
     <string name="value_checked" msgid="5234989698372864892">"kuhloliwe"</string>
     <string name="value_not_checked" msgid="193134740901545340">"akuhloliwe"</string>
     <string name="value_disabled" msgid="65077823320194685">"Khubazekile"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"iyacindezeleka"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"icindezeleka isikhathi eside"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"kuyamakeka"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Thepha ukuze uchofoze."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Thepha bese ubambe ukuze uchofoze isikhathi eside."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Thepha ukuze ushintshe."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"okucingekayo kukho"</string>
     <string name="value_clicked" msgid="8306469740150249879">"kuchofoziwe"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"akunamalebuli"</string>
@@ -72,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Khuluma nge-Bluetooth efakwa endlebeni ye-A2DP (okukodwa) uma itholakala"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Ungalinge ukhulume nge-Bluetooth efakwa endlebeni engeyona i-A2DP (okukodwa)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Sebenzisa ukushintsha kokukhwela"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Khuluma impendulo yekhibhodi ngokukhwela kwezwi okuphansi"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Ungashintshi ukukhwela kwezwi uma ukhuluma"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Izinqamuleli zekhibhodi"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Impendulo"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Impendulo Edlidlizelayo"</string>

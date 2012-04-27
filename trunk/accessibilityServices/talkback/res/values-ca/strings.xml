@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caràcters substituïts per <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caràcters"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Percentatge del to de trucada <xliff:g id="PERCENT">%d</xliff:g>."</string>
     <string name="template_image_view" msgid="4213590103284596735">"Imatge de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Llista de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Mantén premut <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Botó <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"imatge <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Control amb botó lliscant <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -47,9 +47,9 @@
     <string name="value_checked" msgid="5234989698372864892">"marcat"</string>
     <string name="value_not_checked" msgid="193134740901545340">"no marcat"</string>
     <string name="value_disabled" msgid="65077823320194685">"desactivat"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"s\'hi pot fer clic"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"s\'hi pot fer un clic llarg"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"desactivada"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Pica per fer clic."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Mantén picat per fer un clic llarg."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Pica per canviar."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"desplaçable"</string>
     <string name="value_clicked" msgid="8306469740150249879">"s\'ha fet clic"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"sense etiqueta"</string>
@@ -72,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Parla mitjançant auriculars Bluetooth que no siguin A2DP (mono)"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"No parlis mai mitjançant auriculars Bluetooth que no siguin A2DP (mono)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Utilitza els canvis de to"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Digues els comentaris del teclat en una veu amb to baix"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"No canviïs el to de la veu mentre parles"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Tecles de drecera"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Comentaris"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Avisa amb vibració"</string>

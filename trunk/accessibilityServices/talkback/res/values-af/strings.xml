@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> karakters met <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> karakters vervang"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Luitoestel <xliff:g id="PERCENT">%d</xliff:g> persent."</string>
     <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> prent."</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g> lys"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Lankgedruk op <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"<xliff:g id="TITLE">%1$s</xliff:g> knoppie"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"beeld <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> soekbeheer."</string>
@@ -47,9 +47,9 @@
     <string name="value_checked" msgid="5234989698372864892">"gekontroleer"</string>
     <string name="value_not_checked" msgid="193134740901545340">"nie gekontroleer nie"</string>
     <string name="value_disabled" msgid="65077823320194685">"gedeaktiveer"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"klikbaar"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"langklikbaar"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"merkbaar"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Tik om te klik."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Tik en hou om te lang-klik."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Tik om te wissel."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"rol"</string>
     <string name="value_clicked" msgid="8306469740150249879">"geklik"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"etiketloos"</string>
@@ -72,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Praat deur middel van nie-A2DP (mono) Bluetooth-oorstukke wanneer dit beskikbaar is"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Moet nooit praat deur middel van nie-A2DP (mono) Bluetooth-oorstukke nie"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Gebruik toonhoogteveranderings"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Praat sleutelbord-terugvoer in \'n laer stemtoon"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Moenie stemtoon verander wanneer jy praat nie"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Kortpadsleutels"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Terugvoer"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Vibrasieterugvoer"</string>
@@ -93,7 +91,7 @@
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Ontwikkelaarsinstellings"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Log afvoervlak"</string>
     <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Merk gebeurtenisbronne"</string>
-    <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Vertoon klanklewering"</string>
+    <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Vertoon spraakuitvoer"</string>
     <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack-omvalverslag"</string>
     <string name="header_crash_report_email" msgid="9218276172142314054">"Hier is \'n omvalverslag vir TalkBack. Deur die \"Stuur\"-knoppie te klik, sal hierdie data na TalkBack se ontwikkelaars gestuur word."\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"Navigeer volgens karakter."</string>

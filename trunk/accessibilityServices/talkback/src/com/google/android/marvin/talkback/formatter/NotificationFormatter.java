@@ -35,7 +35,7 @@ import java.util.LinkedList;
 
 /**
  * Formatter that returns an utterance to announce text replacement.
- * 
+ *
  * @author svetoslavganov@google.conm (Svetoslav R. Ganov)
  * @author alanv@google.com (Alan Viverette)
  */
@@ -54,12 +54,18 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
 
     @Override
     public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
-        if (isRecentNotification(event)) {
+        final Notification notification = extractNotification(event);
+
+        if (notification == null) {
+            return false;
+        }
+
+        if (isRecent(notification)) {
             return false;
         }
 
         final StringBuilder builder = utterance.getText();
-        final CharSequence typeText = getTypeText(context, event);
+        final CharSequence typeText = getTypeText(context, notification);
 
         if (!TextUtils.isEmpty(typeText)) {
             StringBuilderUtils.appendWithSeparator(builder, typeText);
@@ -75,21 +81,30 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
     }
 
     /**
-     * Manages the notification history and returns whether a notification event
-     * is recent. Returns false if the {@link AccessibilityEvent} does not
-     * contain a {@link Notification}.
-     * 
-     * @param event The accessibility event that contains the notification.
-     * @return {@code true} if the notification is recent.
+     * Extracts a {@link Notification} from an {@link AccessibilityEvent}.
+     *
+     * @param event The event to extract from.
+     * @return The extracted Notification, or {@code null} on error.
      */
-    private synchronized boolean isRecentNotification(AccessibilityEvent event) {
+    private Notification extractNotification(AccessibilityEvent event) {
         final Parcelable parcelable = event.getParcelableData();
 
         if (!(parcelable instanceof Notification)) {
-            return false;
+            return null;
         }
 
-        final Notification notification = (Notification) parcelable;
+        return (Notification) parcelable;
+    }
+
+    /**
+     * Manages the notification history and returns whether a notification event
+     * is recent. Returns false if the {@link AccessibilityEvent} does not
+     * contain a {@link Notification}.
+     *
+     * @param notification The notification.
+     * @return {@code true} if the notification is recent.
+     */
+    private synchronized boolean isRecent(Notification notification) {
         final Notification foundInHistory = removeFromHistory(notification);
 
         // If we didn't find the notification in history, set the notification
@@ -107,7 +122,7 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
 
     /**
      * Searches for and removes a {@link Notification} from history.
-     * 
+     *
      * @param notification The notification to remove from history.
      * @return {@code true} if the notification was found and removed.
      */
@@ -136,7 +151,7 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
     /**
      * Adds the specified {@link Notification} to history and ensures the size
      * of history does not exceed the specified limit.
-     * 
+     *
      * @param notification The notification to add.
      */
     private void addToHistory(Notification notification) {
@@ -149,7 +164,7 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
 
     /**
      * Compares two {@link Notification}s.
-     * 
+     *
      * @param first The first notification to compare.
      * @param second The second notification to compare.
      * @return {@code true} is the notifications are equal.
@@ -171,7 +186,7 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
 
     /**
      * Compares to {@link RemoteViews} objects.
-     * 
+     *
      * @param firstView The first view to compare.
      * @param secondView The second view to compare.
      */
@@ -204,27 +219,15 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
     /**
      * Returns text describing the type of {@link Notification} contained within
      * an {@link AccessibilityEvent}.
-     * 
+     *
      * @param context The parent context.
-     * @param event The event containing the notification.
+     * @param notification The notification.
      * @return Text describing the type of notification.
      */
-    private CharSequence getTypeText(Context context, AccessibilityEvent event) {
-        final Parcelable parcelable = event.getParcelableData();
-        if (!(parcelable instanceof Notification)) {
-            return null;
-        }
-
-        final Notification notification = (Notification) parcelable;
+    private CharSequence getTypeText(Context context, Notification notification) {
         final int icon = notification.icon;
-
-        // TODO(alanv): This may be obsolete now that we keep track of duplicate
-        // notifications.
-        if (icon == NotificationType.ICON_PHONE_CALL) {
-            return null;
-        }
-
         final NotificationType type = NotificationType.getNotificationTypeFromIcon(context, icon);
+
         if (type == null) {
             return null;
         }

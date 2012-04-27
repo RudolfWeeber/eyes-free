@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caractères remplacés par <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caractères"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Volume de la sonnerie à <xliff:g id="PERCENT">%d</xliff:g> pour cent"</string>
     <string name="template_image_view" msgid="4213590103284596735">"Image <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Liste <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Appui de manière prolongée sur <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Bouton \"<xliff:g id="TITLE">%1$s</xliff:g>\""</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"image <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Barre de défilement <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -47,9 +47,9 @@
     <string name="value_checked" msgid="5234989698372864892">"sélectionné"</string>
     <string name="value_not_checked" msgid="193134740901545340">"non sélectionné"</string>
     <string name="value_disabled" msgid="65077823320194685">"désactivé"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"Vous pouvez appuyer."</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"Vous pouvez appuyer de manière prolongée."</string>
-    <string name="value_checkable" msgid="7938829961210181795">"peut être activé ou désactivé"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Appuyez ici pour cliquer sur l\'élément"</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Appuyez ici de manière prolongée pour faire un clic long"</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Appuyez ici pour activer ou désactiver l\'option"</string>
     <string name="value_scrollable" msgid="2310899165772659098">"vue déroulante"</string>
     <string name="value_clicked" msgid="8306469740150249879">"cliqué"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"sans libellé"</string>
@@ -72,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Parler à travers des écouteurs Bluetooth autres que A2DP (mono) si disponibles"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Ne jamais parler à travers des écouteurs Bluetooth autres que A2DP (mono)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Utiliser les modifications du ton"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Prononcer le texte saisi dans une tonalité plus basse"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Ne pas changer le ton de la voix lors de l\'énonciation"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Raccourcis clavier"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Vibration et son"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Vibration"</string>

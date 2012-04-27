@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"Število znakov:<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> je zamenjano s številom znakov: <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g>"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Zvonjenje <xliff:g id="PERCENT">%d</xliff:g> odstotkov."</string>
     <string name="template_image_view" msgid="4213590103284596735">"Slika <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Seznam <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Pridržano <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Gumb <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"slika <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Drsnik <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -49,9 +49,9 @@
     <string name="value_checked" msgid="5234989698372864892">"potrjeno"</string>
     <string name="value_not_checked" msgid="193134740901545340">"ni odkljukano"</string>
     <string name="value_disabled" msgid="65077823320194685">"onemogočeno"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"mogoče klikniti"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"mogoče ga je pridržati"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"je mogoče označiti"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Dotaknite se za klik."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Dotaknite se in pridržite za dolgi klik."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Dotaknite se za preklop."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"pomično"</string>
     <string name="value_clicked" msgid="8306469740150249879">"kliknjeno"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"neoznačeno"</string>
@@ -74,10 +74,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Uporabi slušalko Bluetooth (mono), ki ne podpira profila A2DP, ko je na voljo"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Nikoli ne uporabi slušalke Bluetooth (mono), ki ne podpira profila A2DP"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Uporabi spremembe višine glasu"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Odziv tipkovnice izgovarjaj z nižjim glasom"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Pri izgovorjavi ne spreminjaj višine glasu"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Bližnjične tipke"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Povratne informacije"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Povratne inf. z vibrir."</string>

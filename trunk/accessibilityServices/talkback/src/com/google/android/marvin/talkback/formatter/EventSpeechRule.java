@@ -22,10 +22,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.AccessibilityEventUtils;
+import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.utils.ClassLoadingManager;
 import com.google.android.marvin.utils.NodeUtils;
@@ -988,6 +990,7 @@ public class EventSpeechRule {
         public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
             List<Pair<String, String>> selectors = mSelectors;
             Object[] arguments = new Object[selectors.size()];
+            StringBuilder utteranceBuilder = utterance.getText();
 
             for (int i = 0, count = selectors.size(); i < count; i++) {
                 Pair<String, String> selector = selectors.get(i);
@@ -1007,6 +1010,13 @@ public class EventSpeechRule {
             utterance.getVibrationPatterns().addAll(mVibrationPatterns);
 
             formatTemplateOrAppendSpaceSeparatedValueIfNoTemplate(utterance, arguments);
+
+            // Append the control's disabled state, if applicable.
+            if (!TextUtils.isEmpty(utteranceBuilder) && !event.isEnabled()) {
+                String state = mContext.getString(R.string.value_disabled);
+                utteranceBuilder.append(SPACE);
+                utteranceBuilder.append(state);
+            }
 
             return true;
         }

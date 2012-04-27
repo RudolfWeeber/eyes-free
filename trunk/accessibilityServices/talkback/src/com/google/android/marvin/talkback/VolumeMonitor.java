@@ -42,6 +42,9 @@ public class VolumeMonitor {
     // TODO(alanv): Figure out if this works on API 10 (Honeycomb 3.0)
     public static final int MIN_API_LEVEL = 14;
 
+    /** Keep track of adjustments made by this class. */
+    private final int[] mSelfAdjustments = new int[10];
+
     private Context mContext;
     private SpeechController mSpeechController;
     private AudioManager mAudioManager;
@@ -81,6 +84,27 @@ public class VolumeMonitor {
         mSpeechController = null;
     }
 
+    public void setStreamVolume(int streamType, int index, int flags) {
+        if (streamType >= mSelfAdjustments.length) {
+            return;
+        }
+
+        mSelfAdjustments[streamType] = index;
+    }
+
+    private boolean isSelfAdjusted(int streamType, int volume) {
+        if (streamType >= mSelfAdjustments.length) {
+            return false;
+        }
+
+        if (mSelfAdjustments[streamType] == volume) {
+            mSelfAdjustments[streamType] = -1;
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Called after volume changes. Handles acquiring control of the current
      * stream and providing feedback.
@@ -90,6 +114,11 @@ public class VolumeMonitor {
      * @param prevVolume The previous volume.
      */
     private void internalOnVolumeChanged(int streamType, int volume, int prevVolume) {
+        if (isSelfAdjusted(streamType, volume)) {
+            // Ignore self-adjustments.
+            return;
+        }
+
         if (mCurrentStream < 0) {
             // If the current stream hasn't been set, acquire control.
             mCurrentStream = streamType;
@@ -121,6 +150,11 @@ public class VolumeMonitor {
         final String text = mContext.getString(
                 R.string.template_stream_volume, streamName, volume);
 
+        if (!shouldAnnounceStream(streamType)) {
+            mHandler.post(mStartReleaseTimeout);
+            return;
+        }
+
         speakWithCompletion(text, mStartReleaseTimeout);
     }
 
@@ -130,9 +164,9 @@ public class VolumeMonitor {
      * control of the stream.
      */
     private void internalOnReleaseControl() {
-        final int streamId = mCurrentStream;
+        final int streamType = mCurrentStream;
 
-        if (streamId < 0) {
+        if (streamType < 0) {
             // Already released!
             return;
         }
@@ -140,12 +174,37 @@ public class VolumeMonitor {
         mCurrentStream = -1;
         AudioManagerCompatUtils.forceVolumeControlStream(mAudioManager, -1);
 
-        final String streamName = getStreamName(streamId);
-        final int volume = getStreamVolume(streamId);
+        if (!shouldAnnounceStream(streamType)) {
+            mHandler.post(mHideVolumeOverlay);
+            return;
+        }
+
+        final String streamName = getStreamName(streamType);
+        final int volume = getStreamVolume(streamType);
         final String text = mContext.getString(
                 R.string.template_stream_volume_set, streamName, volume);
 
         speakWithCompletion(text, mHideVolumeOverlay);
+    }
+
+    /**
+     * Returns whether a stream type should be announced.
+     *
+     * @param streamType The stream type.
+     * @return True if the stream should be announced.
+     */
+    private boolean shouldAnnounceStream(int streamType) {
+        switch (streamType) {
+            case AudioManager.STREAM_MUSIC:
+                // Only announce music stream if it's not being used.
+                return !mAudioManager.isMusicActive();
+            default:
+                // Announce all other streams by default. The VOICE_CALL and
+                // RING streams are handled by checking the telephony state in
+                // speakWithCompletion().
+                return true;
+        }
+
     }
 
     /**

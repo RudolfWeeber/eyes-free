@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.android.marvin.talkback"
     android:sharedUserId="com.google.android.marvin.feedback"
-    android:versionCode="44"
-    android:versionName="3.0.8_b1" >
+    android:versionCode="46"
+    android:versionName="3.0.8_r46" >
 
     <uses-sdk
         android:minSdkVersion="4"
@@ -120,6 +120,12 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
+        <!-- Status provider is required for pre-HC compatibility -->
+        <provider
+            android:name=".StatusProvider"
+            android:authorities="com.google.android.marvin.talkback.providers.StatusProvider" />
+
     </application>
 
 </manifest>

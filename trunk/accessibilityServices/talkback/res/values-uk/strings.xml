@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"Символи <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> замінено на символи <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g>"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Гучність дзвінка у відсотках: <xliff:g id="PERCENT">%d</xliff:g>."</string>
     <string name="template_image_view" msgid="4213590103284596735">"Зображення <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Список <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Утримується <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Кнопка \"<xliff:g id="TITLE">%1$s</xliff:g>\""</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"зображення <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Повзунок переходу <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -47,9 +47,9 @@
     <string name="value_checked" msgid="5234989698372864892">"перевірено"</string>
     <string name="value_not_checked" msgid="193134740901545340">"не перевір."</string>
     <string name="value_disabled" msgid="65077823320194685">"вимкнено"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"активний"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"активний протягом тривалого часу"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"з можливістю позначення прапорцем"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Швидко торкніться, щоб натиснути."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Торкніться й утримуйте."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Швидко торкніться, щоб переключити."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"можна прокручувати"</string>
     <string name="value_clicked" msgid="8306469740150249879">"натисн."</string>
     <string name="value_unlabeled" msgid="687358669952513717">"без міток"</string>
@@ -72,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Говорити через динаміки Bluetooth, які не підтримують профіль A2DP (моно)"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Ніколи не говорити через динаміки Bluetooth, які не підтримують профіль A2DP (моно)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Використовувати зміни рівня звуку"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Відтворювати введений за допомогою клавіатури текст із меншою висотою звуку"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Не змінювати висоту звуку під час мовлення"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Комбінації клавіш"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Реакція"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Сигнал системи: вібрація"</string>

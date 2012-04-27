@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"تم استبدال <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> من الأحرف بعدد <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> من الأحرف"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"النسبة المئوية للرنين <xliff:g id="PERCENT">%d</xliff:g>."</string>
     <string name="template_image_view" msgid="4213590103284596735">"صورة <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"قائمة <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"اضغط مع الاستمرار <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"الزر <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"صورة <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"يسعى <xliff:g id="TITLE">%1$s</xliff:g> للتحكّم."</string>
@@ -43,14 +43,13 @@
     <string name="value_options_menu_open" msgid="8668502811176292723">"الخيارات."</string>
     <string name="value_text_removed" msgid="2700105425865376595">"محذوف"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"ملخّص التنبيه"</string>
-    <!-- no translation found for value_selected (6785267365387973217) -->
-    <skip />
+    <string name="value_selected" msgid="6785267365387973217">"محدد"</string>
     <string name="value_checked" msgid="5234989698372864892">"محدد"</string>
     <string name="value_not_checked" msgid="193134740901545340">"لم يتم التحديد"</string>
     <string name="value_disabled" msgid="65077823320194685">"معطَّلة"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"قابل للنقر عليه"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"قابل للنقر عليه مطولاً"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"قابلة للتحديد"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"اضغط للنقر."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"اضغط مع الاستمرار لإجراء نقرة طويلة."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"انقر للتبديل."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"قابل للتمرير"</string>
     <string name="value_clicked" msgid="8306469740150249879">"تم النقر عليه"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"بدون اسم"</string>
@@ -59,7 +58,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"الشاشة متوقفة."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"تم إلغاء تأمين الجهاز."</string>
     <string name="value_web_view" msgid="8368045336469722566">"عرض الويب."</string>
-    <!-- outdated translation 7353842829622995954 -->     <string name="value_unknown_object" msgid="3589473667352440925">"كائن غير معروف."</string>
+    <string name="value_unknown_object" msgid="3589473667352440925">"عنصر غير محدد."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"بيانات تعطل TalkBack المتاحة"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"انقر هنا لتحسين TalkBack عبر إرسال بيانات التعطل."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"وقت التحدث"</string>
@@ -73,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"التحدث عبر سماعات أذن بلوتوث لا تدعم تقنية A2DP (أحادية) عند توفرها"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"عدم التحدث عبر سماعات أذن  بلوتوث لا تدعم تقنية A2DP (أحادية)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"استخدام تغييرات درجة الصوت"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"نطق تعليقات لوحة المفاتيح بدرجة صوت منخفضة"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"عدم تغيير درجة الصوت أثناء التحدث"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"اختصارات لوحة المفاتيح"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"تعليقات"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"تعليقات مع الاهتزاز"</string>

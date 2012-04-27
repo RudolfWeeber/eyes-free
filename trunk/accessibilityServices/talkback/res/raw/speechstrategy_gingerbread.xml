@@ -23,7 +23,8 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.google.android.googlequicksearchbox</ss:packageName>
-      <ss:versionCode>&lt;=112121341</ss:versionCode>
+      <ss:versionCode>&lt;=112200000</ss:versionCode>
+      <ss:platformSdk>9||10</ss:platformSdk>
       <ss:currentItemIndex>0</ss:currentItemIndex>
       <ss:itemCount>9</ss:itemCount>
       <ss:text></ss:text>
@@ -39,7 +40,8 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.TextView</ss:className>
       <ss:packageName>com.google.android.googlequicksearchbox</ss:packageName>
-      <ss:versionCode>&lt;=112121341</ss:versionCode>
+      <ss:versionCode>&lt;=112200000</ss:versionCode>
+      <ss:platformSdk>9||10</ss:platformSdk>
       <ss:currentItemIndex>1</ss:currentItemIndex>
       <ss:itemCount>9</ss:itemCount>
       <ss:text></ss:text>
@@ -55,7 +57,8 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.google.android.googlequicksearchbox</ss:packageName>
-      <ss:versionCode>&lt;=112121341</ss:versionCode>
+      <ss:versionCode>&lt;=112200000</ss:versionCode>
+      <ss:platformSdk>9||10</ss:platformSdk>
       <ss:currentItemIndex>2</ss:currentItemIndex>
       <ss:itemCount>9</ss:itemCount>
       <ss:text></ss:text>

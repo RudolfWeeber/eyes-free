@@ -8,6 +8,39 @@
   <!-- and previous Android versions that should have had more -->
   <!-- contentDescriptions. -->
 
+  <!-- CompoundButton - checked -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.CompoundButton</ss:className>
+      <ss:checked>true</ss:checked>
+      <ss:platformSdk>&lt;=15</ss:platformSdk>
+    </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- CompoundButton - not checked -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.CompoundButton</ss:className>
+      <ss:platformSdk>&lt;=15</ss:platformSdk>
+    </ss:filter>
+    <ss:metadata>
+      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
   <!-- Use a custom formatter for the ICS notification bar -->
   <ss:rule>
     <ss:filter>
@@ -76,5 +109,28 @@
       <ss:template>@string/template_dragging_icon</ss:template>
       <ss:property>text</ss:property>
     </ss:formatter>
+  </ss:rule>
+
+  <!-- Phone - Speak in-call screen -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:className>com.android.phone.InCallScreen</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:platformSdk>&gt;=14</ss:platformSdk>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.phone.InCallScreenFormatterICS</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Phone - Drop call notifications -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_NOTIFICATION_STATE_CHANGED</ss:eventType>
+      <ss:className>android.app.Notification</ss:className>
+      <ss:packageName>com.android.phone</ss:packageName>
+      <ss:platformSdk>&gt;=14</ss:platformSdk>
+    </ss:filter>
   </ss:rule>
 </ss:speechstrategy>

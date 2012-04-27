@@ -99,10 +99,11 @@ public class EventSpeechRuleLoader implements InfrastructureStateListener {
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_gingerbread);
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_honeycomb);
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_ics);
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_jellybean);
 
         // Add version-specific speech strategies for semi-bundled apps.
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_apps);
-        //mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_googletv);
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_googletv);
 
         // Add generic speech strategy. This should always be added last so that
         // the app-specific rules above can override the generic rules.

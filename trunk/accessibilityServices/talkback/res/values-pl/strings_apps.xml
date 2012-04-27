@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="template_change_search_category" msgid="5128415851194056980">"Zmień kategorię wyszukiwania"</string>
+    <string name="template_search_box" msgid="7674310082251778508">"Pole wyszukiwania"</string>
+    <string name="template_voice_search" msgid="6344082494914081067">"Wyszukiwanie głosowe"</string>
+    <string name="template_dragging_icon" msgid="856607323610801888">"Przeciąganie ikony <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="value_increment_hours" msgid="3948602939148321286">"Zwiększ godziny."</string>
+    <string name="value_increment_minutes" msgid="7973429691186941970">"Zwiększ minuty."</string>
+    <string name="value_decrement_hours" msgid="1185897832058708910">"Zmniejsz godziny."</string>
+    <string name="value_decrement_minutes" msgid="1675671130873460387">"Zmniejsz minuty."</string>
+    <string name="value_increment_month" msgid="2108075360629168256">"Zwiększ miesiąc."</string>
+    <string name="value_increment_day" msgid="774372627775704794">"Zwiększ dzień."</string>
+    <string name="value_increment_year" msgid="9076324867468561268">"Zwiększ rok."</string>
+    <string name="value_decrement_month" msgid="6268533926259338764">"Zmniejsz miesiąc."</string>
+    <string name="value_decrement_day" msgid="5715832708435309689">"Zmniejsz dzień."</string>
+    <string name="value_decrement_year" msgid="756084611736232559">"Zmniejsz rok."</string>
+    <string name="template_stream_volume" msgid="7768533936282059501">"<xliff:g id="STREAM_NAME">%s</xliff:g> głośność <xliff:g id="PERCENT">%d</xliff:g> procent."</string>
+    <string name="template_stream_volume_set" msgid="5961200256130745221">"<xliff:g id="STREAM_NAME">%s</xliff:g> – głośność ustawiona na <xliff:g id="PERCENT">%d</xliff:g> procent."</string>
+    <string name="value_stream_master" msgid="6130733378374740098">"Główny"</string>
+    <string name="value_stream_voice_call" msgid="5305385298856357591">"Rozmowa telefoniczna"</string>
+    <string name="value_stream_system" msgid="3108718602352746749">"Dźwięki systemowe"</string>
+    <string name="value_stream_ring" msgid="426689477101897215">"Dzwonek"</string>
+    <string name="value_stream_music" msgid="2420531377342647139">"Muzyka"</string>
+    <string name="value_stream_alarm" msgid="8999482549602611898">"Alarm"</string>
+    <string name="value_stream_notification" msgid="4097029371092384177">"Powiadomienie"</string>
+    <string name="value_stream_dtmf" msgid="7153448300406120426">"Wybieranie tonowe"</string>
+    <string name="template_announce_day" msgid="7569505051538976673">"<xliff:g id="DATE">%1$s</xliff:g>, widok dnia"</string>
+    <string name="template_announce_week" msgid="7352408378283364662">"Od <xliff:g id="FROM_DATE">%1$s</xliff:g> do <xliff:g id="TO_DATE">%2$s</xliff:g>, widok tygodnia"</string>
+    <string name="template_announce_month" msgid="8166818109821067151">"<xliff:g id="MONTH">%1$s</xliff:g>, widok miesiąca"</string>
+    <string name="template_announce_item_index" msgid="5779512033130164015">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> z <xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
+    <string name="value_owner" msgid="2356511106039974687">"Właściciel"</string>
+  <plurals name="plural_event">
+    <item quantity="one" msgid="3277201357577016902">"zdarzenie"</item>
+    <item quantity="other" msgid="40630539017439">"zdarzenia"</item>
+  </plurals>
+    <string name="value_status_bar_opened" msgid="5815609260958160739">"Pasek stanu otwarty"</string>
+    <string name="value_googletv_screen_saver" msgid="4641188128529437451">"Wygaszacz ekranu"</string>
+</resources>

@@ -33,7 +33,6 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -92,12 +91,7 @@ public class TalkBackService extends AccessibilityService {
     /**
      * Flag if the infrastructure has been initialized.
      */
-    private boolean mInfrastructureInitialized = false;
-
-    /**
-     * Handler for uncaught exceptions and crash reports.
-     */
-    private TalkBackExceptionHandler mExceptionHandler;
+    private static boolean sInfrastructureInitialized = false;
 
     /** Manages the pending notifications. */
     private NotificationCache mNotificationCache;
@@ -123,11 +117,6 @@ public class TalkBackService extends AccessibilityService {
     private AudioManager mAudioManager;
 
     /**
-     * The telephony manager used to determine the call state.
-     */
-    private TelephonyManager mTelephonyManager;
-
-    /**
      * {@link BroadcastReceiver} for tracking the ringer mode and screen state.
      */
     private RingerModeAndScreenMonitor mRingerModeAndScreenMonitor;
@@ -143,7 +132,7 @@ public class TalkBackService extends AccessibilityService {
     private VolumeMonitor mVolumeMonitor;
 
     /**
-     * The last spoken accessibility event, used for crash reporting.
+     * The last spoken accessibility event, used for detecting duplicate events.
      */
     private AccessibilityEvent mLastSpokenEvent;
 
@@ -216,6 +205,13 @@ public class TalkBackService extends AccessibilityService {
         initializeInfrastructure();
     }
 
+    /**
+     * Returns true if TalkBack is running and initialized.
+     */
+    public static boolean isServiceInitialized() {
+        return sInfrastructureInitialized;
+    }
+
     private void checkUpdate() {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         final int previousVersion = prefs.getInt(PREF_APP_VERSION, -1);
@@ -264,9 +260,6 @@ public class TalkBackService extends AccessibilityService {
      * Initializes the infrastructure.
      */
     private void initializeInfrastructure() {
-        mExceptionHandler = new TalkBackExceptionHandler(this);
-        mExceptionHandler.register();
-
         mNotificationCache = new NotificationCache(this);
         mSpeechController = new SpeechController(this);
         mFeedbackController = new PreferenceFeedbackController(this);
@@ -284,7 +277,11 @@ public class TalkBackService extends AccessibilityService {
         mAudioManager = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
 
         if (Build.VERSION.SDK_INT >= VolumeMonitor.MIN_API_LEVEL) {
+            // TODO: Find a cleaner way to handle interaction between the volume
+            // monitor (which needs to speak) and the speech controller (which
+            // needs to adjust volume).
             mVolumeMonitor = new VolumeMonitor(this, mSpeechController);
+            mSpeechController.setVolumeMonitor(mVolumeMonitor);
         }
 
         final PackageManager packageManager = getPackageManager();
@@ -294,7 +291,6 @@ public class TalkBackService extends AccessibilityService {
 
         // Only initialize telephony and call state for phones.
         if (deviceIsPhone) {
-            mTelephonyManager = (TelephonyManager) getSystemService(Service.TELEPHONY_SERVICE);
             mCallStateMonitor = new CallStateMonitor(mSpeechController, mFeedbackController);
 
             registerReceiver(mCallStateMonitor, mCallStateMonitor.getFilter());
@@ -308,9 +304,8 @@ public class TalkBackService extends AccessibilityService {
             // Although this receiver includes code responding to phone-specific
             // intents, it should also be registered for touch screen devices
             // without telephony.
-            mRingerModeAndScreenMonitor =
-                    new RingerModeAndScreenMonitor(this, mFeedbackController, mSpeechController,
-                            mAudioManager, mTelephonyManager, mNotificationCache);
+            mRingerModeAndScreenMonitor = new RingerModeAndScreenMonitor(
+                    this, mFeedbackController, mSpeechController, mNotificationCache);
 
             registerReceiver(mRingerModeAndScreenMonitor, mRingerModeAndScreenMonitor.getFilter());
             addInfrastructureStateListener(mRingerModeAndScreenMonitor);
@@ -325,11 +320,8 @@ public class TalkBackService extends AccessibilityService {
         // Register the class loading manager.
         addInfrastructureStateListener(ClassLoadingManager.getInstance());
 
-        mInfrastructureInitialized = true;
+        sInfrastructureInitialized = true;
         notifyInfrastructureStateListeners();
-
-        // Attempt to process any pending crash reports.
-        mExceptionHandler.processCrashReport();
 
         // Register the shortcut broadcast listener.
         final IntentFilter filter = new IntentFilter(TalkBackShortcutHandler.BROADCAST_SHORTCUT);
@@ -340,7 +332,7 @@ public class TalkBackService extends AccessibilityService {
      * Shuts down the infrastructure in case it has been initialized.
      */
     private void shutdownInfrastructure() {
-        if (!mInfrastructureInitialized) {
+        if (!sInfrastructureInitialized) {
             return;
         }
 
@@ -378,7 +370,7 @@ public class TalkBackService extends AccessibilityService {
         }
 
         // Unregister all infrastructure state listeners.
-        mInfrastructureInitialized = false;
+        sInfrastructureInitialized = false;
         notifyInfrastructureStateListeners();
         mInfrastructureStateListeners.clear();
 
@@ -393,10 +385,6 @@ public class TalkBackService extends AccessibilityService {
 
         mNotificationCache.clear();
         mNotificationCache = null;
-
-        if (mExceptionHandler != null) {
-            mExceptionHandler.unregister();
-        }
     }
 
     /**
@@ -411,7 +399,7 @@ public class TalkBackService extends AccessibilityService {
      */
     private void notifyInfrastructureStateListeners() {
         for (InfrastructureStateListener listener : mInfrastructureStateListeners) {
-            listener.onInfrastructureStateChange(this, mInfrastructureInitialized);
+            listener.onInfrastructureStateChange(this, sInfrastructureInitialized);
         }
     }
 
@@ -429,7 +417,7 @@ public class TalkBackService extends AccessibilityService {
         }
 
         // Always drop events if the service isn't ready.
-        if (!mInfrastructureInitialized) {
+        if (!sInfrastructureInitialized) {
             return true;
         }
 

@@ -92,39 +92,6 @@
 
   <!-- TYPE_VIEW_FOCUSED -->
 
-  <!-- CompoundButton - checked -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.CompoundButton</ss:className>
-      <ss:checked>true</ss:checked>
-    </ss:filter>
-    <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
-    </ss:metadata>
-    <ss:formatter>
-      <ss:template>@string/template_compound_button_checked</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- CompoundButton - not checked -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.CompoundButton</ss:className>
-    </ss:filter>
-    <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
-    </ss:metadata>
-    <ss:formatter>
-      <ss:template>@string/template_compound_button_not_checked</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
   <!-- EditText - password -->
   <ss:rule>
     <ss:filter>
@@ -237,34 +204,6 @@
     <ss:formatter>
       <ss:template>@string/template_image_view</ss:template>
       <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- Focused ListView -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.ListView</ss:className>
-    </ss:filter>
-    <ss:formatter>
-      <ss:template>@string/template_list_view</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- Focused object without text or description -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:text></ss:text>
-      <ss:contentDescription></ss:contentDescription>
-    </ss:filter>
-    <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
-    </ss:metadata>
-    <ss:formatter>
-      <ss:template>@string/value_unknown_object</ss:template>
     </ss:formatter>
   </ss:rule>
 

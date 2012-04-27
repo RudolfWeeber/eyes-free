@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
@@ -29,6 +30,7 @@ import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.compat.provider.SettingsCompatUtils.SecureCompatUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.List;
 
@@ -65,6 +67,11 @@ public final class TextFormatters {
 
             if (event.isPassword() && !shouldSpeakPasswords) {
                 return formatPassword(event, context, utteranceText);
+            }
+
+            if (!passesSanityCheck(event)) {
+                LogUtils.log(this, Log.ERROR, "Inconsistent text change event detected");
+                return false;
             }
 
             CharSequence removedText = getRemovedText(event, context);
@@ -123,6 +130,28 @@ public final class TextFormatters {
             }
 
             return true;
+        }
+
+        /**
+         * Checks whether the event's reported properties match its actual
+         * properties, e.g. does the added count minus the removed count reflect
+         * the actual change in length between the current and previous text
+         * contents.
+         *
+         * @param event The text changed event to validate.
+         * @return {@code true} if the event properties are valid.
+         */
+        private boolean passesSanityCheck(AccessibilityEvent event) {
+            final CharSequence afterText = getEventText(event);
+            final CharSequence beforeText = event.getBeforeText();
+
+            if (afterText == null || beforeText == null) {
+                return false;
+            }
+
+            final int diff = (event.getAddedCount() - event.getRemovedCount());
+
+            return ((beforeText.length() + diff) == afterText.length());
         }
 
         /**
@@ -217,6 +246,7 @@ public final class TextFormatters {
         public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
             final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
             final CharSequence text = getEventText(event);
+            final int count = event.getItemCount();
             final StringBuilder utteranceText = utterance.getText();
             final boolean shouldSpeakPasswords = SecureCompatUtils.shouldSpeakPasswords(context);
 
@@ -224,7 +254,11 @@ public final class TextFormatters {
                 return formatPassword(event, context, utteranceText);
             }
 
-            if (text == null) {
+            // Don't provide selection feedback when there's no text. We have to
+            // check the item count separately to avoid speaking hint text,
+            // which always has an item count of zero even though the event text
+            // is not empty.
+            if (TextUtils.isEmpty(text) || (count <= 0)) {
                 return false;
             }
 

@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> 문자를 <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> 문자로 바꿨습니다."</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"벨소리 <xliff:g id="PERCENT">%d</xliff:g>퍼센트"</string>
     <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> 이미지"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g> 목록"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"길게 누름 <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"<xliff:g id="TITLE">%1$s</xliff:g> 버튼"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"이미지 <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> 찾기 컨트롤"</string>
@@ -45,14 +45,13 @@
     <string name="value_options_menu_open" msgid="8668502811176292723">"옵션"</string>
     <string name="value_text_removed" msgid="2700105425865376595">"삭제됨"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"알림 요약"</string>
-    <!-- no translation found for value_selected (6785267365387973217) -->
-    <skip />
+    <string name="value_selected" msgid="6785267365387973217">"선택됨"</string>
     <string name="value_checked" msgid="5234989698372864892">"선택함"</string>
     <string name="value_not_checked" msgid="193134740901545340">"선택 안함"</string>
     <string name="value_disabled" msgid="65077823320194685">"사용 안함"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"클릭 가능"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"길게 클릭 가능"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"선택 가능"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"클릭하려면 탭하세요."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"길게 클릭하려면 탭하고 누르고 있습니다."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"전환하려면 탭하세요."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"스크롤할 수 있음"</string>
     <string name="value_clicked" msgid="8306469740150249879">"클릭함"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"라벨 없음"</string>
@@ -61,7 +60,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"화면 꺼짐."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"기기가 잠금 해제되었습니다."</string>
     <string name="value_web_view" msgid="8368045336469722566">"웹 뷰"</string>
-    <!-- outdated translation 7353842829622995954 -->     <string name="value_unknown_object" msgid="3589473667352440925">"알 수 없는 개체"</string>
+    <string name="value_unknown_object" msgid="3589473667352440925">"라벨이 지정되지 않은 항목"</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack 충돌 데이터 사용 가능"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"충돌 데이터를 보내 TalkBack의 기능을 향상하려면 여기를 클릭하세요."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"말하기 설정"</string>
@@ -75,10 +74,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"A2DP(모노)가 아닌 블루투스 스피커로 음성 출력합니다."</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"A2DP(모노)가 아닌 블루투스 스피커로 음성 출력하지 않습니다."</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"피치 변경 사용"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"낮은 피치 음성으로 키보드로 입력한 내용을 말합니다."</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"말할 때 음성 피치를 변경하지 마세요."</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"단축키"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"의견"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"진동 확인"</string>

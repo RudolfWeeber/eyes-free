@@ -23,7 +23,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
@@ -43,7 +42,7 @@ public class PackageManagerUtils {
         final PackageInfo packageInfo = getPackageInfo(context, packageName);
 
         if (packageInfo == null) {
-            LogUtils.log(AccessibilityEventUtils.class, Log.ERROR, "Could not find package: %s",
+            LogUtils.log(PackageManagerUtils.class, Log.WARN, "Could not find package: %s",
                     packageName);
             return INVALID_VERSION_CODE;
         }
@@ -59,7 +58,7 @@ public class PackageManagerUtils {
         final PackageInfo packageInfo = getPackageInfo(context, packageName);
 
         if (packageInfo == null) {
-            LogUtils.log(AccessibilityEventUtils.class, Log.ERROR, "Could not find package: %s",
+            LogUtils.log(PackageManagerUtils.class, Log.WARN, "Could not find package: %s",
                     packageName);
             return null;
         }

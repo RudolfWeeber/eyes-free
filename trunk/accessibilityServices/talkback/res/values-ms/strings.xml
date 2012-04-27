@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> aksara digantikan dengan <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> aksara"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Pendering <xliff:g id="PERCENT">%d</xliff:g> peratus."</string>
     <string name="template_image_view" msgid="4213590103284596735">"Imej <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Senarai <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Lama ditekan <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Butang <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"imej <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> mencari kawalan."</string>
@@ -43,14 +43,13 @@
     <string name="value_options_menu_open" msgid="8668502811176292723">"Pilihan."</string>
     <string name="value_text_removed" msgid="2700105425865376595">"dipadamkan"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"Ringkasan pemberitahuan"</string>
-    <!-- no translation found for value_selected (6785267365387973217) -->
-    <skip />
+    <string name="value_selected" msgid="6785267365387973217">"dipilih"</string>
     <string name="value_checked" msgid="5234989698372864892">"ditandakan"</string>
     <string name="value_not_checked" msgid="193134740901545340">"tidak ditandakan"</string>
     <string name="value_disabled" msgid="65077823320194685">"dilumpuhkan"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"boleh klik"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"boleh klik lama"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"boleh disemak"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Ketik untuk klik."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Ketik dan tahan untuk klik lama."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Ketik untuk togol."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"boleh ditatal"</string>
     <string name="value_clicked" msgid="8306469740150249879">"diklik"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"tidak berlabel"</string>
@@ -59,7 +58,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"Skrin dimatikan."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Peranti dibuka kunci."</string>
     <string name="value_web_view" msgid="8368045336469722566">"Paparan Web."</string>
-    <!-- outdated translation 7353842829622995954 -->     <string name="value_unknown_object" msgid="3589473667352440925">"Objek tidak diketahui."</string>
+    <string name="value_unknown_object" msgid="3589473667352440925">"Item tidak dilabel."</string>
     <string name="title_talkback_crash" msgid="1342512684382958066">"Data Ranap TalkBack Tersedia"</string>
     <string name="message_talkback_crash" msgid="8552017712769665127">"Klik di sini untuk meningkatkan TalkBack dengan menghantar data ranap."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Bila harus bercakap"</string>
@@ -73,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Bercakap melalui alat dengar Bluetooth bukan A2DP (mono) apabila tersedia"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Jangan sekali-sekali bercakap melalui alat dengar Bluetooth bukan A2DP (mono)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Gunakan perubahan nada"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Cakap maklum balas papan kekunci dalam nada suara yang lebih rendah"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Jangan ubah nada suara apabila bercakap"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Pintasan papan kekunci"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Maklum balas"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Maklum balas getaran"</string>

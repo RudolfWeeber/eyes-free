@@ -66,12 +66,6 @@ class NotificationCache {
 
         final Notification notification = (Notification) parcelable;
         final int icon = notification.icon;
-
-        // Don't record phone calls because we get a missed call anyway.
-        if (icon == NotificationType.ICON_PHONE_CALL) {
-            return;
-        }
-
         final NotificationType type = NotificationType.getNotificationTypeFromIcon(mContext, icon);
 
         // Don't record if we don't know what kind of notification it was.

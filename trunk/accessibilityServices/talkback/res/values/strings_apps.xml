@@ -96,7 +96,7 @@
       Source: An utterance template for announcing the current volume for a particular stream (e.g. music, alarm, etc) before changes are made.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="template_stream_volume"><xliff:g id="stream_name">%s</xliff:g> volume <xliff:g id="percent">%d</xliff:g> percent, press volume buttons to change.</string>
+    <string name="template_stream_volume"><xliff:g id="stream_name">%s</xliff:g> volume <xliff:g id="percent">%d</xliff:g> percent.</string>
 
     <!--
       Source: An utterance template for announcing the current volume for a particular stream (e.g. music, alarm, etc) after changes have been made.

@@ -141,6 +141,8 @@ class ProcessorLongHover implements EventProcessor {
          */
         private void startLongHoverTimeout(AccessibilityEvent event) {
             mPendingLongHoverEvent = AccessibilityEventCompatUtils.obtain(event);
+
+            // The long hover timeout starts after the current text is spoken.
             mSpeechController.addUtteranceCompleteAction(-1, mLongHoverRunnable);
         }
 

@@ -27,8 +27,8 @@
     <string name="template_replaced_characters" msgid="5425385364820310962">"Αντικαταστάθηκαν <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> χαρακτήρες με <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> χαρακτήρες"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Ήχος ειδοποίησης <xliff:g id="PERCENT">%d</xliff:g> τοις εκατό."</string>
     <string name="template_image_view" msgid="4213590103284596735">"Εικόνα <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <!-- no translation found for template_long_clicked (915072513538350747) -->
-    <skip />
+    <string name="template_list_view" msgid="4569888407076618446">"Λίστα <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_long_clicked" msgid="915072513538350747">"Παρατεταμένο πάτημα <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Κουμπί <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"εικόνα <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Στοιχείο ελέγχου αναζήτησης <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -47,9 +47,9 @@
     <string name="value_checked" msgid="5234989698372864892">"επιλέχθηκε"</string>
     <string name="value_not_checked" msgid="193134740901545340">"δεν επιλέχθηκε"</string>
     <string name="value_disabled" msgid="65077823320194685">"απενεργοποίηση"</string>
-    <string name="value_clickable" msgid="7427194667856810494">"με δυνατότητα κλικ"</string>
-    <string name="value_long_clickable" msgid="6317377901757976390">"με δυνατότητα παρατεταμένου κλικ"</string>
-    <string name="value_checkable" msgid="7938829961210181795">"επιλέξιμη"</string>
+    <string name="hint_clickable" msgid="5722744901089685155">"Πατήσετε για να κάνετε κλικ."</string>
+    <string name="hint_long_clickable" msgid="8223088419179222819">"Πατήσετε παρατεταμένα για παρατεταμένο κλικ."</string>
+    <string name="hint_checkable" msgid="3455044599190977740">"Πατήστε για εναλλαγή."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"δυνατότητα κύλισης"</string>
     <string name="value_clicked" msgid="8306469740150249879">"έγινε κλικ"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"χωρίς ετικέτα"</string>
@@ -72,10 +72,8 @@
     <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Να χρησιμοποιείτε ακουστικά Bluetooth διαφορετικού προφίλ από A2DP (mono) όταν είναι διαθέσιμα"</string>
     <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Να χρησιμοποιείτε πάντα ακουστικά Bluetooth A2DP (mono)"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Χρήση αλλαγών τόνου φωνής"</string>
-    <!-- no translation found for summaryOn_pref_intonation (9077400986652228237) -->
-    <skip />
-    <!-- no translation found for summaryOff_pref_intonation (8702174746754615499) -->
-    <skip />
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Εκφωνήστε τα σχόλια για το πληκτρολόγιο χαμηλώνοντας τον τόνο της φωνής σας"</string>
+    <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Μην αλλάζετε τον τόνο της φωνή σας ενώ μιλάτε"</string>
     <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Συντομεύσεις πληκτρολ."</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Σχόλια"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Ανάδραση με δόνηση"</string>

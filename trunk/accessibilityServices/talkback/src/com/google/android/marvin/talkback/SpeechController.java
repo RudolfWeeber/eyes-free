@@ -136,6 +136,9 @@ public class SpeechController {
     /** The telephone manager, used to query ringer state. */
     private final TelephonyManager mTelephonyManager;
 
+    /** The volume monitor, used to set ringer volume. */
+    private VolumeMonitor mVolumeMonitor;
+
     /** Handles connecting to BT headsets. */
     private BluetoothConnectionManager mBluetoothHandler;
 
@@ -219,6 +222,10 @@ public class SpeechController {
         resolver.registerContentObserver(defaultSynth, false, mSynthObserver);
         resolver.registerContentObserver(defaultPitch, false, mPitchObserver);
         resolver.registerContentObserver(defaultRate, false, mRateObserver);
+    }
+
+    public void setVolumeMonitor(VolumeMonitor volumeMonitor) {
+        mVolumeMonitor = volumeMonitor;
     }
 
     /**
@@ -313,7 +320,9 @@ public class SpeechController {
         final int utteranceIndex = getNextUtteranceId();
         final String utteranceId = UTTERANCE_ID_PREFIX + utteranceIndex;
 
-        addUtteranceCompleteAction(utteranceIndex, completedAction);
+        if (completedAction != null) {
+            addUtteranceCompleteAction(utteranceIndex, completedAction);
+        }
 
         if (isDeviceRinging()) {
             manageRingerVolume(utteranceIndex);
@@ -336,7 +345,7 @@ public class SpeechController {
 
         final int ttsQueueMode = computeQueuingMode(queueMode, utteranceIndex);
 
-        LogUtils.log(TalkBackService.class, Log.VERBOSE, "Speaking with queue mode %s: \"%s\"",
+        LogUtils.log(this, Log.VERBOSE, "Speaking with queue mode %s: \"%s\"",
                 queueMode.name(), cleanedText);
 
         speakWithFailover(cleanedText.toString(), ttsQueueMode, speechParams);
@@ -399,7 +408,7 @@ public class SpeechController {
         }
 
         // Ensure all pending completion actions happen.
-        handleUtteranceCompleted(UTTERANCE_ID_PREFIX + Integer.MAX_VALUE);
+        handleUtteranceCompleted(UTTERANCE_ID_PREFIX + Integer.MAX_VALUE, false);
     }
 
     /**
@@ -413,7 +422,7 @@ public class SpeechController {
         }
 
         // Ensure all pending completion actions happen.
-        handleUtteranceCompleted(UTTERANCE_ID_PREFIX + Integer.MAX_VALUE);
+        handleUtteranceCompleted(UTTERANCE_ID_PREFIX + Integer.MAX_VALUE, false);
     }
 
     /**
@@ -575,7 +584,7 @@ public class SpeechController {
             if (result != TextToSpeech.SUCCESS) {
                 // Treat the utterance as completed since we won't get a callback.
                 final String utteranceId = speechParams.get(Engine.KEY_PARAM_UTTERANCE_ID);
-                mUtteranceCompletedListener.onUtteranceCompleted(utteranceId);
+                handleUtteranceCompleted(utteranceId, false);
 
                 // TTS engine failed, we should try another.
                 attemptTtsFailover(mTtsEngine);
@@ -660,8 +669,13 @@ public class SpeechController {
      * @param utteranceId The utteranceId from the onUtteranceCompleted callback
      *            - we expect this to consist of UTTERANCE_ID_PREFIX followed by
      *            the utterance index.
+     * @param success {@code true} if the utterance was spoken successfully.
      */
-    private void handleUtteranceCompleted(String utteranceId) {
+    private void handleUtteranceCompleted(String utteranceId, boolean success) {
+        if (success) {
+            mTtsFailures = 0;
+        }
+
         if (!utteranceId.startsWith(UTTERANCE_ID_PREFIX)) {
             return;
         }
@@ -740,6 +754,9 @@ public class SpeechController {
         final int maxRingerVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
         final int lowerEnoughVolume = Math.max((maxRingerVolume / 3), (currentRingerVolume / 2));
 
+        if (mVolumeMonitor != null) {
+            mVolumeMonitor.setStreamVolume(AudioManager.STREAM_RING, lowerEnoughVolume, 0);
+        }
         mAudioManager.setStreamVolume(AudioManager.STREAM_RING, lowerEnoughVolume, 0);
 
         mRestoreRingerAction = new RestoreRingerRunnable(currentRingerVolume, lowerEnoughVolume);
@@ -753,6 +770,11 @@ public class SpeechController {
      * @param engine The package name of the desired TTS engine
      */
     private void setTtsEngine(String engine) {
+        if (mTempTts != null) {
+            LogUtils.log(SpeechController.class, Log.ERROR, "Can't start TTS engine %s while still loading previous engine", engine);
+            return;
+        }
+
         LogUtils.log(SpeechController.class, Log.ERROR, "Starting TTS engine: %s", engine);
 
         mTempTtsEngine = engine;
@@ -1076,7 +1098,7 @@ public class SpeechController {
                     handleTtsInitialized(msg.arg1);
                     break;
                 case MSG_UTTERANCE_COMPLETED:
-                    handleUtteranceCompleted((String) msg.obj);
+                    handleUtteranceCompleted((String) msg.obj, true);
                     break;
                 case MSG_MEDIA_STATE_CHANGED:
                     handleMediaStateChanged((String) msg.obj);
@@ -1120,7 +1142,11 @@ public class SpeechController {
                 return;
             }
 
+            if (mVolumeMonitor != null) {
+                mVolumeMonitor.setStreamVolume(AudioManager.STREAM_RING, mRestoreVolume, 0);
+            }
             mAudioManager.setStreamVolume(AudioManager.STREAM_RING, mRestoreVolume, 0);
+
         }
     }
 

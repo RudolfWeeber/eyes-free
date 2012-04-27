@@ -18,6 +18,7 @@
     <string name="pref_soundback_sounds_key">pref_soundback_sounds</string>
     <string name="pref_developer_overlay_key">pref_developer_overlay</string>
     <string name="pref_tts_overlay_key">pref_tts_overlay</string>
+    <string name="pref_caller_id_key">pref_proximity</string>
     <string name="settings_manager_market_uri">market://details?id=com.marvin.preferences</string>
 
     <!-- Message template for TalkBack crash reports
@@ -132,5 +133,6 @@
     <bool name="pref_intonation_default">true</bool>
     <bool name="pref_developer_overlay_default">false</bool>
     <bool name="pref_tts_overlay_default">false</bool>
+    <bool name="pref_caller_id_default">false</bool>
 
 </resources>
