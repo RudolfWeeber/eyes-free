@@ -30,11 +30,11 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
-import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
+import com.googlecode.eyesfree.compat.view.MotionEventCompatUtils;
 
 /**
  * Implements the user interface for doing slide dialing.
- *
+ * 
  * @author clchen@google.com (Charles L. Chen) Created 8-2-2008
  * @author alanv@google.com (Alan Viverette)
  */
@@ -43,9 +43,12 @@ public class SlideDialView extends TextView {
     private static final int SOUND_RESOURCE_TYPED = R.raw.keypress;
     private static final int SOUND_RESOURCE_DELETED = R.raw.delete;
 
-    private static final long[] VIBRATE_PATTERN_FOCUSED = new long[] { 0, 30 };
-    private static final long[] VIBRATE_PATTERN_TYPED = new long[] { 0, 40 };
-    private static final long[] VIBRATE_PATTERN_DELETED = new long[] { 0, 50 };
+    private static final long[] VIBRATE_PATTERN_FOCUSED = new long[] {
+    0, 30 };
+    private static final long[] VIBRATE_PATTERN_TYPED = new long[] {
+    0, 40 };
+    private static final long[] VIBRATE_PATTERN_DELETED = new long[] {
+    0, 50 };
 
     /**
      * Edge touch tolerance in inches. Used for edge-based commands like delete.
@@ -117,7 +120,7 @@ public class SlideDialView extends TextView {
         mFeedback = new FeedbackUtil(parent);
 
         mShakeDetector = new ShakeDetector(parent, new ShakeListener() {
-            @Override
+                @Override
             public void onShakeDetected() {
                 deleteNumber();
             }
@@ -149,10 +152,9 @@ public class SlideDialView extends TextView {
         // Inputting a new number invalidates the confirmation
         mNumberConfirmed = false;
 
-        int action = event.getAction();
-        float x = event.getX();
-        float y = event.getY();
-        String prevVal = "";
+        final int action = event.getAction();
+        final float x = event.getX();
+        final float y = event.getY();
         String digit = "";
 
         switch (action) {
@@ -178,25 +180,25 @@ public class SlideDialView extends TextView {
             case MotionEventCompatUtils.ACTION_HOVER_ENTER:
             case MotionEvent.ACTION_DOWN:
                 mDownEvent = MotionEvent.obtain(event);
-                //$FALL-THROUGH$
+        //$FALL-THROUGH$
             case MotionEventCompatUtils.ACTION_HOVER_MOVE:
             case MotionEvent.ACTION_MOVE: {
-                digit = evalMotion(x, y);
+            digit = evalMotion(x, y);
 
-                // Do nothing since we want a deadzone here;
-                // restore the state to the previous value.
-                if (digit.length() == 0) {
-                    digit = mPreviousValue;
-                    break;
-                }
-
-                if (digit != mPreviousValue) {
-                    onDigitFocused(digit);
-                }
-
-                mPreviousValue = digit;
+            // Do nothing since we want a deadzone here;
+            // restore the state to the previous value.
+            if (digit.length() == 0) {
+                digit = mPreviousValue;
                 break;
             }
+
+            if (digit != mPreviousValue) {
+                onDigitFocused(digit);
+            }
+
+            mPreviousValue = digit;
+            break;
+        }
         }
 
         return true;
@@ -204,7 +206,7 @@ public class SlideDialView extends TextView {
 
     /**
      * Called when a digit is focused. Handles haptic and auditory feedback.
-     *
+     * 
      * @param digit The digit that was focused.
      */
     private void onDigitFocused(String digit) {
@@ -218,7 +220,7 @@ public class SlideDialView extends TextView {
 
     /**
      * Called when a digit is typed. Handles haptic and auditory feedback.
-     *
+     * 
      * @param digit The digit that was typed.
      */
     private void onDigitTyped(String digit, boolean announce) {
@@ -252,24 +254,21 @@ public class SlideDialView extends TextView {
         final float downY = mDownEvent.getY();
 
         boolean movedFar = false;
-        boolean nearEdge = false;
-
-        double r = Math.sqrt(((downX - x) * (downX - x)) + ((downY - y) * (downY - y)));
+        final double r = Math.sqrt(((downX - x) * (downX - x)) + ((downY - y) * (downY - y)));
 
         if (r < mRadiusTolerance) {
             return "5";
         }
 
-        if (r > 6 * mRadiusTolerance) {
+        if (r > (6 * mRadiusTolerance)) {
             movedFar = true;
         }
 
-        if (x < mEdgeTolerance || x > (getWidth() - mEdgeTolerance) || y < mEdgeTolerance
-                || y > (getHeight() - mEdgeTolerance)) {
-            nearEdge = true;
+        if ((x < mEdgeTolerance) || (x > (getWidth() - mEdgeTolerance)) || (y < mEdgeTolerance)
+                || (y > (getHeight() - mEdgeTolerance))) {
         }
 
-        double theta = Math.atan2(downY - y, downX - x);
+        final double theta = Math.atan2(downY - y, downX - x);
 
         if (Math.abs(theta - LEFT) < THETA_TOLERANCE) {
             return movedFar ? DELETE : "4";
@@ -285,7 +284,8 @@ public class SlideDialView extends TextView {
             return movedFar ? "0" : "8";
         } else if (Math.abs(theta - DOWN_LEFT) < THETA_TOLERANCE) {
             return movedFar ? "*" : "7";
-        } else if ((theta > RIGHT - THETA_TOLERANCE) || (theta < RIGHT_WRAP + THETA_TOLERANCE)) {
+        } else if ((theta > (RIGHT - THETA_TOLERANCE))
+                || (theta < (RIGHT_WRAP + THETA_TOLERANCE))) {
             return "6";
         }
 
@@ -295,7 +295,7 @@ public class SlideDialView extends TextView {
 
     @Override
     public void onDraw(Canvas canvas) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
@@ -341,38 +341,38 @@ public class SlideDialView extends TextView {
             final float downX = mDownEvent.getX();
             final float downY = mDownEvent.getY();
 
-            int offset = mRadiusTolerance * 3;
-            int regSize = 100;
-            int selectedSize = regSize * 2;
+            final int offset = mRadiusTolerance * 3;
+            final int regSize = 100;
+            final int selectedSize = regSize * 2;
 
-            int x1 = (int) downX - offset;
+            final int x1 = (int) downX - offset;
             int y1 = (int) downY - offset;
-            int x2 = (int) downX;
+            final int x2 = (int) downX;
             int y2 = (int) downY - offset;
-            int x3 = (int) downX + offset;
+            final int x3 = (int) downX + offset;
             int y3 = (int) downY - offset;
-            int x4 = (int) downX - offset;
+            final int x4 = (int) downX - offset;
             int y4 = (int) downY;
-            int x5 = (int) downX;
+            final int x5 = (int) downX;
             int y5 = (int) downY;
-            int x6 = (int) downX + offset;
+            final int x6 = (int) downX + offset;
             int y6 = (int) downY;
-            int x7 = (int) downX - offset;
+            final int x7 = (int) downX - offset;
             int y7 = (int) downY + offset;
-            int x8 = (int) downX;
+            final int x8 = (int) downX;
             int y8 = (int) downY + offset;
-            int x9 = (int) downX + offset;
+            final int x9 = (int) downX + offset;
             int y9 = (int) downY + offset;
 
-            int xDel = (int) downX - offset - offset;
+            final int xDel = (int) downX - offset - offset;
             int yDel = (int) downY;
-            int xDel2 = (int) downX - offset - offset;
+            final int xDel2 = (int) downX - offset - offset;
             int yDel2 = (int) downY - offset;
-            int xStar = (int) downX - offset - offset;
+            final int xStar = (int) downX - offset - offset;
             int yStar = (int) downY + offset + offset;
-            int x0 = (int) downX;
+            final int x0 = (int) downX;
             int y0 = (int) downY + offset + offset;
-            int xPound = (int) downX + offset + offset;
+            final int xPound = (int) downX + offset + offset;
             int yPound = (int) downY + offset + offset;
 
             if (mPreviousValue.equals(DELETE)) {
@@ -569,14 +569,14 @@ public class SlideDialView extends TextView {
         final char keyLabel = event.getDisplayLabel();
 
         if (Character.isLetter(keyLabel)) {
-            String digit = convertLetterToNumber(keyLabel);
+            final String digit = convertLetterToNumber(keyLabel);
             onDigitTyped(digit, true);
             return true;
         } else if (Character.isDigit(keyLabel)) {
             String digit = null;
-            if (keyLabel == '3' && (event.isAltPressed() || event.isShiftPressed())) {
+            if ((keyLabel == '3') && (event.isAltPressed() || event.isShiftPressed())) {
                 digit = "#";
-            } else if (keyLabel == '8' && (event.isAltPressed() || event.isShiftPressed())) {
+            } else if ((keyLabel == '8') && (event.isAltPressed() || event.isShiftPressed())) {
                 digit = "*";
             } else {
                 digit = "" + keyLabel;
@@ -585,8 +585,6 @@ public class SlideDialView extends TextView {
             return true;
         }
 
-        boolean newNumberEntered = false;
-        boolean newLetterEntered = false;
         switch (keyCode) {
             case KeyEvent.KEYCODE_MENU:
                 mParent.switchToContactsView();
@@ -618,7 +616,7 @@ public class SlideDialView extends TextView {
 
     private void speakDigit(String digit, int queueMode, int pitch) {
         mHandler.removeMessages(MSG_SPEAK_DIGIT);
-        String text = adjustForSpeech(digit);
+        final String text = adjustForSpeech(digit);
         speak(text, queueMode, pitch);
     }
 

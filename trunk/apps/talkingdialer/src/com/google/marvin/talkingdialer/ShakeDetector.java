@@ -6,74 +6,78 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Message;
 
 public class ShakeDetector {
+    private final ShakeHandler mHandler = new ShakeHandler();
 
-    public interface ShakeListener {
-        public void onShakeDetected();
-    }
+    private final ShakeListener mShakeListener;
+    private final SensorManager mSensorManager;
 
-    private SensorEventListener mListener;
+    private int mShakeCount = 0;
+    private boolean mLastShakePositive = false;
 
-    private ShakeListener cb;
+    public ShakeDetector(Context context, ShakeListener shakeListener) {
+        mShakeListener = shakeListener;
 
-    private SensorManager sensorManager;
-
-    public ShakeDetector(Context context, ShakeListener callback) {
-        cb = callback;
-        mListener = new SensorEventListener() {
-            private final double deletionForce = .8;
-
-            private final int deletionCount = 2;
-
-            int shakeCount = 0;
-
-            boolean lastShakePositive = false;
-
-            private int shakeCountTimeout = 500;
-
-            @Override
-            public void onSensorChanged(SensorEvent sensorEvent) {
-                if ((sensorEvent.values[1] > deletionForce) && !lastShakePositive) {
-                    (new Thread(new resetShakeCount())).start();
-                    shakeCount++;
-                    lastShakePositive = true;
-                } else if ((sensorEvent.values[1] < -deletionForce) && lastShakePositive) {
-                    (new Thread(new resetShakeCount())).start();
-                    shakeCount++;
-                    lastShakePositive = false;
-                }
-                if (shakeCount > deletionCount) {
-                    shakeCount = 0;
-                    cb.onShakeDetected();
-                }
-            }
-
-            @Override
-            public void onAccuracyChanged(Sensor sensor, int arg1) {
-            }
-
-            class resetShakeCount implements Runnable {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(shakeCountTimeout);
-                        shakeCount = 0;
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-
-        sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        sensorManager.registerListener(mListener,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager.registerListener(mSensorListener,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     public void shutdown() {
-        sensorManager.unregisterListener(mListener);
+        mSensorManager.unregisterListener(mSensorListener);
     }
 
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+        private static final double DELETION_FORCE = 0.8;
+        private static final int DELETION_COUNT = 2;
+
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            if ((sensorEvent.values[1] > DELETION_FORCE) && !mLastShakePositive) {
+                mHandler.startResetTimeout();
+                mShakeCount++;
+                mLastShakePositive = true;
+            } else if ((sensorEvent.values[1] < -DELETION_FORCE) && mLastShakePositive) {
+                mHandler.startResetTimeout();
+                mShakeCount++;
+                mLastShakePositive = false;
+            }
+
+            if (mShakeCount > DELETION_COUNT) {
+                mShakeCount = 0;
+                mShakeListener.onShakeDetected();
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int arg1) {
+            // Do nothing.
+        }
+    };
+
+    private class ShakeHandler extends Handler {
+        private final int RESET_SHAKE_COUNT = 1;
+        private final int DELAY_RESET_SHAKE_COUNT = 500;
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case RESET_SHAKE_COUNT:
+                    mShakeCount = 0;
+                    break;
+            }
+        }
+
+        public void startResetTimeout() {
+            sendEmptyMessageDelayed(RESET_SHAKE_COUNT, DELAY_RESET_SHAKE_COUNT);
+        }
+    }
+
+    public interface ShakeListener {
+        public void onShakeDetected();
+    }
 }

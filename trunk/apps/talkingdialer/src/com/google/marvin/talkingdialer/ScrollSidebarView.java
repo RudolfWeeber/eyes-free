@@ -7,12 +7,12 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
+import com.googlecode.eyesfree.compat.view.MotionEventCompatUtils;
 
 /**
  * Scrolling gesture detector for scrolling through the list of apps. Works with
  * touch exploration.
- *
+ * 
  * @author clchen@google.com (Charles Chen)
  */
 public class ScrollSidebarView extends View {
@@ -39,14 +39,14 @@ public class ScrollSidebarView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int action = event.getAction();
-        float x = event.getX();
-        float y = event.getY();
+        final int action = event.getAction();
+        event.getX();
+        final float y = event.getY();
 
         switch (action) {
             case MotionEventCompatUtils.ACTION_HOVER_EXIT:
             case MotionEvent.ACTION_UP:
-                float p2DeltaY = y - p2DownY;
+                final float p2DeltaY = y - p2DownY;
                 if (p2DeltaY < -100) {
                     cb.onScrollDetected(-1);
                 } else if (p2DeltaY > 100) {

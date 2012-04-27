@@ -1,33 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.google.marvin.talkingdialer"
-      android:versionCode="11"
-      android:versionName="1.5.0">
+    android:versionCode="11"
+    android:versionName="1.5.0" >
+
     <application
-        android:label="@string/app_name"
-        android:icon="@drawable/icon">
-        <activity android:name=".TalkingDialer" 
-                  android:label="@string/app_name"
-                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" 
-                  android:clearTaskOnLaunch="true">
+        android:icon="@drawable/icon"
+        android:label="@string/app_name" >
+        <activity
+            android:name=".TalkingDialer"
+            android:clearTaskOnLaunch="true"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SlideDial" 
-                  android:label="@string/app_name"
-                  android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
-                  android:stateNotNeeded="true"
-                  android:configChanges="orientation|keyboardHidden"
-                  android:clearTaskOnLaunch="true">
+        <activity
+            android:name=".SlideDial"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:stateNotNeeded="true"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
             </intent-filter>
-        </activity>        
+        </activity>
     </application>
+
     <uses-sdk android:minSdkVersion="7" />
-    <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.VIBRATE" />
-    <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.CALL_PHONE" />  
-    <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_CONTACTS" />    
-</manifest> 
+
+    <uses-permission
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="android.permission.VIBRATE" />
+    <uses-permission
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="android.permission.CALL_PHONE" />
+    <uses-permission
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="android.permission.READ_CONTACTS" />
+
+</manifest>

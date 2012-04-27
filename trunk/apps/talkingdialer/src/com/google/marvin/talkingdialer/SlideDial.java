@@ -43,60 +43,63 @@ import com.google.marvin.talkingdialer.ScrollSidebarView.OnScrollDetectedListene
  * @author clchen@google.com (Charles L. Chen)
  */
 public class SlideDial extends Activity {
+    public static final String EXTRA_NUMBER = "number";
+
     private static final int DIALING_VIEW = 0;
     private static final int CONTACTS_VIEW = 1;
 
-    private SlideDialView dialerView;
-    private ContactsView contactsView;
-    private SharedPreferences prefs;
+    private FrameLayout mFrameLayout;
+    private SlideDialView mDialerView;
+    private ContactsView mContactsView;
+    private SharedPreferences mPrefs;
 
-    private int currentView = -1;
+    private int mCurrentView = -1;
 
+    // TODO: Make this private, add getter method.
     public TextToSpeech tts;
 
-    boolean contactsPickerMode = false;
-
-    FrameLayout mFrameLayout;
+    // TODO: Make this private, add getter method.
+    public boolean contactsPickerMode = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mFrameLayout = (FrameLayout) findViewById(R.id.frameLayout);
-        RunButton callButton = (RunButton) findViewById(R.id.callButton);
+        final RunButton callButton = (RunButton) findViewById(R.id.callButton);
         callButton.setOnClickListener(new OnClickListener() {
-            @Override
+                @Override
             public void onClick(View v) {
-                if (contactsView != null) {
-                    contactsView.dialActionHandler();
-                } else if (dialerView != null) {
-                    dialerView.callCurrentNumber();
+                if (mContactsView != null) {
+                    mContactsView.dialActionHandler();
+                } else if (mDialerView != null) {
+                    mDialerView.callCurrentNumber();
                 }
             }
         });
         callButton.setOnHoverListener(new OnHoverListener() {
-            @Override
+                @Override
             public void onHoverEnter() {
-                if (contactsView != null) {
-                    contactsView.dialActionHandler();
-                } else if (dialerView != null) {
-                    dialerView.callCurrentNumber();
+                if (mContactsView != null) {
+                    mContactsView.dialActionHandler();
+                } else if (mDialerView != null) {
+                    mDialerView.callCurrentNumber();
                 }
             }
 
-            @Override
+                @Override
             public void onHoverExit() {
             }
         });
     }
 
-    private OnScrollDetectedListener scrollListener = new OnScrollDetectedListener() {
-        @Override
+    private final OnScrollDetectedListener scrollListener = new OnScrollDetectedListener() {
+            @Override
         public void onScrollDetected(int direction) {
             if (direction > 0) {
-                contactsView.nextContact();
+                mContactsView.nextContact();
             } else {
-                contactsView.prevContact();
+                mContactsView.prevContact();
             }
         }
     };
@@ -105,8 +108,8 @@ public class SlideDial extends Activity {
     public void onResume() {
         super.onResume();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        String action = getIntent().getAction();
-        contactsPickerMode = action != null && action.equals(Intent.ACTION_PICK);
+        final String action = getIntent().getAction();
+        contactsPickerMode = (action != null) && action.equals(Intent.ACTION_PICK);
         if (tts == null) {
             tts = new TextToSpeech(this, ttsInitListener);
         } else {
@@ -120,12 +123,12 @@ public class SlideDial extends Activity {
      */
     private void initView() {
         if (contactsPickerMode) {
-            currentView = CONTACTS_VIEW;
+            mCurrentView = CONTACTS_VIEW;
             switchToContactsView();
         } else {
-            prefs = getPreferences(MODE_PRIVATE);
-            currentView = prefs.getInt(getString(R.string.view_mode_preference), DIALING_VIEW);
-            if (currentView == DIALING_VIEW) {
+            mPrefs = getPreferences(MODE_PRIVATE);
+            mCurrentView = mPrefs.getInt(getString(R.string.view_mode_preference), DIALING_VIEW);
+            if (mCurrentView == DIALING_VIEW) {
                 switchToDialingView();
             } else {
                 switchToContactsView();
@@ -133,10 +136,10 @@ public class SlideDial extends Activity {
         }
     }
 
-    private OnInitListener ttsInitListener = new OnInitListener() {
-        @Override
+    private final OnInitListener ttsInitListener = new OnInitListener() {
+            @Override
         public void onInit(int status) {
-            String pkgName = SlideDial.class.getPackage().getName();
+            final String pkgName = SlideDial.class.getPackage().getName();
             tts.addEarcon(getString(R.string.earcon_tock), pkgName, R.raw.tock_snd);
             initView();
         }
@@ -144,15 +147,15 @@ public class SlideDial extends Activity {
 
     public void returnResults(String dialedNumber) {
         dialedNumber = dialedNumber.replaceAll("[^0-9*#,;]", "");
-        Intent dummyIntent = new Intent();
-        dummyIntent.putExtra("number", dialedNumber);
+        final Intent dummyIntent = new Intent();
+        dummyIntent.putExtra(EXTRA_NUMBER, dialedNumber);
         setResult(RESULT_OK, dummyIntent);
         finish();
     }
 
     public void returnResults(String dialedNumber, String contactName) {
         dialedNumber = dialedNumber.replaceAll("[^0-9*#,;]", "");
-        Intent dummyIntent = new Intent();
+        final Intent dummyIntent = new Intent();
         dummyIntent.putExtra("number", dialedNumber);
         dummyIntent.putExtra("label", contactName);
         setResult(RESULT_OK, dummyIntent);
@@ -161,53 +164,53 @@ public class SlideDial extends Activity {
 
     public void switchToContactsView() {
         removeViews();
-        ScrollSidebarView lScroll = (ScrollSidebarView) findViewById(R.id.lScroll);
+        final ScrollSidebarView lScroll = (ScrollSidebarView) findViewById(R.id.lScroll);
         lScroll.setVisibility(View.VISIBLE);
         lScroll.setOnScrollDetectedListener(scrollListener);
-        ScrollSidebarView rScroll = (ScrollSidebarView) findViewById(R.id.rScroll);
+        final ScrollSidebarView rScroll = (ScrollSidebarView) findViewById(R.id.rScroll);
         rScroll.setVisibility(View.VISIBLE);
         rScroll.setOnScrollDetectedListener(scrollListener);
-        if (contactsView == null) {
-            contactsView = new ContactsView(this);
+        if (mContactsView == null) {
+            mContactsView = new ContactsView(this);
         }
         if (mFrameLayout.getChildCount() > 1) {
             mFrameLayout.removeViewAt(0);
         }
-        mFrameLayout.addView(contactsView, 0);
+        mFrameLayout.addView(mContactsView, 0);
         // setContentView(contactsView);
-        currentView = CONTACTS_VIEW;
+        mCurrentView = CONTACTS_VIEW;
         tts.speak(getString(R.string.phonebook), 0, null);
     }
 
     public void switchToDialingView() {
         removeViews();
-        ScrollSidebarView lScroll = (ScrollSidebarView) findViewById(R.id.lScroll);
+        final ScrollSidebarView lScroll = (ScrollSidebarView) findViewById(R.id.lScroll);
         lScroll.setVisibility(View.INVISIBLE);
-        ScrollSidebarView rScroll = (ScrollSidebarView) findViewById(R.id.rScroll);
+        final ScrollSidebarView rScroll = (ScrollSidebarView) findViewById(R.id.rScroll);
         rScroll.setVisibility(View.INVISIBLE);
 
-        if (dialerView == null) {
-            dialerView = new SlideDialView(this);
+        if (mDialerView == null) {
+            mDialerView = new SlideDialView(this);
         }
         // setContentView(mView);
         if (mFrameLayout.getChildCount() > 1) {
             mFrameLayout.removeViewAt(0);
         }
-        mFrameLayout.addView(dialerView, 0);
-        currentView = DIALING_VIEW;
+        mFrameLayout.addView(mDialerView, 0);
+        mCurrentView = DIALING_VIEW;
         tts.speak(getString(R.string.dialing_mode), 0, null);
     }
 
     public void removeViews() {
-        if (contactsView != null) {
-            contactsView.shutdown();
-            contactsView.setVisibility(View.GONE);
-            contactsView = null;
+        if (mContactsView != null) {
+            mContactsView.shutdown();
+            mContactsView.setVisibility(View.GONE);
+            mContactsView = null;
         }
-        if (dialerView != null) {
-            dialerView.shutdown();
-            dialerView.setVisibility(View.GONE);
-            dialerView = null;
+        if (mDialerView != null) {
+            mDialerView.shutdown();
+            mDialerView.setVisibility(View.GONE);
+            mDialerView = null;
         }
     }
 
@@ -218,9 +221,9 @@ public class SlideDial extends Activity {
 
     @Override
     protected void onPause() {
-        if (prefs != null && currentView != -1) {
-            Editor editor = prefs.edit();
-            editor.putInt(getString(R.string.view_mode_preference), currentView);
+        if ((mPrefs != null) && (mCurrentView != -1)) {
+            final Editor editor = mPrefs.edit();
+            editor.putInt(getString(R.string.view_mode_preference), mCurrentView);
             editor.commit();
         }
         removeViews();

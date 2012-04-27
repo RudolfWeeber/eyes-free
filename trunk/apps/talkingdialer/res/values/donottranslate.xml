@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="earcon_tock">[TOCK]</string>
-  <string name="view_mode_preference">LastKnownView</string>
-  <string name="people_uri">content://contacts/people/%s</string>
+
+    <string name="earcon_tock">[TOCK]</string>
+    <string name="view_mode_preference">LastKnownView</string>
+    <string name="people_uri">content://contacts/people/%s</string>
+
 </resources>

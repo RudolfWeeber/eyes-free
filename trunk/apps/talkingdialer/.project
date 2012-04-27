@@ -3,6 +3,8 @@
 	<name>talkingdialer</name>
 	<comment></comment>
 	<projects>
+		<project>compatutils</project>
+		<project>utils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

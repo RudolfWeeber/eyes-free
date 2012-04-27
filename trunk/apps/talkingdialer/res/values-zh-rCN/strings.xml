@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="phonebook">电话簿</string>
-  <string name="dialing_mode">拨号盘</string>
-  <string name="app_name">电话</string>
-  <string name="deleted">%s 删除</string>
-  <string name="nothing_to_delete">空白</string>
-  <string name="you_are_about_to_dial">您正要拨 %s</string>
-  <string name="home">家</string>
-  <string name="cell">手机</string>
-  <string name="work">工作</string>
-  <string name="no_contacts_found">电话簿空白</string>
-  <string name="period">句点</string>
-  <string name="question_mark">问号</string>
-  <string name="exclamation_point">惊叹号</string>
-  <string name="comma">逗点</string>
-  <string name="backspace">退格</string>
-  <string name="star"> </string>
-  <string name="pound"> </string>
-  <string name="invalid_number">电话号码错误</string>
-  <string name="load_detail"> %s...</string>
+
+    <string name="phonebook">电话簿</string>
+    <string name="dialing_mode">拨号盘</string>
+    <string name="app_name">电话</string>
+    <string name="deleted">%s 删除</string>
+    <string name="nothing_to_delete">空白</string>
+    <string name="you_are_about_to_dial">您正要拨 %s</string>
+    <string name="home">家</string>
+    <string name="cell">手机</string>
+    <string name="work">工作</string>
+    <string name="no_contacts_found">电话簿空白</string>
+    <string name="period">句点</string>
+    <string name="question_mark">问号</string>
+    <string name="exclamation_point">惊叹号</string>
+    <string name="comma">逗点</string>
+    <string name="backspace">退格</string>
+    <string name="star"></string>
+    <string name="pound"></string>
+    <string name="invalid_number">电话号码错误</string>
+    <string name="load_detail"> %s...</string>
+
 </resources>

@@ -25,7 +25,7 @@ import java.util.TreeMap;
 
 /**
  * This class provides haptic and auditory feedback.
- *
+ * 
  * @author alanv@google.com (Alan Viverette)
  */
 public class FeedbackUtil {
@@ -40,7 +40,7 @@ public class FeedbackUtil {
     /**
      * Constructs a new FeedbackUtil based on the specified parent
      * {@link Context}.
-     *
+     * 
      * @param context The parent {@link Context}.
      */
     public FeedbackUtil(Context context) {
@@ -60,12 +60,13 @@ public class FeedbackUtil {
 
     /**
      * Plays a sound file identified by the given resource id.
-     *
+     * 
      * @param resId The resource id of the sound file.
      */
     public void playSound(int resId) {
-        if (!mSoundEnabled)
+        if (!mSoundEnabled) {
             return;
+        }
 
         Integer soundId = mSoundMap.get(resId);
 
@@ -79,26 +80,28 @@ public class FeedbackUtil {
 
     /**
      * Vibrates for the specified duration.
-     *
+     * 
      * @param milliseconds How long to vibrate for.
      */
     public void vibrate(long milliseconds) {
-        if (!mVibrationEnabled)
+        if (!mVibrationEnabled) {
             return;
+        }
 
         mVibrator.vibrate(milliseconds);
     }
 
     /**
      * Vibrates with a given pattern.
-     *
+     * 
      * @param pattern The vibration pattern as defined in
      *            {@link Vibrator#vibrate(long[], int)}.
      * @see Vibrator#vibrate(long[], int)
      */
     public void vibrate(long[] pattern) {
-        if (!mVibrationEnabled)
+        if (!mVibrationEnabled) {
             return;
+        }
 
         mVibrator.vibrate(pattern, -1);
     }

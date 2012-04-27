@@ -1,23 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-  <string name="phonebook">Phone book</string>
-  <string name="dialing_mode">Dialing mode</string>
-  <string name="app_name">Talking Dialer</string>
-  <string name="deleted">%s deleted.</string>
-  <string name="nothing_to_delete">Nothing to delete</string>
-  <string name="you_are_about_to_dial">You are about to dial %s.</string>
-  <string name="you_have_selected">You have selected %s.</string>
-  <string name="home">home</string>
-  <string name="cell">cell</string>
-  <string name="work">work</string>
-  <string name="no_contacts_found">No contacts found</string>
-  <string name="period">Period</string>
-  <string name="question_mark">Question Mark</string>
-  <string name="exclamation_point">Exclamation Point</string>
-  <string name="comma">Comma</string>
-  <string name="backspace">Backspace</string>
-  <string name="star">Star</string>
-  <string name="pound">Pound</string>
-  <string name="invalid_number">Cannot dial. Invalid phone number.</string>
-  <string name="load_detail">Loading contact details for %s...</string>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!--
+      Source: Activity title.
+      Description: Title for the phone book, for browsing contacts.
+    -->
+    <string name="phonebook">Phone book</string>
+    <!--
+      Source: Activity title.
+      Description: Title for the phone dialer, for dialing numbers.
+    -->
+    <string name="dialing_mode">Dialing mode</string>
+    <!--
+      Source: Application name.
+      Description: This application provides a phone dialer for blind users that speaks numbers aloud.
+    -->
+    <string name="app_name">Talking Dialer</string>
+    <!--
+      Source: Button label.
+      Description: Calls the current phone number or contact.
+    -->
+    <string name="call">Call</string>
+    <!--
+      Source: Spoken feedback.
+      Description: Confirmation that a character was deleted.
+    -->
+    <string name="deleted">%s deleted.</string>
+    <!--
+      Source: Spoken feedback.
+      Description: Spoken when no characters are left to delete after pressing backspace.
+    -->
+    <string name="nothing_to_delete">Nothing to delete</string>
+    <!--
+      Source: Spoken feedback.
+      Description: Confirmation that the user is about to dial a phone number.
+    -->
+    <string name="you_are_about_to_dial">You are about to dial <xliff:g id="phone_number">%s</xliff:g>.</string>
+    <!--
+      Source: Spoken feedback.
+      Description: Confirmation that the user has selected a contact.
+    -->
+    <string name="you_have_selected">You have selected <xliff:g id="contact_name">%s</xliff:g>.</string>
+    <!--
+      Source: Label for phone number location.
+      Description: A home phone number.
+    -->
+    <string name="home">home</string>
+    <!--
+      Source: Label for phone number location.
+      Description: A cell phone number.
+    -->
+    <string name="cell">cell</string>
+    <!--
+      Source: Label for phone number location.
+      Description: A work phone number.
+    -->
+    <string name="work">work</string>
+    <!--
+      Source: Spoken feedback.
+      Description: Spoken when no contacts are found while browsing contacts.
+    -->
+    <string name="no_contacts_found">No contacts found</string>
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for ".". Period symbol.
+    -->
+    <string name="period">Period</string>
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for "?". Question mark symbol.
+    -->
+    <string name="question_mark">Question Mark</string>
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for "!". Exclamation mark symbol.
+    -->
+    <string name="exclamation_point">Exclamation Point</string>
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for ",". Comma symbol.
+    -->
+    <string name="comma">Comma</string>
+    <!--
+      Source: Label for keyboard key.
+      Description: Backspace key.
+    -->
+    <string name="backspace">Backspace</string>
+    <!--
+      Source: Label for phone dialer key.
+      Description: Label for "*". Asterisk or "star" character.
+    -->
+    <string name="star">Star</string>
+    <!--
+      Source: Label for phone dialer key.
+      Description: Label for "#". Hash or "pound" sign.
+    -->
+    <string name="pound">Pound</string>
+    <!--
+      Source: Spoken feedback.
+      Description: Spoken when the user enters an invalid phone number.
+    -->
+    <string name="invalid_number">Cannot dial. Invalid phone number.</string>
+    <!--
+      Source: Spoken feedback.
+      Description: Spoken when the application is busy loading contact details.
+    -->
+    <string name="load_detail">Loading contact details for <xliff:g>%s</xliff:g>…</string>
+
 </resources>
