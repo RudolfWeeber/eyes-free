@@ -1,0 +1,37 @@
+This project contains tools for compiling the eSpeak library for use on the
+Android platform. It contains an Eclipse Android application project that
+provides a Java API for accessing the natively-compiled eSpeak API and a
+text-to-speech service that uses the API.
+
+NOTE: You must download and extract source files for the eSpeak library
+prior to building this project.
+
+------------------------------------------------
+Downloading and extracting required source files
+
+  To download the latest versions of the eSpeak library and build this
+  project, run the following commands in the terminal:
+
+    cd <project-directory>/jni/ttsespeak
+    wget http://surfnet.dl.sourceforge.net/project/espeak/espeak/espeak-1.46/espeak-1.46.02-source.zip
+    unzip espeak-1.46.02-source.zip
+    rm -f espeak-1.46.02-source.zip
+    rm -rf espeak-source
+    mv espeak-1.46.02-source espeak-source
+    cd ../..
+    ndk-build
+
+------------------------------------------------
+Installing language data
+
+  To package the eSpeak voices for inclusion in the Android application, first
+  download and extract the required source files by following the instructions
+  in the previous section. Then, run the following commands in the terminal:
+
+    cd <project-directory>/res
+    mkdir raw
+    cd ../jni/ttsespeak/espeak-source
+    zip -r -9 espeakdata.zip espeak-data
+    mv espeakdata.zip ../../../res/raw
+
+Last modified 27 February, 2012 by Alan Viverette <alanv@google.com>
