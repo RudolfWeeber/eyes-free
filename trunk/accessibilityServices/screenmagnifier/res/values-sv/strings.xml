@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Ökar kontrasten vid förstoring"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Invertera ljusstyrkan"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Gör mörka färger ljusa (och vice versa)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Enheten har tyvärr inte stöd för skärmförstoring."\n\n"Inaktivera tjänsten."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Hantera tjänster"</string>
 </resources>

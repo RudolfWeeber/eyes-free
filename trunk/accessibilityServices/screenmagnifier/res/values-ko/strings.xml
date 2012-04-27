@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"확대시 대비 높임"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"밝기 반전"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"어두운 색상을 밝은 색상으로 변경(및 그 반대로 변경)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"죄송합니다. 현재 사용중인 기기에서 화면 확대 기능을 지원하지 않습니다. "\n\n"서비스를 사용중지하세요."</string>
+    <string name="manage_services" msgid="3849023576278994043">"서비스 관리"</string>
 </resources>

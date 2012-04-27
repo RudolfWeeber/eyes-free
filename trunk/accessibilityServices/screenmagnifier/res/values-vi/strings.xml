@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Tăng độ tương phản khi phóng đại"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Đảo ngược độ sáng"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Thay đổi màu tối thành màu sáng (và ngược lại)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Rất tiếc, thiết bị của bạn hiện không hỗ trợ chức năng phóng to màn hình."\n\n"Vui lòng vô hiệu hóa dịch vụ này."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Quản lý dịch vụ"</string>
 </resources>

@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"拡大時のコントラストを高くします"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"輝度反転"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"暗い色を明るく、明るい色を暗くします"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"お使いの携帯端末では現在、画面を拡大できません。"\n\n"このサービスを無効にしてください。"</string>
+    <string name="manage_services" msgid="3849023576278994043">"サービスの管理"</string>
 </resources>

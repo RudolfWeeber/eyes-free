@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Consente di aumentare il contrasto durante l\'ingrandimento"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Inverti luminosità"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Consente di invertire colori scuri e chiari"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Siamo spiacenti, il dispositivo attualmente non supporta l\'ingrandimento dello schermo."\n\n"Disattiva il servizio."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Gestisci servizi"</string>
 </resources>

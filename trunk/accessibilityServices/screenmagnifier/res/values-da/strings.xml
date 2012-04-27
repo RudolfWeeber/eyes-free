@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Øger kontrasten under forstørrelse"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Byt om på lysstyrken"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Skifter mørke farver til lyse (og omvendt)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Vi beklager, men din enhed understøtter i øjeblikket ikke skærmforstørrelse."\n\n"Husk at deaktivere tjenesten."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Administrer tjenester"</string>
 </resources>

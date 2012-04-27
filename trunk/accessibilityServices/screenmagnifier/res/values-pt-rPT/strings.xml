@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Aumenta o contraste durante a ampliação"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Inverter o brilho"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Muda de cores escuras para claras (e vice-versa)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Lamentamos, mas o seu dispositivo não suporta atualmente a ampliação de ecrã."\n\n"Desative o serviço."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Gerir serviços"</string>
 </resources>

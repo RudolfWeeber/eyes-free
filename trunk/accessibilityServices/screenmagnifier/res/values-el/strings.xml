@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Αυξάνει την αντίθεση κατά τη διάρκεια της μεγέθυνσης"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Αντιστροφή της φωτεινότητας"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Αλλάζει τα σκούρα χρώματα σε φωτεινά (και το αντίστροφο)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Λυπούμαστε, αλλά προς το παρόν η συσκευή σας δεν υποστηρίζει μεγέθυνση οθόνης."\n\n"Απενεργοποιήστε την υπηρεσία."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Διαχείριση υπηρεσιών"</string>
 </resources>

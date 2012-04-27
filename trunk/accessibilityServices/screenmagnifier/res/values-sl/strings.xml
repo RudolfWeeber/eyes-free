@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Poveča kontrast pri povečavi"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Obrni svetlost"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Spremeni temne barve v svetle (in obratno)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Oprostite, vaša naprava trenutno ne podpira povečave zaslona."\n" "\n"Onemogočite storitev."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Upravljanje storitev"</string>
 </resources>

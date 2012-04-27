@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Dinaragdagan ang contrast sa panahon ng pag-magnify"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Baliktarin ang liwanag"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Binabago ang maiiitim na kulay patungong mapupusyaw (at kabaliktaran)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Paumanhin, kasalukuyang hindi sinusuportahan ng iyong device ang pag-magnify sa screen."\n\n"Mangyaring huwag paganahin ang serbisyo."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Pamahalaan ang mga serbisyo"</string>
 </resources>

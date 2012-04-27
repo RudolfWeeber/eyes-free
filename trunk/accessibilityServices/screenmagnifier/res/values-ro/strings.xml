@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Măreşte contrastul în timpul măririi"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Inversaţi luminozitatea"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Schimbă culorile închise în culori deschise (şi invers)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"Ne pare rău, în prezent dispozitivul dvs. nu acceptă mărirea ecranului. "\n\n"Dezactivaţi serviciul."</string>
+    <string name="manage_services" msgid="3849023576278994043">"Gestionaţi serviciile"</string>
 </resources>

@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"เพิ่มความคมชัดในระหว่างการขยาย"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"สลับความสว่าง"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"เปลี่ยนสีเข้มเป็นสีอ่อน (และกลับกัน)"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"ขออภัย ปัจจุบันอุปกรณ์ของคุณไม่สนับสนุนการขยายหน้าจอ"\n\n"โปรดปิดใช้งานบริการนี้"</string>
+    <string name="manage_services" msgid="3849023576278994043">"จัดการบริการ"</string>
 </resources>

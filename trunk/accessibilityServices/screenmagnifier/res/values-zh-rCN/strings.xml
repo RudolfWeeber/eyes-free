@@ -7,4 +7,6 @@
     <string name="pref_contrast_summary" msgid="6139733928212444237">"放大时增加对比度"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"明暗反转"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"将深色改为浅色，同时将浅色改为深色"</string>
+    <string name="device_not_supported" msgid="1782640585830581135">"抱歉，您的设备目前不支持屏幕放大功能。"\n\n"请停用该服务。"</string>
+    <string name="manage_services" msgid="3849023576278994043">"管理服务"</string>
 </resources>
