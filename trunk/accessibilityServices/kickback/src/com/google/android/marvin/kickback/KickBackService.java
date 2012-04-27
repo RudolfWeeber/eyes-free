@@ -30,6 +30,10 @@ import android.view.accessibility.AccessibilityEvent;
  *
  */
 public class KickBackService extends AccessibilityService {
+    private static final String TALKBACK_PACKAGE = "com.google.android.marvin.talkback";
+
+    /** The minimum version required for KickBack to disable itself. */
+    private static final int TALKBACK_REQUIRED_VERSION = 42;
 
     private static final String LOG_TAG = "KickBackService";
 
@@ -42,14 +46,30 @@ public class KickBackService extends AccessibilityService {
 
     private Vibrator mVibrator;
 
+    /** Whether this service should disable itself. */
+    private boolean mDisabled;
+
     @Override
     public void onCreate() {
          super.onCreate();
+
+         // If TalkBack r42 or higher is installed, this service should be quiet.
+         final int talkBackVersion = PackageManagerUtils.getVersionCode(this, TALKBACK_PACKAGE);
+
+         if (talkBackVersion >= TALKBACK_REQUIRED_VERSION) {
+             mDisabled = true;
+             return;
+         }
+
          mVibrator = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
     }
 
     @Override
     public void onServiceConnected() {
+        if (mDisabled) {
+            return;
+        }
+
         AccessibilityServiceInfo info = new AccessibilityServiceInfo();
         info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_HAPTIC;
@@ -60,6 +80,10 @@ public class KickBackService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (mDisabled) {
+            return;
+        }
+
         int eventType = event.getEventType();
         switch (eventType) {
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED :
