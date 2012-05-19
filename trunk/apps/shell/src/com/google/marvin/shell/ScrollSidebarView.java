@@ -7,7 +7,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
+import com.googlecode.eyesfree.compat.view.MotionEventCompatUtils;
+
 
 /**
  * Scrolling gesture detector for scrolling through the list of apps. Works with

@@ -7,7 +7,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.Button;
 
-import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
+import com.googlecode.eyesfree.compat.view.MotionEventCompatUtils;
+
 
 /**
  * Standard button but with an OnHoverListener for compatibility with pre-ICS

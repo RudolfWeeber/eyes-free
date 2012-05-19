@@ -73,13 +73,14 @@
     <string name="contact" msgid="3967189141295438609">"Contacte"</string>
     <string name="direct_dial" msgid="6760324712299461726">"Marcatge directe"</string>
     <string name="direct_message" msgid="6883856830119989502">"Missatge directe"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"Widget d\'Eyes-free"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Widget d\'interfície accessible"</string>
     <string name="settings" msgid="2547811091322397443">"Configuració"</string>
     <string name="gmail_label" msgid="461187592270143564">"Etiqueta de Gmail"</string>
     <string name="video_chat" msgid="1400713274879951497">"Xat de vídeo"</string>
     <string name="call" msgid="4657819819700891468">"Truca a <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Missatge de <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Trucada de vídeo de <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Selector d\'Android"</string>
+    <string name="app_name" msgid="2842226161122377485">"Interfície accessible"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

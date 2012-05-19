@@ -34,8 +34,9 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 
 import com.google.marvin.shell.ShakeDetector.ShakeListener;
+
+import com.googlecode.eyesfree.compat.view.MotionEventCompatUtils;
 import com.googlecode.eyesfree.utils.FeedbackController;
-import com.googlecode.eyesfree.utils.compat.MotionEventCompatUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,7 +46,7 @@ import java.util.Collections;
 /**
  * Allows the user to select the application they wish to start by moving
  * through the list of applications.
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  */
 public class AppChooserView extends TextView {
@@ -62,8 +63,10 @@ public class AppChooserView extends TextView {
 
     private static void initCompatibility() {
         try {
-            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] { Integer.TYPE });
-            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] { Integer.TYPE });
+            MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] {
+            Integer.TYPE });
+            MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] {
+            Integer.TYPE });
             AccessibilityManager_isTouchExplorationEnabled = AccessibilityManager.class.getMethod(
                     "isTouchExplorationEnabled");
             /* success, this is a newer device */
@@ -124,8 +127,9 @@ public class AppChooserView extends TextView {
 
     // END OF WORKAROUND FOR DONUT COMPATIBILITY
 
-    private static final char alphabet[] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
-            'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+    private static final char alphabet[] = {
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+            't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
     private static final int AE = 0;
 
@@ -210,7 +214,7 @@ public class AppChooserView extends TextView {
         super(context, attrs);
 
         parent = ((MarvinShell) context);
-        feedbackController = FeedbackController.getInstance(context);
+        feedbackController = new FeedbackController(context);
         accessibilityManager = (AccessibilityManager) context.getSystemService(
                 Context.ACCESSIBILITY_SERVICE);
 
@@ -379,7 +383,7 @@ public class AppChooserView extends TextView {
                 if (backKeyTimeDown == -1) {
                     backKeyTimeDown = System.currentTimeMillis();
                     class QuitCommandWatcher implements Runnable {
-                        @Override
+                    @Override
                         public void run() {
                             try {
                                 Thread.sleep(3000);
@@ -472,6 +476,7 @@ public class AppChooserView extends TextView {
         currentCharacter = "";
     }
 
+    @Override
     public boolean onHoverEvent(MotionEvent event) {
         return onTouchEvent(event);
     }
@@ -917,7 +922,7 @@ public class AppChooserView extends TextView {
         }
         if (visibility == View.VISIBLE) {
             shakeDetector = new ShakeDetector(parent, new ShakeListener() {
-                @Override
+                    @Override
                 public void onShakeDetected() {
                     if (useShake) {
                         backspace();
@@ -946,12 +951,15 @@ public class AppChooserView extends TextView {
             i.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
             i.setData(Uri.parse("package:" + targetPackageName));
             parent.startActivity(i);
-        } catch (ActivityNotFoundException e){
+        } catch (ActivityNotFoundException e) {
             try {
-                // If it isn't possible to use android.settings.APPLICATION_DETAILS_SETTINGS,
-                // try it again with the "pkg" magic key. See ManageApplications.APP_PKG_NAME in:
+                // If it isn't possible to use
+                // android.settings.APPLICATION_DETAILS_SETTINGS,
+                // try it again with the "pkg" magic key. See
+                // ManageApplications.APP_PKG_NAME in:
                 // src/com/android/settings/ManageApplications.java
-                // under http://android.git.kernel.org/?p=platform/packages/apps/Settings.git
+                // under
+                // http://android.git.kernel.org/?p=platform/packages/apps/Settings.git
                 i.setClassName("com.android.settings", "com.android.settings.InstalledAppDetails");
                 i.putExtra("pkg", targetPackageName);
                 parent.startActivity(i);

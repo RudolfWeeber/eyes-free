@@ -80,6 +80,7 @@
     <string name="call" msgid="4657819819700891468">"<xliff:g id="NAME">%s</xliff:g>さんに発信"</string>
     <string name="message" msgid="6532533046559751182">"<xliff:g id="NAME">%s</xliff:g>さんにメッセージを送信"</string>
     <string name="video_call" msgid="375680197155815761">"<xliff:g id="NAME">%s</xliff:g>さんにビデオ通話を発信"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Androidランチャー"</string>
     <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.co.jp/m?q="</string>
 </resources>

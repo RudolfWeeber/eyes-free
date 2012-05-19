@@ -80,6 +80,7 @@
     <string name="call" msgid="4657819819700891468">"撥電話給 <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"傳送簡訊給 <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"與 <xliff:g id="NAME">%s</xliff:g> 進行視訊通話"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Android 應用程式啟動器"</string>
     <string name="app_name" msgid="2842226161122377485">"視障介面"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com.tw/m?q="</string>
 </resources>

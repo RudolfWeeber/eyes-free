@@ -73,13 +73,14 @@
     <string name="contact" msgid="3967189141295438609">"Contatto"</string>
     <string name="direct_dial" msgid="6760324712299461726">"Composizione diretta"</string>
     <string name="direct_message" msgid="6883856830119989502">"Messaggio diretto"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"Widget Eyes-Free"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Widget per ipovedenti"</string>
     <string name="settings" msgid="2547811091322397443">"Impostazioni"</string>
     <string name="gmail_label" msgid="461187592270143564">"Etichetta Gmail"</string>
     <string name="video_chat" msgid="1400713274879951497">"Chat video"</string>
     <string name="call" msgid="4657819819700891468">"Chiama <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Invia messaggio a <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Avvia videochiamata con <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Avvio applicazioni Android"</string>
+    <string name="app_name" msgid="2842226161122377485">"Interfaccia per ipovedenti"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.it/m?q="</string>
 </resources>

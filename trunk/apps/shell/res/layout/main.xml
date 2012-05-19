@@ -1,62 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent" android:layout_height="fill_parent"
-  android:id="@+id/mainFrameLayout">
+    android:id="@+id/mainFrameLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-  <ImageView android:id="@+id/wallpaper" android:layout_width="fill_parent"
-    android:layout_height="fill_parent" android:scaleType="fitCenter" />
+    <ImageView
+        android:id="@+id/wallpaper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitCenter" />
 
-  <RelativeLayout android:orientation="horizontal"
-    android:layout_width="fill_parent" android:layout_height="fill_parent"
-    android:layout_gravity="center" android:id="@+id/homeScreenControlsArea">
+    <RelativeLayout
+        android:id="@+id/homeScreenControlsArea"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
 
-    <TextView android:id="@+id/mainText" android:layout_width="wrap_content"
-      android:layout_height="wrap_content" android:layout_centerHorizontal="true"
-      android:layout_centerVertical="true" android:textSize="50px"
-      android:textColor="#ffffff" android:textStyle="bold" android:text="Home" />
+        <TextView
+            android:id="@+id/mainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Home"
+            android:textColor="#ffffff"
+            android:textSize="50px"
+            android:textStyle="bold" />
 
-    <LinearLayout android:layout_width="wrap_content"
-      android:orientation="vertical" android:layout_height="wrap_content">
-      <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_x="10px"
-        android:layout_y="360px" android:textSize="16px" android:textColor="#ffffff"
-        android:text="Stroke the screen to start applications." />
-      <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_x="10px"
-        android:layout_y="380px" android:textSize="18px" android:textColor="#ffffff"
-        android:text="Hold the BACK button for 5 seconds" />
-      <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:layout_x="10px"
-        android:layout_y="400px" android:textSize="18px" android:textColor="#ffffff"
-        android:text="to go to the regular home screen." />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_x="10px"
+                android:layout_y="360px"
+                android:text="Stroke the screen to start applications."
+                android:textColor="#ffffff"
+                android:textSize="16px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_x="10px"
+                android:layout_y="380px"
+                android:text="Hold the BACK button for 5 seconds"
+                android:textColor="#ffffff"
+                android:textSize="18px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_x="10px"
+                android:layout_y="400px"
+                android:text="to go to the regular home screen."
+                android:textColor="#ffffff"
+                android:textSize="18px" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/appChooserControlsArea"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <com.google.marvin.shell.ScrollSidebarView
+                android:id="@+id/lScroll"
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="10"
+                android:background="#00FF0000" />
+
+            <com.google.marvin.shell.AppChooserView
+                android:id="@+id/appChooserView"
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="80" />
+
+            <com.google.marvin.shell.ScrollSidebarView
+                android:id="@+id/rScroll"
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="10"
+                android:background="#00FF0000" />
+        </LinearLayout>
+
+        <com.google.marvin.shell.RunButton
+            android:id="@+id/runButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n\nRun\n\n" />
     </LinearLayout>
 
-  </RelativeLayout>
-
-
-
-  <LinearLayout android:orientation="vertical" android:id="@+id/appChooserControlsArea"
-    android:layout_width="fill_parent" android:layout_height="fill_parent"
-    android:visibility="gone">
-    <LinearLayout android:orientation="horizontal"
-      android:layout_width="fill_parent" android:layout_height="1dip"
-      android:layout_weight="1">
-      <com.google.marvin.shell.ScrollSidebarView
-        android:id="@+id/lScroll" android:background="#00FF0000"
-        android:layout_width="1dip" android:layout_height="fill_parent"
-        android:layout_weight="10" />
-
-      <com.google.marvin.shell.AppChooserView
-        android:layout_width="1dip" android:layout_height="fill_parent"
-        android:layout_weight="80" android:id="@+id/appChooserView" />
-
-      <com.google.marvin.shell.ScrollSidebarView
-        android:id="@+id/rScroll" android:background="#00FF0000"
-        android:layout_width="1dip" android:layout_height="fill_parent"
-        android:layout_weight="10" />
-    </LinearLayout>
-    <com.google.marvin.shell.RunButton android:layout_width="fill_parent" android:layout_height="wrap_content"
-      android:id="@+id/runButton" android:text="\n\nRun\n\n" />
-  </LinearLayout>
 </FrameLayout>

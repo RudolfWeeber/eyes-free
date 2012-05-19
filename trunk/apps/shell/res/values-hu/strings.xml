@@ -73,13 +73,14 @@
     <string name="contact" msgid="3967189141295438609">"Névjegy"</string>
     <string name="direct_dial" msgid="6760324712299461726">"Közvetlen tárcsázás"</string>
     <string name="direct_message" msgid="6883856830119989502">"Közvetlen üzenet"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"Eyes-free modul"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Hangvezérelt modul"</string>
     <string name="settings" msgid="2547811091322397443">"Beállítások"</string>
     <string name="gmail_label" msgid="461187592270143564">"Gmail-címke"</string>
     <string name="video_chat" msgid="1400713274879951497">"Videocsevegés"</string>
     <string name="call" msgid="4657819819700891468">"<xliff:g id="NAME">%s</xliff:g> hívása"</string>
     <string name="message" msgid="6532533046559751182">"Üzenet küldés <xliff:g id="NAME">%s</xliff:g> részére"</string>
     <string name="video_call" msgid="375680197155815761">"Videohívás kezdeményezése vele: <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Android Indító"</string>
+    <string name="app_name" msgid="2842226161122377485">"Hangvezérelt felület"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

@@ -16,11 +16,11 @@
 
 package com.google.marvin.shell;
 
+import com.googlecode.eyesfree.widget.GestureOverlay.Gesture;
+
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-
-import com.google.marvin.widget.GestureOverlay.Gesture;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -41,7 +41,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Manages a set of menus and provides functions for saving/loading XML and
  * editing menus.
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  * @author credo@google.com (Tim Credo)
  */
@@ -149,8 +149,8 @@ public final class MenuManager extends HashMap<String, Menu> {
             if (versionNodes.getLength() == 0) {
                 versionNumber = "0.0";
             } else {
-                Node versionNumberNode = versionNodes.item(0).getAttributes().getNamedItem(
-                        "number");
+                Node versionNumberNode = versionNodes.item(0)
+                        .getAttributes().getNamedItem("number");
                 if (versionNumberNode == null) {
                     versionNumber = "0.0";
                 } else {
@@ -179,13 +179,13 @@ public final class MenuManager extends HashMap<String, Menu> {
                     Node idAttrNode = attribs.getNamedItem("id");
                     if (idAttrNode != null) {
                         String id = idAttrNode.getNodeValue();
-                        Menu menu = new Menu(label,
-                                readItems(context, menus.item(i).getChildNodes()), wallpaper);
+                        Menu menu = new Menu(label, readItems(
+                                context, menus.item(i).getChildNodes()), wallpaper);
                         menu.setID(id);
                         shortcutMenus.put(id, menu);
                     } else {
-                        Menu menu = new Menu(label,
-                                readItems(context, menus.item(i).getChildNodes()), wallpaper);
+                        Menu menu = new Menu(label, readItems(
+                                context, menus.item(i).getChildNodes()), wallpaper);
                         shortcutMenus.put(label, menu);
                     }
                 }

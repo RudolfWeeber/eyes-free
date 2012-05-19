@@ -313,7 +313,7 @@ public class AuditoryWidgets {
         intent.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         try {
-            parent.startActivityForResult(intent, MarvinShell.VOICE_RECO_CODE);
+            parent.startActivityForResult(intent, MarvinShell.REQUEST_CODE_VOICE_RECO);
         } catch (ActivityNotFoundException anf) {
             parent.tts.speak(parent.getString(R.string.search_not_available),
                     TextToSpeech.QUEUE_FLUSH, null);

@@ -73,13 +73,14 @@
     <string name="contact" msgid="3967189141295438609">"Kontakt"</string>
     <string name="direct_dial" msgid="6760324712299461726">"Direktval"</string>
     <string name="direct_message" msgid="6883856830119989502">"Direktmeddelande"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"En widget som innebär att du slipper använda ögonen"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Widget för röststyrning"</string>
     <string name="settings" msgid="2547811091322397443">"Inställningar"</string>
     <string name="gmail_label" msgid="461187592270143564">"Gmail-etikett"</string>
     <string name="video_chat" msgid="1400713274879951497">"Videochatt"</string>
     <string name="call" msgid="4657819819700891468">"Ring <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Skicka meddelande till <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Ring ett videosamtal till <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Ett gränssnitt som innebär att du slipper använda ögonen"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Startprogrammet för Android"</string>
+    <string name="app_name" msgid="2842226161122377485">"Startsida för röststyrning"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

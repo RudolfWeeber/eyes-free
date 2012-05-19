@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 /**
  * Utility class for scraping the one box and finding the result
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  */
 final public class OneBoxScraper {
@@ -44,6 +44,30 @@ final public class OneBoxScraper {
             // Uncomment this line to see the raw dump;
             // very useful when trying to come up with scraping rules
             // Log.e("OneBoxScraper Debug", results);
+
+            // Account for the privacy policy notice.
+            if (results.indexOf("\n") != -1) {
+                String firstLine = results.substring(0, results.indexOf("\n"));
+                String privacyPolicyUrl = "gxc.google.com/gwt/x?u=http%3A%2F%2Fwww.google.com%2F";
+                if (firstLine.indexOf(privacyPolicyUrl) != -1) {
+                    results = results.substring(results.indexOf("\n") + 1, results.length());
+                }
+            }
+            // Account for additional headers
+            if (results.indexOf("\n") != -1) {
+                String firstLine = results.substring(0, results.indexOf("\n"));
+                String additionalHeaders = "- Google Search";
+                if (firstLine.indexOf(additionalHeaders) != -1) {
+                    results = results.substring(results.indexOf("\n") + 1, results.length());
+                }
+            }
+            if (results.indexOf("\n") != -1) {
+                String firstLine = results.substring(0, results.indexOf("\n"));
+                String additionalHeaders = "Web<http";
+                if (firstLine.indexOf(additionalHeaders) != -1) {
+                    results = results.substring(results.indexOf("\n") + 1, results.length());
+                }
+            }
 
             /* Check for known one box types */
             // Weather
@@ -245,16 +269,15 @@ final public class OneBoxScraper {
             }
             // Try to read the first result if there is no preceding link
             // since this will usually be a onebox of some sort.
-            if ((processedResult.length() < 1) && (results.indexOf("<") != -1)) {
+            // Strip away any ads or links
+            if (processedResult.length() < 1) {
+                while ((results.indexOf("\n") != -1) && ((results.indexOf("Ad<") == 0) || (
+                        results.indexOf("<") == 0))) {
+                    results = results.substring(results.indexOf("\n") + 1, results.length());
+                }
                 int endIndex = results.indexOf("<", 0);
                 if (endIndex != -1) {
                     processedResult = results.substring(0, endIndex + 1);
-                }
-                // If this is the weather box, try to trim it down by cutting it
-                // off at humidity
-                if ((processedResult.length() > 1) && (processedResult.indexOf("%") != -1)) {
-                    processedResult = processedResult.substring(
-                            0, processedResult.indexOf("%") + 1);
                 }
             }
             // Log.e("processedResultLength", processedResult.length() + "");
@@ -263,6 +286,7 @@ final public class OneBoxScraper {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        // Log.e("processedResultLength", processedResult + "");
         return processedResult;
     }
 }

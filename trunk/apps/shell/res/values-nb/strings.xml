@@ -73,13 +73,14 @@
     <string name="contact" msgid="3967189141295438609">"Kontakt"</string>
     <string name="direct_dial" msgid="6760324712299461726">"Ring"</string>
     <string name="direct_message" msgid="6883856830119989502">"Direktemelding"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"Modul for synsfritt grensesnitt"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Synsfri modul"</string>
     <string name="settings" msgid="2547811091322397443">"Innstillinger"</string>
     <string name="gmail_label" msgid="461187592270143564">"Gmail-etikett"</string>
     <string name="video_chat" msgid="1400713274879951497">"Videonettprat"</string>
     <string name="call" msgid="4657819819700891468">"Ring til <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Send en melding til <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Ta en videosamtale med <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Eyes-Free-grensesnitt"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Android-programlisten"</string>
+    <string name="app_name" msgid="2842226161122377485">"Synsfri startside"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.no/m?q="</string>
 </resources>

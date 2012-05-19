@@ -80,6 +80,7 @@
     <string name="call" msgid="4657819819700891468">"Bel <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Stuur \'n boodskap aan <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Bel <xliff:g id="NAME">%s</xliff:g> via video-oproep"</string>
-    <string name="app_name" msgid="2842226161122377485">"Oogvrye dop"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Android-lanseerder"</string>
+    <string name="app_name" msgid="2842226161122377485">"Tuisskerm vir swaksiendes"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

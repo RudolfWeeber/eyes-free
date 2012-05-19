@@ -42,7 +42,7 @@
     <string name="exiting_edit_mode" msgid="3586821704856453338">"Inatoka katika hali ya kuhariri"</string>
     <string name="none" msgid="2549066898380735259">"Hakuna"</string>
     <string name="tts_required" msgid="7598033865290124596">"TextToSpeech ni kijenzi kinachohitajika. Tafadhali kisakinishe kwanza."</string>
-    <string name="quit" msgid="6472236766275676713">"Toka"</string>
+    <string name="quit" msgid="6472236766275676713">"Ondoka"</string>
     <string name="cannot_edit_this_item" msgid="4362692259938436489">"Haiwezi kuhariri kipengee hiki."</string>
     <string name="restore_default_menus" msgid="6131634808298258773">"Rejesha Menyu Chaguo-msingi"</string>
     <string name="edit_menus" msgid="8061593458432567129">"Hariri Menyu"</string>
@@ -80,6 +80,7 @@
     <string name="call" msgid="4657819819700891468">"Pigia <xliff:g id="NAME">%s</xliff:g> simu"</string>
     <string name="message" msgid="6532533046559751182">"Tuma ujumbe kwa <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Piga simu ya video kwa <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Bupu lisilotumia Macho"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Kizinduzi cha Android"</string>
+    <string name="app_name" msgid="2842226161122377485">"Onyesho la Wasioona na Walio na Matatizo ya Kuona"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

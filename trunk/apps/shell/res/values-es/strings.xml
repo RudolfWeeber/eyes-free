@@ -80,6 +80,7 @@
     <string name="call" msgid="4657819819700891468">"Llamar a <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Mandar un mensaje a <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Hacer una videollamada a <xliff:g id="NAME">%s</xliff:g>"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Menú de aplicaciones de Android"</string>
     <string name="app_name" msgid="2842226161122377485">"Interfaz accesible"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

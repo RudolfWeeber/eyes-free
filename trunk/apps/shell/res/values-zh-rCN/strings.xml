@@ -3,15 +3,15 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="please_unlock" msgid="6365667699763427870">"请解锁。"</string>
     <string name="you_have_new_voicemail" msgid="5227108155355706109">"您有新的语音邮件。"</string>
-    <string name="application_not_installed" msgid="1645184903184790315">"应用程序未安装。"</string>
+    <string name="application_not_installed" msgid="1645184903184790315">"应用未安装。"</string>
     <string name="compass" msgid="8750992021021133710">"罗盘"</string>
     <string name="battery" msgid="504393301120218841">"电池"</string>
     <string name="midnight" msgid="823708676542012468">"午夜"</string>
     <string name="noon" msgid="8691597485483233355">"正午"</string>
     <string name="am" msgid="1335477392441532734">"上午"</string>
     <string name="pm" msgid="4558817601126723904">"下午"</string>
-    <string name="applications" msgid="5932623028136955799">"应用程序"</string>
-    <string name="applist_reload" msgid="414133960959011310">"应用程序已重新加载"</string>
+    <string name="applications" msgid="5932623028136955799">"应用"</string>
+    <string name="applist_reload" msgid="414133960959011310">"应用已重新加载"</string>
     <string name="shortcuts" msgid="6219208659294016638">"快捷方式"</string>
     <string name="voicemail" msgid="2728241956154985766">"语音邮件"</string>
     <string name="charging" msgid="1866903547832856576">"正在充电"</string>
@@ -68,18 +68,19 @@
     <string name="open_notifications" msgid="6089702592555917155">"打开通知"</string>
     <string name="save" msgid="2389796015807831702">"保存"</string>
     <string name="run" msgid="2666885736055379870">"运行"</string>
-    <string name="application" msgid="4134860023801858659">"应用程序"</string>
+    <string name="application" msgid="4134860023801858659">"应用"</string>
     <string name="bookmark" msgid="1475053585102538399">"书签"</string>
     <string name="contact" msgid="3967189141295438609">"联系"</string>
     <string name="direct_dial" msgid="6760324712299461726">"直接拨号"</string>
     <string name="direct_message" msgid="6883856830119989502">"直接发送短信"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"无需目视操作的窗口小部件"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"助盲窗口小部件"</string>
     <string name="settings" msgid="2547811091322397443">"设置"</string>
     <string name="gmail_label" msgid="461187592270143564">"Gmail 标签"</string>
     <string name="video_chat" msgid="1400713274879951497">"视频聊天"</string>
     <string name="call" msgid="4657819819700891468">"呼叫<xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"向<xliff:g id="NAME">%s</xliff:g>发送短信"</string>
     <string name="video_call" msgid="375680197155815761">"与<xliff:g id="NAME">%s</xliff:g>进行视频通话"</string>
-    <string name="app_name" msgid="2842226161122377485">"无需目视操作的界面"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Android 启动器"</string>
+    <string name="app_name" msgid="2842226161122377485">"视障界面"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

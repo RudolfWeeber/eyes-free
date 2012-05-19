@@ -73,13 +73,14 @@
     <string name="contact" msgid="3967189141295438609">"Kontaktas"</string>
     <string name="direct_dial" msgid="6760324712299461726">"Tiesioginis numerio rinkimas"</string>
     <string name="direct_message" msgid="6883856830119989502">"Tiesioginis pranešimas"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"„Eyes-Free“ valdiklis"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Garsinės sąsajos valdiklis"</string>
     <string name="settings" msgid="2547811091322397443">"Nustatymai"</string>
     <string name="gmail_label" msgid="461187592270143564">"„Gmail“ etiketė"</string>
     <string name="video_chat" msgid="1400713274879951497">"Vaizdo pokalbis"</string>
     <string name="call" msgid="4657819819700891468">"Skambutis – <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Pranešimas – <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Vaizdo skambutis – <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Shell"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"„Android“ paleidimo priemonė"</string>
+    <string name="app_name" msgid="2842226161122377485">"Garsinė sąsaja"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com/m?q="</string>
 </resources>

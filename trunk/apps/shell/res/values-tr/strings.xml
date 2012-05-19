@@ -73,13 +73,14 @@
     <string name="contact" msgid="3967189141295438609">"Kişi"</string>
     <string name="direct_dial" msgid="6760324712299461726">"Doğrudan Çevirme"</string>
     <string name="direct_message" msgid="6883856830119989502">"Doğrudan Mesaj"</string>
-    <string name="eyes_free_widget" msgid="7109650875913084975">"Eyes-free Widget\'ı"</string>
+    <string name="eyes_free_widget" msgid="7109650875913084975">"Görme Engelliler İçin Widget"</string>
     <string name="settings" msgid="2547811091322397443">"Ayarlar"</string>
     <string name="gmail_label" msgid="461187592270143564">"Gmail Etiketi"</string>
     <string name="video_chat" msgid="1400713274879951497">"Görüntülü Sohbet"</string>
     <string name="call" msgid="4657819819700891468">"Sesli çağrı başlat: <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="message" msgid="6532533046559751182">"Mesaj gönder: <xliff:g id="NAME">%s</xliff:g>"</string>
     <string name="video_call" msgid="375680197155815761">"Görüntülü çağrı başlat: <xliff:g id="NAME">%s</xliff:g>"</string>
-    <string name="app_name" msgid="2842226161122377485">"Eyes-Free Kabuğu"</string>
+    <string name="android_launcher" msgid="6874636205446792668">"Android Başlatıcı"</string>
+    <string name="app_name" msgid="2842226161122377485">"Görme Engelliler İçin Ekran"</string>
     <string name="search_url" msgid="9149357670420084387">"http://www.google.com.tr/m?q="</string>
 </resources>
