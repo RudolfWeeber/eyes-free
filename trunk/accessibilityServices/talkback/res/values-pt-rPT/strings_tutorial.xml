@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Inicie o tutorial \"Explorar através do toque\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Tutorial sobre Acessibilidade"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Tutorial sobre acessibilidade"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Seguinte"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Anterior"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Concluir"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Sair"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Toque desativado enquanto o tutorial está a falar"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Lição 1: Explorar o ecrã"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Após ativar a opção Explorar Através do Toque, poderá tocar no ecrã para saber o que está sob o dedo. Por exemplo, o ecrã atual contém ícones de aplicações. Toque no ecrã e deslize lentamente o dedo para localizar um deles."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Muito bem. Continue a deslizar o dedo pelo ecrã até localizar pelo menos mais um ícone."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Também pode explorar ao deslizar o dedo para a esquerda e para a direita em qualquer parte do ecrã. Tente deslizar da esquerda para a direita para passar para o ícone seguinte."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Para ativar algo que tenha explorado, toque duas vezes no ecrã. Explore até encontrar o ícone <xliff:g id="APP_NAME">%1$s</xliff:g>. Depois, toque duas vezes em qualquer parte do ecrã para o ativar."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Encontrou o ícone <xliff:g id="APP_NAME">%1$s</xliff:g>. Toque duas vezes em qualquer parte do ecrã para ativar o ícone."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"No passado explorou o ícone <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Tente explorar o ecrã até encontrar novamente o ícone <xliff:g id="APP_NAME_1">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Para passar para a aula seguinte, encontre o botão <xliff:g id="NEXT">%1$s</xliff:g>, localizado perto do canto inferior direito do ecrã e toque duas vezes para ativá-lo."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Lição 2: Percorrer listas"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Para percorrer uma lista, pode deslizar dois dedos ao longo do ecrã. Por exemplo, o ecrã atual contém uma lista de nomes de aplicações que pode percorrer para cima ou para baixo. Primeiro, tente explorar o ecrã e identificar uma aplicação."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Agora, coloque dois dedos sobre um item da lista e deslize os dedos para cima. Se chegar ao topo do ecrã, levante os dedos, coloque-os mais abaixo na lista e continue a deslizar para cima."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Explore o ecrã para localizar mais uma aplicação."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Também pode percorrer uma página completa ao deslizar o dedo. Desloque-se para a página seguinte ao deslizar rapidamente da esquerda para a direita e voltando para a esquerda."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Explore novamente o ecrã para localizar uma aplicação na página atual."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Ao deslizar no sentido oposto, para a esquerda e para trás, irá deslocar-se para a página anterior. Tente deslizar para se deslocar para a página anterior."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Para passar à próxima lição, localize e ative o botão <xliff:g id="NEXT">%s</xliff:g>, situado junto ao canto inferior direito do ecrã."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lição 3: Ler por carácter"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Por predefinição, deslizar para a esquerda e para a direita permite ler blocos de texto de uma só vez. Também é possível ler blocos de texto no ecrã por palavra ou carácter. Primeiro, localize o texto que começa com a palavra \"Este\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Em seguida, pode deslizar para baixo e voltar para cima para iniciar a leitura deste bloco num nível específico. Tente deslizar para baixo e para cima para alterar o nível de leitura e, em seguida, deslize para a direita para ler o texto."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Para sair do bloco de texto atual, será necessário regressar ao nível de leitura predefinido. Deslize na direção oposta, para cima e para voltar para baixo, para regressar ao nível de leitura predefinido. Localize o botão <xliff:g id="FINISH">%s</xliff:g> no canto inferior direito e toque duas vezes para ativá-lo e sair do tutorial."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Este é um exemplo de um grande bloco de texto. Pode deslocar-se pelo texto a um nível específico de leitura utilizando gestos de deslize ou ler tudo de uma só vez utilizando gestos de toque."\n\n"Este é o segundo parágrafo."\n\n"Este é o terceiro e último parágrafo. Deslize para baixo e para cima para alterar o nível de leitura e deslize para a direita para percorrer o texto."</string>
+</resources>

@@ -5,31 +5,27 @@
     <string name="pref_speak_ringer_key">pref_speak_ringer</string>
     <string name="pref_screenoff_key">pref_screenoff</string>
     <string name="pref_proximity_key">pref_proximity</string>
+    <string name="pref_speech_volume_key">pref_speech_volume</string>
     <string name="pref_category_feedback_key">pref_category_feedback</string>
     <string name="pref_vibration_key">pref_vibration</string>
     <string name="pref_soundback_key">pref_soundback</string>
     <string name="pref_category_developer_key">pref_category_developer</string>
     <string name="pref_log_level_key">pref_log_level</string>
     <string name="pref_soundback_volume_key">pref_soundback_volume</string>
-    <string name="pref_bluetooth_key">pref_bluetooth</string>
     <string name="pref_intonation_key">pref_intonation</string>
-    <string name="pref_keyboard_shortcuts_key">pref_keyboard_shortcuts</string>
-    <string name="pref_vibration_patterns_key">pref_vibration_patterns</string>
-    <string name="pref_soundback_sounds_key">pref_soundback_sounds</string>
     <string name="pref_developer_overlay_key">pref_developer_overlay</string>
     <string name="pref_tts_overlay_key">pref_tts_overlay</string>
     <string name="pref_caller_id_key">pref_proximity</string>
-    <string name="settings_manager_market_uri">market://details?id=com.marvin.preferences</string>
+    <string name="pref_explore_by_touch_key">pref_explore_by_touch</string>
+    <string name="pref_tutorial_key">pref_tutorial</string>
+    <string name="pref_category_miscellaneous_key">pref_category_miscellaneous</string>
+    <string name="pref_category_touch_exploration_key">pref_category_touch_exploration</string>
 
-    <!-- Message template for TalkBack crash reports
-    %1$s - Time stamp of crash
-    %2$s - Android SDK Version Code
-    %3$s - Android Device Details
-    %4$s - TalkBack Version Code
-    %5$s - Stack trace
-    %6$s - Last processed accessibility event -->
-    <string name="template_crash_report_message">TalkBack crash report generated on: %1$s\n\nAndroid OS Version: %2$s\n
-      Device Details: %3$s\nTalkBack Version: %4$s\n\nStack Trace:\n%5$s\nLast Accessibility Event:\n%6$s\n\n</string>
+    <string name="pref_category_touch_shortcuts_key">pref_category_touch_shortcuts</string>
+    <string name="pref_shortcut_up_and_left_key">pref_shortcut_up_and_left</string>
+    <string name="pref_shortcut_up_and_right_key">pref_shortcut_up_and_right</string>
+    <string name="pref_shortcut_down_and_left_key">pref_shortcut_down_and_left</string>
+    <string name="pref_shortcut_down_and_right_key">pref_shortcut_down_and_right</string>
 
     <!-- Log level preference entries -->
     <string-array name="pref_log_level_entries">
@@ -53,86 +49,97 @@
         <item>2</item>
     </string-array>
 
-    <!-- Assignable sounds -->
-    <string name="pref_sounds_hover_key">pref_sounds_hover_key</string>
-    <string name="pref_sounds_hover_default">raw/view_hover_enter</string>
-    <string name="pref_sounds_actionable_key">pref_sounds_actionable_key</string>
-    <string name="pref_sounds_actionable_default">raw/view_hover_enter_actionable</string>
-    <string name="pref_sounds_explore_begin_key">pref_sounds_explore_begin_key</string>
-    <string name="pref_sounds_explore_begin_default">raw/explore_begin</string>
-    <string name="pref_sounds_explore_end_key">pref_sounds_explore_end_key</string>
-    <string name="pref_sounds_explore_end_default">raw/explore_end</string>
-    <string name="pref_sounds_clicked_key">pref_sounds_clicked_key</string>
-    <string name="pref_sounds_clicked_default">raw/view_clicked</string>
-    <string name="pref_sounds_focused_key">pref_sounds_focused_key</string>
-    <string name="pref_sounds_focused_default">raw/view_focused</string>
-    <string name="pref_sounds_notification_state_key">pref_sounds_notification_state_key</string>
-    <string name="pref_sounds_notification_state_default">raw/notification_state_changed</string>
-    <string name="pref_sounds_text_changed_key">pref_sounds_text_changed_key</string>
-    <string name="pref_sounds_text_changed_default">raw/view_text_changed</string>
+    <!-- Speech volume preference entries -->
+    <string-array name="pref_speech_volume_entries">
+        <item>@string/value_volume_100_percent</item>
+        <item>@string/value_volume_75_percent</item>
+        <item>@string/value_volume_50_percent</item>
+        <item>@string/value_volume_25_percent</item>
+    </string-array>
 
-    <!-- Sounds to assign -->
-    <string-array translatable="false" name="pref_sounds_entries">
-      <item translatable="false">chirp</item>
-      <item translatable="false">cowbell</item>
-      <item translatable="false">slide down</item>
-      <item translatable="false">slide up</item>
-      <item translatable="false">swish</item>
-      <item translatable="false">tick</item>
-      <item translatable="false">tock</item>
-      <item translatable="false">typewriter</item>
-      <item translatable="false">two-tone up</item>
-      <item translatable="false">two-tone down</item>
-      <item translatable="false">wood block</item>
+    <!-- Speech volume preference values -->
+    <string-array name="pref_speech_volume_values">
+        <item>100</item>
+        <item>75</item>
+        <item>50</item>
+        <item>25</item>
     </string-array>
-    <string-array translatable="false" name="pref_sounds_values">
-      <item translatable="false">raw/view_hover_enter</item>
-      <item translatable="false">raw/cowbell</item>
-      <item translatable="false">raw/chime_down</item>
-      <item translatable="false">raw/chime_up</item>
-      <item translatable="false">raw/notification_state_changed</item>
-      <item translatable="false">raw/view_text_changed</item>
-      <item translatable="false">raw/view_hover_enter_actionable</item>
-      <item translatable="false">raw/view_focused</item>
-      <item translatable="false">raw/explore_begin</item>
-      <item translatable="false">raw/explore_end</item>
-      <item translatable="false">raw/view_clicked</item>
+
+    <!-- Sound volume preference entries -->
+    <string-array name="pref_soundback_volume_entries">
+        <item>@string/value_volume_100_percent</item>
+        <item>@string/value_volume_75_percent</item>
+        <item>@string/value_volume_50_percent</item>
+        <item>@string/value_volume_25_percent</item>
     </string-array>
+
+    <!-- Sound volume preference values -->
+    <string-array name="pref_soundback_volume_values">
+        <item>100</item>
+        <item>75</item>
+        <item>50</item>
+        <item>25</item>
+    </string-array>
+
+    <!-- Shortcut preference entries -->
+    <string-array name="pref_shortcut_entries">
+        <item>@string/shortcut_unassigned</item>
+        <item>@string/shortcut_back</item>
+        <item>@string/shortcut_home</item>
+        <item>@string/shortcut_recent_apps</item>
+        <item>@string/shortcut_notifications</item>
+    </string-array>
+
+    <!-- Shortcut preference values -->
+    <string-array name="pref_shortcut_values">
+        <item>UNASSIGNED</item>
+        <item>BACK</item>
+        <item>HOME</item>
+        <item>RECENTS</item>
+        <item>NOTIFICATIONS</item>
+    </string-array>
+
+    <!-- Assignable sounds -->
+    <item type="id" name="sounds_hover">sounds_hover</item>
+    <item type="id" name="sounds_actionable">sounds_actionable</item>
+    <item type="id" name="sounds_explore_begin">sounds_explore_begin</item>
+    <item type="id" name="sounds_explore_end">sounds_explore_end</item>
+    <item type="id" name="sounds_clicked">sounds_clicked</item>
+    <item type="id" name="sounds_focused">sounds_focused</item>
+    <item type="id" name="sounds_notification_state">sounds_notification_state</item>
+    <item type="id" name="sounds_text_changed">sounds_text_changed</item>
+    <item type="id" name="sounds_scroll_for_more">sounds_scroll_for_more</item>
 
     <!-- Assignable patterns -->
-    <string name="pref_patterns_hover_key">pref_patterns_hover_key</string>
-    <string name="pref_patterns_hover_default">array/view_hovered_pattern</string>
-    <string name="pref_patterns_actionable_key">pref_patterns_actionable_key</string>
-    <string name="pref_patterns_actionable_default">array/view_actionable_pattern</string>
-
-    <!-- Patterns to assign -->
-    <string-array translatable="false" name="pref_patterns_entries">
-      <item translatable="false">actionable</item>
-      <item translatable="false">clicked</item>
-      <item translatable="false">focused</item>
-      <item translatable="false">hovered</item>
-      <item translatable="false">notification</item>
-    </string-array>
-    <string-array translatable="false" name="pref_patterns_values">
-      <item translatable="false">array/view_actionable_pattern</item>
-      <item translatable="false">array/view_clicked_pattern</item>
-      <item translatable="false">array/view_focused_or_selected_pattern</item>
-      <item translatable="false">array/view_hovered_pattern</item>
-      <item translatable="false">array/view_notification_or_window_state_changed_pattern</item>
-    </string-array>
+    <item type="id" name="patterns_hover">patterns_hover</item>
+    <item type="id" name="patterns_actionable">patterns_actionable</item>
 
     <!-- Default preferences -->
     <string name="pref_speak_ringer_default">0</string>
+    <string name="pref_speech_volume_default">100</string>
     <bool name="pref_screenoff_default">false</bool>
     <bool name="pref_proximity_default">true</bool>
     <bool name="pref_vibration_default">true</bool>
     <bool name="pref_soundback_default">true</bool>
     <string name="pref_log_level_default">6</string>
     <string name="pref_soundback_volume_default">100</string>
-    <bool name="pref_bluetooth_default">false</bool>
     <bool name="pref_intonation_default">true</bool>
     <bool name="pref_developer_overlay_default">false</bool>
     <bool name="pref_tts_overlay_default">false</bool>
     <bool name="pref_caller_id_default">false</bool>
+    <bool name="pref_explore_by_touch_default">true</bool>
 
+    <string name="pref_shortcut_up_and_left_default">HOME</string>
+    <string name="pref_shortcut_up_and_right_default">NOTIFICATIONS</string>
+    <string name="pref_shortcut_down_and_left_default">BACK</string>
+    <string name="pref_shortcut_down_and_right_default">RECENTS</string>
+
+    <!-- Test application -->
+    <string name="test_username">Username</string>
+    <string name="test_password">Password</string>
+    <string name="test_remember_me">Remember me for 30 days</string>
+    <string name="test_sign_in">Sign in</string>
+
+    <!-- Accessibility tutorial -->
+    <item name="accessibility_tutorial_tag_touched" type="id"/>
 </resources>

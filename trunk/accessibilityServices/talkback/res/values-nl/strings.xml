@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="talkback_shortcut_title" msgid="6374632335119573898">"Snelkoppeling voor TalkBack"</string>
+    <string name="talkback_preferences_title" msgid="615685549632541311">"Instellingen voor TalkBack"</string>
     <string name="talkback_service_description" msgid="983212841294665356">"Wanneer Talkback is ingeschakeld, levert uw apparaat gesproken feedback om blinde en slechtziende gebruikers te helpen. Er wordt bijvoorbeeld beschreven wat u aanraakt, selecteert en inschakelt."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Sms"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Sms niet verzonden"</string>
@@ -26,18 +26,26 @@
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> vervangen door <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> tekens vervangen door <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> tekens"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Belsoftware <xliff:g id="PERCENT">%d</xliff:g> procent."</string>
-    <string name="template_image_view" msgid="4213590103284596735">"Afbeelding <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <!-- no translation found for template_image_view (2368987212503613897) -->
+    <skip />
     <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g>-lijst"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"<xliff:g id="TITLE">%1$s</xliff:g> lang ingedrukt"</string>
     <string name="template_button" msgid="6774709818484366257">"Knop <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"afbeelding <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Zoekregeling <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> procent."</string>
+    <string name="template_container" msgid="8918583415236947599">"<xliff:g id="TYPE">%1$s</xliff:g> met <xliff:g id="COUNT">%2$d</xliff:g> weergegeven items."</string>
+    <string name="value_gridview" msgid="9093738961981389981">"Raster"</string>
+    <string name="value_listview" msgid="3437715684913760710">"Lijst"</string>
+    <string name="value_tabwidget" msgid="5550633699198799743">"Tabbladbalk"</string>
+    <string name="value_container" msgid="439303423101134461">"Container"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Items <xliff:g id="FROM_INDEX">%d</xliff:g> tot en met <xliff:g id="TO_INDEX">%d</xliff:g> van <xliff:g id="TOTAL_COUNT">%d</xliff:g> worden weergegeven."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Item <xliff:g id="FROM_INDEX">%d</xliff:g> van <xliff:g id="TOTAL_COUNT">%d</xliff:g> wordt weergegeven."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Vervolgkeuzelijst <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_password_selected" msgid="7528235887386963927">"Geselecteerde tekens <xliff:g id="FROM_INDEX">%1$s</xliff:g> tot <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"hoofdletter <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
+    <string name="template_checkbox" msgid="7902762816979572494">"Selectievakje <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_radio_button" msgid="4272970081436888704">"Keuzerondje <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="value_password" msgid="52094746222829357">"wachtwoord"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Schuiflade is geopend"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Opties."</string>
@@ -47,9 +55,12 @@
     <string name="value_checked" msgid="5234989698372864892">"aangevinkt"</string>
     <string name="value_not_checked" msgid="193134740901545340">"niet aangevinkt"</string>
     <string name="value_disabled" msgid="65077823320194685">"uitgeschakeld"</string>
-    <string name="hint_clickable" msgid="5722744901089685155">"Tik om te klikken."</string>
-    <string name="hint_long_clickable" msgid="8223088419179222819">"Blijf aanraken om lang te klikken."</string>
-    <string name="hint_checkable" msgid="3455044599190977740">"Tik om in of uit te schakelen."</string>
+    <string name="value_double_tap" msgid="7829968646330038608">"Dubbeltik"</string>
+    <string name="value_single_tap" msgid="6461432282985355533">"Tik"</string>
+    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g> om te activeren."</string>
+    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> en blijf aanraken voor een lange klik."</string>
+    <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g> om te schakelen."</string>
+    <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g> om tekst op te geven."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"scrollbaar"</string>
     <string name="value_clicked" msgid="8306469740150249879">"aangeklikt"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"zonder label"</string>
@@ -57,50 +68,66 @@
     <string name="value_ringer_silent" msgid="672965424730167385">"Belsoftware stil."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Scherm uit."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Apparaat ontgrendeld."</string>
-    <string name="value_web_view" msgid="8368045336469722566">"Webweergave."</string>
+    <string name="value_web_view" msgid="8611542401983419041">"Webinhoud."</string>
     <string name="value_unknown_object" msgid="3589473667352440925">"Item zonder label."</string>
-    <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack-crashgegevens beschikbaar"</string>
-    <string name="message_talkback_crash" msgid="8552017712769665127">"Klik hier om TalkBack te verbeteren door crashgegevens te verzenden."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Wanneer spreken"</string>
+    <string name="title_pref_speech_volume" msgid="4013853601342391397">"Spraakvolume"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Belvolume"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Spreken als scherm uit is"</string>
     <string name="title_pref_caller_id" msgid="1414845059814636961">"Beller-id uitspreken"</string>
     <string name="title_pref_proximity" msgid="4957940010293002852">"Nabijheidssensor gebruiken"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Afstandssensor dempt spraak"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Spraak wordt niet geregeld door afstandssensor"</string>
-    <string name="title_pref_bluetooth" msgid="7738175584293158995">"Bluetooth-oortelefoon gebruiken"</string>
-    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Spreken via non-A2DP (mono) Bluetooth-oortelefoons indien beschikbaar"</string>
-    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Spreek nooit via non-A2DP (mono) Bluetooth-oortelefoons"</string>
+    <string name="title_pref_explore_by_touch" msgid="4051040843081874790">"Verkennen via aanraking"</string>
+    <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Verkennen via aanraking"</string>
+    <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Sneltoetsen voor gebaren beheren"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Verschillende toonhoogten gebruiken"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Spreek toetsenbordfeedback met een lagere toonhoogte uit"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Gebruik dezelfde toonhoogte tijdens het spreken"</string>
-    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Sneltoetsen"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Feedback"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Trilfeedback"</string>
-    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Trilpatronen toewijzen"</string>
-    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Verkennen via aanraking"</string>
-    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Klikbare items verkennen"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Geluidsfeedback"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Geluidsvolume"</string>
-    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Geluiden toewijzen"</string>
-    <string name="value_play_button" msgid="3816799051654747674">"Afspelen"</string>
-    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Verkennen via aanraking"</string>
-    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Klikbare items verkennen"</string>
-    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"Aangeklikt"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Diversen"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Ontwikkelaarsinstellingen"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Niveau van logoutput"</string>
     <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Gebeurtenisbronnen markeren"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Spraakuitvoer weergeven"</string>
-    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack-crashrapport"</string>
-    <string name="header_crash_report_email" msgid="9218276172142314054">"Het volgende is een crashrapport voor TalkBack. Als u op de knop \'Verzenden\' klikt, worden deze gegevens verzonden naar de TalkBack-ontwikkelaars."\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"Navigeren op teken."</string>
     <string name="axis_word" msgid="7745798763195184060">"Navigeren op woord."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Navigeren op zin."</string>
+    <string name="axis_paragraph" msgid="3453285809344289729">"Navigeren per alinea."</string>
+    <string name="axis_object" msgid="7034325449094737671">"Navigeren per object."</string>
+    <string name="axis_line" msgid="2210986915751668758">"Navigeren per regel."</string>
+    <string name="axis_page" msgid="9146038615069235841">"Navigeren per pagina."</string>
     <string name="axis_heading" msgid="8928386537164255063">"Navigeren op kop."</string>
     <string name="axis_sibling" msgid="7260754205862306385">"Navigeren op items op gelijk niveau."</string>
     <string name="axis_document" msgid="1581988340856497809">"Navigeren op document."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Navigeren op standaardgedrag voor webweergave."</string>
+    <string name="attention" msgid="627104955956154539">"Let op"</string>
+    <string name="explore_dialog_message" msgid="2796017207242981327">"Deze functie past de manier aan waarop uw apparaat reageert op aanraking. Inschakelen?"</string>
+    <string name="requires_talkback" msgid="3634159695179852501">"Voor deze handleiding is Verkennen via aanraking vereist. Zet Talkbalk aan en schakel Verkennen via aanraking in voordat u de handleiding start."</string>
+    <string name="granularity_character" msgid="5828563809381090688">"Lezen per teken"</string>
+    <string name="granularity_word" msgid="3660181391007381559">"Lezen per woord"</string>
+    <string name="granularity_paragraph" msgid="1175015890341475666">"Lezen per paragraaf"</string>
+    <string name="granularity_default" msgid="554981185979733919">"Standaard leesniveau"</string>
+    <string name="orientation_portrait" msgid="5280362272647722922">"Staand"</string>
+    <string name="orientation_landscape" msgid="129313890178554132">"Liggend"</string>
+    <string name="shortcut_unassigned" msgid="8631675444401168361">"Niet toegewezen"</string>
+    <string name="shortcut_back" msgid="8404153155835310379">"Knop \'Terug\'"</string>
+    <string name="shortcut_home" msgid="3905505999818649470">"Knop \'Startpagina\'"</string>
+    <string name="shortcut_recent_apps" msgid="4462279958679670485">"Knop \'Recente apps\'"</string>
+    <string name="shortcut_notifications" msgid="7234767026975704922">"Meldingen openen"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Laatste uiting herhalen"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Laatste uiting spellen"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Omlaag en naar links vegen"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Omlaag en naar rechts vegen"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Omhoog en naar links vegen"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Omhoog en naar rechts vegen"</string>
+    <string name="value_volume_200_percent" msgid="2969698924281376143">"200% van mediavolume"</string>
+    <string name="value_volume_150_percent" msgid="4668371157512150392">"150% van mediavolume"</string>
+    <string name="value_volume_100_percent" msgid="6676030754946177658">"Gelijk aan mediavolume"</string>
+    <string name="value_volume_75_percent" msgid="7578844180160160971">"75% van mediavolume"</string>
+    <string name="value_volume_50_percent" msgid="2830571913174435107">"50% van mediavolume"</string>
+    <string name="value_volume_25_percent" msgid="4441038207089946938">"25% van mediavolume"</string>
 </resources>

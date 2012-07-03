@@ -20,14 +20,13 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.util.Log;
 
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 /**
  * This class manages efficient loading of classes.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  * @author alanv@google.com (Alan Viverette)
  */
@@ -58,7 +57,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
 
     /**
      * The singleton instance of this class.
-     * 
+     *
      * @return The singleton instance of this class.
      */
     public static ClassLoadingManager getInstance() {
@@ -67,7 +66,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
         }
         return sInstance;
     }
-    
+
     @Override
     public void onInfrastructureStateChange(Context context, boolean isInitialized) {
         if (isInitialized) {
@@ -93,7 +92,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
 
     /**
      * Adds the specified package to the installed package cache.
-     * 
+     *
      * @param packageName The package name to add.
      */
     private void addInstalledPackageToCache(String packageName) {
@@ -105,7 +104,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
 
     /**
      * Removes the specified package from the installed package cache.
-     * 
+     *
      * @param packageName The package name to remove.
      */
     private void removeInstalledPackageFromCache(String packageName) {
@@ -131,7 +130,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      * try to create a package context and load the class. </p> Note: If the
      * package name is null and an attempt for loading of a package context is
      * required the it is extracted from the class name.
-     * 
+     *
      * @param context The context from which to first try loading the class.
      * @param className The name of the class to load.
      * @param packageName The name of the package to which the class belongs.
@@ -169,7 +168,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
 
         // Try the current ClassLoader.
         try {
-            return context.getClassLoader().loadClass(classNameStr);
+            return getClass().getClassLoader().loadClass(classNameStr);
         } catch (ClassNotFoundException e) {
             // Do nothing.
         }
@@ -186,11 +185,15 @@ public class ClassLoadingManager implements InfrastructureStateListener {
             return null;
         }
 
+        // Context is required past this point.
+        if (context == null) {
+            return null;
+        }
+
         // Attempt to load class by creating a package context.
         try {
             final int flags = (Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
-            final Context packageContext =
-                    context.getApplicationContext().createPackageContext(packageNameStr, flags);
+            final Context packageContext = context.createPackageContext(packageNameStr, flags);
             final Class<?> outsideClazz = packageContext.getClassLoader().loadClass(classNameStr);
 
             mClassNameToOutsidePackageClassMap.put(classNameStr, outsideClazz);

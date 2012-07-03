@@ -26,9 +26,9 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 
-import com.google.android.marvin.utils.PackageManagerUtils;
 import com.google.android.marvin.utils.SecureSettingsUtils;
 import com.googlecode.eyesfree.utils.FeedbackController;
+import com.googlecode.eyesfree.utils.PackageManagerUtils;
 import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
 
 /**
@@ -38,7 +38,9 @@ import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
  */
 class PreferenceFeedbackController extends FeedbackController {
     private final SharedPreferences mPrefs;
+
     private final ContentResolver mResolver;
+
     /**
      * Constructs a new preference-aware feedback controller.
      *
@@ -50,7 +52,8 @@ class PreferenceFeedbackController extends FeedbackController {
         mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         mPrefs.registerOnSharedPreferenceChangeListener(mPreferenceChangeListener);
 
-        final Uri servicesUri = Settings.Secure.getUriFor(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        final Uri servicesUri = Settings.Secure.getUriFor(
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
         mResolver = context.getContentResolver();
         mResolver.registerContentObserver(servicesUri, false, mContentObserver);
 
@@ -59,10 +62,9 @@ class PreferenceFeedbackController extends FeedbackController {
 
     @Override
     public void shutdown() {
-        super.shutdown();
-
         mPrefs.unregisterOnSharedPreferenceChangeListener(mPreferenceChangeListener);
         mResolver.unregisterContentObserver(mContentObserver);
+        super.shutdown();
     }
 
     /**
@@ -74,13 +76,15 @@ class PreferenceFeedbackController extends FeedbackController {
      */
     private void updatePreferences(SharedPreferences prefs, String key) {
         final Context context = getContext();
+        if (context == null) {
+            // Bail out safely if the context is ever set to null.
+            return;
+        }
         final Resources res = context.getResources();
 
         // TODO: Only reload the preference specified by the key.
-        final int volumePref =
-                SharedPreferencesUtils.getIntFromStringPref(prefs, res,
-                        R.string.pref_soundback_volume_key,
-                        R.string.pref_soundback_volume_default);
+        final int volumePref = SharedPreferencesUtils.getIntFromStringPref(prefs, res,
+                R.string.pref_soundback_volume_key, R.string.pref_soundback_volume_default);
 
         final int kickBackVersionCode = PackageManagerUtils.getVersionCode(
                 context, TalkBackService.KICKBACK_PACKAGE);
@@ -111,26 +115,29 @@ class PreferenceFeedbackController extends FeedbackController {
         setVolume(volumePref);
     }
 
-    private final SharedPreferences.OnSharedPreferenceChangeListener mPreferenceChangeListener =
-            new SharedPreferences.OnSharedPreferenceChangeListener() {
-                @Override
-                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                        String key) {
+    private final SharedPreferences.OnSharedPreferenceChangeListener
+            mPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+                    @Override
+                public void onSharedPreferenceChanged(
+                        SharedPreferences sharedPreferences, String key) {
                     updatePreferences(sharedPreferences, key);
                 }
             };
 
     private final ContentObserver mContentObserver = new ContentObserver(new Handler()) {
-        @Override
+            @Override
         public void onChange(boolean selfChange) {
             if (selfChange) {
                 // Don't handle self-changes.
                 return;
             }
 
+            final Context ctx = getContext();
+            if (ctx == null) {
+                return;
+            }
             final SharedPreferences sharedPreferences = PreferenceManager
-                    .getDefaultSharedPreferences(getContext());
-
+                    .getDefaultSharedPreferences(ctx);
             updatePreferences(sharedPreferences, null);
         }
     };

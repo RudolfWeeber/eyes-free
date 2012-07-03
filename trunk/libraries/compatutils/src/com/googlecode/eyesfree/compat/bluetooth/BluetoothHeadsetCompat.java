@@ -16,21 +16,21 @@
 
 package com.googlecode.eyesfree.compat.bluetooth;
 
-import android.bluetooth.BluetoothDevice;
-
 import com.googlecode.eyesfree.compat.CompatUtils;
 
 import java.lang.reflect.Method;
 
 public class BluetoothHeadsetCompat {
+    private static final Class<?> CLASS_BluetoothDevice = CompatUtils
+            .getClass("android.bluetooth.BluetoothDevice");
     private static final Class<?> CLASS_BluetoothHeadset = CompatUtils
             .getClass("android.bluetooth.BluetoothHeadset");
     private static final Method METHOD_startScoUsingVirtualVoiceCall = CompatUtils.getMethod(
-            CLASS_BluetoothHeadset, "startScoUsingVirtualVoiceCall", BluetoothDevice.class);
+            CLASS_BluetoothHeadset, "startScoUsingVirtualVoiceCall", CLASS_BluetoothDevice);
     private static final Method METHOD_stopScoUsingVirtualVoiceCall = CompatUtils.getMethod(
-            CLASS_BluetoothHeadset, "stopScoUsingVirtualVoiceCall", BluetoothDevice.class);
+            CLASS_BluetoothHeadset, "stopScoUsingVirtualVoiceCall", CLASS_BluetoothDevice);
     private static final Method METHOD_isAudioConnected = CompatUtils.getMethod(
-            CLASS_BluetoothHeadset, "isAudioConnected", BluetoothDevice.class);
+            CLASS_BluetoothHeadset, "isAudioConnected", CLASS_BluetoothDevice);
 
     private final Object mReceiver;
 
@@ -42,7 +42,7 @@ public class BluetoothHeadsetCompat {
      * Check if Bluetooth SCO audio is connected.
      * <p>
      * Requires {@link android.Manifest.permission#BLUETOOTH} permission.
-     * 
+     *
      * @param device Bluetooth headset
      * @return true if SCO is connected, false otherwise or on error
      */
@@ -55,7 +55,7 @@ public class BluetoothHeadsetCompat {
      * initiates a virtual voice call for Handsfree devices as many devices do
      * not accept SCO audio without a call. This API allows the handsfree device
      * to be used for routing non-cellular call audio.
-     * 
+     *
      * @param device Remote Bluetooth Device
      * @return true if successful, false if there was some error.
      */
@@ -67,7 +67,7 @@ public class BluetoothHeadsetCompat {
 
     /**
      * Terminates an ongoing SCO connection and the associated virtual call.
-     * 
+     *
      * @param device Remote Bluetooth Device
      * @return true if successful, false if there was some error.
      */

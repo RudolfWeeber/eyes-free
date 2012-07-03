@@ -16,12 +16,15 @@
 
 package com.google.android.marvin.talkback;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
@@ -31,7 +34,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
@@ -41,15 +43,16 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.android.marvin.utils.BluetoothConnectionManager;
+import com.google.android.marvin.utils.ProximitySensor;
+import com.google.android.marvin.utils.ProximitySensor.ProximityChangeListener;
 import com.google.android.marvin.utils.StringBuilderUtils;
+import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.compat.speech.tts.TextToSpeechCompatUtils;
 import com.googlecode.eyesfree.compat.speech.tts.TextToSpeechCompatUtils.EngineCompatUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -61,14 +64,18 @@ import java.util.List;
  * @author alanv@google.com (Alan Viverette)
  */
 public class SpeechController {
-    /** The package name of the system default TTS. */
-    private final String SYSTEM_TTS_ENGINE = (Build.VERSION.SDK_INT < 14) ? "com.svox.pico" : "com.google.android.tts";
+    /**
+     * Utterances must be no longer than MAX_UTTERANCE_LENGTH for the TTS to be
+     * able to handle them properly.  See MAX_SPEECH_ITEM_CHAR_LENGTH in
+     * // android/frameworks/base/core/java/android/speech/tts/TextToSpeechService.java
+     */
+    private static final int MAX_UTTERANCE_LENGTH = 3999;
 
     /** Prefix for utterance IDs. */
     private static final String UTTERANCE_ID_PREFIX = "talkback_";
 
     /** Number of times a TTS engine can fail before switching. */
-    private static final int MAX_TTS_FAILURES = 2;
+    private static final int MAX_TTS_FAILURES = 3;
 
     /** Constant to flush speech globally. */
     private static final int SPEECH_FLUSH_ALL = 2;
@@ -121,6 +128,9 @@ public class SpeechController {
     private final ArrayList<UtteranceCompleteAction> mUtteranceCompleteActions =
             new ArrayList<UtteranceCompleteAction>();
 
+    /** A list of installed TTS engines. */
+    private final LinkedList<String> mInstalledTtsEngines = new LinkedList<String>();
+
     /**
      * {@link BroadcastReceiver} for determining changes in the media state used
      * for switching the TTS engine.
@@ -139,8 +149,16 @@ public class SpeechController {
     /** The volume monitor, used to set ringer volume. */
     private VolumeMonitor mVolumeMonitor;
 
-    /** Handles connecting to BT headsets. */
-    private BluetoothConnectionManager mBluetoothHandler;
+    /** Proximity sensor for implementing "shut up" functionality. */
+    private ProximitySensor mProximitySensor;
+
+    /** Whether to use the proximity sensor to silence speech. */
+    private boolean mSilenceOnProximity;
+
+    /** Whether or not the screen is on. */
+    // This is set by RingerModeAndScreenMonitor and used by SpeechController
+    // to determine if the ProximitySensor should be on or off.
+    private boolean mScreenIsOn;
 
     /** The last spoken utterance. */
     private CharSequence mLastSpokenUtterance;
@@ -155,10 +173,10 @@ public class SpeechController {
     private int mTtsFailures;
 
     /** The package name of the preferred TTS engine. */
-    private String mPreferredTtsEngine;
+    private String mDefaultTtsEngine;
 
-    /** A list of installed TTS engines. */
-    private List<String> mTtsEngines;
+    /** The package name of the system TTS engine. */
+    private String mSystemTtsEngine;
 
     /** A temporary TTS used for switching engines. */
     private TextToSpeech mTempTts;
@@ -181,6 +199,9 @@ public class SpeechController {
     /** Whether rate and pitch can change. */
     private boolean mIntonationEnabled;
 
+    /** The speech volume (out of 100). */
+    private int mSpeechVolume;
+
     private float mCurrentRate = -1.0f;
     private float mCurrentPitch = -1.0f;
 
@@ -198,19 +219,19 @@ public class SpeechController {
 
         mUninterruptible = false;
 
-        mTtsEngines = getAvailableTtsEngines(context);
-
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.registerOnSharedPreferenceChangeListener(mPreferenceChangeListener);
 
         final Resources res = mContext.getResources();
 
         manageTtsOverlayEnabled(res, prefs);
-        manageBluetoothEnabled(res, prefs);
         manageIntonationEnabled(res, prefs);
+        manageSpeechVolume(res, prefs);
 
         final ContentResolver resolver = context.getContentResolver();
 
+        // Updating the default engine reloads the list of installed engines and
+        // the system engine. This also loads the default engine.
         updateDefaultEngine(resolver);
         updateDefaultPitch(resolver);
         updateDefaultRate(resolver);
@@ -222,6 +243,8 @@ public class SpeechController {
         resolver.registerContentObserver(defaultSynth, false, mSynthObserver);
         resolver.registerContentObserver(defaultPitch, false, mPitchObserver);
         resolver.registerContentObserver(defaultRate, false, mRateObserver);
+
+        mScreenIsOn = true;
     }
 
     public void setVolumeMonitor(VolumeMonitor volumeMonitor) {
@@ -302,7 +325,14 @@ public class SpeechController {
      */
     public void cleanUpAndSpeak(CharSequence text, QueuingMode queueMode, Bundle params,
             Runnable completedAction) {
-        if (TextUtils.isEmpty(text)) {
+        if (text == null) {
+            return;
+        }
+
+        final CharSequence trimmedText = text.toString().trim();
+
+        if (trimmedText.length() == 0) {
+            // Don't speak empty text.
             return;
         }
 
@@ -311,7 +341,6 @@ public class SpeechController {
         }
 
         // Attempt to clean up the text.
-        final CharSequence trimmedText = text.toString().trim();
         final CharSequence cleanedText = SpeechCleanupUtils.cleanUp(mContext, trimmedText);
 
         mLastSpokenUtterance = cleanedText;
@@ -406,6 +435,7 @@ public class SpeechController {
         } catch (Exception e) {
             // Don't care, we're not speaking.
         }
+        setProximitySensorState(mScreenIsOn);
 
         // Ensure all pending completion actions happen.
         handleUtteranceCompleted(UTTERANCE_ID_PREFIX + Integer.MAX_VALUE, false);
@@ -420,6 +450,7 @@ public class SpeechController {
         } catch (Exception e) {
             // Don't care, we're not speaking.
         }
+        setProximitySensorState(mScreenIsOn);
 
         // Ensure all pending completion actions happen.
         handleUtteranceCompleted(UTTERANCE_ID_PREFIX + Integer.MAX_VALUE, false);
@@ -442,8 +473,9 @@ public class SpeechController {
         resolver.unregisterContentObserver(mPitchObserver);
         resolver.unregisterContentObserver(mRateObserver);
 
-        manageBluetoothEnabled(null, null);
         manageTtsOverlayEnabled(null, null);
+
+        setProximitySensorState(false);
     }
 
     /**
@@ -472,40 +504,6 @@ public class SpeechController {
     }
 
     /**
-     * Manages whether speech will be output through a Bluetooth headset when
-     * available.
-     *
-     * @param res Activity resources.
-     * @param prefs The shared preferences for this service. Pass {@code null}
-     *            to disable Bluetooth.
-     */
-    private void manageBluetoothEnabled(Resources res, SharedPreferences prefs) {
-        final boolean bluetoothSupported = (Build.VERSION.SDK_INT
-                >= BluetoothConnectionManager.MIN_API_LEVEL);
-
-        if (!bluetoothSupported) {
-            return;
-        }
-
-        final boolean bluetoothEnabled;
-
-        if (prefs != null && res != null) {
-            bluetoothEnabled = SharedPreferencesUtils.getBooleanPref(prefs, res,
-                    R.string.pref_bluetooth_key, R.bool.pref_bluetooth_default);
-        } else {
-            bluetoothEnabled = false;
-        }
-
-        if (bluetoothEnabled && mBluetoothHandler == null) {
-            mBluetoothHandler = new BluetoothConnectionManager(5000, mBluetoothListener);
-        } else if (!bluetoothEnabled && mBluetoothHandler != null) {
-            mBluetoothHandler.stopSco();
-            mBluetoothHandler.stop();
-            mBluetoothHandler = null;
-        }
-    }
-
-    /**
      * Manages whether pitch will be changed to convey extra information.
      *
      * @param res Activity resources.
@@ -518,6 +516,22 @@ public class SpeechController {
                     R.string.pref_intonation_key, R.bool.pref_intonation_default);
         } else {
             mIntonationEnabled = false;
+        }
+    }
+
+    /**
+     * Manages the relative speech volume.
+     *
+     * @param res Activity resources.
+     * @param prefs The shared preferences for this service. Pass {@code null}
+     *            to set the default volume.
+     */
+    private void manageSpeechVolume(Resources res, SharedPreferences prefs) {
+        if (prefs != null && res != null) {
+            mSpeechVolume = SharedPreferencesUtils.getIntFromStringPref(prefs, res,
+                    R.string.pref_speech_volume_key, R.string.pref_speech_volume_default);
+        } else {
+            mSpeechVolume = 100;
         }
     }
 
@@ -549,8 +563,7 @@ public class SpeechController {
 
         // Set the default output stream.
         speechParams.put(Engine.KEY_PARAM_STREAM, "" + DEFAULT_STREAM);
-
-        manageBluetoothConnection(speechParams);
+        speechParams.put(Engine.KEY_PARAM_VOLUME, "" + (mSpeechVolume / 100.0f));
 
         final float pitch;
         final float rate;
@@ -575,11 +588,25 @@ public class SpeechController {
                 mCurrentRate = rate;
             }
 
+            // Split long utterances to avoid killing TTS. TTS will die if
+            // the incoming string is greater than 3999 characters.
+            ArrayList<String> speakableUtterances = null;
+            if (utterance.length() > MAX_UTTERANCE_LENGTH){
+              speakableUtterances = splitUtterancesIntoSpeakableStrings(utterance);
+              utterance = speakableUtterances.get(0);
+            }
+
             // TODO(alanv): Most applications don't know how to duck audio!
             //AudioManagerCompatUtils.requestAudioFocus(mAudioManager, null, AudioManager.STREAM_MUSIC,
             //        AudioManagerCompatUtils.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-
             final int result = mTts.speak(utterance, queueMode, speechParams);
+            if (speakableUtterances != null){
+                for (int i = 1; i < speakableUtterances.size(); i++){
+                    mTts.speak(speakableUtterances.get(i), TextToSpeech.QUEUE_ADD, speechParams);
+                }
+            }
+            // Always enable the proximity sensor after speaking.
+            setProximitySensorState(true);
 
             if (result != TextToSpeech.SUCCESS) {
                 // Treat the utterance as completed since we won't get a callback.
@@ -600,6 +627,29 @@ public class SpeechController {
         if (mTtsOverlay != null) {
             mTtsOverlay.speak(utterance);
         }
+    }
+
+    /**
+     * Splits long utterances up into shorter utterances.
+     * This is needed because the Android TTS does not support Strings that
+     * are longer than 3999 characters.
+     *
+     * @param utterance The original utterance.
+     * @return An ArrayList where the original utterance has been broken up into
+     * Strings that are no longer than 3999 characters.
+     */
+    private ArrayList<String> splitUtterancesIntoSpeakableStrings(String utterance){
+      ArrayList<String> speakableUtterances = new ArrayList<String>();
+      while (utterance.length() > MAX_UTTERANCE_LENGTH){
+        int splitLocation = utterance.lastIndexOf(" ", MAX_UTTERANCE_LENGTH);
+        if (splitLocation == -1){
+          splitLocation = MAX_UTTERANCE_LENGTH;
+        }
+        speakableUtterances.add(utterance.substring(0, splitLocation));
+        utterance = utterance.substring(splitLocation);
+      }
+      speakableUtterances.add(utterance);
+      return speakableUtterances;
     }
 
     /**
@@ -639,25 +689,6 @@ public class SpeechController {
     private boolean isDeviceRinging() {
         return mTelephonyManager != null
                 && (mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_RINGING);
-    }
-
-    /**
-     * Handle speaking through mono Bluetooth headsets.
-     */
-    private void manageBluetoothConnection(HashMap<String, String> speechParams) {
-        if (mBluetoothHandler == null || !mBluetoothHandler.isBluetoothAvailable()) {
-            // Can't output -- either disabled or no connection.
-            return;
-        }
-
-        if (!mBluetoothHandler.isAudioConnected()) {
-            mBluetoothHandler.start(mContext);
-        }
-
-        speechParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
-                Integer.toString(AudioManager.STREAM_VOICE_CALL));
-
-        LogUtils.log(SpeechController.class, Log.DEBUG, "Connected to Bluetooth headset!");
     }
 
     /**
@@ -721,17 +752,20 @@ public class SpeechController {
      * @param action The current media state.
      */
     private void handleMediaStateChanged(String action) {
-        if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) {
-            // When the SD card is mounted, switch to the preferred TTS
-            // engine.
-            if (mPreferredTtsEngine != null) {
-                setTtsEngine(mPreferredTtsEngine);
+        if (Intent.ACTION_MEDIA_UNMOUNTED.equals(action)) {
+            if (!TextUtils.equals(mSystemTtsEngine, mTtsEngine)) {
+                // Temporarily switch to the system TTS engine.
+                LogUtils.log(this, Log.VERBOSE, "Saw media unmount");
+                setTtsEngine(mSystemTtsEngine, true);
             }
-        } else if (Intent.ACTION_MEDIA_UNMOUNTED.equals(action)) {
-            // If the SD card is unmounted, cache the preferred engine and
-            // switch to the system TTS engine.
-            mPreferredTtsEngine = mTtsEngine;
-            setTtsEngine(SYSTEM_TTS_ENGINE);
+        }
+
+        if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) {
+            if (!TextUtils.equals(mDefaultTtsEngine, mTtsEngine)) {
+                // Try to switch back to the default engine.
+                LogUtils.log(this, Log.VERBOSE, "Saw media mount");
+                setTtsEngine(mDefaultTtsEngine, true);
+            }
         }
     }
 
@@ -769,16 +803,45 @@ public class SpeechController {
      *
      * @param engine The package name of the desired TTS engine
      */
-    private void setTtsEngine(String engine) {
+    private void setTtsEngine(String engine, boolean resetFailures) {
+        if (resetFailures) {
+            mTtsFailures = 0;
+        }
+
+        // Always try to stop the current engine before switching.
+        interrupt();
+
         if (mTempTts != null) {
             LogUtils.log(SpeechController.class, Log.ERROR, "Can't start TTS engine %s while still loading previous engine", engine);
             return;
         }
 
-        LogUtils.log(SpeechController.class, Log.ERROR, "Starting TTS engine: %s", engine);
+        // If this is an old version of Android, we need to use a deprecated
+        // method to switch the engine.
+        if ((mTts != null) && (Build.VERSION.SDK_INT < 14) && (Build.VERSION.SDK_INT > 8)) {
+            setEngineByPackageName_GB_HC(engine);
+            return;
+        }
+
+        LogUtils.log(SpeechController.class, Log.INFO, "Starting TTS engine: %s", engine);
 
         mTempTtsEngine = engine;
         mTempTts = TextToSpeechCompatUtils.newTextToSpeech(mContext, mTtsChangeListener, engine);
+    }
+
+    /**
+     * Attempts to set the engine by package name. Supported in GB and HC.
+     *
+     * @param engine The name of the engine to use.
+     */
+    @TargetApi(8)
+    @SuppressWarnings("deprecation")
+    private void setEngineByPackageName_GB_HC(String engine) {
+        mTempTtsEngine = engine;
+        mTempTts = mTts;
+
+        final int status = mTts.setEngineByPackageName(mTempTtsEngine);
+        mTtsChangeListener.onInit(status);
     }
 
     /**
@@ -788,27 +851,27 @@ public class SpeechController {
      * @param failedEngine The package name of the engine to switch from.
      */
     private void attemptTtsFailover(String failedEngine) {
+        LogUtils.log(SpeechController.class, Log.ERROR, "Attempting TTS failover from %s", failedEngine);
+
         mTtsFailures++;
 
-        if (mTtsFailures < MAX_TTS_FAILURES) {
-            // Restart the current engine.
-            setTtsEngine(mTtsEngine);
+        // If there is only one installed engine, or if the current engine
+        // hasn't failed enough times, just restart the current engine.
+        if ((mInstalledTtsEngines.size() <= 1) || (mTtsFailures < MAX_TTS_FAILURES)) {
+            setTtsEngine(failedEngine, false);
             return;
         }
 
-        mTtsEngines.remove(failedEngine);
-        mTtsFailures = 0;
-
-        if (mTtsEngines.size() == 0) {
-            LogUtils.log(SpeechController.class, Log.ERROR,
-                    "Ran out of TTS engines during failover from %s", failedEngine);
-            return;
+        // Move the engine to the back of the list.
+        if (failedEngine != null) {
+            mInstalledTtsEngines.remove(failedEngine);
+            mInstalledTtsEngines.addLast(failedEngine);
         }
 
         // Try to use the first available TTS engine.
-        final String nextEngine = mTtsEngines.get(0);
+        final String nextEngine = mInstalledTtsEngines.getFirst();
 
-        setTtsEngine(nextEngine);
+        setTtsEngine(nextEngine, true);
     }
 
     /**
@@ -818,6 +881,11 @@ public class SpeechController {
      */
     @SuppressWarnings("deprecation")
     private void handleTtsInitialized(int status) {
+        if (mTempTts == null) {
+            LogUtils.log(this, Log.ERROR, "Attempted to initialize TTS more than once!");
+            return;
+        }
+
         final TextToSpeech tempTts = mTempTts;
         final String tempTtsEngine = mTempTtsEngine;
 
@@ -839,6 +907,8 @@ public class SpeechController {
         mTts.setOnUtteranceCompletedListener(mUtteranceCompletedListener);
 
         mTtsEngine = tempTtsEngine;
+
+        LogUtils.log(SpeechController.class, Log.INFO, "Switched to TTS engine: %s", tempTtsEngine);
 
         if (isSwitchingEngines) {
             speakCurrentEngine();
@@ -862,23 +932,15 @@ public class SpeechController {
     }
 
     private void updateDefaultEngine(ContentResolver resolver) {
+        // Always refresh the list of available engines, since the user may have
+        // installed a new TTS and then switched to it.
+        reloadInstalledTtsEngines();
+
         // This may be null if the user hasn't specified an engine.
-        final String defaultEngine = Secure.getString(resolver, Secure.TTS_DEFAULT_SYNTH);
+        mDefaultTtsEngine = Secure.getString(resolver, Secure.TTS_DEFAULT_SYNTH);
 
-        // Set the fall-back engine to the default engine.
-        if (mPreferredTtsEngine == null) {
-            mPreferredTtsEngine = defaultEngine;
-        }
-
-        // Don't do anything if this is already the default engine.
-        if ((defaultEngine != null) && defaultEngine.equals(mTtsEngine)) {
-            return;
-        }
-
-        // Automatically switch engines when the system default changes.
-        interrupt();
-        mTtsFailures = 0;
-        setTtsEngine(defaultEngine);
+        // Always switch engines when the system default changes.
+        setTtsEngine(mDefaultTtsEngine, true);
     }
 
     private void updateDefaultPitch(ContentResolver resolver) {
@@ -887,6 +949,76 @@ public class SpeechController {
 
     private void updateDefaultRate(ContentResolver resolver) {
         mDefaultRate = Secure.getInt(resolver, Secure.TTS_DEFAULT_RATE, 100) / 100.0f;
+    }
+
+    /**
+     * Reloads the list of installed TTS engines.
+     */
+    private void reloadInstalledTtsEngines() {
+        final PackageManager pm = mContext.getPackageManager();
+
+        mInstalledTtsEngines.clear();
+
+        // ICS and pre-ICS have different ways of enumerating installed TTS
+        // services.
+        if (Build.VERSION.SDK_INT >= 14) {
+            reloadInstalledTtsEngines_ICS(pm);
+        } else {
+            reloadInstalledTtsEngines_HC(pm);
+        }
+
+        LogUtils.log(this, Log.INFO, "Found %d TTS engines. System engine is %s.",
+                mInstalledTtsEngines.size(), mSystemTtsEngine);
+    }
+
+    /**
+     * Reloads the list of installed engines for devices running API 14 or
+     * above.
+     *
+     * @param pm The package manager.
+     */
+    private void reloadInstalledTtsEngines_ICS(PackageManager pm) {
+        final Intent intent = new Intent(EngineCompatUtils.INTENT_ACTION_TTS_SERVICE);
+        final List<ResolveInfo> resolveInfos = pm.queryIntentServices(
+                intent, PackageManager.GET_SERVICES);
+
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            final ServiceInfo serviceInfo = resolveInfo.serviceInfo;
+            final ApplicationInfo appInfo = serviceInfo.applicationInfo;
+            final String packageName = serviceInfo.packageName;
+            final boolean isSystemApp = ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+
+            mInstalledTtsEngines.add(serviceInfo.packageName);
+
+            if (isSystemApp) {
+                mSystemTtsEngine = packageName;
+            }
+        }
+    }
+
+    /**
+     * Reloads the list of installed engines for devices running API 13 or
+     * below.
+     *
+     * @param pm The package manager.
+     */
+    private void reloadInstalledTtsEngines_HC(PackageManager pm) {
+        final Intent intent = new Intent("android.intent.action.START_TTS_ENGINE");
+        final List<ResolveInfo> resolveInfos = pm.queryIntentActivities(
+                intent, PackageManager.GET_ACTIVITIES);
+
+        for (ResolveInfo resolveInfo : resolveInfos) {
+            final ActivityInfo activityInfo = resolveInfo.activityInfo;
+            final ApplicationInfo appInfo = activityInfo.applicationInfo;
+            final String packageName = activityInfo.packageName;
+            final boolean isSystemApp = ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
+
+            mInstalledTtsEngines.add(packageName);
+
+            if (isSystemApp) {
+                mSystemTtsEngine = packageName;
+            }
+        }
     }
 
     /**
@@ -962,35 +1094,65 @@ public class SpeechController {
     }
 
     /**
-     * Returns a list of available TTS engines.
-     *
-     * @param context The parent context.
-     * @return A list of available TTS engines.
+     * Enables/disables the proximity sensor. The proximity sensor should be
+     * disabled when not in use to save battery.
      */
-    private static List<String> getAvailableTtsEngines(Context context) {
-        final PackageManager pm = context.getPackageManager();
-        final Intent intent = new Intent(EngineCompatUtils.INTENT_ACTION_TTS_SERVICE);
-        final List<ResolveInfo> resolveInfos =
-                pm.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY);
+    private void setProximitySensorState(boolean enabled) {
+        final boolean silenceOnProximity = mSilenceOnProximity;
 
-        if (resolveInfos.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        final List<String> results = new LinkedList<String>();
-
-        for (ResolveInfo resolveInfo : resolveInfos) {
-            final ServiceInfo serviceInfo = resolveInfo.serviceInfo;
-
-            if (serviceInfo == null) {
-                continue;
+        if (mProximitySensor == null) {
+            if (!silenceOnProximity || !enabled) {
+                // If we're not supposed to be using the proximity sensor, or if
+                // we're supposed to be turning it off, then don't do anything.
+                return;
             }
 
-            results.add(serviceInfo.packageName);
+            // Otherwise, ensure that the proximity sensor is initialized.
+            mProximitySensor = new ProximitySensor(mContext, true);
+            mProximitySensor.setProximityChangeListener(mProximityChangeListener);
         }
 
-        return results;
+        // Otherwise, start only if we're supposed to silence on proximity.
+        if (enabled && silenceOnProximity) {
+            mProximitySensor.start();
+        } else {
+            mProximitySensor.stop();
+        }
     }
+
+    /**
+     * Sets whether or not the proximity sensor should be used to silence speech.
+     */
+    public void setSilenceOnProximity(boolean silenceOnProximity) {
+        mSilenceOnProximity = silenceOnProximity;
+        setProximitySensorState(mSilenceOnProximity);
+    }
+
+    /**
+     * Lets the SpeechController know whether the screen is on.
+     */
+    public void setScreenIsOn(boolean screenIsOn) {
+        mScreenIsOn = screenIsOn;
+        // The proximity sensor should always be on when the screen is on so
+        // that the proximity gesture can be used to silence all apps.
+        if (mScreenIsOn) {
+            setProximitySensorState(true);
+        }
+    }
+
+    /**
+     * Stops the TTS engine when the proximity sensor is close.
+     */
+    private final ProximitySensor.ProximityChangeListener mProximityChangeListener =
+            new ProximityChangeListener() {
+        @Override
+        public void onProximityChanged(boolean close) {
+            // Stop feedback if the user is close to the sensor.
+            if (close) {
+                stopAll();
+            }
+        }
+    };
 
     /** Clears the flag indicating that the TTS shouldn't be interrupted. */
     private final Runnable mClearUninterruptible = new Runnable() {
@@ -1005,6 +1167,9 @@ public class SpeechController {
             new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
                 public void onUtteranceCompleted(String utteranceId) {
+                    // After each utterance has finished, re-evaluate whether
+                    // or not to turn off the proximity sensor.
+                    setProximitySensorState(mScreenIsOn);
                     mHandler.onUtteranceCompleted(utteranceId);
                 }
             };
@@ -1021,20 +1186,7 @@ public class SpeechController {
                 }
             };
 
-    private final BluetoothConnectionManager.Listener mBluetoothListener =
-            new BluetoothConnectionManager.Listener() {
-                @Override
-                public void onConnectionComplete() {
-                    final BluetoothConnectionManager bluetoothHandler = mBluetoothHandler;
-
-                    if (bluetoothHandler != null) {
-                        mAudioManager.setMode(AudioManager.MODE_IN_CALL);
-                        mBluetoothHandler.startSco();
-                    }
-                }
-            };
-
-    private final SpeechHandler mHandler = new SpeechHandler();
+    private final SpeechHandler mHandler = new SpeechHandler(this);
 
     /**
      * Handles changes to the default TTS engine.
@@ -1074,14 +1226,14 @@ public class SpeechController {
                     final Resources res = mContext.getResources();
 
                     // TODO: Optimize this to use the key.
-                    manageBluetoothEnabled(res, sharedPreferences);
                     manageTtsOverlayEnabled(res, sharedPreferences);
                     manageIntonationEnabled(res, sharedPreferences);
+                    manageSpeechVolume(res, sharedPreferences);
                 }
             };
 
     /** Handler used to return to the main thread from the TTS thread. */
-    private class SpeechHandler extends Handler {
+    private static class SpeechHandler extends WeakReferenceHandler<SpeechController> {
         /** Hand-off engine initialized. */
         private static final int MSG_INITIALIZED = 1;
 
@@ -1091,17 +1243,21 @@ public class SpeechController {
         /** Hand-off media state changes. */
         private static final int MSG_MEDIA_STATE_CHANGED = 3;
 
+        public SpeechHandler(SpeechController parent) {
+            super(parent);
+        }
+
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg, SpeechController parent) {
             switch (msg.what) {
                 case MSG_INITIALIZED:
-                    handleTtsInitialized(msg.arg1);
+                    parent.handleTtsInitialized(msg.arg1);
                     break;
                 case MSG_UTTERANCE_COMPLETED:
-                    handleUtteranceCompleted((String) msg.obj, true);
+                    parent.handleUtteranceCompleted((String) msg.obj, true);
                     break;
                 case MSG_MEDIA_STATE_CHANGED:
-                    handleMediaStateChanged((String) msg.obj);
+                    parent.handleMediaStateChanged((String) msg.obj);
             }
         }
 

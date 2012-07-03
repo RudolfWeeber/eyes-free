@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Start veiledningen for Utforsk ved å trykke"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Tilgjengelighetsveiledning"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Tilgjengelighetsveiledning"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Neste"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Forrige"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Fullfør"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Avslutt"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Berøring er deaktivert mens veiledningen snakker"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Leksjon 1: Utforsking av skjermen"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Når du slår på Utforsk ved å trykke, kan du trykke på skjermen for å finne ut hva som er under fingeren din. For eksempel inneholder den gjeldende siden appikoner. Finn ett av dem ved å trykke på skjermen og skyve fingeren rundt."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Bra. Fortsett å skyve fingeren rundt på skjermen til du finner minst ett ikon til."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Du kan også utforske ved å sveipe fingeren til høyre og venstre på skjermen. Prøv å sveipe raskt fra venstre mot høyre for å gå til neste ikon."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Trykk to ganger på skjermen for å aktivere noe du har utforsket. Utforsk til du finner ikonet for <xliff:g id="APP_NAME">%1$s</xliff:g>. Trykk to ganger hvor som helst på skjermen for å aktivere appen."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Du fant ikonet for <xliff:g id="APP_NAME">%1$s</xliff:g>. Trykk to ganger hvor som helst på skjermen for å aktivere ikonet."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Du gikk forbi ikonet for <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Prøv å utforske skjermen til du finner <xliff:g id="APP_NAME_1">%1$s</xliff:g>-ikonet igjen."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Hvis du vil gå videre til neste økt, finner du <xliff:g id="NEXT">%1$s</xliff:g>-knappen nederst i høyre hjørne av skjermen og trykker to ganger for å aktivere den."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Leksjon 2: Å bla gjennom lister"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Hvis du vil bla gjennom en liste, kan du dra to fingre langs skjermen. Den gjeldende skjermen inneholder for eksempel en liste med appnavn som kan rulles opp eller ned. Prøv først å identifisere en app i listen ved å utforske skjermen."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Plassér deretter to fingre på et element i listen, og skyv begge fingrene oppover. Hvis du kommer til toppen av skjermen, løfter du fingrene, plasserer dem lavere på listen, og fortsetter å skyve dem oppover."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Utforsk skjermen for å finne en app til."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Du kan også rulle nedover en hel side ved å sveipe med fingeren. Rull til neste side ved å sveipe raskt fra venstre til høyre og så flytte tilbake til venstre igjen."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Utforsk skjermen igjen for å finne en app på den gjeldende siden."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Hvis du sveiper i motsatt retning, mot venstre og tilbake igjen, går du til forrige side. Prøv å gå til forrige side ved å sveipe."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Bra. Hvis du vil gå videre til neste leksjon, aktiverer du <xliff:g id="NEXT">%s</xliff:g>-knappen som ligger nederst til høyre på skjermen."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Leksjon 3: Lesing tegn for tegn"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Som standard fører sveip mot venstre og høyre til at tekstblokker leses av i ett. Du kan også lese gjennom blokker på skjermen ord for ord eller tegn for tegn. Finn først teksten som begynner med «Dette»."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Deretter kan du sveipe ned og opp igjen for å begynne å lese tekstblokken på et bestemt nivå. Prøv å sveipe ned og opp igjen for å endre lesenivået og så sveipe mot høyre for å lese gjennom teksten."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"For å gå ut av den gjeldende tekstblokken må du gå tilbake til standard lesenivå. Sveip i motsatt retning, opp og ned igjen, for å gå tilbake til standard lesenivå. Finn så <xliff:g id="FINISH">%s</xliff:g>-knappen nederst til høyre og dobbeltklikk for å aktivere den og avslutte veiledningen."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Dette er et eksempel på en stor mengde tekst. Du kan gå gjennom denne teksten på et spesifikt lesenivå ved å sveipe. Du kan også lese alt i ett ved å bruke berøringsbevegelser."\n\n"Dette er det andre avsnittet."\n\n"Dette er det tredje og siste avsnittet. Sveip nedover eller oppover for å forandre lesenivået. Etterpå sveiper du mot høyre for å gå gjennom teksten."</string>
+</resources>

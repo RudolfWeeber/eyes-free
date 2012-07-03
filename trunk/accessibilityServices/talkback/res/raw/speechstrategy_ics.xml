@@ -18,7 +18,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:property>text</ss:property>
@@ -34,7 +34,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:property>text</ss:property>

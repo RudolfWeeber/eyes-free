@@ -18,12 +18,12 @@ package com.google.android.marvin.talkback;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.widget.SimpleOverlay;
 
 /**
@@ -35,18 +35,6 @@ public class TextToSpeechOverlay extends SimpleOverlay {
     private static final int MSG_CLEAR_TEXT = 1;
 
     private TextView mText;
-
-    private final Handler mHandler = new Handler() {
-            @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_CLEAR_TEXT:
-                    mText.setText("");
-                    hide();
-                    break;
-            }
-        }
-    };
 
     public TextToSpeechOverlay(Context context) {
         super(context);
@@ -78,5 +66,23 @@ public class TextToSpeechOverlay extends SimpleOverlay {
         mHandler.removeMessages(MSG_CLEAR_TEXT);
         mText.setText(text.trim());
         mHandler.sendEmptyMessageDelayed(MSG_CLEAR_TEXT, displayTime);
+    }
+
+    private final OverlayHandler mHandler = new OverlayHandler(this);
+
+    private static class OverlayHandler extends WeakReferenceHandler<TextToSpeechOverlay> {
+        public OverlayHandler(TextToSpeechOverlay parent) {
+            super(parent);
+        }
+
+        @Override
+        protected void handleMessage(Message msg, TextToSpeechOverlay parent) {
+            switch (msg.what) {
+                case MSG_CLEAR_TEXT:
+                    parent.mText.setText("");
+                    parent.hide();
+                    break;
+            }
+        }
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Begin \"Verken-met-raak\"-tutoriaal"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Toeganklikheidstutoriaal"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Toeganklikheidstutoriaal"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Volgende"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Vorige"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Voltooi"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Verlaat"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Raak is gedeaktiveer terwyl die tutoriaal praat"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Les 1: Verken die skerm"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Wanneer Verken-met-raak aangeskakel is, kan jy die skerm raak om te wete te kom wat onder jou vinger is. Byvoorbeeld, die huidige skerm bevat programikone. Kry een van hulle deur die skerm te raak en met jou vinger rond te gly."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Mooi so. Hou aan om met jou vinger oor die skerm te gly totdat jy ten minste nog een ikoon kry."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Jy kan ook verken deur jou vinger links en regs op enige plek op die skerm te sleep. Probeer om vinnig van links na regs te sleep om na die volgende ikoon te beweeg."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Om iets wat jy verken het te aktiveer, tik die skerm twee keer. Verken totdat jy die <xliff:g id="APP_NAME">%1$s</xliff:g>-ikoon kry. Dubbbeltik dan enige plek op die skerm om dit te aktiveer."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Jy het die <xliff:g id="APP_NAME">%1$s</xliff:g>-ikoon opgespoor. Dubbeltik enige plek op die skerm om die ikoon te aktiveer."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Jy het verby die <xliff:g id="APP_NAME_0">%1$s</xliff:g>-ikoon verken. Probeer om die skerm te verken totdat jy weer die <xliff:g id="APP_NAME_1">%1$s</xliff:g>-ikoon vind."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Om na die volgende les te beweeg, vind die <xliff:g id="NEXT">%1$s</xliff:g>-knoppie, naby die onderste regterhoek van die skerm geleë, en dubbelklik dan om dit te aktiveer."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Les 2: Rollees deur lyste"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Om deur \'n lys te rollees, gly twee vingers oor die skerm. Byvoorbeeld, die huidige skerm bevat \'n lys programname wat op of af gerollees kan word. Probeer eers om die skerm te verken en \'n program te identifiseer."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Plaas nou twee vingers op \'n item in die lys en gly met albei vingers op. Wanneer jy die bokant van die skerm bereik, lig jou vingers, plaas hulle laer af op die lys en gly weer op."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Verken die skerm om nog \'n program te kry."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Jy kan ook deur \'n hele bladsy rollees deur jou vinger te sleep. Rollees na die volgende bladsy deur vinnig van links na regs te sleep, en beweeg dan agtertoe na links."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Verken die skerm weer om \'n program op die huidige blad te vind"</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Deur in die teenoorgestelde rigting te sleep, links en terug, sal na die vorige bladsy beweeg. Probeer sleep om na die vorige bladsy te rollees."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Om na die volgende les toe aan te beweeg, vind en aktiveer die <xliff:g id="NEXT">%s</xliff:g>-knoppie, wat naby die onderste hoek regs op die skerm geleë is."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Les 3: Lees per karakter"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"By verstek, deur links en regs te sleep word blokke teks alles tergelyketyd gelees. Jy kan ook per woord of karakter deur blokke opskermteks lees. Vind eerstens die teks wat met die woord \"Hierdie\" begin."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Volgende, kan jy af en weer op sleep om hierdie blok op \'n spesifieke vlak te begin lees. Probeer om af en weer terug op te sleep om die leesvlak te verander, en sleep dan na regs om deur die teks te lees."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Om uit die huidige blok teks te beweeg, sal jy na die verstek leesvlak moet terugkeer. Sleep in die teenoorgestelde rigting, op en terug ondertoe, om na die verstek leesvlak terug te keer. Kry die <xliff:g id="FINISH">%s</xliff:g>-knoppie onder-na-regs en dubbelklik om te aktiveer en uit die tutoriaal te gaan."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Hierdie is \'n voorbeeld van \'n groot blok teks. Jy kan op \'n spesifieke leesvlak deur die teks beweeg deur sleepgebare te gebruik of jy kan dit alles tergelyketyd lees deur aanraakgebare te gebruik."\n\n"Hierdie is die tweede paragraaf."\n\n"Hierdie is die derde en laaste paragraaf. Sleep af en op om die leesvlak te verander, een sleep dan regs om deur die teks te beweeg."</string>
+</resources>

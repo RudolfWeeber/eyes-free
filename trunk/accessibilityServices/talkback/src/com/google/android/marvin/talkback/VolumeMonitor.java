@@ -22,12 +22,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
-import android.os.Handler;
+import android.os.Build;
 import android.os.Message;
 import android.telephony.TelephonyManager;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.WindowManager;
 
 import com.google.android.marvin.talkback.SpeechController.QueuingMode;
+import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.compat.media.AudioManagerCompatUtils;
 import com.googlecode.eyesfree.widget.SimpleOverlay;
 
@@ -65,7 +69,11 @@ public class VolumeMonitor {
         mSpeechController = speechController;
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        mVolumeOverlay = new VolumeOverlay(context);
+
+        // Volume control overlay isn't needed for SDK 16+.
+        if (Build.VERSION.SDK_INT < 16) {
+            mVolumeOverlay = new VolumeOverlay(context);
+        }
 
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(AudioManagerCompatUtils.VOLUME_CHANGED_ACTION);
@@ -78,6 +86,8 @@ public class VolumeMonitor {
      * Shuts down and disables the volume monitor.
      */
     public void shutdown() {
+        releaseControl();
+
         mContext.unregisterReceiver(mBroadcastReceiver);
         mContext = null;
 
@@ -123,7 +133,9 @@ public class VolumeMonitor {
             // If the current stream hasn't been set, acquire control.
             mCurrentStream = streamType;
             AudioManagerCompatUtils.forceVolumeControlStream(mAudioManager, mCurrentStream);
-            mVolumeOverlay.show();
+            if (mVolumeOverlay != null) {
+                mVolumeOverlay.show();
+            }
             mHandler.onControlAcquired(streamType);
             return;
         }
@@ -133,8 +145,6 @@ public class VolumeMonitor {
             return;
         }
 
-        // Interrupt TTS is it's already speaking...
-        mSpeechController.interrupt();
         mHandler.releaseControl();
     }
 
@@ -164,6 +174,8 @@ public class VolumeMonitor {
      * control of the stream.
      */
     private void internalOnReleaseControl() {
+        mHandler.clearReleaseControl();
+
         final int streamType = mCurrentStream;
 
         if (streamType < 0) {
@@ -171,11 +183,8 @@ public class VolumeMonitor {
             return;
         }
 
-        mCurrentStream = -1;
-        AudioManagerCompatUtils.forceVolumeControlStream(mAudioManager, -1);
-
         if (!shouldAnnounceStream(streamType)) {
-            mHandler.post(mHideVolumeOverlay);
+            mHandler.post(mReleaseControl);
             return;
         }
 
@@ -184,7 +193,18 @@ public class VolumeMonitor {
         final String text = mContext.getString(
                 R.string.template_stream_volume_set, streamName, volume);
 
-        speakWithCompletion(text, mHideVolumeOverlay);
+        speakWithCompletion(text, mReleaseControl);
+    }
+
+    /**
+     * Releases control of the stream.
+     */
+    private void releaseControl() {
+        mCurrentStream = -1;
+        AudioManagerCompatUtils.forceVolumeControlStream(mAudioManager, -1);
+        if (mVolumeOverlay != null) {
+            mVolumeOverlay.hide();
+        }
     }
 
     /**
@@ -280,16 +300,16 @@ public class VolumeMonitor {
         return volumePercent;
     }
 
-    private final VolumeHandler mHandler = new VolumeHandler();
+    private final VolumeHandler mHandler = new VolumeHandler(this);
 
     /**
      * Runnable that hides the volume overlay. Used as a completion action for
      * the "volume set" utterance.
      */
-    private final Runnable mHideVolumeOverlay = new Runnable() {
+    private final Runnable mReleaseControl = new Runnable() {
         @Override
         public void run() {
-            mVolumeOverlay.hide();
+            releaseControl();
         }
     };
 
@@ -345,7 +365,7 @@ public class VolumeMonitor {
      * service thread. Maintains timeout actions, including volume control
      * acquisition and release.
      */
-    private class VolumeHandler extends Handler {
+    private static class VolumeHandler extends WeakReferenceHandler<VolumeMonitor> {
         /** Timeout in milliseconds before the volume control disappears. */
         private static final long RELEASE_CONTROL_TIMEOUT = 2000;
 
@@ -356,26 +376,30 @@ public class VolumeMonitor {
         private static final int MSG_CONTROL = 2;
         private static final int MSG_RELEASE_CONTROL = 3;
 
+        public VolumeHandler(VolumeMonitor parent) {
+            super(parent);
+        }
+
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg, VolumeMonitor parent) {
             switch (msg.what) {
                 case MSG_VOLUME_CHANGED: {
                     final Integer type = (Integer) msg.obj;
                     final int value = msg.arg1;
                     final int prevValue = msg.arg2;
 
-                    internalOnVolumeChanged(type, value, prevValue);
+                    parent.internalOnVolumeChanged(type, value, prevValue);
                     break;
                 }
                 case MSG_CONTROL: {
                     final int streamType = msg.arg1;
                     final int volume = msg.arg2;
 
-                    internalOnControlAcquired(streamType);
+                    parent.internalOnControlAcquired(streamType);
                     break;
                 }
                 case MSG_RELEASE_CONTROL: {
-                    internalOnReleaseControl();
+                    parent.internalOnReleaseControl();
                     break;
                 }
             }
@@ -387,11 +411,18 @@ public class VolumeMonitor {
          * @see #internalOnReleaseControl
          */
         public void releaseControl() {
-            removeMessages(MSG_CONTROL);
-            removeMessages(MSG_RELEASE_CONTROL);
+            clearReleaseControl();
 
             final Message msg = obtainMessage(MSG_RELEASE_CONTROL);
             sendMessageDelayed(msg, RELEASE_CONTROL_TIMEOUT);
+        }
+
+        /**
+         * Clears the volume control release timeout.
+         */
+        public void clearReleaseControl() {
+            removeMessages(MSG_CONTROL);
+            removeMessages(MSG_RELEASE_CONTROL);
         }
 
         /**
@@ -427,7 +458,7 @@ public class VolumeMonitor {
      * <b>Warning:</b> When shown, this overlay will capture <b>all</a> key events.
      * </p>
      */
-    private static class VolumeOverlay extends SimpleOverlay {
+    private class VolumeOverlay extends SimpleOverlay implements OnKeyListener {
         public VolumeOverlay(Context context) {
             super(context);
 
@@ -438,6 +469,19 @@ public class VolumeMonitor {
             params.width = 0;
             params.height = 0;
             setParams(params);
+
+            setOnKeyListener(this);
+        }
+
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            // Pressing any non-volume key should hide the overlay.
+            if ((keyCode != KeyEvent.KEYCODE_VOLUME_DOWN)
+                    && (keyCode != KeyEvent.KEYCODE_VOLUME_UP)) {
+                releaseControl();
+            }
+
+            return false;
         }
     }
 }

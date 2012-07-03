@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="talkback_shortcut_title" msgid="6374632335119573898">"TalkBack शॉर्टकट"</string>
+    <string name="talkback_preferences_title" msgid="615685549632541311">"Talkback सेटिंग"</string>
     <string name="talkback_service_description" msgid="983212841294665356">"Talkback चालू होने पर, आपका उपकरण नेत्रहीन और कम दृष्टि‍ वाले उपयोगकर्ताओं की सहायता के लि‍ए बोलकर फ़ीडबैक प्रदान करता है. उदाहरण के लि‍ए, यह बताता है कि‍ आप क्‍या स्‍पर्श, चयन और सक्रि‍य कर रहे हैं."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"पाठ संदेश"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"नहीं भेजा गया पाठ संदेश"</string>
@@ -26,18 +26,26 @@
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> को <xliff:g id="NEW_TEXT">%2$s</xliff:g> के साथ बदला गया"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> वर्णों को <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> वर्णों से बदला गया"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"रिंगर <xliff:g id="PERCENT">%d</xliff:g> प्रतिशत."</string>
-    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> छवि"</string>
+    <!-- no translation found for template_image_view (2368987212503613897) -->
+    <skip />
     <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g> सूची"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"लंबे समय तक दबाया गया <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"<xliff:g id="TITLE">%1$s</xliff:g> बटन"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"छवि <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> खोज नियंत्रण."</string>
     <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> प्रतिशत."</string>
+    <string name="template_container" msgid="8918583415236947599">"<xliff:g id="COUNT">%2$d</xliff:g> आइटम <xliff:g id="TYPE">%1$s</xliff:g> दिखा रहा है."</string>
+    <string name="value_gridview" msgid="9093738961981389981">"ग्रिड"</string>
+    <string name="value_listview" msgid="3437715684913760710">"सूची"</string>
+    <string name="value_tabwidget" msgid="5550633699198799743">"टैब बार"</string>
+    <string name="value_container" msgid="439303423101134461">"कंटेनर"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"<xliff:g id="TOTAL_COUNT">%d</xliff:g> में से <xliff:g id="FROM_INDEX">%d</xliff:g> से <xliff:g id="TO_INDEX">%d</xliff:g> आइटम दिखा रहा है."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"<xliff:g id="TOTAL_COUNT">%d</xliff:g> में से <xliff:g id="FROM_INDEX">%d</xliff:g> आइटम दिखा रहा है."</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> ड्रॉप डाउन सूची."</string>
     <string name="template_password_selected" msgid="7528235887386963927">"<xliff:g id="FROM_INDEX">%1$s</xliff:g> से <xliff:g id="TO_INDEX">%1$s</xliff:g> तक चयनि‍त वर्ण"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"कैपिटल <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
+    <string name="template_checkbox" msgid="7902762816979572494">"<xliff:g id="TITLE">%1$s</xliff:g> चेक बॉक्‍स."</string>
+    <string name="template_radio_button" msgid="4272970081436888704">"<xliff:g id="TITLE">%1$s</xliff:g> रेडियो बटन."</string>
     <string name="value_password" msgid="52094746222829357">"पासवर्ड"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"स्लाइडिंग ड्रावर खोला गया"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"विकल्प."</string>
@@ -47,9 +55,12 @@
     <string name="value_checked" msgid="5234989698372864892">"चेक किया गया"</string>
     <string name="value_not_checked" msgid="193134740901545340">"चेक नहीं किया गया"</string>
     <string name="value_disabled" msgid="65077823320194685">"अक्षम"</string>
-    <string name="hint_clickable" msgid="5722744901089685155">"क्‍लिक करने के लिए टैप करें."</string>
-    <string name="hint_long_clickable" msgid="8223088419179222819">"देर तक क्‍लिक करने के लिए टैप करके रखें."</string>
-    <string name="hint_checkable" msgid="3455044599190977740">"टॉगल करने के लिए टैप करें."</string>
+    <string name="value_double_tap" msgid="7829968646330038608">"डबल-टैप करें"</string>
+    <string name="value_single_tap" msgid="6461432282985355533">"टैप करें"</string>
+    <string name="template_hint_clickable" msgid="3732923024418439340">"सक्रिय करने के लिए <xliff:g id="ACTION">%1$s</xliff:g>."</string>
+    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> और लंबी क्‍लिक के लिए रुके रहें."</string>
+    <string name="template_hint_checkable" msgid="6312875663486456665">"टॉगल करने के लिए <xliff:g id="ACTION">%1$s</xliff:g>."</string>
+    <string name="template_hint_edit_text" msgid="4793267613633348902">"पाठ दर्ज करने के लिए <xliff:g id="ACTION">%1$s</xliff:g>."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"स्‍क्रॉल करने योग्‍य"</string>
     <string name="value_clicked" msgid="8306469740150249879">"क्लिक किया गया"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"लेबल हटाया गया"</string>
@@ -57,50 +68,66 @@
     <string name="value_ringer_silent" msgid="672965424730167385">"रिंगर मौन."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"स्क्रीन बंद."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"उपकरण अनलॉक कर दिया गया."</string>
-    <string name="value_web_view" msgid="8368045336469722566">"वेब दृश्य."</string>
+    <string name="value_web_view" msgid="8611542401983419041">"वेब सामग्री."</string>
     <string name="value_unknown_object" msgid="3589473667352440925">"लेबल न किया गया आइटम."</string>
-    <string name="title_talkback_crash" msgid="1342512684382958066">"TalkBack क्रैश डेटा उपलब्ध"</string>
-    <string name="message_talkback_crash" msgid="8552017712769665127">"क्रैश डेटा भेजकर TalkBack में सुधार करने के लिए यहां क्लिक करें."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"कब बोलें"</string>
+    <string name="title_pref_speech_volume" msgid="4013853601342391397">"वाक् वॉल्‍यूम"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"रिंगर वॉल्‍यूम"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"स्‍क्रीन बंद हो तब बोलें"</string>
     <string name="title_pref_caller_id" msgid="1414845059814636961">"कॉलर आईडी बोलें"</string>
     <string name="title_pref_proximity" msgid="4957940010293002852">"निकटस्थ सेंसर का उपयोग करें"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"निकटता सेंसर बातचीत मौन कर देता है"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"निकटता सेंसर बातचीत को नियंत्रित नहीं करता है"</string>
-    <string name="title_pref_bluetooth" msgid="7738175584293158995">"Bluetooth इयरपीस उपयोग करें"</string>
-    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"उपलब्ध होने पर गैर-A2DP (मोनो) Bluetooth इयरपीस से बोलें"</string>
-    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"गैर-A2DP (मोनो) Bluetooth इयरपीस के माध्यम से कभी भी न बोलें"</string>
+    <string name="title_pref_explore_by_touch" msgid="4051040843081874790">"स्‍पर्श द्वारा अन्‍वेषण"</string>
+    <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"स्‍पर्श अन्‍वेषण"</string>
+    <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"शॉर्टकट जेस्चर को प्रबंधित करें"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"आवाज़ तीव्रता में बदलावों का उपयोग करें"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"धीमी आवाज़ में कीबोर्ड फ़ीडबैक बोलें"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"बोलते समय आवाज़ की तीव्रता नहीं बदलें"</string>
-    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"कीबोर्ड शॉर्टकट"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"फ़ीडबैक"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"कंपन फ़ीडबैक"</string>
-    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"कंपन प्रतिमान सौपें"</string>
-    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"स्‍पर्श द्वारा अन्‍वेषण"</string>
-    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"क्‍लिक योग्य आइटम का अन्‍वेषण"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"ध्वनि फ़ीडबैक"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"ध्‍वनि वॉल्‍यूम"</string>
-    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"ध्‍वनि सौपें"</string>
-    <string name="value_play_button" msgid="3816799051654747674">"चलाएं"</string>
-    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"स्‍पर्श द्वारा अन्‍वेषण"</string>
-    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"क्‍लिक योग्य आइटम का अन्‍वेषण"</string>
-    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"क्लिक किया गया"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"विविध"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"डेवलपर सेटिंग"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"लॉग आउटपुट स्‍तर"</string>
     <string name="title_pref_developer_overlay" msgid="3149580897456358717">"ईवेंट स्रोत हाइलाइट करें"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"वाक् आउटपुट दिखाएं"</string>
-    <string name="subject_crash_report_email" msgid="3043388136219501183">"TalkBack क्रैश रिपोर्ट"</string>
-    <string name="header_crash_report_email" msgid="9218276172142314054">"TalkBack के लिए निम्न एक क्रैश रिपोर्ट है. \"भेजें\" बटन क्लिक करने पर यह डेटा TalkBack डेवलपर को प्रसारित कर दिया जाएगा."\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"वर्ण द्वारा नेविगेट करें."</string>
     <string name="axis_word" msgid="7745798763195184060">"शब्‍द द्वारा नेविगेट करें."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"वाक्‍य द्वारा नेविगेट करें."</string>
+    <string name="axis_paragraph" msgid="3453285809344289729">"अनुच्छेद के अनुसार नेविगेट करें."</string>
+    <string name="axis_object" msgid="7034325449094737671">"ऑब्जेक्ट के अनुसार नेविगेट करें."</string>
+    <string name="axis_line" msgid="2210986915751668758">"लाइन के अनुसार नेविगेट करें."</string>
+    <string name="axis_page" msgid="9146038615069235841">"पृष्ठ के अनुसार नेविगेट करें."</string>
     <string name="axis_heading" msgid="8928386537164255063">"शीर्षक द्वारा नेविगेट करें."</string>
     <string name="axis_sibling" msgid="7260754205862306385">"सिबलिंग द्वारा नेविगेट करें."</string>
     <string name="axis_document" msgid="1581988340856497809">"दस्‍तावेज़ द्वारा नेविगेट करें."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"डिफ़ॉल्‍ट वेब दृश्‍य व्‍यवहार द्वारा नेविगेट करें."</string>
+    <string name="attention" msgid="627104955956154539">"ध्यान दें"</string>
+    <string name="explore_dialog_message" msgid="2796017207242981327">"यह सुविधा आपके उपकरण द्वारा स्‍पर्श का प्रतिसाद देने का तरीका बदलती है. चालू करें?"</string>
+    <string name="requires_talkback" msgid="3634159695179852501">"इस ट्यूटोरियल के लिए स्‍पर्श द्वारा अन्‍वेषण आवश्‍यक है. कृपया TalkBack चालू करें और ट्यूटोरियल लॉन्च करने से पहले स्‍पर्श द्वारा अन्‍वेषण को सक्षम करें."</string>
+    <string name="granularity_character" msgid="5828563809381090688">"वर्ण के अनुसार पढ़ें"</string>
+    <string name="granularity_word" msgid="3660181391007381559">"शब्‍द के अनुसार पढ़ें"</string>
+    <string name="granularity_paragraph" msgid="1175015890341475666">"अनुच्‍छेद के अनुसार पढ़ें"</string>
+    <string name="granularity_default" msgid="554981185979733919">"डिफ़ॉल्ट पठन स्तर"</string>
+    <string name="orientation_portrait" msgid="5280362272647722922">"पोर्ट्रेट"</string>
+    <string name="orientation_landscape" msgid="129313890178554132">"लैंडस्केप"</string>
+    <string name="shortcut_unassigned" msgid="8631675444401168361">"सौंपा नहीं गया"</string>
+    <string name="shortcut_back" msgid="8404153155835310379">"वापस जाएं बटन"</string>
+    <string name="shortcut_home" msgid="3905505999818649470">"होम बटन"</string>
+    <string name="shortcut_recent_apps" msgid="4462279958679670485">"हाल ही के एप्लिकेशन बटन"</string>
+    <string name="shortcut_notifications" msgid="7234767026975704922">"सूचनाएं खोलें"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"अंतिम कथन दोहराएं"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"अंतिम कथन की वर्तनी कहें"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"नीचे और बाएं स्‍वाइप करें"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"नीचे और दाएं स्‍वाइप करें"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"ऊपर और बाएं स्‍वाइप करें"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"ऊपर और दाएं स्‍वाइप करें"</string>
+    <string name="value_volume_200_percent" msgid="2969698924281376143">"मीडिया वॉल्‍यूम का 200%"</string>
+    <string name="value_volume_150_percent" msgid="4668371157512150392">"मीडिया वॉल्‍यूम का 150%"</string>
+    <string name="value_volume_100_percent" msgid="6676030754946177658">"मीडिया वॉल्‍यूम का मिलान करें"</string>
+    <string name="value_volume_75_percent" msgid="7578844180160160971">"मीडिया वॉल्‍यूम 75%"</string>
+    <string name="value_volume_50_percent" msgid="2830571913174435107">"मीडिया वॉल्‍यूम का 50%"</string>
+    <string name="value_volume_25_percent" msgid="4441038207089946938">"मीडिया वॉल्‍यूम का 25%"</string>
 </resources>

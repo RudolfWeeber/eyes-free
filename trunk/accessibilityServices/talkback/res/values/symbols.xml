@@ -92,4 +92,6 @@
     <string name="symbol_underscore">Underscore</string>
     <!-- Spoken description for the "\u007C" (VERTICAL LINE) keyboard key. [CHAR LIMIT="NONE"] -->
     <string name="symbol_vertical_bar">Vertical bar</string>
+    <!-- Spoken description for the "\n" (NEW LINE) keyboard key. [CHAR LIMIT="NONE"] -->
+    <string name="symbol_new_line">New line</string>
 </resources>

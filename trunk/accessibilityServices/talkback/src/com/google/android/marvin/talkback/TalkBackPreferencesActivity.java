@@ -16,7 +16,9 @@
 
 package com.google.android.marvin.talkback;
 
-import android.bluetooth.BluetoothAdapter;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -29,10 +31,11 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
+import android.telephony.TelephonyManager;
 
-import com.google.android.marvin.utils.BluetoothConnectionManager;
-import com.google.android.marvin.utils.PackageManagerUtils;
+import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
 import com.googlecode.eyesfree.compat.os.VibratorCompatUtils;
+import com.googlecode.eyesfree.utils.PackageManagerUtils;
 
 /**
  * Activity used to set TalkBack's service preferences. This activity is loaded
@@ -42,6 +45,8 @@ import com.googlecode.eyesfree.compat.os.VibratorCompatUtils;
  * @author alanv@google.com (Alan Viverette)
  */
 public class TalkBackPreferencesActivity extends PreferenceActivity {
+    private final int DIALOG_EXPLORE_BY_TOUCH = 1;
+
     /**
      * Loads the preferences from the XML preference definition and defines an
      * onPreferenceChangeListener for the font zoom size that restarts the
@@ -49,33 +54,75 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
      */
     @SuppressWarnings("deprecation")
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
 
         fixListSummaries(getPreferenceScreen());
 
-        assignKeyboardShortcutsIntent();
+        assignTouchExplorationIntent();
+        assignTutorialIntent();
 
+        checkTelephonySupport();
         checkVibrationSupport();
         checkProximitySupport();
-        checkBluetoothSupport();
         checkDeveloperOverlaySupport();
         checkInstalledBacks();
     }
 
+    @SuppressWarnings("deprecation")
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DIALOG_EXPLORE_BY_TOUCH:
+                return new AlertDialog.Builder(this).setTitle(R.string.attention)
+                        .setMessage(R.string.explore_dialog_message)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.ok, mOnDialogClickListener)
+                        .setNegativeButton(android.R.string.cancel, null).create();
+        }
+
+        return super.onCreateDialog(id);
+    }
+
     /**
-     * Assigns the appropriate intent to the keyboard shortcuts preference.
+     * Assigns the appropriate intent to the tutorial preference.
      */
-    private void assignKeyboardShortcutsIntent() {
-        final Intent shortcutIntent = new Intent("com.android.settings.QUICK_LAUNCH_SETTINGS");
+    private void assignTutorialIntent() {
+        final PreferenceGroup category =
+                (PreferenceGroup) findPreferenceByResId(R.string.pref_category_miscellaneous_key);
+        final Preference prefTutorial = findPreferenceByResId(R.string.pref_tutorial_key);
 
-        final Preference prefKeyboardShortcuts =
-                findPreferenceByResId(R.string.pref_keyboard_shortcuts_key);
+        if (prefTutorial == null) {
+            return;
+        }
 
-        if (prefKeyboardShortcuts != null) {
-            prefKeyboardShortcuts.setIntent(shortcutIntent);
+        if (Build.VERSION.SDK_INT >= AccessibilityTutorialActivity.MIN_API_LEVEL) {
+            final Intent tutorialIntent = new Intent(this, AccessibilityTutorialActivity.class);
+            prefTutorial.setIntent(tutorialIntent);
+        } else {
+            category.removePreference(prefTutorial);
+        }
+    }
+
+    /**
+     * Assigns the appropriate intent to the touch exploration preference.
+     */
+    private void assignTouchExplorationIntent() {
+        final PreferenceGroup category =
+                (PreferenceGroup) findPreferenceByResId(R.string.pref_category_miscellaneous_key);
+        final CheckBoxPreference prefTouchExploration = (CheckBoxPreference) findPreferenceByResId(
+                R.string.pref_explore_by_touch_key);
+
+        if (prefTouchExploration == null) {
+            return;
+        }
+
+        if (Build.VERSION.SDK_INT >= AccessibilityTutorialActivity.MIN_API_LEVEL) {
+            prefTouchExploration.setOnPreferenceChangeListener(mTouchExplorationChangeListener);
+        } else {
+            category.removePreference(prefTouchExploration);
         }
     }
 
@@ -109,25 +156,49 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
     }
 
     /**
+     * Ensure that telephony-related settings do not appear on devices without
+     * telephony.
+     */
+    private void checkTelephonySupport() {
+        final TelephonyManager telephony = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        final int phoneType = telephony.getPhoneType();
+
+        if (phoneType != TelephonyManager.PHONE_TYPE_NONE) {
+            return;
+        }
+
+        final PreferenceGroup category = (PreferenceGroup) findPreferenceByResId(
+                R.string.pref_category_when_to_speak_key);
+        final Preference prefCallerId = findPreferenceByResId(R.string.pref_caller_id_key);
+        final Preference prefSpeakRinger = findPreferenceByResId(R.string.pref_speak_ringer_key);
+
+        if (prefCallerId != null) {
+            category.removePreference(prefCallerId);
+        }
+
+        if (prefSpeakRinger != null) {
+            category.removePreference(prefSpeakRinger);
+        }
+    }
+
+    /**
      * Ensure that the vibration setting does not appear on devices without a
      * vibrator.
      */
     private void checkVibrationSupport() {
         final Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+        if (vibrator != null && VibratorCompatUtils.hasVibrator(vibrator)) {
+            return;
+        }
+
         final PreferenceGroup category =
                 (PreferenceGroup) findPreferenceByResId(R.string.pref_category_feedback_key);
         final CheckBoxPreference prefVibration =
                 (CheckBoxPreference) findPreferenceByResId(R.string.pref_vibration_key);
-        final Preference prefVibrationPatterns =
-                findPreferenceByResId(R.string.pref_vibration_patterns_key);
 
-        if (prefVibration == null) {
-            return;
-        }
-
-        if (vibrator == null || !VibratorCompatUtils.hasVibrator(vibrator)) {
+        if (prefVibration != null) {
             prefVibration.setChecked(false);
-            category.removePreference(prefVibrationPatterns);
             category.removePreference(prefVibration);
         }
     }
@@ -139,16 +210,17 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
     private void checkProximitySupport() {
         final SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
         final Sensor proximity = manager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+
+        if (proximity != null) {
+            return;
+        }
+
         final PreferenceGroup category =
                 (PreferenceGroup) findPreferenceByResId(R.string.pref_category_when_to_speak_key);
         final CheckBoxPreference prefProximity =
                 (CheckBoxPreference) findPreferenceByResId(R.string.pref_proximity_key);
 
-        if (prefProximity == null) {
-            return;
-        }
-
-        if (proximity == null) {
+        if (prefProximity != null) {
             prefProximity.setChecked(false);
             category.removePreference(prefProximity);
         }
@@ -159,40 +231,19 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
      * without touch exploration.
      */
     private void checkDeveloperOverlaySupport() {
-        final SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= DeveloperOverlay.MIN_API_LEVEL) {
+            return;
+        }
+
         final PreferenceGroup category =
                 (PreferenceGroup) findPreferenceByResId(R.string.pref_category_developer_key);
         final CheckBoxPreference preference =
                 (CheckBoxPreference) findPreferenceByResId(R.string.pref_developer_overlay_key);
 
-        if (Build.VERSION.SDK_INT >= DeveloperOverlay.MIN_API_LEVEL) {
-            return;
+        if (preference != null) {
+            preference.setChecked(false);
+            category.removePreference(preference);
         }
-
-        preference.setChecked(false);
-        category.removePreference(preference);
-    }
-
-    /**
-     * Ensure that the Bluetooth headset setting does not appear on devices
-     * without Bluetooth headset support.
-     */
-    private void checkBluetoothSupport() {
-        final PreferenceGroup category =
-                (PreferenceGroup) findPreferenceByResId(R.string.pref_category_when_to_speak_key);
-        final CheckBoxPreference preference =
-                (CheckBoxPreference) findPreferenceByResId(R.string.pref_bluetooth_key);
-
-        if (Build.VERSION.SDK_INT >= BluetoothConnectionManager.MIN_API_LEVEL) {
-            final BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-
-            if (adapter != null) {
-                return;
-            }
-        }
-
-        preference.setChecked(false);
-        category.removePreference(preference);
     }
 
     /**
@@ -207,7 +258,8 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         final int kickBackVersionCode = PackageManagerUtils.getVersionCode(
                 this, TalkBackService.KICKBACK_PACKAGE);
 
-        if (kickBackVersionCode >= TalkBackService.KICKBACK_REQUIRED_VERSION) {
+        if ((kickBackVersionCode >= TalkBackService.KICKBACK_REQUIRED_VERSION)
+                && (prefVibration != null)) {
             category.removePreference(prefVibration);
         }
 
@@ -216,7 +268,8 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         final int soundBackVersionCode = PackageManagerUtils.getVersionCode(
                 this, TalkBackService.SOUNDBACK_PACKAGE);
 
-        if (soundBackVersionCode >= TalkBackService.SOUNDBACK_REQUIRED_VERSION) {
+        if ((soundBackVersionCode >= TalkBackService.SOUNDBACK_REQUIRED_VERSION)
+                && (prefSoundBack != null)) {
             category.removePreference(prefSoundBack);
         }
     }
@@ -231,6 +284,31 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
     private Preference findPreferenceByResId(int resId) {
         return findPreference(getString(resId));
     }
+
+    private final OnPreferenceChangeListener mTouchExplorationChangeListener =
+            new OnPreferenceChangeListener() {
+                @SuppressWarnings("deprecation")
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    final CheckBoxPreference prefTouchExploration = (CheckBoxPreference) findPreferenceByResId(
+                            R.string.pref_explore_by_touch_key);
+                    if (Boolean.TRUE.equals(newValue)) {
+                        showDialog(DIALOG_EXPLORE_BY_TOUCH);
+                        return false;
+                    }
+                    return true;
+                }
+            };
+
+    private final DialogInterface.OnClickListener
+            mOnDialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final CheckBoxPreference prefTouchExploration = (CheckBoxPreference) findPreferenceByResId(
+                            R.string.pref_explore_by_touch_key);
+                    prefTouchExploration.setChecked(true);
+                }
+            };
 
     /**
      * Listens for preference changes and updates the summary to reflect the

@@ -47,4 +47,5 @@
     <string name="symbol_trademark" msgid="7855500032009132790">"Védjegy jel"</string>
     <string name="symbol_underscore" msgid="4704253128574141726">"Aláhúzásjel"</string>
     <string name="symbol_vertical_bar" msgid="1048988153298679308">"Függőleges vonal"</string>
+    <string name="symbol_new_line" msgid="7363881715875223224">"Új sor"</string>
 </resources>

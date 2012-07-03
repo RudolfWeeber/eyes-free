@@ -20,8 +20,8 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.utils.ClassLoadingManager;
 import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.ClassLoadingManager;
 
 import java.util.Iterator;
 import java.util.List;

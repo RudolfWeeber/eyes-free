@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Sem voz no Modo silencioso"</item>
     <item msgid="4945285159234224758">"Não falar nos modos Silencioso e Vibrar"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"Coincidir com o volume de voz"</item>
-    <item msgid="3474415020494727681">"75% do volume de voz"</item>
-    <item msgid="3630774810523140800">"50% do volume de voz"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Botão"</item>
     <item msgid="2031284088774168661">"Caixa de verificação"</item>

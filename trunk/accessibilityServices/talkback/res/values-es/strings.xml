@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="talkback_shortcut_title" msgid="6374632335119573898">"Acceso directo de TalkBack"</string>
+    <string name="talkback_preferences_title" msgid="615685549632541311">"Ajustes de TalkBack"</string>
     <string name="talkback_service_description" msgid="983212841294665356">"Cuando TalkBack está activado, tu dispositivo ofrece mensajes de voz para usuarios con discapacidad visual. Por ejemplo, hablará para describir los elementos que selecciones y actives."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Mensaje de texto"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Mensaje de texto no enviado"</string>
@@ -26,18 +26,26 @@
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> sustituido por <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caracteres sustituidos por <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caracteres"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"<xliff:g id="PERCENT">%d</xliff:g> por ciento de timbre"</string>
-    <string name="template_image_view" msgid="4213590103284596735">"Imagen de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <!-- no translation found for template_image_view (2368987212503613897) -->
+    <skip />
     <string name="template_list_view" msgid="4569888407076618446">"Lista de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Pulsación prolongada en <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Botón <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"imagen <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Control de búsqueda de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> por ciento"</string>
+    <string name="template_container" msgid="8918583415236947599">"<xliff:g id="TYPE">%1$s</xliff:g> muestra <xliff:g id="COUNT">%2$d</xliff:g> elementos."</string>
+    <string name="value_gridview" msgid="9093738961981389981">"Cuadrícula"</string>
+    <string name="value_listview" msgid="3437715684913760710">"Lista"</string>
+    <string name="value_tabwidget" msgid="5550633699198799743">"Barra de pestañas"</string>
+    <string name="value_container" msgid="439303423101134461">"Contenedor"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Mostrando elementos del <xliff:g id="FROM_INDEX">%d</xliff:g> al <xliff:g id="TO_INDEX">%d</xliff:g> de <xliff:g id="TOTAL_COUNT">%d</xliff:g>"</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Mostrando elemento <xliff:g id="FROM_INDEX">%d</xliff:g> de <xliff:g id="TOTAL_COUNT">%d</xliff:g>"</string>
     <string name="template_spinner" msgid="3914981448273826697">"Lista desplegable de <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_password_selected" msgid="7528235887386963927">"Caracteres seleccionados: de <xliff:g id="FROM_INDEX">%1$s</xliff:g> a <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"<xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g> mayúscula"</string>
+    <string name="template_checkbox" msgid="7902762816979572494">"Casilla de verificación: <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_radio_button" msgid="4272970081436888704">"Botón de opción <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="value_password" msgid="52094746222829357">"contraseña"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Cajón deslizante abierto"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Opciones."</string>
@@ -47,9 +55,12 @@
     <string name="value_checked" msgid="5234989698372864892">"seleccionado"</string>
     <string name="value_not_checked" msgid="193134740901545340">"no seleccionado"</string>
     <string name="value_disabled" msgid="65077823320194685">"inhabilitado"</string>
-    <string name="hint_clickable" msgid="5722744901089685155">"Toca para hacer clic."</string>
-    <string name="hint_long_clickable" msgid="8223088419179222819">"Mantén pulsado el elemento."</string>
-    <string name="hint_checkable" msgid="3455044599190977740">"Toca para activar."</string>
+    <string name="value_double_tap" msgid="7829968646330038608">"Toca dos veces"</string>
+    <string name="value_single_tap" msgid="6461432282985355533">"Toca"</string>
+    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g> para activar."</string>
+    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> y mantén pulsado el elemento."</string>
+    <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g> para activar."</string>
+    <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g> para introducir texto."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"desplazable"</string>
     <string name="value_clicked" msgid="8306469740150249879">"se ha hecho clic"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"sin etiqueta"</string>
@@ -57,50 +68,66 @@
     <string name="value_ringer_silent" msgid="672965424730167385">"Timbre en silencio"</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Pantalla apagada"</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Dispositivo desbloqueado"</string>
-    <string name="value_web_view" msgid="8368045336469722566">"Vista web"</string>
+    <string name="value_web_view" msgid="8611542401983419041">"Contenido web"</string>
     <string name="value_unknown_object" msgid="3589473667352440925">"Elemento sin etiqueta"</string>
-    <string name="title_talkback_crash" msgid="1342512684382958066">"Datos errores TalkBack disponibles"</string>
-    <string name="message_talkback_crash" msgid="8552017712769665127">"Haz clic aquí para mejorar TalkBack con el envío de datos de errores."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Cuándo hablar"</string>
+    <string name="title_pref_speech_volume" msgid="4013853601342391397">"Volumen de voz"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Volumen del timbre"</string>
-    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Hablar con pantalla apagada"</string>
+    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Con pantalla apagada"</string>
     <string name="title_pref_caller_id" msgid="1414845059814636961">"Decir nombre del emisor"</string>
-    <string name="title_pref_proximity" msgid="4957940010293002852">"Usar sensor de proximidad"</string>
+    <string name="title_pref_proximity" msgid="4957940010293002852">"Sensor de proximidad"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"El sensor de proximidad silencia la voz"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"El sensor de proximidad no controla la voz"</string>
-    <string name="title_pref_bluetooth" msgid="7738175584293158995">"Usar auricular Bluetooth"</string>
-    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Hablar a través de auriculares Bluetooth que no sean A2DP (mono) cuando estén disponibles"</string>
-    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"No hablar nunca a través de auriculares  Bluetooth que no sean A2DP (mono)"</string>
+    <string name="title_pref_explore_by_touch" msgid="4051040843081874790">"Exploración táctil"</string>
+    <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Exploración táctil"</string>
+    <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Administrar gestos de accesos directos"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Usar cambios de tono"</string>
-    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Decir tecla pulsada en un tono inferior"</string>
+    <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Decir tecla pulsada en un tono más bajo"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"No cambiar el tono al hablar"</string>
-    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Combinaciones de teclas"</string>
-    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Comentarios"</string>
+    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Respuesta del dispositivo"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Vibración"</string>
-    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Asignar patrones vibración"</string>
-    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Exploración táctil"</string>
-    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Elementos táctiles"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Sonido"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Volumen de sonido"</string>
-    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Asignar sonidos"</string>
-    <string name="value_play_button" msgid="3816799051654747674">"Reproducir"</string>
-    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Exploración táctil"</string>
-    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Elementos táctiles"</string>
-    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"Al hacer clic"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Otros ajustes"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Ajustes de desarrollador"</string>
-    <string name="title_pref_log_level" msgid="1608733715034404715">"Registrar nivel salida"</string>
-    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Destacar fuentes de los eventos"</string>
+    <string name="title_pref_log_level" msgid="1608733715034404715">"Nivel de registro de salida"</string>
+    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Destacar eventos"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Mostrar salida de voz"</string>
-    <string name="subject_crash_report_email" msgid="3043388136219501183">"Informe de errores de TalkBack"</string>
-    <string name="header_crash_report_email" msgid="9218276172142314054">"La siguiente información es un informe de errores de TalkBack. Haz clic en el botón \"Enviar\" para transmitir estos datos a los desarrolladores de TalkBack."\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"Desplazarse por carácter"</string>
     <string name="axis_word" msgid="7745798763195184060">"Desplazarse por palabra"</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Desplazarse por frase"</string>
+    <string name="axis_paragraph" msgid="3453285809344289729">"Navegar por párrafo"</string>
+    <string name="axis_object" msgid="7034325449094737671">"Navegar por objeto"</string>
+    <string name="axis_line" msgid="2210986915751668758">"Navegar por línea"</string>
+    <string name="axis_page" msgid="9146038615069235841">"Navegar por página"</string>
     <string name="axis_heading" msgid="8928386537164255063">"Desplazarse por título"</string>
     <string name="axis_sibling" msgid="7260754205862306385">"Desplazarse por elemento secundario"</string>
     <string name="axis_document" msgid="1581988340856497809">"Desplazarse por documento"</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Desplazarse por comportamiento de vista web predeterminado"</string>
+    <string name="attention" msgid="627104955956154539">"Atención"</string>
+    <string name="explore_dialog_message" msgid="2796017207242981327">"Esta función cambia la respuesta táctil del dispositivo. ¿Activar?"</string>
+    <string name="requires_talkback" msgid="3634159695179852501">"Debes activar la exploración táctil para completar este tutorial. Activa TalkBack y habilita la exploración táctil antes de iniciarlo."</string>
+    <string name="granularity_character" msgid="5828563809381090688">"Leer por carácter"</string>
+    <string name="granularity_word" msgid="3660181391007381559">"Leer por palabra"</string>
+    <string name="granularity_paragraph" msgid="1175015890341475666">"Leer por párrafo"</string>
+    <string name="granularity_default" msgid="554981185979733919">"Nivel de lectura predeterminado"</string>
+    <string name="orientation_portrait" msgid="5280362272647722922">"Vertical"</string>
+    <string name="orientation_landscape" msgid="129313890178554132">"Horizontal"</string>
+    <string name="shortcut_unassigned" msgid="8631675444401168361">"Sin asignar"</string>
+    <string name="shortcut_back" msgid="8404153155835310379">"Botón volver"</string>
+    <string name="shortcut_home" msgid="3905505999818649470">"Botón para acceder al escritorio"</string>
+    <string name="shortcut_recent_apps" msgid="4462279958679670485">"Botón de aplicaciones recientes"</string>
+    <string name="shortcut_notifications" msgid="7234767026975704922">"Abrir notificaciones"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Repetir última frase"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Escribir última frase"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Deslizar hacia abajo y hacia la izquierda"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Deslizar hacia abajo y hacia la derecha"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Deslizar hacia arriba y hacia la izquierda"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Deslizar hacia arriba y hacia la derecha"</string>
+    <string name="value_volume_200_percent" msgid="2969698924281376143">"200% del volumen multimedia"</string>
+    <string name="value_volume_150_percent" msgid="4668371157512150392">"150% del volumen multimedia"</string>
+    <string name="value_volume_100_percent" msgid="6676030754946177658">"Usar volumen multimedia"</string>
+    <string name="value_volume_75_percent" msgid="7578844180160160971">"75% del volumen multimedia"</string>
+    <string name="value_volume_50_percent" msgid="2830571913174435107">"50% del volumen multimedia"</string>
+    <string name="value_volume_25_percent" msgid="4441038207089946938">"25% del volumen multimedia"</string>
 </resources>

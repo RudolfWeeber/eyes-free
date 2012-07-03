@@ -16,8 +16,10 @@
 
 package com.googlecode.eyesfree.compat.bluetooth;
 
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothProfile;
 
+@TargetApi(11)
 class BluetoothProfileCompatHoneycomb {
 
     interface ServiceListenerBridge {

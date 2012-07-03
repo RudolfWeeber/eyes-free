@@ -81,6 +81,7 @@ public class SpeechCleanupUtils {
         sCleanupMap.put("™", R.string.symbol_trademark);
         sCleanupMap.put("_", R.string.symbol_underscore);
         sCleanupMap.put("|", R.string.symbol_vertical_bar);
+        sCleanupMap.put("\n", R.string.symbol_new_line);
     }
 
     /**

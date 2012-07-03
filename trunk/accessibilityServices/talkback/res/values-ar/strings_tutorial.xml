@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"تشغيل البرنامج التعليمي لميزة \"Explore by touch\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"برنامج تعليمي لإمكانية الدخول"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"برنامج تعليمي لإمكانية الدخول"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"التالي"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"السابق"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"إنهاء"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"خروج"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"يتم تعطيل اللمس أثناء تحدث البرنامج التعليمي"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"الدرس الأول: استكشاف الشاشة"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"بعد تشغيل ميزة Explore by Touch، يمكنك لمس الشاشة للتعرف على ما تحت إصبعك. على سبيل المثال، تحتوي الشاشة الحالية على رموز تطبيقات. يمكنك العثور على أحدها من خلال لمس الشاشة وتمرير إصبعك حولها."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"جيد، استمر في تمرير إصبعك حول الشاشة حتى تعثر على رمز واحد آخر على الأقل."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"يمكنك أيضًا الاستكشاف من خلال تمرير إصبعك بشكل سريع نحو اليسار واليمين في أي مكان على الشاشة. جرّب التمرير سريعًا من اليسار إلى اليمين للانتقال إلى الرمز التالي."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"لتنشيط شيء ما تم استكشافه، انقر على الشاشة مرتين. استكشف حتى تعثر على رمز <xliff:g id="APP_NAME">%1$s</xliff:g>. ثم انقر نقرًا مزدوجًا في أي مكان على الشاشة لتنشيطه."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"لقد عثرت على رمز <xliff:g id="APP_NAME">%1$s</xliff:g>. يمكنك النقر نقرًا مزدوجًا في أي مكان على الشاشة لتنشيط الرمز."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"لقد تجاوزت استكشاف <xliff:g id="APP_NAME_0">%1$s</xliff:g>. جرب استكشاف الشاشة حتى تعثر على رمز <xliff:g id="APP_NAME_1">%1$s</xliff:g> مرة أخرى."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"للانتقال إلى الدرس التالي، ابحث عن الزر <xliff:g id="NEXT">%1$s</xliff:g>، الموجود بالقرب من الجانب السفلي الأيسر من الشاشة، ثم انقر عليه نقرًا مزدوجًا لتنشيطه."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"الدرس الثاني: التمرير ضمن القوائم"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"للتمرير ضمن القائمة، يمكنك تمرير إصبعين بطول الشاشة. على سبيل المثال، تحتوي الشاشة الحالية على قائمة بأسماء التطبيقات التي يمكنها التمرير لأعلى أو لأسفل. أولاً، حاول استكشاف الشاشة وتحديد تطبيق."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"ضع الآن إصبعين على عنصر في القائمة ومرر إصبعيك إلى أعلى. إذا وصلت إلى أعلى الشاشة، ارفع إصبعيك وضعهما في الأسفل على القائمة، ثم استمر في التمرير لأعلى."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"استكشف الشاشة للعثور على تطبيق آخر."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"يمكنك أيضًا تمرير صفحة بالكامل من خلال تمرير إصبعك بسرعة. مرر إلى الصفحة التالية من خلال التمرير بسرعة بدءًا من اليسار إلى اليمين، ثم الانتقال مرة أخرى إلى اليسار."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"استكشف الشاشة مرة أخرى للعثور على تطبيق في الصفحة الحالية."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"يؤدي التمرير سريعًا في الاتجاه المعاكس، لليسار والرجوع مرة أخرى، إلى الانتقال إلى الصفحة السابقة. جرّب التمرير سريعًا ليتم الانتقال إلى الصفحة السابقة."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"للانتقال إلى الدرس التالي، ابحث عن زر <xliff:g id="NEXT">%s</xliff:g> ونشطه، فهو يقع بالقرب من أسفل الركن الأيسر من الشاشة."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"الدرس الثالث: القراءة بحسب الحرف"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"افتراضيًا، يؤدي التمرير سريعًا لليسار واليمين إلى قراءة المجموعات النصية كلها مرة واحدة. كما يمكنك القراءة ضمن المجموعات النصية لنص على الشاشة بحسب الكلمة أو بحسب الحرف. أولاً، ابحث عن النص الذي يبدأ بالكلمة \"هذه\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"بعد ذلك، يمكنك التمرير سريعًا لأسفل ولأعلى مرة أخرى لبدء قراءة هذه المجموعة النصية على مستوى محدد. جرب التمرير سريعًا لأسفل ولأعلى مرة أخرى لتغيير مستوى القراءة، ثم مرر سريعًا لليمين للقراءة ضمن النص."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"للانتقال خارج المجموعة النصية الحالية، ستحتاج إلى الرجوع إلى مستوى القراءة الافتراضي. مرر سريعًا في الاتجاه المعاكس لأعلى ولأسفل مرة أخرى، للرجوع إلى مستوى القراءة الافتراضي. ثم ابحث عن الزر <xliff:g id="FINISH">%s</xliff:g> في الجزء السفلي الأيسر وانقر عليه نقرًا مزدوجًا لتنشيطه، ثم اخرج من البرنامج التعليمي."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"هذا مثال على مجموعة نصية كبيرة. يمكنك التنقل ضمن هذه المجموعة النصية على مستوى قراءة محدد باستخدام إيماءات التمرير السريع أو قراءتها مرة واحدة باستخدام إيماءات اللمس."\n\n"هذه هي الفقرة الثانية."\n\n"هذه هي الفقرة الثالثة والأخيرة. يمكنك التمرير سريعًا لأسفل ولأعلى لتغيير مستوى القراءة، وبعد ذلك يمكنك التمرير سريعًا لليمين للتنقل ضمن هذا النص."</string>
+</resources>

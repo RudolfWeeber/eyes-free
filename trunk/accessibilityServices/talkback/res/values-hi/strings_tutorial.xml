@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"\"स्पर्श द्वारा अन्वेषण करें\" ट्यूटोरियल लॉन्च करें"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"पहुंच-योग्यता ट्यूटोरि‍यल"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"पहुंच-योग्यता ट्यूटोरि‍यल"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"अगला"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"पिछला"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"समाप्त"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"बाहर निकलें"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"ट्यूटोरियल के बोलने के दौरान स्‍पर्श करें अक्षम है"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"अध्‍याय 1: स्‍क्रीन पर खोजना"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"जब स्‍पर्श द्वारा अन्‍वेषण चालू हो, तो आप यह जानने के लिए स्‍क्रीन को स्‍पर्श कर सकते हैं कि आपकी अंगुली की पहुंच में क्या है. उदाहरण के लिए, वर्तमान स्‍क्रीन में एप्लिकेशन आइकन हैं. स्‍क्रीन को स्‍पर्श करके और अपनी अंगुली को आस-पास स्लाइड करते हुए उनमें से एक आइकन ढूंढें."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"बढ़िया. अपनी अंगुली को स्‍क्रीन के आस-पास तब तक स्‍लाइड करते रहें, जब तक कि आपको कम से कम एक और आइकन नहीं मिल जाता."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"अपनी उंगली को स्‍क्रीन पर कहीं भी बाएं या दाएं स्‍वाइप करके भी आप खोज कर सकते हैं. अगले आइकन पर जाने के लिए बाएं से दाएं तेजी से स्‍वाइप करके देखें."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"आपने जो खोजा है उसे सक्रिय करने के लिए, स्‍क्रीन को दो बार टैप करें. जब तक <xliff:g id="APP_NAME">%1$s</xliff:g> आइकन नहीं मिल जाता तब तक खोजते रहें. फिर उसे सक्रिय करने के लिए स्‍क्रीन पर कहीं भी डबल-टैप करें."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"आपको <xliff:g id="APP_NAME">%1$s</xliff:g> आइकन मिला. आइकन को सक्रिय करने के लिए स्‍क्रीन पर कहीं भी डबल-टैप करें."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"आपने पहले <xliff:g id="APP_NAME_0">%1$s</xliff:g> आइकन खोजा. जब तक <xliff:g id="APP_NAME_1">%1$s</xliff:g> आइकन फिर से नहीं मिल जाता तब तक स्‍क्रीन पर खोजने का प्रयास करें."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"अगले पाठ पर जाने के लिए, स्‍क्रीन के नीचे-दाएं कोने के पास स्थित <xliff:g id="NEXT">%1$s</xliff:g> बटन को खोजें, फिर उसे सक्रिय करने के लिए डबल-टैप करें."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"अध्‍याय 2: सूचियों में स्‍क्रॉल करना"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"किसी सूची पर स्क्रॉल करने के लिए, आप स्क्रीन पर दो अंगुलियां स्लाइड कर सकते हैं. उदाहरण के लिए, वर्तमान स्क्रीन में उन एप्लिकेशन नामों की सूची शामिल होती है, जिन्हें ऊपर और नीचे स्क्रॉल किया जा सकता है. पहले, एप्लिकेशन को स्‍क्रीन पर खोजने और पहचानने का प्रयास करें."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"अब सूची में कि‍सी आइटम पर दो अंगुलियां रखें और दोनों को ऊपर की ओर स्लाइड करें. यदि आप स्क्रीन के शीर्ष तक पहुंच जाते हैं, तो अपनी अंगुलियों को उठाएं, उन्हें सूची में सबसे नीचे रखें, और ऊपर की ओर स्लाइड करना जारी रखें."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"एक और एप्‍लिकेशन ढूंढने के लिए स्‍क्रीन पर खोजें."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"अपनी उंगली को स्‍वाइप कर आप किसी पूरे पृष्‍ठ को स्‍क्रॉल कर सकते हैं. अगले पृष्‍ठ पर स्‍क्रॉल करने के लिए तेजी से बाएं से शुरू करें और दाएं जाकर, फिर वापस बाएं पर आएं."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"वर्तमान पृष्ठ में एप्‍लिकेशन ढूंढने के लिए पुन: स्‍क्रीन पर खोजें."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"विपरीत दिशा में स्‍वाइप करने से, यानी बाएं जाकर और वापस आने से, पिछले पृष्ठ पर चले जाएंगे. स्‍वाइप द्वारा पिछले पृष्ठ पर स्‍क्रॉल करके देखें."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"अगले अध्‍याय पर जाने के लि‍ए, स्‍क्रीन के नि‍चले-दाएं कोने में स्‍थि‍त <xliff:g id="NEXT">%s</xliff:g> बटन ढूंढें और सक्रि‍य करें."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"अध्‍याय 3: वर्ण के द्वारा पढ़ना"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"डिफ़ॉल्‍ट रूप से, बाएं और दाएं स्‍वाइप करने से पाठ के कई ब्‍लॉक एक साथ पढ़े जा सकते हैं. आप शब्‍द या वर्ण द्वारा स्‍क्रीन पर दिए गए पाठ के कई ब्‍लॉक भी पढ़ सकते हैं. पहले, उस पाठ को ढूंढें जो \"इस\" शब्‍द से शुरू होता है."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"इसके बाद, आप नीचे और वापस ऊपर स्‍वाइप करके किसी विशिष्ट स्तर पर इस ब्लॉक को पढ़ना शुरू कर सकते हैं. पठन स्तर को बदलने के लिए नीचे और वापस ऊपर स्वा‍इप करके देखें, फिर पाठ को पढ़ने के लिए दाएं स्वाइप करें."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"पाठ के बर्तमान ब्‍लॉक से बाहर आने के लिए, आपको डिफ़ॉल्‍ट पठन स्‍तर पर वापस जाना होगा. डिफ़ॉल्‍ट पठन स्‍तर पर वापस जाने के लिए विपरीत दिशा में, ऊपर और वापस नीचे, स्‍वाइप करें. फिर नीचे-दाएं कोने पर स्थित <xliff:g id="FINISH">%s</xliff:g> को खोजकर, उसे सक्रिय करने और ट्यूटोरियल से बाहर निकलने के लिए डबल-टैप करें."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"यह पाठ के बड़े ब्‍लॉक का उदाहरण है. आप स्‍वाइप जेस्‍चर का उपयोग करके इस पाठ से किसी विशिष्ट पठन स्‍तर पर जा सकते हैं, या स्‍पर्श जेस्‍चर का उपयोग करके इसे एक बार में पढ़ सकते हैं."\n\n"यह दूसरा अनुच्‍छेद है."\n\n"यह तीसरा और अंतिम अनुच्‍छेद है. पठन स्‍तर बदलने के लिए ऊपर और नीचे स्‍वाइप करें, फिर इस पाठ में जाने के लिए दाएं स्‍वाइप करें."</string>
+</resources>

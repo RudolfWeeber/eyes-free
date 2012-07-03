@@ -29,7 +29,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class BluetoothAdapterCompat {
-    private static final Class<?> CLASS_BluetoothAdapter = BluetoothAdapter.class;
+    private static final Class<?> CLASS_BluetoothAdapter = CompatUtils.getClass(
+            "android.bluetooth.BluetoothAdapter");
     private static final Method METHOD_getProfileProxy = CompatUtils.getMethod(
             CLASS_BluetoothAdapter, "getProfileProxy", Context.class,
             ServiceListenerCompat.CLASS_ServiceListenerCompat, int.class);

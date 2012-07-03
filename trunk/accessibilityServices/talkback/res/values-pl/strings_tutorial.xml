@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Uruchom samouczek „Czytanie dotykiem”"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Samouczek ułatwień dostępu"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Samouczek ułatwień dostępu"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Dalej"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Wstecz"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Zakończ"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Zakończ"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Dotyk wyłączony, gdy samouczek mówi"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Lekcja 1: Poznawanie ekranu"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Po włączeniu Czytania dotykiem możesz dotknąć ekranu, by sprawdzić, co jest pod Twoim palcem. Na przykład bieżący ekran zawiera ikony aplikacji. Znajdź jedną z nich, dotykając ekranu i przesuwając po nim palcem."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Dobrze. Przesuwaj palcem po ekranie, aż znajdziesz jeszcze co najmniej jedną ikonę."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Zawartość ekranu możesz też poznawać, w dowolnym miejscu przesuwając po nim palcem w lewo i w prawo. Przesuń palcem od lewej do prawej, by przejść do następnej ikony."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Aby użyć znalezionego elementu, kliknij dwukrotnie na ekranie. Znajdź ikonę <xliff:g id="APP_NAME">%1$s</xliff:g>, a następnie kliknij dwukrotnie w dowolnym miejscu, by jej użyć."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"To ikona <xliff:g id="APP_NAME">%1$s</xliff:g>. Kliknij dwukrotnie w dowolnym miejscu na ekranie, by jej użyć."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Oddalasz się od ikony <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Jeszcze raz znajdź ikonę <xliff:g id="APP_NAME_1">%1$s</xliff:g> na ekranie."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Aby przejść do następnej lekcji, znajdź przycisk <xliff:g id="NEXT">%1$s</xliff:g> w prawej dolnej części ekranu i kliknij go dwukrotnie."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Lekcja 2: Przewijanie list"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Aby przewinąć listę, możesz przesunąć dwoma palcami po ekranie. Na przykład bieżący ekran zawiera listę nazw aplikacji, którą można przewijać w górę i w dół. Najpierw zapoznaj się z ekranem i znajdź jakąś aplikację."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Teraz umieść dwa palce na elemencie listy i przesuń je w górę. Po dotarciu do górnej krawędzi ekranu unieś palce, umieść je niżej na liście i kontynuuj przesuwanie w górę."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Znajdź jeszcze jedną aplikację na ekranie."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Przesuwając palcem, możesz też przewinąć całą stronę. Przejdź na następną stronę, przesuwając w prawo i z powrotem."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Znajdź jakąś aplikację na bieżącej stronie."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Jeśli przesuniesz palcem w przeciwnym kierunku, w lewo i z powrotem, wrócisz na poprzednią stronę. Przesuń palcem, by przewinąć do poprzedniej strony."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Aby przejść do następnej lekcji, znajdź przycisk <xliff:g id="NEXT">%s</xliff:g> w prawym dolnym rogu ekranu i użyj go."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lekcja 3: Czytanie po znaku"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Przesunięcie palcem w lewo i w prawo domyślnie powoduje przeczytanie od razu całych bloków tekstu. Tekst na ekranie możesz też czytać po słowie lub znaku. Najpierw znajdź tekst, który zaczyna się od „To”."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Następnie przesuń palcem w dół i z powrotem w górę, by zacząć czytać fragmenty określonej wielkości. Przesuń palcem w dół i w górę, by zmienić wielkość czytanego fragmentu, a następnie w prawo, by przeczytać tekst."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Aby wyjść z bieżącego bloku tekstu, musisz przywrócić domyślny sposób czytania. Przesuń palcem w przeciwnym kierunku – w górę i w dół – by przywrócić domyślny sposób czytania. Następnie znajdź przycisk <xliff:g id="FINISH">%s</xliff:g> w prawym dolnym rogu i kliknij go dwukrotnie, by zakończyć ten samouczek."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"To przykład dużego bloku tekstu. Przesuwaj palcem, by kolejno czytać fragmenty określonej wielkości, lub kliknij, by od razu przeczytać cały tekst."\n\n"To jest drugi akapit."\n\n"To jest trzeci i ostatni akapit. Przesuń palcem w dół, by zmienić wielkość czytanego fragmentu, a następnie w prawo, by przeczytać tekst."</string>
+</resources>

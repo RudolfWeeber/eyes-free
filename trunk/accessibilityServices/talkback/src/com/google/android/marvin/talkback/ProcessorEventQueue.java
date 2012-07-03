@@ -18,28 +18,28 @@ package com.google.android.marvin.talkback;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.SpeechController.QueuingMode;
-import com.google.android.marvin.talkback.TalkBackService.EventProcessor;
+import com.google.android.marvin.talkback.TalkBackService.EventListener;
 import com.google.android.marvin.talkback.formatter.EventSpeechRuleLoader;
 import com.google.android.marvin.talkback.formatter.EventSpeechRuleProcessor;
+import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
  * Manages the event feedback queue. Queued events are run through the
  * {@link EventSpeechRuleProcessor} to generate spoken, haptic, and audible
  * feedback.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
-public class ProcessorEventQueue implements EventProcessor {
+public class ProcessorEventQueue implements EventListener {
     /** Manages pending speech events. */
-    private final TalkBackHandler mSpeechHandler = new TalkBackHandler();
+    private final ProcessorEventHandler mHandler = new ProcessorEventHandler(this);
 
     /**
      * We keep the accessibility events to be processed. If a received event is
@@ -82,7 +82,7 @@ public class ProcessorEventQueue implements EventProcessor {
     public void process(AccessibilityEvent event) {
         synchronized (mEventQueue) {
             mEventQueue.add(event);
-            mSpeechHandler.postSpeak(event);
+            mHandler.postSpeak(event);
         }
     }
 
@@ -91,7 +91,7 @@ public class ProcessorEventQueue implements EventProcessor {
      * {@link EventSpeechRuleProcessor} to match it against its rules and in
      * case an utterance is generated it is spoken. This method is responsible
      * for recycling of the processed event.
-     * 
+     *
      * @param event The event to process.
      */
     private void processAndRecycleEvent(AccessibilityEvent event) {
@@ -116,7 +116,7 @@ public class ProcessorEventQueue implements EventProcessor {
 
     /**
      * Provides feedback for the specified utterance.
-     * 
+     *
      * @param event The source event.
      * @param utterance The utterance to provide feedback for.
      */
@@ -166,7 +166,7 @@ public class ProcessorEventQueue implements EventProcessor {
 
     /**
      * Computes the queuing mode for the current utterance.
-     * 
+     *
      * @param utterance
      * @return A queuing mode, one of:
      *         <ul>
@@ -193,20 +193,22 @@ public class ProcessorEventQueue implements EventProcessor {
         return QueuingMode.valueOf(ordinal);
     }
 
-    private class TalkBackHandler extends Handler {
+    private static class ProcessorEventHandler extends WeakReferenceHandler<ProcessorEventQueue> {
         /** Speak action. */
         private static final int WHAT_SPEAK = 1;
 
         /** Timeout before speaking. */
         private static final long TIMEOUT_SPEAK = 0;
 
-        @Override
-        public void handleMessage(Message message) {
-            final int what = message.what;
+        public ProcessorEventHandler(ProcessorEventQueue parent) {
+            super(parent);
+        }
 
-            switch (what) {
+        @Override
+        public void handleMessage(Message message, ProcessorEventQueue parent) {
+            switch (message.what) {
                 case WHAT_SPEAK:
-                    processAllEvents();
+                    processAllEvents(parent);
                     break;
             }
         }
@@ -214,26 +216,26 @@ public class ProcessorEventQueue implements EventProcessor {
         /**
          * Attempts to process all events in the queue.
          */
-        private void processAllEvents() {
+        private void processAllEvents(ProcessorEventQueue parent) {
             while (true) {
                 final AccessibilityEvent event;
 
-                synchronized (mEventQueue) {
-                    if (mEventQueue.isEmpty()) {
+                synchronized (parent.mEventQueue) {
+                    if (parent.mEventQueue.isEmpty()) {
                         return;
                     }
 
-                    event = mEventQueue.remove(0);
+                    event = parent.mEventQueue.remove(0);
                 }
 
-                processAndRecycleEvent(event);
+                parent.processAndRecycleEvent(event);
             }
         }
 
         /**
          * Sends {@link #WHAT_SPEAK} to the speech handler. This method cancels
          * the old message (if such exists) since it is no longer relevant.
-         * 
+         *
          * @param event The event to speak.
          */
         public void postSpeak(AccessibilityEvent event) {

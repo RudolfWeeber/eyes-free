@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"لا كلام في الوضع صامت"</item>
     <item msgid="4945285159234224758">"لا كلام في الوضع \"اهتزاز\" والوضع \"صامت\""</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"مطابقة مستوى صوت الكلام"</item>
-    <item msgid="3474415020494727681">"75% من مستوى صوت الكلام"</item>
-    <item msgid="3630774810523140800">"50% من مستوى صوت الكلام"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"زر"</item>
     <item msgid="2031284088774168661">"مربّع اختيار"</item>

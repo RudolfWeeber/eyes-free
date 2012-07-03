@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Руководство \"Изучение касанием\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Руководство"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Руководство"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Далее"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Назад"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Готово"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Выйти"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Пока запущено руководство, сенсорный ввод недоступен."</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Урок 1. Навигация по экрану"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Функция \"Изучение касанием\" позволяет узнавать, к чему вы прикоснулись на экране. Например, сейчас отображаются значки приложений. Попробуйте найти их на ощупь."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Хорошо. Проведите пальцем по экрану, пока не найдете хотя бы ещё один значок."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Перемещаться между значками также можно, проводя пальцем в сторону в любом месте экрана. Попробуйте перейти к следующему значку, проведя пальцем по экрану слева направо."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Для активации найденного объекта можно дважды нажать на экран. Найдите значок <xliff:g id="APP_NAME">%1$s</xliff:g>. Чтобы активировать его, дважды нажмите в любом месте экрана."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Вы нашли значок <xliff:g id="APP_NAME">%1$s</xliff:g>. Чтобы активировать его, дважды нажмите в любом месте экрана."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Вы вышли за пределы области значка <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Попробуйте снова найти на экране значок <xliff:g id="APP_NAME_1">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Чтобы перейти к следующему уроку, дважды нажмите кнопку <xliff:g id="NEXT">%1$s</xliff:g> в правом нижнем углу экрана."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Урок 2. Прокрутка списков"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Чтобы прокрутить список, проведите двумя пальцами по экрану. Предположим, сейчас отображается список названий приложений, который можно прокрутить вверх или вниз. Попробуйте найти приложение на экране."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Приложите два пальца к элементу списка и проведите ими вверх. Когда доберетесь до верхней части экрана, снова приложите пальцы к списку и продолжайте прокручивание."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Попробуйте найти ещё одно приложение."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Страницы можно листать. Для этого быстро проведите пальцем слева направо, а потом снова налево."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Попробуйте найти приложение на этой странице."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Если провести в обратном направлении (влево и назад), вы перейдете на предыдущую страницу. Попробуйте это сделать."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Чтобы перейти к следующему уроку, найдите и активируйте кнопку <xliff:g id="NEXT">%s</xliff:g>. Она расположена в правом нижнем углу экрана."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Урок 3. Чтение по символам"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Если провести пальцем влево или вправо, по умолчанию фрагмент считывается целиком. Кроме того, можно перемещаться по символам или словам. Найдите фрагмент, начинающийся со слова This."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Чтобы начать читать фрагмент на определенном уровне, проведите пальцем вниз, а затем вверх. Чтобы изменить уровень чтения, проведите вверх или вниз. Затем проведите вправо, чтобы переместиться по тексту."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Чтобы перейти к другому фрагменту текста, выберите уровень чтения по умолчанию. Для этого проведите пальцем в противоположном направлении (вверх и вниз). Затем дважды нажмите кнопку <xliff:g id="FINISH">%s</xliff:g> в правом верхнем углу экрана, чтобы выйти из руководства."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Это большой отрывок из текста. Вы можете перемещаться по нему на определенном уровне чтения, проводя пальцами, или прочитать его сразу, используя нажатия."\n\n"Это второй абзац."\n\n"Это третий и последний абзац. Чтобы изменить уровень чтения, проведите пальцами вверх или вниз. Затем проведите вправо, чтобы переместиться по тексту."</string>
+</resources>

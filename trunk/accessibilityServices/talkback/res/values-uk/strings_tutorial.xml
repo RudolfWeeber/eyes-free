@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Запустити посібник \"Дослідження дотиком\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Посібник із доступності"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Посібник із доступності"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Далі"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Назад"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Закінчити"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Вийти"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Сенсорний ввід даних вимикається під час голосового відтворення посібника"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Урок 1. Дослідження екрана"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Увімкнувши функцію дослідження дотиком, можна торкнутися екрана й дізнатися, що розташовано під вашим пальцем. Наприклад, на поточному екрані є піктограми програм. Знайдіть одну з них, торкаючись екрана та пересуваючи по ньому пальцем."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Добре. Водіть пальцем по екрану, доки не знайдете принаймні ще одну піктограму."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Можна також водити пальцем ліворуч і праворуч будь-де по екрану. Швидко проведіть пальцем зліва направо, щоб перейти до наступної піктограми."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Щоб активувати знайдений елемент, двічі швидко торкніться екрана. Водіть пальцем, доки не знайдете піктограму програми <xliff:g id="APP_NAME">%1$s</xliff:g>. Потім двічі торкніться будь-де на екрані, щоб активувати її."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Ви знайшли піктограму програми <xliff:g id="APP_NAME">%1$s</xliff:g>. Двічі торкніться будь-де на екрані, щоб активувати піктограму."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Ви проминули піктограму програми <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Водіть пальцем по екрану, доки знову не знайдете піктограму програми <xliff:g id="APP_NAME_1">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Щоб перейти до наступного уроку, знайдіть кнопку <xliff:g id="NEXT">%1$s</xliff:g>, розташовану в правому нижньому куті екрана, і двічі торкніться її, щоб активувати."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Урок 2. Прокручування списків"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Щоб прокрутити список, можна провести двома пальцями по екрану. Наприклад, на цьому екрані є список назв програм, який можна прокручувати вгору чи вниз. Спочатку спробуйте провести пальцем по екрану та визначити якусь програму."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Тепер покладіть два пальці на елемент у списку та проведіть обома пальцями вгору. Досягнувши верху екрана, підніміть пальці, покладіть їх нижче на список і знову проведіть угору."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Водіть пальцями по екрану, щоб знайти ще одну програму."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Можна також прокрутити всю сторінку, провівши пальцем по екрану. Перейдіть до наступної сторінки, швидко провівши пальцем зліва направо, а потім знову ліворуч."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Проведіть пальцем по екрану знову, щоб знайти програму на поточній сторінці."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Щоб повернутися на попередню сторінку, проведіть пальцем у протилежному напрямку – ліворуч і назад. Спробуйте провести пальцем, щоб повернутися на попередню сторінку."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Щоб перейти до наступного уроку, знайдіть і активуйте кнопку <xliff:g id="NEXT">%s</xliff:g>, розташовану в правому нижньому куті екрана."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Урок 3. Читання по символах"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"За умовчанням під час гортання ліворуч і праворуч відображаються всі уривки тексту. Також уривки тексту на екрані можна читати по словах або символах. Спочатку знайдіть текст, який починається зі слова \"Це\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Потім можна провести пальцем униз і вгору, щоб почати читати цей уривок на певному рівні. Проведіть пальцем униз і вгору, щоб змінити рівень читання, а потім – праворуч, щоб переглянути весь текст."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Щоб вийти з поточного уривка тексту, потрібно повернутися до рівня читання за умовчанням. Проведіть пальцем у протилежному напрямку (угору та вниз), щоб повернутися на рівень читання за умовчанням. Потім знайдіть кнопку <xliff:g id="FINISH">%s</xliff:g> у правому нижньому куті посібника й двічі торкніться її, щоб активувати."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Це приклад великого уривка тексту. На певному рівні читання можна переміщуватися по цьому тексту за допомогою жестів гортання або читати його весь одночасно за допомогою дотиків."\n\n"Це другий абзац."\n\n"Це третій і останній абзац. Проведіть пальцем униз або вгору, щоб змінити рівень читання, а потім – праворуч, щоб переходити по тексту."</string>
+</resources>

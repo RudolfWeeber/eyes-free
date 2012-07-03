@@ -6,12 +6,23 @@
   <!-- This file contains only generic speech strategy rules that could apply to any app. -->
   <!-- Rules specific to just one app should go in speechstrategy_apps.xml or -->
   <!-- speechstrategy_thirdparty.xml. -->
+  
+  <!-- ANNOUNCEMENT -->
+  
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_ANNOUNCEMENT</ss:eventType>
+    </ss:filter>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
 
   <!-- TOUCH EXPLORATION -->
 
   <ss:rule>
     <ss:filter>
-      <ss:eventType>TYPE_TOUCH_EXPLORATION_GESTURE_START||TYPE_TOUCH_EXPLORATION_GESTURE_END||TYPE_VIEW_HOVER_ENTER||TYPE_VIEW_HOVER_EXIT</ss:eventType>
+      <ss:eventType>TYPE_TOUCH_EXPLORATION_GESTURE_START||TYPE_TOUCH_EXPLORATION_GESTURE_END||TYPE_VIEW_HOVER_ENTER||TYPE_VIEW_HOVER_EXIT||TYPE_VIEW_ACCESSIBILITY_FOCUSED</ss:eventType>
     </ss:filter>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.TouchExplorationFormatter</ss:custom>
@@ -40,7 +51,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_clicked_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_clicked_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_clicked</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/value_checked</ss:template>
@@ -55,7 +66,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_clicked_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_clicked_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_clicked</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/value_not_checked</ss:template>
@@ -69,7 +80,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_clicked_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_clicked_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_clicked</ss:customEarcon>
     </ss:metadata>
   </ss:rule>
 
@@ -82,7 +93,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_clicked_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_clicked_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_clicked</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_long_clicked</ss:template>
@@ -101,7 +112,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/value_password</ss:template>
@@ -116,7 +127,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_edit_box</ss:template>
@@ -132,7 +143,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_seek_bar</ss:template>
@@ -148,7 +159,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_spinner</ss:template>
@@ -164,7 +175,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/value_web_view</ss:template>
@@ -202,8 +213,7 @@
       <ss:className>android.widget.ImageView</ss:className>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@string/template_image_view</ss:template>
-      <ss:property>text</ss:property>
+      <ss:custom>com.google.android.marvin.talkback.formatter.ImageViewFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -214,7 +224,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:property>text</ss:property>
@@ -231,7 +241,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_spinner</ss:template>
@@ -242,12 +252,12 @@
   <!-- WebView -->
   <ss:rule>
     <ss:filter>
-      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:eventType>TYPE_VIEW_SELECTED||TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY</ss:eventType>
       <ss:className>android.webkit.WebView</ss:className>
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.WebContentFormatter</ss:custom>
@@ -272,7 +282,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:property>text</ss:property>
@@ -289,7 +299,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/notification_or_window_state_changed_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_notification_state_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_notification_state</ss:customEarcon>
       <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
     </ss:metadata>
     <ss:formatter>
@@ -306,7 +316,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/notification_or_window_state_changed_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_notification_state_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_notification_state</ss:customEarcon>
       <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
     </ss:metadata>
     <ss:formatter>
@@ -322,7 +332,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/notification_or_window_state_changed_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_notification_state_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_notification_state</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/value_sliding_drawer_opened</ss:template>
@@ -336,21 +346,9 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/notification_or_window_state_changed_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_notification_state_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_notification_state</ss:customEarcon>
       <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
     </ss:metadata>
-    <ss:formatter>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- TYPE_WINDOW_CONTENT_CHANGED -->
-
-  <!-- All -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_WINDOW_CONTENT_CHANGED</ss:eventType>
-    </ss:filter>
     <ss:formatter>
       <ss:property>text</ss:property>
     </ss:formatter>
@@ -364,18 +362,18 @@
       <ss:eventType>TYPE_VIEW_TEXT_CHANGED</ss:eventType>
     </ss:filter>
     <ss:metadata>
-      <ss:customEarcon>@string/pref_sounds_text_changed_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_text_changed</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$ChangedTextFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
   
-  <!-- TYPE_VIEW_TEXT_SELECTION_CHANGED -->
+  <!-- TYPE_VIEW_TEXT_SELECTION_CHANGED and TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY -->
 
   <ss:rule>
     <ss:filter>
-      <ss:eventType>TYPE_VIEW_TEXT_SELECTION_CHANGED</ss:eventType>
+      <ss:eventType>TYPE_VIEW_TEXT_SELECTION_CHANGED||TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY</ss:eventType>
     </ss:filter>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$SelectedTextFormatter</ss:custom>
@@ -391,7 +389,7 @@
     </ss:filter>
     <ss:metadata>
       <ss:vibration>@array/notification_or_window_state_changed_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_notification_state_key</ss:customEarcon>
+      <ss:customEarcon>@id/sounds_notification_state</ss:customEarcon>
       <ss:queuing>QUEUE</ss:queuing>
     </ss:metadata>
     <ss:formatter>

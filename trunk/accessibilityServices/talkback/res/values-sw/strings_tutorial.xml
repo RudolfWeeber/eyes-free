@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Zindua mafunzo ya \"Gundua kwa kugusa\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Mafunzo ya ufikiaji"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Mafunzo ya ufikiaji"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Lifuatalo"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Iliyotangulia"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Maliza"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Ondoka"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Gusa yaliyolemazwa mafunzo yanapoendelea"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Somo la 1: Kuchunguza skrini"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Wakati Uchunguzi kwa Kugusa umewashwa, unaweza kugusa skrini ili kujua yaliyo chini ya kidole chako. Kwa mfano, skrini ya sasa ina ikoni za programu. Tafuta moja kwa kugusa skrini na kutelezesha kidole chako kote."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Vizuri. Endelea kusongesha kidole chako kwenye skrini hadi upate angalau ikoni moja zaidi."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Unaweza pia kuchunguza kwa kupapasa kidole chako kushoto na kulia mahali popote kwenye skrini. Jaribu kupapasa kutoka kushoto hadi kulia ili kusogeza hadi kwenye ikoni inayofuata."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Ili kuamilisha kitu chochote ambacho umekichunguza, gonga skrini mara mbili. Chunguza hadi upate ikoni ya <xliff:g id="APP_NAME">%1$s</xliff:g>. Kisha gonga mara mbili mahali popote kwenye skrini ili kuiamilisha."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Umepata ikoni ya <xliff:g id="APP_NAME">%1$s</xliff:g>. Gonga mara mbili mahali popote kwenye skrini ili kuamilisha ikoni."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Ulichunguza na kupita ikoni ya <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Jaribu kuchunguza skrini hadi upate tena ikoni ya <xliff:g id="APP_NAME_1">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Ili kusonga hadi somo linalofuata, tafuta kitufe cha <xliff:g id="NEXT">%1$s</xliff:g>, kilicho karibu na pembe ya chini kulia ya skrini, kisha gonga mara mbili ili kukiamilisha."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Somo la 2: Kupitia orodha"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Ili kuvingirisha kwenye orodha, unaweza kutelezesha vidole viwili kwenye skrini. Kwa mfano, skrini ya sasa inajumlisha orodha ya majina ya programu ambayo inaweza kuvingirika juu au chini. Kwanza, jaribu kuchunguza skrini na kutambua programu."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Sasa weka vidole viwili kwenye kipengee katika orodha na utelezeshe vidole vyote juu. Ikiwa utafika juu ya skrini, inua vidole vyako, viweke chini kwenye orodha, na uendelee kuteleza juu."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Chunguza skrini ili kupata programu moja zaidi."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Unaweza pia kuvingirisha ukurasa wote kwa kupapasa kidole chako. Vingirisha katika ukurasa unaofuata kwa kupapasa haraka kuanzia kushoto kuelekea kulia, na kisha kurudi tena kushoto."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Chunguza skrini tena ili kupata programu katika ukurasa wa sasa."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Kupapasa katika uelekeo mkabala, kuelekea kushoto na nyuma, kutasogeza kwa ukura wa awali. Jaribu kupapasa ili kwenda kwenye ukurasa wa awali."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Ili kusonga kwenye somo linalofuata, pata na uamilishe kitufe cha <xliff:g id="NEXT">%s</xliff:g>, kilicho karibu na pembe ya chini kulia ya skrini."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Somo la 3: Usomaji kwa kibambo"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Kwa chaguo-msingi, kupapasa kushoto na kulia kunasoma vifungu vya maandishi yote mara moja. Pia unaweza kusoma kupitia kwenye vifungu vya maandishi kwenye skrini kwa maneno au kibambo. Kwanza, tafuta maandishi yanayoanza na neno \"Hii\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Pili, unaweza kupapasa chini na kurudi juu ili kuanza kusoma kifungu hiki katika kiwango maalum. Jaribu kupapasa chini na juu ili kubadilisha kiwango cha usomaji, kisha papasa kulia ili kusoma maandishi yote."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Ili kuondoka kwenye kifungu cha sasa cha maandishi, utahitajika kurudi kwenye kiwango cha usomaji chaguo-msingi. Papasa katika uelekeo mkabala, juu na urudi chini, ili kurudi kwenye kiwango chaguo-msingi cha usomaji. Kisha tafuta kitufe cha <xliff:g id="FINISH">%s</xliff:g> katika upande wa chini kulia na ugonge mara mbili ili kuamilisha na uondoke kwenye mafunzo."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Huu ni mfano wa kifungu kikubwa cha maandishi. Unaweza kupitia maandishi haya katika kiwango maalum cha kusoma kwa kutumia ishara za kutelezesha, au uyasome yote kwa wakati mmoja, kwa kutumia ishara za mguso."\n\n"Hii ni aya ya pili."\n\n"Hii ni aya ya tatu na ya mwisho. Telezesha chini na juu ili kubadilisha kiwango cha kusoma, kisha telezesha kulia ili kupitia maandishi haya."</string>
+</resources>

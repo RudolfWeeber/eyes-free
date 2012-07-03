@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Zakázat řeč v tichém režimu"</item>
     <item msgid="4945285159234224758">"V režimu vibrace a v tichém režimu nemluvit"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"Podle hlasitosti řeči"</item>
-    <item msgid="3474415020494727681">"75 % hlasitosti řeči"</item>
-    <item msgid="3630774810523140800">"50 % hlasitosti řeči"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Tlačítko"</item>
     <item msgid="2031284088774168661">"Zaškrtávací políčko"</item>

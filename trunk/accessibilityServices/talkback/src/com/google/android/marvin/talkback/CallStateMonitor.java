@@ -23,7 +23,7 @@ import android.content.IntentFilter;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.google.android.marvin.utils.InfrastructureStateListener;
+import com.googlecode.eyesfree.utils.InfrastructureStateListener;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
@@ -37,12 +37,7 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
     private final PreferenceFeedbackController mFeedbackController;
 
     /** Handler to transfer broadcasts to the service thread. */
-    private final BroadcastHandler mHandler = new BroadcastHandler() {
-        @Override
-        public void handleOnReceive(Intent intent) {
-            internalOnReceive(intent);
-        }
-    };
+    private final CallStateHandler mHandler = new CallStateHandler(this);
 
     /** Whether the infrastructure has been initialized. */
     private boolean mInfrastructureInitialized;
@@ -80,5 +75,16 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
 
     public IntentFilter getFilter() {
         return STATE_CHANGED_FILTER;
+    }
+
+    private static class CallStateHandler extends BroadcastHandler<CallStateMonitor> {
+        public CallStateHandler(CallStateMonitor parent) {
+            super(parent);
+        }
+
+        @Override
+        public void handleOnReceive(Intent intent, CallStateMonitor parent) {
+            parent.internalOnReceive(intent);
+        }
     }
 }

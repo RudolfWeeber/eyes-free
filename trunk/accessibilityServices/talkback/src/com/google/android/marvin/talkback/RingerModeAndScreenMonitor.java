@@ -22,17 +22,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.os.SystemClock;
 import android.telephony.TelephonyManager;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.google.android.marvin.talkback.SpeechController.QueuingMode;
-import com.google.android.marvin.utils.InfrastructureStateListener;
-import com.google.android.marvin.utils.ProximitySensor;
-import com.google.android.marvin.utils.ProximitySensor.ProximityChangeListener;
 import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.InfrastructureStateListener;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
@@ -41,39 +38,19 @@ import com.googlecode.eyesfree.utils.LogUtils;
  */
 class RingerModeAndScreenMonitor extends BroadcastReceiver implements InfrastructureStateListener {
     private final Context mContext;
-
-    private final PreferenceFeedbackController mFeedbackController;
-
     private final SpeechController mSpeechController;
-
     private final AudioManager mAudioManager;
-
     private final TelephonyManager mTelephonyManager;
-
     private final NotificationCache mNotificationCache;
-
-    /** Proximity sensor for implementing "shut up" functionality. */
-    private ProximitySensor mProximitySensor;
 
     /** The intent filter to match phone state changes. */
     private final IntentFilter mPhoneStateChangeFilter = new IntentFilter();
 
     /** Handler to transfer broadcasts to the service thread. */
-    private final BroadcastHandler mHandler = new BroadcastHandler() {
-        @Override
-        public void handleOnReceive(Intent intent) {
-            internalOnReceive(intent);
-        }
-    };
+    private final RingerModeHandler mHandler = new RingerModeHandler(this);
 
     /** Whether the screen is currently off. */
     private boolean mScreenIsOff;
-
-    /** When the screen was last turned on. */
-    private long mTimeScreenOn;
-
-    /** Whether to use the proximity sensor to silence speech. */
-    private boolean mSilenceOnProximity;
 
     /** Whether the infrastructure has been initialized. */
     private boolean mInfrastructureInitialized;
@@ -84,11 +61,9 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
     /**
      * Creates a new instance.
      */
-    public RingerModeAndScreenMonitor(Context context,
-            PreferenceFeedbackController feedbackController, SpeechController speechController,
+    public RingerModeAndScreenMonitor(Context context, SpeechController speechController,
             NotificationCache notificationCache) {
         mContext = context;
-        mFeedbackController = feedbackController;
         mSpeechController = speechController;
         mNotificationCache = notificationCache;
 
@@ -101,7 +76,6 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
         mPhoneStateChangeFilter.addAction(Intent.ACTION_USER_PRESENT);
 
         mScreenIsOff = false;
-        mTimeScreenOn = SystemClock.uptimeMillis();
     }
 
     @Override
@@ -153,15 +127,6 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
         return mScreenIsOff;
     }
 
-    public void setSilenceOnProximity(boolean silenceOnProximity) {
-        mSilenceOnProximity = silenceOnProximity;
-        setProximitySensorState(mSilenceOnProximity);
-    }
-
-    public void shutdown() {
-        setProximitySensorState(false);
-    }
-
     /**
      * Handles when the device is unlocked. Just speaks "unlocked."
      */
@@ -180,18 +145,11 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
     private void handleScreenOff() {
         mScreenIsOff = true;
 
-        // TODO(alanv): If we're allowed to speak when the screen if off,
-        // should we still suspend the proximity sensor?
-        setProximitySensorState(false);
+        mSpeechController.setScreenIsOn(false);
 
         // Don't announce screen off if we're in a call.
-        if (mTelephonyManager != null
-                && mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
-            return;
-        }
-
-        // Don't speak anything if we're probably already speaking.
-        if (SystemClock.uptimeMillis() - mTimeScreenOn < 2000) {
+        if ((mTelephonyManager != null)
+                && (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE)) {
             return;
         }
 
@@ -199,7 +157,11 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
                 StringBuilderUtils.appendWithSeparator(null,
                         mContext.getString(R.string.value_screen_off));
 
-        appendRingerStateAnouncement(builder);
+        // Only append ringer state if the device has a phone.
+        if ((mTelephonyManager != null)
+                && (mTelephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE)) {
+            appendRingerStateAnouncement(builder);
+        }
 
         mSpeechController.cleanUpAndSpeak(builder, QueuingMode.INTERRUPT, null);
     }
@@ -210,9 +172,9 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
      */
     private void handleScreenOn() {
         mScreenIsOff = false;
-        mTimeScreenOn = SystemClock.uptimeMillis();
 
-        setProximitySensorState(true);
+        // TODO: This doesn't look right. Should probably be using a listener.
+        mSpeechController.setScreenIsOn(true);
 
         if (mTelephonyManager != null
                 && mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
@@ -221,7 +183,6 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
         }
 
         final StringBuilder builder = new StringBuilder();
-
         appendCurrentTimeAnnouncement(builder);
         appendCachedNotificationSummary(builder);
         appendRingerStateAnouncement(builder);
@@ -232,6 +193,8 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
     /**
      * Handles when the ringer mode (ex. volume) changes. Announces the current
      * ringer state.
+     *
+     * TODO: Does this duplicate functionality in VolumeMonitor?
      */
     private void handleRingerModeChanged() {
         final StringBuilder text = new StringBuilder();
@@ -242,7 +205,7 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
 
     /**
      * Appends the current time announcement to a {@link StringBuilder}.
-     * 
+     *
      * @param builder The string to append to.
      */
     private void appendCurrentTimeAnnouncement(StringBuilder builder) {
@@ -260,7 +223,7 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
 
     /**
      * Appends the notification summary to a {@link StringBuilder}.
-     * 
+     *
      * @param builder The string to append to.
      */
     private void appendCachedNotificationSummary(StringBuilder builder) {
@@ -270,32 +233,9 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
         StringBuilderUtils.appendWithSeparator(builder, notificationSummary);
     }
 
-    private void setProximitySensorState(boolean enabled) {
-        final boolean silenceOnProximity = mSilenceOnProximity;
-
-        if (mProximitySensor == null) {
-            if (!silenceOnProximity || !enabled) {
-                // If we're not supposed to be using the proximity sensor, or if
-                // we're supposed to be turning it off, then don't do anything.
-                return;
-            }
-
-            // Otherwise, ensure that the proximity sensor is initialized.
-            mProximitySensor = new ProximitySensor(mContext, true);
-            mProximitySensor.setProximityChangeListener(mProximityChangeListener);
-        }
-
-        // Otherwise, start only if we're supposed to silence on proximity.
-        if (enabled && silenceOnProximity) {
-            mProximitySensor.start();
-        } else {
-            mProximitySensor.stop();
-        }
-    }
-
     /**
      * Appends the ringer state announcement to a {@link StringBuilder}.
-     * 
+     *
      * @param builder The string to append to.
      */
     private void appendRingerStateAnouncement(StringBuilder builder) {
@@ -324,18 +264,14 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
         StringBuilderUtils.appendWithSeparator(builder, announcement);
     }
 
-    /**
-     * Stops the TTS engine when the proximity sensor is close.
-     */
-    private final ProximitySensor.ProximityChangeListener mProximityChangeListener =
-            new ProximityChangeListener() {
-                @Override
-                public void onProximityChanged(boolean close) {
-                    // Stop feedback if the user is close to the sensor.
-                    if (close) {
-                        mSpeechController.stopAll();
-                        mFeedbackController.interrupt();
-                    }
-                }
-            };
+    private static class RingerModeHandler extends BroadcastHandler<RingerModeAndScreenMonitor> {
+        public RingerModeHandler(RingerModeAndScreenMonitor parent) {
+            super(parent);
+        }
+
+        @Override
+        public void handleOnReceive(Intent intent, RingerModeAndScreenMonitor parent) {
+            parent.internalOnReceive(intent);
+        }
+    }
 }

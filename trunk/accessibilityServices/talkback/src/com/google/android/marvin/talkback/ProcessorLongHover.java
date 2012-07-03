@@ -17,7 +17,6 @@
 package com.google.android.marvin.talkback;
 
 import android.content.Context;
-import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
@@ -25,8 +24,9 @@ import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.SpeechController.QueuingMode;
-import com.google.android.marvin.talkback.TalkBackService.EventProcessor;
+import com.google.android.marvin.talkback.TalkBackService.EventListener;
 import com.google.android.marvin.talkback.speechrules.NodeSpeechRuleProcessor;
+import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityEventCompatUtils;
 
 /**
@@ -39,7 +39,7 @@ import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityEventCompa
  *
  * @author alanv@google.com (Alan Viverette)
  */
-class ProcessorLongHover implements EventProcessor {
+class ProcessorLongHover implements EventListener {
     /** The minimum API level required to use this class. */
     public static final int MIN_API_LEVEL = 14;
 
@@ -47,52 +47,61 @@ class ProcessorLongHover implements EventProcessor {
     private final SpeechController mSpeechController;
     private final LongHoverHandler mHandler;
 
-    private boolean mWaitingForExit;
+    private AccessibilityNodeInfoCompat mWaitingForExit;
 
     public ProcessorLongHover(Context context, SpeechController speechController) {
         mContext = context;
         mSpeechController = speechController;
-        mHandler = new LongHoverHandler();
+        mHandler = new LongHoverHandler(this);
     }
 
     @Override
     public void process(AccessibilityEvent event) {
         final int eventType = event.getEventType();
 
-        // We expect to get hover events out of order, so moving from A to
-        // long-hover on B looks like this:
-        // - A HOVER_ENTER
-        // - B HOVER_ENTER
-        // - A HOVER_EXIT
-        // And we'll never get three HOVER_ENTER events in a row, but we may get
-        // hover events that are in order, like:
-        // - A HOVER_ENTER
-        // - B HOVER_EXIT
-        // So we'll flip a bit every time we see one of these events, such that
-        // we need an odd number of events for an EXIT event to be ordered.
-
-        if (eventType == AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER) {
-            mWaitingForExit = !mWaitingForExit;
-        }
-
-        // HOVER_EXIT events are received after the subsequent HOVER_ENTER event, so we need to keep track.
-        if ((eventType != AccessibilityEventCompat.TYPE_VIEW_HOVER_EXIT) || mWaitingForExit) {
-            mHandler.cancelLongHoverTimeout();
-        }
-
-        if (eventType == AccessibilityEventCompat.TYPE_VIEW_HOVER_EXIT) {
-            mWaitingForExit = !mWaitingForExit;
-        }
-
-        // Only HOVER_ENTER events trigger a long hover timeout.
-        if (eventType != AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER) {
+        if (eventType == AccessibilityEvent.TYPE_TOUCH_EXPLORATION_GESTURE_END) {
+            cacheEnteredNode(null);
+            mHandler.cancelLongHoverTimeout(this);
             return;
         }
 
-        mHandler.startLongHoverTimeout(event);
+        if ((eventType != AccessibilityEvent.TYPE_VIEW_HOVER_ENTER)
+                && (eventType != AccessibilityEvent.TYPE_VIEW_HOVER_EXIT)) {
+            return;
+        }
+
+        final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
+        final AccessibilityNodeInfoCompat source = record.getSource();
+
+        if (source == null) {
+            return;
+        }
+
+        switch (eventType) {
+            case AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER:
+                mHandler.startLongHoverTimeout(event, this);
+                break;
+            case AccessibilityEventCompat.TYPE_VIEW_HOVER_EXIT:
+                mHandler.cancelLongHoverTimeout(this);
+                break;
+        }
+
+        source.recycle();
     }
 
-    private class LongHoverHandler extends Handler {
+
+    private void cacheEnteredNode(AccessibilityNodeInfoCompat node) {
+        if (mWaitingForExit != null) {
+            mWaitingForExit.recycle();
+            mWaitingForExit = null;
+        }
+
+        if (node != null) {
+            mWaitingForExit = AccessibilityNodeInfoCompat.obtain(node);
+        }
+    }
+
+    private static class LongHoverHandler extends WeakReferenceHandler<ProcessorLongHover> {
         /** Message identifier for a verbose (long-hover) notification. */
         private static final int LONG_HOVER_TIMEOUT = 1;
 
@@ -102,12 +111,16 @@ class ProcessorLongHover implements EventProcessor {
         /** The event that will be read by the utterance complete action. */
         private AccessibilityEvent mPendingLongHoverEvent;
 
+        public LongHoverHandler(ProcessorLongHover parent) {
+            super(parent);
+        }
+
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg, ProcessorLongHover parent) {
             switch (msg.what) {
                 case LONG_HOVER_TIMEOUT: {
                     final AccessibilityEvent event = (AccessibilityEvent) msg.obj;
-                    handleLongHoverTimeout(event);
+                    handleLongHoverTimeout(event, parent);
                     event.recycle();
                     break;
                 }
@@ -120,7 +133,7 @@ class ProcessorLongHover implements EventProcessor {
          *
          * @param event The source event.
          */
-        private void handleLongHoverTimeout(AccessibilityEvent event) {
+        private void handleLongHoverTimeout(AccessibilityEvent event, ProcessorLongHover parent) {
             final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
             final AccessibilityNodeInfoCompat source = record.getSource();
 
@@ -128,33 +141,34 @@ class ProcessorLongHover implements EventProcessor {
                 return;
             }
 
-            final CharSequence text = NodeSpeechRuleProcessor.processVerbose(mContext, source);
+            final CharSequence text = NodeSpeechRuleProcessor.processVerbose(
+                    parent.mContext, source);
             source.recycle();
 
             // Use QUEUE mode so that we don't interrupt more important messages.
-            mSpeechController.cleanUpAndSpeak(text, QueuingMode.QUEUE, null);
+            parent.mSpeechController.cleanUpAndSpeak(text, QueuingMode.QUEUE, null);
         }
 
         /**
          * Starts the long hover timeout. Call this for every VIEW_HOVER
          * event.
          */
-        private void startLongHoverTimeout(AccessibilityEvent event) {
+        private void startLongHoverTimeout(AccessibilityEvent event, ProcessorLongHover parent) {
             mPendingLongHoverEvent = AccessibilityEventCompatUtils.obtain(event);
 
             // The long hover timeout starts after the current text is spoken.
-            mSpeechController.addUtteranceCompleteAction(-1, mLongHoverRunnable);
+            parent.mSpeechController.addUtteranceCompleteAction(-1, mLongHoverRunnable);
         }
 
         /**
          * Removes the long hover timeout and completion action. Call this
          * for every event.
          */
-        private void cancelLongHoverTimeout() {
+        private void cancelLongHoverTimeout(ProcessorLongHover parent) {
             removeMessages(LONG_HOVER_TIMEOUT);
 
             if (mPendingLongHoverEvent != null) {
-                mSpeechController.removeUtteranceCompleteAction(mLongHoverRunnable);
+                parent.mSpeechController.removeUtteranceCompleteAction(mLongHoverRunnable);
                 mPendingLongHoverEvent.recycle();
                 mPendingLongHoverEvent = null;
             }

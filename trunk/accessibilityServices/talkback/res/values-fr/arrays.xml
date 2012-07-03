@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Désactiver la voix en mode silencieux"</item>
     <item msgid="4945285159234224758">"Désactiver la voix en mode vibreur et silencieux"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"Identique au volume de la voix"</item>
-    <item msgid="3474415020494727681">"75 % du volume de la voix"</item>
-    <item msgid="3630774810523140800">"50 % du volume de la voix"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Bouton"</item>
     <item msgid="2031284088774168661">"Case à cocher"</item>

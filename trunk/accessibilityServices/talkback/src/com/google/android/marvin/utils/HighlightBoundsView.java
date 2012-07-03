@@ -70,12 +70,10 @@ public class HighlightBoundsView extends View {
     @Override
     public void onDraw(Canvas c) {
         final int saveCount = c.save();
-        c.getMatrix(mMatrix);
-
-        mMatrix.postTranslate(-SCREEN_LOCATION[0], -SCREEN_LOCATION[1]);
-        mPaint.setColor(mHighlightColor);
-
+        c.translate(-SCREEN_LOCATION[0], -SCREEN_LOCATION[1]);
         c.setMatrix(mMatrix);
+
+        mPaint.setColor(mHighlightColor);
 
         for (AccessibilityNodeInfoCompat node : mNodes) {
             node.getBoundsInScreen(mTemp);

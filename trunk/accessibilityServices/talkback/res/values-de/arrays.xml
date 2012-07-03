@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Im Lautlos-Modus nicht sprechen"</item>
     <item msgid="4945285159234224758">"Im Vibrations- und Lautlos-Modus nicht sprechen"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"An Sprachlautstärke anpassen"</item>
-    <item msgid="3474415020494727681">"75 % der Sprachlautstärke"</item>
-    <item msgid="3630774810523140800">"50 % der Sprachlautstärke"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Schaltfläche"</item>
     <item msgid="2031284088774168661">"Kontrollkästchen"</item>

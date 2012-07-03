@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="talkback_shortcut_title" msgid="6374632335119573898">"Spartusis klavišas „TalkBack“"</string>
+    <string name="talkback_preferences_title" msgid="615685549632541311">"„TalkBack“ nustatymai"</string>
     <string name="talkback_service_description" msgid="983212841294665356">"Kai įjungta funkcija „TalkBack“, įrenginys teikia atsaką žodžiu, kad padėtų akliems ir sutrikusio regėjimo naudotojams. Pavyzdžiui, apibūdinama tai, ką paliečiate, pasirenkate ir suaktyvinate."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Teksto pranešimas"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Neišsiųstas teksto pranešimas"</string>
@@ -26,18 +26,26 @@
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> pakeista į <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> simb. pakeista <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> simb."</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"<xliff:g id="PERCENT">%d</xliff:g> proc. skambučių."</string>
-    <string name="template_image_view" msgid="4213590103284596735">"„<xliff:g id="TITLE">%1$s</xliff:g>“ vaizdas"</string>
+    <!-- no translation found for template_image_view (2368987212503613897) -->
+    <skip />
     <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g> sąrašas"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Ilgai laikoma paspaudus „<xliff:g id="TITLE">%1$s</xliff:g>“"</string>
     <string name="template_button" msgid="6774709818484366257">"Mygtukas „<xliff:g id="TITLE">%1$s</xliff:g>“"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"vaizdas <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Siekti valdyti „<xliff:g id="TITLE">%1$s</xliff:g>“."</string>
     <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> proc."</string>
+    <string name="template_container" msgid="8918583415236947599">"<xliff:g id="TYPE">%1$s</xliff:g>, kur yra <xliff:g id="COUNT">%2$d</xliff:g> element."</string>
+    <string name="value_gridview" msgid="9093738961981389981">"Tinklelis"</string>
+    <string name="value_listview" msgid="3437715684913760710">"Sąrašas"</string>
+    <string name="value_tabwidget" msgid="5550633699198799743">"Skirtukų juosta"</string>
+    <string name="value_container" msgid="439303423101134461">"Sudėtinis rodinys"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Rodomi elementai: nuo <xliff:g id="FROM_INDEX">%d</xliff:g> iki <xliff:g id="TO_INDEX">%d</xliff:g> iš <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Rodomas elementas: <xliff:g id="FROM_INDEX">%d</xliff:g> iš <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Išskleidžiamasis „<xliff:g id="TITLE">%1$s</xliff:g>“ sąrašas."</string>
     <string name="template_password_selected" msgid="7528235887386963927">"Pasirinkti simboliai: <xliff:g id="FROM_INDEX">%1$s</xliff:g> iki <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"<xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g> didžioji"</string>
+    <string name="template_checkbox" msgid="7902762816979572494">"„<xliff:g id="TITLE">%1$s</xliff:g>“ žymimasis laukelis."</string>
+    <string name="template_radio_button" msgid="4272970081436888704">"Akutė „<xliff:g id="TITLE">%1$s</xliff:g>“."</string>
     <string name="value_password" msgid="52094746222829357">"slaptažodis"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Atidarytas slankus ekranas"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Parinktys."</string>
@@ -47,9 +55,12 @@
     <string name="value_checked" msgid="5234989698372864892">"pažymėtas"</string>
     <string name="value_not_checked" msgid="193134740901545340">"nepatikrinta"</string>
     <string name="value_disabled" msgid="65077823320194685">"neleidžiama"</string>
-    <string name="hint_clickable" msgid="5722744901089685155">"Palieskite, kad spustelėtume."</string>
-    <string name="hint_long_clickable" msgid="8223088419179222819">"Palieskite ir palaikykite, kad atliktumėte ilgo paspaudimo veiksmą."</string>
-    <string name="hint_checkable" msgid="3455044599190977740">"Palieskite, kad perjungtumėte."</string>
+    <string name="value_double_tap" msgid="7829968646330038608">"Dukart palieskite"</string>
+    <string name="value_single_tap" msgid="6461432282985355533">"Palieskite"</string>
+    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g>, kad suaktyvintumėte."</string>
+    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> ir palaikykite, kad atliktumėte ilgo paspaudimo veiksmą."</string>
+    <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g>, kad perjungtumėte."</string>
+    <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g>, kad įvestumėte tekstą."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"slenkamas"</string>
     <string name="value_clicked" msgid="8306469740150249879">"spustelėta"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"nepažymėta"</string>
@@ -57,50 +68,66 @@
     <string name="value_ringer_silent" msgid="672965424730167385">"Skambutis tylus."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Ekranas išjungtas."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Įrenginys atrakintas."</string>
-    <string name="value_web_view" msgid="8368045336469722566">"Žiniatinklio rodinys."</string>
+    <string name="value_web_view" msgid="8611542401983419041">"Žiniatinklio turinys."</string>
     <string name="value_unknown_object" msgid="3589473667352440925">"Etikete nepažymėtas elementas."</string>
-    <string name="title_talkback_crash" msgid="1342512684382958066">"Galimi „TalkBack“ strigties duomenys"</string>
-    <string name="message_talkback_crash" msgid="8552017712769665127">"Jei norite patobul. „TalkBack“ atsiųsdami strigčių duomenų, spust. čia."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Kada kalbėti"</string>
+    <string name="title_pref_speech_volume" msgid="4013853601342391397">"Kalbos garsumas"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Skambučio garsumas"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Kalbėti, kai ekr. išj."</string>
     <string name="title_pref_caller_id" msgid="1414845059814636961">"Pasakyti skambintojo ID"</string>
     <string name="title_pref_proximity" msgid="4957940010293002852">"Naudoti artumo jutiklį"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Artumo jutiklis nutildo kalbą"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Artumo jutiklis nevaldo kalbos"</string>
-    <string name="title_pref_bluetooth" msgid="7738175584293158995">"Naud. „Bluetooth“ ausin."</string>
-    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Kai galite, kalbėkite naudodami ne A2DP (monofonines) „Bluetooth“ ausines."</string>
-    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Niekada nekalbėkite naudodami ne A2DP (monofonines) „Bluetooth“ ausines."</string>
+    <string name="title_pref_explore_by_touch" msgid="4051040843081874790">"Naršyti liečiant"</string>
+    <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Naršymas liečiant"</string>
+    <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Tvarkyti sparčiųjų klavišų gestus"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Naudoti tono pakeitimus"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Klaviatūros veiksmą pasakyti žemesniu tonu"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Kalbant nekeisti tono"</string>
-    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Spartieji klavišai"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Grįžtamasis ryšys"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Atsiliepimai vibruojant"</string>
-    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Priskirti vibr. šabl."</string>
-    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Naršyti paliečiant"</string>
-    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Spustelėjamų elem. tyr."</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Garso atsiliepimai"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Garso įrašo garsumas"</string>
-    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Priskirti garsus"</string>
-    <string name="value_play_button" msgid="3816799051654747674">"Paleisti"</string>
-    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Naršyti paliečiant"</string>
-    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Spustelėjamų elem. tyr."</string>
-    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"Spustelėta"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Įvairūs"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Kūrėjų nustatymai"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Žurnalo išvesties lygis"</string>
     <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Paryškinti įvykio šaltinius"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Pateikti kalbos išvestį"</string>
-    <string name="subject_crash_report_email" msgid="3043388136219501183">"„TalkBack“ strigties ataskaita"</string>
-    <string name="header_crash_report_email" msgid="9218276172142314054">"Tai „TalkBack“ strigties ataskaita. Spustelėjus mygtuką „Siųsti“ šie duomenys bus perduoti „TalkBack“ kūrėjams."\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"Naršyti pagal simbolį."</string>
     <string name="axis_word" msgid="7745798763195184060">"Naršyti pagal žodį."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Naršyti pagal sakinį."</string>
+    <string name="axis_paragraph" msgid="3453285809344289729">"Naršyti pagal pastraipą."</string>
+    <string name="axis_object" msgid="7034325449094737671">"Naršyti pagal objektą."</string>
+    <string name="axis_line" msgid="2210986915751668758">"Naršyti pagal eilutę."</string>
+    <string name="axis_page" msgid="9146038615069235841">"Naršyti pagal puslapį."</string>
     <string name="axis_heading" msgid="8928386537164255063">"Naršyti pagal antraštę."</string>
     <string name="axis_sibling" msgid="7260754205862306385">"Naršyti pagal brolius / seseris"</string>
     <string name="axis_document" msgid="1581988340856497809">"Naršyti pagal dokumentą."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Naršyti pagal numatytojo žiniatinklio rodinio elgesį."</string>
+    <string name="attention" msgid="627104955956154539">"Dėmesio"</string>
+    <string name="explore_dialog_message" msgid="2796017207242981327">"Įjungus šią funkciją, pasikeis įrenginio reakcija į palietimą. Įjungti?"</string>
+    <string name="requires_talkback" msgid="3634159695179852501">"Norint naudoti šią mokymo programą, reikalinga funkcija „Naršyti liečiant“. Prieš paleisdami mokymo programą, įjunkite „TalkBack“ ir įgalinkite funkciją „Naršyti liečiant“."</string>
+    <string name="granularity_character" msgid="5828563809381090688">"Skaityti po vieną simbolį"</string>
+    <string name="granularity_word" msgid="3660181391007381559">"Skaityti po vieną žodį"</string>
+    <string name="granularity_paragraph" msgid="1175015890341475666">"Skaityti po vieną pastraipą"</string>
+    <string name="granularity_default" msgid="554981185979733919">"Numatytasis skaitymo lygis"</string>
+    <string name="orientation_portrait" msgid="5280362272647722922">"Stačias"</string>
+    <string name="orientation_landscape" msgid="129313890178554132">"Gulsčias"</string>
+    <string name="shortcut_unassigned" msgid="8631675444401168361">"Nepriskirta"</string>
+    <string name="shortcut_back" msgid="8404153155835310379">"Mygtukas „Atgal“"</string>
+    <string name="shortcut_home" msgid="3905505999818649470">"Pagrindinio ekrano mygtukas"</string>
+    <string name="shortcut_recent_apps" msgid="4462279958679670485">"Pastarųjų programų mygtukas"</string>
+    <string name="shortcut_notifications" msgid="7234767026975704922">"Atidaryti pranešimus"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Pakartoti pastarąją kalbą"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Paraidžiui pasakyti pastarąją kalbą"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Perbraukti žemyn ir kairėn"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Perbraukti žemyn ir dešinėn"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Perbraukti aukštyn ir kairėn"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Perbraukti aukštyn ir dešinėn"</string>
+    <string name="value_volume_200_percent" msgid="2969698924281376143">"200 % medijos garsumo"</string>
+    <string name="value_volume_150_percent" msgid="4668371157512150392">"150 % medijos garsumo"</string>
+    <string name="value_volume_100_percent" msgid="6676030754946177658">"Lyginti medijos garsumą"</string>
+    <string name="value_volume_75_percent" msgid="7578844180160160971">"75 % medijos garsumo"</string>
+    <string name="value_volume_50_percent" msgid="2830571913174435107">"50 % medijos garsumo"</string>
+    <string name="value_volume_25_percent" msgid="4441038207089946938">"25 % medijos garsumo"</string>
 </resources>

@@ -18,8 +18,10 @@ package com.googlecode.eyesfree.widget;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -29,7 +31,7 @@ import android.widget.FrameLayout;
 /**
  * Provides a simple full-screen overlay. Behaves like a
  * {@link android.app.Dialog} but simpler.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
 public class SimpleOverlay {
@@ -39,17 +41,28 @@ public class SimpleOverlay {
     private final LayoutParams mParams;
 
     private SimpleOverlayListener mListener;
+    private OnKeyListener mKeyListener;
     private boolean mVisible;
 
     /**
      * Creates a new simple overlay.
-     * 
+     *
      * @param context The parent context.
      */
     public SimpleOverlay(Context context) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        mContentView = new SilentFrameLayout(context);
+        mContentView = new SilentFrameLayout(context) {
+            @Override
+            public boolean dispatchKeyEvent(KeyEvent event) {
+                if ((mKeyListener != null)
+                        && mKeyListener.onKey(mContentView, event.getKeyCode(), event)) {
+                    return true;
+                }
+
+                return super.dispatchKeyEvent(event);
+            }
+        };
 
         mParams = new WindowManager.LayoutParams();
         mParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
@@ -67,8 +80,17 @@ public class SimpleOverlay {
     }
 
     /**
+     * Sets the key listener.
+     *
+     * @param keyListener
+     */
+    public void setOnKeyListener (OnKeyListener keyListener) {
+        mKeyListener = keyListener;
+    }
+
+    /**
      * Sets the listener for overlay visibility callbacks.
-     * 
+     *
      * @param listener
      */
     public void setListener(SimpleOverlayListener listener) {
@@ -138,7 +160,7 @@ public class SimpleOverlay {
 
     /**
      * Sets the current layout parameters and applies them immediately.
-     * 
+     *
      * @param params The layout parameters to use.
      */
     public void setParams(LayoutParams params) {
@@ -158,7 +180,7 @@ public class SimpleOverlay {
 
     /**
      * Inflates the specified resource ID and sets it as the content view.
-     * 
+     *
      * @param layoutResId The layout ID of the view to set as the content view.
      */
     public void setContentView(int layoutResId) {
@@ -168,7 +190,7 @@ public class SimpleOverlay {
 
     /**
      * Sets the specified view as the content view.
-     * 
+     *
      * @param content The view to set as the content view.
      */
     public void setContentView(View content) {
@@ -186,7 +208,7 @@ public class SimpleOverlay {
 
     /**
      * Finds and returns the view within the overlay content.
-     * 
+     *
      * @param id The ID of the view to return.
      * @return The view with the specified ID, or {@code null} if not found.
      */
@@ -196,30 +218,30 @@ public class SimpleOverlay {
 
     /**
      * Handles overlay visibility change callbacks.
-     * 
+     *
      * @author alanv@google.com (Alan Viverette)
      */
     public interface SimpleOverlayListener {
         /**
          * Called after the overlay is displayed.
-         * 
+         *
          * @param overlay The overlay that was displayed.
          */
         public void onShow(SimpleOverlay overlay);
 
         /**
          * Called after the overlay is hidden.
-         * 
+         *
          * @param overlay The overlay that was hidden.
          */
         public void onHide(SimpleOverlay overlay);
     }
-    
+
     private static class SilentFrameLayout extends FrameLayout {
         public SilentFrameLayout(Context context) {
             super(context);
         }
-        
+
         /**
          * In API 14+ this is an override.
          */

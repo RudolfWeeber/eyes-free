@@ -23,6 +23,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
 import com.googlecode.eyesfree.compat.provider.SettingsCompatUtils.SecureCompatUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
  * Processes editable text fields.

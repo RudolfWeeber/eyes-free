@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Spustiť návod na použív. funkcie Explore by touch"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Návod na zjednodušené ovládanie"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Návod na zjednodušené ovládanie"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Ďalšie"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Predchádzajúce"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Dokončiť"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Ukončiť"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Keď návod hovorí, ovládanie dotykom je zakázané"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Lekcia 1: Prieskum obrazovky"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Po zapnutí funkcie „Preskúmanie dotykom“ môžete tým, že sa dotknete obrazovky, zistiť, čo sa nachádza pod vaším prstom. Príklad: Aktuálna obrazovka obsahuje ikony aplikácií. Dotknite sa obrazovky a posúvajte prstom, dokým niektorú z nich nenájdete."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Dobre. Posúvajte prstom po obrazovke, kým nenájdete aspoň jednu ďalšiu ikonu."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Preskúmavať môžete tiež posunutím prstom doľava a doprava kdekoľvek na obrazovke. Skúste prejsť na ďalšiu ikonu rýchlym posunutím prstom zľava doprava."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Ak chcete čokoľvek aktivovať, klepnite dvakrát na obrazovku. Nájdite ikonu <xliff:g id="APP_NAME">%1$s</xliff:g> a dvojitým klepnutím kdekoľvek na obrazovke ju aktivujte."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Našli ste ikonu <xliff:g id="APP_NAME">%1$s</xliff:g>. Aktivujte ju dvojitým klepnutím kdekoľvek na obrazovke."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Ikonu <xliff:g id="APP_NAME_0">%1$s</xliff:g> ste už preskočili. Skúste nájsť ikonu <xliff:g id="APP_NAME_1">%1$s</xliff:g> na obrazovke znova."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Ak chcete prejsť na ďalšiu lekciu, nájdite tlačidlo <xliff:g id="NEXT">%1$s</xliff:g> v pravom dolnom rohu obrazovky. Dvojitým klepnutím ho aktivujete."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Lekcia 2: Posúvanie v zoznamoch"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Ak chcete prehliadať zoznam, môžete posúvať dvoma prstami po obrazovke. Príklad: Aktuálna obrazovka obsahuje zoznam názvov aplikácií, ktorý je možné posúvať nahor alebo nadol. Najprv skúste preskúmať obrazovku a identifikovať aplikáciu."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Teraz umiestnite dva prsty na položku v zozname a posúvajte prstami smerom nahor. Ak dosiahnete vrchnú časť obrazovky, nadvihnite prsty, umiestnite ich na nižšiu časť zoznamu a pokračujte v posúvaní smerom nahor."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Preskúmajte obrazovku a nájdite ešte jednu aplikáciu."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Posunutím prstom môžete prechádzať po celej stránke. Ak chcete prejsť na ďalšiu stránku, posuňte rýchlo prstom zľava doprava a potom späť doľava."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Znova preskúmajte obrazovku a na aktuálnej stránke nájdite aplikáciu."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Posunutím v opačnom smere – doľava a späť – prejdete na predchádzajúcu stránku. Skúste prejsť posunutím prstom na predchádzajúcu stránku."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Ak chcete prejsť na ďalšiu lekciu, nájdite a aktivujte tlačidlo <xliff:g id="NEXT">%s</xliff:g>, ktoré sa nachádza v pravom dolnom rohu obrazovky."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lekcia 3: Čítanie po znakoch"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"V predvolenom nastavení čítate celé bloky textu naraz posunutím prstom doľava a doprava. Bloky textu na obrazovke môžete tiež čítať po slovách alebo znakoch. Najprv prejdite na text, ktorý začína slovom „This“ (toto)."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Ďalej posuňte prstom nahor a nadol, vďaka čomu môžete začať čítať tento blok na konkrétnej úrovni. Vyskúšajte posunutím prstom nadol a nahor zmeniť úroveň čítania a potom sa posunutím prstom doprava posúvať v texte."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Ak sa chcete presunúť z aktuálneho bloku textu, budete sa musieť vrátiť na predvolenú úroveň čítania. Posunutím prstom v opačnom smere nahor alebo nadol sa vrátite na predvolenú úroveň čítania. Potom nájdite tlačidlo <xliff:g id="FINISH">%s</xliff:g> v pravej dolnej časti. Dvojitým klepnutím ho aktivujete a ukončíte príručku."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Toto je príklad väčšieho bloku textu. V texte sa môžete na určitej úrovni čítania posúvať pomocou gest posúvania alebo čítať všetko naraz pomocou gest dotykov."\n\n"Toto je druhý odsek."\n\n"Toto je tretí a posledný odsek. Posunutím prsta nadol a nahor zmeníte úroveň čítania, posunutím prsta doprava sa posúvate v texte."</string>
+</resources>

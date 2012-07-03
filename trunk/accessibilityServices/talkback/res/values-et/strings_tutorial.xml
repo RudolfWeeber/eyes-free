@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Käivita õpetus „Uurige puudutades”."</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Hõlbustuse õpetused"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Hõlbustuse õpetused"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Järgmine"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Eelmine"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Lõpeta"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Välju"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Häälõpetuste ajal on puudutused keelatud"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Õppetund 1: ekraani uurimine"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Kui funktsioon Puudutusega uurimine on sisse lülitatud, saate ekraanil puudutatu kohta teavet. Näiteks praegusel kuval on rakenduste ikoonid. Leidke üks neist, puudutades ekraani ja libistades sõrme."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Väga hea. Libistage sõrme ekraanil ringi, kuni leiate veel vähemalt ühe ikooni."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Uurimiseks võite ka sõrmega kus tahes ekraanil vasakule ja paremale libistada. Järgmise ikooni juurde liikumiseks tõmmake kiiresti vasakult paremale."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Uuritu aktiveerimiseks puudutage ekraani kaks korda. Uurige, kuni leiate rakenduse <xliff:g id="APP_NAME">%1$s</xliff:g> ikooni. Seejärel puudutage selle aktiveerimiseks ekraani kaks korda."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Leidsite rakenduse <xliff:g id="APP_NAME">%1$s</xliff:g> ikooni. Ikooni aktiveerimiseks puudutage ekraani kaks korda."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Möödusite rakenduse <xliff:g id="APP_NAME_0">%1$s</xliff:g> ikoonist. Uurige ekraani, kuni leiate taas rakenduse <xliff:g id="APP_NAME_1">%1$s</xliff:g> ikooni."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Järgmise õppetüki juurde liikumiseks leidke nupp <xliff:g id="NEXT">%1$s</xliff:g>, mis asub ekraani all paremas nurgas, ja topeltpuudutage seda."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Õppetund 2: loendites kerimine"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Loendis sirvimiseks võite kahe sõrmega pühkida üle ekraani. Näiteks sisaldab praegune ekraan rakenduste nimede loendit, mida saab kerida üles või alla. Kõigepealt uurige ekraani ja tuvastage rakendus."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Nüüd asetage kaks sõrme loendis olevale üksusele ja pühkige sõrmedega ülespoole. Kui jõuate ekraani ülaossa, tõstke sõrmed üles, asetage loendis allapoole ja korrake ülespoole pühkimist."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Uurige ekraani, et veel üks rakendus leida."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Samuti võite libistades tervet lehte kerida. Järgmisele lehele kerimiseks libistage kiiresti vasakult paremale ja siis uuesti vasakule."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Uurige uuesti ekraani, et praeguselt lehelt rakendus leida."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Eelmisele lehele liikumiseks libistage vastassuunas, vasakule ja tagasi. Proovige eelmisele lehele liikumiseks libistada."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Järgmisele õppetunnile liikumiseks leidke ja aktiveerige nupp <xliff:g id="NEXT">%s</xliff:g>, mis asub ekraani paremas alanurgas."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Õppetund 3: lugemine tähemärgi haaval"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Vaikimisi saab vasakule ja paremale libistades tekstilõike korraga lugeda. Saate ekraanil kuvatud tekstilõike lugeda ka sõnade või tähemärkide haaval. Esmalt liikuge tekstile, mis algab sõnaga „See”."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Järgmisena saate selle lõigu lugemise alustamiseks konkreetsel lugemistasemel libistada sõrmega alla ja tagasi üles. Proovige libistada alla ja üles lugemistaseme muutmiseks, seejärel libistage teksti lugemiseks paremale."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Praegusest tekstilõigust väljumiseks naaske lugemise vaiketasemele. Vaiketasemele naasmiseks libistage vastassuunas, üles ja tagasi alla. Seejärel leidke alumises paremas nurgas nupp <xliff:g id="FINISH">%s</xliff:g>, selle aktiveerimiseks ja õpetusest väljumiseks topeltpuudutage seda."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"See on näide suurest tekstilõigust. Saate teksti lugeda konkreetsel lugemistasemel, kasutades pühkimisliigutusi, või lugeda kõike korraga, kasutades puuteliigutusi."\n\n"See on teine lõik."\n\n"See on kolmas ja viimane lõik. Lugemistaseme muutmiseks pühkige alla ja üles, seejärel pühkige tekstis liikumiseks paremale."</string>
+</resources>

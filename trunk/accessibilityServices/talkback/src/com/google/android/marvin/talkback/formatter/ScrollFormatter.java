@@ -17,6 +17,7 @@
 package com.google.android.marvin.talkback.formatter;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
@@ -32,6 +33,11 @@ import com.google.android.marvin.talkback.formatter.EventSpeechRule.Accessibilit
  * @author alanv@google.com (Alan Viverette)
  */
 public class ScrollFormatter implements AccessibilityEventFormatter {
+    /** The minimum interval (in milliseconds) between scroll feedback events. */
+    private static final long MIN_SCROLL_INTERVAL = 250;
+
+    private static long mLastScrollEvent = -1;
+
     @Override
     public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
         final CharSequence text = AccessibilityEventUtils.getEventText(event);
@@ -40,6 +46,17 @@ public class ScrollFormatter implements AccessibilityEventFormatter {
             utterance.getText().append(text);
             return true;
         }
+
+        final long currentTime = SystemClock.uptimeMillis();
+
+        if ((currentTime - mLastScrollEvent) < MIN_SCROLL_INTERVAL) {
+            // TODO: We shouldn't just reject events, since we'll get weird
+            // rhythms when scrolling, e.g. if we're getting an event every
+            // 300ms and we reject at the 250ms mark.
+            return false;
+        }
+
+        mLastScrollEvent = currentTime;
 
         final float percent = getScrollPercent(event);
         final float rate = (float) Math.pow(2.0, (percent / 50.0) - 1);

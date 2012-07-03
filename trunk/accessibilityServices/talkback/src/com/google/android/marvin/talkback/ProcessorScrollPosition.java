@@ -17,7 +17,6 @@
 package com.google.android.marvin.talkback;
 
 import android.content.Context;
-import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
@@ -25,25 +24,26 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.SpeechController.QueuingMode;
-import com.google.android.marvin.talkback.TalkBackService.EventProcessor;
+import com.google.android.marvin.talkback.TalkBackService.EventListener;
+import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityEventCompatUtils;
 
 /**
  * Manages scroll position feedback. If a VIEW_SCROLLED event passes through
  * this processor and no further events are received for a specified duration, a
  * "scroll position" message is spoken.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
-class ProcessorScrollPosition implements EventProcessor {
+class ProcessorScrollPosition implements EventListener {
     private final Context mContext;
     private final SpeechController mSpeechController;
     private final ScrollPositionHandler mHandler;
-    
+
     public ProcessorScrollPosition(Context context, SpeechController speechController) {
         mContext = context;
         mSpeechController = speechController;
-        mHandler = new ScrollPositionHandler();
+        mHandler = new ScrollPositionHandler(this);
     }
 
     @Override
@@ -69,7 +69,7 @@ class ProcessorScrollPosition implements EventProcessor {
 
     /**
      * Given an {@link AccessibilityEvent}, speaks a scroll position.
-     * 
+     *
      * @param event The source event.
      */
     private void handleScrollTimeout(AccessibilityEvent event) {
@@ -100,20 +100,24 @@ class ProcessorScrollPosition implements EventProcessor {
         // Use QUEUE mode so that we don't interrupt more important messages.
         mSpeechController.cleanUpAndSpeak(text, QueuingMode.QUEUE, null);
     }
-    
-    private class ScrollPositionHandler extends Handler {
+
+    private static class ScrollPositionHandler extends WeakReferenceHandler<ProcessorScrollPosition> {
         /** Message identifier for a scroll position notification. */
         private static final int SCROLL_TIMEOUT = 1;
 
         /** Timeout before reading a scroll position notification. */
         private static final long DELAY_SCROLL_TIMEOUT = 1000;
-        
+
+        public ScrollPositionHandler(ProcessorScrollPosition parent) {
+            super(parent);
+        }
+
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(Message msg, ProcessorScrollPosition parent) {
             switch (msg.what) {
                 case SCROLL_TIMEOUT: {
                     final AccessibilityEvent event = (AccessibilityEvent) msg.obj;
-                    handleScrollTimeout(event);
+                    parent.handleScrollTimeout(event);
                     event.recycle();
                     break;
                 }

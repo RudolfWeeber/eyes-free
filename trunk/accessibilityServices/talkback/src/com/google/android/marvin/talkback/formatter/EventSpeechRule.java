@@ -29,10 +29,10 @@ import android.view.accessibility.AccessibilityEvent;
 import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.Utterance;
-import com.google.android.marvin.utils.ClassLoadingManager;
 import com.google.android.marvin.utils.NodeUtils;
-import com.google.android.marvin.utils.PackageManagerUtils;
+import com.googlecode.eyesfree.utils.ClassLoadingManager;
 import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.PackageManagerUtils;
 
 import dalvik.system.DexFile;
 
@@ -142,6 +142,14 @@ public class EventSpeechRule {
                 AccessibilityEventCompat.TYPE_VIEW_SCROLLED);
         sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_SELECTION_CHANGED",
                 AccessibilityEventCompat.TYPE_VIEW_TEXT_SELECTION_CHANGED);
+        sEventTypeNameToValueMap.put("TYPE_ANNOUNCEMENT",
+                AccessibilityEvent.TYPE_ANNOUNCEMENT);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_ACCESSIBILITY_FOCUSED",
+                AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED",
+                AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED);
+        sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY",
+                AccessibilityEvent.TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY);
     }
 
     /**
@@ -321,8 +329,9 @@ public class EventSpeechRule {
 
     /**
      * Applies this rule to an {@link AccessibilityEvent}. If the event is
-     * accepted by the {@link AccessibilityEventFilter} the rule's {@link AccessibilityEventFormatter} is used to
-     * populate a formatted {@link Utterance}.
+     * accepted by the {@link AccessibilityEventFilter} the rule's
+     * {@link AccessibilityEventFormatter} is used to populate a formatted
+     * {@link Utterance}.
      *
      * @param event The event to which to apply the rule.
      * @param utterance Utterance to populate if the event is accepted.
@@ -404,8 +413,8 @@ public class EventSpeechRule {
             try {
                 return Integer.parseInt(value);
             } catch (NumberFormatException nfe) {
-                LogUtils.log(EventSpeechRule.class, Log.WARN, "Property: '%s' not interger. Ignoring!",
-                        name);
+                LogUtils.log(EventSpeechRule.class, Log.WARN,
+                        "Property: '%s' not interger. Ignoring!", name);
                 return null;
             }
         } else if (isFloatProperty(name)) {
@@ -572,9 +581,8 @@ public class EventSpeechRule {
 
     /**
      * Factory method that creates all speech rules from the DOM representation
-     * of a speechstrategy.xml. This class does not verify if the
-     * <code>document</code> is well-formed and it is responsibility of the
-     * client to do that.
+     * of a speechstrategy.xml. This class does not verify if the <code>document</code>
+     * is well-formed and it is responsibility of the client to do that.
      *
      * @param context A {@link Context} instance for loading resources.
      * @param speechStrategy The speech strategy that defined the rules.
@@ -584,8 +592,8 @@ public class EventSpeechRule {
      * @param document The parsed XML.
      * @return The list of loaded speech rules.
      */
-    public static ArrayList<EventSpeechRule> createSpeechRules(Context context, String speechStrategy,
-            String targetPackage, String publicSourceDir, Document document)
+    public static ArrayList<EventSpeechRule> createSpeechRules(Context context,
+            String speechStrategy, String targetPackage, String publicSourceDir, Document document)
             throws IllegalStateException {
         ArrayList<EventSpeechRule> speechRules = new ArrayList<EventSpeechRule>();
 

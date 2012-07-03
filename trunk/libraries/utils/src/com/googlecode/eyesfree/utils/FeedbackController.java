@@ -27,7 +27,7 @@ import java.util.TreeMap;
 
 /**
  * Provides auditory and haptic feedback.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
 public class FeedbackController {
@@ -58,13 +58,13 @@ public class FeedbackController {
     private final Map<Integer, Integer> mResourceIdToSoundMap = new TreeMap<Integer, Integer>();
 
     /** Parent context. Required for mapping resource IDs to resources. */
-    private Context mContext;
+    private final Context mContext;
 
     /** Vibration service used to play vibration patterns. */
-    private Vibrator mVibrator;
+    private final Vibrator mVibrator;
 
     /** Sound pool used to play auditory icons. */
-    private SoundPool mSoundPool;
+    private final SoundPool mSoundPool;
 
     /** Whether haptic feedback is enabled. */
     private boolean mHapticEnabled = true;
@@ -96,7 +96,7 @@ public class FeedbackController {
 
     /**
      * Sets the current volume for auditory feedback.
-     * 
+     *
      * @param volume Volume value (range 0..100).
      */
     public void setVolume(int volume) {
@@ -131,8 +131,6 @@ public class FeedbackController {
     public void shutdown() {
         mVibrator.cancel();
         mSoundPool.release();
-
-        mContext = null;
     }
 
     /**
@@ -151,7 +149,7 @@ public class FeedbackController {
     /**
      * Plays the sound file specified by the given resource identifier at the
      * default rate.
-     * 
+     *
      * @param resId The sound file's resource identifier.
      * @return {@code true} if successful
      */
@@ -194,12 +192,12 @@ public class FeedbackController {
 
     /**
      * Plays the vibration pattern specified by the given resource identifier.
-     * 
+     *
      * @param resId The vibration pattern's resource identifier.
      * @return {@code true} if successful
      */
     public boolean playVibration(int resId) {
-        if (!mHapticEnabled) {
+        if (!mHapticEnabled || (mVibrator == null)) {
             return false;
         }
 

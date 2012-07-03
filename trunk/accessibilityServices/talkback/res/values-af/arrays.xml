@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Geen spraak in stilmodus nie"</item>
     <item msgid="4945285159234224758">"Geen spraak in vibreer- of stilmodus nie"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"Maak dieselfde as spraakvolume"</item>
-    <item msgid="3474415020494727681">"75% van spraakvolume"</item>
-    <item msgid="3630774810523140800">"50% van spraakvolume"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Knoppie"</item>
     <item msgid="2031284088774168661">"Merkblokkie"</item>

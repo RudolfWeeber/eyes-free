@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"静音模式下不说话"</item>
     <item msgid="4945285159234224758">"在“振动”和“静音”模式下不说话"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"与说话音量一致"</item>
-    <item msgid="3474415020494727681">"说话音量的 75％"</item>
-    <item msgid="3630774810523140800">"说话音量的 50％"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"按钮"</item>
     <item msgid="2031284088774168661">"复选框"</item>

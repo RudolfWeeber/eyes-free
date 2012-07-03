@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Запусціць дапаможнiк па функцыі \"Explore by touch\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Дапаможнік па доступу"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Дапаможнік па доступу"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Далей"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Назад"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Завяршыць"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Выйсці"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Магчымасць націску адключан, пакуль запушчаны дапаможнiк"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Урок 1: Вывучэнне экрана"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Пасля ўключэння функцыі Explore by Touch вы можаце дакрануцца да экрана, каб даведацца, што знаходзiцца пад вашым пальцам. Напрыклад, бягучы экран змяшчае значкі прыкладанняў. Знайдзіце адно з іх, дакрануўшыся да экрана і прасунуўшы палец навокал."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Добра. Працягвайце перасоўваць палец па экране, пакуль не знойдзеце яшчэ хаця б адзін значок."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Вы таксама можаце праглядаць інфармацыю, правёўшы пальцам улева і ўправа ў любым месцы экрана. Паспрабуйце хутка перасунуць палец злева направа, каб перайсці да наступнага значка."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Каб актываваць тое, што вы вывучылі, дакраніцеся да экрану два разы. Праглядайце, пакуль не знойдзеце значок прыкладання <xliff:g id="APP_NAME">%1$s</xliff:g>. Затым двойчы націсніце на любым месцы на экране, каб актываваць яго."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Вы знайшлі значок прыкладання <xliff:g id="APP_NAME">%1$s</xliff:g>. Двойчы націсніце ў любым месцы на экране, каб актываваць значок."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Вы прайшлі праз значок прыкладання <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Паспрабуйце праглядаць экран, пакуль не знойдзеце значок прыкладання <xliff:g id="APP_NAME_1">%1$s</xliff:g> яшчэ раз."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Каб перайсці да наступнага ўрока, знайдзіце кнопку <xliff:g id="NEXT">%1$s</xliff:g>, змешчаную ў правай нiжняй частцы экрана, а потым двойчы націсніце яе, каб актываваць."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Урок 2: Прагортванне спісаў"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Каб прагортваць спіс, вы можаце рухаць двума пальцамі па экране. Напрыклад, бягучы экран утрымлiвае спіс назваў прыкладанняў, які можна пракручваць уверх ці ўніз. Па-першае, паспрабуйце прагледзець экран і вызначыць прыкладанне."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Цяпер пакладзіце два пальцы на элемент спісу і перасуньце абодва пальцы уверх. Калі вы дасягнеце верху экрана, падніміце пальцы, змясціце іх ніжэй па спісе і зноў перасуньце ўверх."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Паглядзiце на экран, каб знайсці яшчэ адно прыкладанне."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Вы таксама можаце перагартнуць ўсю старонку, перасоўваючы палец. Перайдзіце на наступную старонку, хутка правёўшы злева направа, а потым перайдзіце назад улева."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Зноў паглядзiце на экран, каб знайсці прыкладанне на бягучай старонцы."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Перасоўванне ў процілеглы бок, налева і назад дазволіць перайсці на папярэднюю старонку. Паспрабуйце перасунуць палец, каб вярнуцца на папярэднюю старонку."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Каб перайсці да наступнага ўрока, знайдзіце і націсніце кнопку <xliff:g id="NEXT">%s</xliff:g> каля правага ніжняга вугла экрана."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Урок 3: Чытанне па знаках"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Па змаўчанні перасоўванне ўлева і ўправа дазваляе адразу чытаць усе тэкставыя блокі. Вы таксама можаце чытаць блокі тэксту на экране па словах або па знаках. Па-першае, знайдзіце тэкст, які пачынаецца са слова \"Гэта\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Затым вы можаце правесці пальцам уніз і зноў уверх, каб пачаць чытанне гэтага блока на пэўным узроўні. Паспрабуйце перасоўваць палец уверх і ўніз, каб змяніць узровень чытання, а потым правядзіце пальцам управа, каб прачытаць тэкст."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Каб выйсці з бягучага блока тэксту, вам трэба вярнуцца на ўзровень чытання па змаўчанні. Перасуньце палец у процілеглым кірунку, уверх і ўніз, каб вярнуцца да ўзроўню чытання па змаўчанні. Затым знайдзіце кнопку <xliff:g id="FINISH">%s</xliff:g> у нiжняй правай частцы і двойчы націсніце яе, каб яе актываваць і выйсці з навучання."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Гэта прыклад вялікага блока тэксту. Вы можаце рухацца праз гэты тэкст на пэўным узроўні чытання з дапамогай перасоўвання або прачытаць усё разам з дапамогай дакранання."\n\n"Гэта другі абзац."\n\n"Гэта трэці і апошні абзац. Правядзіце пальцам уверх і ўніз, каб змяніць узровень чытання, а потым правядзіце направа, каб рухацца праз тэкст."</string>
+</resources>

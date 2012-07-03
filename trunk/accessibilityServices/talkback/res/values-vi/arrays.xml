@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Không có lời thoại nào ở Chế độ im lặng"</item>
     <item msgid="4945285159234224758">"Không có lời thoại ở Chế độ rung và im lặng"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"Phù hợp với âm lượng tiếng nói"</item>
-    <item msgid="3474415020494727681">"75% âm lượng tiếng nói"</item>
-    <item msgid="3630774810523140800">"50% âm lượng tiếng nói"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Nút"</item>
     <item msgid="2031284088774168661">"Hộp kiểm"</item>

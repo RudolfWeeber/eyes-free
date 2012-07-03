@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.util.SparseIntArray;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class CustomResourceMapper {
      * Contains a mapping of default preference key resource identifiers to
      * sound resource identifiers.
      */
-    private final Map<Integer, Integer> mDefaultResourceMap = new HashMap<Integer, Integer>();
+    private final SparseIntArray mDefaultResourceMap = new SparseIntArray();
 
     /**
      * Contains a mapping of preference key resource identifiers to sound
@@ -51,7 +52,7 @@ public class CustomResourceMapper {
 
     /**
      * Creates a new custom resource mapping and loads the default mappings.
-     * 
+     *
      * @param context The parent context.
      */
     public CustomResourceMapper(Context context) {
@@ -64,22 +65,20 @@ public class CustomResourceMapper {
     }
 
     private void loadDefaults() {
-        // TODO(alanv): This should be an abstract class, this code is
-        // implementation-specific. Maybe we can specify this in XML?
-        mDefaultResourceMap.put(R.string.pref_sounds_hover_key, R.raw.view_hover_enter);
-        mDefaultResourceMap.put(R.string.pref_sounds_actionable_key,
-                R.raw.view_hover_enter_actionable);
-        mDefaultResourceMap.put(R.string.pref_sounds_explore_begin_key, R.raw.explore_begin);
-        mDefaultResourceMap.put(R.string.pref_sounds_explore_end_key, R.raw.explore_end);
-        mDefaultResourceMap.put(R.string.pref_sounds_clicked_key, R.raw.view_text_changed);
-        mDefaultResourceMap.put(R.string.pref_sounds_focused_key, R.raw.view_focused);
-        mDefaultResourceMap.put(R.string.pref_sounds_notification_state_key,
-                R.raw.notification_state_changed);
-        mDefaultResourceMap.put(R.string.pref_sounds_text_changed_key, R.raw.view_text_changed);
+        // Assignable sounds.
+        mDefaultResourceMap.put(R.id.sounds_hover, R.raw.view_hover_enter);
+        mDefaultResourceMap.put(R.id.sounds_actionable, R.raw.view_hover_enter_actionable);
+        mDefaultResourceMap.put(R.id.sounds_explore_begin, R.raw.explore_begin);
+        mDefaultResourceMap.put(R.id.sounds_explore_end, R.raw.explore_end);
+        mDefaultResourceMap.put(R.id.sounds_clicked, R.raw.view_text_changed);
+        mDefaultResourceMap.put(R.id.sounds_focused, R.raw.view_focused);
+        mDefaultResourceMap.put(R.id.sounds_notification_state, R.raw.notification_state_changed);
+        mDefaultResourceMap.put(R.id.sounds_text_changed, R.raw.view_text_changed);
+        mDefaultResourceMap.put(R.id.sounds_scroll_for_more, R.raw.view_clicked);
 
-        mDefaultResourceMap.put(R.string.pref_patterns_hover_key, R.array.view_hovered_pattern);
-        mDefaultResourceMap.put(R.string.pref_patterns_actionable_key,
-                R.array.view_actionable_pattern);
+        // Assignable patterns.
+        mDefaultResourceMap.put(R.id.patterns_hover, R.array.view_hovered_pattern);
+        mDefaultResourceMap.put(R.id.patterns_actionable, R.array.view_actionable_pattern);
     }
 
     public int getResourceIdForPreference(int keyResId) {

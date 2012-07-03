@@ -19,7 +19,7 @@ package com.google.android.marvin.talkback;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.marvin.utils.ClassLoadingManager;
+import com.googlecode.eyesfree.utils.ClassLoadingManager;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**

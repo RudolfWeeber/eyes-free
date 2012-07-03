@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
  * Processes images that are not image buttons.
@@ -42,7 +43,7 @@ public class RuleImageView extends RuleDefault {
     public CharSequence
             format(Context context, AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
         final CharSequence text = super.format(context, node, event);
-        final boolean isActionable = AccessibilityNodeInfoUtils.isActionable(node);
+        final boolean isActionable = AccessibilityNodeInfoUtils.isActionableForAccessibility(node);
         final boolean hasLabel = !TextUtils.isEmpty(text);
 
         if (isActionable && !hasLabel) {

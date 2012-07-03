@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"ไม่มีเสียงเมื่อปิดเสียงเรียกเข้า"</item>
     <item msgid="4945285159234224758">"ไม่มีเสียงพูดเมื่อใช้ระบบสั่นและเมื่อปิดเสียงเรียกเข้า"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"เท่ากับระดับเสียงพูด"</item>
-    <item msgid="3474415020494727681">"75% ของระดับเสียงพูด"</item>
-    <item msgid="3630774810523140800">"50% ของระดับเสียงพูด"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"ปุ่ม"</item>
     <item msgid="2031284088774168661">"ช่องทำเครื่องหมาย"</item>

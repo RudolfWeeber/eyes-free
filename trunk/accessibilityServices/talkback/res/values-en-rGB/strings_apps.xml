@@ -20,7 +20,7 @@
     <string name="value_stream_master" msgid="6130733378374740098">"Master"</string>
     <string name="value_stream_voice_call" msgid="5305385298856357591">"Phone call"</string>
     <string name="value_stream_system" msgid="3108718602352746749">"System sound"</string>
-    <string name="value_stream_ring" msgid="426689477101897215">"Ring tone"</string>
+    <string name="value_stream_ring" msgid="426689477101897215">"Ringtone"</string>
     <string name="value_stream_music" msgid="2420531377342647139">"Music"</string>
     <string name="value_stream_alarm" msgid="8999482549602611898">"Alarm"</string>
     <string name="value_stream_notification" msgid="4097029371092384177">"Notification"</string>

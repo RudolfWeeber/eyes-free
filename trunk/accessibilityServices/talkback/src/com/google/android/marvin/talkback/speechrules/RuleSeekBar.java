@@ -22,10 +22,11 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
  * Formats speech for SeekBar widgets.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
 public class RuleSeekBar extends RuleDefault {
@@ -44,6 +45,7 @@ public class RuleSeekBar extends RuleDefault {
 
         StringBuilderUtils.appendWithSeparator(output, formattedText);
 
+        // TODO: We need to be getting this information from the node.
         if ((event != null) && (event.getItemCount() > 0)) {
             final int percent = (100 * event.getCurrentItemIndex()) / event.getItemCount();
             final CharSequence formattedPercent =

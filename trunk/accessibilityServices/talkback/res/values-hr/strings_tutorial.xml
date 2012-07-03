@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Pokreni vodič \"Istražite dodirom\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Vodič za pristupačnost"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Vodič za pristupačnost"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Sljedeća"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Prethodna"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Završi"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Izlaz"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Dodirivanje je onemogućeno dok vodič govori"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"1. lekcija: istraživanje zaslona"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Ako je značajka Istraživanje dodirom uključena, možete dodirnuti zaslon da biste saznali što je pod vašim prstom. Na primjer, trenutačni zaslon sadrži ikone aplikacija. Pronađite jednu od njih dodirivanjem zaslona i klizanjem prstom."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Dobro. Nastavite kliziti prstom po zaslonu kako biste pronašli još barem jednu ikonu."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Istraživati možete također prelaskom prsta ulijevo ili udesno bilo gdje na zaslonu. Pokušajte brzo prijeći slijeva udesno da biste se pomaknuli na sljedeću ikonu."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Da biste aktivirali nešto što ste istražili, dvaput dodirnite zaslon. Istražujte dok ne pronađete ikonu <xliff:g id="APP_NAME">%1$s</xliff:g>. Zatim dvaput dodirnite bilo gdje na zaslonu da biste ju aktivirali."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Pronašli ste ikonu <xliff:g id="APP_NAME">%1$s</xliff:g>. Dvaput dodirnite bilo gdje na zaslonu da biste aktivirali ikonu."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Pri istraživanju prošli ste ikonu <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Pokušajte istražiti zaslon dok ponovo ne pronađete ikonu <xliff:g id="APP_NAME_1">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Za pomicanje na sljedeću lekciju pronađite gumb <xliff:g id="NEXT">%1$s</xliff:g> u blizini donjeg desnog kuta zaslona, a potom ga dvaput dotaknite da biste ga aktivirali."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"2. lekcija: pomicanje kroz popise"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Za pomicanje po popisu možete kliziti s dva prsta po zaslonu. Na primjer, trenutačni zaslon sadrži popis naziva aplikacija koji se može pomaknuti prema gore ili dolje. Najprije pokušajte istražiti zaslon i identificirati aplikaciju."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Sada stavite dva prsta na stavku na popisu i klizite s oba prsta prema gore. Ako dođete do vrha zaslona, podignite prste, smjestite ih niže na popisu i nastavite kliziti prema gore."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Istražite zaslon da biste pronašli još jednu aplikaciju."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Prelaskom prsta također se možete pomicati cijelom stranicom. Pomaknite se na sljedeću stranicu brzim prelaskom prsta slijeva udesno pa natrag ulijevo."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Ponovo istražite zaslon da biste pronašli aplikaciju na trenutačnoj stranici."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Ako prijeđete prstom u suprotnom smjeru, ulijevo i natrag, vratit ćete se na prethodnu stranicu. Pokušajte prijeći prstom da biste se vratili na prethodnu stranicu."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Za pomicanje na sljedeću lekciju pronađite i aktivirajte gumb <xliff:g id="NEXT">%s</xliff:g> koji se nalazi blizu donjeg desnog kuta zaslona."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"3. lekcija: čitanje po znaku"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Prema zadanim postavkama prelaskom ulijevo i udesno čitaju se svi blokovi teksta odjednom. Blokove teksta na zaslonu također možete čitati po riječima ili znakovima. Najprije pronađite tekst koji počinje riječju \"To\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Zatim možete prijeći prstom prema dolje i natrag prema gore da biste počeli čitati ovaj blok na određenoj razini. Pokušajte prijeći prstom prema dolje i natrag prema gore da biste promijenili razinu čitanja, a potom prijeđite prstom udesno da biste čitali tekst."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Da biste izašli iz trenutačnog bloka teksta, morat ćete se vratiti na zadanu razinu čitanja. Prijeđite prstom u suprotnom smjeru, prema gore i natrag prema dolje, za povratak na zadanu razinu čitanja. Potom pronađite gumb <xliff:g id="FINISH">%s</xliff:g> dolje desno pa ga dvaput dotaknite da biste ga aktivirali i izašli iz vodiča."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Ovo je primjer velikog bloka teksta. Kroz ovaj se tekst možete kretati na određenoj razini čitanja pokretom prijelaza prstom ili ga pročitati odjednom pokretom dodira."\n\n"Ovo je drugi odlomak."\n\n"Ovo je treći i završni odlomak. Prijeđite prstom prema dolje i gore da biste promijenili razinu čitanja, a potom prijeđite prstom udesno za kretanje ovim tekstom."</string>
+</resources>

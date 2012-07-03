@@ -5,38 +5,14 @@
 
   <!-- TYPE_VIEW_FOCUSED -->
 
-  <!-- CompoundButton - checked -->
+  <!-- Special case for FOCUSED, we usually only want ACCESSIBILITY_FOCUS -->
   <ss:rule>
     <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.CompoundButton</ss:className>
-      <ss:platformSdk>&gt;=16</ss:platformSdk>
-      <ss:checked>true</ss:checked>
-    </ss:filter>
-    <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
-    </ss:metadata>
-    <ss:formatter>
-      <ss:template>@string/template_compound_button_checked</ss:template>
-      <ss:property>text</ss:property>
-    </ss:formatter>
-  </ss:rule>
-
-  <!-- CompoundButton - not checked -->
-  <ss:rule>
-    <ss:filter>
-      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
-      <ss:className>android.widget.CompoundButton</ss:className>
+      <ss:eventType>TYPE_VIEW_FOCUSED||TYPE_VIEW_HOVER_ENTER</ss:eventType>
       <ss:platformSdk>&gt;=16</ss:platformSdk>
     </ss:filter>
-    <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
-      <ss:customEarcon>@string/pref_sounds_focused_key</ss:customEarcon>
-    </ss:metadata>
     <ss:formatter>
-      <ss:template>@string/template_compound_button_not_checked</ss:template>
-      <ss:property>text</ss:property>
+      <ss:custom>com.google.android.marvin.talkback.formatter.FallbackFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 

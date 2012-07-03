@@ -33,41 +33,6 @@
     <item translatable="false">1</item>
     <item translatable="false">2</item>
   </string-array>
-  
-  <string-array name="pref_soundback_volume_entries">
-
-    <!--
-      Source: The description of one possible choice of an item in the
-      preferences screen, in the category "sound feedback volume".
-      Description: Indicates that sound feedback volume should match
-      speech volume. [CHAR LIMIT=50]
-    -->
-    <item>Match speech volume</item>
-
-    <!--
-      Source: The description of one possible choice of an item in the
-      preferences screen, in the category "sound feedback volume".
-      Description: Indicates that sound feedback volume should be
-      75% of speech volume.
-      [CHAR LIMIT=50]
-    -->
-    <item>75% of speech volume</item>
-
-    <!--
-      Source: The description of one possible choice of an item in the
-      preferences screen, in the category "sound feedback volume".
-      Description: Indicates that sound feedback volume should be
-      50% of speech volume.
-      [CHAR LIMIT=50]
-    -->
-    <item>50% of speech volume</item>
-  </string-array>
-
-  <string-array translatable="false" name="pref_soundback_volume_values">
-    <item translatable="false">100</item>
-    <item translatable="false">75</item>
-    <item translatable="false">50</item>
-  </string-array>
 
   <string-array translatable="false" name="html_input_to_desc_keys">
     <item translatable="false">button</item>

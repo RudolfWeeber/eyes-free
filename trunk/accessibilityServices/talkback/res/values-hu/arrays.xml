@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Néma üzemmódban nincs beszéd"</item>
     <item msgid="4945285159234224758">"Nincs beszéd Rezgés és Néma üzemmódban"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"Beszéd hangerejével egyező"</item>
-    <item msgid="3474415020494727681">"Beszéd hangerejének 75%-a"</item>
-    <item msgid="3630774810523140800">"Beszéd hangerejének 50%-a"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Gomb"</item>
     <item msgid="2031284088774168661">"Jelölőnégyzet"</item>

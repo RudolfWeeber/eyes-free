@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Launch \"Explore by touch\" tutorial"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Accessibility Tutorial"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Accessibility tutorial"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Next"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Previous"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Finish"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Exit"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Touch disabled while tutorial is speaking"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Lesson 1: Exploring the screen"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"When Explore by Touch is turned on, you can touch the screen to learn what\'s under your finger. For example, the current screen contains app icons. Find one of them by touching the screen and sliding your finger around."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Good. Keep sliding your finger around the screen until you find at least one more icon."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"You can also explore by swiping your finger left and right anywhere on the screen. Try quickly swiping from left to right to move to the next icon."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"To activate something that you\'ve explored, tap the screen twice. Explore until you find the <xliff:g id="APP_NAME">%1$s</xliff:g> icon. Then double-tap anywhere on the screen to activate it."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"You found the <xliff:g id="APP_NAME">%1$s</xliff:g> icon. Double-tap anywhere on the screen to activate the icon."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"You explored past the <xliff:g id="APP_NAME_0">%1$s</xliff:g> icon. Try exploring the screen until you find the <xliff:g id="APP_NAME_1">%1$s</xliff:g> icon again."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"To move to the next lesson, find the <xliff:g id="NEXT">%1$s</xliff:g> button, located near the bottom-right corner of the screen, then double-tap to activate it."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Lesson 2: Scrolling through lists"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"To scroll through a list, you can slide two fingers along the screen. For example, the current screen contains a list of app names that can scroll up or down. First, try to explore the screen and identify an app."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Now place two fingers on an item in the list and slide both fingers up. If you reach the top of the screen, lift your fingers, place them lower on the list, and continue sliding up."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Explore the screen to find one more app."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"You can also scroll an entire page by swiping your finger. Scroll to the next page by swiping quickly starting from the left and going right, then moving back left."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Explore the screen again to find an app in the current page."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Swiping the opposite direction, going left and back, will move to the previous page. Try swiping to scroll to the previous page."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"To move to the next lesson, find and activate the <xliff:g id="NEXT">%s</xliff:g> button, located near the bottom-right corner of the screen."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lesson 3: Reading by character"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"By default, swiping left and right reads blocks of text all at once. You can also read through blocks of on-screen text by word or character. First, find the text that begins with the word \"This\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Next, you can swipe down and back up to start reading this block at a specific level. Try swiping down and back up to change the reading level, then swipe right to read through the text."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"To move out of the current block of text, you will need to return to the default reading level. Swipe in the opposite direction, up and back down, to return to the default reading level. Then find the <xliff:g id="FINISH">%s</xliff:g> button at the bottom-right and double-tap to activate it and exit the tutorial."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"This is an example of a large block of text. You can move through this text at a specific reading level using swipe gestures, or read it all at once using touch gestures."\n\n"This is the second paragraph."\n\n"This is the third and final paragraph. Swipe down and up to change the reading level, then swipe right to move through this text."</string>
+</resources>

@@ -89,18 +89,17 @@ public final class WebContentFormatter implements AccessibilityEventFormatter {
     public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
         // for now ... lookup and announce axis transitions
         final CharSequence contentDescription = event.getContentDescription();
-        if (TextUtils.isEmpty(contentDescription)) {
-            return false;
-        }
+        if (!TextUtils.isEmpty(contentDescription)) {
+            final Action action = mTempAction;
+            action.init(contentDescription.toString());
 
-        final Action action = mTempAction;
-        action.init(contentDescription.toString());
-
-        final int actionCode = mTempAction.mActionCode;
-        if (actionCode == ACTION_PERFORM_AXIS_TRANSITION) {
-            final String axisAnnouncement = getAxisAnnouncement(context, action.mSecondArgument);
-            utterance.getText().append(axisAnnouncement);
-            return true;
+            final int actionCode = mTempAction.mActionCode;
+            if (actionCode == ACTION_PERFORM_AXIS_TRANSITION) {
+                final String axisAnnouncement = getAxisAnnouncement(
+                        context, action.mSecondArgument);
+                utterance.getText().append(axisAnnouncement);
+                return true;
+            }
         }
 
         // for now ... disregard content description
@@ -131,7 +130,7 @@ public final class WebContentFormatter implements AccessibilityEventFormatter {
             e.printStackTrace();
             utterance.getText().append(noTags);
         }
-        
+
         return true;
     }
 
@@ -176,7 +175,7 @@ public final class WebContentFormatter implements AccessibilityEventFormatter {
 
     /**
      * Loads a map of key strings to value strings from array resources.
-     * 
+     *
      * @param context The parent context.
      * @param keysResource A resource identifier for the array of key strings.
      * @param valuesResource A resource identifier for the array of value

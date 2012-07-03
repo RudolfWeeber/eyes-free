@@ -17,28 +17,27 @@
 package com.google.android.marvin.talkback.formatter;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.DeveloperOverlay;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
-import com.google.android.marvin.talkback.speechrules.AccessibilityNodeInfoUtils;
-import com.google.android.marvin.talkback.speechrules.AccessibilityNodeInfoUtils.NodeFilter;
-import com.google.android.marvin.talkback.speechrules.AccessibilityNodeInfoUtils.TopToBottomLeftToRightComparator;
 import com.google.android.marvin.talkback.speechrules.NodeSpeechRuleProcessor;
 import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils.TopToBottomLeftToRightComparator;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * This class is a formatter for handling touch exploration events. Current
@@ -70,14 +69,6 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
     /** The node processor. Used to get spoken descriptions. */
     private NodeSpeechRuleProcessor mNodeProcessor;
 
-    /** Filters out actionable nodes. Used to pick child nodes to read. */
-    private final NodeFilter mNonActionableInfoFilter = new NodeFilter() {
-        @Override
-        public boolean accept(AccessibilityNodeInfoCompat node) {
-            return !AccessibilityNodeInfoUtils.isActionable(node);
-        }
-    };
-
     /**
      * Formatter that returns an utterance to announce touch exploration.
      */
@@ -92,6 +83,13 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
             case AccessibilityEventCompat.TYPE_TOUCH_EXPLORATION_GESTURE_END:
                 onTouchExplorationEnded(utterance);
                 return true;
+            case AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER:
+                if (Build.VERSION.SDK_INT >= 16) {
+                    // Don't actually do any processing for hover enter events on
+                    // JellyBean (16) and higher since hover enter events will trigger
+                    // accessibility focus, and accessibility focus will speak.
+                    return true;
+                }
             case AccessibilityEventCompat.TYPE_VIEW_HOVER_EXIT:
                 // Don't actually do any processing for exit events.
                 return true;
@@ -103,10 +101,10 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
 
         // HACK: If the event was FOCUSED, don't bother computing the announced
         // node because the source is (theoretically) focusable.
-        if (eventType == AccessibilityEvent.TYPE_VIEW_FOCUSED && source != null) {
+        if (shouldAnnounceSourceNode(eventType, source)) {
             announcedNode = AccessibilityNodeInfoCompat.obtain(source);
         } else {
-            announcedNode = AccessibilityNodeInfoUtils.computeAnnouncedNode(context, source);
+            announcedNode = AccessibilityNodeInfoUtils.findFocusFromHover(context, source);
         }
 
         if (announcedNode != null) {
@@ -122,8 +120,8 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
             // but in the case of a FOCUSED or SELECTED event, we still want to
             // read the event text. Otherwise, we shouldn't be reading layouts.
             if (announcedNode == null
-                    && (AccessibilityNodeInfoUtils.isViewGroup(context, source) || AccessibilityEventUtils
-                            .isViewGroup(context, event))) {
+                    && (AccessibilityNodeInfoUtils.isViewGroup(context, source)
+                            || AccessibilityEventUtils.isViewGroup(context, event))) {
                 LogUtils.log(TouchExplorationFormatter.class, Log.INFO,
                         "No node to announce, ignoring view with children");
 
@@ -147,16 +145,19 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
 
         final boolean populated = addDescription(context, event, utterance, source, announcedNode);
 
-        if (!populated) {
-            LogUtils.log(TouchExplorationFormatter.class, Log.INFO,
-                    "Failed to populate utterance, not speaking");
+        if (eventType == AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER) {
+            // Do not announce the node if there's nothing to speak.
+            if (!populated) {
+                LogUtils.log(TouchExplorationFormatter.class, Log.INFO,
+                        "Failed to populate utterance, not speaking");
 
-            AccessibilityNodeInfoUtils.recycleNodes(source);
-            AccessibilityNodeInfoUtils.recycleNodes(announcedNode);
-            return false;
+                AccessibilityNodeInfoUtils.recycleNodes(source);
+                AccessibilityNodeInfoUtils.recycleNodes(announcedNode);
+                return false;
+            }
         }
 
-        addEarcons(announcedNode, event, utterance);
+        addEarcons(context, announcedNode, event, utterance);
 
         setLastAnnouncedNode(announcedNode);
         setLastSourceNode(source);
@@ -165,6 +166,29 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
         AccessibilityNodeInfoUtils.recycleNodes(announcedNode);
 
         return true;
+    }
+
+    /**
+     * Determines whether the source node should be announced without any
+     * traversal.
+     *
+     * @param eventType The type of event received.
+     * @param source The event's source node.
+     * @return true if the source node should be announced, false if an announce
+     *         node should be computed.
+     */
+    private boolean shouldAnnounceSourceNode(int eventType, AccessibilityNodeInfoCompat source) {
+        if (source == null) {
+            return false;
+        }
+
+        switch (eventType) {
+            case AccessibilityEvent.TYPE_VIEW_FOCUSED:
+            case AccessibilityEventCompat.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
+                return true;
+        }
+
+        return false;
     }
 
     /**
@@ -220,6 +244,8 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
         if (result == DescriptionResult.HANDLED) {
             return true;
         } else if (result == DescriptionResult.ABORTED) {
+            // Containers with only actionable content (e.g. nothing will be
+            // read aloud) always abort to avoid reading the event text.
             return false;
         }
 
@@ -228,62 +254,7 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
             return true;
         }
 
-        // If the event description failed, speak the node type.
-        if (addTextForUnlabeledControl(context, event, utterance, announcedNode)) {
-            return true;
-        }
-
-        return true;
-    }
-
-    // TODO: Refactor this into something sane.
-    private static boolean addTextForUnlabeledControl(
-            Context context, AccessibilityEvent event, Utterance utterance,
-            AccessibilityNodeInfoCompat announcedNode) {
-        CharSequence text = null;
-
-        if (announcedNode != null) {
-            text = getTextForUnlabeledNode(context, announcedNode);
-        }
-
-        if (text == null) {
-            text = getTextForUnlabeledEvent(context, event);
-        }
-
-        if (TextUtils.isEmpty(text)) {
-            return false;
-        }
-
-        utterance.getText().append(text);
-        return true;
-    }
-
-    private static String getTextForUnlabeledEvent(Context context, AccessibilityEvent event) {
-        if (AccessibilityEventUtils.eventMatchesClassByType(context, event, Button.class)) {
-            return context.getString(R.string.template_button, "");
-        }
-
-        if (AccessibilityEventUtils.eventMatchesClassByType(
-                context, event, ImageView.class)) {
-            return context.getString(R.string.template_image_view, "");
-        }
-
-        return null;
-    }
-
-    private static String getTextForUnlabeledNode(
-            Context context, AccessibilityNodeInfoCompat node) {
-        if (AccessibilityNodeInfoUtils.nodeMatchesClassByType(
-                context, node, Button.class)) {
-            return context.getString(R.string.template_button, "");
-        }
-
-        if (AccessibilityNodeInfoUtils.nodeMatchesClassByType(
-                context, node, ImageView.class)) {
-            return context.getString(R.string.template_image_view, "");
-        }
-
-        return null;
+        return false;
     }
 
     /**
@@ -316,7 +287,8 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
      * @param announcedNode The node to announce.
      */
     private DescriptionResult addNodeDescription(Context context, AccessibilityEvent event,
-            Utterance utterance, AccessibilityNodeInfoCompat source, AccessibilityNodeInfoCompat announcedNode) {
+            Utterance utterance, AccessibilityNodeInfoCompat source,
+            AccessibilityNodeInfoCompat announcedNode) {
         final StringBuilder builder = utterance.getText();
 
         if (announcedNode == null) {
@@ -341,9 +313,14 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
         // Fetch the subtree of the node to announce.
         announcedSubtreeNodes.add(announcedNodeClone);
 
-        final int failedFilter =
-                AccessibilityNodeInfoUtils.addDescendantsBfs(announcedNode, announcedSubtreeNodes,
-                        COMPARATOR, mNonActionableInfoFilter);
+        // Don't use a comparator in JellyBean or above, since the system
+        // already sorts the nodes for us.
+        final Comparator<AccessibilityNodeInfoCompat> comparator =
+                ((Build.VERSION.SDK_INT < 16) ? COMPARATOR : null);
+
+        final int failedFilter = AccessibilityNodeInfoUtils.addDescendantsBfs(context,
+                announcedNode, announcedSubtreeNodes, comparator,
+                AccessibilityNodeInfoUtils.FILTER_NON_FOCUSABLE);
 
         // Make sure we have a node processor.
         // TODO(alanv): We should do this on initialization.
@@ -355,7 +332,7 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
         // failed the filter) then we've handled the node.
         final boolean handled = addNodesText(event, source, announcedSubtreeNodes, utterance);
 
-        AccessibilityNodeInfoUtils.recycleNodeList(announcedSubtreeNodes);
+        AccessibilityNodeInfoUtils.recycleNodes(announcedSubtreeNodes);
 
         if (handled) {
             return DescriptionResult.HANDLED;
@@ -397,12 +374,13 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
      * @param event The received accessibility event.
      * @param utterance The utterance to which to add the earcons.
      */
-    private void addEarcons(AccessibilityNodeInfoCompat announcedNode, AccessibilityEvent event,
+    private void addEarcons(
+            Context context, AccessibilityNodeInfoCompat announcedNode, AccessibilityEvent event,
             Utterance utterance) {
-        final boolean userCanScroll =
-                AccessibilityNodeInfoUtils.isScrollableOrHasScrollablePredecessor(announcedNode);
+        final boolean userCanScroll = AccessibilityNodeInfoUtils
+                .isScrollableOrHasScrollablePredecessor(context, announcedNode);
 
-        // Only add the scroll state earcon if the scrollable state has changed.
+        // TODO: This needs to be reconciled with edgeListItem.
         if (mUserCanScroll != userCanScroll) {
             mUserCanScroll = userCanScroll;
             if (userCanScroll) {
@@ -412,14 +390,22 @@ public final class TouchExplorationFormatter implements AccessibilityEventFormat
             }
         }
 
-        final boolean actionable = AccessibilityNodeInfoUtils.isActionable(announcedNode);
+        final boolean actionable = AccessibilityNodeInfoUtils.isActionableForAccessibility(
+                announcedNode);
 
         if (actionable) {
-            utterance.getCustomEarcons().add(R.string.pref_sounds_actionable_key);
-            utterance.getCustomVibrations().add(R.string.pref_patterns_actionable_key);
+            utterance.getCustomEarcons().add(R.id.sounds_actionable);
+            utterance.getCustomVibrations().add(R.id.patterns_actionable);
         } else {
-            utterance.getCustomEarcons().add(R.string.pref_sounds_hover_key);
-            utterance.getCustomVibrations().add(R.string.pref_patterns_hover_key);
+            utterance.getCustomEarcons().add(R.id.sounds_hover);
+            utterance.getCustomVibrations().add(R.id.patterns_hover);
+        }
+
+        final boolean edgeListItem = AccessibilityNodeInfoUtils.isEdgeListItem(
+                context, announcedNode);
+
+        if (edgeListItem) {
+            utterance.getCustomEarcons().add(R.id.sounds_scroll_for_more);
         }
     }
 

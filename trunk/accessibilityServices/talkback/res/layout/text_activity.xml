@@ -8,13 +8,14 @@
         android:id="@+id/username_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Username" />
+        android:text="@string/test_username" />
 
     <EditText
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10" >
+        android:ems="10"
+        android:inputType="textEmailAddress" >
 
         <requestFocus />
     </EditText>
@@ -23,7 +24,7 @@
         android:id="@+id/password_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Password" />
+        android:text="@string/test_password" />
 
     <EditText
         android:id="@+id/password"
@@ -36,12 +37,12 @@
         android:id="@+id/remember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remember me for 30 days" />
+        android:text="@string/test_remember_me" />
 
     <Button
         android:id="@+id/sign_in"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign in" />
+        android:text="@string/test_sign_in" />
 
 </LinearLayout>

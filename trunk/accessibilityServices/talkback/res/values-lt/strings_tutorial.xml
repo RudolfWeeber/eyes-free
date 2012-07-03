@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Paleisti „Naršymo liečiant“ mokymo programą"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Pritaikymo neįgaliesiems mokymo programa"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Pritaikymo neįgaliesiems mokymo programa"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Kitas"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Ankstesnis"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Baigti"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Išeiti"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Lietimo funkcija neleidžiama, kai mokymo programoje kalbama"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"1 pamoka: ekrano naršymas"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Kai įjungta funkcija „Naršyti liečiant“, palietę ekraną sužinosite, kas yra po jūsų pirštu. Pvz., dabartiniame ekrane yra programų piktogramų. Raskite vieną iš jų palietę ekraną ir slysdami juo pirštu."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Gerai. Palieskite pirštu ekraną ir slyskite juo, kad surastumėte dar bent vieną piktogramą."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Be to, galite naršyti ekrane perbraukdami pirštu į kairę ir dešinę. Pabandykite sparčiai perbraukti iš kairės į dešinę, kad pereitumėte prie kitos piktogramos."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Jei norite suaktyvinti ką nors, ką naršote, dukart palieskite ekraną. Naršykite, kol rasite „<xliff:g id="APP_NAME">%1$s</xliff:g>“ piktogramą. Tada dukart palieskite bet kurioje ekrano vietoje, kad ją suaktyvintumėte."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Radote „<xliff:g id="APP_NAME">%1$s</xliff:g>“ piktogramą. Dukart palieskite bet kurioje ekrano vietoje, kad ją suaktyvintumėte."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Naršydami praleidote „<xliff:g id="APP_NAME_0">%1$s</xliff:g>“ piktogramą. Bandykite naršyti ekraną, kol vėl rasite „<xliff:g id="APP_NAME_1">%1$s</xliff:g>“ piktogramą."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Jei norite pereiti prie kitos pamokos, raskite mygtuką „<xliff:g id="NEXT">%1$s</xliff:g>“, esantį dešiniajame apatiniame ekrano kampe, ir dukart palieskite, kad suaktyvintumėte."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"2 pamoka: slinkimas sąrašais"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Jei norite slinkti sąrašu, galite dviem pirštais slysti ekranu. Pvz., dabartiniame ekrane yra programų pavadinimų, kuriais galima slinkti į viršų ar į apačią, sąrašas. Pirmiausia pabandykite naršyti ekraną ir nustatyti programą."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Dabar ant sąrašo elemento uždėkite du pirštus ir slyskite jais aukštyn. Jei pasieksite ekrano viršų, pakelkite pirštus, padėkite juos žemiau sąraše ir toliau slyskite aukštyn."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Naršykite ekraną, kad rastumėte dar vieną programą."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Be to, galite slinkti visu puslapiu perbraukdami pirštu. Slinkite į kitą puslapį sparčiai perbraukdami iš kairės į dešinę, o tada atgal."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Dar kartą naršykite ekraną, kad rastumėte programą dabartiniame puslapyje."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Perbraukę priešinga kryptimi, į kairę, pereisite į ankstesnį puslapį. Pabandykite perbraukdami slinkti atgal į ankstesnį puslapį."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Jei norite pereiti prie kitos pamokos, raskite mygtuką „<xliff:g id="NEXT">%s</xliff:g>“, kuris yra apatiniame dešiniajame ekrano kampe, ir jį suaktyvinkite."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"3 pamoka: skaitymas po vieną simbolį"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Pagal numatytuosius nustatymus perbraukiant į kairę ir dešinę skaitomi iš karto visi teksto blokai. Be to, ekrane pateikiamo teksto blokus galite skaityti po vieną žodį ar ženklą. Pirmiausia raskite tekstą, prasidedantį žodžiu „Šis“."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Tada galite perbraukdami į apačią ir į viršų pradėti skaityti šį bloką konkrečiu lygiu. Pabandykite perbraukti į apačią ir į viršų, kad pakeistumėte skaitymo lygį, tada perbraukę į dešinę skaitykite tekstą."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Jei norite išeiti iš dabartinio teksto bloko, grąžinkite numatytąjį skaitymo lygį. Perbraukite priešinga kryptimi, į viršų ir į apačią, kad grąžintumėte numatytąjį skaitymo lygį. Tada dešiniajame apatiniame kampe raskite mygtuką „<xliff:g id="FINISH">%s</xliff:g>“ ir dukart palieskite, kad suaktyvintumėte jį ir išeitumėte iš mokymo programos."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Pateikiamas didelio teksto bloko pavyzdys. Galite perbraukdami judėti šiuo tekstu konkrečiu skaitymo lygiu arba paliesdami skaityti jį visą iš karto."\n\n"Tai antra pastraipa."\n\n"Tai trečia ir paskutinė pastraipa. Perbraukite žemyn ir aukštyn, kad pakeistumėte skaitymo lygį, tada perbraukite dešinėn, kad judėtumėte šiuo tekstu."</string>
+</resources>

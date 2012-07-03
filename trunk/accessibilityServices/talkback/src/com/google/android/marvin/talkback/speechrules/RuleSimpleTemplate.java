@@ -20,26 +20,43 @@ import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+
 
 class RuleSimpleTemplate extends RuleDefault {
+    private final String mTargetClassName;
     private final Class<?> mTargetClass;
     private final int mResId;
 
     public RuleSimpleTemplate(Class<?> targetClass, int resId) {
+        mTargetClassName = null;
         mTargetClass = targetClass;
+        mResId = resId;
+    }
+
+    public RuleSimpleTemplate(String targetClassName, int resId) {
+        mTargetClassName = targetClassName;
+        mTargetClass = null;
         mResId = resId;
     }
 
     @Override
     public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
-        return AccessibilityNodeInfoUtils.nodeMatchesClassByType(context, node, mTargetClass);
+        if (mTargetClass != null) {
+            return AccessibilityNodeInfoUtils.nodeMatchesClassByType(context, node, mTargetClass);
+        }
+
+        if (mTargetClassName != null) {
+            return AccessibilityNodeInfoUtils.nodeMatchesClassByName(node, mTargetClassName);
+        }
+
+        return false;
     }
 
     @Override
     public CharSequence
             format(Context context, AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
         final CharSequence text = super.format(context, node, event);
-
         return context.getString(mResId, text);
     }
 }

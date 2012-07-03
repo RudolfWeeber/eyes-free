@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>compatutils</project>
-		<project>screenmagnifier</project>
 		<project>utils</project>
 	</projects>
 	<buildSpec>

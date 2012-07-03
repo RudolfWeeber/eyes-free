@@ -17,12 +17,15 @@
 package com.google.android.marvin.talkback.speechrules;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.Utterance;
+import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.LinkedList;
 
@@ -74,9 +77,10 @@ public class NodeSpeechRuleProcessor {
         }
 
         // Append the control's selected state.
-        if (node.isSelected()) {
-            appendTextToBuilder(mContext.getString(R.string.value_selected), descriptionBuilder);
-        }
+        // TODO: Selected had no meaning outside of TabWidget and ListView.
+        //if (node.isSelected()) {
+        //    appendTextToBuilder(mContext.getString(R.string.value_selected), descriptionBuilder);
+        //}
 
         return descriptionBuilder;
     }
@@ -85,12 +89,19 @@ public class NodeSpeechRuleProcessor {
      * Loads the default rule set.
      */
     private void loadRules() {
-        mRules.add(new RuleViewGroup());
+        // Rules are matched in the order they are added, so make sure to place
+        // general rules after specific ones (e.g. Button after RadioButton).
+        mRules.add(new RuleSimpleTemplate(android.widget.Spinner.class, R.string.template_spinner));
+        mRules.add(new RuleSimpleTemplate(android.widget.RadioButton.class, R.string.template_radio_button));
+        mRules.add(new RuleSimpleTemplate(android.widget.CompoundButton.class, R.string.template_checkbox));
+        mRules.add(new RuleSimpleTemplate(android.widget.ImageButton.class, R.string.template_button));
+        mRules.add(new RuleSimpleTemplate(android.widget.Button.class, R.string.template_button));
+        mRules.add(new RuleWebContent());
         mRules.add(new RuleImageView());
         mRules.add(new RuleEditText());
         mRules.add(new RuleSeekBar());
-        mRules.add(new RuleSimpleTemplate(android.widget.Spinner.class, R.string.template_spinner));
-        mRules.add(new RuleSimpleTemplate(android.webkit.WebView.class, R.string.value_web_view));
+        mRules.add(new RuleContainer());
+        mRules.add(new RuleViewGroup());
 
         // Always add the default rule last.
         mRules.add(new RuleDefault());
@@ -108,6 +119,7 @@ public class NodeSpeechRuleProcessor {
     private CharSequence processWithRules(AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
         for (NodeSpeechRule rule : mRules) {
             if (rule.accept(mContext, node)) {
+                LogUtils.log(this, Log.VERBOSE, "Processing node using %s", rule);
                 return rule.format(mContext, node, event);
             }
         }
@@ -122,21 +134,27 @@ public class NodeSpeechRuleProcessor {
      * @return The verbose description for a node.
      */
     public static CharSequence processVerbose(Context context, AccessibilityNodeInfoCompat node) {
-        // TODO(alanv): This method shouldn't be static. Or here at all?
-
         final StringBuilder populator = new StringBuilder();
+        final CharSequence action = context.getString(
+                (Build.VERSION.SDK_INT >= 16) ? R.string.value_double_tap
+                        : R.string.value_single_tap);
 
         // Append hints for clickable, long-clickable, etc.
+        // TODO: Allow hints based on node type.
         if (node.isEnabled()) {
             // Don't read both the checkable AND clickable hints!
             if (node.isCheckable()) {
-                appendTextToBuilder(context.getString(R.string.hint_checkable), populator);
+                appendTextToBuilder(
+                        context.getString(R.string.template_hint_checkable, action), populator);
             } else if (node.isClickable()) {
-                appendTextToBuilder(context.getString(R.string.hint_clickable), populator);
+                appendTextToBuilder(
+                        context.getString(R.string.template_hint_clickable, action), populator);
             }
 
             if (node.isLongClickable()) {
-                appendTextToBuilder(context.getString(R.string.hint_long_clickable), populator);
+                appendTextToBuilder(
+                        context.getString(R.string.template_hint_long_clickable, action),
+                        populator);
             }
         }
 

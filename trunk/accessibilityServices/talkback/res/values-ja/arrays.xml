@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"マナーモードのときは読み上げない"</item>
     <item msgid="4945285159234224758">"バイブレーションまたはマナーモード時は読み上げない"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"読み上げと同じ"</item>
-    <item msgid="3474415020494727681">"読み上げの75%"</item>
-    <item msgid="3630774810523140800">"読み上げの50%"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"ボタン"</item>
     <item msgid="2031284088774168661">"チェックボックス"</item>

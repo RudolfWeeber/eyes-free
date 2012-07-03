@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Luncurkan tutorial \"Jelajahi dengan sentuhan\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Tutorial Aksesibilitas"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Tutorial aksesibilitas"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Berikutnya"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Sebelumnya"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Selesai"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Keluar"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Sentuh nonaktifkan saat tutorial berbicara"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Pelajaran 1: Menjelajahi layar"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Saat Jelajahi dengan Sentuhan diaktifkan, Anda dapat menyentuh layar untuk mempelajari apa yang ada di bawah jari Anda. Misalnya, layar aktif yang berisi ikon aplikasi. Cari salah satu ikon dengan menyentuh layar dan menggeser jari Anda di sekitarnya."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Bagus. Tetap geser jari Anda pada layar sampai menemukan setidaknya satu ikon lagi."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Anda juga dapat menjelajah dengan menggesekkan jari Anda ke kiri dan kanan di mana pun pada layar. Cobalah menggesek dari kiri ke kanan dengan cepat untuk pindah ke ikon berikutnya."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Untuk mengaktifkan sesuatu yang telah Anda jelajahi, ketuk layar dua kali. Jelajahi sampai Anda menemukan ikon <xliff:g id="APP_NAME">%1$s</xliff:g>. Kemudian ketuk layar dua kali untuk mengaktifkannya."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Anda menemukan ikon <xliff:g id="APP_NAME">%1$s</xliff:g>. Ketuk layar dua kali di mana saja untuk mengaktifkan ikon tersebut."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Penjelajahan Anda melewati ikon <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Coba jelajahi layar sampai Anda menemukan ikon <xliff:g id="APP_NAME_1">%1$s</xliff:g> lagi."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Untuk pindah ke pelajaran berikutnya, cari tombol <xliff:g id="NEXT">%1$s</xliff:g>, yang ada di dekat pojok kanan bawah layar, kemudian ketuk dua kali untuk mengaktifkannya."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Pelajaran 2: Bergulir melalui daftar"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Untuk menggulir daftar, Anda dapat menggeser dua jari di sepanjang layar. Misalnya, layar aktif saat ini berisi daftar nama aplikasi yang dapat digulir ke atas atau ke bawah. Pertama, coba jelajahi layar dan identifikasi aplikasi."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Sekarang letakkan dua jari di atas item dalam daftar dan geser kedua jari ke atas. Jika Anda mencapai bagian atas layar, angkat jari Anda, letakkan lagi pada daftar di bagian bawah dan teruskan menggeser ke atas."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Jelajahi layar untuk menemukan satu aplikasi lagi."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Anda juga dapat menggulirkan keseluruhan laman dengan menggesekkan jari Anda. Gulirkan ke laman berikutnya dengan menggesek dari kiri ke kanan, kemudian kembali ke kiri."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Jelajahi layar lagi untuk mencari aplikasi di laman yang aktif."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Dengan menggesek ke arah yang berlawanan, ke kiri lalu ke kanan, akan memindahkan ke laman sebelumnya. Cobalah menggesekkan untuk bergulir kembali ke laman sebelumnya."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Untuk melanjutkan ke pelajaran berikutnya, cari dan aktifkan tombol <xliff:g id="NEXT">%s</xliff:g> yang terletak di dekat pojok kanan atas layar."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Pelajaran 3: Membaca menurut karakter"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Secara default, menggesek ke kiri dan ke kanan akan membaca blok teks sekaligus. Anda juga dapat membaca melalui blok teks pada layar berdasarkan kata atau karakter. Pertama, cari teks yang diawali dengan kata \"This\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Selanjutnya, Anda dapat menggesek ke bawah dan kembali ke atas untuk mulai membaca blok ini di tingkatan yang spesifik. Coba gesek ke bawah dan ke atas untuk mengubah tingkatan membaca, kemudian gesek ke kanan untuk membaca teks."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Untuk keluar dari blok teks yang aktif, Anda perlu kembali ke tingkatan membaca default. Gesek ke arah yang berlawanan, ke atas lalu ke bawah, untuk kembali ke tingkatan membaca default. Kemudian cari tombol <xliff:g id="FINISH">%s</xliff:g> di kanan bawah lalu ketuk dua kali untuk mengaktifkannya dan keluar dari tutorial ini."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Ini adalah contoh blok teks yang besar. Anda dapat berpindah melalui teks ini pada tingkatan membaca yang spesifik menggunakan gerakan menggesek, atau membacanya sekaligus menggunakan gerakan menyentuh."\n\n"Ini adalah paragraf kedua."\n\n"Ini adalah paragraf ketiga dan terakhir. Gesek ke bawah dan ke atas untuk mengubah tingkatan membaca, kemudian gesek ke kanan untuk berpindah melalui teks ini."</string>
+</resources>

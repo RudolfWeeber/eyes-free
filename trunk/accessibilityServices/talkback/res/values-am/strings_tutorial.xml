@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"የ«አስስ በዳሰሳ» መማሪያ አስጀምር"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"አጋዥ ስልጠና  ተደራሽነት"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"አጋዥ ስልጠና  ተደራሽነት"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"ቀጥሎ"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"ቀዳሚ"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"ጨርስ"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"ውጣ"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"አጋዥ ስልጠና በሚናገርበት ጊዜ ንኪ ተሰናክሏል"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"ትምህርት1፦ ገጽ ማያውን ማሰስ"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"በንኪ አስስ የሚለውን ካበራህ በኋላ፣ ከጣትህ ስር ምን እንዳለ ለማወቅ መታያ ገጹን መንካት ትችላለህ። ለምሳሌ፣ አሁን ያለው መታያ ገጽ መተግበሪያ አዶዎችን ይዞ ሊሆን ይችላል። መታያ ገጹን በመንካት አንደኛቸውን በመንካት እና እዛው አካባቢ ጣትህን በማንሸራተት አግኝ።"</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"ጥሩ። ቢያንስ አንድ አዶ እስክታገኝ ድረስ በማያው ላይ ጣትህን ማንሸራተት ትቀጥላለህ።"</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"ጣትህን በማያ ገጹ ላይ ወደ ማንኛውም ቦታ ወደ ግራ እና ቀኝ በማንሸራተት ማሰስም ትችላለህ። ወደ ቀጣዩ አዶ ለመሄድ በፍጥነት ከግራ ወደ ቀኝ ለማንሸራተት ሞክር።"</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"የዳሰስከውን አንድ ነገር ለማግበር፣ ገጽ ማያውን ሁለት ጊዜ መታ አድርግ። <xliff:g id="APP_NAME">%1$s</xliff:g>አዶውን እስክታገኝ ድረስ ዳስስ። ከዛም እንድታገብረው ገጽ ማያው ላይ በማንኛውም ቦታ ሁለቴ መታ አድርግ።"</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"የ<xliff:g id="APP_NAME">%1$s</xliff:g> አዶን አግኝተሃል። አዶውን ለማግበር ገጽ ማያው ላይ በማንኛውም ቦታ ሁለቴ መታ አድርግ።"</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"የ<xliff:g id="APP_NAME_0">%1$s</xliff:g> አዶን አልፈህ ዳሰሃል። የ<xliff:g id="APP_NAME_1">%1$s</xliff:g> አዶን እንደገና እስክታገኝ ድረስ ገጽ ማያውን መዳሰስ ሞክር።"</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"ወደ ቀጣዩ ትምህርት ለመሄድ በማያ ገጹ ከታች በስተቀኝ በኩል ላይ የሚገኘው የ<xliff:g id="NEXT">%1$s</xliff:g> አዝራሩን አግኝ፣ ከዛ እሱን ለማግበር ሁለቴ ጠቅ አድርገው።"</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"ትምህርት 2፦ በዝርዝሮች መካከል መሸብለል"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"በዝርዝር በኩል ለመሸብለል፣ በማያው ላይ ሁለት ጣት ማንሸራተት ትችላለህ። ለምሳሌ፣ የአሁኑ ገጽ ማያ ወደላይ እና ወደ ታች የሚሸበልል የመተግበሪያ ስሞች ዝርዝር ይይዛል። መጀመሪያ፣ ገጽ ማያውን መዳሰስ ሞክር እና መተግበሪያ ለይ።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"ሁለት ጣትህን በአይነቱ ዝርዝር ላይ አሳርፍ እና ሁሉቱም ወደ ላይ አንሸራት። የገጽ ማያው ጫፍ ከደረስክ ጣቶችህን አንሳ፣ በዝርዝሩ ዝቅ አድርገህ አሳርፋቸው እና ማንሸራተትህን ቀጥል።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"አንድ ተጨማሪ መተግበሪያ ለማግኘት ገጽ ማያውን ዳስስ።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"ጣትህን በማንሸራተት ሙሉ ገጽ ማሸብለልም ትችላለህ። ከግራ ጀምረህ በፍጥነት ወደ ቀኝ በማንሸራተት፣ ከዛም ተመልሰህ ወደ ግራ በመሄድ ወደ ቀጣዩ ገጽ ሂድ።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"በአሁኑ ገጽ ውስጥ መተግበሪያ ለማግኘት ገጽ ማያውን እንደገና ዳስስ።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"ወደ ተቀራኒው አቅጣጫ ማንሸራተት፣ ከዛ ወደ ግራ መሄድ እና መመለስ ወደ ቀዳሚው ገጽ ይወስዳል። ወደ ቀዳሚው ገጽ መልሰህ ለመሸብለል ማንሸራተት ሞክር።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"ጥሩ። ወደሚቀጥለው ትምህርት ለመቀጠል፣በማያው ቀኝ ታች ጥግ ሥፍራ ያለውን የ<xliff:g id="NEXT">%s</xliff:g> አዝራርን በማግኘት አግብር።"</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"ትምህርት 3፦ በቁምፊ ማንበብ"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"እንደ ነባሪ ወደ ግራ እና ቀኝ ማንሸራተት የጽሁፍ ስብስቦችን በአንዴ ያነባል። እንደዚሁም በማያ ገጽ የቃል ወይም የቁምፊ ስብስቦችን ማንበብ ትችላለህ። በመጀመሪያ በ«ይህ» የሚጀምረውን ጽሁፍ ፈልግ።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"ቀጥሎ በተወሰነ ደረጃ ላይ ይሄንን ስብስብ ማንበብ ለመጀመር ወደታች እና ተመልሰህ ወደላይ ማንሸራተት ትችላለህ። የንባብ ደረጃውን ለመቀየር ወደታችና እና ተመልሰህ ወደላይ ማንሸራተት ሞክር፣ ከዛም ጽሁፉን ለማንበብ ወደቀኝ አንሸራትት።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"ከየአሁኑ የጽሑፍ ስብስብ ለመውጣት ወደ ነባሪ የንባብ ደረጃ መመለስ ይኖርብሃል። ወደ ነባሪው የንባብ ደረጃ ለመመለስ ወደ ተቃራኒው አቅጣጫ፣ ወደ ላይና ተመልሰህ ወደ ታች አንሸራትት። ከዛ ከታች በስተቀኝ በኩል ያለው የ<xliff:g id="FINISH">%s</xliff:g> አዝራሩን ፈልግና እዙን ለማግበር ሁለቴ መታ አድርገው፣ ከዛ ከመማሪያው ውጣ።"</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"ይሄ የትልቅ ጽሁፍ ጥምር ምሳሌ ነው። የማንሸራተት ምልክቶችን በመጠቀም በተወሰነ የንባብ ደረጃ በዚህ ጽሁፍ ውስጥ ማንቀሳቀስ ወይም የንኪ ምልክቶችን በመጠቀም ሁሉንም በአንዴ ማንበብ ትችላለህ። "\n\n"ይሄ ሁለተኛው አንቀጽ ነው። "\n\n"ይሄ ሦስተኛውና የመጨረሻው አንቀጽ ነው። የንባብ መጠኑን ለመለወጥ ወደ ላይና ታች አንሸራት፣ ከዛም በዚህ ጽሁፍ ውስጥ ለማንቀሳቀስ ወደ ቀኝ አንሸራት።"</string>
+</resources>

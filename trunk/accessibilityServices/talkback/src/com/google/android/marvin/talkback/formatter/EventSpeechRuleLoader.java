@@ -22,7 +22,7 @@ import android.os.FileObserver;
 import android.util.Log;
 
 import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.utils.InfrastructureStateListener;
+import com.googlecode.eyesfree.utils.InfrastructureStateListener;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.io.File;
@@ -93,17 +93,17 @@ public class EventSpeechRuleLoader implements InfrastructureStateListener {
             createExternalSpeechRulesDirectory();
         }
 
-        // Add platform-specific speech strategies for bundled apps
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_eclair);
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_froyo);
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_gingerbread);
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_honeycomb);
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_ics);
-        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_jellybean);
-
         // Add version-specific speech strategies for semi-bundled apps.
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_apps);
         mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_googletv);
+
+        // Add platform-specific speech strategies for bundled apps
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_jellybean);
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_ics);
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_honeycomb);
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_gingerbread);
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_froyo);
+        mSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_eclair);
 
         // Add generic speech strategy. This should always be added last so that
         // the app-specific rules above can override the generic rules.

@@ -17,20 +17,25 @@
 package com.google.android.marvin.talkback;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Message;
+
+import com.google.android.marvin.utils.WeakReferenceHandler;
 
 /**
  * Transfers handling of broadcasts to the handler thread.
  */
-public abstract class BroadcastHandler extends Handler {
+public abstract class BroadcastHandler<T> extends WeakReferenceHandler<T> {
     private static final int MSG_BROADCAST_RECEIVED = 1;
 
+    public BroadcastHandler(T parent) {
+        super(parent);
+    }
+
     @Override
-    public void handleMessage(Message msg) {
+    protected void handleMessage(Message msg, T parent) {
         switch (msg.what) {
             case MSG_BROADCAST_RECEIVED:
-                handleOnReceive((Intent) msg.obj);
+                handleOnReceive((Intent) msg.obj, parent);
                 break;
         }
     }
@@ -44,5 +49,5 @@ public abstract class BroadcastHandler extends Handler {
      *
      * @param intent The received Broadcast intent.
      */
-    public abstract void handleOnReceive(Intent intent);
+    public abstract void handleOnReceive(Intent intent, T parent);
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Käynnistä Tutki koskettamalla -ohje"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Esteettömyyden opastus"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Esteettömyyden opastus"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Seuraava"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Edellinen"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Valmis"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Sulje"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Kosketus ei ole käytössä opastuksen puhuessa"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Oppitunti 1: Ruudun tutkiminen"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Otettuasi Tutki koskettamalla -toiminnon käyttöön laite kertoo sinulle, mitä kosketat. Esimerkki: tämä ruutu sisältää sovelluskuvakkeita. Etsi yksi kuvakkeista koskettamalla ruutua ja liu\'uttamalla sormea ympäriinsä."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Hyvä. Jatka sormen liu\'uttamista ruudulla, kunnes löydät vielä ainakin yhden kuvakkeen."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Voit myös tutkia ruutua liu\'uttamalla sormeasi vasemmalle ja oikealle. Yritä löytää seuraava kuvake liu\'uttamalla sormeasi vasemmalta oikealle."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Aktivoi löytämäsi kohde napauttamalla ruutua kahdesti. Tutki ruutua kunnes löydät <xliff:g id="APP_NAME">%1$s</xliff:g>-kuvakkeen. Aktivoi sovellus sitten kaksoisnapauttamalla mitä tahansa ruudun kohtaa."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Löysit <xliff:g id="APP_NAME">%1$s</xliff:g>-kuvakkeen. Aktivoi sovellus kaksoisnapauttamalla mitä tahansa ruudun kohtaa."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Ohitit <xliff:g id="APP_NAME_0">%1$s</xliff:g>-kuvakkeen. Yritä tutkia ruutua, kunnes löydät <xliff:g id="APP_NAME_1">%1$s</xliff:g>-kuvakkeen uudelleen."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Siirry seuraavaan oppituntiin etsimällä <xliff:g id="NEXT">%1$s</xliff:g>-painike, joka sijaitsee ruudun oikeassa alakulmassa. Aktivoi kuvake kaksoisnapauttamalla sitä."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Oppitunti 2: Luetteloiden selaaminen vierittämällä"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Voit selata luetteloa liu\'uttamalla kahta sormea ​​pitkin näyttöä. Esimerkiksi tämä ruutu sisältää sovellusluettelon, jota voit vierittää ylös- tai alaspäin. Tutki ensin ruutua ja etsi sovellus."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Aseta nyt kaksi sormea luettelon päälle ja liu\'uta molempia sormia ylöspäin. Jos ruudun ylälaita tulee vastaan, nosta sormet, aseta ne alemmas luettelossa ja liu\'uta uudelleen ylös."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Etsi vielä yksi sovellus tutkimalla ruutua."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Voit myös vierittää koko sivua sormea liu\'uttamalla. Vieritä seuraavalle sivulle liu\'uttamalla sormea vasemmalta oikealle ja taas takaisin vasemmalle."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Etsi sovellus nykyiseltä sivulta tutkimalla ruutua uudelleen."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Pääset edelliselle sivulle liu\'uttamalla sormea vastakkaiseen suuntaan eli vasemmalle ja takaisin. Kokeile vierittää edelliselle sivulle liu\'uttamalla sormeasi."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Siirry seuraavaan oppituntiin etsimällä ja aktivoimalla <xliff:g id="NEXT">%s</xliff:g>-painike, joka sijaitsee ruudun oikean alakulman lähellä."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Oppitunti 3: Lukeminen merkki kerrallaan"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Sormen liu\'uttaminen vasemmalle ja oikealle lukee oletuksena kokonaisia tekstikatkelmia. Voit myös lukea ruudulla olevaa tekstiä sana tai merkki kerrallaan. Siirry ensin tekstiin, joka alkaa sanalla Tämä."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Liu\'uta seuraavaksi sormea alas ja takaisin ylös lukeaksesi tekstin tietyllä tasolla. Kokeile muuttaa lukutasoa liu\'uttamalla sormea alas ja ylös, ja lue sitten tekstiä liu\'uttamalla oikealle."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Voit siirtyä pois nykyisestä tekstikatkelmasta palaamalla oletuslukutasolle. Palaa oletuslukutasolle liu\'uttamalla sormea vastakkaiseen suuntaan eli ylös ja takaisin alas. Poistu sitten opetusohjelmasta etsimällä <xliff:g id="FINISH">%s</xliff:g>-painike oikeasta alakulmasta ja aktivoimalla se kaksoisnapauttamalla."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Tämä on esimerkki pitkästä tekstikatkelmasta. Voit liikkua tekstissä tietyllä lukutasolla liu\'utuseleiden avulla tai lukea koko tekstin kerralla kosketuseleiden avulla."\n\n"Tämä on toinen kappale."\n\n"Tämä on kolmas ja viimeinen kappale. Vaihda lukutasoa liu\'uttamalla sormea ylös ja alas, ja liiku tekstissä liu\'uttamalla oikealle."</string>
+</resources>

@@ -6,11 +6,6 @@
     <item msgid="7158875206945163928">"Kõne pole hääletus režiimis"</item>
     <item msgid="4945285159234224758">"Kõne pole vibreerimis- ega hääletus režiimis"</item>
   </string-array>
-  <string-array name="pref_soundback_volume_entries">
-    <item msgid="2451786172783948232">"Vastavusse viimine hääle helitugevusega"</item>
-    <item msgid="3474415020494727681">"75% hääle helitugevusest"</item>
-    <item msgid="3630774810523140800">"50% hääle helitugevusest"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Nupp"</item>
     <item msgid="2031284088774168661">"Märkeruut"</item>

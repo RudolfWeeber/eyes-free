@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Khởi chạy hướng dẫn \"Khám phá bằng cách chạm\""</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Hướng dẫn truy cập"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Hướng dẫn truy cập"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Tiếp theo"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Trước"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Hoàn tất"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Thoát"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Chạm bị vô hiệu hóa khi hướng dẫn đang đọc"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Bài 1: Khám phá màn hình"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Khi bật Khám phá bằng cách chạm, bạn có thể chạm vào màn hình để tìm hiểu xem điều gì nằm dưới ngón tay bạn. Ví dụ: màn hình hiện tại chứa các biểu tượng ứng dụng. Tìm kiếm một trong những biểu tượng đó bằng cách chạm vào màn hình và trượt ngón tay của bạn xung quanh."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Tốt. Tiếp tục trượt ngón tay của bạn quanh màn hình cho đến khi bạn tìm thấy ít nhất thêm một biểu tượng."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Bạn cũng có thể khám phá bằng cách vuốt ngón tay sang trái và phải ở bất cứ đâu trên màn hình. Thử vuốt nhanh từ trái sang phải để chuyển sang biểu tượng tiếp theo."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Để kích hoạt biểu tượng nào đó mà bạn đã khám phá, nhấn màn hình hai lần. Khám phá cho tới khi bạn tìm thấy biểu tượng <xliff:g id="APP_NAME">%1$s</xliff:g>. Sau đó, nhấn đúp vào bất cứ đâu trên màn hình để kích hoạt biểu tượng."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Bạn tìm thấy biểu tượng <xliff:g id="APP_NAME">%1$s</xliff:g>. Nhấn đúp vào bất cứ đâu trên màn hình để kích hoạt biểu tượng."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Bạn đã khám phá qua biểu tượng <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Thử khám phá màn hình cho tới khi bạn thấy lại biểu tượng <xliff:g id="APP_NAME_1">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Để chuyển sang bài học tiếp theo, tìm nút <xliff:g id="NEXT">%1$s</xliff:g>, ở gần góc dưới bên phải màn hình, sau đó nhấn đúp để kích hoạt."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Bài 2: Cuộn qua danh sách"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Để cuộn qua danh sách, bạn có thể trượt hai ngón tay dọc màn hình. Ví dụ: màn hình hiện tại chứa danh sách tên ứng dụng có thể cuộn lên hoặc xuống. Trước tiên, cố gắng khám phá màn hình và xác định ứng dụng."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Bây giờ, hãy đặt hai ngón tay trên một mục trong danh sách và trượt cả hai ngón tay lên trên. Nếu bạn đến đầu màn hình, nhấc ngón tay lên, đặt ngón tay ở dưới danh sách và tiếp tục trượt lên."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Khám phá màn hình để tìm ứng dụng khác."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Bạn cũng có thể cuộn toàn bộ trang bằng cách vuốt ngón tay bạn. Chuyển sang trang tiếp theo bằng cách vuốt nhanh từ trái sang phải, sau đó di chuyển lại về bên trái."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Khám phá màn hình lần nữa để tìm ứng dụng trong trang hiện tại."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Vuốt theo chiều ngược lại, sang trái và quay lại, sẽ chuyển về trang trước. Thử vuốt để cuộn trở lại trang trước."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Để chuyển sang bài tiếp theo, tìm và kích hoạt nút <xliff:g id="NEXT">%s</xliff:g>, nằm gần góc dưới cùng bên phải của màn hình."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Bài 3: Đọc theo ký tự"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Theo mặc định, vuốt sang trái và phải sẽ đọc toàn bộ khối văn bản một lúc. Bạn cũng có thể đọc qua khối văn bản trên màn hình theo từ hoặc ký tự. Trước tiên, tìm văn bản bắt đầu bằng từ \"Này\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Tiếp theo, bạn có thể vuốt xuống và ngược lên để bắt đầu đọc khối này ở cấp độ cụ thể. Thử vuốt xuống và lên để thay đổi cấp độ đọc, sau đó vuốt sang phải để đọc qua văn bản."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Để chuyển ra ngoài khối văn bản hiện tại, bạn sẽ cần phải trở về cấp độ đọc mặc định. Vuốt theo chiều ngược lại, lên rồi xuống, để trở về cấp độ đọc mặc định. Sau đó tìm nút <xliff:g id="FINISH">%s</xliff:g> ở dưới cùng bên phải và nhấn đúp để kích hoạt và thoát khỏi hướng dẫn."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Dưới đây là ví dụ về khối văn bản lớn. Bạn có thể di chuyển qua văn bản này ở mức độ đọc cụ thể bằng cách vuốt hoặc đọc tất cả văn bản một lúc bằng cách chạm."\n\n"Đây là đoạn thứ hai."\n\n"Đây là đoạn thứ ba và đoạn cuối. Vuốt xuống và lên để thay đổi mức độ đọc, sau đó vuốt sang phải để di chuyển qua văn bản này."</string>
+</resources>

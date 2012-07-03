@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="talkback_shortcut_title" msgid="6374632335119573898">"ทางลัด TalkBack"</string>
+    <string name="talkback_preferences_title" msgid="615685549632541311">"การตั้งค่า TalkBack"</string>
     <string name="talkback_service_description" msgid="983212841294665356">"เมื่อเปิดใช้งาน Talkback อุปกรณ์ของคุณจะให้การตอบสนองด้วยเสียงพูดเพื่อช่วยเหลือผู้ใช้ที่พิการทางสายตาและผู้ที่มีปัญหาทางสายตา ตัวอย่างเช่น อุปกรณ์จะอธิบายว่าคุณแตะ เลือก และเปิดใช้งานสิ่งใด"</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"ข้อความตัวอักษร"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"ไม่ได้ส่งข้อความตัวอักษร"</string>
@@ -26,18 +26,26 @@
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> แทนที่ด้วย <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"แทนที่ <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> อักขระด้วย <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> อักขระ"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"เสียงเรียกเข้า <xliff:g id="PERCENT">%d</xliff:g> เปอร์เซ็นต์"</string>
-    <string name="template_image_view" msgid="4213590103284596735">"ภาพ <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <!-- no translation found for template_image_view (2368987212503613897) -->
+    <skip />
     <string name="template_list_view" msgid="4569888407076618446">"รายการ <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"กด <xliff:g id="TITLE">%1$s</xliff:g> ค้างเอาไว้นานๆ"</string>
     <string name="template_button" msgid="6774709818484366257">"ปุ่ม <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"ภาพ <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"ตัวควบคุมการค้นหา <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> เปอร์เซ็นต์"</string>
+    <string name="template_container" msgid="8918583415236947599">"<xliff:g id="TYPE">%1$s</xliff:g> แสดง <xliff:g id="COUNT">%2$d</xliff:g> รายการ"</string>
+    <string name="value_gridview" msgid="9093738961981389981">"ตาราง"</string>
+    <string name="value_listview" msgid="3437715684913760710">"รายการ"</string>
+    <string name="value_tabwidget" msgid="5550633699198799743">"แถบแท็บ"</string>
+    <string name="value_container" msgid="439303423101134461">"ที่เก็บ"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"กำลังแสดงรายการที่ <xliff:g id="FROM_INDEX">%d</xliff:g> ถึง <xliff:g id="TO_INDEX">%d</xliff:g> จาก <xliff:g id="TOTAL_COUNT">%d</xliff:g>"</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"กำลังแสดงรายการที่ <xliff:g id="FROM_INDEX">%d</xliff:g> จาก <xliff:g id="TOTAL_COUNT">%d</xliff:g>"</string>
     <string name="template_spinner" msgid="3914981448273826697">"รายการ <xliff:g id="TITLE">%1$s</xliff:g> แบบเลื่อนลง"</string>
     <string name="template_password_selected" msgid="7528235887386963927">"อักขระที่เลือกจาก <xliff:g id="FROM_INDEX">%1$s</xliff:g> ถึง <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"ตัวพิมพ์ใหญ่ <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
+    <string name="template_checkbox" msgid="7902762816979572494">"ช่องทำเครื่องหมาย <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_radio_button" msgid="4272970081436888704">"ปุ่มตัวเลือก <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="value_password" msgid="52094746222829357">"รหัสผ่าน"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"เปิดบานเลื่อนแล้ว"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"ตัวเลือก"</string>
@@ -47,9 +55,12 @@
     <string name="value_checked" msgid="5234989698372864892">"เลือกไว้"</string>
     <string name="value_not_checked" msgid="193134740901545340">"ไม่ได้ตรวจสอบ"</string>
     <string name="value_disabled" msgid="65077823320194685">"ปิดใช้งานแล้ว"</string>
-    <string name="hint_clickable" msgid="5722744901089685155">"แตะเพื่อคลิก"</string>
-    <string name="hint_long_clickable" msgid="8223088419179222819">"แตะค้างไว้เพื่อคลิกยาว"</string>
-    <string name="hint_checkable" msgid="3455044599190977740">"แตะเพื่อสลับ"</string>
+    <string name="value_double_tap" msgid="7829968646330038608">"แตะสองครั้ง"</string>
+    <string name="value_single_tap" msgid="6461432282985355533">"แตะ"</string>
+    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g> เพื่อเปิดใช้งาน"</string>
+    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> ค้างไว้เพื่อคลิกยาว"</string>
+    <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g> เพื่อสลับ"</string>
+    <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g> เพื่อป้อนข้อความ"</string>
     <string name="value_scrollable" msgid="2310899165772659098">"เลื่อนได้"</string>
     <string name="value_clicked" msgid="8306469740150249879">"คลิกแล้ว"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"ไม่มีป้ายกำกับ"</string>
@@ -57,50 +68,66 @@
     <string name="value_ringer_silent" msgid="672965424730167385">"เสียงเรียกเข้าแบบปิดเสียง"</string>
     <string name="value_screen_off" msgid="8705438751467344903">"ปิดหน้าจอ"</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"ปลดล็อกอุปกรณ์แล้ว"</string>
-    <string name="value_web_view" msgid="8368045336469722566">"มุมมองเว็บ"</string>
+    <string name="value_web_view" msgid="8611542401983419041">"เนื้อหาเว็บ"</string>
     <string name="value_unknown_object" msgid="3589473667352440925">"รายการที่ไม่มีป้ายกำกับ"</string>
-    <string name="title_talkback_crash" msgid="1342512684382958066">"มีข้อมูลการขัดข้องของ TalkBack"</string>
-    <string name="message_talkback_crash" msgid="8552017712769665127">"คลิกที่นี่เพื่อปรับปรุง TalkBack โดยการส่งข้อมูลการขัดข้อง"</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"พูดเมื่อใด"</string>
+    <string name="title_pref_speech_volume" msgid="4013853601342391397">"ระดับเสียงพูด"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"ความดังของเสียงเรียกเข้า"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"พูดเมื่อหน้าจอปิด"</string>
     <string name="title_pref_caller_id" msgid="1414845059814636961">"บอกหมายเลขผู้โทร"</string>
     <string name="title_pref_proximity" msgid="4957940010293002852">"ใช้พร็อกซิมิตีเซ็นเซอร์"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"พร็อกซิมิตีเซ็นเซอร์ปิดเสียงพูด"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"พร็อกซิมิตีเซ็นเซอร์ไม่ควบคุมเสียงพูด"</string>
-    <string name="title_pref_bluetooth" msgid="7738175584293158995">"ใช้หูฟังโทรศัพท์บลูทูธ"</string>
-    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"พูดผ่านหูฟังโทรศัพท์บลูทูธแบบไม่ใช่ A2DP (โมโน) เมื่อสามารถใช้งานได้"</string>
-    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"ไม่ใช้การพูดผ่านหูฟังโทรศัพท์บลูทูธแบบไม่ใช่ A2DP (โมโน)"</string>
+    <string name="title_pref_explore_by_touch" msgid="4051040843081874790">"สำรวจโดยการแตะ"</string>
+    <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"การศึกษารายละเอียดการแตะ"</string>
+    <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"จัดการท่าทางสัมผัสของทางลัด"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"ใช้การเปลี่ยนแปลงระดับเสียงสูงต่ำ"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"พูดความคิดเห็นผ่านทางแป้นพิมพ์โดยใช้ระดับเสียงต่ำ"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"อย่าเปลี่ยนระดับเสียงสูงต่ำในขณะพูด"</string>
-    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"แป้นพิมพ์ลัด"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"ฟีดแบ็ก"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"การสั่นเตือน"</string>
-    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"กำหนดรูปแบบการสั่น"</string>
-    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"สำรวจโดยการแตะ"</string>
-    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"การสำรวจรายการที่คลิกได้"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"เสียงเตือน"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"ระดับเสียง"</string>
-    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"กําหนดเสียง"</string>
-    <string name="value_play_button" msgid="3816799051654747674">"เล่น"</string>
-    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"สำรวจโดยการแตะ"</string>
-    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"การสำรวจรายการที่คลิกได้"</string>
-    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"เมื่อคลิก"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"เบ็ดเตล็ด"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"การตั้งค่าสำหรับนักพัฒนาซอฟต์แวร์"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"ระดับของการบันทึกเอาต์พุต"</string>
     <string name="title_pref_developer_overlay" msgid="3149580897456358717">"ไฮไลต์แหล่งที่มาของกิจกรรม"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"แสดงเอาต์พุตของการพูด"</string>
-    <string name="subject_crash_report_email" msgid="3043388136219501183">"รายงานการขัดข้องของ TalkBack"</string>
-    <string name="header_crash_report_email" msgid="9218276172142314054">"ต่อไปนี้เป็นรายงานการขัดข้องสำหรับ TalkBack การคลิกปุ่ม \"ส่ง\" จะเป็นการส่งข้อมูลนี้ถึงนักพัฒนาซอฟต์แวร์ TalkBack"\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"นำทางตามอักขระ"</string>
     <string name="axis_word" msgid="7745798763195184060">"นำทางตามคำ"</string>
     <string name="axis_sentence" msgid="5569363499210008882">"นำทางตามประโยค"</string>
+    <string name="axis_paragraph" msgid="3453285809344289729">"นำทางทีละย่อหน้า"</string>
+    <string name="axis_object" msgid="7034325449094737671">"นำทางทีละวัตถุ"</string>
+    <string name="axis_line" msgid="2210986915751668758">"นำทางทีละบรรทัด"</string>
+    <string name="axis_page" msgid="9146038615069235841">"นำทางทีละหน้า"</string>
     <string name="axis_heading" msgid="8928386537164255063">"นำทางตามหัวเรื่อง"</string>
     <string name="axis_sibling" msgid="7260754205862306385">"นำทางตามเครือเดียวกัน"</string>
     <string name="axis_document" msgid="1581988340856497809">"นำทางตามเอกสาร"</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"นำทางตามมุมมองเว็บค่าเริ่มต้น"</string>
+    <string name="attention" msgid="627104955956154539">"โปรดทราบ"</string>
+    <string name="explore_dialog_message" msgid="2796017207242981327">"คุณลักษณะนี้จะเปลี่ยนวิธีการที่อุปกรณ์ของคุณตอบสนองต่อการแตะ ต้องการเปิดใช้งานหรือไม่"</string>
+    <string name="requires_talkback" msgid="3634159695179852501">"บทแนะนำนี้ต้องใช้ \"ศึกษารายละเอียดโดยการแตะ\" โปรดเปิดและเปิดใช้งาน TalkBack โปรดศึกษารายละเอียดโดยการแตะก่อนที่จะเปิดใช้งานบทแนะนำนี้"</string>
+    <string name="granularity_character" msgid="5828563809381090688">"อ่านทีละอักขระ"</string>
+    <string name="granularity_word" msgid="3660181391007381559">"อ่านทีละคำ"</string>
+    <string name="granularity_paragraph" msgid="1175015890341475666">"อ่านทีละย่อหน้า"</string>
+    <string name="granularity_default" msgid="554981185979733919">"ระดับการอ่านเริ่มต้น"</string>
+    <string name="orientation_portrait" msgid="5280362272647722922">"แนวตั้ง"</string>
+    <string name="orientation_landscape" msgid="129313890178554132">"แนวนอน"</string>
+    <string name="shortcut_unassigned" msgid="8631675444401168361">"ไม่ได้กำหนด"</string>
+    <string name="shortcut_back" msgid="8404153155835310379">"ปุ่มย้อนกลับ"</string>
+    <string name="shortcut_home" msgid="3905505999818649470">"ปุ่มหน้าหลัก"</string>
+    <string name="shortcut_recent_apps" msgid="4462279958679670485">"ปุ่มแอปพลิเคชันล่าสุด"</string>
+    <string name="shortcut_notifications" msgid="7234767026975704922">"เปิดการแจ้งเตือน"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"พูดคำสุดท้ายอีกครั้ง"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"สะกดคำสุดท้ายที่พูด"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"กวาดนิ้วลงด้านล่างและไปทางซ้าย"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"กวาดนิ้วลงด้านล่างและไปทางขวา"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"กวาดนิ้วขึ้นด้านบนและไปทางซ้าย"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"กวาดนิ้วขึ้นด้านบนและไปทางขวา"</string>
+    <string name="value_volume_200_percent" msgid="2969698924281376143">"200% ของระดับเสียงของสื่อ"</string>
+    <string name="value_volume_150_percent" msgid="4668371157512150392">"150% ของระดับเสียงของสื่อ"</string>
+    <string name="value_volume_100_percent" msgid="6676030754946177658">"ตรงกับระดับเสียงของสื่อ"</string>
+    <string name="value_volume_75_percent" msgid="7578844180160160971">"75% ของระดับเสียงของสื่อ"</string>
+    <string name="value_volume_50_percent" msgid="2830571913174435107">"50% ของระดับเสียงของสื่อ"</string>
+    <string name="value_volume_25_percent" msgid="4441038207089946938">"25% ของระดับเสียงของสื่อ"</string>
 </resources>

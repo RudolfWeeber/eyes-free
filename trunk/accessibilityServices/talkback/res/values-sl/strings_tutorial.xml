@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Zagon vadnice za funkcijo raziskovanja z dotikom"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Vadnica za osebe s posebnimi potrebami"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Vadnica za osebe s posebnimi potrebami"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Naprej"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Nazaj"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Dokončaj"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Izhod"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Med govorjenjem vadnice je dotikanje onemogočeno"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"1. vaja: Raziskovanje zaslona"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"Če vklopite funkcijo raziskovanja z dotikom, se lahko dotaknete zaslona, da izveste, kaj je pod prstom. Na trenutnem zaslonu so na primer prikazane ikone aplikacij. Poiščite eno med njimi, tako da se dotaknete zaslona in premaknete prst."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Odlično. Prst še naprej pomikajte po zaslonu, dokler ne najdete vsaj še ene ikone."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Raziskujete lahko tudi z vlečenjem prsta levo in desno kjer koli na zaslonu. Hitro povlecite z leve na desno, če želite na naslednjo ikono."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Če želite aktivirati nekaj, kar ste raziskati, se dvakrat dotaknite zaslona. Raziskujte, dokler ne najdete ikone <xliff:g id="APP_NAME">%1$s</xliff:g>. Nato se dvakrat dotaknite kjer koli na zaslonu, da jo aktivirate."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Našli ste ikono <xliff:g id="APP_NAME">%1$s</xliff:g>. Dvakrat pritisnite kjerkoli na zaslonu, da aktivirate ikono."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Pri raziskovanju ste šli mimo ikone <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Raziskujte zaslon, dokler znova ne najdete ikone <xliff:g id="APP_NAME_1">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Če se želite premakniti na naslednjo lekcijo, poiščite gumb <xliff:g id="NEXT">%1$s</xliff:g> v spodnjem desnem kotu zaslona, nato se ga dvakrat dotaknite, da ga aktivirate."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Lekcija 2: Pomikanje po seznamih"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Za pomikanje po seznamu lahko podrsate s prstoma po zaslonu. Trenutni zaslon na primer vsebuje seznam imen aplikacij, ki ga lahko pomikate gor ali dol. Najprej poskusite raziskati zaslon in identificirati aplikacijo."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Zdaj položite prsta na element na seznamu in ju pomaknite navzgor. Če pridete na vrh zaslona, dvignite prsta, ju položite nižje na seznamu in ju spet pomikajte navzgor."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Raziščite zaslon in poiščite še eno aplikacijo."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"S premikanjem prsta lahko pomaknete tudi celotno stran. Če želite na naslednjo stran, s prstom hitro povlecite z leve na desno in nato nazaj na levo."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Znova raziščite zaslon in poiščite aplikacijo na trenutni strani."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Če povlečete v nasprotno smer, v levo in nazaj, se boste pomaknili na prejšnjo stran. Poskusite se z vlečenjem pomakniti na prejšnjo stran."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Če se želite premakniti na naslednjo vajo, poiščite in aktivirajte gumb <xliff:g id="NEXT">%s</xliff:g> blizu spodnjega desnega kota zaslona."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lekcija 3: Branje po znakih"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Če povlečete v levo ali desno, aplikacija privzeto prebere odlomke besedila naenkrat. Odlomke besedila na zaslonu lahko prebere tudi po besedah ali znakih. Najprej poiščite besedilo, ki se začne z besedo »This«."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Nato lahko povlečete dol in nazaj gor, da začnete ta razdelek brati na določeni ravni. Poskusite povleči dol in gor, da spremenite raven branja, nato pa povlecite v desno, da začnete brati besedilo."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Če se želite premakniti iz trenutnega razdelka besedila, se boste morali vrniti na privzeto raven branja. S prstom povlecite v nasprotno smer, gor in nazaj dol, da se vrnete na privzeto raven branja. Nato spodaj desno poiščite gumb <xliff:g id="FINISH">%s</xliff:g> in se ga dvakrat dotaknite, da ga aktivirate in zaprete vadnico."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"To je primer velikega bloka besedila. Po besedilu se lahko s potezami vlečenja premikate na določeni ravni branja ali pa s potezami dotika preberete vse naenkrat. "\n\n" To je drugi odstavek."\n\n"To je tretji in zadnji odstavek. Če želite spremeniti raven branja, povlecite dol in gor, nato pa povlecite v desno za premikanje po besedilu."</string>
+</resources>

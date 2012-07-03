@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="title_pref_tutorial" msgid="3245369379022519951">"Starta självstudier för funktionen Explore by touch"</string>
+    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"Hjälpmedelsguide"</string>
+    <string name="accessibility_tutorial_title" msgid="3604139189214645351">"Hjälpmedelsguide"</string>
+    <string name="accessibility_tutorial_next" msgid="5403131568391761625">"Nästa"</string>
+    <string name="accessibility_tutorial_back" msgid="7953265962480572962">"Föregående"</string>
+    <string name="accessibility_tutorial_finish" msgid="8651842380314324443">"Slutför"</string>
+    <string name="accessibility_tutorial_skip" msgid="4635703249458449485">"Stäng"</string>
+    <string name="accessibility_tutorial_touch_disabled" msgid="1947871282831171107">"Tryckningar är inaktiverade medan guiden läses upp"</string>
+    <string name="accessibility_tutorial_lesson_1_title" msgid="8913174159810078422">"Lektion 1: utforska skärmen"</string>
+    <string name="accessibility_tutorial_lesson_1_text_1" msgid="6281024124325477313">"När Explore by Touch är aktiverat kan du peka på skärmen för att se vad du har under fingret. Den här skärmen innehåller appikoner. Leta reda på en av dem genom att peka på skärmen och dra fingret runt."</string>
+    <string name="accessibility_tutorial_lesson_1_text_2_more" msgid="7154137274310772436">"Bra. Fortsätt röra fingret på skärmen tills du hittar minst ytterligare en ikon."</string>
+    <string name="accessibility_tutorial_lesson_1_text_3" msgid="5866504456242703872">"Du kan även utforska genom att dra fingret åt vänster och höger var som helst på skärmen. Testa att flytta till nästa ikon genom att snabbt dra från vänster till höger."</string>
+    <string name="accessibility_tutorial_lesson_1_text_4" msgid="56981537955090208">"Om du vill aktivera något som du har utforskat trycker du två gånger på skärmen. Utforska tills du hittar ikonen <xliff:g id="APP_NAME">%1$s</xliff:g>. Dubbelknacka sedan lätt var som helst på skärmen om du vill aktivera den."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5" msgid="1208294090974872449">"Du hittade ikonen <xliff:g id="APP_NAME">%1$s</xliff:g>. Dubbelknacka lätt var som helst på skärmen om du vill aktivera ikonen."</string>
+    <string name="accessibility_tutorial_lesson_1_text_5_exited" msgid="8862005898053070331">"Du gick förbi ikonen <xliff:g id="APP_NAME_0">%1$s</xliff:g>. Utforska skärmen tills du hittar ikonen <xliff:g id="APP_NAME_1">%1$s</xliff:g> igen."</string>
+    <string name="accessibility_tutorial_lesson_1_text_6" msgid="4094982888777210681">"Fortsätt till nästa lektion genom att leta upp knappen <xliff:g id="NEXT">%1$s</xliff:g> nära skärmens nedre högra hörn och dubbelknacka lätt på den."</string>
+    <string name="accessibility_tutorial_lesson_2_title" msgid="8237242914117751937">"Lektion 2: bläddra igenom listor"</string>
+    <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"Du kan bläddra genom en lista genom att dra två fingrar längs skärmen. Den aktuella skärmen innehåller en lista med appnamn som kan flyttas upp eller ned. Försök först att utforska skärmen och identifiera en app."</string>
+    <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"Placera nu två fingrar på ett objekt i listan och dra båda fingrarna uppåt. Om du når toppen av skärmen lyfter du på fingrarna, placerar dem längre ned i listan och fortsätter uppåt."</string>
+    <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"Utforska skärmen och hitta en app till."</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"Du kan även bläddra igenom en hel sida genom att dra med fingret. Bläddra till nästa sida genom att snabbt dra från vänster till höger och tillbaka igen."</string>
+    <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Utforska skärmen igen och hitta en app på den aktuella sidan."</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"Om du för fingrarna åt motsatt håll, från höger till vänster och tillbaka, kommer du till föregående sida. Testa att bläddra till föregående sida genom att dra."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Gå vidare till nästa lektion genom att leta reda på och aktivera knappen <xliff:g id="NEXT">%s</xliff:g>. Den finns nära det nedre högra hörnet av skärmen."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lektion 3: läsa tecken för tecken"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"Som standard läses hela textblock om du drar till vänster eller höger. Du kan även läsa igenom textblock på skärmen ord för ord eller tecken för tecken. Börja med att leta upp texten som inleds med ordet Detta."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"Därefter kan du dra ner och upp om du vill börja läsa det här blocket på en viss nivå. Testa att dra ner och upp för att ändra läsnivån och dra sedan åt höger för att läsa igenom texten."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"Om du vill komma ut från det aktuella textblocket måste du återgå till standardläsnivån. Dra i motsatt riktning, upp och ned, för att återgå till standardläsnivån. Leta sedan reda på knappen <xliff:g id="FINISH">%s</xliff:g> längst ner till höger och dubbelknacka lätt på den så avslutas guiden."</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"Det här är ett exempel på ett stort textblock. Du kan gå igenom texten på en viss läsnivå genom att använda draggester, eller läsa allt på en gång med pekgester."\n\n"Det här är andra stycket."\n\n"Detta är det tredje och sista stycket. Dra ner och upp för att ändra läsnivån och dra sedan åt höger för att gå igenom texten."</string>
+</resources>

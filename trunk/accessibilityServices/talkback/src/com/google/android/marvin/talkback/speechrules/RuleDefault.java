@@ -21,7 +21,7 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
  * Default node processing rule. Returns a content description if available,
@@ -43,12 +43,6 @@ class RuleDefault implements NodeSpeechRule {
             return nodeText;
         }
 
-        final CharSequence eventText = AccessibilityEventUtils.getEventText(event);
-
-        if (!TextUtils.isEmpty(eventText)) {
-            return eventText;
-        }
-
-        return null;
+        return "";
     }
 }

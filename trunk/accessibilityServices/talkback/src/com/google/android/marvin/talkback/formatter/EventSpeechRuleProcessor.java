@@ -46,7 +46,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
  * processed in the order they are defined and in case a rule is successfully
  * applied i.e. an utterance is formatted, processing stops. In other words, the
  * first applicable speech rule wins.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public class EventSpeechRuleProcessor {
@@ -89,7 +89,7 @@ public class EventSpeechRuleProcessor {
 
     /**
      * Removes the speech rules defined by a speech strategy with the
-     * given <code>resourceId</code> 
+     * given <code>resourceId</code>
      */
     void removeSpeechStrategy(int resourceId) {
         String speechStrategy = mContext.getResources().getResourceName(resourceId);
@@ -112,7 +112,7 @@ public class EventSpeechRuleProcessor {
 
     /**
      * Removes the speech rules defined by a speech strategy in the
-     * given <code>file</code> 
+     * given <code>file</code>
      */
     public void removeSpeechStrategy(File file) {
         String speechStrategy = file.toURI().toString();
@@ -218,7 +218,7 @@ public class EventSpeechRuleProcessor {
      * result is used to populate an <code>utterance</code>. In other words, the
      * first matching rule wins. Optionally <code>filterArguments</code> and
      * <code>formatterArguments</code> can be provided.
-     * 
+     *
      * @return True if the event was processed false otherwise.
      */
     public boolean processEvent(AccessibilityEvent event, Utterance utterance) {
@@ -226,7 +226,7 @@ public class EventSpeechRuleProcessor {
             // Try package specific speech rules first.
             ArrayList<EventSpeechRule> speechRules = mPackageNameToSpeechRulesMap
                     .get(event.getPackageName());
-            
+
             if (speechRules != null
                     && processEvent(speechRules, event, utterance)) {
                 return true;
@@ -239,7 +239,7 @@ public class EventSpeechRuleProcessor {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -252,7 +252,7 @@ public class EventSpeechRuleProcessor {
      * other words, the first matching rule wins. Optionally
      * <code>filterArguments</code> and <code>formatterArguments</code> can be
      * provided.
-     * 
+     *
      * @return {@code true} if the event was processed, {@code false} otherwise.
      */
     private boolean processEvent(ArrayList<EventSpeechRule> speechRules, AccessibilityEvent event,
@@ -281,7 +281,7 @@ public class EventSpeechRuleProcessor {
      * Parses a speech strategy XML file specified by <code>resourceId</code>
      * and returns a <code>document</code>. If an error occurs during the
      * parsing, it is logged and <code>null</code> is returned.
-     * 
+     *
      * @param context A {@link Context} instance.
      * @param inputStream An {@link InputStream} to the speech strategy XML file.
      * @return The parsed {@link Document} or <code>null</code> if an error

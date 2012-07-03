@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="talkback_shortcut_title" msgid="6374632335119573898">"TalkBack-snarvei"</string>
+    <string name="talkback_preferences_title" msgid="615685549632541311">"TalkBack-innstillinger"</string>
     <string name="talkback_service_description" msgid="983212841294665356">"Når Talkback er slått på, gir enheten talte tilbakemeldinger for å hjelpe svaksynte og blinde brukere. Enheten beskriver for eksempel hva du trykker på, velger og aktiverer."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"Tekstmelding"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Ingen sendt tekstmelding"</string>
@@ -26,18 +26,26 @@
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> erstattet med <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> tegn erstattet med <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> tegn"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Ringevolum <xliff:g id="PERCENT">%d</xliff:g> prosent."</string>
-    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> bilde"</string>
+    <!-- no translation found for template_image_view (2368987212503613897) -->
+    <skip />
     <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g>-liste"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Trykk og hold på <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"<xliff:g id="TITLE">%1$s</xliff:g>-knapp"</string>
     <string name="template_unlabeled_image_view" msgid="1433983285490648415">"bilde <xliff:g id="TITLE">%d</xliff:g>"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> glidebryter."</string>
     <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> prosent."</string>
+    <string name="template_container" msgid="8918583415236947599">"<xliff:g id="TYPE">%1$s</xliff:g> viser <xliff:g id="COUNT">%2$d</xliff:g> elementer."</string>
+    <string name="value_gridview" msgid="9093738961981389981">"Rutenett"</string>
+    <string name="value_listview" msgid="3437715684913760710">"Liste"</string>
+    <string name="value_tabwidget" msgid="5550633699198799743">"Fanerad"</string>
+    <string name="value_container" msgid="439303423101134461">"Beholder"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Viser element <xliff:g id="FROM_INDEX">%d</xliff:g> til <xliff:g id="TO_INDEX">%d</xliff:g> av <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Viser element <xliff:g id="FROM_INDEX">%d</xliff:g> av <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> rullegardinliste."</string>
     <string name="template_password_selected" msgid="7528235887386963927">"Valgte tegn er <xliff:g id="FROM_INDEX">%1$s</xliff:g> til <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"stor <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
+    <string name="template_checkbox" msgid="7902762816979572494">"Avmerkingsboks for <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_radio_button" msgid="4272970081436888704">"<xliff:g id="TITLE">%1$s</xliff:g>-radioknapp."</string>
     <string name="value_password" msgid="52094746222829357">"passord"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Skyveskuff åpnet"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Alternativer."</string>
@@ -47,9 +55,12 @@
     <string name="value_checked" msgid="5234989698372864892">"valgt"</string>
     <string name="value_not_checked" msgid="193134740901545340">"ikke valgt"</string>
     <string name="value_disabled" msgid="65077823320194685">"deaktivert"</string>
-    <string name="hint_clickable" msgid="5722744901089685155">"Trykk for å klikke."</string>
-    <string name="hint_long_clickable" msgid="8223088419179222819">"Trykk og hold nede for å klikke lenge."</string>
-    <string name="hint_checkable" msgid="3455044599190977740">"Trykk for å veksle."</string>
+    <string name="value_double_tap" msgid="7829968646330038608">"Dobbelttrykk"</string>
+    <string name="value_single_tap" msgid="6461432282985355533">"Trykk"</string>
+    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g> for å aktivere."</string>
+    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> og hold nede for å langtrykke."</string>
+    <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g> for å merke eller fjerne avmerkingen."</string>
+    <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g> for å skrive inn tekst."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"rullbar"</string>
     <string name="value_clicked" msgid="8306469740150249879">"klikket"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"uten tekst"</string>
@@ -57,50 +68,66 @@
     <string name="value_ringer_silent" msgid="672965424730167385">"Stille modus."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Skjerm av."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Enheten er opplåst."</string>
-    <string name="value_web_view" msgid="8368045336469722566">"Nettvisning."</string>
+    <string name="value_web_view" msgid="8611542401983419041">"Nettinnhold."</string>
     <string name="value_unknown_object" msgid="3589473667352440925">"Umerket element."</string>
-    <string name="title_talkback_crash" msgid="1342512684382958066">"Programstoppdata for TalkBack"</string>
-    <string name="message_talkback_crash" msgid="8552017712769665127">"Klikk her for å forbedre TalkBack ved å sende programstoppdata."</string>
     <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Bruk av talefunksjonen"</string>
+    <string name="title_pref_speech_volume" msgid="4013853601342391397">"Talevolum"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Ringevolum"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Snakk når skjermen er av"</string>
     <string name="title_pref_caller_id" msgid="1414845059814636961">"Les opp anrops-ID"</string>
     <string name="title_pref_proximity" msgid="4957940010293002852">"Bruk avstandssensor"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Avstandssensoren deaktiverer talefunksjonen"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Avstandssensor styrer ikke talefunksjonen"</string>
-    <string name="title_pref_bluetooth" msgid="7738175584293158995">"Bruk Bluetooth-øreplugg."</string>
-    <string name="summaryOn_pref_bluetooth" msgid="5851111371454601541">"Snakk via Bluetooth-øreplugg som ikke er A2DP (mono) når den er tilgjengelig"</string>
-    <string name="summaryOff_pref_bluetooth" msgid="578474738776820650">"Aldri snakk via Bluetooth-øreplugg som ikke er A2DP (mono)"</string>
+    <string name="title_pref_explore_by_touch" msgid="4051040843081874790">"Utforsk ved å trykke"</string>
+    <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Utforsk ved trykking"</string>
+    <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Administrer snarveibevegelser"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Bruk tonehøydeendringer"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Uttal tastaturtilbakemeldinger med lavere tonehøyde"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Ikke endre tonehøyde når vi snakker"</string>
-    <string name="title_pref_keyboard_shortcuts" msgid="7050870387135750051">"Hurtigtaster"</string>
     <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Tilbakemelding"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Vibrasjonstilbakemelding"</string>
-    <string name="title_pref_vibration_patterns" msgid="2883907174568613798">"Tilfør vibrasjonsmønstre"</string>
-    <string name="title_pref_patterns_hover" msgid="1028955563101936030">"Utforsk ved å trykke"</string>
-    <string name="title_pref_patterns_actionable" msgid="4119848460907205018">"Om klikkbare elementer"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Tilbakemelding med lyd"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Lydvolum"</string>
-    <string name="title_pref_soundback_sounds" msgid="4085905099641175573">"Tilfør lyder"</string>
-    <string name="value_play_button" msgid="3816799051654747674">"Spill av"</string>
-    <string name="title_pref_sounds_hover" msgid="7541705161020400291">"Utforsk ved å trykke"</string>
-    <string name="title_pref_sounds_actionable" msgid="309050969670809224">"Om klikkbare elementer"</string>
-    <string name="title_pref_sounds_clicked" msgid="9124568461689249664">"Klikking"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Generelt"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Utviklerinnstillinger"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Utdatanivå for loggen"</string>
     <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Uthev begivenhetskilder"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Vis utdata for tale"</string>
-    <string name="subject_crash_report_email" msgid="3043388136219501183">"Programstopprapport for TalkBack"</string>
-    <string name="header_crash_report_email" msgid="9218276172142314054">"Følgende er en programstopprapport for TalkBack. Klikk på sendeknappen for å sende disse dataene til utviklerne av TalkBack."\n\n</string>
     <string name="axis_character" msgid="5059604520074645703">"Naviger etter tegn."</string>
     <string name="axis_word" msgid="7745798763195184060">"Naviger etter ord."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Naviger etter setning."</string>
+    <string name="axis_paragraph" msgid="3453285809344289729">"Naviger etter avsnitt."</string>
+    <string name="axis_object" msgid="7034325449094737671">"Naviger etter objekt."</string>
+    <string name="axis_line" msgid="2210986915751668758">"Naviger etter linje."</string>
+    <string name="axis_page" msgid="9146038615069235841">"Naviger etter side."</string>
     <string name="axis_heading" msgid="8928386537164255063">"Naviger etter overskrift."</string>
     <string name="axis_sibling" msgid="7260754205862306385">"Naviger etter søsken."</string>
     <string name="axis_document" msgid="1581988340856497809">"Naviger etter dokument."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Naviger etter standard nettvisningsatferd."</string>
+    <string name="attention" msgid="627104955956154539">"Obs"</string>
+    <string name="explore_dialog_message" msgid="2796017207242981327">"Denne funksjonen påvirker hvordan enheten din reagerer på berøring. Vil du slå på funksjonen?"</string>
+    <string name="requires_talkback" msgid="3634159695179852501">"Denne veiledningen krever Utforsk ved å trykke. Slå på Talkback og aktiver Utforsk ved å trykke før du starter veiledningen."</string>
+    <string name="granularity_character" msgid="5828563809381090688">"Les tegn for tegn"</string>
+    <string name="granularity_word" msgid="3660181391007381559">"Les ord for ord"</string>
+    <string name="granularity_paragraph" msgid="1175015890341475666">"Les avsnitt for avsnitt"</string>
+    <string name="granularity_default" msgid="554981185979733919">"Standard lesenivå"</string>
+    <string name="orientation_portrait" msgid="5280362272647722922">"Stående"</string>
+    <string name="orientation_landscape" msgid="129313890178554132">"Liggende"</string>
+    <string name="shortcut_unassigned" msgid="8631675444401168361">"Ikke tilordnet"</string>
+    <string name="shortcut_back" msgid="8404153155835310379">"Tilbake-knapp"</string>
+    <string name="shortcut_home" msgid="3905505999818649470">"Startside-knapp"</string>
+    <string name="shortcut_recent_apps" msgid="4462279958679670485">"Nylige apper-knapp"</string>
+    <string name="shortcut_notifications" msgid="7234767026975704922">"Åpne varsler"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Gjenta siste ytring"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Stav siste ytring"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Sveip ned og mot venstre"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Sveip ned og mot høyre"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Sveip opp og mot venstre"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Sveip opp og mot høyre"</string>
+    <string name="value_volume_200_percent" msgid="2969698924281376143">"200 % av medievolumet"</string>
+    <string name="value_volume_150_percent" msgid="4668371157512150392">"150 % av medievolumet"</string>
+    <string name="value_volume_100_percent" msgid="6676030754946177658">"Juster etter medievolumet"</string>
+    <string name="value_volume_75_percent" msgid="7578844180160160971">"75 % av medievolumet"</string>
+    <string name="value_volume_50_percent" msgid="2830571913174435107">"50 % av medievolumet"</string>
+    <string name="value_volume_25_percent" msgid="4441038207089946938">"25 % av medievolumet"</string>
 </resources>

@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.SpeechCleanupUtils;
 import com.google.android.marvin.talkback.SpeechController.SpeechParam;
@@ -32,7 +33,9 @@ import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.compat.provider.SettingsCompatUtils.SecureCompatUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
+import java.text.BreakIterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * This class contains custom formatters for presenting text edits.
@@ -46,6 +49,13 @@ public final class TextFormatters {
     /** Default rate adjustment for text event feedback. */
     private static final float DEFAULT_RATE = 1.0f;
 
+    /** Minimum delay between change and selection events. */
+    private static final long SELECTION_DELAY = 100;
+
+    /** Event time of the most recent changed event. */
+    private static long sChangedTimestamp = -1;
+    private static CharSequence sChangedPackage = null;
+
     private TextFormatters() {
         // Not publicly instantiable.
     }
@@ -56,6 +66,9 @@ public final class TextFormatters {
     public static final class ChangedTextFormatter implements AccessibilityEventFormatter {
         @Override
         public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+            sChangedTimestamp = event.getEventTime();
+            sChangedPackage = event.getPackageName();
+
             // Text changes should use a different voice from labels.
             final Bundle params = new Bundle();
             params.putFloat(SpeechParam.PITCH, DEFAULT_PITCH);
@@ -121,7 +134,9 @@ public final class TextFormatters {
                         R.string.template_text_replaced, cleanedRemovedText, cleanedAddedText);
                 StringBuilderUtils.appendWithSeparator(utteranceText, formattedText);
             } else if (added) {
-                StringBuilderUtils.appendWithSeparator(utteranceText, cleanedAddedText);
+                if (!appendLastWordIfNeeded(event, context, utteranceText)) {
+                    StringBuilderUtils.appendWithSeparator(utteranceText, cleanedAddedText);
+                }
             } else if (removed) {
                 StringBuilderUtils.appendWithSeparator(utteranceText, cleanedRemovedText,
                         context.getString(R.string.value_text_removed));
@@ -129,6 +144,41 @@ public final class TextFormatters {
                 return false;
             }
 
+            return true;
+        }
+
+        private boolean appendLastWordIfNeeded(
+                AccessibilityEvent event, Context context, StringBuilder utteranceText) {
+            final CharSequence text = getEventText(event);
+            final int fromIndex = event.getFromIndex();
+
+            if (fromIndex > text.length()) {
+                LogUtils.log(this, Log.WARN, "Received event with invalid fromIndex: %s", event);
+                return false;
+            }
+
+            // TODO: Cache the locale and break iterator.
+            final Locale locale = context.getResources().getConfiguration().locale;
+            final BreakIterator iterator = BreakIterator.getWordInstance(locale);
+
+            iterator.setText(text.toString());
+
+            // Is this text a word boundary?
+            if (!iterator.isBoundary(fromIndex)) {
+                return false;
+            }
+
+            iterator.preceding(fromIndex);
+
+            final int breakIndex = iterator.current();
+            final CharSequence word = text.subSequence(breakIndex, fromIndex);
+
+            // Did the user just type a word?
+            if (TextUtils.getTrimmedLength(word) == 0) {
+                return false;
+            }
+
+            StringBuilderUtils.appendWithSeparator(utteranceText, word);
             return true;
         }
 
@@ -244,8 +294,28 @@ public final class TextFormatters {
     public static final class SelectedTextFormatter implements AccessibilityEventFormatter {
         @Override
         public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+            final long selectedTimestamp = event.getEventTime();
+            final CharSequence selectedPackage = event.getPackageName();
+
+            // Ignore the first selection following a changed event.
+            if ((sChangedTimestamp > 0)
+                    && ((selectedTimestamp - sChangedTimestamp) < SELECTION_DELAY)
+                    && TextUtils.equals(selectedPackage, sChangedPackage)) {
+                sChangedTimestamp = -1;
+                sChangedPackage = null;
+                return false;
+            }
+
             final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
-            final CharSequence text = getEventText(event);
+            final CharSequence text;
+
+            if (event.getEventType() ==
+                    AccessibilityEvent.TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY) {
+                text = AccessibilityEventUtils.getEventText(event);
+            } else {
+                text = getEventText(event);
+            }
+
             final int count = event.getItemCount();
             final StringBuilder utteranceText = utterance.getText();
             final boolean shouldSpeakPasswords = SecureCompatUtils.shouldSpeakPasswords(context);
@@ -258,7 +328,7 @@ public final class TextFormatters {
             // check the item count separately to avoid speaking hint text,
             // which always has an item count of zero even though the event text
             // is not empty.
-            if (TextUtils.isEmpty(text) || (count <= 0)) {
+            if (TextUtils.isEmpty(text) || (count == 0)) {
                 return false;
             }
 
