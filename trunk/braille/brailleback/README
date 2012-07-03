@@ -1,0 +1,62 @@
+Building BrailleBack From The Command Line
+==========================================
+
+This document contains instructions for building BrailleBack from the command
+line.  See the Android developer documentation for general instructions on how
+to build android packages, please refer to the documentation at
+http://developer.android.com.  These build instructions apply to building
+on Linux.
+
+Prerequisites
+=============
+
+BrailleBack has a few dependencies that need to be available before it can be
+built:
+
+- Android SDK for JellyBean (API level 16) and NDK, revision 7a or later.
+  These can be downloaded from developer.android.com/tools/sdk.
+  Make sure that the SDK and NDK tools (android, ndk-build, etc) are
+  available in your $PATH.
+
+- Apache ant version 1.8 or later.
+
+- A checked out copy of the eyes-free source code.  Check out of subversion
+  as follows:
+  $ svn checkout http://eyes-free.googlecode.com/svn/trunk/ eyes-free
+
+- A copy of brltty, version 4.4.  This can be checked out from subversion
+  as follows (run from within the eyes-free directory as per above):
+  $ svn checkout svn://mielke.cc//releases/brltty-4.4 \
+    braille/service/jni/brlttywrapper/brltty
+
+- A copy of liblouis, version 2.4.1.  This can be checked out from subversion
+  as follows (run from within the eyes-free directory as per above):
+  $ svn checkout http://liblouis.googlecode.com/svn/tags/liblouis_2_4_1 \
+    braille/service/jni/liblouiswrapper/liblouis
+
+Building
+========
+
+After making sure that the dependencies are in place (see Prerequisites
+above), perform the following steps to build the BrailleBack apk.
+Make sure to run all commands from the root of the eyes-free source tree.
+
+- Apply patches to brltty and liblouis:
+  $ (cd braille/service/jni/brlttywrapper && patch -p1 < brltty.patch)
+  $ (cd braille/service/jni/liblouiswrapper && patch -p1 < liblouis.patch)
+
+- Update the local ant property files:
+  $ android update project -p libraries/utils
+  $ android update project -p libraries/compatutils
+  $ android update project -p braille/client
+  $ android update project -p braille/service
+  $ android update project -p braille/brailleback
+
+* Build the native libraries:
+  $ (cd braille/service && ndk-build -j16)
+
+* Build the BrailleBack apk:
+  $ (cd braille/brailleback && ant debug)
+
+* Alternatively, build and install on a connected device:
+  $ (cd braille/brailleback && ant debug install)
