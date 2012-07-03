@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Збільшує вміст на екрані."\n\n"Натисніть значок лупи, щоб тимчасово ввімкнути збільшення. Якщо торкнутися екрана, лупа пересуватиметься за вашим пальцем. Припиніть торкатися екрана, щоб вийти з режиму збільшення."\n\n"Натисніть і утримуйте значок лупи, щоб змінити розташування значка на екрані."\n\n"Щоб змінити контраст і яскравість під час збільшення, перегляньте сторінку Налаштування."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Лупа"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Колір"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Високий контраст"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Підвищує контраст під час збільшення"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Інвертувати яскравість"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Змінює темні кольори на світлі (і навпаки)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"На жаль, ваш пристрій наразі не підтримує збільшення екрана."\n\n"Вимкніть цю службу."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Увімкнути збільшення"</string>
     <string name="manage_services" msgid="3849023576278994043">"Керування службами"</string>
 </resources>

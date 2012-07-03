@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Forstørrer indhold på skærmen."\n\n"Klik på lupikonet for midlertidigt at slå forstørrelse til. Når du trykker på skærmen, følger luppen din finger. Slip skærmen for at afslutte forstørrelse. "\n\n"Tryk på lupikonet, og hold nede, for at ændre ikonets placering på skærmen."\n\n"Gå til siden Indstillinger for at ændre kontrasten og lysstyrken under forstørrelse."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Lup"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Farve"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Høj kontrast"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Øger kontrasten under forstørrelse"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Byt om på lysstyrken"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Skifter mørke farver til lyse (og omvendt)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Vi beklager, men din enhed understøtter i øjeblikket ikke skærmforstørrelse."\n\n"Husk at deaktivere tjenesten."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Slå forstørrelse til"</string>
     <string name="manage_services" msgid="3849023576278994043">"Administrer tjenester"</string>
 </resources>

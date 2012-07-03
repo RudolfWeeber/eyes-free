@@ -14,13 +14,14 @@
  * the License.
  */
 
-package com.googlecode.eyesfree.screenmagnifier;
+package com.google.android.marvin.screenmagnifier;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 public class MagnifierPreferencesActivity extends PreferenceActivity {
     @Override
+    @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

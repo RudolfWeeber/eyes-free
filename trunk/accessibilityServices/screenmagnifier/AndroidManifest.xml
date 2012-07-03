@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.googlecode.eyesfree.screenmagnifier"
-    android:versionCode="6"
-    android:versionName="1.1.0" >
+    package="com.google.android.marvin.screenmagnifier"
+    android:versionCode="10"
+    android:versionName="1.1.2_r10" >
 
-    <uses-sdk android:minSdkVersion="14" />
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="16" />
 
     <uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application>
         <activity
+            android:name="MagnifierPreferencesActivity"
             android:icon="@drawable/magnifier_icon"
-            android:label="@string/magnifier_name"
-            android:name=".MagnifierService$Preferences" >
+            android:label="@string/magnifier_name" >
         </activity>
 
         <service
+            android:name="MagnifierService"
             android:icon="@drawable/magnifier_icon"
             android:label="@string/magnifier_name"
-            android:name=".MagnifierService" >
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
+
                 <category android:name="android.accessibilityservice.category.FEEDBACK_VISUAL" />
             </intent-filter>
 

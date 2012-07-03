@@ -70,8 +70,6 @@ public class ScreenshotUtil {
         final int height = bitmap.getHeight();
         final int rotation = display.getRotation();
 
-        Log.d(TAG, "Took screenshot with resolution (" + width + "," + height + ")");
-
         final int outWidth;
         final int outHeight;
         final float degrees;

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Padidina ekrane esantį turinį."\n\n"Jei norite laikinai įjungti didinimą, spustelėkite didintuvo piktogramą. Kai paliesite ekraną, didintuvas seks jūsų pirštą. Jei norite išeiti iš didinimo režimo, nebelieskite ekrano."\n\n"Paspauskite ir laikykite didintuvo piktogramą, kad pakeistumėte piktogramos padėtį ekrane."\n\n"Jei norite pakeisti kontrastą ir ryškumą didindami, žr. puslapį „Nustatymai“."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Ekrano didinimas"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Spalva"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Didelis kontrastas"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Didinant didinamas kontrastas"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Invertuoti ryškumą"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Tamsias spalvas pakeičia šviesiomis (ir atvirkščiai)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Deja, jūsų įrenginyje ekrano didinimas šiuo metu nepalaikomas."\n\n"Išjunkite paslaugą."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Perjungti didinimą"</string>
     <string name="manage_services" msgid="3849023576278994043">"Tvarkyti paslaugas"</string>
 </resources>

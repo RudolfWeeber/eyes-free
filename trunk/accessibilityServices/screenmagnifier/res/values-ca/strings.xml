@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Amplia el contingut en pantalla."\n\n"Fes clic a la icona de lupa per desactivar temporalment l\'ampliació. Quan toquis la pantalla, la lupa seguirà el teu dit. Deixa de tocar la pantalla per sortir de l\'ampliació. "\n" "\n"Mantén premuda la icona de lupa per canviar la posició de la icona a la pantalla."\n\n"Per canviar el contrast i la brillantor durant l\'ampliació, consulta la pàgina de configuració."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Lupa"</string>
+    <string name="magnifier_description" msgid="5061291218265936244">"Amplia el contingut a la pantalla."\n\n"Fes clic a la icona de la lupa per activar l\'ampliació de manera temporal. Quan toquis la pantalla, la lupa seguirà el teu dit. Per canviar el nivell del zoom, situa un altre dit a la pantalla i arrossega\'l per unir o per separar els dits. Deixa de tocar la pantalla per sortir del mode de lupa."\n\n"Mantén premuda la icona de la lupa per canviar la posició de la icona a la pantalla."\n\n"Per canviar el contrast i la brillantor durant l\'ampliació, consulta la pàgina Configuració."</string>
     <string name="pref_category_color" msgid="6051931053185407970">"Color"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Alt contrast"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Augmenta el contrast durant l\'ampliació"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Inverteix la brillantor"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Canvia els colors foscos per colors clars (i viceversa)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Actualment el teu dispositiu no admet l\'ampliació de la pantalla."\n\n"Desactiva el servei."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Canvia l\'augment"</string>
     <string name="manage_services" msgid="3849023576278994043">"Gestiona els serveis"</string>
 </resources>

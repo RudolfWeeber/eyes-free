@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="pref_boot_default" type="bool">false</item>
     <item name="pref_contrast_default" type="bool">false</item>
     <item name="pref_invert_default" type="bool">false</item>
-    <item name="magnifier_enabled" type="bool">false</item>
 
 </resources>

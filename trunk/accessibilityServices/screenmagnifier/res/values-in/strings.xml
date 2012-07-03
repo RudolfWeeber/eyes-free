@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Memperbesar konten di layar."\n\n"Klik ikon kaca pembesar guna mengaktifkan pembesaran untuk sementara. Ketika Anda menyentuh layar, kaca pembesar akan mengikuti jari Anda. Berhentilah menyentuh layar untuk keluar dari pembesaran."\n\n"Tekan dan tahan ikon kaca pembesar untuk mengubah posisi ikon pada layar."\n\n"Untuk mengubah kontras dan kecerahan selama pembesaran, lihat laman Setelan."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Lup"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Warna"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Kontras tinggi"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Meningkatkan kontras selama pembesaran"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Balikkan kecerahan"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Mengubah warna gelap menjadi warna terang (dan sebaliknya)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Maaf, perangkat Anda tidak mendukung pembesaran layar."\n\n"Nonaktifkan layanan ini."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Pengubah perbesaran"</string>
     <string name="manage_services" msgid="3849023576278994043">"Mengelola layanan"</string>
 </resources>

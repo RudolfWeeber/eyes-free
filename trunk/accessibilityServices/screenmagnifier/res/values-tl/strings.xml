@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Mina-magnify ang on-screen na nilalaman."\n\n"I-click ang icon na magnifier upang pansamantalang i-on ang pag-magnify. Kapag hinawakan mo ang screen, susundan ng magnifier ang iyong daliri. Ihinto ang paghawak sa screen upang lumabas sa pag-magnify."\n\n"Pindutin nang matagal ang icon na magnifier upang mabago ang posisyon ng icon sa screen."\n\n"Upang baguhin ang contrast at liwanag sa panahon ng pag-magnify, tingnan ang pahina ng Mga Setting."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Magnifier ng Screen"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Kulay"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"High-contrast"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Dinaragdagan ang contrast sa panahon ng pag-magnify"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Baliktarin ang liwanag"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Binabago ang maiiitim na kulay patungong mapupusyaw (at kabaliktaran)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Paumanhin, kasalukuyang hindi sinusuportahan ng iyong device ang pag-magnify sa screen."\n\n"Mangyaring huwag paganahin ang serbisyo."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"I-toggle ang magnification"</string>
     <string name="manage_services" msgid="3849023576278994043">"Pamahalaan ang mga serbisyo"</string>
 </resources>

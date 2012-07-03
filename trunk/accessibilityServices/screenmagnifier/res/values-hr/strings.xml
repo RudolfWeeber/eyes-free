@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Uvećava sadržaj na zaslonu."\n\n"Kliknite ikonu povećala da biste privremeno uključili uvećavanje. Kada dodirnete zaslon, povećalo će slijediti vaš prst. Prestanite dodirivati zaslon da biste isključili uvećavanje."\n\n"Pritisnite i držite ikonu povećala da biste promijenili njezin položaj na zaslonu."\n\n"Upute o mijenjanju kontrasta i svjetline tijekom uvećavanja potražite na stranici Postavki."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Povećalo"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Boja"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Visoki kontrast"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Povećava kontrast tijekom uvećanja"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Invertiranje svjetline"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Mijenja tamnih boja u svijetle (i obrnuto)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Žao nam je, vaš uređaj trenutačno ne podržava povećanje zaslona. "\n" "\n"Onemogućite uslugu."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Uključivanje/isključivanje povećanja"</string>
     <string name="manage_services" msgid="3849023576278994043">"Upravljanje uslugama"</string>
 </resources>

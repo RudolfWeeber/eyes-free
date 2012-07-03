@@ -14,13 +14,12 @@
  * the License.
  */
 
-package com.googlecode.eyesfree.screenmagnifier;
+package com.google.android.marvin.screenmagnifier;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
-import android.graphics.PorterDuff.Mode;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.View;
@@ -30,7 +29,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.googlecode.eyesfree.compat.view.WindowManagerCompatUtils;
 import com.googlecode.eyesfree.widget.SimpleOverlay;
 
 public class ToggleOverlay extends SimpleOverlay {
@@ -52,7 +50,7 @@ public class ToggleOverlay extends SimpleOverlay {
 
         final WindowManager.LayoutParams params = getParams();
         params.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        params.flags |= WindowManagerCompatUtils.LayoutParamsCompatUtils.FLAG_SPLIT_TOUCH;
+        params.flags |= WindowManager.LayoutParams.FLAG_SPLIT_TOUCH;
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
         params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -79,12 +77,6 @@ public class ToggleOverlay extends SimpleOverlay {
 
     public void setState(boolean enabled) {
         mImageView.setEnabled(enabled);
-
-        if (enabled) {
-            mImageView.clearColorFilter();
-        } else {
-            mImageView.setColorFilter(0xFFFF8000, Mode.MULTIPLY);
-        }
 
         if (mListener != null) {
             mListener.onToggled(enabled);

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Hiermee wordt de scherminhoud vergroot."\n\n"Klik op het vergrootglaspictogram om vergroting tijdelijk in te schakelen. Wanneer u het scherm aanraakt, volgt het vergrootglas uw vinger. Raak het scherm niet meer aan als u de vergroting wilt beëindigen."\n\n"Blijf het vergrootglaspictogram aanraken om de positie van het pictogram op het scherm te wijzigen."\n\n"Als u het contrast en de helderheid tijdens de vergroting wilt wijzigen, gaat u naar de pagina \'Instellingen\'."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Vergrootglas"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Kleur"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Hoog contrast"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Hiermee wordt het contrast verhoogd tijdens vergroting"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Helderheid omkeren"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Donkere kleuren wijzigen in lichte kleuren (en omgekeerd)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Uw apparaat biedt momenteel geen ondersteuning voor schermvergroting."\n\n"Schakel de service uit."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Zoomniveau instellen"</string>
     <string name="manage_services" msgid="3849023576278994043">"Services beheren"</string>
 </resources>

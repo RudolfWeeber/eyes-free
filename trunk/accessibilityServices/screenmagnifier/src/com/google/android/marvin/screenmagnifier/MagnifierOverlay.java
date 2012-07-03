@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.googlecode.eyesfree.screenmagnifier;
+package com.google.android.marvin.screenmagnifier;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,8 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.googlecode.eyesfree.compat.view.WindowManagerCompatUtils;
-import com.googlecode.eyesfree.screenmagnifier.FilteredImageView.MagnifierListener;
+import com.google.android.marvin.screenmagnifier.FilteredImageView.MagnifierListener;
 import com.googlecode.eyesfree.utils.ScreenshotUtil;
 import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
 import com.googlecode.eyesfree.widget.SimpleOverlay;
@@ -45,7 +44,7 @@ public class MagnifierOverlay extends SimpleOverlay {
         final WindowManager.LayoutParams params = getParams();
         params.format = PixelFormat.OPAQUE;
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
-        params.flags |= WindowManagerCompatUtils.LayoutParamsCompatUtils.FLAG_HARDWARE_ACCELERATED;
+        params.flags |= WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
         params.flags |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         params.flags |= WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR;
         setParams(params);

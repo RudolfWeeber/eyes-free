@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="pref_enabled_key">enabled</string>
-    <string name="pref_boot_key">boot</string>
     <string name="pref_contrast_key">contrast</string>
     <string name="pref_invert_key">invert</string>
     <string name="pref_position">position</string>

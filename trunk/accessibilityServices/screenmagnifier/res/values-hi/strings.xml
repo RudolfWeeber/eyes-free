@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"ऑन-स्‍क्रीन सामग्री आवर्धित करता है."\n\n"अस्‍थायी रूप से आवर्धन चालू करने के लिए आवर्धक आइकन क्‍लिक करें. जब आप स्‍क्रीन को स्‍पर्श करते हैं, तो आवर्धक आपकी अंगुली का अनुसरण करेगा. आवर्धन से बाहर निकलने के लिए स्‍क्रीन को स्‍पर्श करना रोकें."\n\n"स्‍क्रीन पर आइकन की स्‍थिति बदलने के लिए आवर्धक आइकन दबाकर रखें."\n\n"आवर्धन के दौरान कंट्रास्‍ट और चमक बदलने के लिए, सेटिंग पृष्ठ देखें."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"स्क्रीन आवर्धक"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"रंग"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"उच्च-कंट्रास्ट"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"आवर्धन के दौरान कंट्रास्‍ट बढ़ाता है"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"चमक उलटें"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"गहरे रंगों को हल्‍के रंगो में परिवर्तित करता है (और इसके विपरीत)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"क्षमा करें, आपका उपकरण वर्तमान में स्‍क्रीन आवर्धन का समर्थन नहीं करता."\n\n"कृपया सेवा अक्षम करें."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"आवर्धन टॉगल करें"</string>
     <string name="manage_services" msgid="3849023576278994043">"सेवाएं प्रबंधित करें"</string>
 </resources>

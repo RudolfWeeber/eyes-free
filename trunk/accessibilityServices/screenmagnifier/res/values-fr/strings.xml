@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Agrandit le contenu à l\'écran."\n\n"Cliquez sur l\'icône Loupe pour activer temporairement le grossissement. Lorsque vous appuyez sur l\'écran, la loupe suit votre doigt. Retirez votre doigt de l\'écran pour quitter le grossissement."\n\n"Appuyez de manière prolongée sur l\'icône Loupe pour modifier la position de celle-ci sur l\'écran."\n\n"Pour modifier le contraste et la luminosité au cours de l\'utilisation de la loupe, veuillez accéder à la page \"Paramètres\"."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Loupe"</string>
+    <string name="magnifier_description" msgid="5061291218265936244">"Agrandit le contenu qui s\'affiche à l\'écran."\n\n"Cliquez sur l\'icône Loupe pour l\'activer momentanément. Lorsque vous touchez l\'écran, la loupe suit votre doigt. Pour modifier le niveau de zoom, placez un autre doigt sur l\'écran, puis rapprochez-le ou éloignez-le du premier doigt. Pour arrêter d\'utiliser la loupe, retirez vos doigts de l\'écran."\n\n"Appuyez de manière prolongée sur l\'icône Loupe pour modifier sa position sur l\'écran."\n\n"Pour découvrir comment modifier le contraste et la luminosité lors de l\'utilisation de la loupe, consultez la page \"Paramètres\"."</string>
     <string name="pref_category_color" msgid="6051931053185407970">"Couleur"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Contraste élevé"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Augmente le contraste pendant l\'utilisation de la loupe."</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Inverser la luminosité"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Les couleurs sombres deviennent claires, et inversement."</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Désolé, votre appareil n\'est pas compatible avec l\'utilisation de la loupe."\n\n"Veuillez désactiver le service."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Activer la loupe"</string>
     <string name="manage_services" msgid="3849023576278994043">"Gérer les services"</string>
 </resources>

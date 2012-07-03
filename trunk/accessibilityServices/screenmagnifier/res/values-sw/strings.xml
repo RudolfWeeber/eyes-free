@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Hukuza maudhui kwenye skrini."\n\n"Bofya ikoni ya kikuzaji ili kuwasha ukuzaji kwa muda. Wakati unapogusa skrini, kikuzaji kitafuata kidole chako. Wacha kugusa skrini ili kutoka kwa ukuzaji. "\n\n"Bonyeza na ushikilie ikoni ya kikuzaji ili kubadilisha mkao wa ikoni kwenye skrini."\n\n" Ili kubadilisha utofauti na mwangaza wakati wa ukuzaji, angalia ukurasa wa Mipangilio."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Kiookuzi cha Skrini"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Rangi"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Tofauti ya Juu"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Huongeza utofauti wakati wa ukuzaji"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Pindua mwangaza"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Hubadilisha rangi nzito kuwa zenye uangavu (na kinyume chake)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"Samahani, kifaa chako kwa sasa hakihimili ukuzaji skrini."\n\n"Tafadhali lemaza huduma."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Bana ugeuzi"</string>
     <string name="manage_services" msgid="3849023576278994043">"Dhibiti huduma"</string>
 </resources>

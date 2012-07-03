@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.googlecode.eyesfree.screenmagnifier;
+package com.google.android.marvin.screenmagnifier;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -38,6 +38,8 @@ import com.googlecode.eyesfree.utils.ColorUtils;
  */
 public class FilteredImageView extends ImageView {
     private static final long ANIM_DURATION = 100;
+    private static final float MIN_SCALE_FACTOR = 1.0f;
+    private static final float MAX_SCALE_FACTOR = 4.0f;
 
     private final GestureDetector mGestureDetector;
     private final ScaleGestureDetector mScaleGestureDetector;
@@ -243,7 +245,7 @@ public class FilteredImageView extends ImageView {
      * Animates zoom to the specified magnification level.
      */
     private void setScaleFactor(float x, float y, float scaleFactor) {
-        mZoomFactor = Math.max(1.0f, mZoomFactor * scaleFactor);
+        mZoomFactor = Math.min(MAX_SCALE_FACTOR, Math.max(MIN_SCALE_FACTOR, mZoomFactor * scaleFactor));
 
         mPointerX = x;
         mPointerY = y;
@@ -326,16 +328,33 @@ public class FilteredImageView extends ImageView {
         }
     };
 
-    private final ScaleGestureDetector.SimpleOnScaleGestureListener mOnScaleGestureListener =
-            new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+    private final ScaleGestureDetector.OnScaleGestureListener mOnScaleGestureListener =
+            new ScaleGestureDetector.OnScaleGestureListener() {
+                private float mPreviousScaleFactor = 0;
+
+                @Override
+                public boolean onScaleBegin(ScaleGestureDetector detector) {
+                    // Always zoom when scaling.
+                    return true;
+                }
+
                 @Override
                 public boolean onScale(ScaleGestureDetector detector) {
                     final float x = detector.getFocusX() - detector.getCurrentSpanX() / 2.0f;
                     final float y = detector.getFocusY() - detector.getCurrentSpanY() / 2.0f;
+                    final float scaleFactor = detector.getScaleFactor();
+                    final float smoothed = (scaleFactor * 0.9f) + (mPreviousScaleFactor * 0.1f);
 
-                    setScaleFactor(x, y, detector.getScaleFactor());
+                    mPreviousScaleFactor = scaleFactor;
+
+                    setScaleFactor(mPointerX, mPointerY, scaleFactor);
 
                     return true;
+                }
+
+                @Override
+                public void onScaleEnd(ScaleGestureDetector detector) {
+                    // Do nothing.
                 }
     };
 
@@ -352,12 +371,12 @@ public class FilteredImageView extends ImageView {
 
                 @Override
                 public void onShowPress(MotionEvent e) {
-                    zoomIn(e.getX(), e.getY());
+                    zoomIn(e.getX(0), e.getY(0));
                 }
 
                 @Override
                 public boolean onScroll(MotionEvent e1, MotionEvent e2, float velX, float velY) {
-                    zoomTo(e2.getX(), e2.getY());
+                    zoomTo(e2.getX(0), e2.getY(0));
 
                     return true;
                 }

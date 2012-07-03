@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Amplia o conteúdo na tela."\n\n"Clique no ícone de lupa para ativar temporariamente a ampliação. Ao tocar na tela, a lupa acompanhará seu dedo. Pare de tocar na tela para cancelar a ampliação."\n\n"Pressione e segure o ícone de lupa para alterar a posição do ícone na tela."\n\n"Para alterar o contraste e o brilho durante a ampliação, consulte a página \"Configurações\"."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Lupa"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Cor"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Alto contraste"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Aumenta o contraste durante a ampliação"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Inverter brilho"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Altera cores escuras para claras (e vice-versa)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"No momento, seu dispositivo não suporta ampliação de tela."\n\n"Desative o serviço."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Ativar ampliação"</string>
     <string name="manage_services" msgid="3849023576278994043">"Gerenciar serviços"</string>
 </resources>

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- The human-readable name of this service. Do not translate. -->
-    <string name="magnifier_name" translatable="false">Screen Magnifier</string>
+    <!--
+      Source: The human-readable name of this service.
+      Description: This is the name of the service. This service magnifies on-screen content. -->
+    <string name="magnifier_name">Screen Magnifier</string>
     <!--
       Source: A brief description of Screen Magnifier.
       Description: This is presented to the user on the accessibility settings view. [CHAR LIMIT="NONE"]
     -->
-    <string name="magnifier_description">Magnifies on-screen content.\n\nClick the magnifier icon to temporarily turn on magnification. When you touch the screen, the magnifier will follow your finger. Stop touching the screen to exit magnification.\n\nPress and hold the magnifier icon to change the icon\'s position on the screen.\n\nTo change contrast and brightness during magnification, see the Settings page.</string>
+    <string name="magnifier_description">Magnifies on-screen content.\n\nClick the magnifier icon to temporarily turn on magnification. When you touch the screen, the magnifier will follow your finger. To change the zoom level, place a second finger on the screen and drag towards or away from your other finger. Stop touching the screen to exit magnification.\n\nPress and hold the magnifier icon to change the icon\'s position on the screen.\n\nTo change contrast and brightness during magnification, see the Settings page.</string>
     <!--
       Source: Category title for color-related preferences.
       Description: This is presented to the user on the accessibility settings view. [CHAR LIMIT="NONE"]
@@ -33,7 +35,11 @@
       Description: This is presented to the user on the accessibility settings view. [CHAR LIMIT="NONE"]
     -->
     <string name="pref_invert_summary">Changes dark colors to light ones (and vice-versa)</string>
+    <!-- Message displayed when the user's device doesn't support the screen magnifier. -->
     <string name="device_not_supported">Sorry, your device does not currently support screen magnification.\n\nPlease disable the service.</string>
+    <!-- Spoken description for the button that turns on magnification. -->
+    <string name="toggle_magnifier">Toggle magnification</string>
+    <!-- Text for the button that takes users to the Accessibility Services screen. -->
     <string name="manage_services">Manage services</string>
 
 </resources>

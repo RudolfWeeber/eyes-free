@@ -2,4 +2,4 @@
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:accessibilityFeedbackType="feedbackVisual"
     android:description="@string/magnifier_description"
-    android:settingsActivity="com.googlecode.eyesfree.screenmagnifier.MagnifierPreferencesActivity" />
+    android:settingsActivity="com.google.android.marvin.screenmagnifier.MagnifierPreferencesActivity" />

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"Увеличава съдържанието на екрана."\n\n"Кликнете върху иконата на лупа, за да включите временно увеличението. Когато докоснете екрана, лупата ще следва пръста ви. Спрете да го докосвате, за да излезете от този режим."\n\n"Натиснете и задръжте иконата на лупа, за да промените позицията й на екрана."\n\n"За да промените контраста и яркостта по време на увеличението, вижте страницата „Настройки“."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"Лупа"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"Цвят"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"Висок контраст"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"Засилва контраста по време на увеличението"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"Обръщане на яркостта"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"Променя тъмните цветове в светли (и обратно)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"За съжаление понастоящем устройството ви не поддържа увеличаване на екрана."\n\n"Моля, деактивирайте услугата."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"Превключване на нивото на мащаба"</string>
     <string name="manage_services" msgid="3849023576278994043">"Управление на услугите"</string>
 </resources>

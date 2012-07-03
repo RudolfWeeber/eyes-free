@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"لتكبير المحتوى على الشاشة."\n\n"انقر على رمز المكبّر لتشغيل التكبير مؤقتًا. عند لمس الشاشة، سيتبع المكبّر إصبعك. للخروج من التكبير توقف عن لمس الشاشة."\n\n"اضغط مع الاستمرار على رمز المكبّر لتغيير وضع الرمز على الشاشة."\n\n"لتغيير درجة التباين والسطوع أثناء التكبير، يمكنك الاطلاع على صفحة الإعدادات."</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"مكبر الشاشة"</string>
+    <!-- no translation found for magnifier_description (5061291218265936244) -->
+    <skip />
     <string name="pref_category_color" msgid="6051931053185407970">"اللون"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"درجة التباين العالية"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"لزيادة درجة التباين أثناء التكبير"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"السطوع العكسي"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"لتغيير الألوان الداكنة إلى ألوان فاتحة (والعكس صحيح)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"عذرًا، لا يتيح جهازك في الوقت الحالي استخدام تكبير الشاشة."\n\n"الرجاء تعطيل الخدمة."</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"تشغيل التكبير"</string>
     <string name="manage_services" msgid="3849023576278994043">"إدارة الخدمات"</string>
 </resources>

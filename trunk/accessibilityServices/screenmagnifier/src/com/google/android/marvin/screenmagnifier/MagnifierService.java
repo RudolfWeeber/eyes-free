@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.googlecode.eyesfree.screenmagnifier;
+package com.google.android.marvin.screenmagnifier;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -24,25 +24,25 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.googlecode.eyesfree.screenmagnifier.ToggleOverlay.ToggleListener;
-import com.googlecode.eyesfree.utils.FeedbackController;
+import com.google.android.marvin.screenmagnifier.ToggleOverlay.ToggleListener;
 import com.googlecode.eyesfree.utils.ScreenshotUtil;
 import com.googlecode.eyesfree.widget.SimpleOverlay;
 import com.googlecode.eyesfree.widget.SimpleOverlay.SimpleOverlayListener;
 
 public class MagnifierService extends AccessibilityService {
-    private static final int SHOW_MAGNIFIER = 1;
-
-    private FeedbackController mFeedbackController;
+    private SoundPool mSoundPool;
     private MagnifierOverlay mMagnifierOverlay;
     private ToggleOverlay mToggleOverlay;
+
+    private int mActionSound;
 
     @Override
     public void onCreate() {
@@ -53,7 +53,8 @@ public class MagnifierService extends AccessibilityService {
             return;
         }
 
-        mFeedbackController = new FeedbackController(this);
+        mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 0);
+        mActionSound = mSoundPool.load(this, R.raw.quiet_action, 1);
 
         mMagnifierOverlay = new MagnifierOverlay(this);
         mMagnifierOverlay.setListener(mMagnifierOverlayListener);
@@ -101,9 +102,9 @@ public class MagnifierService extends AccessibilityService {
             mToggleOverlay = null;
         }
 
-        if (mFeedbackController != null) {
-            mFeedbackController.shutdown();
-            mFeedbackController = null;
+        if (mSoundPool != null) {
+            mSoundPool.release();
+            mSoundPool = null;
         }
     }
 
@@ -130,26 +131,16 @@ public class MagnifierService extends AccessibilityService {
         dialog.show();
     }
 
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SHOW_MAGNIFIER:
-                    mMagnifierOverlay.show();
-                    break;
-            }
-        }
-    };
-
     private final SimpleOverlayListener mMagnifierOverlayListener = new SimpleOverlayListener() {
         @Override
         public void onShow(SimpleOverlay overlay) {
-            mFeedbackController.playSound(R.raw.chime_up);
+            mSoundPool.play(mActionSound, 1.0f, 1.0f, 1, 0, 1.0f);
+            mToggleOverlay.setState(false);
         }
 
         @Override
         public void onHide(SimpleOverlay overlay) {
-            mFeedbackController.playSound(R.raw.chime_down);
+            mSoundPool.play(mActionSound, 1.0f, 1.0f, 1, 0, 1.0f);
             mToggleOverlay.setState(true);
         }
     };
@@ -168,7 +159,7 @@ public class MagnifierService extends AccessibilityService {
         @Override
         public void onToggled(boolean state) {
             if (!state) {
-                mHandler.sendEmptyMessage(SHOW_MAGNIFIER);
+                mMagnifierOverlay.show();
             }
         }
     };
@@ -180,6 +171,7 @@ public class MagnifierService extends AccessibilityService {
             final String enabledServices = Settings.Secure.getString(
                     resolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
 
+            // TODO: This is a hack, why do we need this?
             if (!enabledServices.contains(MagnifierService.class.getName())) {
                 shutdown();
                 stopSelf();

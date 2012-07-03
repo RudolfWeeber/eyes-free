@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="magnifier_description" msgid="2200839537277721438">"ขยายเนื้อหาบนหน้าจอ"\n\n"คลิกไอคอนแว่นขยายเพื่อเปิดการขยายชั่วคราว เมื่อคุณแตะที่หน้าจอ แว่นขยายจะตามนิ้วคุณไป หยุดแตะหน้าจอเพื่อออกจากการขยาย"\n\n"กดไอคอนแว่นขยายค้างไว้เพื่อเปลี่ยนตำแหน่งของไอคอนบนหน้าจอ"\n\n"หากต้องการเปลี่ยนความคมชัดและความสว่างในระหว่างการขยาย ให้ดูในหน้าการตั้งค่า"</string>
+    <string name="magnifier_name" msgid="2122688829107478278">"แว่นขยายหน้าจอ"</string>
+    <string name="magnifier_description" msgid="5061291218265936244">"ขยายเนื้อหาบนหน้าจอ"\n\n"คลิกไอคอนแว่นขยายเพื่อเปิดการขยายชั่วคราว เมื่อคุณแตะหน้าจอ แว่นขยายจะตามนิ้วของคุณไป หากต้องการเปลี่ยนระดับการซูม ให้วางนิ้วที่สองลงบนหน้าจอแล้วลากเข้าหาหรือออกจากอีกนิ้วหนึ่งของคุณ หยุดแตะหน้าจอเพื่อออกจากการขยาย"\n\n"กดไอคอนแว่นขยายค้างเอาไว้เพื่อเปลี่ยนตำแหน่งไอคอนบนหน้าจอ"\n\n"หากต้องการปรับความคมชัดและแสงสว่างระหว่างการขยาย ให้ดูหน้าการตั้งค่า"</string>
     <string name="pref_category_color" msgid="6051931053185407970">"สี"</string>
     <string name="pref_contrast_title" msgid="3368395965119793612">"ความคมชัดสูง"</string>
     <string name="pref_contrast_summary" msgid="6139733928212444237">"เพิ่มความคมชัดในระหว่างการขยาย"</string>
     <string name="pref_invert_title" msgid="228744273678790520">"สลับความสว่าง"</string>
     <string name="pref_invert_summary" msgid="545028538679170545">"เปลี่ยนสีเข้มเป็นสีอ่อน (และกลับกัน)"</string>
     <string name="device_not_supported" msgid="1782640585830581135">"ขออภัย ปัจจุบันอุปกรณ์ของคุณไม่สนับสนุนการขยายหน้าจอ"\n\n"โปรดปิดใช้งานบริการนี้"</string>
+    <string name="toggle_magnifier" msgid="60830031960877387">"สลับการขยาย"</string>
     <string name="manage_services" msgid="3849023576278994043">"จัดการบริการ"</string>
 </resources>
