@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="brailleback_setup_title">BrailleBack</string>
+
+    <string name="service_description">When BrailleBack is on, your device will connect to a paired bluetooth braille display and present the screen content in braille. Keys on the braille display can be used to navigate the screen, activate items and enter text. For more information, press Space+Dot1+Dot2+Dot3 (the letter l in braille) on your display when connected.</string>
+
+    <string name="braille_ime_name">Braille hardware keyboard</string>
+
+    <!-- Braille display permission -->
+
+    <string name="permlab_displayConnect">Connect to a braille display</string>
+    <string name="permdesc_displayConnect">Allows an app to write output to and and read keyboad input from a braille display</string>
+
+    <string name="checkmark_not_checked" translatable="false">( )</string>
+    <string name="checkmark_checked" translatable="false">(x)</string>
+
+    <string name="type_emptygridview">Empty Grid</string>
+    <string name="type_gridview">Grid</string>
+    <string name="type_emptylistview">Empty List</string>
+    <string name="type_listview">List</string>
+    <string name="type_emptyscrollview">Empty Scrollable Content</string>
+    <string name="type_scrollview">Scrollable Content</string>
+    <string name="type_edittext">Edit Box</string>
+    <string name="type_image">Image</string>
+    <string name="type_button">Button</string>
+    <string name="type_seekbar">Seek Control</string>
+    <string name="type_quickcontact">Contact</string>
+
+    <!-- Default 8 dot (computer braille) braille translation table for this locale -->
+    <string name="brailletable_8dot_default">en-us-comp8.ctb</string>
+
+    <!-- Title for the BrailleBack Preferences activity. -->
+    <string name="preferences_title">BrailleBack Preferences</string>
+    <!-- Label for the Device preferences category. Contains preferences specific to a user's Braille display. [CHAR_LIMIT=25] -->
+    <string name="pref_category_device_title">Device</string>
+    <!-- Label for the Key Bindings preference. Displays an activity that show the user key bindings for their device. [CHAR_LIMIT=25] -->
+    <string name="pref_key_bindings_title">Key bindings</string>
+
+    <!-- Title for the Key Bindings activity, which shows the user key bindings for their device. [CHAR_LIMIT=25] -->
+    <string name="key_bindings_title">Key bindings</string>
+
+    <!-- Shown on the display when connected to the device. [CHAR_LIMIT=12]-->
+    <string name="display_connected">BrlBack on</string>
+    <!-- Shown on the braille display when brailleback is being destroyed [CHAR_LIMIT=12]-->
+    <string name="shutting_down">BrlBack off"</string>
+
+    <!-- Label shown when the BrailleBack input method is active. -->
+    <string name="braille_keyboard_active">BrailleBack keyboard active</string>
+    <!-- Label for the button that switches from the BrailleBack input method to the system keyboard. -->
+    <string name="tap_to_switch_ime">Tap to switch to default keyboard</string>
+</resources>

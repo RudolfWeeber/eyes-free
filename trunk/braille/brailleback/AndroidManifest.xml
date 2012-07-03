@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Copyright (C) 2010 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.googlecode.eyesfree.brailleback"
+      android:versionCode="3"
+      android:versionName="0.9_r3">
+
+    <uses-sdk android:minSdkVersion="16" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="com.googlecode.eyesfree.braille.display.PERMISSION_CONNECT" />
+
+    <permission
+        android:name="com.googlecode.eyesfree.braille.display.PERMISSION_CONNECT"
+        android:icon="@drawable/icon"
+        android:label="@string/permlab_displayConnect"
+        android:description="@string/permdesc_displayConnect"
+        android:protectionLevel="signature" />
+
+
+
+    <application
+        android:label="@string/brailleback_setup_title"
+        android:icon="@drawable/icon">
+
+        <service android:name=".BrailleBackService"
+                 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibilityservice" />
+        </service>
+
+        <service
+            android:name=".BrailleIME"
+            android:label="@string/braille_ime_name"
+            android:permission="android.permission.BIND_INPUT_METHOD" >
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/method" />
+        </service>
+
+        <service
+            android:name="com.googlecode.eyesfree.braille.service.display.DisplayService"
+            android:permission="com.googlecode.eyesfree.braille.display.PERMISSION_CONNECT"
+            android:process=":service">
+            <intent-filter>
+                <action android:name="com.googlecode.eyesfree.braille.service.ACTION_DISPLAY_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.googlecode.eyesfree.braille.service.translate.TranslatorService"
+            android:process=":service">
+            <intent-filter>
+                <action android:name="com.googlecode.eyesfree.braille.service.ACTION_TRANSLATOR_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".BrailleBackPreferencesActivity"
+            android:title="@string/preferences_title" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.accessibilityservice.SERVICE_SETTINGS" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".KeyBindingsActivity"
+            android:title="@string/key_bindings_title" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

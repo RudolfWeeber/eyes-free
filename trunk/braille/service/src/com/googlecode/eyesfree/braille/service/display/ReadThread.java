@@ -1,0 +1,203 @@
+/*
+ * Copyright 2012 Google Inc.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+package com.googlecode.eyesfree.braille.service.display;
+
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.util.Log;
+
+import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * The thread that connects to a device that it finds, reads from the device
+ * and starts another thread that manages the driver.
+ */
+class ReadThread extends Thread implements DriverThread.OnInitListener {
+    private static final String LOG_TAG = ReadThread.class.getSimpleName();
+
+    private final DisplayService mDisplayService;
+    private final DeviceFinder mDeviceFinder;
+    private final File mTablesDir;
+    private volatile BluetoothSocket mSocket;
+    private volatile boolean mDisconnecting;
+    private volatile DriverThread mDriverThread;
+    private volatile DeviceFinder.DeviceInfo mConnectedDeviceInfo;
+
+    /**
+     * Constructs the thread so that it can be started.
+     * {@code displayService} will get called when the display is either
+     * connected or disconnected.  {@code tablesDir} is a directory that
+     * contains keyboard tables and is forwarded to the driver thread.
+     */
+    public ReadThread(DisplayService displayService, File tablesDir) {
+        mDisplayService = displayService;
+        mDeviceFinder = new DeviceFinder(displayService);
+        mTablesDir = tablesDir;
+    }
+
+    @Override
+    public void run() {
+        try {
+            if (connect()) {
+                readLoop();
+            }
+        } finally {
+            cleanup();
+        }
+    }
+
+    /** Returns the driver thread, or null if not connected. */
+    public DriverThread getDriverThread() {
+        return mDriverThread;
+    }
+
+    /**
+     * Asynchronously disconnects, which will eventually lead to the
+     * thread terminating.  If not connected yet, the attempts to connect
+     * to a display will be aborted.  Calls back into
+     * {@link DisplayService#onDisplayDisconnected} before dying.
+     */
+    public void disconnect() {
+        // Close the socket to abort any blocking operations.
+        closeSocket();
+        mDisconnecting = true;
+    }
+
+    private boolean connect() {
+        List<DeviceFinder.DeviceInfo> bonded = mDeviceFinder.findDevices();
+        tryToConnect(bonded);
+        if (mSocket != null) {
+            try {
+                mDriverThread = new DriverThread(mSocket.getOutputStream(),
+                        mConnectedDeviceInfo.getDriverCode(),
+                        deviceBrlttyAddress(),
+                        mTablesDir,
+                        this /*initListener*/,
+                        mDisplayService/*inputEventListener*/);
+                Log.i(LOG_TAG, "Device connected");
+                return true;
+            } catch (IOException ex) {
+                Log.e(LOG_TAG, "Error while starting driver thread", ex);
+            }
+        }
+        return false;
+    }
+
+    private void readLoop() {
+        try {
+            byte[] buf = new byte[128];
+            int readSize;
+            do {
+                readSize = mSocket.getInputStream().read(buf, 0, buf.length);
+                if (readSize > 0) {
+                    // Enqueue the input which will eventually wake up the
+                    // driver to poll for this data.
+                    mDriverThread.addReadOperation(buf, readSize);
+                }
+            } while (readSize >= 0);
+            Log.i(LOG_TAG, "End of input from device.");
+        } catch (IOException ex) {
+            Log.i(LOG_TAG, "Socket closed while reading: " + ex);
+        }
+    }
+
+    private void tryToConnect(List<DeviceFinder.DeviceInfo> bonded) {
+        mSocket = null;
+        for (DeviceFinder.DeviceInfo dev : bonded) {
+            if (mDisconnecting) {
+                return;
+            }
+            BluetoothDevice bthDev = dev.getBluetoothDevice();
+            Log.d(LOG_TAG, "Trying to connect to braille device: "
+                    + bthDev.getName());
+            try {
+                BluetoothSocket socket;
+                if (dev.getConnectSecurely()) {
+                    socket = bthDev
+                        .createRfcommSocketToServiceRecord(
+                            dev.getSdpUuid());
+                } else {
+                    socket = bthDev
+                        .createInsecureRfcommSocketToServiceRecord(
+                            dev.getSdpUuid());
+                }
+                if (socket != null) {
+                    socket.connect();
+                    mSocket = socket;
+                    mConnectedDeviceInfo = dev;
+                }
+                return;
+            } catch (IOException ex) {
+                Log.e(LOG_TAG, "Error opening a socket: " + ex.toString());
+            }
+        }
+    }
+
+    /**
+     * Returns the address of the connected device in the form expected
+     * by the brltty drivers.
+     */
+    private String deviceBrlttyAddress() {
+        if (mConnectedDeviceInfo != null) {
+            return "bluetooth:"
+                    + mConnectedDeviceInfo.getBluetoothDevice().getAddress();
+        } else {
+            return null;
+        }
+    }
+
+    private void closeSocket() {
+        // More than one calls of this function is allowed, even in paralell
+        // because close on the socket is idempotent.
+        if (mSocket != null) {
+            try {
+                mSocket.close();
+            } catch (IOException ex) {
+                Log.d(LOG_TAG, "Error closing socket: ", ex);
+            }
+        }
+    }
+
+    private void cleanup() {
+        closeSocket();
+        if (mDriverThread != null) {
+            DriverThread localDriverThread = mDriverThread;
+            mDriverThread = null;
+            localDriverThread.stop();
+        }
+        mDisplayService.onDisplayDisconnected();
+        Log.i(LOG_TAG, "Display disconnected");
+    }
+
+    @Override
+    public void onInit(BrailleDisplayProperties properties) {
+        // We're in the driver thread.
+        if (properties != null) {
+            mDeviceFinder.rememberSuccessfulConnection(mConnectedDeviceInfo);
+            mDisplayService.onDisplayConnected(properties);
+        } else {
+            disconnect();
+            return;
+        }
+    }
+}

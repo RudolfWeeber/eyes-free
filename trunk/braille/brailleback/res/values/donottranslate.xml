@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Preference keys -->
+    <string name="pref_key_bindings_key">key_bindings</string>
+    <string name="pref_category_device_key">category_device</string>
+</resources>

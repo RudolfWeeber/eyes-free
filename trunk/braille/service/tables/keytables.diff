@@ -1,0 +1,460 @@
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-android-chords.kti mytables/brl-android-chords.kti
+--- jni/brlttywrapper/brltty/Tables/brl-android-chords.kti	1969-12-31 16:00:00.000000000 -0800
++++ mytables/brl-android-chords.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -0,0 +1,12 @@
++# Back key
++bind \{Space}+Dot1+Dot2 KEY_ESCAPE
++# Home key
++bind \{Space}+Dot1+Dot2+Dot5 KEY_FUNCTION+0
++# Recent apps key
++bind \{Space}+Dot1+Dot2+Dot3+Dot5 KEY_FUNCTION+1
++# Notifications bar
++bind \{Space}+Dot1+Dot3+Dot4+Dot5 KEY_FUNCTION+2
++bind \{Space}+\{Dot7} KEY_BACKSPACE
++bind \{Space}+\{Dot8} KEY_ENTER
++# Keyboard help
++bind \{Space}+Dot1+Dot2+Dot3 LEARN
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb mytables/brl-bm-default.ktb
+--- jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-bm-default.ktb	2012-07-02 17:01:55.408842729 -0700
+@@ -18,6 +18,15 @@
+ 
+ title Baum (default)
+ 
++assign Dot7 F2
++assign Dot8 F3
++assign Space B9
++include brl-android-chords.kti
++hide on
++assign Space B10
++include brl-android-chords.kti
++hide off
++
+ include brl-bm-display6.kti
+ include brl-bm-keyboard.kti
+ include brl-bm-routing6.kti
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-display6.kti
+--- jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-bm-display6.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -24,15 +24,12 @@
+ bind Display2 FWINLT
+ bind Display5 FWINRT
+ 
+-bind Display1+Display3 CHRLT
+-bind Display4+Display6 CHRRT
++bind Display3 CHRLT
++bind Display6 CHRRT
+ 
+ bind Display1+Display2+Display3 LNBEG
+ bind Display4+Display5+Display6 LNEND
+ 
+-bind Display4 LNUP
+-bind Display6 LNDN
+-
+ bind Display1+Display4 TOP
+ bind Display3+Display6 BOT
+ 
+@@ -54,9 +51,6 @@
+ bind Display2+Display4+Display6+Display1 PRSEARCH
+ bind Display2+Display4+Display6+Display3 NXSEARCH
+ 
+-bind Display1 CSRTRK+on
+-bind Display3 CSRTRK+off
+-
+ bind Display1+Display6 BACK
+ 
+ bind Display2+Display4+Display6 HOME
+@@ -79,7 +73,6 @@
+ bind Display2+Display3+Display5 SIXDOTS+on
+ bind Display2+Display3+Display6 SIXDOTS+off
+ 
+-bind Display1+Display4+Display5+Display6 LEARN
+ bind Display1+Display2+Display3+Display6 SWITCHVT_NEXT
+ bind Display3+Display4+Display5+Display6 SWITCHVT_PREV
+ 
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti mytables/brl-bm-keyboard.kti
+--- jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-bm-keyboard.kti	2012-07-02 16:30:29.734160354 -0700
+@@ -41,24 +41,17 @@
+ map B10 SPACE
+ map B11 SPACE
+ 
+-bind Press KEY_ENTER
+-bind Up KEY_CURSOR_UP
+-bind Down KEY_CURSOR_DOWN
+-bind Left KEY_CURSOR_LEFT
+-bind Right KEY_CURSOR_RIGHT
++# Activate the currently focused item.
++bind Press Route+255
++bind Up LNUP
++bind Down LNDN
++bind Left CHRLT
++bind Right CHRRT
+ 
+ bind Dot4+Up TOP_LEFT
+ bind Dot4+Down BOT_LEFT
+ bind Dot4+Left LNBEG
+ bind Dot4+Right LNEND
+ 
+-bind Dot5+Up LNUP
+-bind Dot5+Down LNDN
+-bind Dot5+Left FWINLT
+-bind Dot5+Right FWINRT
+-
+ bind Dot6+Up WINUP
+ bind Dot6+Down WINDN
+-bind Dot6+Left CHRLT
+-bind Dot6+Right CHRRT
+-
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-braille.kti mytables/brl-eu-braille.kti
+--- jni/brlttywrapper/brltty/Tables/brl-eu-braille.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-eu-braille.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -40,31 +40,6 @@
+ bind Space+Dot2+Dot5+Dot6 KEY_TAB
+ bind Space+Dot2+Dot3+Dot6 KEY_TAB+shift
+ 
+-bind Space+Dot4 KEY_CURSOR_UP
+-bind Space+Dot6 KEY_CURSOR_DOWN
+-bind Space+Dot2 KEY_CURSOR_LEFT
+-bind Space+Dot5 KEY_CURSOR_RIGHT
+-
+ bind Space+Dot1+Dot3 KEY_PAGE_UP
+ bind Space+Dot4+Dot6 KEY_PAGE_DOWN
+ 
+-bind Space+Dot1+Dot2+Dot3 KEY_HOME
+-bind Space+Dot4+Dot5+Dot6 KEY_END
+-
+-bind Space+Dot3+Dot6 KEY_DELETE
+-bind Space+Dot1+Dot2+Dot4+Dot5 KEY_ESCAPE
+-bind Space+Dot1+Dot3+Dot5 KEY_INSERT
+-
+-bind Backspace+Dot1 KEY_FUNCTION+0
+-bind Backspace+Dot1+Dot2 KEY_FUNCTION+1
+-bind Backspace+Dot1+Dot4 KEY_FUNCTION+2
+-bind Backspace+Dot1+Dot4+Dot5 KEY_FUNCTION+3
+-bind Backspace+Dot1+Dot5 KEY_FUNCTION+4
+-bind Backspace+Dot1+Dot2+Dot4 KEY_FUNCTION+5
+-bind Backspace+Dot1+Dot2+Dot4+Dot5 KEY_FUNCTION+6
+-bind Backspace+Dot1+Dot2+Dot5 KEY_FUNCTION+7
+-bind Backspace+Dot2+Dot4 KEY_FUNCTION+8
+-bind Backspace+Dot2+Dot4+Dot5 KEY_FUNCTION+9
+-bind Backspace+Dot1+Dot3 KEY_FUNCTION+10
+-bind Backspace+Dot1+Dot2+Dot3 KEY_FUNCTION+11
+-
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-common.kti mytables/brl-eu-common.kti
+--- jni/brlttywrapper/brltty/Tables/brl-eu-common.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-eu-common.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -23,4 +23,8 @@
+ bind RoutingKey1 ROUTE
+ bind RoutingKey2 DESCCHAR
+ 
++assign Space Space
++assign Dot7 Dot7
++assign Dot8 Dot8
++include brl-android-chords.kti
+ include brl-eu-braille.kti
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti mytables/brl-eu-joysticks.kti
+--- jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-eu-joysticks.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -18,12 +18,18 @@
+ 
+ note The joysticks are the small, round, five-way (left, right, up, down, press) controls to the left and right of the cursor routing keys.
+ 
+-bind RightJoystickPress HOME
+-bind RightJoystickLeft FWINLT
+-bind RightJoystickRight FWINRT
++# Activate currently focused item.
++bind RightJoystickPress ROUTE+255
++bind RightJoystickLeft CHRLT
++bind RightJoystickRight CHRRT
+ bind RightJoystickUp LNUP
+ bind RightJoystickDown LNDN
+ 
++# Scroll backwards
++bind Space+RightJoystickUp WINUP
++# Scroll forwards
++bind Space+RightJoystickDown WINDN
++
+ bind LeftJoystickLeft PRPROMPT
+ bind LeftJoystickRight NXPROMPT
+ bind LeftJoystickUp TOP_LEFT
+@@ -41,7 +47,6 @@
+ bind LeftJoystickLeft+RightJoystickLeft SAY_SOFTER
+ bind LeftJoystickLeft+RightJoystickRight SAY_LOUDER
+ 
+-bind LeftJoystickRight+RightJoystickUp LEARN
+ bind LeftJoystickRight+RightJoystickDown HELP
+ 
+ 
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-common.kti mytables/brl-fs-common.kti
+--- jni/brlttywrapper/brltty/Tables/brl-fs-common.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-fs-common.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -35,8 +35,10 @@
+ bind !LeftWheelUp LNUP
+ bind !LeftWheelDown LNDN
+ 
+-bind !RightWheelUp FWINLT
+-bind !RightWheelDown FWINRT
++# Previous item
++bind !RightWheelUp CHRLT
++# Next item
++bind !RightWheelDown CHRRT
+ 
+ bind LeftWheelPress+!LeftWheelUp PRDIFLN
+ bind LeftWheelPress+!LeftWheelDown NXDIFLN
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-focus_basic.kti mytables/brl-fs-focus_basic.kti
+--- jni/brlttywrapper/brltty/Tables/brl-fs-focus_basic.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-fs-focus_basic.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -18,22 +18,6 @@
+ 
+ # This key subtable is for all FreedomScientific Focus displays.
+ 
+-bind Space+Dot2+Dot4 SKPIDLNS
+-bind Space+Dot1+Dot2 SKPBLNKWINS
+-
+-bind Space+Dot1 DISPMD
+-bind Space+Dot1+Dot3+Dot6 ATTRVIS
+-
+-bind Space+Dot2+Dot3+Dot4+Dot5 CSRTRK
+-bind Space+Dot1+Dot4 CSRVIS
+-
+-bind Space+Dot2+Dot3+Dot5 SIXDOTS+on
+-bind Space+Dot2+Dot3+Dot6 SIXDOTS+off
+-bind Space+Dot1+Dot2+Dot3+Dot5 AUTOREPEAT
+-
+-bind Space+Dot1+Dot2+Dot5 HELP
+-bind Space+Dot1+Dot2+Dot4 FREEZE
+-
+ bind Space+Dot1+Dot2+Dot3 LEARN
+ bind Space+LeftShift+Dot1+Dot2+Dot3+Dot4 PREFLOAD
+ 
+@@ -71,10 +55,7 @@
+ bind Space+Dot2 KEY_HOME
+ bind Space+Dot3 KEY_END
+ bind Space+Dot3+Dot5 KEY_INSERT
+-bind Space+Dot2+Dot5+Dot6 KEY_DELETE
+-bind Space+Dot2+Dot6 KEY_ESCAPE
+ 
+-bind Space+!RoutingKey KEY_FUNCTION
+ bind RightShift+!RoutingKey SWITCHVT
+ 
+ bind !NavrowKey DESCCHAR
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-focus_small.ktb mytables/brl-fs-focus_small.ktb
+--- jni/brlttywrapper/brltty/Tables/brl-fs-focus_small.ktb	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-fs-focus_small.ktb	2012-07-02 15:48:18.000000000 -0700
+@@ -18,5 +18,9 @@
+ 
+ title FreedomScientific Focus Blue
+ 
++assign Space Space
++assign Dot7 Dot7
++assign Dot8 Dot8
++include brl-android-chords.kti
+ include brl-fs-focus_basic.kti
+ include brl-fs-rockers.kti
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-rockers.kti mytables/brl-fs-rockers.kti
+--- jni/brlttywrapper/brltty/Tables/brl-fs-rockers.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-fs-rockers.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -21,5 +21,7 @@
+ bind LeftRockerUp LNUP
+ bind LeftRockerDown LNDN
+ 
+-bind RightRockerUp KEY_CURSOR_UP
+-bind RightRockerDown KEY_CURSOR_DOWN
++# Previous item
++bind RightRockerUp CHRLT
++# Next item
++bind RightRockerDown CHRRT
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb mytables/brl-hw-all.ktb
+--- jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-hw-all.ktb	2012-07-02 15:48:18.000000000 -0700
+@@ -52,19 +52,18 @@
+ map Thumb2 META
+ map Thumb3 CONTROL
+ 
+-bind Space+Dot1 KEY_CURSOR_LEFT
+-bind Space+Dot4 KEY_CURSOR_RIGHT
+-bind Space+Dot2 KEY_CURSOR_UP
+-bind Space+Dot5 KEY_CURSOR_DOWN
+-bind Space+Dot3 KEY_PAGE_UP
+-bind Space+Dot6 KEY_PAGE_DOWN
+ bind Space+Dot7 KEY_BACKSPACE
+ bind Space+Dot8 KEY_ENTER
+ bind Space+Dot1+Dot4+Dot5 KEY_DELETE
+-bind Space+Dot2+Dot4 KEY_INSERT
+-bind Space+Dot2+Dot3+Dot4+Dot5 KEY_TAB
+-bind Space+RoutingKey KEY_FUNCTION
+-
++# Scroll backward
++bind Space+Thumb2 WINUP
++# Scroll forward
++bind Space+Thumb3 WINDN
++
++assign Space Space
++assign Dot7 Dot7
++assign Dot8 Dot8
++include brl-android-chords.kti
+ include brl-bm-display6.kti
+ include brl-bm-routing6.kti
+ 
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-bar.kti mytables/brl-pm-bar.kti
+--- jni/brlttywrapper/brltty/Tables/brl-pm-bar.kti	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-pm-bar.kti	2012-07-02 15:48:18.000000000 -0700
+@@ -58,3 +58,15 @@
+ include brl-pm-keys.kti
+ ifkey RoutingKey2 bind !RoutingKey2 DESCCHAR
+ ifkey StatusKey2 bind !StatusKey2 GOTOLINE
++
++# Scroll backwards
++ifkey Space bind Space+BarUp1 WINUP
++# Scroll forwards
++ifkey Space bind Space+BarDown1 WINDN
++
++hide on
++ifkey LeftSpace bind LeftSpace+BarUp1 WINUP
++ifkey LeftSpace bind LeftSpace+BarDown1 WINDN
++ifkey RightSpace bind RightSpace+BarUp1 WINUP
++ifkey RightSpace bind RightSpace+BarDown1 WINDN
++hide off
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-trio.ktb mytables/brl-pm-trio.ktb
+--- jni/brlttywrapper/brltty/Tables/brl-pm-trio.ktb	2012-06-20 15:42:57.527223979 -0700
++++ mytables/brl-pm-trio.ktb	2012-07-02 15:48:18.000000000 -0700
+@@ -18,6 +18,21 @@
+ 
+ title Papenmeier BrailleX Trio
+ 
++assign Dot7 Dot7
++assign Dot8 Dot8
++hide on
++assign Space LeftSpace
++include brl-android-chords.kti
++assign Space RightSpace
++include brl-android-chords.kti
++# The Space key is not used when producing input from the device.
++# We use it here to avoid poluting the user-visible keyboard bindings
++# with LeftSpace and RightSpace.
++hide off
++assign Space Space
++include brl-android-chords.kti
++
++
+ assign statusKeys 0
+ include brl-pm-bar.kti
+ include brl-pm-keyboard.kti
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-vo-bp.ktb mytables/brl-vo-bp.ktb
+--- jni/brlttywrapper/brltty/Tables/brl-vo-bp.ktb	2012-06-20 15:42:57.527223979 -0700
++++ mytables/brl-vo-bp.ktb	2012-07-02 15:48:18.000000000 -0700
+@@ -32,14 +32,10 @@
+ bind ScrollLeft+ScrollRight HOME
+ bind ScrollLeft FWINLT
+ bind ScrollRight FWINRT
+-bind ScrollLeft+Space LNUP
+-bind ScrollRight+Space LNDN
+ bind ScrollLeft+Shift FWINLTSKIP
+ bind ScrollRight+Control FWINRTSKIP
+ 
+ bind ScrollLeft+JoystickEnter SETLEFT
+-bind ScrollLeft+JoystickLeft CHRLT
+-bind ScrollLeft+JoystickRight CHRRT
+ bind ScrollLeft+JoystickUp PRDIFLN
+ bind ScrollLeft+JoystickDown NXDIFLN
+ 
+@@ -81,7 +77,6 @@
+ bind Dot2+Dot4+JoystickEnter SKPIDLNS
+ bind Dot2+Dot4+JoystickLeft SKPIDLNS+off
+ bind Dot2+Dot4+JoystickRight SKPIDLNS+on
+-bind Dot1+Dot2+Dot3+JoystickEnter LEARN
+ bind Dot1+Dot2+Dot3+Dot4+JoystickEnter PREFMENU
+ bind Dot1+Dot2+Dot3+Dot4+JoystickLeft PREFLOAD
+ bind Dot1+Dot2+Dot3+Dot4+JoystickRight PREFSAVE
+@@ -108,79 +103,26 @@
+ map Control DOT8
+ map Space SPACE
+ 
++assign Space Space
++assign Dot7 Shift
++assign Dot8 Control
++include brl-android-chords.kti
++
+ bind Space+Shift KEY_BACKSPACE
+ bind Space+Control KEY_ENTER
+-bind Space+Shift+Control KEY_ESCAPE
+ 
+-bind Space+Dot1 KEY_CURSOR_LEFT
+-bind Space+Dot4 KEY_CURSOR_RIGHT
+-bind Space+Dot2 KEY_CURSOR_UP
+-bind Space+Dot5 KEY_CURSOR_DOWN
+-bind Space+Dot3 KEY_PAGE_UP
+-bind Space+Dot6 KEY_PAGE_DOWN
+-
+-bind Space+Dot1+Dot2 KEY_BACKSPACE
+-bind Space+Dot1+Dot4+Dot5 KEY_DELETE
+-bind Space+Dot1+Dot5 KEY_END
+-bind Space+Dot1+Dot2+Dot5 KEY_HOME
+-bind Space+Dot2+Dot4 KEY_INSERT
+-bind Space+Dot1+Dot2+Dot3+Dot5 KEY_ENTER
+-bind Space+Dot2+Dot3+Dot4+Dot5 KEY_TAB
+-bind Space+Dot1+Dot3+Dot4+Dot6 KEY_ESCAPE
+ 
+-bind JoystickEnter ROUTE
++# Activate the currently focused item
++bind JoystickEnter ROUTE+255
+ bind JoystickLeft KEY_CURSOR_LEFT
+ bind JoystickRight KEY_CURSOR_RIGHT
+ bind JoystickUp KEY_CURSOR_UP
+ bind JoystickDown KEY_CURSOR_DOWN
+ 
+-bind Space+JoystickEnter KEY_INSERT
+-bind Space+JoystickLeft KEY_HOME
+-bind Space+JoystickRight KEY_END
+-bind Space+JoystickUp KEY_PAGE_UP
+-bind Space+JoystickDown KEY_PAGE_DOWN
+-
+-bind Space+Shift+Dot1 KEY_FUNCTION+0
+-bind Space+Shift+Dot1+Dot2 KEY_FUNCTION+1
+-bind Space+Shift+Dot1+Dot4 KEY_FUNCTION+2
+-bind Space+Shift+Dot1+Dot4+Dot5 KEY_FUNCTION+3
+-bind Space+Shift+Dot1+Dot5 KEY_FUNCTION+4
+-bind Space+Shift+Dot1+Dot2+Dot4 KEY_FUNCTION+5
+-bind Space+Shift+Dot1+Dot2+Dot4+Dot5 KEY_FUNCTION+6
+-bind Space+Shift+Dot1+Dot2+Dot5 KEY_FUNCTION+7
+-bind Space+Shift+Dot2+Dot4 KEY_FUNCTION+8
+-bind Space+Shift+Dot2+Dot4+Dot5 KEY_FUNCTION+9
+-bind Space+Shift+Dot1+Dot3 KEY_FUNCTION+10
+-bind Space+Shift+Dot1+Dot2+Dot3 KEY_FUNCTION+11
+-bind Space+Shift+Dot1+Dot3+Dot4 KEY_FUNCTION+12
+-bind Space+Shift+Dot1+Dot3+Dot4+Dot5 KEY_FUNCTION+13
+-bind Space+Shift+Dot1+Dot3+Dot5 KEY_FUNCTION+14
+-bind Space+Shift+Dot1+Dot2+Dot3+Dot4 KEY_FUNCTION+15
+-bind Space+Shift+Dot1+Dot2+Dot3+Dot4+Dot5 KEY_FUNCTION+16
+-bind Space+Shift+Dot1+Dot2+Dot3+Dot5 KEY_FUNCTION+17
+-bind Space+Shift+Dot2+Dot3+Dot4 KEY_FUNCTION+18
+-bind Space+Shift+Dot2+Dot3+Dot4+Dot5 KEY_FUNCTION+19
+-
+-bind Space+Control+Dot1 SWITCHVT+0
+-bind Space+Control+Dot1+Dot2 SWITCHVT+1
+-bind Space+Control+Dot1+Dot4 SWITCHVT+2
+-bind Space+Control+Dot1+Dot4+Dot5 SWITCHVT+3
+-bind Space+Control+Dot1+Dot5 SWITCHVT+4
+-bind Space+Control+Dot1+Dot2+Dot4 SWITCHVT+5
+-bind Space+Control+Dot1+Dot2+Dot4+Dot5 SWITCHVT+6
+-bind Space+Control+Dot1+Dot2+Dot5 SWITCHVT+7
+-bind Space+Control+Dot2+Dot4 SWITCHVT+8
+-bind Space+Control+Dot2+Dot4+Dot5 SWITCHVT+9
+-bind Space+Control+Dot1+Dot3 SWITCHVT+10
+-bind Space+Control+Dot1+Dot2+Dot3 SWITCHVT+11
+-bind Space+Control+Dot1+Dot3+Dot4 SWITCHVT+12
+-bind Space+Control+Dot1+Dot3+Dot4+Dot5 SWITCHVT+13
+-bind Space+Control+Dot1+Dot3+Dot5 SWITCHVT+14
+-bind Space+Control+Dot1+Dot2+Dot3+Dot4 SWITCHVT+15
+-bind Space+Control+Dot1+Dot2+Dot3+Dot4+Dot5 SWITCHVT+16
+-bind Space+Control+Dot1+Dot2+Dot3+Dot5 SWITCHVT+17
+-bind Space+Control+Dot2+Dot3+Dot4 SWITCHVT+18
+-bind Space+Control+Dot2+Dot3+Dot4+Dot5 SWITCHVT+19
++# Scroll backward
++bind Space+JoystickUp WINUP
++# Scroll backward.
++bind Space+JoystickDown WINDN
+ 
+ 
+ #################

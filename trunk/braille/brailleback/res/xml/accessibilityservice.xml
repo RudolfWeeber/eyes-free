@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+  android:accessibilityEventTypes="typeAllMask"
+  android:accessibilityFeedbackType="feedbackGeneric"
+  android:notificationTimeout="0"
+  android:accessibilityFlags="flagDefault"
+  android:description="@string/service_description"
+  android:canRetrieveWindowContent="true" />
+<!-- Hide settings activity for now.
+  android:settingsActivity="com.googlecode.eyesfree.brailleback.BrailleBackPreferencesActivity"
+-->

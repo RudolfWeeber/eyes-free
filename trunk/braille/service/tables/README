@@ -1,0 +1,62 @@
+Braille Key Mapping Tables And Android
+======================================
+
+The keyboard mapping for the supported braille displays are extracted from the
+brltty source code, modified according to a patch in this directory and then
+archived in a zip file.  This zip archive is included as a raw resource in the
+Android package and extracted at run-time by the Braille Display service.
+
+
+Generating The Tables
+---------------------
+
+The zip file can be generated and put in the correct location by the
+mkkeytables.sh shell script.  Just run the script like so:
+
+$ tables/mkkeytables.sh
+
+...
+Keyboard table archive successfully created.
+
+
+Updating The Tables
+-------------------
+
+To update the keyboard mappings, you need to do the following:
+
+* Generate the zip archive as described above if it doesn't already
+  exist.
+
+* Unzip the archive into a temporary directory:
+
+$ mkdir mytables
+$ (cd mytables && unzip ../res/raw/keytables.zip)
+
+* Update the tables as required.
+
+* Update the zip file in the resource directory:
+
+$ zip -j -r res/raw/keytables.zip mytables
+
+To generate the key table patch from a modified directory as per above:
+
+* Get rid of any backup files so they don't get included in the patch.
+
+* Generate the diff:
+
+$ diff -Pu jni/brlttywrapper/brltty/Tables mytables \
+  |egrep -v "^Only in " \
+  > tables/keytables.diff
+
+* If you have added files from the brltty sources, make sure to add them to
+  tablefiles variable in the mkkeytables.sh script.
+
+
+BRLTTY To Android Key Mappings
+------------------------------
+
+The set of commands on Android is slightly different form what is available in
+the BRLTTY built-in command set.  Many commands, however, have a reasonable
+mapping, which allows most of the mapping tables to be reused on Android.  For
+the definitive list of mappings, see the file
+jni/brlttywrapper/BrlttyWrapper.c.  Look for the function initCommandTables.

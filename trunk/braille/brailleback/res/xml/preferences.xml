@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="@string/pref_category_device_key"
+        android:title="@string/pref_category_device_title" >
+        <Preference
+            android:key="@string/pref_key_bindings_key"
+            android:title="@string/pref_key_bindings_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
