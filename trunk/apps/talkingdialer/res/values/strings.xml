@@ -8,6 +8,11 @@
     <string name="phonebook">Phone book</string>
     <!--
       Source: Activity title.
+      Description: Title for the video contacts list for browsing video call.
+    -->
+    <string name="video_contacts">Video Contacts</string>
+    <!--
+      Source: Activity title.
       Description: Title for the phone dialer, for dialing numbers.
     -->
     <string name="dialing_mode">Dialing mode</string>
@@ -38,6 +43,11 @@
     <string name="you_are_about_to_dial">You are about to dial <xliff:g id="phone_number">%s</xliff:g>.</string>
     <!--
       Source: Spoken feedback.
+      Description: Confirmation that the user is about to video dial a gchat contact.
+    -->
+    <string name="you_are_about_to_video_call">You are about to video call <xliff:g id="email_address">%s</xliff:g>.</string>
+    <!--
+      Source: Spoken feedback.
       Description: Confirmation that the user has selected a contact.
     -->
     <string name="you_have_selected">You have selected <xliff:g id="contact_name">%s</xliff:g>.</string>
@@ -56,6 +66,51 @@
       Description: A work phone number.
     -->
     <string name="work">work</string>
+     <!--
+      Source: Label for phone number location.
+      Description: A default phone number.
+    -->
+    <string name="phone">phone</string>
+    <!--
+      Source: Label for when talk is disabled
+      Description: Warn users when talk is disabled, and video chat will fail..
+    -->
+    <string name="talk_disabled">Google Talk is Not Running. Please Stay Signed Into Talk to Make Video Calls.</string>
+    <!--
+      Source: Label for video chat availability.
+      Description: A video chat capable contact.
+    -->
+    <string name="video_chat">Video Chat Capable</string>
+    <!--
+      Source: Label for offline chat status.
+      Description: A video chat capable contact who is offline.
+    -->
+    <string name="offline">Currently Offline</string>
+    <!--
+      Source: Label for available chat status.
+      Description: A video chat capable contact who is available.
+    -->
+    <string name="available">Currently Available</string>
+    <!--
+      Source: Label for idle chat status.
+      Description: A video chat capable contact who is idle.
+    -->
+    <string name="idle">Currently Idle</string>
+    <!--
+      Source: Label for away chat status.
+      Description: A video chat capable contact who is away.
+    -->
+    <string name="away">Currently Away</string>
+    <!--
+      Source: Label for busy chat status.
+      Description: A video chat capable contact who is busy.
+    -->
+    <string name="busy">Currently Busy</string>
+    <!--
+      Source: Label for invisible chat status.
+      Description: A video chat capable contact who is invisible.
+    -->
+    <string name="invisible">Currently Invisible</string>
     <!--
       Source: Spoken feedback.
       Description: Spoken when no contacts are found while browsing contacts.

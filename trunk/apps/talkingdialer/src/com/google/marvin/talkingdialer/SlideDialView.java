@@ -30,11 +30,12 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 
 import com.google.marvin.talkingdialer.ShakeDetector.ShakeListener;
+
 import com.googlecode.eyesfree.compat.view.MotionEventCompatUtils;
 
 /**
  * Implements the user interface for doing slide dialing.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen) Created 8-2-2008
  * @author alanv@google.com (Alan Viverette)
  */
@@ -69,6 +70,7 @@ public class SlideDialView extends TextView {
 
     // Command constants
     private static final String DELETE = "delete";
+    private static final String DIAL = "dial";
 
     // Handler constants
     private static final int MSG_SPEAK_DIGIT = 1;
@@ -85,7 +87,7 @@ public class SlideDialView extends TextView {
     private static final double RIGHT_WRAP = -Math.PI;
 
     private final FeedbackUtil mFeedback;
-    private final SlideDial mParent;
+    private final TalkingDialer mParent;
     private final ShakeDetector mShakeDetector;
     private final SlideHandler mHandler;
 
@@ -102,13 +104,16 @@ public class SlideDialView extends TextView {
     private String mDialedNumber;
 
     /** Currently entered digit or command. */
-    // private String mCurrentValue;
     private String mPreviousValue;
 
     /** Whether the dialed number has been confirmed. */
     private boolean mNumberConfirmed;
 
-    public SlideDialView(SlideDial parent) {
+    /** Maximum tolerance for double tap (before J release). */
+    private long mDoubleTapWindow = 700;
+    private long mLastTapTime = 0;
+
+    public SlideDialView(TalkingDialer parent) {
         super(parent);
 
         mParent = parent;
@@ -117,7 +122,11 @@ public class SlideDialView extends TextView {
         mPreviousValue = "";
         mNumberConfirmed = false;
         mHandler = new SlideHandler(parent.getMainLooper());
+        
         mFeedback = new FeedbackUtil(parent);
+        mFeedback.load(SOUND_RESOURCE_FOCUSED);
+        mFeedback.load(SOUND_RESOURCE_DELETED);
+        mFeedback.load(SOUND_RESOURCE_TYPED);
 
         mShakeDetector = new ShakeDetector(parent, new ShakeListener() {
                 @Override
@@ -126,10 +135,10 @@ public class SlideDialView extends TextView {
             }
         });
 
-        mEdgeTolerance = (int) (EDGE_TOLERANCE_INCHES
-                * getResources().getDisplayMetrics().densityDpi);
-        mRadiusTolerance = (int) (RADIUS_TOLERANCE_INCHES
-                * getResources().getDisplayMetrics().densityDpi);
+        mEdgeTolerance = (int) (EDGE_TOLERANCE_INCHES * getResources()
+                .getDisplayMetrics().densityDpi);
+        mRadiusTolerance = (int) (RADIUS_TOLERANCE_INCHES * getResources()
+                .getDisplayMetrics().densityDpi);
 
         setClickable(true);
         setFocusable(true);
@@ -143,38 +152,41 @@ public class SlideDialView extends TextView {
         mShakeDetector.shutdown();
     }
 
+    @Override
     public boolean onHoverEvent(MotionEvent event) {
         return onTouchEvent(event);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Inputting a new number invalidates the confirmation
-        mNumberConfirmed = false;
+
+        boolean touchExploring = mParent.isTouchExplorationEnabled();
 
         final int action = event.getAction();
         final float x = event.getX();
         final float y = event.getY();
         String digit = "";
 
+        boolean motionUpDown = (action == MotionEvent.ACTION_UP
+                || action == MotionEvent.ACTION_DOWN);
+
         switch (action) {
             case MotionEventCompatUtils.ACTION_HOVER_EXIT:
             case MotionEvent.ACTION_UP:
                 if (mDownEvent != null) {
-                    mDownEvent.recycle();
                     mDownEvent = null;
                 }
-
-                digit = evalMotion(x, y);
 
                 // Do some correction if the user lifts UP on deadspace
                 if (digit.length() == 0) {
                     digit = mPreviousValue;
                 }
 
-                onDigitTyped(digit, false);
+                if (!digit.equals(DIAL)) {
+                    onDigitTyped(digit, false);
+                    mPreviousValue = "";
+                }
 
-                mPreviousValue = "";
                 break;
 
             case MotionEventCompatUtils.ACTION_HOVER_ENTER:
@@ -182,31 +194,46 @@ public class SlideDialView extends TextView {
                 mDownEvent = MotionEvent.obtain(event);
         //$FALL-THROUGH$
             case MotionEventCompatUtils.ACTION_HOVER_MOVE:
-            case MotionEvent.ACTION_MOVE: {
-            digit = evalMotion(x, y);
+            case MotionEvent.ACTION_MOVE:
 
-            // Do nothing since we want a deadzone here;
-            // restore the state to the previous value.
-            if (digit.length() == 0) {
-                digit = mPreviousValue;
+                digit = evalMotion(x, y, action, touchExploring);
+
+                if (digit.equals(DIAL)) {
+
+                    mNumberConfirmed = (mPreviousValue == DIAL);
+
+                    mPreviousValue = DIAL;
+
+                    callCurrentNumber();
+
+                    return true;
+                }
+
+                // Do nothing since we want a deadzone here;
+                // restore the state to the previous value.
+                if (digit.length() == 0) {
+                    digit = mPreviousValue;
+                    break;
+                }
+
+                if (digit != mPreviousValue) {
+                    onDigitFocused(digit);
+                }
+
+                mPreviousValue = digit;
                 break;
-            }
 
-            if (digit != mPreviousValue) {
-                onDigitFocused(digit);
-            }
+        }
 
-            mPreviousValue = digit;
-            break;
-        }
-        }
+        // Inputting a new number invalidates the confirmation
+        mNumberConfirmed = false;
 
         return true;
     }
 
     /**
      * Called when a digit is focused. Handles haptic and auditory feedback.
-     * 
+     *
      * @param digit The digit that was focused.
      */
     private void onDigitFocused(String digit) {
@@ -220,7 +247,7 @@ public class SlideDialView extends TextView {
 
     /**
      * Called when a digit is typed. Handles haptic and auditory feedback.
-     * 
+     *
      * @param digit The digit that was typed.
      */
     private void onDigitTyped(String digit, boolean announce) {
@@ -245,16 +272,41 @@ public class SlideDialView extends TextView {
         invalidate();
     }
 
-    public String evalMotion(double x, double y) {
+    public String evalMotion(double x, double y, int action,
+            boolean touchExploring) {
         if (mDownEvent == null) {
             return "";
         }
 
-        final float downX = mDownEvent.getX();
-        final float downY = mDownEvent.getY();
+        final double deltaX = mDownEvent.getX() - x;
+        final double deltaY = mDownEvent.getY() - y;
+
+        boolean isTap = (action == MotionEvent.ACTION_DOWN);
+
+        // fail-safe for pre-ICS
+        if (Math.abs(deltaX) < 3.0 && Math.abs(deltaY) < 3.0
+                && action == MotionEvent.ACTION_MOVE) {
+            return "";
+        }
+
+        if (isTap) {
+            if (touchExploring) {
+                if (deltaX == 0 && deltaY == 0) {
+                    return DIAL;
+                }
+            } else {
+                if (mLastTapTime + mDoubleTapWindow > System
+                        .currentTimeMillis()) {
+                    return DIAL;
+                } else {
+                    mLastTapTime = System.currentTimeMillis();
+                    return "";
+                }
+            }
+        }
 
         boolean movedFar = false;
-        final double r = Math.sqrt(((downX - x) * (downX - x)) + ((downY - y) * (downY - y)));
+        final double r = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
         if (r < mRadiusTolerance) {
             return "5";
@@ -264,11 +316,11 @@ public class SlideDialView extends TextView {
             movedFar = true;
         }
 
-        if ((x < mEdgeTolerance) || (x > (getWidth() - mEdgeTolerance)) || (y < mEdgeTolerance)
-                || (y > (getHeight() - mEdgeTolerance))) {
+        if ((x < mEdgeTolerance) || (x > (getWidth() - mEdgeTolerance))
+                || (y < mEdgeTolerance) || (y > (getHeight() - mEdgeTolerance))) {
         }
 
-        final double theta = Math.atan2(downY - y, downX - x);
+        final double theta = Math.atan2(deltaY, deltaX);
 
         if (Math.abs(theta - LEFT) < THETA_TOLERANCE) {
             return movedFar ? DELETE : "4";
@@ -491,22 +543,25 @@ public class SlideDialView extends TextView {
 
     public void callCurrentNumber() {
         if (!mNumberConfirmed) {
-            if (mDialedNumber.length() == 0) {
-                mParent.switchToContactsView();
-            } else if (mDialedNumber.length() < 3) {
+            if (mDialedNumber.length() < 3) {
                 // A number is considered invalid if less than 3 digits in
                 // length.
-                final String text = getContext().getString(R.string.invalid_number);
+                final String text = getContext().getString(
+                        R.string.invalid_number);
                 speak(text, TextToSpeech.QUEUE_FLUSH, 100);
+                mNumberConfirmed = false;
+                mPreviousValue = "";
             } else {
                 final StringBuilder builder = new StringBuilder();
 
                 for (int i = 0; i < mDialedNumber.length(); i++) {
-                    builder.append(adjustForSpeech("" + mDialedNumber.charAt(i)) + " ");
+                    builder.append(adjustForSpeech("" + mDialedNumber.charAt(i))
+                            + " ");
                 }
                 final String text;
-                if (mParent.contactsPickerMode) {
-                    text = getContext().getString(R.string.you_have_selected, builder.toString());
+                if (mParent.mIntentMode == TalkingDialer.SELECT_PHONE) {
+                    text = getContext().getString(R.string.you_have_selected,
+                            builder.toString());
                 } else {
                     text = getContext().getString(
                             R.string.you_are_about_to_dial, builder.toString());
@@ -515,7 +570,7 @@ public class SlideDialView extends TextView {
                 mNumberConfirmed = true;
             }
         } else {
-            mParent.returnResults(mDialedNumber);
+            mParent.returnResults(mDialedNumber, null, false);
         }
     }
 
@@ -574,9 +629,11 @@ public class SlideDialView extends TextView {
             return true;
         } else if (Character.isDigit(keyLabel)) {
             String digit = null;
-            if ((keyLabel == '3') && (event.isAltPressed() || event.isShiftPressed())) {
+            if ((keyLabel == '3')
+                    && (event.isAltPressed() || event.isShiftPressed())) {
                 digit = "#";
-            } else if ((keyLabel == '8') && (event.isAltPressed() || event.isShiftPressed())) {
+            } else if ((keyLabel == '8')
+                    && (event.isAltPressed() || event.isShiftPressed())) {
                 digit = "*";
             } else {
                 digit = "" + keyLabel;
@@ -587,7 +644,7 @@ public class SlideDialView extends TextView {
 
         switch (keyCode) {
             case KeyEvent.KEYCODE_MENU:
-                mParent.switchToContactsView();
+                mParent.switchToContactsView(false);
                 return true;
             case KeyEvent.KEYCODE_SEARCH:
             case KeyEvent.KEYCODE_CALL:
@@ -604,6 +661,9 @@ public class SlideDialView extends TextView {
     }
 
     private void speakDigitDelayed(String digit, int queueMode, int pitch) {
+        if (digit.equals(DIAL)) {
+            return;
+        }
         mHandler.removeMessages(MSG_SPEAK_DIGIT);
 
         final Message msg = mHandler.obtainMessage(MSG_SPEAK_DIGIT);
@@ -615,6 +675,9 @@ public class SlideDialView extends TextView {
     }
 
     private void speakDigit(String digit, int queueMode, int pitch) {
+        if (digit.equals(DIAL)) {
+            return;
+        }
         mHandler.removeMessages(MSG_SPEAK_DIGIT);
         final String text = adjustForSpeech(digit);
         speak(text, queueMode, pitch);
@@ -669,12 +732,14 @@ public class SlideDialView extends TextView {
         if (mDialedNumber.length() == 0) {
             text = getContext().getString(R.string.nothing_to_delete);
         } else {
-            final String substr = mDialedNumber.substring(mDialedNumber.length() - 1);
+            final String substr = mDialedNumber.substring(mDialedNumber
+                    .length() - 1);
             final String deletedNum = adjustForSpeech(substr);
 
             text = getContext().getString(R.string.deleted, deletedNum);
 
-            mDialedNumber = mDialedNumber.substring(0, mDialedNumber.length() - 1);
+            mDialedNumber = mDialedNumber.substring(0,
+                    mDialedNumber.length() - 1);
         }
 
         speak(text, TextToSpeech.QUEUE_FLUSH, 100);

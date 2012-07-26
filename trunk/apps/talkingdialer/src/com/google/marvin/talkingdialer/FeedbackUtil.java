@@ -59,6 +59,17 @@ public class FeedbackUtil {
     }
 
     /**
+     * Loads a resource ahead of time
+     * @param resId
+     * @return soundId
+     */
+    public Integer load(int resId) {
+        Integer soundId = mSoundPool.load(mContext, resId, 1);
+        mSoundMap.put(resId, soundId);
+        return soundId;
+    }
+    
+    /**
      * Plays a sound file identified by the given resource id.
      * 
      * @param resId The resource id of the sound file.
@@ -71,8 +82,7 @@ public class FeedbackUtil {
         Integer soundId = mSoundMap.get(resId);
 
         if (soundId == null) {
-            soundId = mSoundPool.load(mContext, resId, 1);
-            mSoundMap.put(resId, soundId);
+            soundId = load(resId);
         }
 
         mSoundPool.play(soundId, 1.0f, 1.0f, 1, 0, 1.0f);
