@@ -243,7 +243,9 @@ public class MarvinShell extends Activity {
             proximitySensor.resume();
         }
         isTalkActive = false;
-        new TalkCheckTask().execute();
+        if (Build.VERSION.SDK_INT > 10) {
+            new TalkCheckTask().execute();
+        }
     }
 
     @Override
