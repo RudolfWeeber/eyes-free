@@ -24,7 +24,7 @@ import java.util.Iterator;
 /**
  * A class for representing menus as a HashMap mapping gesture codes to
  * MenuItems.
- *
+ * 
  * @author credo@google.com (Tim Credo)
  */
 public final class Menu extends HashMap<Integer, MenuItem> {

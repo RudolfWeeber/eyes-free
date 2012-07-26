@@ -22,10 +22,13 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -46,7 +49,7 @@ import java.util.Collections;
 /**
  * Allows the user to select the application they wish to start by moving
  * through the list of applications.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 public class AppChooserView extends TextView {
@@ -64,9 +67,9 @@ public class AppChooserView extends TextView {
     private static void initCompatibility() {
         try {
             MotionEvent_getX = MotionEvent.class.getMethod("getX", new Class[] {
-            Integer.TYPE });
+                    Integer.TYPE });
             MotionEvent_getY = MotionEvent.class.getMethod("getY", new Class[] {
-            Integer.TYPE });
+                    Integer.TYPE });
             AccessibilityManager_isTouchExplorationEnabled = AccessibilityManager.class.getMethod(
                     "isTouchExplorationEnabled");
             /* success, this is a newer device */
@@ -128,7 +131,8 @@ public class AppChooserView extends TextView {
     // END OF WORKAROUND FOR DONUT COMPATIBILITY
 
     private static final char alphabet[] = {
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+            'r', 's',
             't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
     private static final int AE = 0;
@@ -177,8 +181,6 @@ public class AppChooserView extends TextView {
 
     private boolean screenIsBeingTouched;
 
-    private boolean gestureHadSecondPoint;
-
     private int currentWheel;
 
     private String currentCharacter;
@@ -203,6 +205,8 @@ public class AppChooserView extends TextView {
 
     private long doubleTapWindow = 700;
 
+    private double screenWidth;
+
     private AccessibilityManager accessibilityManager;
 
     private FeedbackController feedbackController;
@@ -226,6 +230,15 @@ public class AppChooserView extends TextView {
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
+
+        Display display = parent.getWindowManager().getDefaultDisplay();
+        if (Build.VERSION.SDK_INT > 12) {
+            Point size = new Point();
+            display.getSize(size);
+            screenWidth = size.x;
+        } else {
+            screenWidth = display.getWidth();
+        }
     }
 
     public void setAppList(ArrayList<AppInfo> installedApps) {
@@ -237,7 +250,6 @@ public class AppChooserView extends TextView {
         if (trackballEnabled == false) {
             return true;
         }
-        // Log.i("Motion", Float.toString(event.getY()));
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             startActionHandler();
             return true;
@@ -476,6 +488,10 @@ public class AppChooserView extends TextView {
         currentCharacter = "";
     }
 
+    private boolean inScrollZone(double x) {
+        return x > (screenWidth - 100) || x < 100;
+    }
+
     @Override
     public boolean onHoverEvent(MotionEvent event) {
         return onTouchEvent(event);
@@ -483,6 +499,7 @@ public class AppChooserView extends TextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         boolean touchExploring = isTouchExplorationEnabled(accessibilityManager);
 
         int action = event.getAction();
@@ -494,13 +511,36 @@ public class AppChooserView extends TextView {
             secondFingerId = 0;
         }
 
+        if ((!touchExploring && action == MotionEvent.ACTION_UP)
+                ||
+                        (touchExploring && action == MotionEventCompatUtils.ACTION_HOVER_EXIT)) {
+
+            if (inScrollZone(downX)) {
+                if (inScrollZone(x)) {
+                    if (downY - y < -100) {
+                        nextApp();
+                    } else if (downY - y > 100) {
+                        prevApp();
+                    } else {
+                        // TAP : navigate up or down depending on side
+                        if (x < 100) {
+                            prevApp();
+                        } else {
+                            nextApp();
+                        }
+                    }
+                }
+                screenIsBeingTouched = false;
+                return true;
+            }
+        }
+
         // Treat the screen as a dpad
         if ((action == 261) || (touchExploring && action == MotionEvent.ACTION_DOWN)) {
             // 261 == ACTION_POINTER_2_DOWN - using number for Android 1.6
             // compat
             // Track the starting location of the second touch point.
             inDPadMode = false;
-            gestureHadSecondPoint = true;
             screenIsBeingTouched = false;
             currentWheel = NONE;
             p2DownX = getX(event, secondFingerId);
@@ -513,6 +553,13 @@ public class AppChooserView extends TextView {
             // Second touch point has lifted, so process the gesture.
             float p2DeltaX = getX(event, secondFingerId) - p2DownX;
             float p2DeltaY = getY(event, secondFingerId) - p2DownY;
+
+            // If this is a double-tap generated programmatically,
+            // the delta will always be 0
+            if (p2DeltaX == 0 && p2DeltaY == 0 && touchExploring) {
+                confirmEntry();
+            }
+
             if (Math.abs(p2DeltaX) > Math.abs(p2DeltaY)) {
                 if (p2DeltaX < -200) {
                     backspace();
@@ -532,61 +579,60 @@ public class AppChooserView extends TextView {
             return true;
         } else if ((action == MotionEvent.ACTION_UP)
                 || (action == MotionEventCompatUtils.ACTION_HOVER_EXIT)) {
-            if (gestureHadSecondPoint == false) {
-                if (inDPadMode == false) {
-                    confirmEntry();
-                } else {
-                    inDPadMode = false;
-                }
+            if (inDPadMode == false) {
+                confirmEntry();
             } else {
-                // Full multi-touch gesture completed, so reset the state.
-                gestureHadSecondPoint = false;
+                inDPadMode = false;
             }
             return true;
         } else {
-            if (gestureHadSecondPoint == false) {
-                screenIsBeingTouched = true;
-                lastX = x;
-                lastY = y;
-                int prevVal = currentValue;
-                currentValue = evalMotion(x, y);
-                // Do nothing since we want a deadzone here;
-                // restore the state to the previous value.
-                if (currentValue == -1) {
-                    currentValue = prevVal;
-                    return true;
-                }
-                // There is a wheel that is active
-                if (currentValue != 5) {
-                    if (currentWheel == NONE) {
-                        currentWheel = getWheel(currentValue);
-                    }
-                    currentCharacter = getCharacter(currentWheel, currentValue);
-                } else {
-                    currentCharacter = "";
-                }
-                invalidate();
-                if (prevVal != currentValue) {
-                    if (currentCharacter.equals("")) {
-                        parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
-                    } else {
-                        if (currentCharacter.equals(".")) {
-                            parent.tts.speak(parent.getString(R.string.period), 0, null);
-                        } else if (currentCharacter.equals("!")) {
-                            parent.tts.speak(parent.getString(R.string.exclamation_point), 0, null);
-                        } else if (currentCharacter.equals("?")) {
-                            parent.tts.speak(parent.getString(R.string.question_mark), 0, null);
-                        } else if (currentCharacter.equals(",")) {
-                            parent.tts.speak(parent.getString(R.string.comma), 0, null);
-                        } else if (currentCharacter.equals("<-")) {
-                            parent.tts.speak(parent.getString(R.string.backspace), 0, null);
-                        } else {
-                            parent.tts.speak(currentCharacter, 0, null);
-                        }
-                    }
-                }
-                feedbackController.playVibration(R.array.pattern_app_chooser);
+
+            if (inScrollZone(downX)) {
+                return true;
             }
+
+            screenIsBeingTouched = true;
+            lastX = x;
+            lastY = y;
+            int prevVal = currentValue;
+            currentValue = evalMotion(x, y);
+            // Do nothing since we want a deadzone here;
+            // restore the state to the previous value.
+            if (currentValue == -1) {
+                currentValue = prevVal;
+                return true;
+            }
+            // There is a wheel that is active
+            if (currentValue != 5) {
+                if (currentWheel == NONE) {
+                    currentWheel = getWheel(currentValue);
+                }
+                currentCharacter = getCharacter(currentWheel, currentValue);
+            } else {
+                currentCharacter = "";
+            }
+            invalidate();
+            if (prevVal != currentValue) {
+                if (currentCharacter.equals("")) {
+                    parent.tts.playEarcon(parent.getString(R.string.earcon_tock), 0, null);
+                } else {
+                    if (currentCharacter.equals(".")) {
+                        parent.tts.speak(parent.getString(R.string.period), 0, null);
+                    } else if (currentCharacter.equals("!")) {
+                        parent.tts.speak(parent.getString(R.string.exclamation_point), 0, null);
+                    } else if (currentCharacter.equals("?")) {
+                        parent.tts.speak(parent.getString(R.string.question_mark), 0, null);
+                    } else if (currentCharacter.equals(",")) {
+                        parent.tts.speak(parent.getString(R.string.comma), 0, null);
+                    } else if (currentCharacter.equals("<-")) {
+                        parent.tts.speak(parent.getString(R.string.backspace), 0, null);
+                    } else {
+                        parent.tts.speak(currentCharacter, 0, null);
+                    }
+                }
+            }
+            feedbackController.playVibration(R.array.pattern_app_chooser);
+
         }
         return true;
     }

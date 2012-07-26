@@ -24,7 +24,7 @@ import android.hardware.SensorManager;
 
 /**
  * Compass uses the magnetic compass to track the current heading.
- *
+ * 
  * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
  */
 
@@ -39,7 +39,8 @@ public class Compass {
         sensorManager.registerListener(mListener, compassSensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
-    private static final String[] DIRECTION_NAMES = { "north", "north north east", "north east",
+    private static final String[] DIRECTION_NAMES = {
+    "north", "north north east", "north east",
             "east north east", "east", "east south east", "south east", "south south east", "south",
             "south south west", "south west", "west south west", "west", "west north west",
             "north west", "north north west", "north" };
@@ -54,13 +55,13 @@ public class Compass {
      * Handles the sensor events for changes to readings and accuracy
      */
     private final SensorEventListener mListener = new SensorEventListener() {
-        @Override
+            @Override
         public void onSensorChanged(SensorEvent event) {
             // Values are yaw (heading), pitch, and roll.
             currentHeading = event.values[0];
         }
 
-        @Override
+            @Override
         public void onAccuracyChanged(Sensor arg0, int arg1) {
             sensorOk = (arg1 == SensorManager.SENSOR_STATUS_ACCURACY_HIGH);
         }

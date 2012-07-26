@@ -20,7 +20,7 @@ import android.content.pm.ResolveInfo;
 
 /**
  * Class for encapsulating the information needed to start up an application
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  * @author credo@google.com (Tim Credo)
  */
@@ -64,7 +64,7 @@ public class AppInfo implements Comparable<AppInfo> {
 
     /**
      * Returns a String xml representation of this appInfo element.
-     *
+     * 
      * @return String xml representation of this appInfo object
      */
     public String toXml() {

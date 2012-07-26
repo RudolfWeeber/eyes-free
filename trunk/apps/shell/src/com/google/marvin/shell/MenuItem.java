@@ -19,14 +19,13 @@ package com.google.marvin.shell;
 /**
  * Holds the information for an application in the shell that is needed to start
  * that application from the shell.
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  */
 
 public class MenuItem {
 
     private static String XML_ITEM_OPEN_TAG =
-
 
             "<item gesture='%s' label='%s' action='%s' data='%s'>\n";
 

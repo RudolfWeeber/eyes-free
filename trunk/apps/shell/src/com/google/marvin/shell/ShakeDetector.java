@@ -24,7 +24,7 @@ import android.hardware.SensorManager;
 
 /**
  * Uses the accelerometer to detect when the user is shaking the phone.
- *
+ * 
  * @author clchen@google.com (Charles L. Chen), credo@google.com (Tim Credo)
  */
 public class ShakeDetector {

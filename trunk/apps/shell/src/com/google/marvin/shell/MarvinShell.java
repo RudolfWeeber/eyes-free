@@ -16,12 +16,15 @@
 
 package com.google.marvin.shell;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -40,13 +43,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.StatusUpdates;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -55,7 +60,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.marvin.shell.ProximitySensor.ProximityChangeListener;
-import com.google.marvin.shell.ScrollSidebarView.OnScrollDetectedListener;
 import com.googlecode.eyesfree.utils.FeedbackController;
 import com.googlecode.eyesfree.widget.GestureOverlay;
 import com.googlecode.eyesfree.widget.GestureOverlay.Gesture;
@@ -72,7 +76,7 @@ import java.util.List;
 /**
  * Shell An alternate home screen that is designed to be friendly for eyes-free
  * use
- * 
+ *
  * @author clchen@google.com (Charles L. Chen),
  * @author credo@google.com (Tim Credo)
  */
@@ -101,6 +105,8 @@ public class MarvinShell extends Activity {
     public static final int REQUEST_CODE_PICK_GMAIL_LABEL = 5009;
 
     public static final int REQUEST_CODE_PICK_VIDEO_CHAT = 5010;
+
+    public static final int REQUEST_CODE_TALKING_DIALER_VIDEO = 5011;
 
     public static final int REQUEST_CODE_VOICE_RECO = 777;
 
@@ -147,6 +153,8 @@ public class MarvinShell extends Activity {
      * the Shell has just started up.
      */
     private boolean justStarted;
+
+    private boolean isTalkActive;
 
     private GestureOverlay gestureOverlay;
 
@@ -234,6 +242,8 @@ public class MarvinShell extends Activity {
         if (proximitySensor != null) {
             proximitySensor.resume();
         }
+        isTalkActive = false;
+        new TalkCheckTask().execute();
     }
 
     @Override
@@ -417,17 +427,17 @@ public class MarvinShell extends Activity {
         if (!pm.queryIntentActivities(intentGmailLabel, 0).isEmpty()) {
             shortcutDescriptionToAction.put(getString(R.string.gmail_label), "GMAIL_LABEL");
         }
-        // Check to see if video chat is available
-        Intent i = new Intent();
-        i.setClassName(
-                "com.google.android.talk", "com.google.android.talk.videochat.VideoChatActivity");
-        i.setAction("initiate");
-        if (!pm.queryIntentActivities(i, 0).isEmpty()) {
-            /*
-             * Uncomment the line below to expose video chat shortcuts.
-             */
-            // shortcutDescriptionToAction.put(getString(R.string.video_chat),
-            // "VIDEO_CHAT");
+        if (Build.VERSION.SDK_INT > 10) {
+            // Check to see if video chat is available
+            Intent i = new Intent();
+            i.setClassName(
+                    "com.google.android.talk",
+                    "com.google.android.talk.videochat.VideoChatActivity");
+            i.setAction("initiate");
+            if (!pm.queryIntentActivities(i, 0).isEmpty()) {
+                shortcutDescriptionToAction.put(getString(R.string.video_chat),
+                        "VIDEO_CHAT");
+            }
         }
     }
 
@@ -479,7 +489,7 @@ public class MarvinShell extends Activity {
 
     /**
      * Create an intent to launch the specified application.
-     * 
+     *
      * @param packageName The application package.
      * @param className The class name of the activity to launch.
      * @return An intent that launches the application.
@@ -534,9 +544,6 @@ public class MarvinShell extends Activity {
     }
 
     private class ShellGestureListener implements GestureListener {
-        private long lastCenterUpTime = 0;
-
-        private long doubleTapWindow = 500;
 
         @Override
         public void onGestureStart(int g) {
@@ -644,7 +651,15 @@ public class MarvinShell extends Activity {
                             intentGmailLabel.putExtra("account", account);
                             intentGmailLabel.putExtra("label", label);
                             startActivity(intentGmailLabel);
-                        } else if (item.action.equals("VIDEO_CALL")) {
+                        } else if (item.action.equals("VIDEO_CHAT")) {
+                            // If the user is not signed into talk, video calls
+                            // will fail
+                            if (!isTalkActive) {
+                                tts.speak(
+                                        getString(R.string.talk_disabled), TextToSpeech.QUEUE_FLUSH,
+                                        null);
+                                return;
+                            }
                             String address = item.data;
                             if (Build.VERSION.SDK_INT < 10) {
                                 Intent i = new Intent();
@@ -713,7 +728,7 @@ public class MarvinShell extends Activity {
                         Intent talkingDialerIntent = new Intent(Intent.ACTION_PICK);
                         ComponentName slideDial = new ComponentName(
                                 "com.google.marvin.talkingdialer",
-                                "com.google.marvin.talkingdialer.SlideDial");
+                                "com.google.marvin.talkingdialer.TalkingDialer");
                         talkingDialerIntent.setComponent(slideDial);
                         startActivityForResult(
                                 talkingDialerIntent, REQUEST_CODE_TALKING_DIALER_DIAL);
@@ -727,7 +742,7 @@ public class MarvinShell extends Activity {
                         Intent talkingDialerIntent = new Intent(Intent.ACTION_PICK);
                         ComponentName slideDial = new ComponentName(
                                 "com.google.marvin.talkingdialer",
-                                "com.google.marvin.talkingdialer.SlideDial");
+                                "com.google.marvin.talkingdialer.TalkingDialer");
                         talkingDialerIntent.setComponent(slideDial);
                         startActivityForResult(
                                 talkingDialerIntent, REQUEST_CODE_TALKING_DIALER_MESSAGE);
@@ -736,6 +751,22 @@ public class MarvinShell extends Activity {
                                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
                         startActivityForResult(
                                 intentDirectMessage, REQUEST_CODE_PICK_DIRECT_MESSAGE);
+                    }
+                } else if (action.equals("VIDEO_CHAT")) {
+                    if (isTalkingDialerContactChooserAvailable()) {
+                        Intent talkingDialerIntent = new Intent(Intent.ACTION_PICK);
+                        talkingDialerIntent.putExtra("ContactsMode",
+                                ContactsContract.CommonDataKinds.Email.CONTENT_URI.toString());
+                        ComponentName slideDial = new ComponentName(
+                                "com.google.marvin.talkingdialer",
+                                "com.google.marvin.talkingdialer.TalkingDialer");
+                        talkingDialerIntent.setComponent(slideDial);
+                        startActivityForResult(
+                                talkingDialerIntent, REQUEST_CODE_TALKING_DIALER_VIDEO);
+                    } else {
+                        Intent intentVideoChat = new Intent(Intent.ACTION_PICK,
+                                ContactsContract.CommonDataKinds.Email.CONTENT_URI);
+                        startActivityForResult(intentVideoChat, REQUEST_CODE_PICK_VIDEO_CHAT);
                     }
                 } else if (action.equals("WIDGET")) {
                     selectWidget();
@@ -779,7 +810,8 @@ public class MarvinShell extends Activity {
              */
             Intent talkingDialerIntent = new Intent(Intent.ACTION_PICK);
             ComponentName slideDial = new ComponentName(
-                    "com.google.marvin.talkingdialer", "com.google.marvin.talkingdialer.SlideDial");
+                    "com.google.marvin.talkingdialer",
+                    "com.google.marvin.talkingdialer.TalkingDialer");
             talkingDialerIntent.setComponent(slideDial);
             return (pm.queryIntentActivities(talkingDialerIntent, 0).size() > 0);
         } else {
@@ -890,9 +922,11 @@ public class MarvinShell extends Activity {
             case REQUEST_CODE_PICK_CONTACT:
             case REQUEST_CODE_PICK_SETTINGS:
             case REQUEST_CODE_PICK_DIRECT_DIAL:
+            case REQUEST_CODE_PICK_VIDEO_CHAT:
             case REQUEST_CODE_PICK_DIRECT_MESSAGE:
             case REQUEST_CODE_TALKING_DIALER_DIAL:
             case REQUEST_CODE_TALKING_DIALER_MESSAGE:
+            case REQUEST_CODE_TALKING_DIALER_VIDEO:
             case REQUEST_CODE_PICK_GMAIL_LABEL:
                 if (resultCode == Activity.RESULT_OK) {
                     addActivityResultShortcut(requestCode, data);
@@ -909,7 +943,7 @@ public class MarvinShell extends Activity {
     private void addActivityResultShortcut(int requestCode, Intent data) {
         MenuItem menuItem = null;
         Cursor c;
-        String title, name, phoneNumber, number, label;
+        String title, name, phoneNumber, emailAddress, number, label;
         switch (requestCode) {
             case REQUEST_CODE_PICK_BOOKMARK:
                 title = data.getStringExtra("TITLE");
@@ -979,10 +1013,24 @@ public class MarvinShell extends Activity {
                         account + " " + label, null);
                 break;
             case REQUEST_CODE_PICK_VIDEO_CHAT:
-                name = data.getStringExtra("name");
-                String address = data.getStringExtra("address");
+                c = managedQuery(data.getData(), null, null, null, null);
+                if (c.moveToFirst()) {
+                    name = c.getString(
+                            c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                    emailAddress = c.getString(
+                            c.getColumnIndexOrThrow(
+                                    ContactsContract.CommonDataKinds.Email.ADDRESS));
+                    menuItem = new MenuItem(
+                            getString(R.string.video_call, name), "VIDEO_CHAT", emailAddress, null);
+                }
+                break;
+            case REQUEST_CODE_TALKING_DIALER_VIDEO:
+                emailAddress = data.getStringExtra("email");
+                label = data.getStringExtra("label");
+                if (label == null)
+                    label = emailAddress;
                 menuItem = new MenuItem(
-                        getString(R.string.video_call, name), "VIDEO_CHAT", address, null);
+                        getString(R.string.video_call, label), "VIDEO_CHAT", emailAddress, null);
                 break;
         }
         if (menuItem != null && lastGesture > 0) {
@@ -1006,18 +1054,8 @@ public class MarvinShell extends Activity {
             appChooserView.requestFocus();
             appChooserView.resetListState();
             appChooserView.speakCurrentApp(false);
-            RunButton runButton = (RunButton) findViewById(R.id.runButton);
-            switch (activeMode) {
-                case MENU_EDIT_MODE:
-                    runButton.setText(R.string.save);
-                    break;
-                case APPLAUNCHER_VIEW:
-                    runButton.setText(R.string.run);
-                    break;
-                case MAIN_VIEW:
-                    runButton.setText(R.string.run);
-                    activeMode = APPLAUNCHER_VIEW;
-                    break;
+            if (activeMode == MAIN_VIEW) {
+                activeMode = APPLAUNCHER_VIEW;
             }
         }
     }
@@ -1184,48 +1222,6 @@ public class MarvinShell extends Activity {
         public void onPostExecute(ArrayList<AppInfo> appList) {
             appChooserView = (AppChooserView) findViewById(R.id.appChooserView);
             appChooserView.setAppList(appList);
-            ScrollSidebarView rScroll = (ScrollSidebarView) findViewById(R.id.rScroll);
-            rScroll.setOnScrollDetectedListener(new OnScrollDetectedListener() {
-                    @Override
-                public void onScrollDetected(int direction) {
-                    if (direction < 0) {
-                        appChooserView.prevApp();
-                    } else if (direction > 0) {
-                        appChooserView.nextApp();
-                    }
-                }
-            });
-            ScrollSidebarView lScroll = (ScrollSidebarView) findViewById(R.id.lScroll);
-            lScroll.setOnScrollDetectedListener(new OnScrollDetectedListener() {
-                    @Override
-                public void onScrollDetected(int direction) {
-                    if (direction < 0) {
-                        appChooserView.prevApp();
-                    } else if (direction > 0) {
-                        appChooserView.nextApp();
-                    }
-                }
-            });
-            RunButton runButton = (RunButton) findViewById(R.id.runButton);
-            runButton.setOnHoverListener(new com.google.marvin.shell.RunButton.OnHoverListener() {
-                    @Override
-                public void onHoverExit() {
-                    appChooserView.startActionHandler();
-                }
-
-                    @Override
-                public void onHoverEnter() {
-                    tts.playEarcon(getString(R.string.earcon_tick), 0, null);
-                    tts.speak("Run", 1, null);
-                    appChooserView.speakCurrentApp(false);
-                }
-            });
-            runButton.setOnClickListener(new OnClickListener() {
-                    @Override
-                public void onClick(View v) {
-                    appChooserView.startActionHandler();
-                }
-            });
         }
     }
 
@@ -1283,6 +1279,67 @@ public class MarvinShell extends Activity {
                 tts.speak(getString(R.string.no_short_answer) + " " + q, TextToSpeech.QUEUE_FLUSH,
                         null);
             }
+        }
+    }
+
+    /**
+     * Sends a test query to gtalk for the actual user. If this query fails, the
+     * gtalk is bugging out and needs a good reboot. Otherwise, we want to
+     * confirm the user is in fact logged in.
+     *
+     * @return true if talk is active
+     */
+    private boolean isTalkActive() {
+
+        String[] proj = new String[] {
+                Contacts.DISPLAY_NAME, Email.ADDRESS,
+                StatusUpdates.CHAT_CAPABILITY,
+                StatusUpdates.PRESENCE };
+
+        String filter = StatusUpdates.CHAT_CAPABILITY + " > -1";
+
+        Cursor statusCursor = getBaseContext().getContentResolver().query(
+                ContactsContract.Data.CONTENT_URI, proj, filter, null, null);
+
+        // we want to check that we in fact have supported contacts
+        if (!statusCursor.moveToFirst()) {
+            return false;
+        } else if (statusCursor.getCount() == 1) {
+            AccountManager accountManager = AccountManager.get(getBaseContext());
+            Account[] accounts = accountManager.getAccountsByType("com.google");
+            Account account;
+            if (accounts.length > 0) {
+                account = accounts[0];
+            } else {
+                return false;
+            }
+            String userEmail = account.name;
+            if (statusCursor.getString(1).equals(userEmail)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * This is an asynchronous task that queries the StatusUpdates database for
+     * each of the phone contacts to determine if that are vChatCapable
+     */
+    private class TalkCheckTask extends AsyncTask<Void, Void, Boolean> {
+
+        public TalkCheckTask() {
+            super();
+        }
+
+        @Override
+        public Boolean doInBackground(Void... params) {
+            return isTalkActive();
+        }
+
+        @Override
+        public void onPostExecute(Boolean result) {
+            isTalkActive = result;
         }
     }
 }

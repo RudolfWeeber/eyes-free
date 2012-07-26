@@ -47,7 +47,7 @@ import java.util.HashMap;
 
 /**
  * Collection of one shot speech widgets for the home screen
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  * @author credo@google.com (Tim Credo)
  */
@@ -79,7 +79,7 @@ public class AuditoryWidgets {
         tm.listen(new PhoneStateListener() {
             private boolean inService = true;
 
-            @Override
+                @Override
             public void onServiceStateChanged(ServiceState service) {
                 if (service.getState() != ServiceState.STATE_IN_SERVICE) {
                     inService = false;
@@ -88,7 +88,7 @@ public class AuditoryWidgets {
                 }
             }
 
-            @Override
+                @Override
             public void onSignalStrengthChanged(int asu) {
                 if ((asu == -1) || !inService) {
                     voiceSignalStrength = -1;
@@ -105,13 +105,13 @@ public class AuditoryWidgets {
                 }
             }
 
-            @Override
+                @Override
             public void onCallStateChanged(int state, String incomingNumber) {
                 callState = state;
             }
         },
                 PhoneStateListener.LISTEN_SIGNAL_STRENGTH | PhoneStateListener.LISTEN_SERVICE_STATE
-                        | PhoneStateListener.LISTEN_CALL_STATE);
+                | PhoneStateListener.LISTEN_CALL_STATE);
 
         descriptionToWidget = new HashMap<String, String>();
         descriptionToWidget.put(parent.getString(R.string.applications), "APPLAUNCHER");
@@ -177,7 +177,7 @@ public class AuditoryWidgets {
             toggleWifi();
         } else if (widgetName.equals("OPEN_NOTIFICATIONS")) {
             openNotifications();
-        }  else if (widgetName.equals("ANDROID_LAUNCHER")) {
+        } else if (widgetName.equals("ANDROID_LAUNCHER")) {
             launchDefaultHomeScreen();
         }
     }
@@ -202,7 +202,7 @@ public class AuditoryWidgets {
                 WifiInfo wInfo = wManager.getConnectionInfo();
                 int wifiSignalStrength = WifiManager.calculateSignalLevel(wInfo.getRssi(), 4);
                 info = parent.getString(R.string.wifi) + wInfo.getSSID() + " "
-                            + parent.getString(R.string.bars, wifiSignalStrength);
+                        + parent.getString(R.string.bars, wifiSignalStrength);
             }
         }
         tts.speak(info, TextToSpeech.QUEUE_ADD, null);
@@ -245,7 +245,7 @@ public class AuditoryWidgets {
 
     public void announceBattery() {
         BroadcastReceiver battReceiver = new BroadcastReceiver() {
-            @Override
+                @Override
             public void onReceive(Context context, Intent intent) {
                 context.unregisterReceiver(this);
                 int rawlevel = intent.getIntExtra("level", -1);

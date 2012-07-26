@@ -75,32 +75,14 @@
             android:layout_weight="1"
             android:orientation="horizontal" >
 
-            <com.google.marvin.shell.ScrollSidebarView
-                android:id="@+id/lScroll"
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:layout_weight="10"
-                android:background="#00FF0000" />
-
             <com.google.marvin.shell.AppChooserView
                 android:id="@+id/appChooserView"
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
                 android:layout_weight="80" />
 
-            <com.google.marvin.shell.ScrollSidebarView
-                android:id="@+id/rScroll"
-                android:layout_width="1dip"
-                android:layout_height="fill_parent"
-                android:layout_weight="10"
-                android:background="#00FF0000" />
         </LinearLayout>
-
-        <com.google.marvin.shell.RunButton
-            android:id="@+id/runButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="\n\nRun\n\n" />
+        
     </LinearLayout>
 
 </FrameLayout>

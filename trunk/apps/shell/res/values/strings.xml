@@ -380,7 +380,7 @@
         Source: Type of shortcut.
         Description: A type of shortcut that starts a video chat. [CHAR LIMIT="NONE"]
     -->
-    <string name="video_chat">Video Chat</string>
+    <string name="video_chat">Direct Video Call</string>
     <!--
         Source: Shortcut title.
         Description: Label for the calling action. Includes the name of a contact.
@@ -411,5 +411,10 @@
         Description: Use the localized Google domain (ex. google.fr) for better OneBox triggering.
     -->
     <string name="search_url">http://www.google.com/m?q=</string>
+    <!--
+      Source: Label for when talk is disabled
+      Description: Warn users when talk is disabled, and video chat will fail..
+    -->
+    <string name="talk_disabled">Google Talk is Not Running. Please Stay Signed Into Talk to Make Video Calls.</string>
 
 </resources>

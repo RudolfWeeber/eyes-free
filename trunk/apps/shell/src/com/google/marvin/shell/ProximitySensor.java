@@ -24,7 +24,7 @@ import android.hardware.SensorManager;
 
 /**
  * Convenience class for working with the ProximitySensor
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  */
 
@@ -69,12 +69,12 @@ public class ProximitySensor {
     private boolean mClose;
 
     SensorEventListener listener = new SensorEventListener() {
-        @Override
+            @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
             // Ignoring this for now
         }
 
-        @Override
+            @Override
         public void onSensorChanged(SensorEvent event) {
             if (mIgnoreNextCallback) {
                 mIgnoreNextCallback = false;
@@ -92,7 +92,7 @@ public class ProximitySensor {
 
     /**
      * Constructor for ProximitySensor
-     *
+     * 
      * @param ctx The Context of the app using the proximity sensor
      * @param ignoreCallbackOnRegistration Flag indicating whether or not to
      *            drop the first callback event after registering the listener.
@@ -114,7 +114,7 @@ public class ProximitySensor {
 
     /**
      * Checks if something is close to the proximity sensor
-     *
+     * 
      * @return True if there is something close to the proximity sensor
      */
     public boolean isClose() {

@@ -31,7 +31,7 @@ import com.google.marvin.shell.StreetLocator.StreetLocatorListener;
  * Guide uses the magnetic compass, GPS/Network location provider, and the
  * Google Maps API to generate a meaningful spoken string to let users know
  * where they are.
- *
+ * 
  * @author clchen@google.com (Charles L. Chen)
  */
 public class Guide implements Runnable, StreetLocatorListener {
@@ -56,7 +56,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     }
 
     private LocationListener networkLocationListener = new LocationListener() {
-        @Override
+            @Override
         public void onLocationChanged(Location arg0) {
             networkLoc = arg0;
             networkLocLastUpdateTime = System.currentTimeMillis();
@@ -73,18 +73,18 @@ public class Guide implements Runnable, StreetLocatorListener {
             }
         }
 
-        @Override
+            @Override
         public void onProviderDisabled(String arg0) {
             unregisterLocationServices();
             networkLoc = null;
             networkLocLastUpdateTime = -1;
         }
 
-        @Override
+            @Override
         public void onProviderEnabled(String arg0) {
         }
 
-        @Override
+            @Override
         public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
             if (arg1 != LocationProvider.AVAILABLE) {
                 unregisterLocationServices();
@@ -97,7 +97,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     };
 
     private LocationListener gpsLocationListener = new LocationListener() {
-        @Override
+            @Override
         public void onLocationChanged(Location arg0) {
             gpsLoc = arg0;
             gpsLocLastUpdateTime = System.currentTimeMillis();
@@ -115,18 +115,18 @@ public class Guide implements Runnable, StreetLocatorListener {
             }
         }
 
-        @Override
+            @Override
         public void onProviderDisabled(String arg0) {
             unregisterLocationServices();
             gpsLoc = null;
             gpsLocLastUpdateTime = -1;
         }
 
-        @Override
+            @Override
         public void onProviderEnabled(String arg0) {
         }
 
-        @Override
+            @Override
         public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
         }
     };
@@ -134,7 +134,7 @@ public class Guide implements Runnable, StreetLocatorListener {
     // This is a fix for the Droid - the status listener must be set or GPS will
     // not work right.
     GpsStatus.Listener dummyGpsStatusListener = new GpsStatus.Listener() {
-        @Override
+            @Override
         public void onGpsStatusChanged(int event) {
         }
     };
