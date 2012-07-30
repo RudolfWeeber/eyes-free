@@ -16,7 +16,6 @@ import android.provider.ContactsContract.Contacts.Data;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -52,6 +51,12 @@ public class ContactsManager {
         final static String[] COLUMNS = new String[] {
                 Contacts.DISPLAY_NAME,
                 Contacts.CONTACT_PRESENCE, Contacts.CONTACT_CHAT_CAPABILITY,
+                Contacts.LOOKUP_KEY, Contacts._ID };
+
+        // Add dummy column for simplicity (no chat capability pre ICS)
+        final static String[] COMPAT_COLUMNS = new String[] {
+                Contacts.DISPLAY_NAME,
+                Contacts.CONTACT_PRESENCE, Contacts.CONTACT_PRESENCE,
                 Contacts.LOOKUP_KEY, Contacts._ID };
 
         public final static int DISPLAY_NAME = 0;
@@ -181,6 +186,9 @@ public class ContactsManager {
             }
             uri = URI_PHONE;
             proj = ContactQuery.COLUMNS;
+            if (Build.VERSION.SDK_INT < 11) {
+                proj = ContactQuery.COMPAT_COLUMNS;
+            }
         } else {
             // Selecting from all emails
             uri = URI_EMAIL;
@@ -193,7 +201,8 @@ public class ContactsManager {
 
         boolean hasFirst = mCursor != null && mCursor.moveToFirst();
         if (hasFirst) {
-            // Limit to something reasonable (average size of Contact ~300 bytes)
+            // Limit to something reasonable (average size of Contact ~300
+            // bytes)
             // So this should be << 1 MB
             int cacheSize = 100;
             contactsCache = new LruCache<String, Contact>(cacheSize);
@@ -227,7 +236,8 @@ public class ContactsManager {
 
         } else {
 
-            filter = Contacts.DISPLAY_NAME + " = '" + cursor.getString(ContactQuery.DISPLAY_NAME)
+            String formattedName = cursor.getString(ContactQuery.DISPLAY_NAME).replace("'", "''");
+            filter = Contacts.DISPLAY_NAME + " = '" + formattedName
                     + "'";
 
             projection = new String[] {
@@ -306,9 +316,9 @@ public class ContactsManager {
                     + Data.MIMETYPE + " = '" + Email.CONTENT_ITEM_TYPE + "'";
 
         } else {
-
+            String formattedName = cursor.getString(ContactQuery.DISPLAY_NAME).replace("'", "''");
             filter = Email.CHAT_CAPABILITY + " > -1 AND " + Contacts.DISPLAY_NAME + " = '"
-                    + cursor.getString(ContactQuery.DISPLAY_NAME) + "'";
+                    + formattedName + "'";
 
             projection = new String[] {
                     Contacts.DISPLAY_NAME,
@@ -510,7 +520,6 @@ public class ContactsManager {
             CursorLoader asyncLoader = new CursorLoader(context, uri,
                     proj, filter, null, SORTORDER);
             cursor = asyncLoader.loadInBackground();
-            Log.i("CONTACTSMANAGER", "BEGIN CACHE SIZE "+contactsCache.size());
         }
 
         @Override
@@ -526,7 +535,6 @@ public class ContactsManager {
 
         @Override
         public void onPostExecute(Void test) {
-            Log.i("CONTACTSMANAGER", "END CACHE SIZE "+contactsCache.size());
         }
     }
 

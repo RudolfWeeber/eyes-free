@@ -28,7 +28,7 @@ public class BookmarkChooserActivity extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Only want bookmarks (not history items)
-        String filter = Browser.BookmarkColumns.BOOKMARK + " = 1";
+        String filter = Browser.BookmarkColumns.BOOKMARK + " = 1 AND " + Browser.BookmarkColumns.URL + " NOT NULL ";
         // Grab bookmarks from Chrome
         Uri chromeBookMarks = Uri.parse(
                 "content://com.google.android.apps.chrome.browser/bookmarks");

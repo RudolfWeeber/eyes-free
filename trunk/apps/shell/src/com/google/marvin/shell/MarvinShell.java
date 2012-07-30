@@ -626,22 +626,32 @@ public class MarvinShell extends Activity {
                         } else if (item.action.equals("BOOKMARK")) {
                             Intent intentBookmark = new Intent(Intent.ACTION_VIEW, Uri.parse(
                                     item.data));
-                            startActivity(intentBookmark);
+                            if (isValidIntent(intentBookmark)) {
+                                startActivity(intentBookmark);
+                            }
                         } else if (item.action.equals("CONTACT")) {
                             Intent intentContact = new Intent(Intent.ACTION_VIEW, Uri.parse(
                                     item.data));
-                            startActivity(intentContact);
+                            if (isValidIntent(intentContact)) {
+                                startActivity(intentContact);
+                            }
                         } else if (item.action.equals("SETTINGS")) {
                             Intent intentSettings = new Intent(item.data);
-                            startActivity(intentSettings);
+                            if (isValidIntent(intentSettings)) {
+                                startActivity(intentSettings);
+                            }
                         } else if (item.action.equals("CALL")) {
                             Intent intentCall = new Intent(Intent.ACTION_CALL, Uri.parse(
                                     "tel:" + item.data));
-                            startActivity(intentCall);
+                            if (isValidIntent(intentCall)) {
+                                startActivity(intentCall);
+                            }
                         } else if (item.action.equals("SMS")) {
                             Intent intentSms = new Intent(Intent.ACTION_VIEW, Uri.parse(
                                     "sms:" + item.data));
-                            startActivity(intentSms);
+                            if (isValidIntent(intentSms)) {
+                                startActivity(intentSms);
+                            }
                         } else if (item.action.equals("GMAIL_LABEL")) {
                             Intent intentGmailLabel = new Intent();
                             ComponentName gmailActivity = new ComponentName("com.google.android.gm",
@@ -652,7 +662,9 @@ public class MarvinShell extends Activity {
                             String label = item.data.substring(firstSpace + 1);
                             intentGmailLabel.putExtra("account", account);
                             intentGmailLabel.putExtra("label", label);
-                            startActivity(intentGmailLabel);
+                            if (isValidIntent(intentGmailLabel)) {
+                                startActivity(intentGmailLabel);
+                            }
                         } else if (item.action.equals("VIDEO_CHAT")) {
                             // If the user is not signed into talk, video calls
                             // will fail
@@ -673,7 +685,9 @@ public class MarvinShell extends Activity {
                                                 "content://com.google.android.providers.talk/messagesByAcctAndContact/1/%s",
                                                 Uri.encode(address));
                                 i.setData(Uri.parse(uriString));
-                                startActivity(i);
+                                if (isValidIntent(i)) {
+                                    startActivity(i);
+                                }
                             } else {
                                 Intent i = new Intent();
                                 i.setClassName("com.google.android.talk",
@@ -681,7 +695,9 @@ public class MarvinShell extends Activity {
                                 i.setAction("initiate");
                                 i.putExtra("accountId", (long) 1);
                                 i.putExtra("from", address);
-                                startActivity(i);
+                                if (isValidIntent(i)) {
+                                    startActivity(i);
+                                }
                             }
                         }
                     }
@@ -1284,6 +1300,15 @@ public class MarvinShell extends Activity {
         }
     }
 
+    
+    private boolean isValidIntent(Intent i) {
+        if (pm.queryIntentActivities(i, 0).isEmpty()) {
+           tts.speak(getString(R.string.item_invalid), TextToSpeech.QUEUE_FLUSH, null);
+           return false;
+        }
+        return true;
+    }
+    
     /**
      * Sends a test query to gtalk for the actual user. If this query fails, the
      * gtalk is bugging out and needs a good reboot. Otherwise, we want to
