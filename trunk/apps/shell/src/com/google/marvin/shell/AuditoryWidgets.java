@@ -290,7 +290,11 @@ public class AuditoryWidgets {
             ampm = parent.getString(R.string.am);
         }
 
-        String timeStr = Integer.toString(hour) + ":" + Integer.toString(minutes) + " " + ampm;
+        String colonStr = ":";
+        if (minutes < 10) {
+            colonStr = ":0";
+        }
+        String timeStr = Integer.toString(hour) + colonStr + Integer.toString(minutes) + " " + ampm;
 
         tts.speak(timeStr + " " + monthStr + " " + Integer.toString(day), TextToSpeech.QUEUE_FLUSH,
                 null);

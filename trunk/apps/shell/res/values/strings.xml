@@ -416,5 +416,10 @@
       Description: Warn users when talk is disabled, and video chat will fail..
     -->
     <string name="talk_disabled">Google Talk is Not Running. Please Stay Signed Into Talk to Make Video Calls.</string>
+    <!--
+      Source: Label for when menu item intent is not valid
+      Description: Warn users that intent is not valid and will fail 
+    -->
+    <string name="item_invalid">Shortcut is not valid. Please consider removing this menu item.</string>
 
 </resources>
