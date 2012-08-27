@@ -16,6 +16,7 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -92,6 +93,7 @@ public class KeyBindingsActivity extends Activity
                 getResources().getStringArray(R.array.help_supportedCommands);
         String[] descriptions =
                 getResources().getStringArray(R.array.help_commandDescriptions);
+        Map<String, String> friendlyKeyNames = props.getFriendlyKeyNames();
         BrailleKeyBinding dummyBinding = new BrailleKeyBinding();
         for (int i = 0; i < supportedCommands.length; ++i) {
             String name = supportedCommands[i];
@@ -114,7 +116,7 @@ public class KeyBindingsActivity extends Activity
                 index -= 1;
             }
             addBindingsForCommand(sortedBindings, index, descriptions[i],
-                    result);
+                    friendlyKeyNames, result);
         }
 
         KeyBindingsAdapter adapter = new KeyBindingsAdapter(
@@ -129,6 +131,7 @@ public class KeyBindingsActivity extends Activity
     private void addBindingsForCommand(
             List<BrailleKeyBinding> bindings, int startIndex,
             String commandDescription,
+            Map<String, String> friendlyKeyNames,
             List<KeyBinding> result) {
         String delimiter = getString(R.string.help_keyBindingDelimiter);
         int command = bindings.get(startIndex).getCommand();
@@ -143,12 +146,28 @@ public class KeyBindingsActivity extends Activity
                         binding.getKeyNames())) {
                 result.add(new KeyBinding(
                     commandDescription,
-                    TextUtils.join(delimiter, binding.getKeyNames())));
+                    TextUtils.join(delimiter,
+                            getFriendlyKeyNames(binding.getKeyNames(),
+                                    friendlyKeyNames))));
             }
             prevBinding = binding;
             index += 1;
         } while (index < bindings.size()
                 && bindings.get(index).getCommand() == command);
+    }
+
+    private static String[] getFriendlyKeyNames(String[] unfriendlyNames,
+            Map<String, String> friendlyNames) {
+        String[] result = new String[unfriendlyNames.length];
+        for (int i = 0; i < unfriendlyNames.length; ++i) {
+            String friendlyName = friendlyNames.get(unfriendlyNames[i]);
+            if (friendlyName != null) {
+                result[i] = friendlyName;
+            } else {
+                result[i] = unfriendlyNames[i];
+            }
+        }
+        return result;
     }
 
     private static class KeyBindingsAdapter extends ArrayAdapter<KeyBinding> {

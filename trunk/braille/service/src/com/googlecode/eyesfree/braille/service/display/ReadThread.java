@@ -89,11 +89,11 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
         if (mSocket != null) {
             try {
                 mDriverThread = new DriverThread(mSocket.getOutputStream(),
-                        mConnectedDeviceInfo.getDriverCode(),
-                        deviceBrlttyAddress(),
+                        mConnectedDeviceInfo,
+                        mDisplayService.getResources(),
                         mTablesDir,
                         this /*initListener*/,
-                        mDisplayService/*inputEventListener*/);
+                        mDisplayService /*inputEventListener*/);
                 Log.i(LOG_TAG, "Device connected");
                 return true;
             } catch (IOException ex) {
@@ -150,19 +150,6 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
             } catch (IOException ex) {
                 Log.e(LOG_TAG, "Error opening a socket: " + ex.toString());
             }
-        }
-    }
-
-    /**
-     * Returns the address of the connected device in the form expected
-     * by the brltty drivers.
-     */
-    private String deviceBrlttyAddress() {
-        if (mConnectedDeviceInfo != null) {
-            return "bluetooth:"
-                    + mConnectedDeviceInfo.getBluetoothDevice().getAddress();
-        } else {
-            return null;
         }
     }
 

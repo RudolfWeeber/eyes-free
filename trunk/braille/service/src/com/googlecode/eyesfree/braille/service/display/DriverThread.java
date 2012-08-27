@@ -18,6 +18,7 @@
 
 package com.googlecode.eyesfree.braille.service.display;
 
+import android.content.res.Resources;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -92,12 +93,14 @@ public class DriverThread {
     private final OnInputEventListener mInputEventListener;
 
     public DriverThread(OutputStream outputStream,
-            String driverCode, String brailleDevice, File tablesDir,
+            DeviceFinder.DeviceInfo deviceInfo,
+            Resources resources,
+            File tablesDir,
             final OnInitListener initListener,
             OnInputEventListener inputListener) {
         mOutputStream = outputStream;
         mInputEventListener = inputListener;
-        mBrlttyWrapper = new BrlttyWrapper(driverCode, brailleDevice, this,
+        mBrlttyWrapper = new BrlttyWrapper(deviceInfo, this, resources,
                 tablesDir);
         mHandlerThread = new HandlerThread("DriverTrhead") {
             @Override

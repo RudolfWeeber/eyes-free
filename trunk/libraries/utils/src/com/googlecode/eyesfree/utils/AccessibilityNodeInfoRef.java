@@ -31,7 +31,7 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
  * are not visible to the user.  The traversal methods, however, will only
  * traverse to visible nodes.
  *
- * @see AccessibilityNodeInfoCompat#isVisibleToUser()
+ * @see AccessibilityNodeInfoUtils#isVisibleOrLegacy(AccessibilityNodeInfoCompat)
  */
 public class AccessibilityNodeInfoRef {
     private AccessibilityNodeInfoCompat mNode;
@@ -172,7 +172,7 @@ public class AccessibilityNodeInfoRef {
             if (newNode == null) {
                 return false;
             }
-            if (newNode.isVisibleToUser()) {
+            if (AccessibilityNodeInfoUtils.isVisibleOrLegacy(newNode)) {
                 reset(newNode);
                 return true;
             }
@@ -200,7 +200,7 @@ public class AccessibilityNodeInfoRef {
                 if (newNode == null) {
                     return false;
                 }
-                if (newNode.isVisibleToUser()) {
+                if (AccessibilityNodeInfoUtils.isVisibleOrLegacy(newNode)) {
                     reset(newNode);
                     return true;
                 }
@@ -226,7 +226,7 @@ public class AccessibilityNodeInfoRef {
             if (newNode == null) {
                 return false;
             }
-            if (newNode.isVisibleToUser()) {
+            if (AccessibilityNodeInfoUtils.isVisibleOrLegacy(newNode)) {
                 reset(newNode);
                 return true;
             }
@@ -259,7 +259,7 @@ public class AccessibilityNodeInfoRef {
                 if (newNode == null) {
                     return false;
                 }
-                if (newNode.isVisibleToUser()) {
+                if (AccessibilityNodeInfoUtils.isVisibleOrLegacy(newNode)) {
                     reset(newNode);
                     return true;
                 }
@@ -281,7 +281,7 @@ public class AccessibilityNodeInfoRef {
         }
         AccessibilityNodeInfoCompat parentNode = mNode.getParent();
         while (parentNode != null) {
-            if (parentNode.isVisibleToUser()) {
+            if (AccessibilityNodeInfoUtils.isVisibleOrLegacy(parentNode)) {
                 reset(parentNode);
                 return true;
             }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Names of braille display keys. -->
+<resources>
+    <!-- Keys that are common on most displays -->
+    <string name="key_Backspace">Backspace</string>
+    <string name="key_Space">Space</string>
+    <string name="key_Dot1">Dot1</string>
+    <string name="key_Dot2">Dot2</string>
+    <string name="key_Dot3">Dot3</string>
+    <string name="key_Dot4">Dot4</string>
+    <string name="key_Dot5">Dot5</string>
+    <string name="key_Dot6">Dot6</string>
+    <string name="key_Dot7">Dot7</string>
+    <string name="key_Dot8">Dot8</string>
+    <string name="key_Routing">RoutingKey</string>
+    <string name="key_JoystickLeft">JoystickLeft</string>
+    <string name="key_JoystickRight">JoystickRight</string>
+    <string name="key_JoystickUp">JoystickUp</string>
+    <string name="key_JoystickDown">JoystickDown</string>
+    <string name="key_JoystickCenter">JoystickCenter</string>
+
+    <!-- BraillePen keys -->
+    <string name="key_BP_Shift">Shift</string>
+    <string name="key_BP_Control">Control</string>
+    <string name="key_BP_ScrollLeft">ScrollLeft</string>
+    <string name="key_BP_ScrollRight">ScrollRight</string>
+
+    <!-- Esys keys -->
+    <string name="key_esys_SwitchLeft">FrontSwitchLeft</string>
+    <string name="key_esys_SwitchRight">FrontSwitchRight</string>
+    <string name="key_esys_LeftJoystickLeft">LeftJoystickLeft</string>
+    <string name="key_esys_LeftJoystickRight">LeftJoystickRight</string>
+    <string name="key_esys_LeftJoystickUp">LeftJoystickUp</string>
+    <string name="key_esys_LeftJoystickDown">LeftJoystickDown</string>
+    <string name="key_esys_LeftJoystickCenter">LeftJoystickCenter</string>
+    <string name="key_esys_RightJoystickLeft">RightJoystickLeft</string>
+    <string name="key_esys_RightJoystickRight">RightJoystickRight</string>
+    <string name="key_esys_RightJoystickUp">RightJoystickUp</string>
+    <string name="key_esys_RightJoystickDown">RightJoystickDown</string>
+    <string name="key_esys_RightJoystickCenter">RightJoystickCenter</string>
+
+    <!-- Focus -->
+    <string name="key_focus_LeftAdvance">LeftAdvance</string>
+    <string name="key_focus_RightAdvance">RightAdvance</string>
+    <string name="key_focus_LeftWheelPress">LeftWheelPress</string>
+    <string name="key_focus_LeftWheelUp">LeftWheelUp</string>
+    <string name="key_focus_LeftWheelDown">LeftWheelDown</string>
+    <string name="key_focus_RightWheelPress">RightWheelPress</string>
+    <string name="key_focus_RightWheelUp">RightWheelUp</string>
+    <string name="key_focus_RightWheelDown">RightWheelDown</string>
+    <string name="key_focus_LeftShift">LeftShift</string>
+    <string name="key_focus_RightShift">RightShift</string>
+    <string name="key_focus_LeftGdf">LeftGdf</string>
+    <string name="key_focus_RightGdf">RightGdf</string>
+    <string name="key_focus_LeftRockerUp">LeftRockerUp</string>
+    <string name="key_focus_LeftRockerDown">LeftRockerDown</string>
+    <string name="key_focus_RightRockerUp">RightRockerUp</string>
+    <string name="key_focus_RightRockerDown">RightRockerDown</string>
+    
+    <!-- Brailliant -->
+    <string name="key_brailliant_Power">Power</string>
+    <string name="key_brailliant_Display1">Command1</string>
+    <string name="key_brailliant_Display2">Command2</string>
+    <string name="key_brailliant_Display3">Command3</string>
+    <string name="key_brailliant_Display4">Command4</string>
+    <string name="key_brailliant_Display5">Command5</string>
+    <string name="key_brailliant_Display6">Command6</string>
+    <string name="key_brailliant_Thumb1">Thumb1</string>
+    <string name="key_brailliant_Thumb2">Thumb2</string>
+    <string name="key_brailliant_Thumb3">Thumb3</string>
+    <string name="key_brailliant_Thumb4">Thumb4</string>
+
+    <!-- APH Refreshabraille keys -->
+    <string name="key_APH_AdvanceLeft">AdvanceLeft</string>
+    <string name="key_APH_AdvanceRight">AdvanceRight</string>
+
+    <!-- Braillex -->
+    <string name="key_braillex_RightKeyFront">RightKeyFront</string>
+    <string name="key_braillex_RightKeyRear">RightKeyRear</string>
+    <string name="key_braillex_LeftKeyFront">LeftKeyFront</string>
+    <string name="key_braillex_LeftKeyRear">LeftKeyRear</string>
+    <string name="key_braillex_BarLeft1">BarLeft1</string>
+    <string name="key_braillex_BarLeft2">BarLeft2</string>
+    <string name="key_braillex_BarRight1">BarRight1</string>
+    <string name="key_braillex_BarRight2">BarRight2</string>
+    <string name="key_braillex_BarUp1">BarUp1</string>
+    <string name="key_braillex_BarUp2">BarUp2</string>
+    <string name="key_braillex_BarDown1">BarDown1</string>
+    <string name="key_braillex_BarDown2">BarDown2</string>
+    <string name="key_braillex_LeftThumb">LeftThumb</string>
+    <string name="key_braillex_RightThumb">RightThumb</string>
+    
+</resources>

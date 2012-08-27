@@ -16,13 +16,13 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-android-chords.kti mytables/brl-and
 +bind \{Space}+Dot1+Dot2+Dot3 LEARN
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb mytables/brl-bm-default.ktb
 --- jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb	2012-06-20 15:42:57.517223847 -0700
-+++ mytables/brl-bm-default.ktb	2012-07-02 17:01:55.408842729 -0700
++++ mytables/brl-bm-default.ktb	2012-08-09 13:58:35.546344115 -0700
 @@ -18,6 +18,15 @@
  
  title Baum (default)
  
-+assign Dot7 F2
-+assign Dot8 F3
++assign Dot7 Dot7
++assign Dot8 Dot8
 +assign Space B9
 +include brl-android-chords.kti
 +hide on
@@ -74,7 +74,7 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-dis
  
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti mytables/brl-bm-keyboard.kti
 --- jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti	2012-06-20 15:42:57.517223847 -0700
-+++ mytables/brl-bm-keyboard.kti	2012-07-02 16:30:29.734160354 -0700
++++ mytables/brl-bm-keyboard.kti	2012-07-02 16:30:29.000000000 -0700
 @@ -41,24 +41,17 @@
  map B10 SPACE
  map B11 SPACE
@@ -188,8 +188,21 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti mytables/brl-eu-jo
  
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-common.kti mytables/brl-fs-common.kti
 --- jni/brlttywrapper/brltty/Tables/brl-fs-common.kti	2012-06-20 15:42:57.517223847 -0700
-+++ mytables/brl-fs-common.kti	2012-07-02 15:48:18.000000000 -0700
-@@ -35,8 +35,10 @@
++++ mytables/brl-fs-common.kti	2012-08-24 10:04:09.368191064 -0700
+@@ -19,8 +19,10 @@
+ bind LeftWheelPress LNBEG
+ bind RightWheelPress LNEND
+ 
+-bind LeftGdf BACK
+-bind RightGdf HOME
++# Scroll backwards
++bind LeftGdf WINUP
++# Scroll forwards
++bind RightGdf WINDN
+ bind LeftGdf+RightGdf PASTE
+ 
+ bind LeftAdvance FWINLT
+@@ -35,8 +37,10 @@
  bind !LeftWheelUp LNUP
  bind !LeftWheelDown LNDN
  

@@ -18,6 +18,7 @@ package com.googlecode.eyesfree.utils;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -96,7 +97,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      * @param packageName The package name to add.
      */
     private void addInstalledPackageToCache(String packageName) {
-        synchronized (this) {
+        synchronized (mInstalledPackagesSet) {
             mInstalledPackagesSet.add(packageName);
             mNotFoundClassesMap.remove(packageName);
         }
@@ -108,7 +109,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      * @param packageName The package name to remove.
      */
     private void removeInstalledPackageFromCache(String packageName) {
-        synchronized (this) {
+        synchronized (mInstalledPackagesSet) {
             mInstalledPackagesSet.remove(packageName);
         }
     }
@@ -117,7 +118,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      * Clears the installed package cache.
      */
     private void clearInstalledPackagesCache() {
-        synchronized (this) {
+        synchronized (mInstalledPackagesSet) {
             mInstalledPackagesSet.clear();
         }
     }
@@ -138,32 +139,34 @@ public class ClassLoadingManager implements InfrastructureStateListener {
      */
     public Class<?> loadOrGetCachedClass(Context context, CharSequence className,
             CharSequence packageName) {
-        if (className == null) {
-            LogUtils.log(Log.DEBUG, "Class name was null. Failed to load class: %s", className);
+        if (TextUtils.isEmpty(className)) {
+            LogUtils.log(this, Log.DEBUG, "Missing class name. Failed to load class.");
             return null;
         }
 
-        final String classNameStr = className.toString();
-        final String packageNameStr;
-
         // If we don't know the package name, get it from the class name.
-        if (packageName == null) {
-            final int lastDotIndex = classNameStr.lastIndexOf(".");
+        if (TextUtils.isEmpty(packageName)) {
+            final int lastDotIndex = TextUtils.lastIndexOf(className, '.');
 
             if (lastDotIndex < 0) {
-                LogUtils.log(Log.DEBUG, "Missing package name. Failed to load class: %s", className);
+                LogUtils.log(this, Log.DEBUG, "Missing package name. Failed to load class: %s",
+                        className);
                 return null;
             }
 
-            packageNameStr = classNameStr.substring(0, lastDotIndex);
-        } else {
-            packageNameStr = packageName.toString();
+            packageName = TextUtils.substring(className, 0, lastDotIndex);
         }
 
+        final String classNameStr = className.toString();
+        final String packageNameStr = packageName.toString();
+
         // If we failed loading this class once, don't bother trying again.
-        HashSet<String> notFoundClassesSet = mNotFoundClassesMap.get(packageName);
-        if (notFoundClassesSet != null && notFoundClassesSet.contains(className)) {
-            return null;
+        HashSet<String> notFoundClassesSet = null;
+        synchronized (mInstalledPackagesSet) {
+            notFoundClassesSet = mNotFoundClassesMap.get(packageNameStr);
+            if ((notFoundClassesSet != null) && notFoundClassesSet.contains(classNameStr)) {
+                return null;
+            }
         }
 
         // Try the current ClassLoader.
@@ -174,15 +177,9 @@ public class ClassLoadingManager implements InfrastructureStateListener {
         }
 
         // See if we have a cached class.
-        final Class<?> clazz = mClassNameToOutsidePackageClassMap.get(className);
+        final Class<?> clazz = mClassNameToOutsidePackageClassMap.get(classNameStr);
         if (clazz != null) {
             return clazz;
-        }
-
-        // Check if the package is installed before attempting to load.
-        if (!mInstalledPackagesSet.contains(packageName)) {
-            LogUtils.log(Log.DEBUG, "Package not installed. Failed to load class: %s", className);
-            return null;
         }
 
         // Context is required past this point.
@@ -202,19 +199,18 @@ public class ClassLoadingManager implements InfrastructureStateListener {
                 return outsideClazz;
             }
         } catch (Exception e) {
-            LogUtils.log(ClassLoadingManager.class, Log.ERROR,
-                    "Error encountered. Failed to load outside class: %s", className);
+            LogUtils.log(this, Log.ERROR, "Error encountered. Failed to load outside class: %s",
+                    classNameStr);
         }
 
         if (notFoundClassesSet == null) {
             notFoundClassesSet = new HashSet<String>();
-
             mNotFoundClassesMap.put(packageNameStr, notFoundClassesSet);
         }
 
         notFoundClassesSet.add(classNameStr);
 
-        LogUtils.log(Log.DEBUG, "Failed to load class: %s", className);
+        LogUtils.log(Log.DEBUG, "Failed to load class: %s", classNameStr);
 
         return null;
     }

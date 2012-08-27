@@ -20,11 +20,12 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
  * Utilities for interacting with the {@link PackageManager}.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
 public class PackageManagerUtils {
@@ -35,7 +36,11 @@ public class PackageManagerUtils {
      * @return The package version code or {@link #INVALID_VERSION_CODE} if the
      *         package does not exist.
      */
-    public static int getVersionCode(Context context, String packageName) {
+    public static int getVersionCode(Context context, CharSequence packageName) {
+        if (TextUtils.isEmpty(packageName)) {
+            return INVALID_VERSION_CODE;
+        }
+
         final PackageInfo packageInfo = getPackageInfo(context, packageName);
 
         if (packageInfo == null) {
@@ -51,7 +56,11 @@ public class PackageManagerUtils {
      * @return The package version name or <code>null</code> if the package does
      *         not exist.
      */
-    public static String getVersionName(Context context, String packageName) {
+    public static String getVersionName(Context context, CharSequence packageName) {
+        if (TextUtils.isEmpty(packageName)) {
+            return null;
+        }
+
         final PackageInfo packageInfo = getPackageInfo(context, packageName);
 
         if (packageInfo == null) {
@@ -70,11 +79,15 @@ public class PackageManagerUtils {
         return (getPackageInfo(context, packageName) != null);
     }
 
-    private static PackageInfo getPackageInfo(Context context, String packageName) {
+    private static PackageInfo getPackageInfo(Context context, CharSequence packageName) {
+        if (packageName == null) {
+            return null;
+        }
+
         final PackageManager packageManager = context.getPackageManager();
 
         try {
-            return packageManager.getPackageInfo(packageName, 0);
+            return packageManager.getPackageInfo(packageName.toString(), 0);
         } catch (NameNotFoundException e) {
             return null;
         }

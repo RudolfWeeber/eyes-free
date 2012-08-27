@@ -7,6 +7,15 @@
 
     <string name="braille_ime_name">Braille hardware keyboard</string>
 
+    <string name="ime_setup_wizard_name">Braille Hardware Keyboard Wizard</string>
+    <string name="ime_setup_need_enable_title">Enable braille hardware keyboard</string>
+    <string name="ime_setup_need_enable_message">To use the braille hardware keyboard, you need to enable it in the input method settings and then set it as the default input method.</string>
+    <string name="ime_setup_skip">Skip</string>
+    <string name="ime_setup_need_enable_positive">Open Input Method Settings</string>
+    <string name="ime_setup_need_default_title">Set Default Input Method</string>
+    <string name="ime_setup_need_default_message">To use the braille hardware keyboard, you need to set it as the default input method.</string>
+    <string name="ime_setup_need_default_positive">Open Input Method Picker</string>
+
     <!-- Braille display permission -->
 
     <string name="permlab_displayConnect">Connect to a braille display</string>

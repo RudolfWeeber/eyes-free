@@ -303,7 +303,7 @@ public class DisplayManager
                         DisplaySpans.FocusSpan.class);
         for (DisplaySpans.FocusSpan span : spans) {
             int start = spanned.getSpanStart(span);
-            if (start < spanned.length()) {
+            if (start < mOverlaidBrailleContent.length) {
                 copyOverlaidContent();
                 // TODO: When not using computer braille, map char position
                 // to braille position.

@@ -19,6 +19,10 @@ package com.googlecode.eyesfree.braille.display;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Properties of a braille display such as dimensions and keyboard
  * configuration.
@@ -27,12 +31,15 @@ public class BrailleDisplayProperties implements Parcelable {
     private final int mNumTextCells;
     private final int mNumStatusCells;
     private final BrailleKeyBinding[] mKeyBindings;
+    private final Map<String, String> mFriendlyKeyNames;
 
     public BrailleDisplayProperties(int numTextCells, int numStatusCells,
-            BrailleKeyBinding[] keyBindings) {
+            BrailleKeyBinding[] keyBindings,
+            Map<String, String> friendlyKeyNames) {
         mNumTextCells = numTextCells;
         mNumStatusCells = numStatusCells;
         mKeyBindings = keyBindings;
+        mFriendlyKeyNames = friendlyKeyNames;
     }
 
     /**
@@ -57,6 +64,14 @@ public class BrailleDisplayProperties implements Parcelable {
      */
     public BrailleKeyBinding[] getKeyBindings() {
         return mKeyBindings;
+    }
+
+    /**
+     * Returns an unmodifiable map mapping key names in {@link BrailleKeyBinding}
+     * objects to localized user-friendly key names.
+     */
+    public Map<String, String> getFriendlyKeyNames() {
+        return mFriendlyKeyNames;
     }
 
     @Override
@@ -92,11 +107,22 @@ public class BrailleDisplayProperties implements Parcelable {
         out.writeInt(mNumTextCells);
         out.writeInt(mNumStatusCells);
         out.writeTypedArray(mKeyBindings, flags);
+        out.writeInt(mFriendlyKeyNames.size());
+        for (Map.Entry<String, String> entry : mFriendlyKeyNames.entrySet()) {
+            out.writeString(entry.getKey());
+            out.writeString(entry.getValue());
+        }
     }
 
     private BrailleDisplayProperties(Parcel in) {
         mNumTextCells = in.readInt();
         mNumStatusCells = in.readInt();
         mKeyBindings = in.createTypedArray(BrailleKeyBinding.CREATOR);
+        int size = in.readInt();
+        Map<String, String> names = new HashMap<String, String>(size);
+        for (int i = 0; i < size; ++i) {
+            names.put(in.readString(), in.readString());
+        }
+        mFriendlyKeyNames = Collections.unmodifiableMap(names);
     }
 }

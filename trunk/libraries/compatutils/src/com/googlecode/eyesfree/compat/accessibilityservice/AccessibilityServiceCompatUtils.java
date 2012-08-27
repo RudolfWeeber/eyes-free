@@ -17,6 +17,7 @@
 package com.googlecode.eyesfree.compat.accessibilityservice;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
 
 import com.googlecode.eyesfree.compat.CompatUtils;
 
@@ -25,8 +26,14 @@ import java.lang.reflect.Method;
 public class AccessibilityServiceCompatUtils {
     private static final Method METHOD_performGlobalAction = CompatUtils.getMethod(
             AccessibilityService.class, "performGlobalAction", int.class);
+    private static final Method METHOD_getServiceInfo = CompatUtils.getMethod(
+            AccessibilityService.class, "getServiceInfo");
 
     public static boolean performGlobalAction(AccessibilityService service, int action) {
         return (Boolean) CompatUtils.invoke(service, false, METHOD_performGlobalAction, action);
+    }
+
+    public static AccessibilityServiceInfo getServiceInfo(AccessibilityService service) {
+        return (AccessibilityServiceInfo) CompatUtils.invoke(service, null, METHOD_getServiceInfo);
     }
 }

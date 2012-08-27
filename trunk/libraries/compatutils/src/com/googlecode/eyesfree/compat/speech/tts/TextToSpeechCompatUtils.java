@@ -22,16 +22,30 @@ import android.speech.tts.TextToSpeech;
 import com.googlecode.eyesfree.compat.CompatUtils;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class TextToSpeechCompatUtils {
     private static final Constructor<?> CONSTRUCTOR_LLS = CompatUtils.getConstructor(
             TextToSpeech.class, Context.class, TextToSpeech.OnInitListener.class, String.class);
+    private static final Method METHOD_setEngineByPackageName = CompatUtils.getMethod(
+            TextToSpeech.class, "setEngineByPackageName", String.class);
 
     private TextToSpeechCompatUtils() {
         // This class is non-instantiable.
     }
 
+    /**
+     * The constructor for the TextToSpeech class, using the given TTS engine.
+     * This will also initialize the associated TextToSpeech engine if it isn't
+     * already running.
+     *
+     * @param context The context this instance is running in.
+     * @param listener The
+     *            {@link android.speech.tts.TextToSpeech.OnInitListener} that
+     *            will be called when the TextToSpeech engine has initialized.
+     * @param engine Package name of the TTS engine to use.
+     */
     public static TextToSpeech newTextToSpeech(Context context,
             TextToSpeech.OnInitListener listener, String engine) {
         final TextToSpeech result = (TextToSpeech) CompatUtils.newInstance(CONSTRUCTOR_LLS,
@@ -43,7 +57,12 @@ public class TextToSpeechCompatUtils {
 
         return new TextToSpeech(context, listener);
     }
-    
+
+    public static int setEngineByPackageName(TextToSpeech receiver, String enginePackageName) {
+        return (Integer) CompatUtils.invoke(
+                receiver, TextToSpeech.ERROR, METHOD_setEngineByPackageName, enginePackageName);
+    }
+
     public static class EngineCompatUtils {
         /**
          * Intent for starting a TTS service. Services that handle this intent must

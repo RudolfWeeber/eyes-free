@@ -21,9 +21,8 @@ import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
-
-import java.util.Map;
-import java.util.TreeMap;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 /**
  * Provides auditory and haptic feedback.
@@ -51,11 +50,10 @@ public class FeedbackController {
     private static final int NUMBER_OF_CHANNELS = 10;
 
     /** Map of resource IDs to vibration pattern arrays. */
-    private final Map<Integer, long[]> mResourceIdToVibrationPatternMap =
-            new TreeMap<Integer, long[]>();
+    private final SparseArray<long[]> mResourceIdToVibrationPatternMap = new SparseArray<long[]>();
 
     /** Map of resource IDs to loaded sound stream IDs. */
-    private final Map<Integer, Integer> mResourceIdToSoundMap = new TreeMap<Integer, Integer>();
+    private final SparseIntArray mResourceIdToSoundMap = new SparseIntArray();
 
     /** Parent context. Required for mapping resource IDs to resources. */
     private final Context mContext;
@@ -141,7 +139,7 @@ public class FeedbackController {
      * @param resId resource id of the sound to be loaded
      */
     public void preloadSound(int resId) {
-        if (!mResourceIdToSoundMap.containsKey(resId)) {
+        if (mResourceIdToSoundMap.indexOfKey(resId) < 0) {
             mResourceIdToSoundMap.put(resId, mSoundPool.load(mContext, resId, 1));
         }
     }
@@ -171,9 +169,9 @@ public class FeedbackController {
             return false;
         }
 
-        Integer soundId = mResourceIdToSoundMap.get(resId);
+        final int soundId = mResourceIdToSoundMap.get(resId);
 
-        if (soundId == null) {
+        if (soundId == 0) {
             // Make the sound available for the next time it is needed
             // to preserve backwars compatibility with callers who don't
             // preload the sounds.

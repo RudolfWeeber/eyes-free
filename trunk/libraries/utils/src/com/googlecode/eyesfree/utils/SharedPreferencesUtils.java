@@ -19,9 +19,6 @@ package com.googlecode.eyesfree.utils;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 
-/**
- * @author alanv@google.com (Alan Viverette)
- */
 public class SharedPreferencesUtils {
     public static int getIntFromStringPref(SharedPreferences prefs, Resources res, int keyResId,
             int defaultResId) {
@@ -33,5 +30,12 @@ public class SharedPreferencesUtils {
     public static boolean getBooleanPref(SharedPreferences prefs, Resources res, int keyResId,
             int defaultResId) {
         return prefs.getBoolean(res.getString(keyResId), res.getBoolean(defaultResId));
+    }
+
+    public static void putBooleanPref(
+            SharedPreferences prefs, Resources res, int keyResId, boolean value) {
+        final SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(res.getString(keyResId), value);
+        editor.commit();
     }
 }

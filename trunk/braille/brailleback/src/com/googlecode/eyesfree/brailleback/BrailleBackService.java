@@ -65,6 +65,7 @@ public class BrailleBackService
     private TranslatorManager mTranslatorManager;
     /** Used to translate text into braille. */
     /*package*/ BrailleTranslator mTranslator;
+    private IMEHelper mIMEHelper;
 
     /** Set if the infrastructure is initialized. */
     private boolean isInfrastructureInitialized;
@@ -119,9 +120,13 @@ public class BrailleBackService
             mModeSwitcher.switchMode();
             return;
         }
-        if (!mModeSwitcher.onMappedInputEvent(event, content)) {
-            mFeedbackManager.emitFeedback(FeedbackManager.TYPE_UNKNOWN_COMMAND);
+        if (mModeSwitcher.onMappedInputEvent(event, content)) {
+            return;
         }
+        if (mIMEHelper.onInputEvent(event)) {
+            return;
+        }
+        mFeedbackManager.emitFeedback(FeedbackManager.TYPE_UNKNOWN_COMMAND);
     }
 
     private boolean handleGlobalCommands(BrailleInputEvent event) {
@@ -207,12 +212,8 @@ public class BrailleBackService
     public void onAccessibilityEvent(AccessibilityEvent event) {
         LogUtils.log(this, Log.VERBOSE, "Event: %s", event.toString());
         LogUtils.log(this, Log.VERBOSE, "Node: %s", event.getSource());
-        // Since the IME is only temporarily overriding the current
-        // navigation mode, it won't get this call from the mode switcher.
-        // Invoke it here instead so it can keep track of focus.
-        BrailleIME ime = BrailleIME.getActiveInstance();
-        if (ime != null) {
-            ime.onObserveAccessibilityEvent(event);
+        if (mIMEHelper != null) {
+            mIMEHelper.onAccessibilityEvent(event);
         }
         if (mModeSwitcher != null) {
             mModeSwitcher.onAccessibilityEvent(event);
@@ -251,6 +252,7 @@ public class BrailleBackService
                         initializeModeSwitcher();
                     }
                 });
+        mIMEHelper = new IMEHelper(this);
     }
 
     private void initializeDisplayManager() {
@@ -286,6 +288,10 @@ public class BrailleBackService
         }
         // TODO: Shut down feedback manager and braille translator
         // when those classes have shutdown methods.
+        if (mIMEHelper != null) {
+            mIMEHelper.destroy();
+            mIMEHelper = null;
+        }
     }
 
     public boolean runHelp() {
@@ -298,4 +304,5 @@ public class BrailleBackService
     public static BrailleBackService getActiveInstance() {
         return sInstance;
     }
+
 }

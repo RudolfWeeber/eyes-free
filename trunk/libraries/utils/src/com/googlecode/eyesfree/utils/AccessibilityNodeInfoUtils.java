@@ -18,6 +18,7 @@ package com.googlecode.eyesfree.utils;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -39,16 +41,8 @@ import java.util.Set;
  * @author caseyburkhardt@google.com (Casey Burkhardt)
  */
 public class AccessibilityNodeInfoUtils {
-    /**
-     * Filters {@link AccessibilityNodeInfoCompat}s.
-     */
-    public static interface NodeFilter {
-        /**
-         * @param node The node info to filter.
-         * @return {@code true} if the node is accepted
-         */
-        public boolean accept(Context context, AccessibilityNodeInfoCompat node);
-    }
+    /** Whether isVisibleToUser() is supported by the current SDK. */
+    private static final boolean SUPPORTS_VISIBILITY = (Build.VERSION.SDK_INT >= 16);
 
     private AccessibilityNodeInfoUtils() {
         // This class is not instantiable.
@@ -84,6 +78,25 @@ public class AccessibilityNodeInfoUtils {
     }
 
     /**
+     * Returns the root node of the tree containing {@code node}.
+     */
+    public static AccessibilityNodeInfoCompat getRoot(AccessibilityNodeInfoCompat node) {
+        if (node == null) {
+            return null;
+        }
+
+        AccessibilityNodeInfoCompat current = null;
+        AccessibilityNodeInfoCompat parent = AccessibilityNodeInfoCompat.obtain(node);
+
+        do {
+            current = parent;
+            parent = current.getParent();
+        } while (parent != null);
+
+        return current;
+    }
+
+    /**
      * Returns {@code true} if the specified node is a view group or has
      * children.
      *
@@ -116,7 +129,7 @@ public class AccessibilityNodeInfoUtils {
      * <li>The node is actionable (see
      * {@link #isActionableForAccessibility(AccessibilityNodeInfoCompat)})</li>
      * <li>The node is a top-level list item (see
-     * {@link #isTopLevelListItem(Context, AccessibilityNodeInfoCompat)})</li>
+     * {@link #isTopLevelScrollItem(Context, AccessibilityNodeInfoCompat)})</li>
      * </ul>
      *
      * @param node
@@ -129,7 +142,7 @@ public class AccessibilityNodeInfoUtils {
         }
 
         // Never focus invisible nodes.
-        if (!node.isVisibleToUser()) {
+        if (!isVisibleOrLegacy(node)) {
             return false;
         }
 
@@ -138,10 +151,20 @@ public class AccessibilityNodeInfoUtils {
             return true;
         }
 
-        // Always focus top-level list items with text.
-        if (hasText(node) && isTopLevelListItem(context, node)) {
-            return true;
+        if ((Build.VERSION.SDK_INT < 16)) {
+            // In pre-JellyBean, always focus ALL top-level list items and items
+            // that should have independently focusable children.
+            if (isTopLevelScrollItem(context, node)
+                    || isTopLevelFocusableItemInGrouping(context, node)) {
+                return true;
+            }
+        } else {
+            // In post-JellyBean, only focus top-level list items with text.
+            if (hasText(node) && isTopLevelScrollItem(context, node)) {
+                return true;
+            }
         }
+
 
         return false;
     }
@@ -155,6 +178,10 @@ public class AccessibilityNodeInfoUtils {
      */
     public static boolean shouldFocusNode(Context context, AccessibilityNodeInfoCompat node) {
         if (node == null) {
+            return false;
+        }
+
+        if (!node.isVisibleToUser()) {
             return false;
         }
 
@@ -244,7 +271,7 @@ public class AccessibilityNodeInfoUtils {
                 }
 
                 // Ignore invisible nodes.
-                if (!child.isVisibleToUser()) {
+                if (!isVisibleOrLegacy(child)) {
                     continue;
                 }
 
@@ -422,12 +449,13 @@ public class AccessibilityNodeInfoUtils {
     }
 
     /**
-     * Determines whether a node is a top-level list item.
+     * Determines whether a node is a top-level item in a scrollable container.
      *
      * @param node The node to test.
-     * @return {@code true} if {@code node} is a top-level list item.
+     * @return {@code true} if {@code node} is a top-level item in a scrollable
+     *         container.
      */
-    public static boolean isTopLevelListItem(Context context, AccessibilityNodeInfoCompat node) {
+    public static boolean isTopLevelScrollItem(Context context, AccessibilityNodeInfoCompat node) {
         if (node == null) {
             return false;
         }
@@ -441,7 +469,38 @@ public class AccessibilityNodeInfoUtils {
                 return false;
             }
 
-            return nodeMatchesClassByType(context, parent, android.widget.AbsListView.class);
+            return nodeMatchesClassByType(context, parent, android.widget.AbsListView.class) ||
+                    nodeMatchesClassByType(context, parent, android.widget.ScrollView.class);
+        } finally {
+            recycleNodes(parent);
+        }
+    }
+
+    /**
+     * Determines whether a node is a top-level item in a container that has
+     * independently focusable direct children.
+     *
+     * @param context used for class loading.
+     * @param node The node to test.
+     * @return {@code true} if {@code node} is a top-level item in a container
+     *         with independently focusable direct children.
+     */
+    public static boolean isTopLevelFocusableItemInGrouping(
+            Context context, AccessibilityNodeInfoCompat node) {
+        if (node == null) {
+            return false;
+        }
+
+        AccessibilityNodeInfoCompat parent = null;
+
+        try {
+            parent = node.getParent();
+            if (parent == null) {
+                // Not a child node of anything.
+                return false;
+            }
+
+            return nodeMatchesClassByType(context, parent, android.widget.AdapterView.class);
         } finally {
             recycleNodes(parent);
         }
@@ -458,12 +517,12 @@ public class AccessibilityNodeInfoUtils {
             return false;
         }
 
-        if (isMatchingEdgeListItem(context, node, mScrollBackwardFilter,
+        if (isMatchingEdgeListItem(context, node, FILTER_SCROLL_BACKWARD,
                 NodeFocusFinder.SEARCH_BACKWARD)) {
             return true;
         }
 
-        if (isMatchingEdgeListItem(context, node, mScrollForwardFilter,
+        if (isMatchingEdgeListItem(context, node, FILTER_SCROLL_FORWARD,
                 NodeFocusFinder.SEARCH_FORWARD)) {
             return true;
         }
@@ -743,129 +802,60 @@ public class AccessibilityNodeInfoUtils {
      */
     public static boolean supportsAnyAction(AccessibilityNodeInfoCompat node,
             int... actions) {
-        final int supportedActions = node.getActions();
+        if (node != null) {
+            final int supportedActions = node.getActions();
 
-        for (int action : actions) {
-            if ((supportedActions & action) == action) {
-                return true;
+            for (int action : actions) {
+                if ((supportedActions & action) == action) {
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-   private static final NodeFilter FILTER_ACCESSIBILITY_FOCUSABLE = new NodeFilter() {
-        @Override
-        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
-            return isAccessibilityFocusable(context, node);
-        }
-    };
-
-    /** Filters out actionable and invisible nodes. Used to pick child nodes to read. */
-    // TODO: This should be private or somewhere else.
-    public static final NodeFilter FILTER_NON_FOCUSABLE = new NodeFilter() {
-        @Override
-        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
-            if (!node.isVisibleToUser()) {
-                return false;
-            }
-
-            return !FILTER_ACCESSIBILITY_FOCUSABLE.accept(context, node);
-        }
-    };
-
     /**
-     * Filter for scrollable items. One of the following must be true:
-     * <ul>
-     * <li>{@link AccessibilityNodeInfoCompat#isScrollable()} returns
-     * {@code true}</li>
-     * <li>{@link AccessibilityNodeInfoCompat#getActions()} supports
-     * {@link AccessibilityNodeInfoCompat#ACTION_SCROLL_FORWARD}</li>
-     * <li>{@link AccessibilityNodeInfoCompat#getActions()} supports
-     * {@link AccessibilityNodeInfoCompat#ACTION_SCROLL_BACKWARD}</li>
-     * </ul>
+     * Returns the result of applying a filter using breadth-first traversal.
+     *
+     * @param context The activity context.
+     * @param node The root node to traverse from.
+     * @param filter The filter to satisfy.
+     * @return The first node reached via BFS traversal that satisfies the
+     *         filter.
      */
-    public static final NodeFilter FILTER_SCROLLABLE = new NodeFilter() {
-        @Override
-        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
-            return isScrollable(node);
-        }
-    };
-
-    private static final NodeActionFilter mScrollForwardFilter = new NodeActionFilter(
-            AccessibilityNodeInfoCompat.ACTION_SCROLL_FORWARD);
-    private static final NodeActionFilter mScrollBackwardFilter = new NodeActionFilter(
-            AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD);
-
-    /**
-     * Convenience class for a {@link NodeFilter} that checks whether nodes
-     * support a specific action or set of actions.
-     */
-    private static class NodeActionFilter implements NodeFilter {
-        private final int mAction;
-
-        public NodeActionFilter(int action) {
-            mAction = action;
+    public static AccessibilityNodeInfoCompat searchFromBfs(
+            Context context, AccessibilityNodeInfoCompat node, NodeFilter filter) {
+        if (node == null) {
+            return null;
         }
 
-        @Override
-        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
-            return ((node.getActions() & mAction) == mAction);
+        final LinkedList<AccessibilityNodeInfoCompat> queue =
+                new LinkedList<AccessibilityNodeInfoCompat>();
+
+        queue.add(AccessibilityNodeInfoCompat.obtain(node));
+
+        while (!queue.isEmpty()) {
+            final AccessibilityNodeInfoCompat item = queue.removeFirst();
+
+            if (filter.accept(context, item)) {
+                return AccessibilityNodeInfoCompat.obtain(item);
+            }
+
+            final int childCount = item.getChildCount();
+
+            for (int i = 0; i < childCount; i++) {
+                final AccessibilityNodeInfoCompat child = item.getChild(i);
+
+                if (child == null) {
+                    continue;
+                }
+
+                queue.addLast(child);
+            }
         }
-    }
 
-    /**
-     * Compares two AccessibilityNodeInfos in left-to-right and top-to-bottom
-     * fashion.
-     */
-    public static class TopToBottomLeftToRightComparator implements
-            Comparator<AccessibilityNodeInfoCompat> {
-        private final Rect mFirstBounds = new Rect();
-        private final Rect mSecondBounds = new Rect();
-
-        @Override
-        public int compare(AccessibilityNodeInfoCompat first, AccessibilityNodeInfoCompat second) {
-            final Rect firstBounds = mFirstBounds;
-            first.getBoundsInScreen(firstBounds);
-
-            final Rect secondBounds = mSecondBounds;
-            second.getBoundsInScreen(secondBounds);
-
-            // First, compare based on top position difference.
-            final int topDifference = firstBounds.top - secondBounds.top;
-            if (topDifference != 0) {
-                return topDifference;
-            }
-
-            // Next, compare based on left position distance.
-            final int leftDifference = firstBounds.left - secondBounds.left;
-            if (leftDifference != 0) {
-                return leftDifference;
-            }
-
-            // TODO(alanv): Does it make sense to break ties? If two nodes share
-            // the same top and left positions, one should be Z-ordered above
-            // the other.
-
-            // Compare based on height difference.
-            final int firstHeight = firstBounds.bottom - firstBounds.top;
-            final int secondHeight = secondBounds.bottom - secondBounds.top;
-            final int heightDiference = firstHeight - secondHeight;
-            if (heightDiference != 0) {
-                return heightDiference;
-            }
-
-            // Compare based on width difference.
-            final int firstWidth = firstBounds.right - firstBounds.left;
-            final int secondWidth = secondBounds.right - secondBounds.left;
-            int widthDiference = firstWidth - secondWidth;
-            if (widthDiference != 0) {
-                return widthDiference;
-            }
-
-            // Do not return 0 to avoid losing data.
-            return 1;
-        }
+        return null;
     }
 
     /**
@@ -920,5 +910,145 @@ public class AccessibilityNodeInfoUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Helper method that returns {@code true} if the specified node is visible
+     * to the user or if the current SDK doesn't support checking visibility.
+     */
+    /* package */ static  boolean isVisibleOrLegacy(AccessibilityNodeInfoCompat node) {
+        return (!AccessibilityNodeInfoUtils.SUPPORTS_VISIBILITY || node.isVisibleToUser());
+    }
+
+    /** Filters out actionable and invisible nodes. Used to pick child nodes to read. */
+    // TODO: This should be private or somewhere else.
+    public static final NodeFilter FILTER_NON_FOCUSABLE = new NodeFilter() {
+        @Override
+        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
+            if (!isVisibleOrLegacy(node)) {
+                return false;
+            }
+
+            return !FILTER_ACCESSIBILITY_FOCUSABLE.accept(context, node);
+        }
+    };
+
+    /**
+     * Filter for scrollable items. One of the following must be true:
+     * <ul>
+     * <li>{@link AccessibilityNodeInfoCompat#isScrollable()} returns
+     * {@code true}</li>
+     * <li>{@link AccessibilityNodeInfoCompat#getActions()} supports
+     * {@link AccessibilityNodeInfoCompat#ACTION_SCROLL_FORWARD}</li>
+     * <li>{@link AccessibilityNodeInfoCompat#getActions()} supports
+     * {@link AccessibilityNodeInfoCompat#ACTION_SCROLL_BACKWARD}</li>
+     * </ul>
+     */
+    public static final NodeFilter FILTER_SCROLLABLE = new NodeFilter() {
+        @Override
+        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
+            return isScrollable(node);
+        }
+    };
+
+    private static final NodeFilter FILTER_ACCESSIBILITY_FOCUSABLE = new NodeFilter() {
+        @Override
+        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
+            return isAccessibilityFocusable(context, node);
+        }
+    };
+
+    private static final NodeActionFilter FILTER_SCROLL_FORWARD = new NodeActionFilter(
+            AccessibilityNodeInfoCompat.ACTION_SCROLL_FORWARD);
+
+    private static final NodeActionFilter FILTER_SCROLL_BACKWARD = new NodeActionFilter(
+            AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD);
+
+    /**
+     * Convenience class for a {@link NodeFilter} that checks whether nodes
+     * support a specific action or set of actions.
+     */
+    private static class NodeActionFilter implements NodeFilter {
+        private final int mAction;
+
+        public NodeActionFilter(int action) {
+            mAction = action;
+        }
+
+        @Override
+        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
+            return ((node.getActions() & mAction) == mAction);
+        }
+    }
+
+    /**
+     * Compares two AccessibilityNodeInfos in left-to-right and top-to-bottom
+     * fashion.
+     */
+    public static class TopToBottomLeftToRightComparator implements
+            Comparator<AccessibilityNodeInfoCompat> {
+        private final Rect mFirstBounds = new Rect();
+        private final Rect mSecondBounds = new Rect();
+
+        private static final int BEFORE = -1;
+        private static final int AFTER = 1;
+
+        @Override
+        public int compare(AccessibilityNodeInfoCompat first, AccessibilityNodeInfoCompat second) {
+            final Rect firstBounds = mFirstBounds;
+            first.getBoundsInScreen(firstBounds);
+
+            final Rect secondBounds = mSecondBounds;
+            second.getBoundsInScreen(secondBounds);
+
+            // First is entirely above second.
+            if (firstBounds.bottom <= secondBounds.top) {
+                return BEFORE;
+            }
+
+            // First is entirely below second.
+            if (firstBounds.top >= secondBounds.bottom) {
+                return AFTER;
+            }
+
+            // Smaller left-bound.
+            final int leftDifference = (firstBounds.left - secondBounds.left);
+            if (leftDifference != 0) {
+                return leftDifference;
+            }
+
+            // Smaller top-bound.
+            final int topDifference = (firstBounds.top - secondBounds.top);
+            if (topDifference != 0) {
+                return topDifference;
+            }
+
+            // Smaller bottom-bound.
+            final int bottomDifference = (firstBounds.bottom - secondBounds.bottom);
+            if (bottomDifference != 0) {
+                return bottomDifference;
+            }
+
+            // Smaller right-bound.
+            final int rightDifference = (firstBounds.right - secondBounds.right);
+            if (rightDifference != 0) {
+                return rightDifference;
+            }
+
+            // Just break the tie somehow. The hash codes are unique
+            // and stable, hence this is deterministic tie breaking.
+            return first.hashCode() - second.hashCode();
+        }
+    }
+
+    /**
+     * Filters {@link AccessibilityNodeInfoCompat}s.
+     */
+    public static interface NodeFilter {
+        /**
+         * @param node The node info to filter.
+         * @return {@code true} if the node is accepted
+         */
+        public boolean accept(Context context, AccessibilityNodeInfoCompat node);
     }
 }

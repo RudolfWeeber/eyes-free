@@ -89,7 +89,6 @@ static CommandMap* brlttyKeyMap = NULL;
 static jint cmdActivateCurrent = -1;
 
 static jclass class_BrlttyWrapper;
-static jclass class_BrailleDisplayProperties;
 static jclass class_BrailleKeyBinding;
 static jclass class_IndexOutOfBoundsException;
 static jclass class_OutOfMemoryError;
@@ -97,11 +96,8 @@ static jclass class_NullPointerException;
 static jclass class_RuntimeException;
 static jclass class_String;
 static jfieldID field_mNativeData;
-static jfieldID field_mDriverCode;
-static jfieldID field_mBrailleDevice;
 static jfieldID field_mTablesDir;
 static jmethodID method_sendBytesToDevice;
-static jmethodID method_BrailleDisplayProperties_ctor;
 static jmethodID method_BrailleKeyBinding_ctor;
 
 // Data for the reportKeyBinding callback.
@@ -168,7 +164,7 @@ freenat:
 
 jboolean
 Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_startNative
-(JNIEnv* env, jobject thiz) {
+(JNIEnv* env, jobject thiz, jstring driverCode, jstring brailleDevice) {
   jboolean result = JNI_FALSE;
   LOGI("Starting braille driver");
   NativeData *nat = getNativeData(env, thiz);
@@ -176,22 +172,11 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_startNative
     LOGE("Trying to start a destroyed object");
     goto out;
   }
-  jstring driverCode = (*env)->GetObjectField(env, thiz, field_mDriverCode);
-  if (!driverCode) {
-    (*env)->ThrowNew(env, class_NullPointerException, NULL);
-    goto out;
-  }
-  const char *driverCodeChars = (*env)->GetStringUTFChars(env, driverCode,
-                                                          NULL);
+  const char *driverCodeChars =
+      (*env)->GetStringUTFChars(env, driverCode, NULL);
   if (!driverCodeChars) {
     // Out of memory already thrown.
     goto out;
-  }
-  jstring brailleDevice = (*env)->GetObjectField(env, thiz,
-                                                 field_mBrailleDevice);
-  if (!brailleDevice) {
-    (*env)->ThrowNew(env, class_NullPointerException, NULL);
-    goto releaseDriverCodeChars;
   }
   const char *brailleDeviceChars =
       (*env)->GetStringUTFChars(env, brailleDevice, NULL);
@@ -244,19 +229,50 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_stopNative(
   free(nat);
 }
 
-jobject
-Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_getDisplayPropertiesNative(
+jint
+Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_getTextCellsNative(
     JNIEnv* env, jobject thiz) {
-  jobjectArray keyBindings = listKeyMap(env);
-  if (keyBindings == NULL) {
+  return brltty_getTextCells();
+}
+
+jint
+Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_getStatusCellsNative(
+    JNIEnv* env, jobject thiz) {
+  return brltty_getStatusCells();
+}
+
+jobjectArray
+Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_getKeyMapNative(
+    JNIEnv* env, jobject thiz) {
+  ListKeyMapData lkd = {
+    .env = env,
+    .bindings = NULL,
+    .bindingsSize = 0,
+    .bindingsCapacity = 0,
+  };
+  jobjectArray result = NULL;
+  if ((*env)->PushLocalFrame(env, 128) < 0) {
+    // Exception thrown.
     return NULL;
   }
-  return (*env)->NewObject(
-      env, class_BrailleDisplayProperties,
-      method_BrailleDisplayProperties_ctor,
-      brltty_getTextCells(),
-      brltty_getStatusCells(),
-      keyBindings);
+  if (!brltty_listKeyMap(reportKeyBinding, &lkd)) {
+    (*env)->ThrowNew(env, class_RuntimeException, "Couldn't list key bindings");
+    goto out;
+  }
+  jobjectArray array = (*env)->NewObjectArray(
+      env, lkd.bindingsSize, class_BrailleKeyBinding, NULL);
+  if (array == NULL) {
+    // Exception thrown.
+    goto out;
+  }
+  int i;
+  for (i = 0; i < lkd.bindingsSize; ++i) {
+    (*env)->SetObjectArrayElement(env, array, i, lkd.bindings[i]);
+  }
+  result = array;
+out:
+  free(lkd.bindings);
+  return (*env)->PopLocalFrame(env, result);
 }
 
 jboolean
@@ -359,29 +375,9 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_classInitNati
     LOGE("Couldn't find mNativeData field");
     return;
   }
-  if (!(field_mDriverCode = (*env)->GetFieldID(
-          env, clazz, "mDriverCode", "Ljava/lang/String;"))) {
-    LOGE("Couldn't find mDriverCode field");
-    return;
-  }
-  if (!(field_mBrailleDevice = (*env)->GetFieldID(
-          env, clazz, "mBrailleDevice", "Ljava/lang/String;"))) {
-    LOGE("Couldn't find mBrailleDevice field");
-    return;
-  }
   if (!(field_mTablesDir = (*env)->GetFieldID(
           env, clazz, "mTablesDir", "Ljava/lang/String;"))) {
     LOGE("Couldn't find mTablesDir field");
-    return;
-  }
-  if (!(class_BrailleDisplayProperties = getGlobalClassRef(
-          env, DISPLAY_PACKAGE "BrailleDisplayProperties"))) {
-    return;
-  }
-  if (!(method_BrailleDisplayProperties_ctor =
-        (*env)->GetMethodID(
-            env, class_BrailleDisplayProperties, "<init>",
-            "(II[L" DISPLAY_PACKAGE "BrailleKeyBinding;)V"))) {
     return;
   }
   if (!(class_BrailleKeyBinding = getGlobalClassRef(
@@ -630,39 +626,6 @@ mapBrlttyCommand(int brlttyCommand,
     *outCommand = commandMapGet(brlttyCommandMap, maskedCommand);
     *outArg = brlttyArg;
   }
-}
-
-static jobjectArray
-listKeyMap(JNIEnv* env) {
-  ListKeyMapData lkd = {
-    .env = env,
-    .bindings = NULL,
-    .bindingsSize = 0,
-    .bindingsCapacity = 0,
-  };
-  jobject result = NULL;
-  if ((*env)->PushLocalFrame(env, 128) < 0) {
-    // Exception thrown.
-    return NULL;
-  }
-  if (!brltty_listKeyMap(reportKeyBinding, &lkd)) {
-    LOGE("Couldn't list key map");
-    goto out;
-  }
-  jobjectArray array = (*env)->NewObjectArray(
-      env, lkd.bindingsSize, class_BrailleKeyBinding, NULL);
-  if (array == NULL) {
-    // Exception thrown.
-    goto out;
-  }
-  int i;
-  for (i = 0; i < lkd.bindingsSize; ++i) {
-    (*env)->SetObjectArrayElement(env, array, i, lkd.bindings[i]);
-  }
-  result = array;
-out:
-  free(lkd.bindings);
-  return (*env)->PopLocalFrame(env, result);
 }
 
 static int

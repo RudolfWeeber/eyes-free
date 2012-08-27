@@ -18,10 +18,14 @@
 
 package com.googlecode.eyesfree.braille.service.display;
 
+import android.content.res.Resources;
+
 import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
-import android.util.Log;
+import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Wrapper for the driver functionality of brltty.
@@ -42,9 +46,9 @@ public class BrlttyWrapper {
     private static final String LOG_TAG = BrlttyWrapper.class.getSimpleName();
 
     private final DriverThread mDriverThread;
+    private final Resources mResources;
     private final String mTablesDir;
-    private final String mDriverCode;
-    private final String mBrailleDevice;
+    private final DeviceFinder.DeviceInfo mDeviceInfo;
     /** Native pointer to C struct */
     @SuppressWarnings("unused")
     private int mNativeData;
@@ -53,11 +57,13 @@ public class BrlttyWrapper {
      * Constructs a {@link BrlttyWrapper}.  {@code driverThread} is used
      * to send data bytes to the device.
      */
-    public BrlttyWrapper(String driverCode, String brailleDevice,
-            DriverThread driverThread, File tablesDir) {
-        mDriverCode = driverCode;
-        mBrailleDevice = brailleDevice;
+    public BrlttyWrapper(DeviceFinder.DeviceInfo deviceInfo,
+            DriverThread driverThread,
+            Resources resources,
+            File tablesDir) {
+        mDeviceInfo = deviceInfo;
         mDriverThread = driverThread;
+        mResources = resources;
         mTablesDir = tablesDir.getPath();
         initNative();
     }
@@ -67,7 +73,7 @@ public class BrlttyWrapper {
      * connected.
      */
     public boolean start() {
-        return startNative();
+        return startNative(mDeviceInfo.getDriverCode(), deviceBrlttyAddress());
     }
 
     /**
@@ -79,7 +85,10 @@ public class BrlttyWrapper {
     }
 
     public BrailleDisplayProperties getDisplayProperties() {
-        return getDisplayPropertiesNative();
+        BrailleKeyBinding[] keyBindings = getKeyMapNative();
+        return new BrailleDisplayProperties(
+            getTextCellsNative(), getStatusCellsNative(),
+            keyBindings, getFriendlyKeyNames(keyBindings));
     }
 
     /**
@@ -118,15 +127,44 @@ public class BrlttyWrapper {
         addBytesFromDeviceNative(bytes, size);
     }
 
+    /**
+     * Returns the address of the connected device in the form expected
+     * by the brltty drivers.
+     */
+    private String deviceBrlttyAddress() {
+        return String.format("bluetooth:%s",
+                mDeviceInfo.getBluetoothDevice().getAddress());
+    }
+
+    private Map<String, String> getFriendlyKeyNames(
+        BrailleKeyBinding[] bindings) {
+        Map<String, String> result = new HashMap<String, String>();
+        Map<String, Integer> friendlyNames = mDeviceInfo.getFriendlyKeyNames();
+        for (BrailleKeyBinding binding : bindings) {
+            for (String key : binding.getKeyNames()) {
+                Integer resId = friendlyNames.get(key);
+                if (resId != null) {
+                    result.put(key, mResources.getString(resId));
+                } else {
+                    result.put(key, key);
+                }
+            }
+        }
+        return result;
+    }
+
     // Native methods.
 
     private native boolean initNative();
-    private native boolean startNative();
+    private native boolean startNative(String driverCode,
+            String brailleDevice);
     private native void stopNative();
-    private native BrailleDisplayProperties getDisplayPropertiesNative();
     private native boolean writeWindowNative(byte[] pattern);
     private native int readCommandNative();
     private native void addBytesFromDeviceNative(byte[] bytes, int size);
+    private native BrailleKeyBinding[] getKeyMapNative();
+    private native int getTextCellsNative();
+    private native int getStatusCellsNative();
 
     // Callbacks used from native code.
 
