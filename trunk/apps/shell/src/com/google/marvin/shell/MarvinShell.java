@@ -20,11 +20,14 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.appwidget.AppWidgetHost;
+import android.appwidget.AppWidgetHostView;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -41,6 +44,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.Contacts;
@@ -50,8 +54,11 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -66,6 +73,7 @@ import com.googlecode.eyesfree.widget.GestureOverlay.Gesture;
 import com.googlecode.eyesfree.widget.GestureOverlay.GestureListener;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,6 +116,12 @@ public class MarvinShell extends Activity {
 
     public static final int REQUEST_CODE_TALKING_DIALER_VIDEO = 5011;
 
+    public static final int REQUEST_PICK_APPWIDGET = 5012;
+
+    public static final int REQUEST_CREATE_APPWIDGET = 5013;
+
+    public static final int REQUEST_BIND_APPWIDGET = 5014;
+
     public static final int REQUEST_CODE_VOICE_RECO = 777;
 
     public static final String HOME_MENU = "Home";
@@ -118,6 +132,18 @@ public class MarvinShell extends Activity {
 
     private PackageManager pm;
 
+    private AppWidgetManager awm;
+
+    private RelativeLayout widgetHolder;
+
+    private AppWidgetHost widgetHost;
+
+    private AppWidgetHostView currentWidget;
+
+    private int widgetKey;
+
+    private ArrayList<Bundle> widgetConfigs;
+
     private FrameLayout mainFrameLayout;
 
     // We use an ImageView rather than setBackground to avoid the automatic
@@ -125,6 +151,8 @@ public class MarvinShell extends Activity {
     private ImageView wallpaperView;
 
     private AppChooserView appChooserView;
+
+    private WidgetChooserView widgetChooserView;
 
     public TextToSpeech tts;
 
@@ -167,19 +195,23 @@ public class MarvinShell extends Activity {
     int lastGesture = -1;
 
     // Path to shortcuts file.
-    private String eyesfreePath = "/sdcard/eyesfree/";
+    public static final String EYES_FREE_PATH = "/sdcard/eyesfree/";
 
-    private String shortcutsFilename = eyesfreePath + "shortcuts.xml";
+    private String shortcutsFilename = EYES_FREE_PATH + "shortcuts.xml";
 
     private TelephonyManager mTelephonyManager;
 
     private HashMap<String, String> shortcutDescriptionToAction;
+
+    private static final int APPWIDGET_HOST_ID = 314;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         self = this;
+
+        requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
 
         justStarted = true;
         isFocused = true;
@@ -201,6 +233,7 @@ public class MarvinShell extends Activity {
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         setVolumeControlStream(AudioManager.STREAM_RING);
         pm = getPackageManager();
+        awm = AppWidgetManager.getInstance(this);
 
         IntentFilter appChangeFilter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
         appChangeFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -220,11 +253,16 @@ public class MarvinShell extends Activity {
         mainFrameLayout.addView(gestureOverlay, mainFrameLayout.getChildCount() - 2);
 
         widgets = new AuditoryWidgets(tts, self);
+        widgetHost = new AppWidgetHost(this, APPWIDGET_HOST_ID);
+        widgetHolder = (RelativeLayout) findViewById(R.id.widgetHolder);
+        widgetConfigs = new ArrayList<Bundle>();
+        widgetKey = -1;
 
         menuHistory = new ArrayList<String>();
         menus = new MenuManager();
         menus.put(HOME_MENU, new Menu(HOME_MENU));
         loadMenus();
+        menus.save(shortcutsFilename);
         switchMenu(HOME_MENU);
 
         IntentFilter mediaIntentFilter = new IntentFilter();
@@ -233,6 +271,9 @@ public class MarvinShell extends Activity {
         registerReceiver(sdcardReceiver, mediaIntentFilter);
 
         new InitAppChooserTask().execute();
+        new InitWidgetChooserTask().execute();
+
+        widgetHost.startListening();
     }
 
     @Override
@@ -292,6 +333,7 @@ public class MarvinShell extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        widgetHost.stopListening();
         if (tts != null) {
             tts.shutdown();
         }
@@ -441,6 +483,10 @@ public class MarvinShell extends Activity {
                         "VIDEO_CHAT");
             }
         }
+        // Android widgets for Jelly Bean on
+        if (Build.VERSION.SDK_INT > 15) {
+            shortcutDescriptionToAction.put(getString(R.string.android_widgets), "ANDROID_WIDGET");
+        }
     }
 
     /**
@@ -467,25 +513,24 @@ public class MarvinShell extends Activity {
      * resources instead.
      */
     private void loadMenus() {
-        final Context ctx = this;
-        File efDir = new File(eyesfreePath);
+        File efDir = new File(EYES_FREE_PATH);
         boolean directoryExists = efDir.isDirectory();
         if (!directoryExists) {
             efDir.mkdir();
         }
 
         if (new File(shortcutsFilename).isFile()) {
-            menus = MenuManager.loadMenus(ctx, shortcutsFilename);
+            menus = MenuManager.loadMenus(this, shortcutsFilename);
             if (!menus.containsKey(HOME_MENU)) {
                 new File(shortcutsFilename).delete();
                 Resources res = getResources();
                 InputStream is = res.openRawResource(R.raw.default_shortcuts);
-                menus = MenuManager.loadMenus(ctx, is);
+                menus = MenuManager.loadMenus(this, is);
             }
         } else {
             Resources res = getResources();
             InputStream is = res.openRawResource(R.raw.default_shortcuts);
-            menus = MenuManager.loadMenus(ctx, is);
+            menus = MenuManager.loadMenus(this, is);
         }
     }
 
@@ -525,6 +570,277 @@ public class MarvinShell extends Activity {
         }
     }
 
+    protected int onAndroidWidgetSelected(AppWidgetProviderInfo widgetInfo, int id, boolean fromBackup) {
+        boolean hasPermission = false;
+        // If this widget is not bound: attempt to bind it.
+        if (id < 0) {
+            id = widgetHost.allocateAppWidgetId();
+            hasPermission = awm.bindAppWidgetIdIfAllowed(id, widgetInfo.provider);
+            // Request bind permission if we don't already have it
+            if (!hasPermission) {
+                Intent bindIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_BIND);
+                bindIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_PROVIDER, widgetInfo.provider);
+                bindIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+                startActivityForResult(bindIntent, REQUEST_BIND_APPWIDGET);
+                return id;
+            }
+        }
+        // This Widget is already bound
+        if (hasPermission || id > -1) {
+            Intent intent =
+                    new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
+            intent.setComponent(widgetInfo.configure);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+            // TODO(sainsley): If we are restoring a widget from backup but it
+            // needs to be configured, then we should replace this widget with
+            // a "please configure" message.
+            // Launch widget configure activity, if necessary
+            if (widgetInfo.configure != null && !fromBackup) {
+                startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+            } else {
+                createAndroidWidget(intent);
+            }
+        }
+        switchToMainView();
+        return id;
+    }
+
+    /**
+     * Simulate a click on current android widget
+     */
+    private void launchCurrentAndroidWidget() {
+        View widget = findWidget(currentWidget);
+        if (widget != null) {
+            boolean success = widget.performClick();
+            if (!success) {
+                widget = findClickableChild(currentWidget);
+                widget.performClick();
+            }
+        } else {
+            // Attempt to fire on touch event in center of widget (this rarely
+            // works)
+            View firstChild = currentWidget.getChildAt(0);
+            float x = firstChild.getHeight() / 2f;
+            float y = firstChild.getWidth() / 2f;
+            MotionEvent touchDown = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, x, y, 0);
+            boolean success = firstChild.dispatchTouchEvent(touchDown);
+            MotionEvent touchUp = MotionEvent.obtain(0, 0, MotionEvent.ACTION_UP, x, y, 0);
+            boolean success2 = firstChild.dispatchTouchEvent(touchUp);
+        }
+    }
+
+    /**
+     * Display and speak current widget
+     *
+     * @param item associated menu item
+     */
+    private void focusAndroidWidget(MenuItem item) {
+
+        HashMap<String, String> idMap = new HashMap<String, String>();
+        int appWidgetId = Integer.parseInt(item.data);
+        AppWidgetHostView hostView = (AppWidgetHostView) widgetHolder.getChildAt(appWidgetId);
+        hostView.setVisibility(View.VISIBLE);
+        currentWidget = hostView;
+        AppWidgetProviderInfo providerInfo = awm.getAppWidgetInfo(hostView.getAppWidgetId());
+        if (providerInfo == null) {
+            return;
+        }
+        // Get focusable items
+        ArrayList<View> focusWidgets = new ArrayList<View>();
+        focusWidgets = findFocusWidgets(hostView, focusWidgets);
+
+        boolean hasContent = false;
+        // Read widget content
+        for (View focusWidget : focusWidgets) {
+            String description = null;
+            // Try to find something to speak
+            if (focusWidget.getContentDescription() != null) {
+                description = focusWidget.getContentDescription().toString();
+            } else if (focusWidget instanceof TextView) {
+                description = ((TextView) focusWidget).getText().toString();
+            }
+            if (description != null) {
+                int mode = TextToSpeech.QUEUE_ADD;
+                if (!hasContent) {
+                    mode = TextToSpeech.QUEUE_FLUSH;
+                }
+                idMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, focusWidget.toString());
+                tts.speak(description, mode, idMap);
+                hasContent = true;
+            }
+        }
+
+        if (!hasContent) {
+            // Read widget label
+            tts.speak(providerInfo.label, TextToSpeech.QUEUE_FLUSH, null);
+        }
+    }
+
+    /**
+     * Finds all items in a widget view that we should read
+     *
+     * @param currentView
+     * @param currentList
+     * @return views
+     */
+    public ArrayList<View> findFocusWidgets(View currentView, ArrayList<View> currentList) {
+        if (currentView.getImportantForAccessibility() == View.IMPORTANT_FOR_ACCESSIBILITY_YES
+                && currentView.getVisibility() == View.VISIBLE) {
+            currentList.add(currentView);
+        }
+        // Check children
+        if (currentView instanceof ViewGroup) {
+            ViewGroup wrapperGroup = (ViewGroup) currentView;
+            for (int i = 0; i < wrapperGroup.getChildCount(); ++i) {
+                currentList = findFocusWidgets(wrapperGroup.getChildAt(i), currentList);
+            }
+        }
+        return currentList;
+    }
+
+    /**
+     * Finds first clickable view in this widget
+     */
+    private View findWidget(View currentView) {
+        if (!currentView.isClickable()) {
+            if (currentView instanceof ViewGroup) {
+                ViewGroup wrapperGroup = (ViewGroup) currentView;
+                for (int i = 0; i < wrapperGroup.getChildCount(); ++i) {
+                    View childView = findWidget(wrapperGroup.getChildAt(i));
+                    if (childView != null) {
+                        return childView;
+                    }
+                }
+            }
+            return null;
+        } else {
+            return currentView;
+        }
+    }
+
+    /**
+     * Finds the first clickable view with no children we use this as a fail
+     * safe if the first clickable view doesn't do anything
+     */
+    private View findClickableChild(View currentView) {
+        // Find the first clickable child of the current group
+        if (currentView instanceof ViewGroup) {
+            ViewGroup wrapperGroup = (ViewGroup) currentView;
+            for (int i = 0; i < wrapperGroup.getChildCount(); ++i) {
+                View childView = findClickableChild(wrapperGroup.getChildAt(i));
+                if (childView != null) {
+                    return childView;
+                }
+            }
+        }
+
+        if (currentView.isClickable()) {
+            return currentView;
+        }
+
+        return null;
+    }
+
+    /**
+     * Loads an android widget when inflating menus
+     *
+     * @param widgetId the saved widget id
+     * @param backUpInfo the provider info in case we can't find this widget
+     * @return new widget id
+     */
+    protected String loadAndroidWidget(
+            String widgetId, AppWidgetProviderInfo backUpInfo) {
+        widgetKey++;
+        int appWidgetId = Integer.parseInt(widgetId);
+        AppWidgetProviderInfo appWidgetInfo = awm.getAppWidgetInfo(appWidgetId);
+        // We cannot find the widget: try to reinstantiate it
+        if (appWidgetInfo == null && backUpInfo != null) {
+            widgetId = Integer.toString(onAndroidWidgetSelected(backUpInfo, -1, true));
+            return widgetId;
+        }
+        // Place widget
+        AppWidgetHostView hostView = widgetHost.createView(this, appWidgetId, appWidgetInfo);
+        hostView.setAppWidget(appWidgetId, appWidgetInfo);
+        widgetHolder.addView(hostView);
+        hostView.setVisibility(View.GONE);
+        // widgetConfigs.add(configBundle);
+        return widgetId;
+    }
+
+    /**
+     * Gets the current widget key
+     *
+     * @return widgetKey
+     */
+    protected int getAndroidWidgetKey() {
+        return widgetKey;
+    }
+
+    /**
+     * Save android widget info to file
+     */
+    private void saveAndroidWidgets() {
+        // Save parcel for each widget file
+        for (int i = 0; i < widgetHolder.getChildCount(); ++i) {
+            AppWidgetHostView widget = (AppWidgetHostView) widgetHolder.getChildAt(i);
+            // Get widget info
+            AppWidgetProviderInfo info = widget.getAppWidgetInfo();
+            // Save parcel
+            FileOutputStream fos;
+            try {
+                // write widget parcel
+                Parcel parcel = Parcel.obtain();
+                info.writeToParcel(parcel, 0);
+                fos = new FileOutputStream(EYES_FREE_PATH + "widget_" + i);
+                fos.write(parcel.marshall());
+                fos.close();
+            } catch (Exception e) {
+                Log.e("MarvinShell", e.toString());
+            }
+        }
+    }
+
+    /**
+     * Launch config activity for a widget
+     */
+    private void configureAndroidWidget(Intent data) {
+        Bundle extras = data.getExtras();
+        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+        AppWidgetProviderInfo appWidgetInfo = awm.getAppWidgetInfo(appWidgetId);
+        // Launch widget configure activity, if necessary
+        if (appWidgetInfo.configure != null) {
+            Intent intent =
+                    new Intent(AppWidgetManager.ACTION_APPWIDGET_CONFIGURE);
+            intent.setComponent(appWidgetInfo.configure);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            startActivityForResult(intent, REQUEST_CREATE_APPWIDGET);
+        } else {
+            createAndroidWidget(data);
+        }
+    }
+
+    /**
+     * Create and place widget
+     */
+    private void createAndroidWidget(Intent data) {
+        Bundle extras = data.getExtras();
+        int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+        AppWidgetProviderInfo appWidgetInfo = awm.getAppWidgetInfo(appWidgetId);
+        AppWidgetHostView hostView = widgetHost.createView(this, appWidgetId, appWidgetInfo);
+        hostView.setAppWidget(appWidgetId, appWidgetInfo);
+        // Place widget
+        int viewId = widgetHolder.getChildCount();
+        widgetHolder.addView(hostView);
+        hostView.setVisibility(View.GONE);
+        widgetConfigs.add(awm.getAppWidgetOptions(appWidgetId));
+        if (lastGesture > 0) {
+            MenuItem menuItem = new MenuItem(appWidgetInfo.label, "ANDROID_WIDGET",
+                    Integer.toString(viewId), Integer.toString(appWidgetId));
+            currentMenu.put(lastGesture, menuItem);
+            tts.speak(lastGesture + " - " + menuItem.label, TextToSpeech.QUEUE_FLUSH, null);
+        }
+    }
+
     private void selectWidget() {
         final String[] items = new String[widgets.descriptionToWidget.size()];
         widgets.descriptionToWidget.keySet().toArray(items);
@@ -536,7 +852,7 @@ public class MarvinShell extends Activity {
             public void onClick(DialogInterface dialog, int item) {
                 String widgetData = widgets.descriptionToWidget.get(items[item]);
                 if (widgetData != null) {
-                    MenuItem menuItem = new MenuItem(items[item], "WIDGET", widgetData, null);
+                    MenuItem menuItem = new MenuItem(items[item], "WIDGET", widgetData);
                     currentMenu.put(lastGesture, menuItem);
                 }
             }
@@ -560,6 +876,9 @@ public class MarvinShell extends Activity {
 
         @Override
         public void onGestureChange(int g) {
+            if (currentWidget != null) {
+                currentWidget.setVisibility(View.GONE);
+            }
             String feedback;
             if (g == GestureOverlay.Gesture.CENTER) {
                 feedbackController.playVibration(R.array.pattern_center);
@@ -568,6 +887,10 @@ public class MarvinShell extends Activity {
                 feedbackController.playVibration(R.array.pattern_center);
                 MenuItem item = currentMenu.get(g);
                 if (item != null) {
+                    if (item.isWidget && activeMode != MENU_EDIT_MODE) {
+                        focusAndroidWidget(item);
+                        return;
+                    }
                     feedback = item.label;
                     // If the item is a menu, we want to look up the name.
                     if (item.action.equalsIgnoreCase("MENU") && menus.get(item.data) != null) {
@@ -585,11 +908,21 @@ public class MarvinShell extends Activity {
 
         @Override
         public void onGestureFinish(int g) {
+            if (currentWidget != null) {
+                currentWidget.setVisibility(View.GONE);
+            }
             setVolumeControlStream(AudioManager.STREAM_RING);
-
+            // Launch widget if we have a widget waiting
+            if (g == Gesture.DOUBLE_TAP && currentWidget != null) {
+                launchCurrentAndroidWidget();
+                currentWidget = null;
+                return;
+            }
             if (g == Gesture.CENTER) {
+                // single tap
                 switchMenu(HOME_MENU);
                 tts.speak(menus.get(HOME_MENU).getName(), TextToSpeech.QUEUE_FLUSH, null);
+                currentWidget = null;
                 return;
             }
 
@@ -618,7 +951,9 @@ public class MarvinShell extends Activity {
             // Otherwise do the appropriate thing depending on mode.
             switch (activeMode) {
                 case MAIN_VIEW:
-                    if (item != null) {
+                    if (item != null && !item.action.equals("ANDROID_WIDGET")) {
+                        // unregister android widget
+                        currentWidget = null;
                         if (item.action.equals("LAUNCH")) {
                             onAppSelected(item.appInfo);
                         } else if (item.action.equals("WIDGET")) {
@@ -730,7 +1065,9 @@ public class MarvinShell extends Activity {
             public void onClick(DialogInterface dialog, int item) {
                 String action = shortcutDescriptionToAction.get(items[item]);
                 if (action.equals("LAUNCH")) {
-                    switchToAppChooserView();
+                    switchToAppChooserView(false);
+                } else if (action.equals("ANDROID_WIDGET")) {
+                    switchToAppChooserView(true);
                 } else if (action.equals("BOOKMARK")) {
                     Intent intentBookmark = new Intent();
                     ComponentName bookmarks = new ComponentName("com.google.marvin.shell",
@@ -917,6 +1254,7 @@ public class MarvinShell extends Activity {
                         return true;
                     case MENU_EDIT_MODE:
                         menus.save(shortcutsFilename);
+                        saveAndroidWidgets();
                         tts.speak(getString(R.string.exiting_edit_mode), TextToSpeech.QUEUE_FLUSH,
                                 null);
                         activeMode = MAIN_VIEW;
@@ -950,6 +1288,25 @@ public class MarvinShell extends Activity {
                     addActivityResultShortcut(requestCode, data);
                 }
                 break;
+            case REQUEST_BIND_APPWIDGET:
+                if (resultCode == Activity.RESULT_OK) {
+                    int widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+                    if (widgetId > -1) {
+                        onAndroidWidgetSelected(awm.getAppWidgetInfo(widgetId), widgetId, false);
+                    }
+                }
+                break;
+            case REQUEST_PICK_APPWIDGET:
+                if (resultCode == Activity.RESULT_OK) {
+
+                    configureAndroidWidget(data);
+                }
+                break;
+            case REQUEST_CREATE_APPWIDGET:
+                if (resultCode == Activity.RESULT_OK) {
+                    createAndroidWidget(data);
+                }
+                break;
         }
     }
 
@@ -966,7 +1323,7 @@ public class MarvinShell extends Activity {
             case REQUEST_CODE_PICK_BOOKMARK:
                 title = data.getStringExtra("TITLE");
                 String url = data.getStringExtra("URL");
-                menuItem = new MenuItem(title, "BOOKMARK", url, null);
+                menuItem = new MenuItem(title, "BOOKMARK", url);
                 break;
             case REQUEST_CODE_PICK_CONTACT:
                 c = managedQuery(data.getData(), null, null, null, null);
@@ -978,13 +1335,13 @@ public class MarvinShell extends Activity {
                             c.getColumnIndexOrThrow(ContactsContract.Contacts.LOOKUP_KEY));
                     String uriString = ContactsContract.Contacts.getLookupUri(id, lookup)
                             .toString();
-                    menuItem = new MenuItem(name, "CONTACT", uriString, null);
+                    menuItem = new MenuItem(name, "CONTACT", uriString);
                 }
                 break;
             case REQUEST_CODE_PICK_SETTINGS:
                 title = data.getStringExtra("TITLE");
                 String action = data.getStringExtra("ACTION");
-                menuItem = new MenuItem(title, "SETTINGS", action, null);
+                menuItem = new MenuItem(title, "SETTINGS", action);
                 break;
             case REQUEST_CODE_PICK_DIRECT_DIAL:
                 c = managedQuery(data.getData(), null, null, null, null);
@@ -994,7 +1351,7 @@ public class MarvinShell extends Activity {
                     phoneNumber = c.getString(
                             c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     menuItem = new MenuItem(
-                            getString(R.string.call, name), "CALL", phoneNumber, null);
+                            getString(R.string.call, name), "CALL", phoneNumber);
                 }
                 break;
             case REQUEST_CODE_PICK_DIRECT_MESSAGE:
@@ -1005,7 +1362,7 @@ public class MarvinShell extends Activity {
                     phoneNumber = c.getString(
                             c.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     menuItem = new MenuItem(
-                            getString(R.string.message, name), "SMS", phoneNumber, null);
+                            getString(R.string.message, name), "SMS", phoneNumber);
                 }
                 break;
             case REQUEST_CODE_TALKING_DIALER_DIAL:
@@ -1013,14 +1370,14 @@ public class MarvinShell extends Activity {
                 label = data.getStringExtra("label");
                 if (label == null)
                     label = number;
-                menuItem = new MenuItem(getString(R.string.call, label), "CALL", number, null);
+                menuItem = new MenuItem(getString(R.string.call, label), "CALL", number);
                 break;
             case REQUEST_CODE_TALKING_DIALER_MESSAGE:
                 number = data.getStringExtra("number");
                 label = data.getStringExtra("label");
                 if (label == null)
                     label = number;
-                menuItem = new MenuItem(getString(R.string.message, label), "SMS", number, null);
+                menuItem = new MenuItem(getString(R.string.message, label), "SMS", number);
                 break;
             case REQUEST_CODE_PICK_GMAIL_LABEL:
                 name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
@@ -1028,7 +1385,7 @@ public class MarvinShell extends Activity {
                 String account = labelIntent.getStringExtra("account");
                 label = labelIntent.getStringExtra("label");
                 menuItem = new MenuItem(name + " " + getString(R.string.gmail), "GMAIL_LABEL",
-                        account + " " + label, null);
+                        account + " " + label);
                 break;
             case REQUEST_CODE_PICK_VIDEO_CHAT:
                 c = managedQuery(data.getData(), null, null, null, null);
@@ -1039,7 +1396,7 @@ public class MarvinShell extends Activity {
                             c.getColumnIndexOrThrow(
                                     ContactsContract.CommonDataKinds.Email.ADDRESS));
                     menuItem = new MenuItem(
-                            getString(R.string.video_call, name), "VIDEO_CHAT", emailAddress, null);
+                            getString(R.string.video_call, name), "VIDEO_CHAT", emailAddress);
                 }
                 break;
             case REQUEST_CODE_TALKING_DIALER_VIDEO:
@@ -1048,7 +1405,7 @@ public class MarvinShell extends Activity {
                 if (label == null)
                     label = emailAddress;
                 menuItem = new MenuItem(
-                        getString(R.string.video_call, label), "VIDEO_CHAT", emailAddress, null);
+                        getString(R.string.video_call, label), "VIDEO_CHAT", emailAddress);
                 break;
         }
         if (menuItem != null && lastGesture > 0) {
@@ -1063,15 +1420,31 @@ public class MarvinShell extends Activity {
      * in the app. chooser. TODO(credo): Fix activeMode problems. This may
      * require making the app. chooser a separate activity.
      */
-    public void switchToAppChooserView() {
-        if (appChooserView != null) {
-            LinearLayout ll = (LinearLayout) findViewById(R.id.appChooserControlsArea);
-            ll.setVisibility(View.VISIBLE);
+    public void switchToAppChooserView(boolean showWidgets) {
+        boolean viewReady = false;
+        ChooserView currentView = null;
+
+        if (!showWidgets && appChooserView != null) {
+            viewReady = true;
+            widgetChooserView.setVisibility(View.GONE);
+            currentView = appChooserView;
+        }
+
+        if (showWidgets && widgetChooserView != null) {
+            viewReady = true;
+            appChooserView.setVisibility(View.GONE);
+            currentView = widgetChooserView;
+        }
+
+        if (viewReady) {
             RelativeLayout rl = (RelativeLayout) findViewById(R.id.homeScreenControlsArea);
             rl.setVisibility(View.GONE);
-            appChooserView.requestFocus();
-            appChooserView.resetListState();
-            appChooserView.speakCurrentApp(false);
+            LinearLayout ll = (LinearLayout) findViewById(R.id.chooserControlsArea);
+            ll.setVisibility(View.VISIBLE);
+            currentView.setVisibility(View.VISIBLE);
+            currentView.requestFocus();
+            currentView.resetListState();
+            currentView.speakCurrentItem(false);
             if (activeMode == MAIN_VIEW) {
                 activeMode = APPLAUNCHER_VIEW;
             }
@@ -1084,7 +1457,7 @@ public class MarvinShell extends Activity {
      * feedback to disambiguate.
      */
     public void switchToMainView() {
-        LinearLayout ll = (LinearLayout) findViewById(R.id.appChooserControlsArea);
+        LinearLayout ll = (LinearLayout) findViewById(R.id.chooserControlsArea);
         ll.setVisibility(View.GONE);
         RelativeLayout rl = (RelativeLayout) findViewById(R.id.homeScreenControlsArea);
         rl.setVisibility(View.VISIBLE);
@@ -1115,9 +1488,9 @@ public class MarvinShell extends Activity {
         switch (activeMode) {
             case APPLAUNCHER_VIEW:
                 String uninstallText = getString(R.string.uninstall) + " "
-                        + appChooserView.getCurrentAppTitle();
+                        + appChooserView.getCurrentItemName();
                 String detailsFor = getString(
-                        R.string.details_for, appChooserView.getCurrentAppTitle());
+                        R.string.details_for, appChooserView.getCurrentItemName());
                 menu.add(NONE, R.string.details_for, 0, detailsFor)
                         .setIcon(android.R.drawable.ic_menu_info_details);
                 menu.add(NONE, R.string.uninstall, 1, uninstallText)
@@ -1210,7 +1583,6 @@ public class MarvinShell extends Activity {
                 return;
             }
         }
-        wallpaperView.setVisibility(View.GONE);
     }
 
     /**
@@ -1240,6 +1612,26 @@ public class MarvinShell extends Activity {
         public void onPostExecute(ArrayList<AppInfo> appList) {
             appChooserView = (AppChooserView) findViewById(R.id.appChooserView);
             appChooserView.setAppList(appList);
+        }
+    }
+
+    /**
+     */
+    private class InitWidgetChooserTask
+            extends AsyncTask<Void, Void, ArrayList<AppWidgetProviderInfo>> {
+        @Override
+        public ArrayList<AppWidgetProviderInfo> doInBackground(Void... params) {
+            List<AppWidgetProviderInfo> widgetProviders = awm
+                    .getInstalledProviders();
+            ArrayList<AppWidgetProviderInfo> indexedWidgets = new ArrayList<AppWidgetProviderInfo>(
+                    widgetProviders);
+            return indexedWidgets;
+        }
+
+        @Override
+        public void onPostExecute(ArrayList<AppWidgetProviderInfo> widgets) {
+            widgetChooserView = (WidgetChooserView) findViewById(R.id.widgetChooserView);
+            widgetChooserView.setWidgetList(widgets);
         }
     }
 
@@ -1300,15 +1692,14 @@ public class MarvinShell extends Activity {
         }
     }
 
-    
     private boolean isValidIntent(Intent i) {
         if (pm.queryIntentActivities(i, 0).isEmpty()) {
-           tts.speak(getString(R.string.item_invalid), TextToSpeech.QUEUE_FLUSH, null);
-           return false;
+            tts.speak(getString(R.string.item_invalid), TextToSpeech.QUEUE_FLUSH, null);
+            return false;
         }
         return true;
     }
-    
+
     /**
      * Sends a test query to gtalk for the actual user. If this query fails, the
      * gtalk is bugging out and needs a good reboot. Otherwise, we want to
@@ -1329,7 +1720,7 @@ public class MarvinShell extends Activity {
                 ContactsContract.Data.CONTENT_URI, proj, filter, null, null);
 
         // we want to check that we in fact have supported contacts
-        if (!statusCursor.moveToFirst()) {
+        if (statusCursor == null || !statusCursor.moveToFirst()) {
             return false;
         } else if (statusCursor.getCount() == 1) {
             AccountManager accountManager = AccountManager.get(getBaseContext());

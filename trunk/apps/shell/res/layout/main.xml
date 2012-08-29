@@ -11,6 +11,11 @@
         android:scaleType="fitCenter" />
 
     <RelativeLayout
+        android:id="@+id/widgetHolder"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <RelativeLayout
         android:id="@+id/homeScreenControlsArea"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -23,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:focusable="false"
             android:text="Home"
             android:textColor="#ffffff"
             android:textSize="50px"
@@ -38,6 +44,8 @@
                 android:layout_height="wrap_content"
                 android:layout_x="10px"
                 android:layout_y="360px"
+                android:focusable="false"
+                android:importantForAccessibility="no"
                 android:text="Stroke the screen to start applications."
                 android:textColor="#ffffff"
                 android:textSize="16px" />
@@ -47,6 +55,8 @@
                 android:layout_height="wrap_content"
                 android:layout_x="10px"
                 android:layout_y="380px"
+                android:focusable="false"
+                android:importantForAccessibility="no"
                 android:text="Hold the BACK button for 5 seconds"
                 android:textColor="#ffffff"
                 android:textSize="18px" />
@@ -56,6 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_x="10px"
                 android:layout_y="400px"
+                android:focusable="false"
+                android:importantForAccessibility="no"
                 android:text="to go to the regular home screen."
                 android:textColor="#ffffff"
                 android:textSize="18px" />
@@ -63,7 +75,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/appChooserControlsArea"
+        android:id="@+id/chooserControlsArea"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
@@ -81,8 +93,12 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="80" />
 
+            <com.google.marvin.shell.WidgetChooserView
+                android:id="@+id/widgetChooserView"
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="80" />
         </LinearLayout>
-        
     </LinearLayout>
 
 </FrameLayout>

@@ -47,6 +47,11 @@
     -->
     <string name="pm">PM</string>
     <!--
+        Source: Label for Android Widgets. 
+        Description: This allows the user to select and run an installed android widgets.
+    -->
+    <string name="android_widgets">Android Widgets</string>
+    <!--
         Source: Label for Applications. 
         Description: This allows the user to select and run an installed application.
     -->

@@ -166,7 +166,7 @@ public class AuditoryWidgets {
         } else if (widgetName.equals("CONNECTIVITY")) {
             announceConnectivity();
         } else if (widgetName.equals("APPLAUNCHER")) {
-            parent.switchToAppChooserView();
+            parent.switchToAppChooserView(false);
         } else if (widgetName.equals("VOICE_SEARCH")) {
             launchVoiceSearch();
         } else if (widgetName.equals("TOGGLE_BLUETOOTH")) {

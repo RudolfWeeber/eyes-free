@@ -19,7 +19,7 @@ package com.google.marvin.shell;
 /**
  * Holds the information for an application in the shell that is needed to start
  * that application from the shell.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  */
 
@@ -39,11 +39,31 @@ public class MenuItem {
 
     public AppInfo appInfo;
 
+    public String widgetId;
+
+    public boolean isWidget;
+
+    public MenuItem(String itemLabel, String itemAction, String itemData) {
+        label = itemLabel;
+        action = itemAction;
+        data = itemData;
+        isWidget = false;
+    }
+
     public MenuItem(String itemLabel, String itemAction, String itemData, AppInfo applicationInfo) {
         label = itemLabel;
         action = itemAction;
         data = itemData;
         appInfo = applicationInfo;
+        isWidget = false;
+    }
+
+    public MenuItem(String itemLabel, String itemAction, String itemData, String id) {
+        label = itemLabel;
+        action = itemAction;
+        data = itemData;
+        widgetId = id;
+        isWidget = true;
     }
 
     /**
@@ -57,6 +77,14 @@ public class MenuItem {
                         MenuManager.escapeEntities(data)));
         if (appInfo != null) {
             xmlBuilder.append(appInfo.toXml());
+        }
+        // For android widgets : save widget info parcel path
+        if (isWidget) {
+            String widgetFilePath = MarvinShell.EYES_FREE_PATH + "widget_" + data;
+            xmlBuilder.append("<widgetInfo");
+            xmlBuilder.append(" widget_id='" + MenuManager.escapeEntities(widgetId) + "'");
+            xmlBuilder.append(" parcel='" + MenuManager.escapeEntities(widgetFilePath) + "'");
+            xmlBuilder.append("/>\n");
         }
         xmlBuilder.append(XML_ITEM_CLOSE_TAG);
         return xmlBuilder.toString();

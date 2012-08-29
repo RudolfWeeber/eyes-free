@@ -18,9 +18,12 @@ package com.google.marvin.shell;
 
 import com.googlecode.eyesfree.widget.GestureOverlay.Gesture;
 
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Parcel;
+import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -41,7 +44,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 /**
  * Manages a set of menus and provides functions for saving/loading XML and
  * editing menus.
- * 
+ *
  * @author clchen@google.com (Charles L. Chen)
  * @author credo@google.com (Tim Credo)
  */
@@ -111,12 +114,12 @@ public final class MenuManager extends HashMap<String, Menu> {
         Menu newMenu = new Menu(menuName);
         put(id, newMenu);
         newMenu.setID(id);
-        MenuItem link = new MenuItem(menuName, "MENU", id, null);
-        MenuItem homeLink = new MenuItem(currentMenu.getName(), "MENU", currentMenu.getID(), null);
+        MenuItem link = new MenuItem(menuName, "MENU", id);
+        MenuItem homeLink = new MenuItem(currentMenu.getName(), "MENU", currentMenu.getID());
         currentMenu.put(gesture, link);
         newMenu.put(oppositeGesture, homeLink);
         if (nextMenu != null) {
-            MenuItem nextLink = new MenuItem(nextMenu.getName(), "MENU", nextMenu.getID(), null);
+            MenuItem nextLink = new MenuItem(nextMenu.getName(), "MENU", nextMenu.getID());
             newMenu.put(gesture, nextLink);
             nextMenu.put(oppositeGesture, link);
         }
@@ -125,7 +128,7 @@ public final class MenuManager extends HashMap<String, Menu> {
     /**
      * Load a set of menus from an XML file.
      */
-    public static MenuManager loadMenus(Context context, String filename) {
+    public static MenuManager loadMenus(MarvinShell context, String filename) {
         MenuManager manager = new MenuManager();
         try {
             FileInputStream fis = new FileInputStream(filename);
@@ -139,7 +142,7 @@ public final class MenuManager extends HashMap<String, Menu> {
     /**
      * Load a set of menus from an XML input stream.
      */
-    public static MenuManager loadMenus(Context context, InputStream is) {
+    public static MenuManager loadMenus(MarvinShell context, InputStream is) {
         HashMap<String, Menu> shortcutMenus = new HashMap<String, Menu>();
         try {
             DocumentBuilder docBuild = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -201,7 +204,7 @@ public final class MenuManager extends HashMap<String, Menu> {
     /**
      * Loads menu items from a list of XML nodes containing menu items.
      */
-    public static HashMap<Integer, MenuItem> readItems(Context context, NodeList itemNodes) {
+    public static HashMap<Integer, MenuItem> readItems(MarvinShell context, NodeList itemNodes) {
         HashMap<Integer, MenuItem> menu = new HashMap<Integer, MenuItem>();
         for (int i = 0; i < itemNodes.getLength(); i++) {
             if (itemNodes.item(i).getNodeName().equalsIgnoreCase("item")) {
@@ -247,6 +250,56 @@ public final class MenuManager extends HashMap<String, Menu> {
                         menu.put(g, new MenuItem(label, action, data, appInfo));
                     }
 
+                } else if (action.equalsIgnoreCase("android_widget")) {
+
+                    Node widgetInfoNode = null;
+                    NodeList nodes = itemNodes.item(i).getChildNodes();
+                    for (int j = 0; j < nodes.getLength(); j++) {
+                        Node currentNode = nodes.item(j);
+                        String tagName = currentNode.getNodeName();
+                        // Only process actual nodes
+                        if (tagName != null) {
+                            if (tagName.equalsIgnoreCase("widgetInfo")) {
+                                widgetInfoNode = currentNode;
+                            }
+                        }
+                    }
+                    AppWidgetProviderInfo widgetInfo = null;
+                    // Get widget id to grab widget
+                    NamedNodeMap idInfoAttr = widgetInfoNode.getAttributes();
+                    String widgetId = "";
+                    Node idAttrNode = idInfoAttr.getNamedItem("widget_id");
+                    if (idAttrNode != null) {
+                        widgetId = idAttrNode.getNodeValue();
+                    }
+                    // Get widget info parcel (back up for case when app has
+                    // been uninstalled and reinstalled)
+                    NamedNodeMap parcelInfoAttr = widgetInfoNode.getAttributes();
+                    String fileName = "";
+                    Node fileAttrNode = parcelInfoAttr.getNamedItem("parcel");
+                    if (fileAttrNode != null) {
+                        fileName = fileAttrNode.getNodeValue();
+                    }
+                    Parcel parcel = Parcel.obtain();
+                    try {
+                        byte[] buffer = new byte[1024];
+                        FileInputStream fis = new FileInputStream(fileName);
+                        // Inflate widget info
+                        int length = fis.read(buffer);
+                        parcel.unmarshall(buffer, 0, length);
+                        // read parcel file
+                        parcel.setDataPosition(0);
+                        // configParcel.setDataPosition(0);
+                        widgetInfo = new AppWidgetProviderInfo(parcel);
+                    } catch (Exception e) {
+                        Log.e("MenuManager", "EXCEPTION: " + e);
+                    }
+                    // Load widget and get its new widget id (changes if
+                    // reloaded after uninstall)
+                    widgetId = context.loadAndroidWidget(widgetId, widgetInfo);
+                    // Get widget index in holder
+                    int newData = context.getAndroidWidgetKey();
+                    menu.put(g, new MenuItem(label, action, Integer.toString(newData), widgetId));
                 } else {
                     menu.put(g, new MenuItem(label, action, data, appInfo));
                 }
