@@ -6,8 +6,11 @@ refreshable braille display.  It presents screen content on the braille
 display and let's the user navigate the user interface.  It also provides an
 input method that enables entering text using a braille keyboard on the
 display.  BrailleBack is distributed on the Google Play Store where it can be
-downloaded and installed.  This file contains build instructions and other
-information for developers.
+downloaded and installed.  This file contains information for developers.
+
+In particular, you will find instructions for how to build the app from source
+below.  Also, there are instructions on what to do, in addition to having
+brltty drivers, to add support for a new braille display to BrailleBack.
 
 Building BrailleBack From The Command Line
 ==========================================
@@ -82,6 +85,21 @@ release build.  The command to uninstall BrailleBack is:
 
 Adding Support for A New Braille Display
 ========================================
+
+This section details how to add support for a new braille display.
+On a high level, the following steps need to be performed:
+
+* Make sure that the display meets the requirements listed in the
+  subsection on Display Requirements below.
+
+* Include the brltty driver in the native library build.
+
+* Add the display in the braille display service source code
+  so it gets automatically detected.
+
+* Adjust keyboard maps for Android
+
+* Test the display with actual hardware
 
 Support for hardware braille displays is handled by a service that is separate
 from BrailleBack.  The source code for the display service is located in the
