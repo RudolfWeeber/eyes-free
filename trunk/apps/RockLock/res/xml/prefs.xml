@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-  <CheckBoxPreference android:key="use_as_prelock"
-    android:title="Use as pre-lock"
-    android:summaryOn="Rock Lock will be displayed before your lockscreen is shown. If you do not have a lock pattern, Rock Lock will act as your lockscreen."
-    android:summaryOff="(Default) Rock Lock will have no effect on your lockscreen."
-    android:defaultValue="false" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/use_as_prelock_key"
+        android:summaryOff="@string/lock_off_summary"
+        android:summaryOn="@string/lock_on_summary"
+        android:title="@string/use_as_prelock" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/verbose_mode"
+        android:summaryOff="@string/verbose_off_summary"
+        android:summaryOn="@string/verbose_on_summary"
+        android:title="@string/verbose_mode" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/browse_mode"
+        android:summaryOff="@string/browse_off_summary"
+        android:summaryOn="@string/browse_on_summary"
+        android:title="@string/browse_mode" />
+
 </PreferenceScreen>

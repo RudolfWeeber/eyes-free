@@ -1,21 +1,358 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">Rock Lock</string>
-  <string name="previous_artist">Previous Artist</string>
-  <string name="previous_album">Previous Album</string>
-  <string name="next_artist">Next Artist</string>
-  <string name="previous_track">Previous Track</string>
-  <string name="pause">Pause</string>
-  <string name="play">Play</string>
-  <string name="next_track">Next Track</string>
-  <string name="rewind">Rewind</string>
-  <string name="next_album">Next Album</string>
-  <string name="fast_forward">Fast Forward</string>
-  <string name="rock_lock_playlist">Rock Lock Playlist</string>
-  <string name="tagged_music_playlist">Tagged Music Playlist</string>
-  <string name="playing">Playing</string>
-  <string name="the_lock_that_rocks">The lock that rocks!</string>
-  <string name="preferences">Preferences</string>
-  <string name="toggle_playlist">Toggle Playlist Mode</string>
-  <string name="switch_to">Switch to</string>
+
+    <string name="app_name">Rock Lock</string>
+
+    <!--
+      Source: Label for player screen
+      Description: Spoken when we return to the player screen from a menu item
+    -->
+    <string name="player_announce">Rock Lock Player</string>
+
+    <!--
+      Source: Labels for player gestures
+      Description: Spoken on long press for various player gestures
+    -->
+    <!-- Text spoken when the user makes the previous group gesture in artist mode. [CHAR LIMIT="NONE"] -->
+    <string name="previous_artist">Previous Artist</string>
+    <!-- Text spoken when the user makes the previous group gesture in album mode. [CHAR LIMIT="NONE"] -->
+    <string name="previous_album">Previous Album</string>
+    <!-- Text spoken when the user makes the next group gesture in artist mode. [CHAR LIMIT="NONE"] -->
+    <string name="next_artist">Next Artist</string>
+    <!-- Text spoken when the user makes the next group gesture in album mode. [CHAR LIMIT="NONE"] -->
+    <string name="next_album">Next Album</string>
+    <!-- Text spoken when the user makes the previous track gesture. [CHAR LIMIT="NONE"] -->
+    <string name="previous_track">Previous Track</string>
+    <!-- Text spoken when the user makes the next track gesture. [CHAR LIMIT="NONE"] -->
+    <string name="next_track">Next Track</string>
+    <!-- Text spoken when the user holds toggle pause/play gesture while playing. [CHAR LIMIT="NONE"] -->
+    <string name="pause">Pause</string>
+    <!-- Text spoken when the user holds toggle pause/play gesture while paused. [CHAR LIMIT="NONE"] -->
+    <string name="play">Play</string>
+
+    <!-- Text drawn to screen for next track. [CHAR LIMIT="NONE"] -->
+    <string name="next">Next</string>
+
+    <!-- Text drawn to screen for current browsing track. [CHAR LIMIT="NONE"] -->
+    <string name="tap_to_play">Tap To Play</string>
+
+    <!--
+      Source: Navigation mode labels
+      Description: Spoken for artist navigation mode [CHAR LIMIT="NONE"]
+    -->
+    <string name="artists">Artists</string>
+
+    <!--
+      Source: Navigation mode labels
+      Description: Spoken for album navigation mode [CHAR LIMIT="NONE"]
+    -->
+    <string name="albums">Albums</string>
+
+    <!--
+      Source: Navigation mode labels
+      Description: Spoken for genre navigation mode [CHAR LIMIT="NONE"]
+    -->
+    <string name="genres">Genres</string>
+
+    <!--
+      Source: Navigation mode labels
+      Description: Spoken for songs navigation mode [CHAR LIMIT="NONE"]
+    -->
+    <string name="songs">Songs</string>
+
+    <!--
+      Source: Navigation mode labels
+      Description: Spoken for directories navigation mode [CHAR LIMIT="NONE"]
+    -->
+    <string name="directories">Directories</string>
+
+    <!--
+      Source: Navigation mode labels
+      Description: Spoken for playlist navigation mode [CHAR LIMIT="NONE"]
+    -->
+    <string name="playlists">Playlists</string>
+
+    <!--
+      Source: Playlist action labels
+      Description: Spoken for add to playlist gesture in player [CHAR LIMIT="NONE"]
+    -->
+    <string name="add_to_playlist">Add To Playlist</string>
+
+    <!--
+      Source: Label for new playlist dialog
+      Description: New playlist dialog title [CHAR LIMIT="NONE"]
+    -->
+    <string name="new_playlist">New Playlist</string>
+
+    <!--
+      Source: Label for new playlist dialog
+      Description: New playlist dialog message [CHAR LIMIT="NONE"]
+    -->
+    <string name="enter_playlist_name">Enter Playlist Name</string>
+
+    <!--
+      Source: Label for delete playlist dialog
+      Description: Delete playlist dialog title [CHAR LIMIT="NONE"]
+    -->
+    <string name="delete_playlist">Delete Playlist</string>
+
+    <!--
+      Source: Label for delete playlist dialog
+      Description: Delete playlist dialog message [CHAR LIMIT="NONE"]
+    -->
+    <string name="delete_playlist_confirm">Are You Sure You Want to Delete this Playlist?</string>
+
+    <!--
+      Source: Label for no playlists
+      Description: Spoken to indicate there are no playlists [CHAR LIMIT="NONE"]
+    -->
+    <string name="no_playlists">No playlists found</string>
+
+    <!--
+      Source: Label for no playlists
+      Description: Spoken to indicate how to create a new playlist [CHAR LIMIT="NONE"]
+    -->
+    <string name="new_playlist_instruct">Swipe right to create a new playlist</string>
+
+    <!--
+      Source: Label for playlist dialogs
+      Description: OK button label [CHAR LIMIT="NONE"]
+    -->
+    <string name="ok">OK</string>
+
+    <!--
+      Source: Label for playlist creator
+      Description: Confirmation spoken when song is added to playlist [CHAR LIMIT="NONE"]
+    -->
+    <string name="added">Added</string>
+
+    <!--
+      Source: Label for playlist creator
+      Description: Confirmation spoken when playlist is saved [CHAR LIMIT="NONE"]
+    -->
+    <string name="saved">Saved</string>
+
+    <!--
+      Source: Label for playlist creator
+      Description: Confirmation spoken when we beging saving [CHAR LIMIT="NONE"]
+    -->
+    <string name="saving">Saving</string>
+
+    <!--
+      Source: Label for playlist creator
+      Description: Spoken to instruct users on how to create playlist [CHAR LIMIT="NONE"]
+    -->
+    <string name="playlist_instructions">Tap to add. Double tap to save.</string>
+
+    <!--
+      Source: Label for playlist navigation
+      Description: Spoken to instruct users on how to navigate playlists [CHAR LIMIT="NONE"]
+    -->
+    <string name="playlist_nav_instructions">Tap to play. Draw circle to scroll playlist tracks.</string>
+
+    <!--
+      Source: Label for playlist creator
+      Description: Confirmation spoken when playlist creation is cancelled [CHAR LIMIT="NONE"]
+    -->
+    <string name="playlist_cancelled">Playlist Cancelled</string>
+
+    <!--
+      Source: Options Menu Labels
+      Description: Label for settings screen [CHAR LIMIT=20]
+    -->
+    <string name="settings">Settings</string>
+
+    <!--
+      Source: Options Menu Labels
+      Description: Label for search screen [CHAR LIMIT=20]
+    -->
+    <string name="search">Search</string>
+
+    <!--
+      Source: Options Menu Labels
+      Description: Label for bookmarks manager screen [CHAR LIMIT=20]
+    -->
+    <string name="bookmarks">Bookmarks</string>
+
+    <!--
+      Source: Bookmark action labels
+      Description: Spoken when the user bookmarks a point in a track [CHAR LIMIT="NONE"]
+    -->
+    <string name="bookmarked">Bookmarked</string>
+
+    <!--
+      Source: Bookmark action labels
+      Description: Spoken for bookmark gesture [CHAR LIMIT="NONE"]
+    -->
+    <string name="add_bookmark">Bookmark</string>
+
+    <!--
+      Source: Label for delete bookmark dialog
+      Description: Delete bookmark dialog title [CHAR LIMIT="NONE"]
+    -->
+    <string name="delete_bookmark">Delete Bookmark</string>
+
+    <!--
+      Source: Label for delete bookmark dialog
+      Description: Delete bookmark dialog message [CHAR LIMIT="NONE"]
+    -->
+    <string name="delete_bookmark_confirm">Are You Sure You Want to Delete this Bookmark?</string>
+
+    <!--
+      Source: Label for no bookmarks
+      Description: Spoken to indicate there are no bookmarks [CHAR LIMIT="NONE"]
+    -->
+    <string name="no_bookmarks">No bookmarks found</string>
+
+    <!--
+      Source: Label for no bookmarks
+      Description: Spoken to indicate how to create a new bookmark [CHAR LIMIT="NONE"]
+    -->
+    <string name="new_bookmark_instruct">When listening to a track, swipe towards the bottom right corner to bookmark the current time.</string>
+
+    <!--
+      Source: Search screen labels
+      Description: Text direct drawn on SearchFragment for sighted users to indicate searching string. [CHAR LIMIT=40]
+    -->
+    <string name="searching">Searching:</string>
+
+    <!--
+      Source: Search screen labels
+      Description: Spoken when no search results are found for current query. [CHAR LIMIT="NONE"]
+    -->
+    <string name="no_results">No Results Found</string>
+
+    <!--
+    Source: Label for current player state
+    Description: Text direct drawn on player for sighted users. [CHAR LIMIT=40]
+    -->
+    <string name="playing">Playing %1$s</string>
+
+    <!--
+    Source: Label for current player state
+    Description: Text direct drawn on player for sighted users when paused. [CHAR LIMIT=40]
+    -->
+    <string name="paused">Paused</string>
+
+    <!--
+    Source: Label for toggling shuffle
+    Description: Label for toggle shuffle menu item [CHAR LIMIT=20]
+    -->
+    <string name="toggle_shuffle">Toggle Shuffle</string>
+
+    <!--
+    Source: Label for toggling shuffle
+    Description: Confirmation spoken when shuffle is turned on [CHAR LIMIT="NONE"]
+    -->
+    <string name="shuffle_on">Shuffle On</string>
+
+    <!--
+    Source: Label for toggling shuffle
+    Description: Confirmation spoken when shuffle is turned off [CHAR LIMIT="NONE"]
+    -->
+    <string name="shuffle_off">Shuffle Disabled</string>
+
+    <!--
+      Source: Label for mode
+      Description: Tacked on to current music mode. [CHAR LIMIT="NONE"]
+    -->
+    <string name="mode">Mode</string>
+
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for ".". Period symbol. [CHAR LIMIT="NONE"]
+    -->
+    <string name="period">Period</string>
+
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for "?". Question mark symbol. [CHAR LIMIT="NONE"]
+    -->
+    <string name="question_mark">Question Mark</string>
+
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for "!". Exclamation mark symbol. [CHAR LIMIT="NONE"]
+    -->
+    <string name="exclamation_point">Exclamation Point</string>
+
+    <!--
+      Source: Label for keyboard symbol.
+      Description: Label for ",". Comma symbol. [CHAR LIMIT="NONE"]
+    -->
+    <string name="comma">Comma</string>
+
+    <!--
+      Source: Label for keyboard key.
+      Description: Backspace key. [CHAR LIMIT="NONE"]
+    -->
+    <string name="backspace">Backspace</string>
+
+    <!--
+      Source: Summary of various states of RockLock as a lock
+      Description: Label for option to use as a pre-lock [CHAR LIMIT="NONE"]
+    -->
+    <string name="use_as_prelock">Use as pre-lock</string>
+    <!--
+      Source: Summary of various states of RockLock as a lock
+      Description: Summary of how program will act when set as a lock [CHAR LIMIT="NONE"]
+    -->
+    <string name="lock_on_summary">Rock Lock will be displayed before your lockscreen is shown. If you do not have a lock pattern, Rock Lock will act as your lockscreen.</string>
+
+    <!--
+      Source: Summary of various states of RockLock as a lock
+      Description: Summary of how program will act when not set as a lock [CHAR LIMIT="NONE"]
+    -->
+    <string name="lock_off_summary">Rock Lock will have no effect on your lockscreen.</string>
+
+    <!--
+      Source: Summary of various states of RockLock as a lock
+      Description: Label for option to use as a pre-lock [CHAR LIMIT="NONE"]
+    -->
+    <string name="verbose_mode">Verbose Mode</string>
+    <!--
+      Source: Summary of various states of RockLock as a lock
+      Description: Summary of how program will act when set as a lock [CHAR LIMIT="NONE"]
+    -->
+    <string name="verbose_on_summary">Rock Lock will speak audio previews with each gesture.</string>
+
+    <!--
+      Source: Summary of various states of RockLock as a lock
+      Description: Summary of how program will act when not set as a lock [CHAR LIMIT="NONE"]
+    -->
+    <string name="verbose_off_summary">Rock Lock will not interrupt playback with audio previews.</string>
+
+    <!--
+      Source: Summary of two RockLock browsing gestures
+      Description: Label for two-finger browsing option [CHAR LIMIT="NONE"]
+    -->
+    <string name="browse_mode">Browse Gesture</string>
+    <!--
+      Source: Summary of two RockLock browsing gestures
+      Description: Summary of two-finger browsing option [CHAR LIMIT="NONE"]
+    -->
+    <string name="browse_on_summary">Use two fingers to browse groups and tracks (and tap to play). Use one finger to play new groups and tracks.</string>
+
+    <!--
+      Source: Summary of two RockLock browsing gestures
+      Description: Summary of single-finger browsing option [CHAR LIMIT="NONE"]
+    -->
+    <string name="browse_off_summary">Use one finger to browse groups and tracks (and tap to play). Use two fingers to play new groups and tracks.</string>
+
+    <!--
+      Source: Articles to ignore when searching and sorting
+      Description: A list of articles that should be ignored. For english: the, an, a [CHAR LIMIT="NONE"]
+    -->
+    <string-array name="articles_to_ignore">
+        <item>the</item>
+        <item>an</item>
+        <item>a</item>
+    </string-array>
+
+    <!--
+      Source: Label for the Help item in the menu.
+      Description: Shows the user the help documentation. [CHAR LIMIT="NONE"]
+    -->
+    <string name="help">Help</string>
+
 </resources>
