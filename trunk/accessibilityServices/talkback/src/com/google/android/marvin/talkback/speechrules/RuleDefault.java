@@ -21,6 +21,8 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
@@ -29,7 +31,7 @@ import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
  *
  * @author alanv@google.com (Alan Viverette)
  */
-class RuleDefault implements NodeSpeechRule {
+class RuleDefault implements NodeSpeechRule, NodeHintRule {
     @Override
     public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
         return true;
@@ -44,5 +46,35 @@ class RuleDefault implements NodeSpeechRule {
         }
 
         return "";
+    }
+
+    @Override
+    public CharSequence getHintText(Context context, AccessibilityNodeInfoCompat node) {
+        // Disabled actionable items don't have any hint text.
+        if (AccessibilityNodeInfoUtils.isActionableForAccessibility(node) && !node.isEnabled()) {
+            return context.getString(R.string.value_disabled);
+        }
+
+        final StringBuilder builder = new StringBuilder();
+        final int actions = node.getActions();
+
+        // Don't read both the checkable AND clickable hints!
+        if (node.isCheckable()) {
+            StringBuilderUtils.appendWithSeparator(builder,
+                    NodeHintHelper.getHintString(context, R.string.template_hint_checkable));
+        } else if (node.isClickable()
+                || ((actions & AccessibilityNodeInfoCompat.ACTION_CLICK) != 0)) {
+            StringBuilderUtils.appendWithSeparator(builder,
+                    NodeHintHelper.getHintString(context, R.string.template_hint_clickable));
+        }
+
+        // Long clickable is long.
+        if (node.isLongClickable()
+                || ((actions & AccessibilityNodeInfoCompat.ACTION_LONG_CLICK) != 0)) {
+            StringBuilderUtils.appendWithSeparator(builder,
+                    NodeHintHelper.getHintString(context, R.string.template_hint_long_clickable));
+        }
+
+        return builder;
     }
 }

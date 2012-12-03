@@ -8,6 +8,23 @@
   <!-- and previous Android versions that should have had more -->
   <!-- contentDescriptions. -->
 
+  <!-- Hover events in the Latin IME -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_HOVER_ENTER</ss:eventType>
+      <ss:packageName>com.google.android.inputmethod.latin</ss:packageName>
+      <ss:className>com.android.inputmethod.keyboard.LatinKeyboardView</ss:className>
+      <ss:platformSdk>14||15</ss:platformSdk>
+    </ss:filter>
+    <ss:metadata>
+      <ss:customVibration>@id/patterns_actionable</ss:customVibration>
+      <ss:customEarcon>@id/sounds_actionable</ss:customEarcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
   <!-- CompoundButton - checked -->
   <ss:rule>
     <ss:filter>
@@ -17,7 +34,7 @@
       <ss:platformSdk>&lt;=15</ss:platformSdk>
     </ss:filter>
     <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:customVibration>@id/patterns_focused</ss:customVibration>
       <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
@@ -33,11 +50,22 @@
       <ss:platformSdk>&lt;=15</ss:platformSdk>
     </ss:filter>
     <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:customVibration>@id/patterns_focused</ss:customVibration>
       <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:property>text</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Focused ImageView -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
+      <ss:className>android.widget.ImageView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.ImageViewFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Είστε βέβαιοι ότι επιθυμείτε την αναστολή του TalkBack;"\n\n"Κατά την αναστολή του TalkBack, η συσκευή σας δεν θα παρέχει σχόλια και η λειτουργία \"Εξερεύνηση με άγγιγμα\" θα απενεργοποιηθεί."\n\n"Μπορείτε να ενεργοποιήσετε ξανά το TalkBack από το πλαίσιο σκίασης ειδοποιήσεων ή επιστρέφοντας στην οθόνη κλειδώματος."</string>
+</resources>

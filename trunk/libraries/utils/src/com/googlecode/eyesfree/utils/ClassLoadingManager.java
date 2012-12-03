@@ -41,8 +41,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
     /**
      * Mapping from class names to classes form outside packages.
      */
-    private final HashMap<String, Class<?>> mClassNameToOutsidePackageClassMap =
-            new HashMap<String, Class<?>>();
+    private final HashMap<String, Class<?>> mClassNameToClassMap = new HashMap<String, Class<?>>();
 
     /**
      * A set of classes not found to be loaded. Used to avoid multiple attempts
@@ -75,6 +74,7 @@ public class ClassLoadingManager implements InfrastructureStateListener {
             mPackageMonitor.register(context);
         } else {
             clearInstalledPackagesCache();
+            mClassNameToClassMap.clear();
             mPackageMonitor.unregister();
         }
     }
@@ -169,17 +169,21 @@ public class ClassLoadingManager implements InfrastructureStateListener {
             }
         }
 
-        // Try the current ClassLoader.
-        try {
-            return getClass().getClassLoader().loadClass(classNameStr);
-        } catch (ClassNotFoundException e) {
-            // Do nothing.
-        }
-
         // See if we have a cached class.
-        final Class<?> clazz = mClassNameToOutsidePackageClassMap.get(classNameStr);
+        final Class<?> clazz = mClassNameToClassMap.get(classNameStr);
         if (clazz != null) {
             return clazz;
+        }
+
+        // Try the current ClassLoader.
+        try {
+            final Class<?> insideClazz = getClass().getClassLoader().loadClass(classNameStr);
+            if (insideClazz != null) {
+                mClassNameToClassMap.put(classNameStr, insideClazz);
+                return insideClazz;
+            }
+        } catch (ClassNotFoundException e) {
+            // Do nothing.
         }
 
         // Context is required past this point.
@@ -193,9 +197,8 @@ public class ClassLoadingManager implements InfrastructureStateListener {
             final Context packageContext = context.createPackageContext(packageNameStr, flags);
             final Class<?> outsideClazz = packageContext.getClassLoader().loadClass(classNameStr);
 
-            mClassNameToOutsidePackageClassMap.put(classNameStr, outsideClazz);
-
             if (outsideClazz != null) {
+                mClassNameToClassMap.put(classNameStr, outsideClazz);
                 return outsideClazz;
             }
         } catch (Exception e) {
@@ -213,6 +216,54 @@ public class ClassLoadingManager implements InfrastructureStateListener {
         LogUtils.log(Log.DEBUG, "Failed to load class: %s", classNameStr);
 
         return null;
+    }
+
+    /**
+     * Returns whether a target class is an instance of a reference class.
+     * <p>
+     * If a class cannot be loaded by the default {@link ClassLoader}, this
+     * method will attempt to use the loader for the specified app package.
+     * </p>
+     */
+    public boolean checkInstanceOf(Context context, CharSequence targetClassName,
+            CharSequence loaderPackage, CharSequence referenceClassName) {
+        if ((targetClassName == null) || (referenceClassName == null)) {
+            return false;
+        }
+
+        // Try a shortcut for efficiency.
+        if (TextUtils.equals(targetClassName, referenceClassName)) {
+            return true;
+        }
+
+        final Class<?> referenceClass = loadOrGetCachedClass(
+                context, referenceClassName, loaderPackage);
+        if (referenceClass == null) {
+            return false;
+        }
+
+        return checkInstanceOf(context, targetClassName, loaderPackage, referenceClass);
+    }
+
+    /**
+     * Returns whether a target class is an instance of a reference class.
+     * <p>
+     * If a class cannot be loaded by the default {@link ClassLoader}, this
+     * method will attempt to use the loader for the specified app package.
+     * </p>
+     */
+    public boolean checkInstanceOf(Context context, CharSequence targetClassName,
+            CharSequence loaderPackage, Class<?> referenceClass) {
+        if ((targetClassName == null) || (referenceClass == null)) {
+            return false;
+        }
+
+        final Class<?> targetClass = loadOrGetCachedClass(context, targetClassName, loaderPackage);
+        if (targetClass == null) {
+            return false;
+        }
+
+        return referenceClass.isAssignableFrom(targetClass);
     }
 
     /**

@@ -24,7 +24,7 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 
-import com.google.android.marvin.utils.WeakReferenceHandler;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 import java.util.HashMap;
 import java.util.LinkedList;

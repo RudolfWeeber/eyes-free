@@ -95,16 +95,6 @@
     -->
     <string name="template_current_tts_engine">Using <xliff:g id="engine_name">%1$s</xliff:g></string>
     <!--
-      Source: An utterance template for announcing the checked state of a check-box/radio-button.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-    -->
-    <string name="template_compound_button_checked"><xliff:g id="title">%1$s</xliff:g> checked</string>
-    <!--
-      Source: An utterance template for announcing the not checked state of a check-box/radio-button.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-    -->
-    <string name="template_compound_button_not_checked"><xliff:g id="title">%1$s</xliff:g> not checked</string>
-    <!--
       Source: An utterance template for announcing an edit-box.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
@@ -129,11 +119,13 @@
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
     <string name="template_ringer_volume">Ringer <xliff:g id="percent">%d</xliff:g> percent.</string>
+    <!-- Template used for announcing an item associated with a label. For example, "check box for Wi-Fi". -->
+    <string name="template_labeled_item"><xliff:g id="item" example="check box">%1$s</xliff:g> for <xliff:g id="label" example="Wi-Fi">%2$s</xliff:g></string>
     <!--
       Source: An utterance template for announcing an image.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
-    <string name="template_image_view"><xliff:g id="title" example="Save">%1$s</xliff:g></string>
+    <string name="template_image_view"><xliff:g id="title" example="Save">%1$s</xliff:g> image</string>
     <!--
       Source: An utterance template for announcing a list.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
@@ -172,8 +164,6 @@
     <string name="value_listview">List</string>
     <!-- Spoken description of a bar which contains tabs. -->
     <string name="value_tabwidget">Tab bar</string>
-    <!-- Spoken description of a generic container. This has items inside it, but is not a list or tab bar. -->
-    <string name="value_container">Container</string>
     <!--
       Source: An utterance template for announcing the visible range of items within a list view.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
@@ -201,9 +191,9 @@
     -->
     <string name="template_capital_letter">capital <xliff:g id="uppercase_character">%1$s</xliff:g></string>
     <!-- Description template for a check box. If the check box has text, this is populated in the title field. -->
-    <string name="template_checkbox"><xliff:g id="title">%1$s</xliff:g> check box.</string>
+    <string name="template_checkbox"><xliff:g id="title">%1$s</xliff:g> check box</string>
     <!-- Description template for a radio button. If the radio button has text, this is populated in the title field. -->
-    <string name="template_radio_button"><xliff:g id="title">%1$s</xliff:g> radio button.</string>
+    <string name="template_radio_button"><xliff:g id="title">%1$s</xliff:g> radio button</string>
     <!-- VALUES -->
     <!--
       Source: A value for announcing a password field.
@@ -216,10 +206,17 @@
     -->
     <string name="value_sliding_drawer_opened">Sliding drawer opened</string>
     <!--
+      Source: A value for announcing a system shade opening.
+      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
+    -->
+    <string name="value_notification_shade_opened">Shade opened</string>
+    <!--
       Source: A value for announcing opening the activity options (shown on a press of the menu button).
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
     <string name="value_options_menu_open">Options.</string>
+    <!-- Description spoken when all text is removed from a text box. -->
+    <string name="value_text_cleared">Cleared text</string>
     <!--
       Source: A value for announcing text deletion.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
@@ -250,18 +247,22 @@
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
     <string name="value_disabled">disabled</string>
-    <!-- Description of the double-tap action. Used to populate "Double-tap to activate" hint. -->
+    <!-- Description of the double-tap action. Used to populate "Double-tap to select" hint. -->
     <string name="value_double_tap">Double-tap</string>
-    <!-- Description of the single-tap action. Used to populate "Tap to activate" hint. -->
+    <!-- Description of the single-tap action. Used to populate "Tap to select" hint. -->
     <string name="value_single_tap">Tap</string>
     <!-- Hint spoken when the user pauses over an item that can be clicked. Populated with an action like "Tap" or "Double-tap". -->
-    <string name="template_hint_clickable"><xliff:g id="action" example="Tap">%1$s</xliff:g> to activate.</string>
+    <string name="template_hint_clickable"><xliff:g id="action" example="Tap">%1$s</xliff:g> to select.</string>
     <!-- Hint spoken when the user pauses over an item that can be long-clicked. Long-click can activate icon dragging, contextual menus, etc. Populated with an action like "Tap" or "Double-tap". -->
-    <string name="template_hint_long_clickable"><xliff:g id="action" example="Tap">%1$s</xliff:g> and hold to long-click.</string>
+    <string name="template_hint_long_clickable"><xliff:g id="action" example="Tap">%1$s</xliff:g> and hold to long press.</string>
     <!-- Hint spoken when the user pauses over a check box. Populated with an action like "Tap" or "Double-tap". -->
     <string name="template_hint_checkable"><xliff:g id="action" example="Tap">%1$s</xliff:g> to toggle.</string>
     <!-- Hint spoken when the user pauses over an editable text area. Populated with an action like "Tap" or "Double-tap". -->
     <string name="template_hint_edit_text"><xliff:g id="action" example="Tap">%1$s</xliff:g> to enter text.</string>
+    <!-- Hint spoken when the user pauses over a drop-down list. Populated with an action like "Tap" or "Double-tap". -->
+    <string name="template_hint_spinner"><xliff:g id="action" example="Tap">%1$s</xliff:g> to change.</string>
+    <!-- Hint spoken when the user pauses in a radial menu, which is a pie-shaped arrangement of menu items. -->
+    <string name="hint_radial_menu">Touch the screen and explore to find an item, then lift to select.</string>
     <!--
       Source: A value for announcing that a view can be scrolled.
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
@@ -302,17 +303,12 @@
       Description: This is spoken to the user. [CHAR LIMIT="NONE"]
     -->
     <string name="value_web_view">Web content.</string>
-    <!--
-      Source: A value for announcing an item without a label.
-      Description: This is spoken to the user. [CHAR LIMIT="NONE"]
-    -->
-    <string name="value_unknown_object">Unlabelled item.</string>
     <!-- PREFERENCES -->
     <!--
       Source: Preference category for customizing when to speak.
       Description: Contains preferences for customizing when to speak. [CHAR LIMIT=25]
     -->
-    <string name="title_pref_category_when_to_speak">When to speak</string>
+    <string name="title_pref_category_when_to_speak">Speech</string>
     <!-- Title for preference that controls the volume of TalkBack's speech output. [CHAR LIMIT=25] -->
     <string name="title_pref_speech_volume">Speech volume</string>
     <!--
@@ -359,6 +355,8 @@
       Description: The user can check or not check this. [CHAR LIMIT=40]
     -->
     <string name="title_pref_intonation">Use pitch changes</string>
+    <!-- Label for preference that changes whether typed keyboard keys are spoken aloud. -->
+    <string name="title_pref_keyboard_echo">Keyboard echo</string>
     <!--
       Source: Summary subtext for the "Use pitch changes" setting.
       Description: Explains that feedback from the keyboard, e.g. when a user types "A" and the phone speaks "A", will be spoken in a lower pitched voice. [CHAR LIMIT="NONE"]
@@ -373,7 +371,7 @@
       Source: Preference category for customizing the sound and vibration feedback.
       Description: Contains preferences for customizing sound and vibration feedback. [CHAR LIMIT=25]
     -->
-    <string name="title_pref_category_feedback_settings">Feedback</string>
+    <string name="title_pref_category_feedback_settings">Other feedback</string>
     <!--
       Source: Preference for whether to provide vibration feedback in response to system events.
       Description: The user can check or not check this. [CHAR LIMIT=25]
@@ -401,13 +399,9 @@
     <string name="title_pref_category_developer_settings">Developer settings</string>
     <!--
       Source: Preference title.
-      Description: Preference for controlling the amount of log output. 
+      Description: Preference for controlling the amount of log output.
     -->
     <string name="title_pref_log_level">Log output level</string>
-    <!--
-      Source: Preference title.
-      Description: This preference allows the user to turn on visual indicators to help debug accessibility problems. -->
-    <string name="title_pref_developer_overlay">Highlight event sources</string>
     <!--
       Source: Preference title.
       Description: This preference allows the user to show speech output on the screen. -->
@@ -428,16 +422,6 @@
       Description: Announced when the user changes the granularity of reading a web page to sentence. [CHAR LIMIT="NONE"]
     -->
     <string name="axis_sentence">Navigate by sentence.</string>
-    <!--
-      Source: When the user pressed a key combo while exploring a web page.
-      Description: Announced when the user changes the granularity of reading a web page to paragraph. [CHAR LIMIT="NONE"]
-    -->
-    <string name="axis_paragraph">Navigate by paragraph.</string>
-    <!--
-      Source: When the user pressed a key combo while exploring a web page.
-      Description: Announced when the user changes the granularity of reading a web page to object. [CHAR LIMIT="NONE"]
-    -->
-    <string name="axis_object">Navigate by object.</string>
     <!--
       Source: When the user pressed a key combo while exploring a web page.
       Description: Announced when the user changes the granularity of reading a web page to line. [CHAR LIMIT="NONE"]
@@ -476,8 +460,6 @@
     <string name="axis_default_web_view_behavior">Navigate by default web view behavior.</string>
     <!-- Title for the dialog that warns users about turning on Explore by touch. -->
     <string name="attention">Attention</string>
-    <!-- Message for the dialog that warns users about turning on Explore by touch. -->
-    <string name="explore_dialog_message">This feature changes the way your device responds to touch. Turn on?</string>
     <!-- Message for the dialog shown when the user launches the tutorial without turning on Accessibility. -->
     <string name="requires_talkback">This tutorial requires Explore by touch. Please turn TalkBack on and enable Explore by touch before launching the tutorial.</string>
 
@@ -505,30 +487,114 @@
     <string name="shortcut_recent_apps">Recent apps button</string>
     <!-- Label for the shortcut that opens the notifications shade. [CHAR_LIMIT=40] -->
     <string name="shortcut_notifications">Open notifications</string>
+    <!-- Label for the shortcut that opens the continuous reading breakout menu [CHAR_LIMIT=40] -->
+    <string name="shortcut_read_all_breakout">Open continuous reading menu</string>
+    <!-- Label for the shortcut that opens the global context breakout menu [CHAR_LIMIT=40] -->
+    <string name="shortcut_talkback_breakout">Open global context menu</string>
     <!-- Label for the shortcut that repeats the last thing that TalkBack spoke aloud. [CHAR_LIMIT=40] -->
     <string name="shortcut_repeat_last_utterance">Repeat last utterance</string>
     <!-- Label for the shortcut that spells aloud the last thing that TalkBack spoke aloud. [CHAR_LIMIT=40] -->
     <string name="shortcut_spell_last_utterance">Spell last utterance</string>
+    <!-- Label for the shortcut that pauses all feedback from TalkBack. [CHAR_LIMIT=40] -->
+    <string name="shortcut_pause_feedback">Pause feedback</string>
 
-    <!-- Label for the preference that assigns an action to the "swipe down and left" gesture. [CHAR_LIMIT=40] -->
-    <string name="title_pref_shortcut_down_and_left">Swipe down and left</string>
-    <!-- Label for the preference that assigns an action to the "swipe down and right" gesture. [CHAR_LIMIT=40] -->
-    <string name="title_pref_shortcut_down_and_right">Swipe down and right</string>
-    <!-- Label for the preference that assigns an action to the "swipe up and left" gesture. [CHAR_LIMIT=40] -->
-    <string name="title_pref_shortcut_up_and_left">Swipe up and left</string>
-    <!-- Label for the preference that assigns an action to the "swipe up and right" gesture. [CHAR_LIMIT=40] -->
-    <string name="title_pref_shortcut_up_and_right">Swipe up and right</string>
+    <!-- Label for the preference that assigns an action to the "swipe down then left" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_down_and_left">Swipe down then left</string>
+    <!-- Label for the preference that assigns an action to the "swipe down then right" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_down_and_right">Swipe down then right</string>
+    <!-- Label for the preference that assigns an action to the "swipe up then left" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_up_and_left">Swipe up then left</string>
+    <!-- Label for the preference that assigns an action to the "swipe up then right" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_up_and_right">Swipe up then right</string>
+    <!-- Label for the preference that assigns an action to the "swipe right then down" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_right_and_down">Swipe right then down</string>
+    <!-- Label for the preference that assigns an action to the "swipe right then up" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_right_and_up">Swipe right then up</string>
+    <!-- Label for the preference that assigns an action to the "swipe left then down" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_left_and_down">Swipe left then down</string>
+    <!-- Label for the preference that assigns an action to the "swipe left then up" gesture. [CHAR_LIMIT=40] -->
+    <string name="title_pref_shortcut_left_and_up">Swipe left then up</string>
 
-    <!-- Label for preference specifying a volume that's 200% of the system media volume. -->
-    <string name="value_volume_200_percent">200% of media volume</string>
-    <!-- Label for preference specifying a volume that's 150% of the system media volume. -->
-    <string name="value_volume_150_percent">150% of media volume</string>
     <!-- Label for preference specifying a volume that's the same as the system media volume. -->
-    <string name="value_volume_100_percent">Match media volume</string>
+    <string name="value_volume_100_percent" formatted="false">Match media volume</string>
     <!-- Label for preference specifying a volume that's 75% of the system media volume. -->
-    <string name="value_volume_75_percent">75% of media volume</string>
+    <string name="value_volume_75_percent" formatted="false" >75% of media volume</string>
     <!-- Label for preference specifying a volume that's 50% of the system media volume. -->
-    <string name="value_volume_50_percent">50% of media volume</string>
+    <string name="value_volume_50_percent" formatted="false">50% of media volume</string>
     <!-- Label for preference specifying a volume that's 25% of the system media volume. -->
-    <string name="value_volume_25_percent">25% of media volume</string>
+    <string name="value_volume_25_percent" formatted="false">25% of media volume</string>
+
+    <!-- Label for preference specifying that TalkBack should always speak keys that the user types. -->
+    <string name="value_keyboard_echo_always">Always speak typed keys</string>
+    <!-- Label for preference specifying that TalkBack should only speak keys that the user types with an on-screen (e.g. not physical) keyboard. -->
+    <string name="value_keyboard_echo_softkeys">Only for on-screen keyboard</string>
+    <!-- Label for preference specifying that TalkBack should never speak keys that the user types. -->
+    <string name="value_keyboard_echo_never">Never speak typed keys</string>
+
+    <!--
+      Source: Title of a notification that a preferences-manager application exists.
+      Description: Allows the user to choose to download a preferences manager application. [CHAR LIMIT=30]
+    -->
+    <string name="title_talkback_settings_available">Accessibility Preferences available</string>
+
+    <!--
+      Source: Description of a notification that a preferences-manager application exists.
+      Description: Allows the user to choose to download a preferences manager application. [CHAR LIMIT=70]
+    -->
+    <string name="message_talkback_settings_available">Tap to download the Accessibility Preferences application.</string>
+
+    <!--
+      Source: Title of a notification that TalkBack's gestures have been changed.
+      Description: Displays a more detailed notification with information about gesture changes [CHAR LIMIT=30]
+    -->
+    <string name="notification_title_talkback_gestures_changed">TalkBack gestures changed</string>
+
+    <!--
+      Source: Description of a notification that TalkBack's gestures have been changed.
+      Description: Displays a more detailed notification with information about gesture changes [CHAR LIMIT=70]
+    -->
+    <string name="notification_message_talkback_gestures_changed">Tap to review changes to accessibility gestures</string>
+
+    <!-- Title of the notification displayed when TalkBack has been temporarily paused. -->
+    <string name="notification_title_talkback_suspended">TalkBack is suspended</string>
+    <!-- Message of the notification displayed when TalkBack has been temporarily paused. The user can tap the notification to resume TalkBack. -->
+    <string name="notification_message_talkback_suspended">Tap to resume.</string>
+
+    <!-- Title for the alert shown when a user attempts to suspend TalkBack. -->
+    <string name="dialog_title_suspend_talkback">Suspend TalkBack?</string>
+    <!-- Message for the alert shown when a user attempts to suspend TalkBack. -->
+    <string name="dialog_message_suspend_talkback">Are you sure you want to suspend TalkBack?\n\nWhile TalkBack is suspended, your device will not provide feedback.\n\nYou can resume TalkBack from the notifications shade or by returning to the lock screen.</string>
+
+    <!--
+      Source: Description of a notification that TalkBack's gestures have been changed.
+      Description: Displays a more detailed notification with information about gesture changes [CHAR LIMIT=NONE]
+     -->
+    <string name="talkback_gesture_change_details">This version of TalkBack includes changes to the default accessibility gestures.  The actions associated with these gestures can be customized within TalkBack settings.  When Explore by touch is enabled, you can use the following gestures to perform certain actions.\n\n<xliff:g id="mappings">%1$s</xliff:g></string>
+
+    <!-- Label for the gesture change notificaiton dialog button to accept the suggested gesture mapping -->
+    <string name="button_accept_changed_gesture_mappings">Accept gestures</string>
+
+    <!-- Label for the gesture change notificaiton dialog button to customize the gesture mapping -->
+    <string name="button_customize_gesture_mappings">Customize gestures</string>
+
+    <!-- Title for the dialog shown when a user attempts to disable Explore by Touch.  -->
+    <string name="dialog_title_disable_exploration">Disable Explore by touch?</string>
+    <!-- Message for the dialog shown when a user attempts to disable Explore by Touch. -->
+    <string name="dialog_message_disable_exploration">Are you sure you want to turn off Explore by touch?\n\nYour device will no longer respond to shortcut gestures or speak items when you touch the screen.</string>
+
+    <!-- Label for menu item that reads all on-screen content, starting from the top of the screen. -->
+    <string name="read_from_top">Read all from top</string>
+    <!-- Label for menu item that reads all on-screen content, starting from the next item. -->
+    <string name="read_from_current">Read all from next item</string>
+    <!-- Label for menu item that speaks the label of the currently focused item. -->
+    <string name="repeat_current">Repeat current item</string>
+
+    <!-- Hint text spoken when a user attempts to interact with web content but the enhanced web accessibility setting is disabled. -->
+    <string name="hint_script_injection">Explore by touch is not available in web content. Turn on <xliff:g id="preference_name" example="Enhance web accessibility">%1$s</xliff:g> in Accessibility settings to explore web content.</string>
+
+    <!-- Label for shortcut action that opens the TalkBack global context menu. -->
+    <string name="label_talkback_context_menu">TalkBack global context menu</string>
+
+    <!-- Label for the permission that allows an application to control TalkBack. -->
+    <string name="permission_talkback_label">Control TalkBack</string>
 </resources>

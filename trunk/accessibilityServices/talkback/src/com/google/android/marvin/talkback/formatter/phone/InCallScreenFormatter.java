@@ -16,12 +16,12 @@
 
 package com.google.android.marvin.talkback.formatter.phone;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
@@ -51,7 +51,7 @@ public final class InCallScreenFormatter implements AccessibilityEventFormatter 
     private static final String SPACE = " ";
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final boolean speakCallerId = SharedPreferencesUtils.getBooleanPref(prefs,
                 context.getResources(), R.string.pref_caller_id_key, R.bool.pref_caller_id_default);

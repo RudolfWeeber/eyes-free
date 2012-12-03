@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="inner_radius">64dp</dimen>
+    <dimen name="outer_radius">128dp</dimen>
+    <dimen name="corner_radius">128dp</dimen>
+    <dimen name="extreme_radius">256dp</dimen>
+    <dimen name="spacing">4dp</dimen>
+    <dimen name="text_size">20sp</dimen>
+    </resources>

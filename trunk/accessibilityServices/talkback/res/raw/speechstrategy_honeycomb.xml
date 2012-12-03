@@ -24,6 +24,7 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
       <ss:className>com.android.calendar.month.FullMonthView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -36,6 +37,7 @@
     <ss:filter>
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>com.android.calendar.month.FullMonthView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
     </ss:filter>
     <ss:formatter>
       <ss:template>@com.google.android.marvin.talkback:string/template_announce_month</ss:template>

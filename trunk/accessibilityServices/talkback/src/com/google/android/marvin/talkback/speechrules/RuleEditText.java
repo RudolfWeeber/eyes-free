@@ -30,7 +30,7 @@ import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
  * 
  * @author alanv@google.com (Alan Viverette)
  */
-class RuleEditText implements NodeSpeechRule {
+class RuleEditText implements NodeSpeechRule, NodeHintRule {
     @Override
     public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
         return AccessibilityNodeInfoUtils.nodeMatchesClassByType(context, node,
@@ -42,6 +42,16 @@ class RuleEditText implements NodeSpeechRule {
             format(Context context, AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
         final CharSequence text = getText(context, node);
         return context.getString(R.string.template_edit_box, text);
+    }
+
+    @Override
+    public CharSequence getHintText(Context context, AccessibilityNodeInfoCompat node) {
+        // Disabled items don't have any hint text.
+        if (!node.isEnabled()) {
+            return context.getString(R.string.value_disabled);
+        }
+
+        return NodeHintHelper.getHintString(context, R.string.template_hint_edit_text);
     }
 
     /**

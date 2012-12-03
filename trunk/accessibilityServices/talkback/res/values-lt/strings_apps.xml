@@ -15,8 +15,8 @@
     <string name="value_decrement_month" msgid="6268533926259338764">"Sumažinti mėnesių skaičių."</string>
     <string name="value_decrement_day" msgid="5715832708435309689">"Sumažinti dienų skaičių."</string>
     <string name="value_decrement_year" msgid="756084611736232559">"Sumažinti metų skaičių."</string>
-    <string name="template_stream_volume" msgid="7768533936282059501">"<xliff:g id="STREAM_NAME">%s</xliff:g> garsumas – <xliff:g id="PERCENT">%d</xliff:g> proc."</string>
-    <string name="template_stream_volume_set" msgid="5961200256130745221">"Nustatytas <xliff:g id="STREAM_NAME">%s</xliff:g> garsumas – <xliff:g id="PERCENT">%d</xliff:g> proc."</string>
+    <string name="template_stream_volume" msgid="7768533936282059501">"<xliff:g id="STREAM_NAME">%1$s</xliff:g> garsumas – <xliff:g id="PERCENT">%2$d</xliff:g> proc."</string>
+    <string name="template_stream_volume_set" msgid="5961200256130745221">"Nustatytas <xliff:g id="STREAM_NAME">%1$s</xliff:g> garsumas – <xliff:g id="PERCENT">%2$d</xliff:g> proc."</string>
     <string name="value_stream_master" msgid="6130733378374740098">"Bendras"</string>
     <string name="value_stream_voice_call" msgid="5305385298856357591">"Telefono skambutis"</string>
     <string name="value_stream_system" msgid="3108718602352746749">"Sistemos garsas"</string>

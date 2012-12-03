@@ -154,8 +154,7 @@ public class AccessibilityNodeInfoUtils {
         if ((Build.VERSION.SDK_INT < 16)) {
             // In pre-JellyBean, always focus ALL top-level list items and items
             // that should have independently focusable children.
-            if (isTopLevelScrollItem(context, node)
-                    || isTopLevelFocusableItemInGrouping(context, node)) {
+            if (isTopLevelScrollItem(context, node)) {
                 return true;
             }
         } else {
@@ -181,71 +180,80 @@ public class AccessibilityNodeInfoUtils {
             return false;
         }
 
-        if (!node.isVisibleToUser()) {
+        if (!isVisibleOrLegacy(node)) {
+            LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                    "Don't focus, node is not visible");
             return false;
         }
 
         if (FILTER_ACCESSIBILITY_FOCUSABLE.accept(context, node)) {
-            return isSpeakingNode(context, node);
+            // TODO: This may still result in focusing non-speaking nodes, but it
+            // won't prevent unlabeled buttons from receiving focus.
+            if (node.getChildCount() <= 0) {
+                LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                        "Focus, node is focusable and has no children");
+                return true;
+            } else if (isSpeakingNode(context, node)) {
+                LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                        "Focus, node is focusable and has something to speak");
+                return true;
+            } else {
+                LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                        "Don't focus, node is focusable but has nothing to speak");
+                return false;
+            }
         }
 
         // If this node has no focusable predecessors, but it still has text,
         // then it should receive focus from navigation and be read aloud.
         if (!hasMatchingPredecessor(context, node, FILTER_ACCESSIBILITY_FOCUSABLE)
                 && hasText(node)) {
+            LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                    "Focus, node has text and no focusable predecessors");
             return true;
         }
 
+        LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                "Don't focus, failed all focusability tests");
         return false;
     }
 
     /**
-     * Returns the node that should receive focus from hover.
+     * Returns the node that should receive focus from hover by starting from
+     * the touched node and calling {@link #shouldFocusNode} at each level of
+     * the view hierarchy.
      */
     public static AccessibilityNodeInfoCompat findFocusFromHover(
             Context context, AccessibilityNodeInfoCompat touched) {
-        if (touched == null) {
-            return null;
-        }
-
-        final AccessibilityNodeInfoCompat predecessor = AccessibilityNodeInfoUtils
-                .getSelfOrMatchingPredecessor(context, touched, FILTER_ACCESSIBILITY_FOCUSABLE);
-
-        if ((predecessor != null) && isSpeakingNode(context, predecessor)) {
-            return predecessor;
-        }
-
-        // If the touched node has no actionable predecessors, but it still has
-        // text, then it should receive focus from hover and be read aloud.
-        if (hasText(touched)) {
-            return AccessibilityNodeInfoCompat.obtain(touched);
-        }
-
-        return null;
+        return AccessibilityNodeInfoUtils.getSelfOrMatchingPredecessor(
+                context, touched, FILTER_SHOULD_FOCUS);
     }
 
     private static boolean isSpeakingNode(Context context, AccessibilityNodeInfoCompat node) {
-        final int childCount = node.getChildCount();
-
-        // TODO: This may still result in focusing non-speaking nodes, but it
-        // won't prevent unlabeled buttons from receiving focus.
-        if (childCount <= 0) {
+        if (hasText(node)) {
+            LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                    "Speaking, has text");
             return true;
         }
 
-        if (hasText(node)) {
+        // Special case for check boxes.
+        if (node.isCheckable()) {
+            LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                    "Speaking, is checkable");
             return true;
         }
 
         // Special case for web content.
-        if (supportsAnyAction(node,
-                AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT,
-                AccessibilityNodeInfoCompat.ACTION_PREVIOUS_HTML_ELEMENT)) {
+        if (WebInterfaceUtils.hasWebContent(node)) {
+            LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                    "Speaking, has web content");
             return true;
         }
 
         // Special case for containers with non-focusable content.
         if (hasNonActionableSpeakingChildren(context, node)) {
+            LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                    "Speaking, has non-actionable speaking children");
             return true;
         }
 
@@ -255,10 +263,6 @@ public class AccessibilityNodeInfoUtils {
     private static boolean hasNonActionableSpeakingChildren(Context context, AccessibilityNodeInfoCompat node) {
         final int childCount = node.getChildCount();
 
-        if (childCount == 0) {
-            return false;
-        }
-
         AccessibilityNodeInfoCompat child = null;
 
         // Has non-actionable, speaking children?
@@ -267,22 +271,30 @@ public class AccessibilityNodeInfoUtils {
                 child = node.getChild(i);
 
                 if (child == null) {
+                    LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                            "Child %d is null, skipping it", i);
                     continue;
                 }
 
                 // Ignore invisible nodes.
                 if (!isVisibleOrLegacy(child)) {
+                    LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                            "Child %d is invisible, skipping it", i);
                     continue;
                 }
 
                 // Ignore focusable nodes.
                 if (FILTER_ACCESSIBILITY_FOCUSABLE.accept(context, child)) {
+                    LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                            "Child %d is focusable, skipping it", i);
                     continue;
                 }
 
                 // Recursively check non-focusable child nodes.
                 // TODO: Mutual recursion is probably not a good idea.
                 if (isSpeakingNode(context, child)) {
+                    LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                            "Does have actionable speaking children (child %d)", i);
                     return true;
                 }
             } finally {
@@ -290,6 +302,8 @@ public class AccessibilityNodeInfoUtils {
             }
         }
 
+        LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
+                "Does not have non-actionable speaking children");
         return false;
     }
 
@@ -372,6 +386,10 @@ public class AccessibilityNodeInfoUtils {
      */
     public static AccessibilityNodeInfoCompat getSelfOrMatchingPredecessor(
             Context context, AccessibilityNodeInfoCompat node, NodeFilter filter) {
+        if (node == null) {
+            return null;
+        }
+
         if (filter.accept(context, node)) {
             return AccessibilityNodeInfoCompat.obtain(node);
         }
@@ -469,38 +487,22 @@ public class AccessibilityNodeInfoUtils {
                 return false;
             }
 
-            return nodeMatchesClassByType(context, parent, android.widget.AbsListView.class) ||
-                    nodeMatchesClassByType(context, parent, android.widget.ScrollView.class);
-        } finally {
-            recycleNodes(parent);
-        }
-    }
-
-    /**
-     * Determines whether a node is a top-level item in a container that has
-     * independently focusable direct children.
-     *
-     * @param context used for class loading.
-     * @param node The node to test.
-     * @return {@code true} if {@code node} is a top-level item in a container
-     *         with independently focusable direct children.
-     */
-    public static boolean isTopLevelFocusableItemInGrouping(
-            Context context, AccessibilityNodeInfoCompat node) {
-        if (node == null) {
-            return false;
-        }
-
-        AccessibilityNodeInfoCompat parent = null;
-
-        try {
-            parent = node.getParent();
-            if (parent == null) {
-                // Not a child node of anything.
-                return false;
+            if (isScrollable(node)) {
+                return true;
             }
 
-            return nodeMatchesClassByType(context, parent, android.widget.AdapterView.class);
+            // AdapterView, ScrollView, and HorizontalScrollView are focusable
+            // containers, but Spinner is a special case.
+            // TODO: Rename or break up this method, since it actually returns
+            // whether the parent is scrollable OR is a focusable container that
+            // should not block its children from receiving focus.
+            if (nodeMatchesAnyClassByType(context, parent, android.widget.AdapterView.class,
+                    android.widget.ScrollView.class, android.widget.HorizontalScrollView.class)
+                    && !nodeMatchesAnyClassByType(context, parent, android.widget.Spinner.class)) {
+                return true;
+            }
+
+            return false;
         } finally {
             recycleNodes(parent);
         }
@@ -586,28 +588,26 @@ public class AccessibilityNodeInfoUtils {
      *
      * @param node A sealed {@link AccessibilityNodeInfoCompat} dispatched by
      *            the accessibility framework.
-     * @param clazz A {@link Class} to match by type or inherited type.
+     * @param referenceClass A {@link Class} to match by type or inherited type.
      * @return {@code true} if the {@link AccessibilityNodeInfoCompat} object
      *         matches the {@link Class} by type or inherited type,
      *         {@code false} otherwise.
      */
-    public static boolean nodeMatchesClassByType(Context context, AccessibilityNodeInfoCompat node,
-            Class<?> clazz) {
-        if (node == null || clazz == null) {
+    public static boolean nodeMatchesClassByType(
+            Context context, AccessibilityNodeInfoCompat node, Class<?> referenceClass) {
+        if ((node == null) || (referenceClass == null)) {
             return false;
         }
 
-        final ClassLoadingManager classLoader = ClassLoadingManager.getInstance();
-        final CharSequence className = node.getClassName();
-        final CharSequence packageName = node.getPackageName();
-        final Class<?> nodeClass =
-                classLoader.loadOrGetCachedClass(context, className, packageName);
-
-        if (nodeClass == null) {
-            return false;
+        // Attempt to take a shortcut.
+        final CharSequence nodeClassName = node.getClassName();
+        if (TextUtils.equals(nodeClassName, referenceClass.getName())) {
+            return true;
         }
 
-        return clazz.isAssignableFrom(nodeClass);
+        final ClassLoadingManager loader = ClassLoadingManager.getInstance();
+        final CharSequence appPackage = node.getPackageName();
+        return loader.checkInstanceOf(context, nodeClassName, appPackage, referenceClass);
     }
 
     /**
@@ -620,20 +620,19 @@ public class AccessibilityNodeInfoUtils {
      * @return {@code true} if the {@link AccessibilityNodeInfoCompat} object
      *         matches the {@link Class} by type or inherited type,
      *         {@code false} otherwise.
-     * @param classes A variable-length list of {@link Class} objects to match
-     *            by type or inherited type.
+     * @param referenceClasses A variable-length list of {@link Class} objects
+     *            to match by type or inherited type.
      */
-    public static boolean nodeMatchesAnyClassByType(Context context,
-            AccessibilityNodeInfoCompat node,
-            Class<?>... classes) {
-        for (Class<?> clazz : classes) {
-            if (AccessibilityNodeInfoUtils.nodeMatchesClassByType(
-                    context, node, clazz)) {
+    public static boolean nodeMatchesAnyClassByType(
+            Context context, AccessibilityNodeInfoCompat node, Class<?>... referenceClasses) {
+        for (Class<?> referenceClass : referenceClasses) {
+            if (nodeMatchesClassByType(context, node, referenceClass)) {
                 return true;
             }
         }
         return false;
     }
+
     /**
      * Determines if the class of an {@link AccessibilityNodeInfoCompat} matches
      * a given {@link Class} by package and name.
@@ -916,22 +915,9 @@ public class AccessibilityNodeInfoUtils {
      * Helper method that returns {@code true} if the specified node is visible
      * to the user or if the current SDK doesn't support checking visibility.
      */
-    /* package */ static  boolean isVisibleOrLegacy(AccessibilityNodeInfoCompat node) {
+    public static  boolean isVisibleOrLegacy(AccessibilityNodeInfoCompat node) {
         return (!AccessibilityNodeInfoUtils.SUPPORTS_VISIBILITY || node.isVisibleToUser());
     }
-
-    /** Filters out actionable and invisible nodes. Used to pick child nodes to read. */
-    // TODO: This should be private or somewhere else.
-    public static final NodeFilter FILTER_NON_FOCUSABLE = new NodeFilter() {
-        @Override
-        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
-            if (!isVisibleOrLegacy(node)) {
-                return false;
-            }
-
-            return !FILTER_ACCESSIBILITY_FOCUSABLE.accept(context, node);
-        }
-    };
 
     /**
      * Filter for scrollable items. One of the following must be true:
@@ -955,6 +941,13 @@ public class AccessibilityNodeInfoUtils {
         @Override
         public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
             return isAccessibilityFocusable(context, node);
+        }
+    };
+
+    private static final NodeFilter FILTER_SHOULD_FOCUS = new NodeFilter() {
+        @Override
+        public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
+            return shouldFocusNode(context, node);
         }
     };
 

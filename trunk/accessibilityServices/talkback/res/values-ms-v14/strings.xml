@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Adakah anda pasti mahu menggantung TalkBack?"\n\n"Semasa TalkBack digantung, peranti anda tidak akan memberi maklum balas dan Jelajah melalui Sentuhan akan dilumpuhkan."\n\n"Anda boleh menyambung semula TalkBack dari bidai pemberitahuan atau dengan kembali ke skrin kunci."</string>
+</resources>

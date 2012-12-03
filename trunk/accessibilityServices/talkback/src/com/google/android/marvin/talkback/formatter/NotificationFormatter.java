@@ -24,8 +24,8 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.RemoteViews;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.NotificationType;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.utils.StringBuilderUtils;
@@ -35,9 +35,6 @@ import java.util.LinkedList;
 
 /**
  * Formatter that returns an utterance to announce text replacement.
- *
- * @author svetoslavganov@google.conm (Svetoslav R. Ganov)
- * @author alanv@google.com (Alan Viverette)
  */
 public class NotificationFormatter implements AccessibilityEventFormatter {
     /** The maximum number of history items to keep track of. */
@@ -53,7 +50,7 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
     private final LinkedList<Notification> mNotificationHistory = new LinkedList<Notification>();
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         final Notification notification = extractNotification(event);
 
         if (notification == null) {
@@ -66,18 +63,17 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
 
         final StringBuilder builder = utterance.getText();
         final CharSequence typeText = getTypeText(context, notification);
+        final CharSequence tickerText = notification.tickerText;
 
         if (!TextUtils.isEmpty(typeText)) {
             StringBuilderUtils.appendWithSeparator(builder, typeText);
         }
 
-        final CharSequence eventText = AccessibilityEventUtils.getEventText(event);
-
-        if (!TextUtils.isEmpty(eventText)) {
-            StringBuilderUtils.appendWithSeparator(builder, eventText);
+        if (!TextUtils.isEmpty(tickerText)) {
+            StringBuilderUtils.appendWithSeparator(builder, tickerText);
         }
 
-        return true;
+        return !TextUtils.isEmpty(builder);
     }
 
     /**

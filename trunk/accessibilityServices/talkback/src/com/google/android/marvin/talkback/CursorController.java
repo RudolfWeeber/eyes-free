@@ -20,7 +20,6 @@ import android.accessibilityservice.AccessibilityService;
 import android.annotation.TargetApi;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
-import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.google.android.marvin.talkback.CursorGranularityManager.CursorGranularity;
@@ -28,6 +27,7 @@ import com.googlecode.eyesfree.utils.AccessibilityNodeInfoRef;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.NodeFocusFinder;
+import com.googlecode.eyesfree.utils.WebInterfaceUtils;
 
 import java.util.HashSet;
 
@@ -90,19 +90,23 @@ class CursorController {
     /**
      * Attempts to move to the next item using the current navigation mode.
      *
+     * @param shouldWrap {@code true} if navigating past the last node should
+     *            wrap to the beginning, {@code false} otherwise.
      * @return {@code true} if successful.
      */
-    public boolean next() {
-        return navigateWithGranularity(NAVIGATION_DIRECTION_NEXT);
+    public boolean next(boolean shouldWrap) {
+        return navigateWithGranularity(NAVIGATION_DIRECTION_NEXT, shouldWrap);
     }
 
     /**
      * Attempts to move to the previous item using the current navigation mode.
      *
+     * @param shouldWrap {@code true} if navigating past the last node should
+     *            wrap to the beginning, {@code false} otherwise.
      * @return {@code true} if successful.
      */
-    public boolean previous() {
-        return navigateWithGranularity(NAVIGATION_DIRECTION_PREVIOUS);
+    public boolean previous(boolean shouldWrap) {
+        return navigateWithGranularity(NAVIGATION_DIRECTION_PREVIOUS, shouldWrap);
     }
 
     /**
@@ -160,6 +164,26 @@ class CursorController {
     }
 
     /**
+     * Adjust the cursor's granularity by moving it directly to the specified
+     * {@link CursorGranularity}
+     *
+     * @param granularity The {@link CursorGranularity} to request.
+     * @return {@code true} if the granularity change was successful,
+     *         {@code false} otherwise.
+     */
+    public boolean setGranularity(CursorGranularity granularity) {
+        if (mGranularityManager.requestGranularity(granularity) == true) {
+            if (mListener != null) {
+                mListener.onGranularityChanged(
+                        mGranularityManager.getRequestedGranularity(), false);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Sets the current cursor position.
      *
      * @param node The node to set as the cursor.
@@ -167,6 +191,24 @@ class CursorController {
      */
     public boolean setCursor(AccessibilityNodeInfoCompat node) {
         return node.performAction(AccessibilityNodeInfoCompat.ACTION_ACCESSIBILITY_FOCUS);
+    }
+
+    /**
+     * Clears the current cursor position.
+     */
+    public void clearCursor() {
+        final AccessibilityNodeInfo root = mService.getRootInActiveWindow();
+        if (root == null) {
+            return;
+        }
+
+        final AccessibilityNodeInfo focused = root.findFocus(
+                AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
+        if (focused == null) {
+            return;
+        }
+
+        focused.performAction(AccessibilityNodeInfo.ACTION_CLEAR_ACCESSIBILITY_FOCUS);
     }
 
     /**
@@ -195,7 +237,7 @@ class CursorController {
         // TODO: We should treat non-focusable nodes (e.g. invisible or fail the
         // heuristic we're using elsewhere) then we should try to find a
         // focusable node.
-        if (!focusedNode.isVisibleToUser()) {
+        if (!AccessibilityNodeInfoUtils.isVisibleOrLegacy(focusedNode)) {
             focusedNode.recycle();
             return compatRoot;
         }
@@ -219,8 +261,7 @@ class CursorController {
                 return false;
             }
 
-            scrollableNode = AccessibilityNodeInfoUtils.getSelfOrMatchingPredecessor(
-                    mService, cursor, AccessibilityNodeInfoUtils.FILTER_SCROLLABLE);
+            scrollableNode = getBestScrollableNode(cursor);
             if (scrollableNode == null) {
                 return false;
             }
@@ -234,6 +275,32 @@ class CursorController {
         } finally {
             AccessibilityNodeInfoUtils.recycleNodes(cursor, scrollableNode);
         }
+    }
+
+    private AccessibilityNodeInfoCompat getBestScrollableNode(
+            AccessibilityNodeInfoCompat cursor) {
+        final AccessibilityNodeInfoCompat predecessor =
+                AccessibilityNodeInfoUtils.getSelfOrMatchingPredecessor(mService, cursor,
+                        AccessibilityNodeInfoUtils.FILTER_SCROLLABLE);
+
+        if (predecessor != null) {
+            return predecessor;
+        }
+
+        // If there isn't a scrollable predecessor, we'll have to search the
+        // screen for the "best" scrollable node. Currently, "best" means:
+        //   1. Matches FILTER_SCROLLABLE
+        //   2. Appears first during BFS from the root node
+
+        final AccessibilityNodeInfoCompat root = AccessibilityNodeInfoUtils.getRoot(cursor);
+        final AccessibilityNodeInfoCompat searched = AccessibilityNodeInfoUtils.searchFromBfs(
+                mService, root, AccessibilityNodeInfoUtils.FILTER_SCROLLABLE);
+
+        if (searched != null) {
+            return searched;
+        }
+
+        return null;
     }
 
     /**
@@ -274,13 +341,15 @@ class CursorController {
      * <p>
      * If no granularity has been applied, or if the DEFAULT granularity has
      * been applied, attempts to move in the specified direction using
-     * {@link View#focusSearch(int)}.
+     * {@link android.view.View#focusSearch(int)}.
      * </p>
      *
      * @param direction The direction to move.
+     * @param shouldWrap {@code true} if navigating past the last node should
+     *            wrap to the beginning, {@code false} otherwise.
      * @return true on success, false on failure.
      */
-    private boolean navigateWithGranularity(int direction) {
+    private boolean navigateWithGranularity(int direction, boolean shouldWrap) {
         AccessibilityNodeInfoCompat current = null;
 
         try {
@@ -308,9 +377,7 @@ class CursorController {
             }
 
             // Are we currently navigating web content?
-            if (AccessibilityNodeInfoUtils.supportsAnyAction(current,
-                    AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT,
-                    AccessibilityNodeInfoCompat.ACTION_PREVIOUS_HTML_ELEMENT)
+            if (WebInterfaceUtils.hasWebContent(current)
                     && attemptHtmlNavigation(current, direction)) {
                 return true;
             }
@@ -322,19 +389,21 @@ class CursorController {
         // next or previous view instead.
         final int focusSearchDirection = (direction == NAVIGATION_DIRECTION_NEXT) ?
                 NodeFocusFinder.SEARCH_FORWARD : NodeFocusFinder.SEARCH_BACKWARD;
-        return navigateWithEdges(focusSearchDirection);
+        return navigateWithEdges(focusSearchDirection, shouldWrap);
     }
 
-    private boolean navigateWithEdges(int direction) {
+    private boolean navigateWithEdges(int direction, boolean shouldWrap) {
         final boolean success = navigate(direction);
 
-        // TODO: We need to reset the "reached edge" flag after the user touch
-        // explores to a new node.
+        // TODO(alanv): We need to reset the "reached edge" flag after the user
+        // touch explores to a new node.
         if (success) {
             mReachedEdge = false;
         } else if (mReachedEdge) {
-            mReachedEdge = false;
-            return navigateWrapAround(direction);
+            if (shouldWrap) {
+                mReachedEdge = false;
+                return navigateWrapAround(direction);
+            }
         } else {
             mReachedEdge = true;
         }
@@ -442,12 +511,14 @@ class CursorController {
 
             while ((next != null) && !AccessibilityNodeInfoUtils.shouldFocusNode(mService, next)) {
                 if (mNavigateSeenNodes.contains(next)) {
-                    LogUtils.log(this, Log.ERROR, "Found duplicate during traversal: %s", next);
-                    // TODO: Should we return null here or just stop traversing?
+                    LogUtils.log(this, Log.ERROR, "Found duplicate during traversal: %s",
+                            next.getInfo());
+                    // TODO(alanv): Should we return null here or just stop traversing?
                     break;
                 }
 
-                LogUtils.log(this, Log.VERBOSE, "Search strategy rejected node: %s", next);
+                LogUtils.log(
+                        this, Log.VERBOSE, "Search strategy rejected node: %s", next.getInfo());
 
                 mNavigateSeenNodes.add(next);
 

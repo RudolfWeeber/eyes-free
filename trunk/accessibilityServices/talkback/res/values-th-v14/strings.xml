@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"คุณแน่ใจหรือไม่ว่าต้องการระงับ TalkBack"\n\n"ในขณะที่ TalkBack ถูกระงับอยู่ อุปกรณ์ของคุณจะไม่ให้การสนองตอบ และการสำรวจด้วยการแตะจะถูกปิดใช้งาน"\n\n"คุณสามารถให้ TalkBack กลับมาทำงานได้อีกครั้งจากแถบการแจ้งเตือนหรือโดยกลับไปยังหน้าจอล็อก"</string>
+</resources>

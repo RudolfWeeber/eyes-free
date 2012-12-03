@@ -1,7 +1,6 @@
 
 package com.google.android.marvin.talkback.formatter;
 
-import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
@@ -10,7 +9,9 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
+import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFilter;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 
 /**
@@ -21,32 +22,50 @@ import com.google.android.marvin.talkback.formatter.EventSpeechRule.Accessibilit
  * otherwise, just provides the corresponding vibration and earcon feedback.
  * </p>
  */
-public class FallbackFormatter implements AccessibilityEventFormatter {
+public class FallbackFormatter implements AccessibilityEventFormatter, AccessibilityEventFilter {
+    private static final int EVENT_MASK = AccessibilityEvent.TYPE_VIEW_FOCUSED
+            | AccessibilityEvent.TYPE_VIEW_SELECTED
+            | AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER;
+
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean accept(AccessibilityEvent event, TalkBackService context) {
+        if ((event.getEventType() & EVENT_MASK) == 0) {
+            return false;
+        }
+
         final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
         final AccessibilityNodeInfoCompat source = record.getSource();
 
-        // Always add earcons for FOCUSED so that they play concurrently with
-        // the accessibility focus earcons.
-        if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_FOCUSED) {
-            utterance.getCustomEarcons().add(R.id.sounds_focused);
-        }
-
-        // For compatibility's sake, we should only drop events that are
-        // populated with a source node. Otherwise, it's someone's custom
-        // event which is effectively TYPE_ANNOUNCEMENT.
         if (source != null) {
             source.recycle();
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
+        final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
+        final AccessibilityNodeInfoCompat source = record.getSource();
+
+        if (source != null) {
+            source.recycle();
+
+            // TODO(caseyburkhardt): Flip to false once we define the
+            // "false from formatter drops event" logic.
             return true;
         }
 
         // Add earcons and patterns since the event doesn't have a source node
-        // and there won't be a subsequent accessibility focus event.
         switch (event.getEventType()) {
             case AccessibilityEvent.TYPE_VIEW_FOCUSED:
-                // Already added the earcon for system focus.
                 utterance.getVibrationPatterns().add(R.array.view_focused_or_selected_pattern);
+                utterance.getCustomEarcons().add(R.id.sounds_focused);
+                break;
+            case AccessibilityEvent.TYPE_VIEW_SELECTED:
+                utterance.getVibrationPatterns().add(R.array.view_focused_or_selected_pattern);
+                utterance.getCustomEarcons().add(R.id.sounds_selected);
                 break;
             case AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER:
                 utterance.getCustomEarcons().add(R.id.sounds_hover);
@@ -61,4 +80,5 @@ public class FallbackFormatter implements AccessibilityEventFormatter {
 
         return true;
     }
+
 }

@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.utils.StringBuilderUtils;
@@ -40,7 +41,7 @@ public class TouchExplorationSystemUiFormatter implements AccessibilityEventForm
     private final StringBuilder mLastUtteranceText = new StringBuilder();
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         final CharSequence recordText = getRecordText(context, event);
 
         // Don't populate with empty text. This should never happen!

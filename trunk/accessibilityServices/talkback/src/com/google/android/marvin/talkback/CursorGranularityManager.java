@@ -144,6 +144,22 @@ public class CursorGranularityManager {
     }
 
     /**
+     * Moves the current granularity directly to the requested granularity.
+     *
+     * @param granularity the requested granularity
+     * @return {@code true} if successful, {@code false} otherwise
+     */
+    public boolean requestGranularity(CursorGranularity granularity) {
+        for (int i = 0; i < GRANULARITIES.length; ++i) {
+            if (GRANULARITIES[i] == granularity) {
+                mRequestedGranularityIndex = i;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Attempt to navigate within the specified cursor at the current
      * granularity.
      *

@@ -17,8 +17,7 @@
 package com.google.android.marvin.talkback;
 
 import android.content.Context;
-
-import java.util.HashMap;
+import android.util.SparseIntArray;
 
 /**
  * Utilities for cleaning up speech text.
@@ -27,61 +26,58 @@ import java.util.HashMap;
  */
 public class SpeechCleanupUtils {
     /** Map containing string to speech conversions. */
-    private static HashMap<String, Object> sCleanupMap;
+    private static final SparseIntArray UNICODE_MAP = new SparseIntArray();
 
-    /**
-     * Populates the cleanup map with default conversions.
-     */
-    private static void populateCleanupMap() {
-        sCleanupMap = new HashMap<String, Object>();
-
-        sCleanupMap.put("&", R.string.symbol_ampersand);
-        sCleanupMap.put("<", R.string.symbol_angle_bracket_left);
-        sCleanupMap.put(">", R.string.symbol_angle_bracket_right);
-        sCleanupMap.put("\'", R.string.symbol_apostrophe);
-        sCleanupMap.put("*", R.string.symbol_asterisk);
-        sCleanupMap.put("@", R.string.symbol_at_sign);
-        sCleanupMap.put("\\", R.string.symbol_backslash);
-        sCleanupMap.put("•", R.string.symbol_bullet);
-        sCleanupMap.put("^", R.string.symbol_caret);
-        sCleanupMap.put("¢", R.string.symbol_cent);
-        sCleanupMap.put(":", R.string.symbol_colon);
-        sCleanupMap.put(",", R.string.symbol_comma);
-        sCleanupMap.put("©", R.string.symbol_copyright);
-        sCleanupMap.put("{", R.string.symbol_curly_bracket_left);
-        sCleanupMap.put("}", R.string.symbol_curly_bracket_right);
-        sCleanupMap.put("°", R.string.symbol_degree);
-        sCleanupMap.put("$", R.string.symbol_dollar_sign);
-        sCleanupMap.put("…", R.string.symbol_ellipsis);
-        sCleanupMap.put("\u2014", R.string.symbol_em_dash);
-        sCleanupMap.put("\u2013", R.string.symbol_en_dash);
-        sCleanupMap.put("€", R.string.symbol_euro);
-        sCleanupMap.put("!", R.string.symbol_exclamation_mark);
-        sCleanupMap.put("`", R.string.symbol_grave_accent);
-        sCleanupMap.put("-", R.string.symbol_hyphen_minus);
-        sCleanupMap.put("„", R.string.symbol_low_double_quote);
-        sCleanupMap.put("¶", R.string.symbol_paragraph_mark);
-        sCleanupMap.put("(", R.string.symbol_parenthesis_left);
-        sCleanupMap.put(")", R.string.symbol_parenthesis_right);
-        sCleanupMap.put("%", R.string.symbol_percent);
-        sCleanupMap.put(".", R.string.symbol_period);
-        sCleanupMap.put("π", R.string.symbol_pi);
-        sCleanupMap.put("#", R.string.symbol_pound);
-        sCleanupMap.put("£", R.string.symbol_pound_sterling);
-        sCleanupMap.put("?", R.string.symbol_question_mark);
-        sCleanupMap.put("\"", R.string.symbol_quotation_mark);
-        sCleanupMap.put("®", R.string.symbol_registered_trademark);
-        sCleanupMap.put(";", R.string.symbol_semicolon);
-        sCleanupMap.put("/", R.string.symbol_slash);
-        sCleanupMap.put(":-)", R.string.symbol_smiley);
-        sCleanupMap.put(" ", R.string.symbol_space);
-        sCleanupMap.put("[", R.string.symbol_square_bracket_left);
-        sCleanupMap.put("]", R.string.symbol_square_bracket_right);
-        sCleanupMap.put("√", R.string.symbol_square_root);
-        sCleanupMap.put("™", R.string.symbol_trademark);
-        sCleanupMap.put("_", R.string.symbol_underscore);
-        sCleanupMap.put("|", R.string.symbol_vertical_bar);
-        sCleanupMap.put("\n", R.string.symbol_new_line);
+    static {
+        UNICODE_MAP.put('&', R.string.symbol_ampersand);
+        UNICODE_MAP.put('<', R.string.symbol_angle_bracket_left);
+        UNICODE_MAP.put('>', R.string.symbol_angle_bracket_right);
+        UNICODE_MAP.put('\'', R.string.symbol_apostrophe);
+        UNICODE_MAP.put('*', R.string.symbol_asterisk);
+        UNICODE_MAP.put('@', R.string.symbol_at_sign);
+        UNICODE_MAP.put('\\', R.string.symbol_backslash);
+        UNICODE_MAP.put('\u2022', R.string.symbol_bullet);
+        UNICODE_MAP.put('^', R.string.symbol_caret);
+        UNICODE_MAP.put('¢', R.string.symbol_cent);
+        UNICODE_MAP.put(':', R.string.symbol_colon);
+        UNICODE_MAP.put(',', R.string.symbol_comma);
+        UNICODE_MAP.put('©', R.string.symbol_copyright);
+        UNICODE_MAP.put('{', R.string.symbol_curly_bracket_left);
+        UNICODE_MAP.put('}', R.string.symbol_curly_bracket_right);
+        UNICODE_MAP.put('°', R.string.symbol_degree);
+        UNICODE_MAP.put('\u00F7', R.string.symbol_division);
+        UNICODE_MAP.put('$', R.string.symbol_dollar_sign);
+        UNICODE_MAP.put('…', R.string.symbol_ellipsis);
+        UNICODE_MAP.put('\u2014', R.string.symbol_em_dash);
+        UNICODE_MAP.put('\u2013', R.string.symbol_en_dash);
+        UNICODE_MAP.put('€', R.string.symbol_euro);
+        UNICODE_MAP.put('!', R.string.symbol_exclamation_mark);
+        UNICODE_MAP.put('`', R.string.symbol_grave_accent);
+        UNICODE_MAP.put('-', R.string.symbol_hyphen_minus);
+        UNICODE_MAP.put('„', R.string.symbol_low_double_quote);
+        UNICODE_MAP.put('\u00D7', R.string.symbol_multiplication);
+        UNICODE_MAP.put('\n', R.string.symbol_new_line);
+        UNICODE_MAP.put('¶', R.string.symbol_paragraph_mark);
+        UNICODE_MAP.put('(', R.string.symbol_parenthesis_left);
+        UNICODE_MAP.put(')', R.string.symbol_parenthesis_right);
+        UNICODE_MAP.put('%', R.string.symbol_percent);
+        UNICODE_MAP.put('.', R.string.symbol_period);
+        UNICODE_MAP.put('π', R.string.symbol_pi);
+        UNICODE_MAP.put('#', R.string.symbol_pound);
+        UNICODE_MAP.put('£', R.string.symbol_pound_sterling);
+        UNICODE_MAP.put('?', R.string.symbol_question_mark);
+        UNICODE_MAP.put('"', R.string.symbol_quotation_mark);
+        UNICODE_MAP.put('®', R.string.symbol_registered_trademark);
+        UNICODE_MAP.put(';', R.string.symbol_semicolon);
+        UNICODE_MAP.put('/', R.string.symbol_slash);
+        UNICODE_MAP.put(' ', R.string.symbol_space);
+        UNICODE_MAP.put('[', R.string.symbol_square_bracket_left);
+        UNICODE_MAP.put(']', R.string.symbol_square_bracket_right);
+        UNICODE_MAP.put('√', R.string.symbol_square_root);
+        UNICODE_MAP.put('™', R.string.symbol_trademark);
+        UNICODE_MAP.put('_', R.string.symbol_underscore);
+        UNICODE_MAP.put('|', R.string.symbol_vertical_bar);
+        UNICODE_MAP.put('\u00a5', R.string.symbol_yen);
     }
 
     /**
@@ -92,34 +88,33 @@ public class SpeechCleanupUtils {
      * @return Cleaned up text.
      */
     public static CharSequence cleanUp(Context context, CharSequence text) {
-        if (sCleanupMap == null) {
-            populateCleanupMap();
+        if ((text == null) || (text.length() != 1)) {
+            return text;
         }
 
-        if (text == null) {
-            return null;
-        }
+        final String value = getCleanValueFor(context, text.charAt(0));
 
-        final String key = text.toString();
-        final Object value = sCleanupMap.get(key);
-
-        if (value instanceof String) {
-            return (String) value;
-        }
-
-        if (value instanceof Integer) {
-            final String localized = context.getString((Integer) value);
-            sCleanupMap.put(key, localized);
-            return localized;
-        }
-
-        if ((key.length() == 1) && Character.isUpperCase(key.charAt(0))) {
-            final String localized = context.getString(R.string.template_capital_letter, text);
-            sCleanupMap.put(key, localized);
-            return localized;
+        if (value != null) {
+            return value;
         }
 
         return text;
     }
 
+    /**
+     * Returns the "clean" value for the specified character.
+     */
+    private static String getCleanValueFor(Context context, char key) {
+        final int resId = UNICODE_MAP.get(key);
+
+        if (resId != 0) {
+            return context.getString(resId);
+        }
+
+        if (Character.isUpperCase(key)) {
+            return context.getString(R.string.template_capital_letter, Character.toString(key));
+        }
+
+        return null;
+    }
 }

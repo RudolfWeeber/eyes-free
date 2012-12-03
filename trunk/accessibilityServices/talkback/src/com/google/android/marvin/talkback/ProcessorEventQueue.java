@@ -16,19 +16,17 @@
 
 package com.google.android.marvin.talkback;
 
-import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.SpeechController.QueuingMode;
 import com.google.android.marvin.talkback.TalkBackService.EventListener;
-import com.google.android.marvin.talkback.formatter.EventSpeechRuleLoader;
 import com.google.android.marvin.talkback.formatter.EventSpeechRuleProcessor;
-import com.google.android.marvin.utils.WeakReferenceHandler;
+import com.googlecode.eyesfree.utils.FeedbackController;
 import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 /**
  * Manages the event feedback queue. Queued events are run through the
@@ -50,13 +48,8 @@ public class ProcessorEventQueue implements EventListener {
     private final EventQueue mEventQueue = new EventQueue();
 
     private final CustomResourceMapper mCustomResourceMapper;
-    private final PreferenceFeedbackController mFeedbackController;
+    private final FeedbackController mFeedbackController;
     private final SpeechController mSpeechController;
-
-    /**
-     * Loader of speech rules.
-     */
-    private EventSpeechRuleLoader mSpeechRuleLoader;
 
     /**
      * Processor for {@link AccessibilityEvent}s that populates
@@ -66,16 +59,13 @@ public class ProcessorEventQueue implements EventListener {
 
     private int mLastEventType;
 
-    public ProcessorEventQueue(Context context, PreferenceFeedbackController feedbackController,
-            SpeechController speechController) {
+    public ProcessorEventQueue(TalkBackService context) {
         mCustomResourceMapper = new CustomResourceMapper(context);
-        mFeedbackController = feedbackController;
-        mSpeechController = speechController;
+        mFeedbackController = context.getFeedbackController();
+        mSpeechController = context.getSpeechController();
         mEventSpeechRuleProcessor = new EventSpeechRuleProcessor(context);
 
-        mSpeechRuleLoader =
-                new EventSpeechRuleLoader(context.getPackageName(), mEventSpeechRuleProcessor);
-        mSpeechRuleLoader.loadSpeechRules();
+        loadDefaultRules();
     }
 
     @Override
@@ -84,6 +74,37 @@ public class ProcessorEventQueue implements EventListener {
             mEventQueue.add(event);
             mHandler.postSpeak(event);
         }
+    }
+
+
+    /**
+     * Loads default speech strategies based on the current SDK version.
+     */
+    private void loadDefaultRules() {
+        // Add version-specific speech strategies for semi-bundled apps.
+        mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_apps);
+        mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_googletv);
+
+        // Add platform-specific speech strategies for bundled apps.
+        if (Build.VERSION.SDK_INT >= 16) {
+            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_jellybean);
+        } else if (Build.VERSION.SDK_INT >= 14) {
+            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_ics);
+        } else if (Build.VERSION.SDK_INT >= 11) {
+            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_honeycomb);
+        } else if (Build.VERSION.SDK_INT >= 9) {
+            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_gingerbread);
+        } else if (Build.VERSION.SDK_INT >= 8) {
+            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_froyo);
+        } else if (Build.VERSION.SDK_INT >= 5) {
+            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_eclair);
+        } else if (Build.VERSION.SDK_INT >= 4) {
+            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_donut);
+        }
+
+        // Add generic speech strategy. This should always be added last so that
+        // the app-specific rules above can override the generic rules.
+        mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy);
     }
 
     /**
@@ -95,15 +116,13 @@ public class ProcessorEventQueue implements EventListener {
      * @param event The event to process.
      */
     private void processAndRecycleEvent(AccessibilityEvent event) {
-        // AccessibilityEvent.toString() is expensive, only do it if we have to!
-        if (Log.DEBUG >= LogUtils.LOG_LEVEL) {
-            LogUtils.log(TalkBackService.class, Log.DEBUG, "Processing event: %s", event.toString());
-        }
+        LogUtils.log(this, Log.DEBUG, "Processing event: %s", event);
 
         final Utterance utterance = Utterance.obtain();
 
         if (!mEventSpeechRuleProcessor.processEvent(event, utterance)) {
             // Failed to match event to a rule, so the utterance is empty.
+            LogUtils.log(this, Log.WARN, "Failed to process event");
             utterance.recycle();
             return;
         }
@@ -153,15 +172,12 @@ public class ProcessorEventQueue implements EventListener {
             }
         }
 
+        // Speak the text.  Utterances with empty speech will be filtered at the SpeechController.
         final Bundle params = metadata.getBundle(Utterance.KEY_METADATA_SPEECH_PARAMS);
+        final int queueMode = computeQueuingMode(utterance, event);
+        final StringBuilder text = utterance.getText();
 
-        // Speak the text, if available.
-        if (!TextUtils.isEmpty(utterance.getText())) {
-            final QueuingMode queueMode = computeQueuingMode(utterance, event);
-            final StringBuilder text = utterance.getText();
-
-            mSpeechController.cleanUpAndSpeak(text, queueMode, params);
-        }
+        mSpeechController.cleanUpAndSpeak(text, queueMode, 0, params);
     }
 
     /**
@@ -170,27 +186,27 @@ public class ProcessorEventQueue implements EventListener {
      * @param utterance
      * @return A queuing mode, one of:
      *         <ul>
-     *         <li>{@link QueuingMode#INTERRUPT}
-     *         <li>{@link QueuingMode#QUEUE}
-     *         <li>{@link QueuingMode#UNINTERRUPTIBLE}
+     *         <li>{@link SpeechController#QUEUE_MODE_INTERRUPT}
+     *         <li>{@link SpeechController#QUEUE_MODE_QUEUE}
+     *         <li>{@link SpeechController#QUEUE_MODE_UNINTERRUPTIBLE}
      *         </ul>
      */
-    private QueuingMode computeQueuingMode(Utterance utterance, AccessibilityEvent event) {
+    private int computeQueuingMode(Utterance utterance, AccessibilityEvent event) {
         final Bundle metadata = utterance.getMetadata();
         final int eventType = event.getEventType();
         final int mode;
 
         // Always collapse events of the same type.
         if (mLastEventType == eventType) {
-            return QueuingMode.INTERRUPT;
+            return SpeechController.QUEUE_MODE_INTERRUPT;
         }
 
         mLastEventType = eventType;
 
-        final int ordinal =
-                metadata.getInt(Utterance.KEY_METADATA_QUEUING, QueuingMode.INTERRUPT.ordinal());
+        final int queueMode = metadata.getInt(
+                Utterance.KEY_METADATA_QUEUING, SpeechController.QUEUE_MODE_INTERRUPT);
 
-        return QueuingMode.valueOf(ordinal);
+        return queueMode;
     }
 
     private static class ProcessorEventHandler extends WeakReferenceHandler<ProcessorEventQueue> {

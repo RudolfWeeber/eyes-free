@@ -13,21 +13,19 @@
     <string name="notification_type_status_more" msgid="3191659976249507098">"ተጨማሪ"</string>
     <string name="notification_type_status_sdcard" msgid="2268627072134312579">"SD ካርድ"</string>
     <string name="notification_type_status_sdcard_usb" msgid="410122674028987252">"የSD ካርድ USB"</string>
-    <string name="notification_status_sync" msgid="4919271166470257796">"አሳምር"</string>
+    <string name="notification_status_sync" msgid="4919271166470257796">"አስምር"</string>
     <string name="notification_type_new_email" msgid="207543580986817175">"አዲስ ኢሜይል"</string>
-    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"አሳምር"</string>
+    <string name="notification_type_status_sync_noanim" msgid="7207653060078653323">"አስምር"</string>
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"የድምፅ መልዕክት"</string>
     <string name="notification_status_play" msgid="5444333019485373575">" በመጫወት ላይ"</string>
     <string name="template_current_tts_engine" msgid="2402080656466274253">"<xliff:g id="ENGINE_NAME">%1$s</xliff:g> በመጠቀም ላይ"</string>
-    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> ታይቷል"</string>
-    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> አልታየም"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"ሣጥን አርትዕ።<xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
     <string name="template_alert_dialog_template" msgid="578525726030867650">"አንቃ <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g>በ<xliff:g id="NEW_TEXT">%2$s</xliff:g> ተተክቷል"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> ቁምፊዎች በ<xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> ቁምፊዎች ተተክተዋል።"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"የስልክ ጥሪ <xliff:g id="PERCENT">%d</xliff:g> በመቶ።"</string>
-    <!-- no translation found for template_image_view (2368987212503613897) -->
-    <skip />
+    <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="ITEM">%1$s</xliff:g> ለ<xliff:g id="LABEL">%2$s</xliff:g>"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> ምስል።"</string>
     <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g> ዝርዝር"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"<xliff:g id="TITLE">%1$s</xliff:g>ን ለረጅም ጊዜ ተጭኖ ተይዟል"</string>
     <string name="template_button" msgid="6774709818484366257">"<xliff:g id="TITLE">%1$s</xliff:g> አዝራር"</string>
@@ -38,7 +36,6 @@
     <string name="value_gridview" msgid="9093738961981389981">"ፍርግርግ"</string>
     <string name="value_listview" msgid="3437715684913760710">"ዝርዝር"</string>
     <string name="value_tabwidget" msgid="5550633699198799743">"የትር አሞሌ"</string>
-    <string name="value_container" msgid="439303423101134461">"መያዣ"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"ንጥሎች <xliff:g id="FROM_INDEX">%d</xliff:g> ለ <xliff:g id="TO_INDEX">%d</xliff:g> ከ <xliff:g id="TOTAL_COUNT">%d</xliff:g> በማሳየት ላይ::"</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"ንጥል <xliff:g id="FROM_INDEX">%d</xliff:g> ከ <xliff:g id="TOTAL_COUNT">%d</xliff:g> በማሳየት ላይ::"</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g>ተቆልቋይ ዝርዝር።"</string>
@@ -48,7 +45,9 @@
     <string name="template_radio_button" msgid="4272970081436888704">"<xliff:g id="TITLE">%1$s</xliff:g> የሬዲዮ አዝራር።"</string>
     <string name="value_password" msgid="52094746222829357">"የይለፍ ቃል"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"የስላይደር መሳቢያ ተከፍቷል"</string>
+    <string name="value_notification_shade_opened" msgid="3832526419695611670">"ጥላ ተከፍቷል"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"አማራጮች።"</string>
+    <string name="value_text_cleared" msgid="3190458526844389854">"የተጠረገ ጽሑፍ"</string>
     <string name="value_text_removed" msgid="2700105425865376595">"ተሰርዟል"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"የማሳወቂያዎች ማጠቃለያ"</string>
     <string name="value_selected" msgid="6785267365387973217">"የተመረጡ"</string>
@@ -57,10 +56,12 @@
     <string name="value_disabled" msgid="65077823320194685">"ቦዝኗል"</string>
     <string name="value_double_tap" msgid="7829968646330038608">"ሁለቴ መታ ማድረግ"</string>
     <string name="value_single_tap" msgid="6461432282985355533">"መታ ማድረግ"</string>
-    <string name="template_hint_clickable" msgid="3732923024418439340">"ለማግበር <xliff:g id="ACTION">%1$s</xliff:g>።"</string>
-    <string name="template_hint_long_clickable" msgid="8710614198873717434">"በረጅሙ ጠቅ ለማድረግ <xliff:g id="ACTION">%1$s</xliff:g>ና ያዝ።"</string>
+    <string name="template_hint_clickable" msgid="1687873106975426560">"ለመምረጥ <xliff:g id="ACTION">%1$s</xliff:g>።"</string>
+    <string name="template_hint_long_clickable" msgid="4276746786982054368">"በረጅሙ ለመጫን <xliff:g id="ACTION">%1$s</xliff:g> እና ይያዙ።"</string>
     <string name="template_hint_checkable" msgid="6312875663486456665">"ለመቀያየር <xliff:g id="ACTION">%1$s</xliff:g>።"</string>
     <string name="template_hint_edit_text" msgid="4793267613633348902">"ጽሑፍ ለማስገባት <xliff:g id="ACTION">%1$s</xliff:g>።"</string>
+    <string name="template_hint_spinner" msgid="1320498935380159474">"ለመቀየር <xliff:g id="ACTION">%1$s</xliff:g> ያድርጉ።"</string>
+    <string name="hint_radial_menu" msgid="7030043763037187865">"አንድ ንጥል ለማግኘት ማያ ገጹን ይንኩና ያስሱ፣ ከዚያ ለመምረጥ ያንሱት።"</string>
     <string name="value_scrollable" msgid="2310899165772659098">"ጥቅሉ ሊፈታ የሚችል"</string>
     <string name="value_clicked" msgid="8306469740150249879">"ጠቅ ተደርጓል"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"ያልተሰየሙ"</string>
@@ -69,8 +70,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"ማያ ጠፍቷል"</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"መሳሪያው አልተቆለፈም፡፡"</string>
     <string name="value_web_view" msgid="8611542401983419041">"የድር ይዘት።"</string>
-    <string name="value_unknown_object" msgid="3589473667352440925">"የመለያ ስያሜ ያልተሰጠው ንጥል"</string>
-    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"መቼ መናገር እንዳለብህ"</string>
+    <string name="title_pref_category_when_to_speak" msgid="9082038550046119493">"ንግግር"</string>
     <string name="title_pref_speech_volume" msgid="4013853601342391397">"የንግግር ድምጽ"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"የስልክ ጥሪ ድምፅ"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"ማያ ሲጠፋ ንግግር አድርግ"</string>
@@ -82,22 +82,20 @@
     <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"የንክኪ አሰሳ"</string>
     <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"የአቋራጭ ምልክቶችን አቀናብር"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"የድምጽ ቅጥነት ለውጦች ተጠቀም"</string>
+    <string name="title_pref_keyboard_echo" msgid="860353418869467119">"የቁልፍ ሰሌዳ ማሚቶ"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"የቁምፊ ሰሌዳ ግብረ-መልስ ወፈር ባለ ድምጽ ተናገር"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"ስናገር የድምጽ ውፍረት አትቀይር"</string>
-    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"ግብረ-መልስ"</string>
+    <string name="title_pref_category_feedback_settings" msgid="1245161004109313841">"ሌላ ግብረመልስ"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"የንዝረት ግብረ ምላሽ"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"የድምፅ ግብረ ምላሽ"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"የድምጽ መጨመሪያ"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"የተለያዩ"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"የገንቢ ቅንብሮች"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"የውጽአት ደረጃን መዝግብ"</string>
-    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"የክስተት ምንጮችን አድምቅ"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"የንግግር ውፅዓት አሳይ"</string>
     <string name="axis_character" msgid="5059604520074645703">"በቁምፊ ዳስስ።"</string>
     <string name="axis_word" msgid="7745798763195184060">"በቃል ዳስስ።"</string>
     <string name="axis_sentence" msgid="5569363499210008882">"በአረፍተ ነገር ዳስስ።"</string>
-    <string name="axis_paragraph" msgid="3453285809344289729">"በአንቀጽ አስስ።"</string>
-    <string name="axis_object" msgid="7034325449094737671">"በነገር አስስ።"</string>
     <string name="axis_line" msgid="2210986915751668758">"በመስመር አስስ።"</string>
     <string name="axis_page" msgid="9146038615069235841">"በገጽ አስስ።"</string>
     <string name="axis_heading" msgid="8928386537164255063">"በርዕስ ዳስስ።"</string>
@@ -105,7 +103,6 @@
     <string name="axis_document" msgid="1581988340856497809">"በሰነድ ዳስስ።"</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"የድረ ባህሪ ዕይታን በነባሪ ዳስስ።"</string>
     <string name="attention" msgid="627104955956154539">"ትኩረት"</string>
-    <string name="explore_dialog_message" msgid="2796017207242981327">"ይህ ባህሪ መሳሪያህ ለንኪ የሚሰጠውን ምላሽ አሰጣጥ ይለውጣል። አብራው?"</string>
     <string name="requires_talkback" msgid="3634159695179852501">"ይህ መማሪያ አስስ በዳሰሳን ይፈልጋል። መማሪያውን ከማስጀመርህ በፊት እባክህ TalkBackን አብራና አስስ በዳሰሳን አንቃ።"</string>
     <string name="granularity_character" msgid="5828563809381090688">"በቁምፊ አንብብ"</string>
     <string name="granularity_word" msgid="3660181391007381559">"በቃል አንብብ"</string>
@@ -118,16 +115,43 @@
     <string name="shortcut_home" msgid="3905505999818649470">"የመነሻ አዝራር"</string>
     <string name="shortcut_recent_apps" msgid="4462279958679670485">"የቅርብ ጊዜ መተግበሪያዎች አዝራር"</string>
     <string name="shortcut_notifications" msgid="7234767026975704922">"ክፍት ማሳወቂያዎች"</string>
+    <string name="shortcut_read_all_breakout" msgid="4373114224519034620">"ቀጣይነት ያለው የንባብ ምናሌን ክፈት"</string>
+    <string name="shortcut_talkback_breakout" msgid="568168492542718040">"ሁለንተናዊ አውድ ምናሌን ክፈት"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"የመጨረሻውን ማነብነብ ድገም"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"የመጨረሻውን ማነብነብ በፊደል ፃፍ"</string>
-    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"ወደ ታችና ከዛ ወደ ግራ አንሸራትት"</string>
-    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"ወደ ታችና ከዛ ወደ ቀኝ አንሸራትት"</string>
-    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"ወደ ላይና ከዛ ወደ ግራ አንሸራትት"</string>
-    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"ወደ ላይና ከዛ ወደ ቀኝ አንሸራትት"</string>
-    <string name="value_volume_200_percent" msgid="2969698924281376143">"200% የማህደረ መረጃ ድምጽ"</string>
-    <string name="value_volume_150_percent" msgid="4668371157512150392">"150% የማህደረ መረጃ ድምጽ"</string>
-    <string name="value_volume_100_percent" msgid="6676030754946177658">"የማህደረ መረጃ ድምጽ አመሳስል"</string>
-    <string name="value_volume_75_percent" msgid="7578844180160160971">"75% የማህደረ መረጃ ድምጽ"</string>
-    <string name="value_volume_50_percent" msgid="2830571913174435107">"50% የማህደረ መረጃ ድምጽ"</string>
-    <string name="value_volume_25_percent" msgid="4441038207089946938">"25% የማህደረ መረጃ ድምጽ"</string>
+    <string name="shortcut_pause_feedback" msgid="1125364186583919621">"ግብረ መልስ ባለበት አቁም"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="5252410921504649704">"ወደ ታች ከዚያ ወደ ግራ ያንሸራትቱ"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="70468539039651273">"ወደ ታች ከዛ ወደ ቀኝ ያንሸራትቱ"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="6488345551912922700">"ወደ ላይ ከዛ ወደ ግራ ያንሸራትቱ"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="8936164693273303141">"ወደ ላይ ከዛ ወደ ቀኝ ያንሸራትቱ"</string>
+    <string name="title_pref_shortcut_right_and_down" msgid="8367941430094918701">"ወደ ቀኝ ከዚያ ወደ ታች ያንሸራትቱ"</string>
+    <string name="title_pref_shortcut_right_and_up" msgid="3803984082758463130">"ወደ ቀኝ ከዚያ ወደ ላይ ያንሸራትቱ"</string>
+    <string name="title_pref_shortcut_left_and_down" msgid="7133444152727902323">"ወደ ግራ ከዚያ ወደ ታች ያንሸራትቱ"</string>
+    <string name="title_pref_shortcut_left_and_up" msgid="2432229113065295801">"ወደ ግራ ከዚያ ወደ ላይ ያንሸራትቱ"</string>
+    <string name="value_volume_100_percent" formatted="false" msgid="6676030754946177658">"የማህደረ መረጃ ድምጽ አመሳስል"</string>
+    <string name="value_volume_75_percent" formatted="false" msgid="7578844180160160971">"75% የማህደረ መረጃ ድምጽ"</string>
+    <string name="value_volume_50_percent" formatted="false" msgid="2830571913174435107">"50% የማህደረ መረጃ ድምጽ"</string>
+    <string name="value_volume_25_percent" formatted="false" msgid="4441038207089946938">"25% የማህደረ መረጃ ድምጽ"</string>
+    <string name="value_keyboard_echo_always" msgid="6227871839200687680">"የተተየቡ ቁልፎችን ሁልጊዜ ተናገር"</string>
+    <string name="value_keyboard_echo_softkeys" msgid="6592352879887617590">"ለየማያ ገጽ ላይ ቁልፍ ሰሌዳ ብቻ"</string>
+    <string name="value_keyboard_echo_never" msgid="7272733066649438914">"የተተየቡ ቃላት በጭራሽ አትናገር"</string>
+    <string name="title_talkback_settings_available" msgid="6764624676369520992">"የተደራሽነት ምርጫዎችን ማግኘት ይቻላል"</string>
+    <string name="message_talkback_settings_available" msgid="8705763859411459771">"የተደራሽነት ምርጫዎችን ትግበራ ለማውረድ እዚህ ላይ ነካ ያድርጉ።"</string>
+    <string name="notification_title_talkback_gestures_changed" msgid="8384253637363301938">"የTalkBack ምልክቶች ተቀይረዋል"</string>
+    <string name="notification_message_talkback_gestures_changed" msgid="5639775622146513884">"የተደራሽነት ምልክቶች ላይ ያሉ ለውጦችን ለመገምገም መታ ያድርጉ"</string>
+    <string name="notification_title_talkback_suspended" msgid="2185046615850691522">"TalkBack ታግዷል"</string>
+    <string name="notification_message_talkback_suspended" msgid="3312683762001713772">"ከቆመበት ለመቀጠል መታ ያድርጉ።"</string>
+    <string name="dialog_title_suspend_talkback" msgid="452536442417893349">"TalkBack ይታገድ?"</string>
+    <string name="dialog_message_suspend_talkback" msgid="399684608846305231">"እርግጠኛ ነዎት TalkBackን ማገድ ይፈልጋሉ?"\n\n"TalkBack ታግዶ እያለ መሳሪያዎ ግብረ መልስ አይሰጥም።"\n\n"TalkBack ከማስታወቂያዎች ጥላ ወይም ወደ ቁልፍ ማያው በመመለስ ከቆመበት ማስቀጠል ይችላሉ።"</string>
+    <string name="talkback_gesture_change_details" msgid="2919155220372343154">"ይህ የTalkBack ስሪት ወደ ነባሪው የተደራሽነት ጣት ምልክቶች ላይ የተደረጉ ለውጦችን ያካትታል። ከእነዚህ ምልክቶች ጋር የተጎዳኙ ምልክቶች በTalkBack ቅንብሮች ውስጥ ሊበጁ ይችላሉ። በንክኪ አስስ ሲነቃ የተወሰኑ እርምጃዎችን ለመፈጸም የሚከተሉትን ምልክቶች መጠቀም ይችላሉ።"\n\n"<xliff:g id="MAPPINGS">%1$s</xliff:g>"</string>
+    <string name="button_accept_changed_gesture_mappings" msgid="3709582843147387025">"ምልክቶችን ተቀበል"</string>
+    <string name="button_customize_gesture_mappings" msgid="6198453024008558647">"ምልክቶችን አብጅ"</string>
+    <string name="dialog_title_disable_exploration" msgid="6318745977662978395">"በንኪኪ አስስ ይሰናከል?"</string>
+    <string name="dialog_message_disable_exploration" msgid="206632033549219529">"እርግጠኛ ነዎት በንኪኪ አስስን ማጥፋት ይፈልጋሉ?"\n\n"መሣሪያዎ ከአሁን በኋላ ለአጭር ምልክቶች ምላሽ አይሰጡም ወይም ማያ ገጹን ሲነኩ ንጥሎችን አይናገሩም።"</string>
+    <string name="read_from_top" msgid="4178188498867856189">"ሁሉንም ከላይ አንብብ"</string>
+    <string name="read_from_current" msgid="2331288178673192110">"ሁሉንም ከቀጣዩ ንጥል ያንብቡ"</string>
+    <string name="repeat_current" msgid="5909904824878426189">"የአሁኑን ንጥል ድገም"</string>
+    <string name="hint_script_injection" msgid="2973894305173271874">"አስስ በመንካት በድር ይዘት ላይ አይገኝም። የድር ይዘትን ለማሰስ በተደራሽነት ቅንብሮች ውስጥ <xliff:g id="PREFERENCE_NAME">%1$s</xliff:g>ን ያብሩ።"</string>
+    <string name="label_talkback_context_menu" msgid="102441078934343795">"TalkBack የሁለንተናዊ አውድ ምናሌ"</string>
+    <string name="permission_talkback_label" msgid="7399199628843033396">"TalkBackን ይቆጣጠራል"</string>
 </resources>

@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.SparseIntArray;
+import android.util.TypedValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,6 +41,9 @@ public class CustomResourceMapper {
      * resource identifiers.
      */
     private final Map<String, Integer> mCustomResourceMap = new HashMap<String, Integer>();
+
+    /** Temporary holding variable for resolving resource identifiers. */
+    private final TypedValue mResolvedValue = new TypedValue();
 
     /** The parent context. Used to retrieve resources. */
     private final Context mContext;
@@ -66,46 +70,49 @@ public class CustomResourceMapper {
 
     private void loadDefaults() {
         // Assignable sounds.
-        mDefaultResourceMap.put(R.id.sounds_hover, R.raw.view_hover_enter);
-        mDefaultResourceMap.put(R.id.sounds_actionable, R.raw.view_hover_enter_actionable);
-        mDefaultResourceMap.put(R.id.sounds_explore_begin, R.raw.explore_begin);
-        mDefaultResourceMap.put(R.id.sounds_explore_end, R.raw.explore_end);
-        mDefaultResourceMap.put(R.id.sounds_clicked, R.raw.view_text_changed);
-        mDefaultResourceMap.put(R.id.sounds_focused, R.raw.view_focused);
-        mDefaultResourceMap.put(R.id.sounds_notification_state, R.raw.notification_state_changed);
-        mDefaultResourceMap.put(R.id.sounds_text_changed, R.raw.view_text_changed);
-        mDefaultResourceMap.put(R.id.sounds_scroll_for_more, R.raw.view_clicked);
+        loadDefault(R.id.sounds_hover, R.raw.def_sounds_hover);
+        loadDefault(R.id.sounds_actionable, R.raw.def_sounds_actionable);
+        loadDefault(R.id.sounds_clicked, R.raw.def_sounds_clicked);
+        loadDefault(R.id.sounds_focused, R.raw.def_sounds_focused);
+        loadDefault(R.id.sounds_selected, R.raw.def_sounds_selected);
+        loadDefault(R.id.sounds_notification, R.raw.def_sounds_notification);
+        loadDefault(R.id.sounds_window_state, R.raw.def_sounds_window_state);
+        loadDefault(R.id.sounds_text_changed, R.raw.def_sounds_text_changed);
+        loadDefault(R.id.sounds_scroll_for_more, R.raw.def_sounds_scroll_for_more);
 
         // Assignable patterns.
-        mDefaultResourceMap.put(R.id.patterns_hover, R.array.view_hovered_pattern);
-        mDefaultResourceMap.put(R.id.patterns_actionable, R.array.view_actionable_pattern);
+        loadDefault(R.id.patterns_hover, R.array.def_patterns_hover);
+        loadDefault(R.id.patterns_actionable, R.array.def_patterns_actionable);
+        loadDefault(R.id.patterns_clicked, R.array.def_patterns_clicked);
+        loadDefault(R.id.patterns_focused, R.array.def_patterns_focused);
+        loadDefault(R.id.patterns_selected, R.array.def_patterns_selected);
+        loadDefault(R.id.patterns_notification, R.array.def_patterns_notification);
+        loadDefault(R.id.patterns_window_state, R.array.def_patterns_window_state);
+    }
+
+    private void loadDefault(int keyResId, int defaultResId) {
+        mResources.getValue(defaultResId, mResolvedValue, true);
+        mDefaultResourceMap.put(keyResId, mResolvedValue.resourceId);
     }
 
     public int getResourceIdForPreference(int keyResId) {
         // First attempt to load from cache.
         final String key = mContext.getString(keyResId);
         final Integer resId = mCustomResourceMap.get(key);
-
         if (resId != null) {
             return resId;
         }
 
         // Next, attempt to load from preferences.
         final String resName = mSharedPreferences.getString(key, null);
-
         if (resName != null) {
-            final int customResId =
-                    mResources.getIdentifier(resName, null, mContext.getPackageName());
-
-            // Cache the value in the custom resource map.
-            mCustomResourceMap.put(key, customResId);
-
-            return customResId;
+            final int customId = mResources.getIdentifier(resName, null, mContext.getPackageName());
+            mCustomResourceMap.put(key, customId);
+            return customId;
         }
 
         // Finally, attempt to load from defaults.
         final Integer defaultResId = mDefaultResourceMap.get(keyResId);
-
         if (defaultResId != null) {
             return defaultResId;
         }

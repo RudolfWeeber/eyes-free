@@ -17,7 +17,12 @@
 package com.google.android.marvin.talkback.formatter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,15 +32,15 @@ import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.SpeechCleanupUtils;
 import com.google.android.marvin.talkback.SpeechController.SpeechParam;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.compat.provider.SettingsCompatUtils.SecureCompatUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
 
-import java.text.BreakIterator;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * This class contains custom formatters for presenting text edits.
@@ -43,6 +48,11 @@ import java.util.Locale;
  * @author alanv@google.com (Alan Viverette)
  */
 public final class TextFormatters {
+    // These must be synchronized with res/values/donottranslate.xml
+    private static final int PREF_ECHO_ALWAYS = 0;
+    private static final int PREF_ECHO_SOFTKEYS = 1;
+    private static final int PREF_ECHO_NEVER = 2;
+
     /** Default pitch adjustment for text event feedback. */
     private static final float DEFAULT_PITCH = 1.2f;
 
@@ -52,9 +62,17 @@ public final class TextFormatters {
     /** Minimum delay between change and selection events. */
     private static final long SELECTION_DELAY = 100;
 
-    /** Event time of the most recent changed event. */
+    /** Minimum delay between change events without an intervening selection. */
+    private static final long CHANGED_DELAY = 100;
+
+    /** Event time of the most recently processed change event. */
     private static long sChangedTimestamp = -1;
+
+    /** Package name of the most recently processed change event. */
     private static CharSequence sChangedPackage = null;
+
+    /** Whether we received a change event and are waiting for a selection. */
+    private static boolean sAwaitingSelection;
 
     private TextFormatters() {
         // Not publicly instantiable.
@@ -65,10 +83,54 @@ public final class TextFormatters {
      */
     public static final class ChangedTextFormatter implements AccessibilityEventFormatter {
         @Override
-        public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
-            sChangedTimestamp = event.getEventTime();
+        public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
+            final long timestamp = event.getEventTime();
+
+            // Drop change event if we're still waiting for a select event and
+            // the change occurred too soon after the previous change.
+            if (sAwaitingSelection && ((timestamp - sChangedTimestamp) < CHANGED_DELAY)) {
+                return false;
+            }
+
+            if (!formatInternal(event, context, utterance)) {
+                return false;
+            }
+
+            sAwaitingSelection = true;
+            sChangedTimestamp = timestamp;
             sChangedPackage = event.getPackageName();
 
+            if (!shouldEchoKeyboard(context)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        private boolean shouldEchoKeyboard(Context context) {
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            final Resources res = context.getResources();
+            final int keyboardPref = SharedPreferencesUtils.getIntFromStringPref(prefs, res,
+                    R.string.pref_keyboard_echo_key, R.string.pref_keyboard_echo_default);
+
+            switch (keyboardPref) {
+                case PREF_ECHO_ALWAYS:
+                    return true;
+                case PREF_ECHO_SOFTKEYS:
+                    final Configuration config = res.getConfiguration();
+                    return (config.keyboard == Configuration.KEYBOARD_NOKEYS) ||
+                            (config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES);
+                case PREF_ECHO_NEVER:
+                    return false;
+                default:
+                    LogUtils.log(this, Log.ERROR, "Invalid keyboard echo preference value: %d",
+                            keyboardPref);
+                    return false;
+            }
+        }
+
+        private boolean formatInternal(
+                AccessibilityEvent event, TalkBackService context, Utterance utterance) {
             // Text changes should use a different voice from labels.
             final Bundle params = new Bundle();
             params.putFloat(SpeechParam.PITCH, DEFAULT_PITCH);
@@ -87,64 +149,68 @@ public final class TextFormatters {
                 return false;
             }
 
+            // If multi-character text was cleared, stop now.
+            final boolean wasCleared = (event.getRemovedCount() > 1) && (event.getAddedCount() == 0)
+                    && (event.getBeforeText().length() == event.getRemovedCount());
+            if (wasCleared) {
+                StringBuilderUtils.appendWithSeparator(utteranceText,
+                        context.getString(R.string.value_text_cleared));
+                return true;
+            }
+
             CharSequence removedText = getRemovedText(event, context);
             CharSequence addedText = getAddedText(event, context);
 
             // Never say "replaced Hello with Hello".
             if (TextUtils.equals(addedText, removedText)) {
+                LogUtils.log(this, Log.DEBUG, "Drop event, nothing changed");
                 return false;
             }
 
             // Abort if either text is null (indicates an error).
             if ((removedText == null) || (addedText == null)) {
+                LogUtils.log(this, Log.DEBUG, "Drop event, either added or removed was null");
                 return false;
             }
 
             final int removedLength = removedText.length();
             final int addedLength = addedText.length();
 
-            // Eliminate overlap. This is necessary to avoid saying
-            // "replaced Hell with Hello" when auto-correct is active.
-            if ((addedLength > removedLength)
-                    && TextUtils.regionMatches(addedText, 0, removedText, 0, removedLength)) {
-                addedText = TextUtils.substring(addedText, removedLength, addedLength);
-                removedText = "";
-            } else if ((removedLength > addedLength)
-                    && TextUtils.regionMatches(removedText, 0, addedText, 0, addedLength)) {
-                addedText = "";
-                removedText = TextUtils.substring(removedText, addedLength, removedLength);
+            // Translate partial replacement into addition / deletion.
+            if (removedLength > addedLength) {
+                if (TextUtils.regionMatches(removedText, 0, addedText, 0, addedLength)) {
+                    removedText = TextUtils.substring(removedText, addedLength, removedLength);
+                    addedText = "";
+                }
+            } else if (addedLength > removedLength) {
+                if (TextUtils.regionMatches(removedText, 0, addedText, 0, removedLength)) {
+                    removedText = "";
+                    addedText = TextUtils.substring(addedText, removedLength, addedLength);
+                }
             }
 
             // Apply any speech clean up rules. Usually this means changing "A"
             // to "capital A" or "[" to "left bracket".
-            final CharSequence cleanedRemovedText =
-                    SpeechCleanupUtils.cleanUp(context, removedText);
-            final CharSequence cleanedAddedText = SpeechCleanupUtils.cleanUp(context, addedText);
+            final CharSequence cleanRemovedText = SpeechCleanupUtils.cleanUp(context, removedText);
+            final CharSequence cleanAddedText = SpeechCleanupUtils.cleanUp(context, addedText);
 
-            // Abort if either text is null (indicates an error).
-            if ((cleanedRemovedText == null) || (cleanedAddedText == null)) {
-                return false;
-            }
-
-            final boolean added = !TextUtils.isEmpty(cleanedAddedText);
-            final boolean removed = !TextUtils.isEmpty(cleanedRemovedText);
-
-            if (added && removed) {
-                final String formattedText = context.getString(
-                        R.string.template_text_replaced, cleanedRemovedText, cleanedAddedText);
-                StringBuilderUtils.appendWithSeparator(utteranceText, formattedText);
-            } else if (added) {
+            if (!TextUtils.isEmpty(cleanAddedText)) {
+                // Text was added. This includes replacement.
                 if (!appendLastWordIfNeeded(event, context, utteranceText)) {
-                    StringBuilderUtils.appendWithSeparator(utteranceText, cleanedAddedText);
+                    StringBuilderUtils.appendWithSeparator(utteranceText, cleanAddedText);
                 }
-            } else if (removed) {
-                StringBuilderUtils.appendWithSeparator(utteranceText, cleanedRemovedText,
-                        context.getString(R.string.value_text_removed));
-            } else {
-                return false;
+                return true;
             }
 
-            return true;
+            if (!TextUtils.isEmpty(cleanRemovedText)) {
+                // Text was only removed.
+                StringBuilderUtils.appendWithSeparator(utteranceText, cleanRemovedText,
+                        context.getString(R.string.value_text_removed));
+                return true;
+            }
+
+            LogUtils.log(this, Log.DEBUG, "Drop event, cleaned up text was empty");
+            return false;
         }
 
         private boolean appendLastWordIfNeeded(
@@ -157,20 +223,12 @@ public final class TextFormatters {
                 return false;
             }
 
-            // TODO: Cache the locale and break iterator.
-            final Locale locale = context.getResources().getConfiguration().locale;
-            final BreakIterator iterator = BreakIterator.getWordInstance(locale);
-
-            iterator.setText(text.toString());
-
             // Is this text a word boundary?
-            if (!iterator.isBoundary(fromIndex)) {
+            if (!Character.isWhitespace(text.charAt(fromIndex))) {
                 return false;
             }
 
-            iterator.preceding(fromIndex);
-
-            final int breakIndex = iterator.current();
+            final int breakIndex = getPrecedingWhitespace(text, fromIndex);
             final CharSequence word = text.subSequence(breakIndex, fromIndex);
 
             // Did the user just type a word?
@@ -180,6 +238,16 @@ public final class TextFormatters {
 
             StringBuilderUtils.appendWithSeparator(utteranceText, word);
             return true;
+        }
+
+        private static int getPrecedingWhitespace(CharSequence text, int fromIndex) {
+            for (int i = (fromIndex - 1); i > 0; i--) {
+                if (Character.isWhitespace(text.charAt(i))) {
+                    return i;
+                }
+            }
+
+            return 0;
         }
 
         /**
@@ -194,6 +262,13 @@ public final class TextFormatters {
         private boolean passesSanityCheck(AccessibilityEvent event) {
             final CharSequence afterText = getEventText(event);
             final CharSequence beforeText = event.getBeforeText();
+
+            // Special case for deleting all the text in an EditText with a
+            // hint, since the event text will contain the hint rather than an
+            // empty string.
+            if ((event.getAddedCount() == 0) && (event.getRemovedCount() == beforeText.length())) {
+                return true;
+            }
 
             if (afterText == null || beforeText == null) {
                 return false;
@@ -212,22 +287,33 @@ public final class TextFormatters {
          * @return The added text, or {@code null} on error.
          */
         private CharSequence getAddedText(AccessibilityEvent event, Context context) {
-            final CharSequence text = getEventText(event);
+            final List<CharSequence> textList = event.getText();
+            if ((textList == null) || (textList.size() > 1)) {
+                LogUtils.log(this, Log.WARN, "getAddedText: Text list was null or bad size");
+                return null;
+            }
 
+            // If the text was empty, the list will be empty. See the
+            // implementation for TextView.onPopulateAccessibilityEvent().
+            if (textList.size() == 0) {
+                return "";
+            }
+
+            final CharSequence text = event.getText().get(0);
             if (text == null) {
+                LogUtils.log(this, Log.WARN, "getAddedText: First text entry was null");
                 return null;
             }
 
             final int addedBegIndex = event.getFromIndex();
             final int addedEndIndex = addedBegIndex + event.getAddedCount();
-
             if (!areValidIndices(text, addedBegIndex, addedEndIndex)) {
+                LogUtils.log(this, Log.WARN, "getAddedText: Invalid indices (%d,%d) for \"%s\"",
+                        addedBegIndex, addedEndIndex, text);
                 return null;
             }
 
-            final CharSequence addedText = text.subSequence(addedBegIndex, addedEndIndex);
-
-            return addedText;
+            return text.subSequence(addedBegIndex, addedEndIndex);
         }
 
         /**
@@ -239,21 +325,17 @@ public final class TextFormatters {
          */
         private CharSequence getRemovedText(AccessibilityEvent event, Context context) {
             final CharSequence beforeText = event.getBeforeText();
-
             if (beforeText == null) {
                 return null;
             }
 
             final int beforeBegIndex = event.getFromIndex();
             final int beforeEndIndex = beforeBegIndex + event.getRemovedCount();
-
             if (!areValidIndices(beforeText, beforeBegIndex, beforeEndIndex)) {
                 return null;
             }
 
-            final CharSequence removedText = beforeText.subSequence(beforeBegIndex, beforeEndIndex);
-
-            return removedText;
+            return beforeText.subSequence(beforeBegIndex, beforeEndIndex);
         }
 
         /**
@@ -293,16 +375,10 @@ public final class TextFormatters {
      */
     public static final class SelectedTextFormatter implements AccessibilityEventFormatter {
         @Override
-        public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
-            final long selectedTimestamp = event.getEventTime();
-            final CharSequence selectedPackage = event.getPackageName();
+        public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
+            sAwaitingSelection = false;
 
-            // Ignore the first selection following a changed event.
-            if ((sChangedTimestamp > 0)
-                    && ((selectedTimestamp - sChangedTimestamp) < SELECTION_DELAY)
-                    && TextUtils.equals(selectedPackage, sChangedPackage)) {
-                sChangedTimestamp = -1;
-                sChangedPackage = null;
+            if (shouldIgnoreEvent(event)) {
                 return false;
             }
 
@@ -351,6 +427,37 @@ public final class TextFormatters {
             final CharSequence cleanedText = SpeechCleanupUtils.cleanUp(context, selectedText);
             StringBuilderUtils.appendWithSeparator(utteranceText, cleanedText);
             return true;
+        }
+
+        /**
+         * Checks whether TalkBack should provide feedback for the event.
+         *
+         * @param event The text selected event to validate.
+         * @return {@code true} if the event needs feedback.
+         */
+        private boolean shouldIgnoreEvent(AccessibilityEvent event) {
+            final long selectedTimestamp = event.getEventTime();
+            final CharSequence selectedPackage = event.getPackageName();
+
+            // Ignore the first selection following a changed event.
+            if ((sChangedTimestamp > 0)
+                    && ((selectedTimestamp - sChangedTimestamp) < SELECTION_DELAY)
+                    && TextUtils.equals(selectedPackage, sChangedPackage)) {
+                sChangedTimestamp = -1;
+                sChangedPackage = null;
+                return true;
+            }
+
+            final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
+            final AccessibilityNodeInfoCompat source = record.getSource();
+
+            // We shouldn't be getting text events from EditText fields that
+            // don't have any type of focus.
+            if ((source != null) && !(source.isAccessibilityFocused() || source.isFocused())) {
+                return true;
+            }
+
+            return false;
         }
 
         /**

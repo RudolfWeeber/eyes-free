@@ -16,7 +16,6 @@
 
 package com.google.android.marvin.talkback;
 
-import android.accessibilityservice.AccessibilityService;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Message;
@@ -28,10 +27,10 @@ import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.google.android.marvin.talkback.TalkBackService.EventListener;
-import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.NodeFocusFinder;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 import java.util.HashSet;
 
@@ -43,14 +42,24 @@ class ProcessorFollowFocus implements EventListener {
     /** This processor requires JellyBean (API 16). */
     public static final int MIN_API_LEVEL = 16;
 
-    private final AccessibilityService mService;
+    /** The minimum delay between window state change and scroll events. */
+    private static final long DELAY_FOLLOW_AFTER_STATE = 100;
+
+    private final TalkBackService mService;
+    private final CursorController mCursorController;
     private final AccessibilityManager mAccessibilityManager;
 
-    private int mLastAction = 0;
-    private int mLastFromIndex = 0;
+    /** Event time for the most recent window state changed event. */
+    private long mLastWindowStateChanged = 0;
 
-    public ProcessorFollowFocus(AccessibilityService service) {
+    private AccessibilityNodeInfoCompat mLastScrollSource;
+    private int mLastScrollAction = 0;
+    private int mLastScrollFromIndex = -1;
+    private int mLastScrollToIndex = -1;
+
+    public ProcessorFollowFocus(TalkBackService service) {
         mService = service;
+        mCursorController = service.getCursorController();
         mAccessibilityManager = (AccessibilityManager) service.getSystemService(
                 Context.ACCESSIBILITY_SERVICE);
     }
@@ -58,6 +67,7 @@ class ProcessorFollowFocus implements EventListener {
     @Override
     public void process(AccessibilityEvent event) {
         if (!mAccessibilityManager.isTouchExplorationEnabled()) {
+            // Don't manage focus when touch exploration is disabled.
             return;
         }
 
@@ -67,20 +77,36 @@ class ProcessorFollowFocus implements EventListener {
             case AccessibilityEvent.TYPE_VIEW_FOCUSED:
                 setFocusFromInput(record);
                 break;
+            case AccessibilityEvent.TYPE_VIEW_SELECTED:
+                setFocusFromSelection(event, record);
+                break;
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                setFocusFromWindow();
+                // Invalidate scrolling information.
+                if (mLastScrollSource != null) {
+                    mLastScrollSource.recycle();
+                    mLastScrollSource = null;
+                }
+                mLastScrollAction = 0;
+                mLastScrollFromIndex = -1;
+                mLastScrollToIndex = -1;
+
+                mLastWindowStateChanged = event.getEventTime();
+                mCursorController.clearCursor();
+                break;
+            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+                handleContentChangedEvent(record);
                 break;
             case AccessibilityEvent.TYPE_VIEW_HOVER_ENTER:
                 setFocusFromHover(record);
                 break;
             case AccessibilityEvent.TYPE_VIEW_SCROLLED: {
-                handleScrollEvent(record);
+                handleScrollEvent(event, record);
                 break;
             }
         }
     }
 
-    private void handleScrollEvent(AccessibilityRecordCompat record) {
+    private void handleContentChangedEvent(AccessibilityRecordCompat record) {
         final AccessibilityNodeInfoCompat source = record.getSource();
 
         if (source == null) {
@@ -89,34 +115,97 @@ class ProcessorFollowFocus implements EventListener {
 
         source.recycle();
 
-        mHandler.followScrollDelayed(record, mLastFromIndex, mLastAction);
-        mLastFromIndex = record.getFromIndex();
-        mLastAction = 0;
+        mHandler.followContentChangedDelayed(record);
+    }
+
+    private void handleScrollEvent(AccessibilityEvent event, AccessibilityRecordCompat record) {
+        final AccessibilityNodeInfoCompat source = record.getSource();
+        if (source == null) {
+            LogUtils.log(this, Log.ERROR, "Drop scroll with no source node");
+            return;
+        }
+
+        // Only move focus if we've already seen the source.
+        if (source.equals(mLastScrollSource)) {
+            final boolean isMovingForward =
+                    (mLastScrollAction == AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
+                    || (event.getFromIndex() > mLastScrollFromIndex)
+                    || (event.getToIndex() > mLastScrollToIndex);
+
+            mHandler.followScrollDelayed(source, isMovingForward);
+        }
+
+        if (mLastScrollSource != null) {
+            mLastScrollSource.recycle();
+        }
+
+        mLastScrollSource = source;
+        mLastScrollFromIndex = record.getFromIndex();
+        mLastScrollToIndex = record.getToIndex();
+        mLastScrollAction = 0;
+    }
+
+    /**
+     * Attempts to place focus on the {@code event}'s selected item.
+     */
+    private boolean setFocusFromSelection(AccessibilityEvent event, AccessibilityRecordCompat record) {
+        AccessibilityNodeInfoCompat source = null;
+        AccessibilityNodeInfoCompat child = null;
+
+        if ((event.getEventTime() - mLastWindowStateChanged) < DELAY_FOLLOW_AFTER_STATE) {
+            LogUtils.log(this, Log.INFO, "Drop selected events following state change.");
+            return false;
+        }
+
+        try {
+            source = record.getSource();
+            if (source == null) {
+                return false;
+            }
+
+            final int index = (record.getCurrentItemIndex() - record.getFromIndex());
+            if ((index < 0) || (index >= source.getChildCount())) {
+                return false;
+            }
+
+            child = source.getChild(index);
+            if (child == null) {
+                return false;
+            }
+
+            if (!AccessibilityNodeInfoUtils.isTopLevelScrollItem(mService, child)) {
+                return false;
+            }
+
+            return tryFocusing(child);
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(source, child);
+        }
     }
 
     /**
      * Attempts to place focus on the {@code event}'s source node.
      */
-    private void setFocusFromInput(AccessibilityRecordCompat event) {
-        final AccessibilityNodeInfoCompat source = event.getSource();
+    private boolean setFocusFromInput(AccessibilityRecordCompat event) {
+        AccessibilityNodeInfoCompat source = null;
 
-        if (source == null) {
-            return;
+        try {
+            source= event.getSource();
+            if (source == null) {
+                return false;
+            }
+
+            return tryFocusing(source);
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(source);
         }
-
-        if (AccessibilityNodeInfoUtils.shouldFocusNode(mService, source)) {
-            tryFocusing(source);
-        }
-
-        source.recycle();
     }
 
     /**
      * Attempts to place focus within a new window.
      */
-    private boolean setFocusFromWindow() {
+    private boolean ensureFocusConsistency() {
         final AccessibilityNodeInfo root = mService.getRootInActiveWindow();
-
         if (root == null) {
             return false;
         }
@@ -131,34 +220,28 @@ class ProcessorFollowFocus implements EventListener {
 
             // First, see if we've already placed accessibility focus.
             focused = compatRoot.findFocus(AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
-
             if (focused != null) {
-                return true;
+                if (AccessibilityNodeInfoUtils.shouldFocusNode(mService, focused)) {
+                    return true;
+                }
+
+                LogUtils.log(Log.ERROR, "Clearing old focus");
+                focused.performAction(AccessibilityNodeInfo.ACTION_CLEAR_ACCESSIBILITY_FOCUS);
             }
 
             // Next, see if the system has placed input focus.
             inputFocused = compatRoot.findFocus(AccessibilityNodeInfo.FOCUS_INPUT);
-
-            if ((inputFocused != null)
-                    && AccessibilityNodeInfoUtils.shouldFocusNode(mService, inputFocused)
-                    && tryFocusing(inputFocused)) {
+            if (tryFocusing(inputFocused)) {
                 return true;
             }
 
             // Finally, just try to focus the first focusable item.
             firstFocus = findFocusFromNode(compatRoot, NodeFocusFinder.SEARCH_FORWARD);
-
-            if ((firstFocus != null) && tryFocusing(firstFocus)) {
+            if (tryFocusing(firstFocus)) {
                 return true;
             }
 
-            // Last-ditch effort, try focusing the root.
-            if (tryFocusing(compatRoot)) {
-                LogUtils.log(Log.WARN, "Failed to place focus from new window");
-                return true;
-            }
-
-            LogUtils.log(Log.ERROR, "Failed to place focus on root from new window");
+            LogUtils.log(Log.ERROR, "Failed to place focus from new window");
 
             return false;
         } finally {
@@ -170,70 +253,55 @@ class ProcessorFollowFocus implements EventListener {
      * Attempts to place focus on an accessibility-focusable node, starting from
      * the {@code event}'s source node.
      */
-    private void setFocusFromHover(AccessibilityRecordCompat event) {
+    private boolean setFocusFromHover(AccessibilityRecordCompat event) {
         AccessibilityNodeInfoCompat touched = null;
         AccessibilityNodeInfoCompat focusable = null;
 
         try {
             touched = event.getSource();
             if (touched == null) {
-                return;
+                return false;
             }
 
             focusable = AccessibilityNodeInfoUtils.findFocusFromHover(mService, touched);
             if (focusable == null) {
-                return;
+                return false;
             }
 
-            focusable.performAction(AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
+            return tryFocusing(focusable);
         } finally {
             AccessibilityNodeInfoUtils.recycleNodes(touched, focusable);
         }
     }
 
-    private boolean followScrollEvent(
-            AccessibilityRecordCompat event, int lastFromIndex, int lastAction) {
-        final AccessibilityNodeInfo root = mService.getRootInActiveWindow();
+    private boolean followContentChangedEvent(AccessibilityRecordCompat event) {
+        return ensureFocusConsistency();
+    }
 
+    private boolean followScrollEvent(AccessibilityNodeInfoCompat source, boolean isMovingForward) {
+        final AccessibilityNodeInfo root = mService.getRootInActiveWindow();
         if (root == null) {
             return false;
         }
 
         AccessibilityNodeInfoCompat compatRoot = null;
         AccessibilityNodeInfoCompat focused = null;
-        AccessibilityNodeInfoCompat source = null;
 
         try {
             // First, see if we've already placed accessibility focus.
             compatRoot = new AccessibilityNodeInfoCompat(root);
+
             focused = compatRoot.findFocus(AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
+            if (focused != null) {
+                if (AccessibilityNodeInfoUtils.shouldFocusNode(mService, focused)) {
+                    return true;
+                }
 
-            if (focused != null && focused.isVisibleToUser()) {
-                return true;
-            }
-
-            // Next, try to place focus on a child within the scrollable node. If
-            // there are no child nodes, this will fail; however, scrolling should
-            // only clear focus if there are child nodes.
-            source = event.getSource();
-
-            if (source == null) {
-                LogUtils.log(this, Log.ERROR, "Failed to obtain source from scroll event");
-                return false;
-            }
-
-            // Try to determine which direction we're scrolling.
-            final boolean wasMovingForward;
-
-            if ((lastAction == AccessibilityNodeInfo.ACTION_SCROLL_FORWARD)
-                    || (event.getFromIndex() > lastFromIndex)) {
-                wasMovingForward = true;
-            } else {
-                wasMovingForward = false;
+                focused.performAction(AccessibilityNodeInfo.ACTION_CLEAR_ACCESSIBILITY_FOCUS);
             }
 
             // Try focusing the appropriate child node.
-            if (tryFocusingChild(source, wasMovingForward)) {
+            if (tryFocusingChild(source, isMovingForward)) {
                 return true;
             }
 
@@ -244,7 +312,7 @@ class ProcessorFollowFocus implements EventListener {
 
             return false;
         } finally {
-            AccessibilityNodeInfoUtils.recycleNodes(compatRoot, focused, source);
+            AccessibilityNodeInfoUtils.recycleNodes(compatRoot, focused);
         }
     }
 
@@ -257,21 +325,24 @@ class ProcessorFollowFocus implements EventListener {
             AccessibilityNodeInfoCompat parent, boolean wasMovingForward) {
         final int direction = wasMovingForward ? NodeFocusFinder.SEARCH_FORWARD
                 : NodeFocusFinder.SEARCH_BACKWARD;
-        final AccessibilityNodeInfoCompat child = findChildFromNode(parent, direction);
 
-        if (child == null) {
-            return false;
+        AccessibilityNodeInfoCompat child = null;
+
+        try {
+            child = findChildFromNode(parent, direction);
+            if (child == null) {
+                return false;
+            }
+
+            return tryFocusing(child);
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(child);
         }
-
-        final boolean result = tryFocusing(child);
-        child.recycle();
-        return result;
     }
 
     private AccessibilityNodeInfoCompat findChildFromNode(
             AccessibilityNodeInfoCompat root, int direction) {
         final int childCount = root.getChildCount();
-
         if (childCount == 0) {
             return null;
         }
@@ -290,7 +361,6 @@ class ProcessorFollowFocus implements EventListener {
         for (int childIndex = startIndex; (childIndex >= 0) && (childIndex < childCount);
                 childIndex += increment) {
             final AccessibilityNodeInfoCompat child = root.getChild(childIndex);
-
             if (child == null) {
                 continue;
             }
@@ -333,7 +403,20 @@ class ProcessorFollowFocus implements EventListener {
     }
 
     private boolean tryFocusing(AccessibilityNodeInfoCompat source) {
-        return source.performAction(AccessibilityNodeInfoCompat.ACTION_ACCESSIBILITY_FOCUS);
+        if (source == null) {
+            return false;
+        }
+
+        if (!AccessibilityNodeInfoUtils.shouldFocusNode(mService, source)) {
+            return false;
+        }
+
+        if (!source.performAction(AccessibilityNodeInfoCompat.ACTION_ACCESSIBILITY_FOCUS)) {
+            return false;
+        }
+
+        mHandler.interruptFollowDelayed();
+        return true;
     }
 
     /**
@@ -345,7 +428,7 @@ class ProcessorFollowFocus implements EventListener {
         switch (action) {
             case AccessibilityNodeInfo.ACTION_SCROLL_FORWARD:
             case AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD:
-                mLastAction = action;
+                mLastScrollAction = action;
                 break;
         }
     }
@@ -354,11 +437,14 @@ class ProcessorFollowFocus implements EventListener {
 
     private static class FollowFocusHandler extends WeakReferenceHandler<ProcessorFollowFocus> {
         private static final int FOCUS_AFTER_SCROLL = 1;
+        private static final int FOCUS_AFTER_CONTENT_CHANGED = 2;
 
         /** Delay after a scroll event before checking focus. */
         private static final long FOCUS_AFTER_SCROLL_DELAY = 250;
+        private static final long FOCUS_AFTER_CONTENT_CHANGED_DELAY = 500;
 
-        private AccessibilityRecordCompat mCachedRecord;
+        private AccessibilityNodeInfoCompat mCachedScrollNode;
+        private AccessibilityRecordCompat mCachedContentRecord;
 
         public FollowFocusHandler(ProcessorFollowFocus parent) {
             super(parent);
@@ -368,37 +454,69 @@ class ProcessorFollowFocus implements EventListener {
         public void handleMessage(Message msg, ProcessorFollowFocus parent) {
             switch (msg.what) {
                 case FOCUS_AFTER_SCROLL:
-                    parent.followScrollEvent(mCachedRecord, msg.arg1, msg.arg2);
+                    parent.followScrollEvent(mCachedScrollNode, (Boolean) msg.obj);
 
-                    if (mCachedRecord != null) {
-                        mCachedRecord.recycle();
-                        mCachedRecord = null;
+                    if (mCachedScrollNode != null) {
+                        mCachedScrollNode.recycle();
+                        mCachedScrollNode = null;
+                    }
+                    break;
+                case FOCUS_AFTER_CONTENT_CHANGED:
+                    parent.followContentChangedEvent(mCachedContentRecord);
+
+                    if (mCachedContentRecord != null) {
+                        mCachedContentRecord.recycle();
+                        mCachedContentRecord = null;
                     }
                     break;
             }
         }
 
         /**
-         * Ensure that focus is placed after scroll actions, but use a delay to
+         * Ensure that focus is placed after content change actions, but use a delay to
          * avoid consuming too many resources.
          *
          * @param record The scroll event.
-         * @param lastFromIndex The fromIndex of the most recent scroll event.
-         * @param lastAction The most recent accessibility action.
          */
-        public void followScrollDelayed(
-                AccessibilityRecordCompat record, int lastFromIndex, int lastAction) {
-            removeMessages(FOCUS_AFTER_SCROLL);
+        public void followContentChangedDelayed(AccessibilityRecordCompat record) {
+            removeMessages(FOCUS_AFTER_CONTENT_CHANGED);
 
-            if (mCachedRecord != null) {
-                mCachedRecord.recycle();
-                mCachedRecord = null;
+            if (mCachedContentRecord != null) {
+                mCachedContentRecord.recycle();
+                mCachedContentRecord = null;
             }
 
-            mCachedRecord = AccessibilityRecordCompat.obtain(record);
+            mCachedContentRecord = AccessibilityRecordCompat.obtain(record);
 
-            final Message msg = obtainMessage(FOCUS_AFTER_SCROLL, lastFromIndex, lastAction);
+            final Message msg = obtainMessage(FOCUS_AFTER_CONTENT_CHANGED);
+            sendMessageDelayed(msg, FOCUS_AFTER_CONTENT_CHANGED_DELAY);
+        }
+
+        /**
+         * Ensure that focus is placed after scroll actions, but use a delay to
+         * avoid consuming too many resources.
+         */
+        public void followScrollDelayed(
+                AccessibilityNodeInfoCompat source, boolean isMovingForward) {
+            removeMessages(FOCUS_AFTER_SCROLL);
+
+            if (mCachedScrollNode != null) {
+                mCachedScrollNode.recycle();
+                mCachedScrollNode = null;
+            }
+
+            mCachedScrollNode = AccessibilityNodeInfoCompat.obtain(source);
+
+            final Message msg = obtainMessage(FOCUS_AFTER_SCROLL, isMovingForward);
             sendMessageDelayed(msg, FOCUS_AFTER_SCROLL_DELAY);
+        }
+
+        /**
+         * Interrupt any pending follow-focus events.
+         */
+        public void interruptFollowDelayed() {
+            removeMessages(FOCUS_AFTER_CONTENT_CHANGED);
+            removeMessages(FOCUS_AFTER_SCROLL);
         }
     }
 }

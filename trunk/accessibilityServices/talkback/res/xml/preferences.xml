@@ -29,6 +29,14 @@
             android:summaryOff="@string/summaryOff_pref_intonation"
             android:summaryOn="@string/summaryOn_pref_intonation"
             android:title="@string/title_pref_intonation" />
+        <ListPreference
+            android:defaultValue="@string/pref_keyboard_echo_default"
+            android:dialogTitle="@string/title_pref_keyboard_echo"
+            android:entries="@array/pref_keyboard_echo_entries"
+            android:entryValues="@array/pref_keyboard_echo_values"
+            android:key="@string/pref_keyboard_echo_key"
+            android:summary="%s"
+            android:title="@string/title_pref_keyboard_echo" />
         <CheckBoxPreference
             android:defaultValue="@bool/pref_screenoff_default"
             android:key="@string/pref_screenoff_key"
@@ -69,53 +77,20 @@
     <PreferenceCategory
         android:key="@string/pref_category_touch_exploration_key"
         android:title="@string/title_pref_category_touch_exploration" >
-        <!-- Touch exploration is always on for now.
         <CheckBoxPreference
             android:defaultValue="@bool/pref_explore_by_touch_default"
-            android:key="@string/pref_explore_by_touch_key"
+            android:key="@string/pref_explore_by_touch_reflect_key"
             android:title="@string/title_pref_explore_by_touch" />
-
-            android:dependency="@string/pref_explore_by_touch_key"
-        -->
-
         <Preference
             android:key="@string/pref_tutorial_key"
-            android:title="@string/title_pref_tutorial" />
-
-        <PreferenceScreen
+            android:title="@string/title_pref_tutorial"
+            android:dependency="@string/pref_explore_by_touch_reflect_key" />
+        <Preference
             android:key="@string/pref_category_touch_shortcuts_key"
             android:title="@string/title_pref_category_touch_shortcuts" >
-            <ListPreference
-                android:defaultValue="@string/pref_shortcut_up_and_right_default"
-                android:entries="@array/pref_shortcut_entries"
-                android:entryValues="@array/pref_shortcut_values"
-                android:key="@string/pref_shortcut_up_and_right_key"
-                android:summary="%s"
-                android:title="@string/title_pref_shortcut_up_and_right" />
-            <ListPreference
-                android:defaultValue="@string/pref_shortcut_up_and_left_default"
-                android:entries="@array/pref_shortcut_entries"
-                android:entryValues="@array/pref_shortcut_values"
-                android:key="@string/pref_shortcut_up_and_left_key"
-                android:summary="%s"
-                android:title="@string/title_pref_shortcut_up_and_left" />
-            <ListPreference
-                android:defaultValue="@string/pref_shortcut_down_and_right_default"
-                android:entries="@array/pref_shortcut_entries"
-                android:entryValues="@array/pref_shortcut_values"
-                android:key="@string/pref_shortcut_down_and_right_key"
-                android:summary="%s"
-                android:title="@string/title_pref_shortcut_down_and_right" />
-            <ListPreference
-                android:defaultValue="@string/pref_shortcut_down_and_left_default"
-                android:entries="@array/pref_shortcut_entries"
-                android:entryValues="@array/pref_shortcut_values"
-                android:key="@string/pref_shortcut_down_and_left_key"
-                android:summary="%s"
-                android:title="@string/title_pref_shortcut_down_and_left" />
-        </PreferenceScreen>
+        </Preference>
     </PreferenceCategory>
-    <PreferenceCategory
+<PreferenceCategory
         android:key="@string/pref_category_miscellaneous_key"
         android:title="@string/title_pref_category_miscellaneous_settings" >
         <PreferenceScreen
@@ -130,10 +105,6 @@
                 android:summary="%s"
                 android:title="@string/title_pref_log_level" />
 
-            <CheckBoxPreference
-                android:defaultValue="@bool/pref_developer_overlay_default"
-                android:key="@string/pref_developer_overlay_key"
-                android:title="@string/title_pref_developer_overlay" />
             <CheckBoxPreference
                 android:defaultValue="@bool/pref_tts_overlay_default"
                 android:key="@string/pref_tts_overlay_key"

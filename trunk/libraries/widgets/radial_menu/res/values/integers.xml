@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="key_space" type="id"/>
+    <item name="key_delete" type="id"/>
+    <item name="key_comma" type="id"/>
+    <item name="key_exclamation_mark" type="id"/>
+    <item name="key_question_mark" type="id"/>
+    <item name="key_period" type="id"/>
+    <item name="key_A" type="id"/>
+    <item name="key_B" type="id"/>
+    <item name="key_C" type="id"/>
+    <item name="key_D" type="id"/>
+    <item name="key_E" type="id"/>
+    <item name="key_F" type="id"/>
+    <item name="key_G" type="id"/>
+    <item name="key_H" type="id"/>
+    <item name="key_I" type="id"/>
+    <item name="key_J" type="id"/>
+    <item name="key_K" type="id"/>
+    <item name="key_L" type="id"/>
+    <item name="key_M" type="id"/>
+    <item name="key_N" type="id"/>
+    <item name="key_O" type="id"/>
+    <item name="key_P" type="id"/>
+    <item name="key_Q" type="id"/>
+    <item name="key_R" type="id"/>
+    <item name="key_S" type="id"/>
+    <item name="key_T" type="id"/>
+    <item name="key_U" type="id"/>
+    <item name="key_V" type="id"/>
+    <item name="key_W" type="id"/>
+    <item name="key_X" type="id"/>
+    <item name="key_Y" type="id"/>
+    <item name="key_Z" type="id"/>
+    <item name="group_corners" type="id"/>
+    <item name="group_keyboard" type="id"/>
+    <item name="corner_NW" type="integer">0</item>
+    <item name="corner_NE" type="integer">1</item>
+    <item name="corner_SW" type="integer">2</item>
+    <item name="corner_SE" type="integer">3</item>
+
+</resources>

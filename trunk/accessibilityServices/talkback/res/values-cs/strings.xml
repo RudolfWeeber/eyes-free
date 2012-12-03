@@ -19,15 +19,13 @@
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Hlasová schránka"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Přehrávání"</string>
     <string name="template_current_tts_engine" msgid="2402080656466274253">"Používá <xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
-    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> zaškrtnuto"</string>
-    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"<xliff:g id="TITLE">%1$s</xliff:g> nezaškrtnuto"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Pole pro úpravy. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Výstraha <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"Text <xliff:g id="OLD_TEXT">%1$s</xliff:g> nahrazen textem <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"Posloupnost <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> znaků nahrazena <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> znaky"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Vyzvánění <xliff:g id="PERCENT">%d</xliff:g> procent"</string>
-    <!-- no translation found for template_image_view (2368987212503613897) -->
-    <skip />
+    <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="ITEM">%1$s</xliff:g> pro <xliff:g id="LABEL">%2$s</xliff:g>"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Obrázek <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_list_view" msgid="4569888407076618446">"Seznam <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Dlouhé stisknutí položky <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Tlačítko <xliff:g id="TITLE">%1$s</xliff:g>"</string>
@@ -38,7 +36,6 @@
     <string name="value_gridview" msgid="9093738961981389981">"Mřížka"</string>
     <string name="value_listview" msgid="3437715684913760710">"Seznam"</string>
     <string name="value_tabwidget" msgid="5550633699198799743">"Lišta karet"</string>
-    <string name="value_container" msgid="439303423101134461">"Kontejner"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Zobrazují se položky <xliff:g id="FROM_INDEX">%d</xliff:g> až <xliff:g id="TO_INDEX">%d</xliff:g> z <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Zobrazuje se položka <xliff:g id="FROM_INDEX">%d</xliff:g> z <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Rozbalovací seznam <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -48,7 +45,9 @@
     <string name="template_radio_button" msgid="4272970081436888704">"Přepínač <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="value_password" msgid="52094746222829357">"heslo"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Výsuvné okno otevřeno"</string>
+    <string name="value_notification_shade_opened" msgid="3832526419695611670">"Panel byl otevřen"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Možnosti."</string>
+    <string name="value_text_cleared" msgid="3190458526844389854">"Text byl vymazán"</string>
     <string name="value_text_removed" msgid="2700105425865376595">"smazáno"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"Souhrn oznámení"</string>
     <string name="value_selected" msgid="6785267365387973217">"vybráno"</string>
@@ -57,10 +56,12 @@
     <string name="value_disabled" msgid="65077823320194685">"neaktivní"</string>
     <string name="value_double_tap" msgid="7829968646330038608">"dvojitým klepnutím"</string>
     <string name="value_single_tap" msgid="6461432282985355533">"klepnutím"</string>
-    <string name="template_hint_clickable" msgid="3732923024418439340">"Aktivujete <xliff:g id="ACTION">%1$s</xliff:g>."</string>
-    <string name="template_hint_long_clickable" msgid="8710614198873717434">"Dlouhé kliknutí provedete <xliff:g id="ACTION">%1$s</xliff:g> a podržením."</string>
+    <string name="template_hint_clickable" msgid="1687873106975426560">"Výběr: <xliff:g id="ACTION">%1$s</xliff:g>."</string>
+    <string name="template_hint_long_clickable" msgid="4276746786982054368">"Dlouhé stisknutí: <xliff:g id="ACTION">%1$s</xliff:g> a podržte."</string>
     <string name="template_hint_checkable" msgid="6312875663486456665">"Přepnete <xliff:g id="ACTION">%1$s</xliff:g>."</string>
     <string name="template_hint_edit_text" msgid="4793267613633348902">"Zadávání textu zahájíte <xliff:g id="ACTION">%1$s</xliff:g>."</string>
+    <string name="template_hint_spinner" msgid="1320498935380159474">"<xliff:g id="ACTION">%1$s</xliff:g> provedete změnu."</string>
+    <string name="hint_radial_menu" msgid="7030043763037187865">"Dotkněte se obrazovky, pohybem prstu najděte požadovanou položku a zdvihnutím prstu ji vyberte."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"posunovací"</string>
     <string name="value_clicked" msgid="8306469740150249879">"kliknuto"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"neoznačeno"</string>
@@ -69,8 +70,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"Obrazovka vypnutá."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Zařízení bylo odemknuto."</string>
     <string name="value_web_view" msgid="8611542401983419041">"Webový obsah."</string>
-    <string name="value_unknown_object" msgid="3589473667352440925">"Neoznačená položka."</string>
-    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Kdy hovořit"</string>
+    <string name="title_pref_category_when_to_speak" msgid="9082038550046119493">"Řeč"</string>
     <string name="title_pref_speech_volume" msgid="4013853601342391397">"Hlasitost řeči"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Hlasitost vyzvánění"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Hovor s vyp. obrazovkou"</string>
@@ -82,22 +82,20 @@
     <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Průzkum dotykem"</string>
     <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Správa gest pro zkratky"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Měnit výšku hlasu"</string>
+    <string name="title_pref_keyboard_echo" msgid="860353418869467119">"Hlasová odezva klávesnice"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Opakovat odezvu klávesnice hlubším hlasem"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Při mluvení neměnit výšku hlasu"</string>
-    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Váš názor"</string>
+    <string name="title_pref_category_feedback_settings" msgid="1245161004109313841">"Další zpětná vazba"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Vibrační odezva"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Zvuková odezva"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Hlasitost zvuku"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Různé"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Nastavení vývojáře"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Zaznamenat výstupní úroveň"</string>
-    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Zvýraznit zdroje událostí"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Zobrazit hlasový výstup"</string>
     <string name="axis_character" msgid="5059604520074645703">"Navigovat podle znaků."</string>
     <string name="axis_word" msgid="7745798763195184060">"Navigovat podle slov."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Navigovat podle vět."</string>
-    <string name="axis_paragraph" msgid="3453285809344289729">"Navigovat po odstavcích."</string>
-    <string name="axis_object" msgid="7034325449094737671">"Navigovat po objektech."</string>
     <string name="axis_line" msgid="2210986915751668758">"Navigovat po řádcích."</string>
     <string name="axis_page" msgid="9146038615069235841">"Navigovat po stránkách."</string>
     <string name="axis_heading" msgid="8928386537164255063">"Navigovat podle nadpisů."</string>
@@ -105,7 +103,6 @@
     <string name="axis_document" msgid="1581988340856497809">"Navigovat podle dokumentu."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Navigovat podle výchozího chování zobrazení webu."</string>
     <string name="attention" msgid="627104955956154539">"Upozornění"</string>
-    <string name="explore_dialog_message" msgid="2796017207242981327">"Tato funkce mění způsob, jakým zařízení reaguje na dotyk. Chcete ji zapnout?"</string>
     <string name="requires_talkback" msgid="3634159695179852501">"Tento výukový program vyžaduje funkci Explore by touch. Než výukový program spustíte, zapněte prosím aplikaci TalkBack a aktivujte funkci Explore by touch."</string>
     <string name="granularity_character" msgid="5828563809381090688">"Číst po znacích"</string>
     <string name="granularity_word" msgid="3660181391007381559">"Číst po slovech"</string>
@@ -118,16 +115,43 @@
     <string name="shortcut_home" msgid="3905505999818649470">"Tlačítko Domovská stránka"</string>
     <string name="shortcut_recent_apps" msgid="4462279958679670485">"Tlačítko Poslední aplikace"</string>
     <string name="shortcut_notifications" msgid="7234767026975704922">"Otevřít oznámení"</string>
+    <string name="shortcut_read_all_breakout" msgid="4373114224519034620">"Otevřít nabídku kontinuálního čtení"</string>
+    <string name="shortcut_talkback_breakout" msgid="568168492542718040">"Otevřít globální kontextovou nabídku"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Zopakovat poslední výrok"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Hláskovat poslední výrok"</string>
-    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Přejetí prstem dolů a doleva"</string>
-    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Přejetí prstem dolů a doprava"</string>
-    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Přejetí prstem nahoru a doleva"</string>
-    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Přejetí prstem nahoru a doprava"</string>
-    <string name="value_volume_200_percent" msgid="2969698924281376143">"200 % hlasitosti médií"</string>
-    <string name="value_volume_150_percent" msgid="4668371157512150392">"150 % hlasitosti médií"</string>
-    <string name="value_volume_100_percent" msgid="6676030754946177658">"Podle hlasitosti médií"</string>
-    <string name="value_volume_75_percent" msgid="7578844180160160971">"75 % hlasitosti médií"</string>
-    <string name="value_volume_50_percent" msgid="2830571913174435107">"50 % hlasitosti médií"</string>
-    <string name="value_volume_25_percent" msgid="4441038207089946938">"25 % hlasitosti médií"</string>
+    <string name="shortcut_pause_feedback" msgid="1125364186583919621">"Pozastavit zpětnou vazbu"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="5252410921504649704">"Přejetí prstem dolů a doleva"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="70468539039651273">"Přejetí prstem dolů a doprava"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="6488345551912922700">"Přejetí prstem nahoru a doleva"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="8936164693273303141">"Přejetí prstem nahoru a doprava"</string>
+    <string name="title_pref_shortcut_right_and_down" msgid="8367941430094918701">"Přejet doprava, pak dolů"</string>
+    <string name="title_pref_shortcut_right_and_up" msgid="3803984082758463130">"Přejet doprava, pak nahoru"</string>
+    <string name="title_pref_shortcut_left_and_down" msgid="7133444152727902323">"Přejet doleva, pak dolů"</string>
+    <string name="title_pref_shortcut_left_and_up" msgid="2432229113065295801">"Přejet doleva, pak nahoru"</string>
+    <string name="value_volume_100_percent" formatted="false" msgid="6676030754946177658">"Podle hlasitosti médií"</string>
+    <string name="value_volume_75_percent" formatted="false" msgid="7578844180160160971">"75 % hlasitosti médií"</string>
+    <string name="value_volume_50_percent" formatted="false" msgid="2830571913174435107">"50 % hlasitosti médií"</string>
+    <string name="value_volume_25_percent" formatted="false" msgid="4441038207089946938">"25 % hlasitosti médií"</string>
+    <string name="value_keyboard_echo_always" msgid="6227871839200687680">"Vždy vyslovit stisknuté klávesy"</string>
+    <string name="value_keyboard_echo_softkeys" msgid="6592352879887617590">"Pouze pro klávesnici na obrazovce"</string>
+    <string name="value_keyboard_echo_never" msgid="7272733066649438914">"Nikdy nevyslovovat stisknuté klávesy"</string>
+    <string name="title_talkback_settings_available" msgid="6764624676369520992">"Je k disp. Nastavení usnadnění"</string>
+    <string name="message_talkback_settings_available" msgid="8705763859411459771">"Klepnutím stáhněte aplikaci Nastavení usnadnění."</string>
+    <string name="notification_title_talkback_gestures_changed" msgid="8384253637363301938">"Byla změněna hesla TalkBack"</string>
+    <string name="notification_message_talkback_gestures_changed" msgid="5639775622146513884">"Klepnutím zkontrolujete změny gest usnadnění"</string>
+    <string name="notification_title_talkback_suspended" msgid="2185046615850691522">"Aplikace TalkBack je pozastavena"</string>
+    <string name="notification_message_talkback_suspended" msgid="3312683762001713772">"Pokračujte klepnutím."</string>
+    <string name="dialog_title_suspend_talkback" msgid="452536442417893349">"Pozastavit aplikaci TalkBack?"</string>
+    <string name="dialog_message_suspend_talkback" msgid="399684608846305231">"Opravdu chcete aplikaci TalkBack pozastavit?"\n\n"Pokud bude aplikace TalkBack pozastavena, vaše zařízení nebude poskytovat zpětnou vazbu."\n\n"Aplikaci TalkBack můžete znovu spustit z panelu oznámení nebo tak, že se vrátíte na stránku zámku."</string>
+    <string name="talkback_gesture_change_details" msgid="2919155220372343154">"Tato verze služby TalkBack obsahuje i změny výchozích gest usnadnění. Akce přiřazené k těmto gestům lze přizpůsobit v nastavení TalkBack. Když je zapnutá funkce Prozkoumání dotykem, můžete použít následující gesta k provádění určitých akcí."\n\n"<xliff:g id="MAPPINGS">%1$s</xliff:g>"</string>
+    <string name="button_accept_changed_gesture_mappings" msgid="3709582843147387025">"Přijmout gesta"</string>
+    <string name="button_customize_gesture_mappings" msgid="6198453024008558647">"Přizpůsobit gesta"</string>
+    <string name="dialog_title_disable_exploration" msgid="6318745977662978395">"Vypnout Prozkoumání dotykem?"</string>
+    <string name="dialog_message_disable_exploration" msgid="206632033549219529">"Opravdu chcete funkci Prozkoumání dotykem vypnout?"\n\n"Zařízení již nebude reagovat na gesta ani nebude poskytovat hlasovou odezvu, když se dotknete obrazovky."</string>
+    <string name="read_from_top" msgid="4178188498867856189">"Přečíst vše od shora"</string>
+    <string name="read_from_current" msgid="2331288178673192110">"Číst vše od další položky"</string>
+    <string name="repeat_current" msgid="5909904824878426189">"Opakovat aktuální položku"</string>
+    <string name="hint_script_injection" msgid="2973894305173271874">"Procházení dotykem je ve webovém obsahu nedostupné. Chcete-li procházet webový obsah, zapněte v nastavení Usnadnění možnost <xliff:g id="PREFERENCE_NAME">%1$s</xliff:g>."</string>
+    <string name="label_talkback_context_menu" msgid="102441078934343795">"Globální kontextová nabídka aplikace TalkBack"</string>
+    <string name="permission_talkback_label" msgid="7399199628843033396">"Ovládání aplikace TalkBack"</string>
 </resources>

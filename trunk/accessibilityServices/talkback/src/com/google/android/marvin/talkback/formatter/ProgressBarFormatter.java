@@ -16,7 +16,6 @@
 
 package com.google.android.marvin.talkback.formatter;
 
-import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.text.TextUtils;
@@ -25,6 +24,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.googlecode.eyesfree.utils.LogUtils;
@@ -50,7 +50,7 @@ public class ProgressBarFormatter implements AccessibilityEventFormatter {
     }
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         if (shouldDropEvent(event)) {
             LogUtils.log(this, Log.VERBOSE, "Dropping unwanted progress bar event");
             return true;
@@ -77,13 +77,14 @@ public class ProgressBarFormatter implements AccessibilityEventFormatter {
         final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
         final AccessibilityNodeInfoCompat source = record.getSource();
 
-        // Don't drop if we're on pre-ICS or the event was generated (e.g. missing a node).
+        // Don't drop if we're on pre-ICS or the event was generated (e.g.
+        // missing a node).
         if (source == null) {
             return false;
         }
 
-        // Don't drop if the node is currently focused.
-        if (source.isFocused()) {
+        // Don't drop if the node is currently focused or accessibility focused.
+        if (source.isFocused() || source.isAccessibilityFocused()) {
             return false;
         }
 

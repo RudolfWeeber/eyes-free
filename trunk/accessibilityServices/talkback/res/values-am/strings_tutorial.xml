@@ -2,7 +2,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_pref_tutorial" msgid="3245369379022519951">"የ«አስስ በዳሰሳ» መማሪያ አስጀምር"</string>
-    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"አጋዥ ስልጠና  ተደራሽነት"</string>
     <string name="accessibility_tutorial_title" msgid="3604139189214645351">"አጋዥ ስልጠና  ተደራሽነት"</string>
     <string name="accessibility_tutorial_next" msgid="5403131568391761625">"ቀጥሎ"</string>
     <string name="accessibility_tutorial_back" msgid="7953265962480572962">"ቀዳሚ"</string>
@@ -21,13 +20,13 @@
     <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"በዝርዝር በኩል ለመሸብለል፣ በማያው ላይ ሁለት ጣት ማንሸራተት ትችላለህ። ለምሳሌ፣ የአሁኑ ገጽ ማያ ወደላይ እና ወደ ታች የሚሸበልል የመተግበሪያ ስሞች ዝርዝር ይይዛል። መጀመሪያ፣ ገጽ ማያውን መዳሰስ ሞክር እና መተግበሪያ ለይ።"</string>
     <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"ሁለት ጣትህን በአይነቱ ዝርዝር ላይ አሳርፍ እና ሁሉቱም ወደ ላይ አንሸራት። የገጽ ማያው ጫፍ ከደረስክ ጣቶችህን አንሳ፣ በዝርዝሩ ዝቅ አድርገህ አሳርፋቸው እና ማንሸራተትህን ቀጥል።"</string>
     <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"አንድ ተጨማሪ መተግበሪያ ለማግኘት ገጽ ማያውን ዳስስ።"</string>
-    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"ጣትህን በማንሸራተት ሙሉ ገጽ ማሸብለልም ትችላለህ። ከግራ ጀምረህ በፍጥነት ወደ ቀኝ በማንሸራተት፣ ከዛም ተመልሰህ ወደ ግራ በመሄድ ወደ ቀጣዩ ገጽ ሂድ።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"በጣትዎ በማንሸራተትም አንድ ሙሉ ገጽ ማሸብለልም ይችላሉ። ወደ ቀጣዩ ገጽ ለማሸብለል በአንዲት እንቅስቃሴ በመጠቀም ወደ ቀኝ ከዚያ ወደ ግራ ያንሸራትቱ። ወደ ቀኝ ከዚያ ወደ ግራ በማንሸራተት ወደ ቀጣዩ ገጽ ለማሸብለል ይሞክሩ።"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"በአሁኑ ገጽ ውስጥ መተግበሪያ ለማግኘት ገጽ ማያውን እንደገና ዳስስ።"</string>
-    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"ወደ ተቀራኒው አቅጣጫ ማንሸራተት፣ ከዛ ወደ ግራ መሄድ እና መመለስ ወደ ቀዳሚው ገጽ ይወስዳል። ወደ ቀዳሚው ገጽ መልሰህ ለመሸብለል ማንሸራተት ሞክር።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"በአንዲት እንቅስቃሴ ወደ ተቃራኒው አቅጣጫ፣ ግራ ከዚያ ወደ ቀኝ ማንሸራተት ወደ ቀዳሚው ገጽ ይወስዳል። ወደ ግራ ከዚያ ወደ ቀኝ በማንሸራተት ወደ ቀዳሚው ገጽ ለማሸብለል ይሞክሩ።"</string>
     <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"ጥሩ። ወደሚቀጥለው ትምህርት ለመቀጠል፣በማያው ቀኝ ታች ጥግ ሥፍራ ያለውን የ<xliff:g id="NEXT">%s</xliff:g> አዝራርን በማግኘት አግብር።"</string>
     <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"ትምህርት 3፦ በቁምፊ ማንበብ"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"እንደ ነባሪ ወደ ግራ እና ቀኝ ማንሸራተት የጽሁፍ ስብስቦችን በአንዴ ያነባል። እንደዚሁም በማያ ገጽ የቃል ወይም የቁምፊ ስብስቦችን ማንበብ ትችላለህ። በመጀመሪያ በ«ይህ» የሚጀምረውን ጽሁፍ ፈልግ።"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"ቀጥሎ በተወሰነ ደረጃ ላይ ይሄንን ስብስብ ማንበብ ለመጀመር ወደታች እና ተመልሰህ ወደላይ ማንሸራተት ትችላለህ። የንባብ ደረጃውን ለመቀየር ወደታችና እና ተመልሰህ ወደላይ ማንሸራተት ሞክር፣ ከዛም ጽሁፉን ለማንበብ ወደቀኝ አንሸራትት።"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"ከየአሁኑ የጽሑፍ ስብስብ ለመውጣት ወደ ነባሪ የንባብ ደረጃ መመለስ ይኖርብሃል። ወደ ነባሪው የንባብ ደረጃ ለመመለስ ወደ ተቃራኒው አቅጣጫ፣ ወደ ላይና ተመልሰህ ወደ ታች አንሸራትት። ከዛ ከታች በስተቀኝ በኩል ያለው የ<xliff:g id="FINISH">%s</xliff:g> አዝራሩን ፈልግና እዙን ለማግበር ሁለቴ መታ አድርገው፣ ከዛ ከመማሪያው ውጣ።"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"ይሄ የትልቅ ጽሁፍ ጥምር ምሳሌ ነው። የማንሸራተት ምልክቶችን በመጠቀም በተወሰነ የንባብ ደረጃ በዚህ ጽሁፍ ውስጥ ማንቀሳቀስ ወይም የንኪ ምልክቶችን በመጠቀም ሁሉንም በአንዴ ማንበብ ትችላለህ። "\n\n"ይሄ ሁለተኛው አንቀጽ ነው። "\n\n"ይሄ ሦስተኛውና የመጨረሻው አንቀጽ ነው። የንባብ መጠኑን ለመለወጥ ወደ ላይና ታች አንሸራት፣ ከዛም በዚህ ጽሁፍ ውስጥ ለማንቀሳቀስ ወደ ቀኝ አንሸራት።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"እንደ ነባሪ ወደ ግራ እና ቀኝ ማንሸራተት የጽሁፍ ጥምሮችን በአንዴ ያነባል። እንደዚሁም በማያ ገጽ የቃል ወይም የቁምፊ ጥምሮችን ማንበብ ይችላሉ። በመጀመሪያ በ«ይህ» የሚጀምረውን ጽሁፍ ይፈልጉ።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"በመቀጠልም በአንዲት እንቅስቃሴ ወደ ታች ከዚያ ወደ ላይ በማንሸራተት ይህን ጥምር በተወሰነ ደረጃ ማንበብ መጀመር ይችላሉ። የንባብ ደረጃውን ለመቀየር ወደ ታች ከዚያ ወደ ላይ ለማንሸራተት ይሞክሩ፣ ከዚያ ጽሑፉን ለማንበብ ወደ ቀኝ ያንሸራትቱ።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"ከአሁኑ የጽሑፍ ጥምር ለመውጣት ወደ ነባሪ የንባብ ደረጃ መመለስ ይኖርብዎታል። ወደ ነባሪው የንባብ ደረጃ ለመመለስ ወደ ተቃራኒው አቅጣጫ፣ ወደ ላይና ከዚያ ወደ ታች ያንሸራትቱ። ከዚያ ከታች በስተቀኝ በኩል ያለው የ<xliff:g id="FINISH">%s</xliff:g> አዝራሩን ይፈልጉና እሱን ለማግበር ሁለቴ መታ ያድርጉት፣ ከዚያ ከመማሪያው ይውጡ።"</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"ይሄ ትልቅ የጽሁፍ ጥምር ምሳሌ ነው። የማንሸራተት ምልክቶችን በመጠቀም በተወሰነ የንባብ ደረጃ በዚህ ጽሁፍ ውስጥ ማንቀሳቀስ ወይም ደግሞ የንኪ ምልክቶችን በመጠቀም ሁሉንም በአንዴ ማንበብ ይችላሉ። "\n\n"ይሄ ሁለተኛው አንቀጽ ነው። "\n\n"ይሄ ሦስተኛውና የመጨረሻው አንቀጽ ነው። የንባብ መጠኑን ለመቀየር ወደ ታችና ከዚያ ወደ ላይ ያንሸራትቱ፣ ከዚያም በዚህ ጽሁፍ ውስጥ ለማንቀሳቀስ ወደ ቀኝ ያንሸራትቱ።"</string>
 </resources>

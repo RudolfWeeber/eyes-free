@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Ar tikrai norite laikinai sustabdyti „TalkBack“?"\n\n"Kol „TalkBack“ bus laikinai sustabdyta, įrenginys nepateiks atsiliepimų ir bus išjungta naršymo palietus funkcija."\n\n"„TalkBack“ galite atnaujinti pranešimų gaubte arba sugrįžę į užrakinimo ekraną."</string>
+</resources>

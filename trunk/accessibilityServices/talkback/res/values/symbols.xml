@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Spoken description for the "'" keyboard key. [CHAR LIMIT="NONE"] -->
-    <string name="symbol_apostrophe">Single quote</string>
+    <string name="symbol_apostrophe">Apostrophe</string>
     <!-- Spoken description for the "&" keyboard key. [CHAR LIMIT="NONE"] -->
     <string name="symbol_ampersand">Ampersand</string>
     <!-- Spoken description for the "<" keyboard key. [CHAR LIMIT="NONE"] -->
@@ -32,6 +32,8 @@
     <string name="symbol_curly_bracket_right">Right curly bracket</string>
     <!-- Spoken description for the "\u00B0" (DEGREE SIGN) keyboard key. [CHAR LIMIT="NONE"] -->
     <string name="symbol_degree">Degree</string>
+    <!-- Spoken description for the "\u00F7" (DIVISION SIGN) keyboard key. [CHAR LIMIT="NONE"] -->
+    <string name ="symbol_division">Division sign</string>
     <!-- Spoken description for the "$" keyboard key. [CHAR LIMIT="NONE"] -->
     <string name="symbol_dollar_sign">Dollar sign</string>
     <!-- Spoken description for the "\u2026" (HORIZONTAL ELLIPSIS) keyboard key. [CHAR LIMIT="NONE"] -->
@@ -50,6 +52,10 @@
     <string name="symbol_hyphen_minus">Dash</string>
     <!-- Spoken description for the "\u201E" (DOUBLE LOW-9 QUOTATION MARK) keyboard key. [CHAR LIMIT="NONE"] -->
     <string name="symbol_low_double_quote">Low double quote</string>
+    <!-- Spoken description for the "\u00D7" (MULTIPLICATION SIGN) keyboard key. [CHAR LIMIT="NONE"] -->
+    <string name="symbol_multiplication">Multiplication sign</string>
+    <!-- Spoken description for the "\n" (NEW LINE) keyboard key. [CHAR LIMIT="NONE"] -->
+    <string name="symbol_new_line">New line</string>
     <!-- Spoken description for the "\u00B6" (PILCROW SIGN) keyboard key. [CHAR LIMIT="NONE"] -->
     <string name="symbol_paragraph_mark">Paragraph mark</string>
     <!-- Spoken description for the "(" keyboard key. [CHAR LIMIT="NONE"] -->
@@ -92,6 +98,6 @@
     <string name="symbol_underscore">Underscore</string>
     <!-- Spoken description for the "\u007C" (VERTICAL LINE) keyboard key. [CHAR LIMIT="NONE"] -->
     <string name="symbol_vertical_bar">Vertical bar</string>
-    <!-- Spoken description for the "\n" (NEW LINE) keyboard key. [CHAR LIMIT="NONE"] -->
-    <string name="symbol_new_line">New line</string>
+    <!-- Spoken description for the "\u00a5" (YEN) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_yen">Yen</string>
 </resources>

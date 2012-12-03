@@ -2,7 +2,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_pref_tutorial" msgid="3245369379022519951">"啟動「輕觸探索」教學課程"</string>
-    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"協助工具教學課程"</string>
     <string name="accessibility_tutorial_title" msgid="3604139189214645351">"協助工具教學課程"</string>
     <string name="accessibility_tutorial_next" msgid="5403131568391761625">"下一課"</string>
     <string name="accessibility_tutorial_back" msgid="7953265962480572962">"上一課"</string>
@@ -21,13 +20,13 @@
     <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"如要捲動清單，您可使用兩指沿螢幕滑動。例如，目前畫面中的應用程式名稱清單可供上下捲動，因此請您先探索螢幕，並且找出應用程式。"</string>
     <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"現在將兩指放在清單項目上並往上滑動。如果到達畫面頂端，請移開手指，並將手指放在清單的下方位置，再繼續往上滑動。"</string>
     <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"探索螢幕，找出另一個應用程式。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"您也可以滑動手指捲動整個頁面。由左至右迅速滑動再向左移回，即可捲動至下一頁。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"您可透過滑動手指的方式捲動整個頁面。如要捲動至下一頁，請以連貫動作往右再往左滑動手指。請往右再往左滑動手指，嘗試捲動至下一頁。"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"重新探索螢幕，找出目前頁面中的應用程式。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"往反方向滑動，也就是先往左再往右滑動，即可前往上一頁。試著滑動手指，捲動回上一頁。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"以連貫動作往反方向滑動手指 (也就是往左再往右)，即可捲動至上一頁。請往左再往右滑動手指，嘗試捲動至上一頁。"</string>
     <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"如要前往下一課，請找出位於畫面右下角的 [<xliff:g id="NEXT">%s</xliff:g>] 按鈕，並且啟用該按鈕。"</string>
     <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"第 3 課：逐字元朗讀"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"根據預設，左右滑動會一次朗讀整段文字。此外，您也可以逐字詞或逐字元朗讀螢幕上的文字段落。首先請找出以「這」這個字開頭的文字。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"接著，您可以先往下再往上滑動，開始以特定程度朗讀這個段落。試著上下滑動來變更朗讀程度，接著往右滑動，即可朗讀整段文字。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"如要離開目前的文字段落，您必須返回預設朗讀程度。請往反方向滑動，也就是先往上再往下滑動，即可返回預設朗讀程度。接著找出右下角的 [<xliff:g id="FINISH">%s</xliff:g>] 按鈕，輕按兩下即可啟動這個按鈕並結束教學課程。"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"這是大型文字段落的範例。您可以透過滑動手勢，以特定程度逐步朗讀文字，或是透過輕觸手勢一次朗讀整段文字。"\n\n"這是第二段。"\n\n"這是第三段，也是最後一段。上下滑動即可變更朗讀程度，接著向右滑動即可朗讀這段文字。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"根據預設，左右滑動會一次朗讀整段文字。此外，您也可以逐字詞或逐字元朗讀螢幕上的文字段落。首先請找出以「這」這個字開頭的文字。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"接下來，您可透過連貫動作往下再往上滑動，開始以特定層級朗讀這個段落中的文字。請嘗試往下再往上滑動以變更朗讀層級，再向右滑動即可朗讀這段文字。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"如要離開目前的文字段落，您必須返回預設朗讀層級。請以反方向往上再往下滑動，返回預設朗讀層級。接著找出右下角的 [<xliff:g id="FINISH">%s</xliff:g>] 按鈕，輕按兩下以啟動這個按鈕並結束教學課程。"</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"這是大型文字段落的範例。您可以透過滑動手勢，以特定朗讀層級逐步讀出文字，或是透過輕觸手勢一次朗讀整段文字。"\n\n"這是第二段。"\n\n"這是第三段，也是最後一段。往下再往上滑動可變更朗讀層級，接著向右滑動即可朗讀這段文字。"</string>
 </resources>

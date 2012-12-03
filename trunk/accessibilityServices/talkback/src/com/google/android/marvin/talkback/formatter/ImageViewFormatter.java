@@ -16,11 +16,11 @@
 
 package com.google.android.marvin.talkback.formatter;
 
-import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.talkback.speechrules.RuleImageView;
@@ -43,7 +43,7 @@ public class ImageViewFormatter implements AccessibilityEventFormatter {
     }
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
         final AccessibilityNodeInfoCompat source = record.getSource();
         final CharSequence text = ruleImageView.format(context, source, event);

@@ -24,6 +24,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.utils.WebContentHandler;
@@ -86,7 +87,7 @@ public final class WebContentFormatter implements AccessibilityEventFormatter {
     private final Action mTempAction = new Action();
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         // for now ... lookup and announce axis transitions
         final CharSequence contentDescription = event.getContentDescription();
         if (!TextUtils.isEmpty(contentDescription)) {

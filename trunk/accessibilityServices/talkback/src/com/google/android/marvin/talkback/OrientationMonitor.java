@@ -19,12 +19,8 @@ package com.google.android.marvin.talkback;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Message;
-import android.view.Display;
-import android.view.Surface;
-import android.view.WindowManager;
 
-import com.google.android.marvin.talkback.SpeechController.QueuingMode;
-import com.google.android.marvin.utils.WeakReferenceHandler;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 /**
  * Watches changes in device orientation.
@@ -32,65 +28,51 @@ import com.google.android.marvin.utils.WeakReferenceHandler;
 public class OrientationMonitor {
     private final Context mContext;
     private final SpeechController mSpeechController;
-    private final Display mDefaultDisplay;
 
-    private int mLastRotation;
+    private int mLastOrientation;
 
-    @SuppressWarnings("deprecation")
-    public OrientationMonitor(Context context, SpeechController speechController) {
+    public OrientationMonitor(TalkBackService context) {
         mContext = context;
-        mSpeechController = speechController;
-
-        final WindowManager windowManager = (WindowManager) mContext.getSystemService(
-                Context.WINDOW_SERVICE);
-        mDefaultDisplay = windowManager.getDefaultDisplay();
-        mLastRotation = mDefaultDisplay.getOrientation();
+        mSpeechController = context.getSpeechController();
     }
 
     public void shutdown() {
-        // Do nothing.
+        // Do nothing. This method is only here for consistency.
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
-        mHandler.startAnnounceTimeout();
-    }
-
-    @SuppressWarnings("deprecation")
-    private void announceCurrentRotation() {
-        final int rotation = mDefaultDisplay.getOrientation();
-
-        if (rotation == mLastRotation) {
+        final int orientation = newConfig.orientation;
+        if (orientation == mLastOrientation) {
             return;
         }
 
-        mLastRotation = rotation;
-
-        final int resId = getDescriptionForRotation(rotation);
-
-        if (resId > 0) {
-            mSpeechController.cleanUpAndSpeak(mContext.getString(resId), QueuingMode.QUEUE, null);
-        }
+        mLastOrientation = orientation;
+        mHandler.startAnnounceTimeout(orientation);
     }
 
-    private static int getDescriptionForRotation(int rotation) {
-        switch (rotation) {
-            case Surface.ROTATION_0:
-            case Surface.ROTATION_180:
-                return R.string.orientation_portrait;
-            case Surface.ROTATION_90:
-            case Surface.ROTATION_270:
-                return R.string.orientation_landscape;
+    private void announceCurrentRotation(int orientation) {
+        final int resId;
+
+        switch (orientation) {
+            case Configuration.ORIENTATION_PORTRAIT:
+                resId = R.string.orientation_portrait;
+                break;
+            case Configuration.ORIENTATION_LANDSCAPE:
+                resId = R.string.orientation_landscape;
+                break;
             default:
-                return 0;
+                return;
         }
+
+        mSpeechController.cleanUpAndSpeak(mContext.getString(resId),
+                SpeechController.QUEUE_MODE_QUEUE, SpeechController.FLAG_NO_HISTORY, null);
     }
 
     private final OrientationHandler mHandler = new OrientationHandler(this);
 
     private static class OrientationHandler extends WeakReferenceHandler<OrientationMonitor> {
         private static final int ANNOUNCE_ROTATION = 1;
-
-        private static final long ANNOUNCE_ROTATION_DELAY = 250;
+        private static final long DELAY_ANNOUNCE_ROTATION = 250;
 
         public OrientationHandler(OrientationMonitor parent) {
             super(parent);
@@ -100,14 +82,16 @@ public class OrientationMonitor {
         public void handleMessage(Message msg, OrientationMonitor parent) {
             switch (msg.what) {
                 case ANNOUNCE_ROTATION:
-                    parent.announceCurrentRotation();
+                    parent.announceCurrentRotation(msg.arg1);
                     break;
             }
         }
 
-        public void startAnnounceTimeout() {
+        public void startAnnounceTimeout(int orientation) {
             removeMessages(ANNOUNCE_ROTATION);
-            sendEmptyMessageDelayed(ANNOUNCE_ROTATION, ANNOUNCE_ROTATION_DELAY);
+
+            final Message msg = obtainMessage(ANNOUNCE_ROTATION, orientation);
+            sendMessageDelayed(msg, DELAY_ANNOUNCE_ROTATION);
         }
     }
 }

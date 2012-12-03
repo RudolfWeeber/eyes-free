@@ -15,8 +15,8 @@
     <string name="value_decrement_month" msgid="6268533926259338764">"Yehlisa inyanga."</string>
     <string name="value_decrement_day" msgid="5715832708435309689">"Yehlisa usuku."</string>
     <string name="value_decrement_year" msgid="756084611736232559">"Yehlisa unyaka."</string>
-    <string name="template_stream_volume" msgid="7768533936282059501">"<xliff:g id="STREAM_NAME">%s</xliff:g> ivolomu <xliff:g id="PERCENT">%d</xliff:g> amaphesenti."</string>
-    <string name="template_stream_volume_set" msgid="5961200256130745221">"Ivolomu ye-<xliff:g id="STREAM_NAME">%s</xliff:g> isethwe ku-<xliff:g id="PERCENT">%d</xliff:g>."</string>
+    <string name="template_stream_volume" msgid="7768533936282059501">"<xliff:g id="STREAM_NAME">%1$s</xliff:g> ivolomu <xliff:g id="PERCENT">%2$d</xliff:g> amaphesenti."</string>
+    <string name="template_stream_volume_set" msgid="5961200256130745221">"Ivolomu ye-<xliff:g id="STREAM_NAME">%1$s</xliff:g> isethwe ku-<xliff:g id="PERCENT">%2$d</xliff:g>."</string>
     <string name="value_stream_master" msgid="6130733378374740098">"I-Master"</string>
     <string name="value_stream_voice_call" msgid="5305385298856357591">"Ikholi yefoni"</string>
     <string name="value_stream_system" msgid="3108718602352746749">"Umsindo wesistimu"</string>
@@ -31,7 +31,7 @@
     <string name="template_announce_item_index" msgid="5779512033130164015">"<xliff:g id="ITEM_INDEX">%1$s</xliff:g> kuka-<xliff:g id="ITEM_COUNT">%2$s</xliff:g>"</string>
     <string name="value_owner" msgid="2356511106039974687">"Umnikazi"</string>
   <plurals name="plural_event">
-    <item quantity="one" msgid="3277201357577016902">"isehlakalo"</item>
+    <item quantity="one" msgid="3277201357577016902">"umcimbi"</item>
     <item quantity="other" msgid="40630539017439">"izehlakalo"</item>
   </plurals>
     <string name="value_status_bar_opened" msgid="5815609260958160739">"Ibha yesimo ivuliwe"</string>

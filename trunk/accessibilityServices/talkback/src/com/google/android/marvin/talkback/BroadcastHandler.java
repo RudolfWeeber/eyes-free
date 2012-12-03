@@ -19,7 +19,7 @@ package com.google.android.marvin.talkback;
 import android.content.Intent;
 import android.os.Message;
 
-import com.google.android.marvin.utils.WeakReferenceHandler;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 /**
  * Transfers handling of broadcasts to the handler thread.

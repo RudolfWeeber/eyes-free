@@ -16,7 +16,6 @@
 
 package com.google.android.marvin.talkback;
 
-import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -39,18 +38,17 @@ import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.Engine;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.marvin.utils.ProximitySensor;
 import com.google.android.marvin.utils.ProximitySensor.ProximityChangeListener;
 import com.google.android.marvin.utils.StringBuilderUtils;
-import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.compat.speech.tts.TextToSpeechCompatUtils;
 import com.googlecode.eyesfree.compat.speech.tts.TextToSpeechCompatUtils.EngineCompatUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,8 +64,8 @@ import java.util.List;
 public class SpeechController {
     /**
      * Utterances must be no longer than MAX_UTTERANCE_LENGTH for the TTS to be
-     * able to handle them properly.  See MAX_SPEECH_ITEM_CHAR_LENGTH in
-     * // android/frameworks/base/core/java/android/speech/tts/TextToSpeechService.java
+     * able to handle them properly. See MAX_SPEECH_ITEM_CHAR_LENGTH in //
+     * android/frameworks/base/core/java/android/speech/tts/TextToSpeechService.java
      */
     private static final int MAX_UTTERANCE_LENGTH = 3999;
 
@@ -83,6 +81,14 @@ public class SpeechController {
     /** Default stream for speech output. */
     private static final int DEFAULT_STREAM = AudioManager.STREAM_MUSIC;
 
+    /** Flag to prevent speech from being read as the "last" utterance. */
+    public static final int FLAG_NO_HISTORY = 0x2;
+
+    public static final int QUEUE_MODE_INTERRUPT = 0;
+    public static final int QUEUE_MODE_QUEUE = 1;
+    public static final int QUEUE_MODE_UNINTERRUPTIBLE = 2;
+    public static final int QUEUE_MODE_FLUSH_ALL = 3;
+
     public static class SpeechParam {
         /** Float parameter for controlling speech pan. Range is {-1 ... 1}. */
         public static final String PAN = EngineCompatUtils.KEY_PARAM_PAN;
@@ -95,26 +101,6 @@ public class SpeechController {
 
         /** Float parameter for controlling speech pitch. Range is {0 ... 2}. */
         public static final String PITCH = "pitch";
-    }
-
-    public enum QueuingMode {
-        INTERRUPT, QUEUE, UNINTERRUPTIBLE;
-
-        /**
-         * Returns the queuing mode with the specified ordinal value.
-         *
-         * @param ordinal The ordinal value of the mode.
-         * @return The queuing mode with the specified ordinal value.
-         */
-        public static QueuingMode valueOf(int ordinal) {
-            final QueuingMode[] values = values();
-
-            if (ordinal < 0 || ordinal >= values.length) {
-                return values[0];
-            }
-
-            return values[ordinal];
-        }
     }
 
     /**
@@ -137,23 +123,17 @@ public class SpeechController {
      */
     private final MediaMountStateMonitor mMediaStateMonitor = new MediaMountStateMonitor();
 
-    /** The parent context. */
-    private final Context mContext;
-
-    /** The audio manager, used to query ringer volume. */
-    private final AudioManager mAudioManager;
-
-    /** The telephone manager, used to query ringer state. */
-    private final TelephonyManager mTelephonyManager;
-
-    /** The volume monitor, used to set ringer volume. */
-    private VolumeMonitor mVolumeMonitor;
+    /** The parent service. */
+    private final TalkBackService mService;
 
     /** Proximity sensor for implementing "shut up" functionality. */
     private ProximitySensor mProximitySensor;
 
     /** Whether to use the proximity sensor to silence speech. */
     private boolean mSilenceOnProximity;
+
+    /** Whether we expect the proximity sensor to be enabled. */
+    private boolean mRequestedProximityState;
 
     /** Whether or not the screen is on. */
     // This is set by RingerModeAndScreenMonitor and used by SpeechController
@@ -191,6 +171,15 @@ public class SpeechController {
     private boolean mUninterruptible;
 
     /**
+     * Whether the speech controller should add utterance callbacks to
+     * FullScreenReadController
+     */
+    private boolean mInjectFullScreenReadCallbacks;
+
+    /** The utterance completed callback for FullScreenReadController */
+    private Runnable mFullScreenReadNextCallback;
+
+    /**
      * The next utterance index; each utterance id will be constructed from this
      * ever-increasing index.
      */
@@ -208,21 +197,23 @@ public class SpeechController {
     private float mDefaultRate;
     private float mDefaultPitch;
 
-    private Runnable mRestoreRingerAction;
+    private CharSequence mPendingText;
+    private int mPendingQueueMode;
+    private int mPendingFlags;
+    private Bundle mPendingParams;
+    private Runnable mPendingCompletedAction;
 
-    public SpeechController(Context context) {
-        mContext = context;
-        mContext.registerReceiver(mMediaStateMonitor, mMediaStateMonitor.getFilter());
-
-        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        mTelephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+    public SpeechController(TalkBackService context) {
+        mService = context;
+        mService.registerReceiver(mMediaStateMonitor, mMediaStateMonitor.getFilter());
 
         mUninterruptible = false;
+        mInjectFullScreenReadCallbacks = false;
 
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         prefs.registerOnSharedPreferenceChangeListener(mPreferenceChangeListener);
 
-        final Resources res = mContext.getResources();
+        final Resources res = mService.getResources();
 
         manageTtsOverlayEnabled(res, prefs);
         manageIntonationEnabled(res, prefs);
@@ -245,10 +236,6 @@ public class SpeechController {
         resolver.registerContentObserver(defaultRate, false, mRateObserver);
 
         mScreenIsOn = true;
-    }
-
-    public void setVolumeMonitor(VolumeMonitor volumeMonitor) {
-        mVolumeMonitor = volumeMonitor;
     }
 
     /**
@@ -277,7 +264,7 @@ public class SpeechController {
 
         for (int i = 0; i < lastUtterance.length(); i++) {
             final CharSequence character = Character.toString(lastUtterance.charAt(i));
-            final CharSequence cleanedChar = SpeechCleanupUtils.cleanUp(mContext, character);
+            final CharSequence cleanedChar = SpeechCleanupUtils.cleanUp(mService, character);
 
             StringBuilderUtils.appendWithSeparator(builder, cleanedChar);
         }
@@ -288,10 +275,10 @@ public class SpeechController {
     }
 
     /**
-     * @see #cleanUpAndSpeak(CharSequence, QueuingMode, Bundle, Runnable)
+     * @see #cleanUpAndSpeak(CharSequence, int, int, Bundle, Runnable)
      */
-    public void cleanUpAndSpeak(CharSequence text, QueuingMode queueMode, Bundle params) {
-        cleanUpAndSpeak(text, queueMode, params, null);
+    public void cleanUpAndSpeak(CharSequence text, int queueMode, int flags, Bundle params) {
+        cleanUpAndSpeak(text, queueMode, flags, params, null);
     }
 
     /**
@@ -309,9 +296,13 @@ public class SpeechController {
      * @param text The text to speak.
      * @param queueMode The queue mode to use for speaking. One of:
      *            <ul>
-     *            <li>{@link QueuingMode#INTERRUPT}
-     *            <li>{@link QueuingMode#QUEUE}
-     *            <li>{@link QueuingMode#UNINTERRUPTIBLE}
+     *            <li>{@link #QUEUE_MODE_INTERRUPT}
+     *            <li>{@link #QUEUE_MODE_QUEUE}
+     *            <li>{@link #QUEUE_MODE_UNINTERRUPTIBLE}
+     *            </ul>
+     * @param flags Bit mask of speaking flags. Use {@code 0} for no flags, or a combination of:
+     *            <ul>
+     *            <li>{@link #FLAG_NO_HISTORY}</li>
      *            </ul>
      * @param params Speaking parameters. Not all parameters are supported by
      *            all engines. One of:
@@ -321,18 +312,36 @@ public class SpeechController {
      *            <li>{@link SpeechParam#RATE}
      *            <li>{@link SpeechParam#VOLUME}
      *            </ul>
-     * @param completedAction The action to run after this utterance has been spoken.
+     * @param completedAction The action to run after this utterance has been
+     *            spoken.
      */
-    public void cleanUpAndSpeak(CharSequence text, QueuingMode queueMode, Bundle params,
-            Runnable completedAction) {
+    public void cleanUpAndSpeak(CharSequence text, int queueMode, int flags,
+            Bundle params, Runnable completedAction) {
+        if (mTts == null) {
+            mPendingText = text;
+            mPendingQueueMode = queueMode;
+            mPendingFlags = flags;
+            mPendingParams = params;
+            mPendingCompletedAction = completedAction;
+            LogUtils.log(this, Log.ERROR, "Attempted to speak before TTS was initialized.");
+            return;
+        }
+
         if (text == null) {
+            // If full screen reading is enabled, advance to the next node.
+            if (mInjectFullScreenReadCallbacks) {
+                mFullScreenReadNextCallback.run();
+            }
             return;
         }
 
         final CharSequence trimmedText = text.toString().trim();
 
         if (trimmedText.length() == 0) {
-            // Don't speak empty text.
+            // Don't speak empty text.  Advance to the next node if full screen reading is enabled.
+            if (mInjectFullScreenReadCallbacks) {
+                mFullScreenReadNextCallback.run();
+            }
             return;
         }
 
@@ -341,9 +350,11 @@ public class SpeechController {
         }
 
         // Attempt to clean up the text.
-        final CharSequence cleanedText = SpeechCleanupUtils.cleanUp(mContext, trimmedText);
+        final CharSequence cleanedText = SpeechCleanupUtils.cleanUp(mService, trimmedText);
 
-        mLastSpokenUtterance = cleanedText;
+        if ((flags & FLAG_NO_HISTORY) != FLAG_NO_HISTORY) {
+            mLastSpokenUtterance = cleanedText;
+        }
 
         // Give every utterance an unique identifier with an increasing index.
         final int utteranceIndex = getNextUtteranceId();
@@ -353,8 +364,8 @@ public class SpeechController {
             addUtteranceCompleteAction(utteranceIndex, completedAction);
         }
 
-        if (isDeviceRinging()) {
-            manageRingerVolume(utteranceIndex);
+        if (mInjectFullScreenReadCallbacks) {
+            addUtteranceCompleteAction(utteranceIndex, mFullScreenReadNextCallback);
         }
 
         // Reuse the global instance of speech parameters.
@@ -374,10 +385,17 @@ public class SpeechController {
 
         final int ttsQueueMode = computeQueuingMode(queueMode, utteranceIndex);
 
-        LogUtils.log(this, Log.VERBOSE, "Speaking with queue mode %s: \"%s\"",
-                queueMode.name(), cleanedText);
+        LogUtils.log(this, Log.VERBOSE, "Speaking with queue mode %d: \"%s\"",
+                queueMode, cleanedText);
 
         speakWithFailover(cleanedText.toString(), ttsQueueMode, speechParams);
+    }
+
+    /**
+     * Returns the next utterance identifier.
+     */
+    public int peekNextUtteranceId() {
+        return mNextUtteranceIndex;
     }
 
     /**
@@ -427,24 +445,9 @@ public class SpeechController {
     }
 
     /**
-     * Stops speech from this controller.
+     * Stops all speech.
      */
     public void interrupt() {
-        try {
-            mTts.stop();
-        } catch (Exception e) {
-            // Don't care, we're not speaking.
-        }
-        setProximitySensorState(mScreenIsOn);
-
-        // Ensure all pending completion actions happen.
-        handleUtteranceCompleted(UTTERANCE_ID_PREFIX + Integer.MAX_VALUE, false);
-    }
-
-    /**
-     * Stops speech from all applications.
-     */
-    public void stopAll() {
         try {
             mTts.speak("", SPEECH_FLUSH_ALL, null);
         } catch (Exception e) {
@@ -465,10 +468,10 @@ public class SpeechController {
         attemptTtsShutdown(mTts);
 
         if (mMediaStateMonitor != null) {
-            mContext.unregisterReceiver(mMediaStateMonitor);
+            mService.unregisterReceiver(mMediaStateMonitor);
         }
 
-        final ContentResolver resolver = mContext.getContentResolver();
+        final ContentResolver resolver = mService.getContentResolver();
         resolver.unregisterContentObserver(mSynthObserver);
         resolver.unregisterContentObserver(mPitchObserver);
         resolver.unregisterContentObserver(mRateObserver);
@@ -496,7 +499,7 @@ public class SpeechController {
         }
 
         if (ttsOverlayEnabled && mTtsOverlay == null) {
-            mTtsOverlay = new TextToSpeechOverlay(mContext);
+            mTtsOverlay = new TextToSpeechOverlay(mService);
         } else if (!ttsOverlayEnabled && mTtsOverlay != null) {
             mTtsOverlay.hide();
             mTtsOverlay = null;
@@ -579,6 +582,7 @@ public class SpeechController {
         final boolean needsAdjustment = (pitch != mCurrentPitch) || (rate != mCurrentRate);
 
         try {
+            // TODO(alanv): We should postpone adjustment if the queue mode is ADD.
             if (needsAdjustment) {
                 mTts.stop();
                 mTts.setPitch(pitch);
@@ -591,17 +595,18 @@ public class SpeechController {
             // Split long utterances to avoid killing TTS. TTS will die if
             // the incoming string is greater than 3999 characters.
             ArrayList<String> speakableUtterances = null;
-            if (utterance.length() > MAX_UTTERANCE_LENGTH){
-              speakableUtterances = splitUtterancesIntoSpeakableStrings(utterance);
-              utterance = speakableUtterances.get(0);
+            if (utterance.length() > MAX_UTTERANCE_LENGTH) {
+                speakableUtterances = splitUtterancesIntoSpeakableStrings(utterance);
+                utterance = speakableUtterances.get(0);
             }
 
             // TODO(alanv): Most applications don't know how to duck audio!
-            //AudioManagerCompatUtils.requestAudioFocus(mAudioManager, null, AudioManager.STREAM_MUSIC,
-            //        AudioManagerCompatUtils.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+            // AudioManagerCompatUtils.requestAudioFocus(mAudioManager, null,
+            // AudioManager.STREAM_MUSIC,
+            // AudioManagerCompatUtils.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
             final int result = mTts.speak(utterance, queueMode, speechParams);
-            if (speakableUtterances != null){
-                for (int i = 1; i < speakableUtterances.size(); i++){
+            if (speakableUtterances != null) {
+                for (int i = 1; i < speakableUtterances.size(); i++) {
                     mTts.speak(speakableUtterances.get(i), TextToSpeech.QUEUE_ADD, speechParams);
                 }
             }
@@ -609,7 +614,8 @@ public class SpeechController {
             setProximitySensorState(true);
 
             if (result != TextToSpeech.SUCCESS) {
-                // Treat the utterance as completed since we won't get a callback.
+                // Treat the utterance as completed since we won't get a
+                // callback.
                 final String utteranceId = speechParams.get(Engine.KEY_PARAM_UTTERANCE_ID);
                 handleUtteranceCompleted(utteranceId, false);
 
@@ -630,26 +636,26 @@ public class SpeechController {
     }
 
     /**
-     * Splits long utterances up into shorter utterances.
-     * This is needed because the Android TTS does not support Strings that
-     * are longer than 3999 characters.
+     * Splits long utterances up into shorter utterances. This is needed because
+     * the Android TTS does not support Strings that are longer than 3999
+     * characters.
      *
      * @param utterance The original utterance.
      * @return An ArrayList where the original utterance has been broken up into
-     * Strings that are no longer than 3999 characters.
+     *         Strings that are no longer than 3999 characters.
      */
-    private ArrayList<String> splitUtterancesIntoSpeakableStrings(String utterance){
-      ArrayList<String> speakableUtterances = new ArrayList<String>();
-      while (utterance.length() > MAX_UTTERANCE_LENGTH){
-        int splitLocation = utterance.lastIndexOf(" ", MAX_UTTERANCE_LENGTH);
-        if (splitLocation == -1){
-          splitLocation = MAX_UTTERANCE_LENGTH;
+    private ArrayList<String> splitUtterancesIntoSpeakableStrings(String utterance) {
+        ArrayList<String> speakableUtterances = new ArrayList<String>();
+        while (utterance.length() > MAX_UTTERANCE_LENGTH) {
+            int splitLocation = utterance.lastIndexOf(" ", MAX_UTTERANCE_LENGTH);
+            if (splitLocation == -1) {
+                splitLocation = MAX_UTTERANCE_LENGTH;
+            }
+            speakableUtterances.add(utterance.substring(0, splitLocation));
+            utterance = utterance.substring(splitLocation);
         }
-        speakableUtterances.add(utterance.substring(0, splitLocation));
-        utterance = utterance.substring(splitLocation);
-      }
-      speakableUtterances.add(utterance);
-      return speakableUtterances;
+        speakableUtterances.add(utterance);
+        return speakableUtterances;
     }
 
     /**
@@ -660,18 +666,20 @@ public class SpeechController {
      * @param utteranceIndex The index for this utterance.
      * @return A TTS queuing mode.
      */
-    private int computeQueuingMode(QueuingMode queueMode, int utteranceIndex) {
+    private int computeQueuingMode(int queueMode, int utteranceIndex) {
         final int ttsQueueMode;
 
-        if (queueMode == QueuingMode.UNINTERRUPTIBLE) {
+        if (queueMode == QUEUE_MODE_UNINTERRUPTIBLE) {
             ttsQueueMode = TextToSpeech.QUEUE_FLUSH;
 
             // Set uninterruptible to true.
             mUninterruptible = true;
             removeUtteranceCompleteAction(mClearUninterruptible);
             addUtteranceCompleteAction(utteranceIndex, mClearUninterruptible);
-        } else if (queueMode == QueuingMode.INTERRUPT && !mUninterruptible) {
+        } else if (queueMode == QUEUE_MODE_INTERRUPT && !mUninterruptible) {
             ttsQueueMode = TextToSpeech.QUEUE_FLUSH;
+        } else if (queueMode == QUEUE_MODE_FLUSH_ALL && !mUninterruptible) {
+            ttsQueueMode = SPEECH_FLUSH_ALL;
         } else {
             ttsQueueMode = TextToSpeech.QUEUE_ADD;
 
@@ -681,14 +689,6 @@ public class SpeechController {
         }
 
         return ttsQueueMode;
-    }
-
-    /**
-     * @return {@code true} if the device is ringing.
-     */
-    private boolean isDeviceRinging() {
-        return mTelephonyManager != null
-                && (mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_RINGING);
     }
 
     /**
@@ -708,6 +708,7 @@ public class SpeechController {
         }
 
         if (!utteranceId.startsWith(UTTERANCE_ID_PREFIX)) {
+            LogUtils.log(this, Log.ERROR, "Utterance has wrong prefix: %s", utteranceId);
             return;
         }
 
@@ -716,6 +717,7 @@ public class SpeechController {
         try {
             utteranceIndex = Integer.parseInt(utteranceId.substring(UTTERANCE_ID_PREFIX.length()));
         } catch (NumberFormatException e) {
+            e.printStackTrace();
             return;
         }
 
@@ -743,7 +745,7 @@ public class SpeechController {
      */
     private void handleAllUtterancesCompleted() {
         // TODO(alanv): Most applications don't know how to duck audio!
-        //AudioManagerCompatUtils.abandonAudioFocus(mAudioManager, null);
+        // AudioManagerCompatUtils.abandonAudioFocus(mAudioManager, null);
     }
 
     /**
@@ -770,35 +772,6 @@ public class SpeechController {
     }
 
     /**
-     * Decreases the ringer volume and registers a listener for the event of
-     * completing to speak which restores the volume to its previous level.
-     *
-     * @param utteranceIndex the index of this utterance, used to schedule an
-     *            utterance completion action.
-     */
-    private void manageRingerVolume(int utteranceIndex) {
-        if (mRestoreRingerAction != null) {
-            removeUtteranceCompleteAction(mRestoreRingerAction);
-            addUtteranceCompleteAction(utteranceIndex, mRestoreRingerAction);
-            return;
-        }
-
-        // TODO(alanv): Do we need to manually duck audio?
-        final int currentRingerVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
-        final int maxRingerVolume = mAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING);
-        final int lowerEnoughVolume = Math.max((maxRingerVolume / 3), (currentRingerVolume / 2));
-
-        if (mVolumeMonitor != null) {
-            mVolumeMonitor.setStreamVolume(AudioManager.STREAM_RING, lowerEnoughVolume, 0);
-        }
-        mAudioManager.setStreamVolume(AudioManager.STREAM_RING, lowerEnoughVolume, 0);
-
-        mRestoreRingerAction = new RestoreRingerRunnable(currentRingerVolume, lowerEnoughVolume);
-
-        addUtteranceCompleteAction(utteranceIndex, mRestoreRingerAction);
-    }
-
-    /**
      * Try to switch the TTS engine.
      *
      * @param engine The package name of the desired TTS engine
@@ -812,7 +785,8 @@ public class SpeechController {
         interrupt();
 
         if (mTempTts != null) {
-            LogUtils.log(SpeechController.class, Log.ERROR, "Can't start TTS engine %s while still loading previous engine", engine);
+            LogUtils.log(SpeechController.class, Log.ERROR,
+                    "Can't start TTS engine %s while still loading previous engine", engine);
             return;
         }
 
@@ -826,7 +800,7 @@ public class SpeechController {
         LogUtils.log(SpeechController.class, Log.INFO, "Starting TTS engine: %s", engine);
 
         mTempTtsEngine = engine;
-        mTempTts = TextToSpeechCompatUtils.newTextToSpeech(mContext, mTtsChangeListener, engine);
+        mTempTts = TextToSpeechCompatUtils.newTextToSpeech(mService, mTtsChangeListener, engine);
     }
 
     /**
@@ -834,13 +808,11 @@ public class SpeechController {
      *
      * @param engine The name of the engine to use.
      */
-    @TargetApi(8)
-    @SuppressWarnings("deprecation")
     private void setEngineByPackageName_GB_HC(String engine) {
         mTempTtsEngine = engine;
         mTempTts = mTts;
 
-        final int status = mTts.setEngineByPackageName(mTempTtsEngine);
+        final int status = TextToSpeechCompatUtils.setEngineByPackageName(mTts, mTempTtsEngine);
         mTtsChangeListener.onInit(status);
     }
 
@@ -851,7 +823,8 @@ public class SpeechController {
      * @param failedEngine The package name of the engine to switch from.
      */
     private void attemptTtsFailover(String failedEngine) {
-        LogUtils.log(SpeechController.class, Log.ERROR, "Attempting TTS failover from %s", failedEngine);
+        LogUtils.log(
+                SpeechController.class, Log.ERROR, "Attempting TTS failover from %s", failedEngine);
 
         mTtsFailures++;
 
@@ -912,21 +885,38 @@ public class SpeechController {
 
         if (isSwitchingEngines) {
             speakCurrentEngine();
+        } else if (mPendingText != null) {
+            speakAndClearPendingUtterance();
         }
+    }
+
+    /**
+     * Removes and speaks the pending utterance.
+     */
+    private void speakAndClearPendingUtterance() {
+        final CharSequence text = mPendingText;
+        final Bundle params = mPendingParams;
+        final Runnable completedAction = mPendingCompletedAction;
+
+        mPendingText = null;
+        mPendingParams = null;
+        mPendingCompletedAction = null;
+
+        cleanUpAndSpeak(text, mPendingQueueMode, mPendingFlags, params, completedAction);
     }
 
     /**
      * Speaks the name of the currently active TTS engine.
      */
     private void speakCurrentEngine() {
-        final CharSequence engineLabel = getLabelForEngine(mContext, mTtsEngine);
+        final CharSequence engineLabel = getLabelForEngine(mService, mTtsEngine);
 
         if (engineLabel == null) {
             return;
         }
 
         final String utterance =
-                mContext.getString(R.string.template_current_tts_engine, engineLabel);
+                mService.getString(R.string.template_current_tts_engine, engineLabel);
 
         speakWithFailover(utterance, TextToSpeech.QUEUE_FLUSH, null);
     }
@@ -955,7 +945,7 @@ public class SpeechController {
      * Reloads the list of installed TTS engines.
      */
     private void reloadInstalledTtsEngines() {
-        final PackageManager pm = mContext.getPackageManager();
+        final PackageManager pm = mService.getPackageManager();
 
         mInstalledTtsEngines.clear();
 
@@ -1079,7 +1069,7 @@ public class SpeechController {
         final List<ResolveInfo> resolveInfos =
                 pm.queryIntentServices(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
-        if (resolveInfos.isEmpty()) {
+        if ((resolveInfos == null) || resolveInfos.isEmpty()) {
             return null;
         }
 
@@ -1096,24 +1086,35 @@ public class SpeechController {
     /**
      * Enables/disables the proximity sensor. The proximity sensor should be
      * disabled when not in use to save battery.
+     * <p>
+     * This is a no-op if the user has turned off the "silence on proximity"
+     * preference.
      */
     private void setProximitySensorState(boolean enabled) {
-        final boolean silenceOnProximity = mSilenceOnProximity;
+        mRequestedProximityState = enabled;
 
-        if (mProximitySensor == null) {
-            if (!silenceOnProximity || !enabled) {
-                // If we're not supposed to be using the proximity sensor, or if
-                // we're supposed to be turning it off, then don't do anything.
-                return;
+        // Should we be using the proximity sensor at all?
+        if (!mSilenceOnProximity) {
+            if (mProximitySensor != null) {
+                mProximitySensor.stop();
+                mProximitySensor = null;
             }
 
-            // Otherwise, ensure that the proximity sensor is initialized.
-            mProximitySensor = new ProximitySensor(mContext, true);
-            mProximitySensor.setProximityChangeListener(mProximityChangeListener);
+            return;
         }
 
-        // Otherwise, start only if we're supposed to silence on proximity.
-        if (enabled && silenceOnProximity) {
+        // Do we need to initialize the proximity sensor?
+        if (mProximitySensor == null) {
+            if (enabled) {
+                mProximitySensor = new ProximitySensor(mService);
+                mProximitySensor.setProximityChangeListener(mProximityChangeListener);
+            } else {
+                return;
+            }
+        }
+
+        // Manage the proximity sensor state.
+        if (enabled) {
             mProximitySensor.start();
         } else {
             mProximitySensor.stop();
@@ -1121,11 +1122,18 @@ public class SpeechController {
     }
 
     /**
-     * Sets whether or not the proximity sensor should be used to silence speech.
+     * Sets whether or not the proximity sensor should be used to silence
+     * speech.
+     * <p>
+     * This should be called when the user changes the state of the "silence on
+     * proximity" preference.
      */
     public void setSilenceOnProximity(boolean silenceOnProximity) {
         mSilenceOnProximity = silenceOnProximity;
-        setProximitySensorState(mSilenceOnProximity);
+
+        // We should only turn proximity on if it's enabled and already
+        // supposed to be on.
+        setProximitySensorState(mSilenceOnProximity && mRequestedProximityState);
     }
 
     /**
@@ -1141,15 +1149,28 @@ public class SpeechController {
     }
 
     /**
+     * Sets whether the SpeechController should inject utterance completed
+     * callbacks.
+     */
+    public void setShouldInjectAutoReadingCallbacks(
+            boolean shouldInject, Runnable nextItemCallback) {
+        mFullScreenReadNextCallback = (shouldInject) ? nextItemCallback : null;
+        mInjectFullScreenReadCallbacks = shouldInject;
+
+        if (!shouldInject) {
+            removeUtteranceCompleteAction(nextItemCallback);
+        }
+    }
+
+    /**
      * Stops the TTS engine when the proximity sensor is close.
      */
-    private final ProximitySensor.ProximityChangeListener mProximityChangeListener =
-            new ProximityChangeListener() {
+    private final ProximityChangeListener mProximityChangeListener = new ProximityChangeListener() {
         @Override
-        public void onProximityChanged(boolean close) {
+        public void onProximityChanged(boolean isClose) {
             // Stop feedback if the user is close to the sensor.
-            if (close) {
-                stopAll();
+            if (isClose) {
+                mService.interruptAllFeedback();
             }
         }
     };
@@ -1194,7 +1215,7 @@ public class SpeechController {
     private final ContentObserver mSynthObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
-            final ContentResolver resolver = mContext.getContentResolver();
+            final ContentResolver resolver = mService.getContentResolver();
             updateDefaultEngine(resolver);
         }
     };
@@ -1202,7 +1223,7 @@ public class SpeechController {
     private final ContentObserver mPitchObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
-            final ContentResolver resolver = mContext.getContentResolver();
+            final ContentResolver resolver = mService.getContentResolver();
             updateDefaultPitch(resolver);
         }
     };
@@ -1210,7 +1231,7 @@ public class SpeechController {
     private final ContentObserver mRateObserver = new ContentObserver(mHandler) {
         @Override
         public void onChange(boolean selfChange) {
-            final ContentResolver resolver = mContext.getContentResolver();
+            final ContentResolver resolver = mService.getContentResolver();
             updateDefaultRate(resolver);
         }
     };
@@ -1223,7 +1244,7 @@ public class SpeechController {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                         String key) {
-                    final Resources res = mContext.getResources();
+                    final Resources res = mService.getResources();
 
                     // TODO: Optimize this to use the key.
                     manageTtsOverlayEnabled(res, sharedPreferences);
@@ -1271,38 +1292,6 @@ public class SpeechController {
 
         public void onMediaStateChanged(String action) {
             obtainMessage(MSG_MEDIA_STATE_CHANGED, action).sendToTarget();
-        }
-    }
-
-    /**
-     * Utterance completion action used to restore the ringer volume.
-     */
-    private class RestoreRingerRunnable implements Runnable {
-        private final int mRestoreVolume;
-        private final int mExpectedVolume;
-
-        public RestoreRingerRunnable(int restoreVolume, int expectedVolume) {
-            mRestoreVolume = restoreVolume;
-            mExpectedVolume = expectedVolume;
-        }
-
-        @Override
-        public void run() {
-            mRestoreRingerAction = null;
-
-            final int currentVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
-
-            if (currentVolume != mExpectedVolume) {
-                LogUtils.log(SpeechController.class, Log.WARN,
-                        "Current volume does not match expected volume!");
-                return;
-            }
-
-            if (mVolumeMonitor != null) {
-                mVolumeMonitor.setStreamVolume(AudioManager.STREAM_RING, mRestoreVolume, 0);
-            }
-            mAudioManager.setStreamVolume(AudioManager.STREAM_RING, mRestoreVolume, 0);
-
         }
     }
 

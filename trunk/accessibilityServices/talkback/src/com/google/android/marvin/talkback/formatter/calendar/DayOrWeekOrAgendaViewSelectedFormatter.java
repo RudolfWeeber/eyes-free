@@ -28,6 +28,7 @@ import android.util.SparseArray;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 
@@ -89,7 +90,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
     private String mLastDateFragment;
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         String className = event.getClassName().toString();
         if (CLASS_NAME_AGENDA_VIEW.equals(className)) {
             formatAgendaViewSelected(event, context, utterance);
@@ -260,6 +261,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      * @param event The event being processed.
      * @param textBuilder The builder to which to append the announcement.
      */
+    @SuppressWarnings("deprecation")
     private void appendSelectedEventDetails(Context context, AccessibilityEvent event,
             StringBuilder textBuilder) {
         Bundle parcelableData = (Bundle) event.getParcelableData();

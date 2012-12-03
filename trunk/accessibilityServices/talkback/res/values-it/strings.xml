@@ -19,15 +19,13 @@
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Messaggio vocale"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"In riproduzione"</string>
     <string name="template_current_tts_engine" msgid="2402080656466274253">"In uso: <xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
-    <string name="template_compound_button_checked" msgid="8969457633214121273">"Opzione <xliff:g id="TITLE">%1$s</xliff:g> selezionata"</string>
-    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"Opzione <xliff:g id="TITLE">%1$s</xliff:g> non selezionata"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Casella di modifica. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Avviso <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> sostituito con <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> caratteri sostituiti con <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> caratteri"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Suoneria <xliff:g id="PERCENT">%d</xliff:g> percento."</string>
-    <!-- no translation found for template_image_view (2368987212503613897) -->
-    <skip />
+    <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="ITEM">%1$s</xliff:g> per <xliff:g id="LABEL">%2$s</xliff:g>"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Immagine <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_list_view" msgid="4569888407076618446">"Elenco <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Pressione lunga di <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Pulsante <xliff:g id="TITLE">%1$s</xliff:g>"</string>
@@ -38,7 +36,6 @@
     <string name="value_gridview" msgid="9093738961981389981">"Griglia"</string>
     <string name="value_listview" msgid="3437715684913760710">"Elenco"</string>
     <string name="value_tabwidget" msgid="5550633699198799743">"Barra delle schede"</string>
-    <string name="value_container" msgid="439303423101134461">"Contenitore"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Visualizzati da <xliff:g id="FROM_INDEX">%d</xliff:g> a <xliff:g id="TO_INDEX">%d</xliff:g> elementi su <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Visualizzato <xliff:g id="FROM_INDEX">%d</xliff:g> elemento di <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Elenco a discesa <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -48,7 +45,9 @@
     <string name="template_radio_button" msgid="4272970081436888704">"Pulsante di opzione <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="value_password" msgid="52094746222829357">"password"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Cassetto scorrevole aperto"</string>
+    <string name="value_notification_shade_opened" msgid="3832526419695611670">"Area aperta"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Opzioni."</string>
+    <string name="value_text_cleared" msgid="3190458526844389854">"Testo cancellato"</string>
     <string name="value_text_removed" msgid="2700105425865376595">"eliminato"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"Riepilogo notifiche"</string>
     <string name="value_selected" msgid="6785267365387973217">"selezionato"</string>
@@ -57,10 +56,12 @@
     <string name="value_disabled" msgid="65077823320194685">"disabilitato"</string>
     <string name="value_double_tap" msgid="7829968646330038608">"Tocca due volte"</string>
     <string name="value_single_tap" msgid="6461432282985355533">"Tocca"</string>
-    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g> per attivare."</string>
-    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> e tieni premuto per fare un clic lungo."</string>
+    <string name="template_hint_clickable" msgid="1687873106975426560">"<xliff:g id="ACTION">%1$s</xliff:g> per selezionare."</string>
+    <string name="template_hint_long_clickable" msgid="4276746786982054368">"<xliff:g id="ACTION">%1$s</xliff:g> e tieni premuto per premere a lungo."</string>
     <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g> per attivare/disattivare."</string>
     <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g> per inserire testo."</string>
+    <string name="template_hint_spinner" msgid="1320498935380159474">"<xliff:g id="ACTION">%1$s</xliff:g> per modificare."</string>
+    <string name="hint_radial_menu" msgid="7030043763037187865">"Tocca lo schermo ed esplora per trovare un elemento, quindi solleva il dito per selezionare."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"scorrevole"</string>
     <string name="value_clicked" msgid="8306469740150249879">"selezionato"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"senza etichetta"</string>
@@ -69,8 +70,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"Schermo spento."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Dispositivo sbloccato."</string>
     <string name="value_web_view" msgid="8611542401983419041">"Contenuti web."</string>
-    <string name="value_unknown_object" msgid="3589473667352440925">"Elemento privo di etichetta."</string>
-    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Quando parlare"</string>
+    <string name="title_pref_category_when_to_speak" msgid="9082038550046119493">"Voce"</string>
     <string name="title_pref_speech_volume" msgid="4013853601342391397">"Volume voce"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Volume suoneria"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Parla con schermo non attivo"</string>
@@ -82,22 +82,20 @@
     <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Esplorazione al tocco"</string>
     <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Gestione gesti rapidi"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Usa variazioni tono"</string>
+    <string name="title_pref_keyboard_echo" msgid="860353418869467119">"Eco tastiera"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Feedback vocale della tastiera con tono di voce più basso"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Non cambiare tono di voce quando si parla"</string>
-    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Feedback"</string>
+    <string name="title_pref_category_feedback_settings" msgid="1245161004109313841">"Altro feedback"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Feedback con vibrazione"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Feedback audio"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Volume audio"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Varie"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Impostazioni sviluppatore"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Livello di uscita"</string>
-    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Evidenzia fonti di eventi"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Visualizza uscita vocale"</string>
     <string name="axis_character" msgid="5059604520074645703">"Naviga per carattere."</string>
     <string name="axis_word" msgid="7745798763195184060">"Naviga per parola."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Naviga per frase."</string>
-    <string name="axis_paragraph" msgid="3453285809344289729">"Esplora per paragrafo."</string>
-    <string name="axis_object" msgid="7034325449094737671">"Esplora per oggetto."</string>
     <string name="axis_line" msgid="2210986915751668758">"Esplora per riga."</string>
     <string name="axis_page" msgid="9146038615069235841">"Esplora per pagina."</string>
     <string name="axis_heading" msgid="8928386537164255063">"Naviga per intestazione."</string>
@@ -105,7 +103,6 @@
     <string name="axis_document" msgid="1581988340856497809">"Naviga per documento."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Naviga in base a comportamento visualizzazione web predefinito."</string>
     <string name="attention" msgid="627104955956154539">"Attenzione"</string>
-    <string name="explore_dialog_message" msgid="2796017207242981327">"Questa funzione cambia il modo in cui il dispositivo risponde al tocco. Attivarla?"</string>
     <string name="requires_talkback" msgid="3634159695179852501">"Il tutorial richiede la funzione Esplora al tocco. Prima di avviare il tutorial, attiva TalkBack e la funzione Esplora al tocco."</string>
     <string name="granularity_character" msgid="5828563809381090688">"Lettura per carattere"</string>
     <string name="granularity_word" msgid="3660181391007381559">"Lettura per parola"</string>
@@ -118,16 +115,43 @@
     <string name="shortcut_home" msgid="3905505999818649470">"Pulsante Home"</string>
     <string name="shortcut_recent_apps" msgid="4462279958679670485">"Pulsante Applicazioni recenti"</string>
     <string name="shortcut_notifications" msgid="7234767026975704922">"Apri notifiche"</string>
+    <string name="shortcut_read_all_breakout" msgid="4373114224519034620">"Apri il menu di lettura continua"</string>
+    <string name="shortcut_talkback_breakout" msgid="568168492542718040">"Apri il menu contestuale globale"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Ripeti ultima frase"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Pronuncia ultima frase"</string>
-    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Scorri verso il basso e a sinistra"</string>
-    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Scorri verso il basso e a destra"</string>
-    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Scorri verso l\'alto e a sinistra"</string>
-    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Scorri verso l\'alto e a destra"</string>
-    <string name="value_volume_200_percent" msgid="2969698924281376143">"200% del volume delle applicazioni multimediali"</string>
-    <string name="value_volume_150_percent" msgid="4668371157512150392">"150% del volume delle applicazioni multimediali"</string>
-    <string name="value_volume_100_percent" msgid="6676030754946177658">"Pareggia volume applicazioni multimediali"</string>
-    <string name="value_volume_75_percent" msgid="7578844180160160971">"75% del volume delle applicazioni multimediali"</string>
-    <string name="value_volume_50_percent" msgid="2830571913174435107">"50% del volume delle applicazioni multimediali"</string>
-    <string name="value_volume_25_percent" msgid="4441038207089946938">"25% del volume delle applicazioni multimediali"</string>
+    <string name="shortcut_pause_feedback" msgid="1125364186583919621">"Sospendi feedback"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="5252410921504649704">"Scorri verso il basso e poi a sinistra"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="70468539039651273">"Scorri verso il basso e poi a destra"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="6488345551912922700">"Scorri verso l\'alto e poi a sinistra"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="8936164693273303141">"Scorri verso l\'alto e poi a destra"</string>
+    <string name="title_pref_shortcut_right_and_down" msgid="8367941430094918701">"Scorri verso destra, poi verso il basso"</string>
+    <string name="title_pref_shortcut_right_and_up" msgid="3803984082758463130">"Scorri verso destra, poi verso l\'alto"</string>
+    <string name="title_pref_shortcut_left_and_down" msgid="7133444152727902323">"Scorri verso sinistra, poi verso il basso"</string>
+    <string name="title_pref_shortcut_left_and_up" msgid="2432229113065295801">"Scorri verso sinistra, poi verso l\'alto"</string>
+    <string name="value_volume_100_percent" formatted="false" msgid="6676030754946177658">"Pareggia volume applicazioni multimediali"</string>
+    <string name="value_volume_75_percent" formatted="false" msgid="7578844180160160971">"75% del volume delle applicazioni multimediali"</string>
+    <string name="value_volume_50_percent" formatted="false" msgid="2830571913174435107">"50% del volume delle applicazioni multimediali"</string>
+    <string name="value_volume_25_percent" formatted="false" msgid="4441038207089946938">"25% del volume delle applicazioni multimediali"</string>
+    <string name="value_keyboard_echo_always" msgid="6227871839200687680">"Enuncia sempre i tasti premuti"</string>
+    <string name="value_keyboard_echo_softkeys" msgid="6592352879887617590">"Solo per tastiera sullo schermo"</string>
+    <string name="value_keyboard_echo_never" msgid="7272733066649438914">"Non enunciare mai i tasti premuti"</string>
+    <string name="title_talkback_settings_available" msgid="6764624676369520992">"Preferenze accessibilità disponibili"</string>
+    <string name="message_talkback_settings_available" msgid="8705763859411459771">"Tocca per scaricare l\'applicazione Preferenze di accessibilità."</string>
+    <string name="notification_title_talkback_gestures_changed" msgid="8384253637363301938">"Gesti TalkBack modificati"</string>
+    <string name="notification_message_talkback_gestures_changed" msgid="5639775622146513884">"Tocca per esaminare le modifiche ai gesti di accessibilità"</string>
+    <string name="notification_title_talkback_suspended" msgid="2185046615850691522">"TalkBack è sospeso"</string>
+    <string name="notification_message_talkback_suspended" msgid="3312683762001713772">"Tocca per riprendere."</string>
+    <string name="dialog_title_suspend_talkback" msgid="452536442417893349">"Sospendere TalkBack?"</string>
+    <string name="dialog_message_suspend_talkback" msgid="399684608846305231">"Vuoi sospendere TalkBack?"\n\n"Se sospendi TalkBack il tuo dispositivo non fornirà feedback."\n\n"Puoi riattivare TalkBack dall\'area notifiche o tornando nella schermata di blocco."</string>
+    <string name="talkback_gesture_change_details" msgid="2919155220372343154">"Questa versione di TalkBack include modifiche ai gesti di accessibilità predefiniti. Le azioni associate ai gesti possono essere personalizzate nelle impostazioni di TalkBack. Se l\'opzione \"Esplora al tocco\" è attiva, puoi utilizzare i gesti che seguono per compiere determinate azioni."\n\n"<xliff:g id="MAPPINGS">%1$s</xliff:g>"</string>
+    <string name="button_accept_changed_gesture_mappings" msgid="3709582843147387025">"Accetta gesti"</string>
+    <string name="button_customize_gesture_mappings" msgid="6198453024008558647">"Personalizza gesti"</string>
+    <string name="dialog_title_disable_exploration" msgid="6318745977662978395">"Disattivare la funzione Esplora al tocco?"</string>
+    <string name="dialog_message_disable_exploration" msgid="206632033549219529">"Vuoi disattivare la funzione Esplora al tocco?"\n\n"Il dispositivo non risponderà più ai gesti rapidi e non fornirà feedback vocali per gli elementi toccati sullo schermo."</string>
+    <string name="read_from_top" msgid="4178188498867856189">"Leggi tutto dall\'alto"</string>
+    <string name="read_from_current" msgid="2331288178673192110">"Leggi tutto dal prossimo elemento"</string>
+    <string name="repeat_current" msgid="5909904824878426189">"Ripeti elemento corrente"</string>
+    <string name="hint_script_injection" msgid="2973894305173271874">"L\'esplorazione tattile non è disponibile nei contenuti web. Attiva <xliff:g id="PREFERENCE_NAME">%1$s</xliff:g> nelle impostazioni di Accessibilità per esplorare i contenuti web."</string>
+    <string name="label_talkback_context_menu" msgid="102441078934343795">"Menu contestuale globale TalkBack"</string>
+    <string name="permission_talkback_label" msgid="7399199628843033396">"Controllo di TalkBack"</string>
 </resources>

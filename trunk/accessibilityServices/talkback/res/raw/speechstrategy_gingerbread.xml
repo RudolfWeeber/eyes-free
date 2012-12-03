@@ -17,16 +17,25 @@
     </ss:formatter>
   </ss:rule>
 
+    <!-- Drop extra event for Gingerbread notification shade -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:className>com.android.systemui.statusbar.TrackingView</ss:className>
+      <ss:packageName>com.android.systemui</ss:packageName>
+    </ss:filter>
+    <ss:formatter>
+    </ss:formatter>
+  </ss:rule>
+
   <!-- Google Quick Search Box widget -->
   <ss:rule>
     <ss:filter>
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.google.android.googlequicksearchbox</ss:packageName>
-      <ss:versionCode>&lt;=112200000</ss:versionCode>
       <ss:platformSdk>9||10</ss:platformSdk>
-      <ss:currentItemIndex>0</ss:currentItemIndex>
-      <ss:itemCount>9</ss:itemCount>
+      <ss:currentItemIndex>0||1</ss:currentItemIndex>
       <ss:text></ss:text>
       <ss:contentDescription></ss:contentDescription>
     </ss:filter>
@@ -40,10 +49,8 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.TextView</ss:className>
       <ss:packageName>com.google.android.googlequicksearchbox</ss:packageName>
-      <ss:versionCode>&lt;=112200000</ss:versionCode>
       <ss:platformSdk>9||10</ss:platformSdk>
-      <ss:currentItemIndex>1</ss:currentItemIndex>
-      <ss:itemCount>9</ss:itemCount>
+      <ss:currentItemIndex>1||2</ss:currentItemIndex>
       <ss:text></ss:text>
       <ss:contentDescription></ss:contentDescription>
     </ss:filter>
@@ -57,10 +64,8 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.ImageButton</ss:className>
       <ss:packageName>com.google.android.googlequicksearchbox</ss:packageName>
-      <ss:versionCode>&lt;=112200000</ss:versionCode>
       <ss:platformSdk>9||10</ss:platformSdk>
-      <ss:currentItemIndex>2</ss:currentItemIndex>
-      <ss:itemCount>9</ss:itemCount>
+      <ss:currentItemIndex>2||3</ss:currentItemIndex>
       <ss:text></ss:text>
       <ss:contentDescription></ss:contentDescription>
     </ss:filter>
@@ -76,6 +81,7 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
       <ss:className>com.android.calendar.DayView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -88,6 +94,7 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
       <ss:className>com.android.calendar.WeekView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -100,6 +107,7 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
       <ss:className>com.android.calendar.MonthView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -112,6 +120,7 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
       <ss:className>com.android.calendar.AgendaListView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -124,6 +133,7 @@
     <ss:filter>
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>com.android.calendar.DayView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -136,6 +146,7 @@
     <ss:filter>
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>com.android.calendar.WeekView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -149,6 +160,7 @@
     <ss:filter>
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>com.android.calendar.MonthView</ss:className>
+      <ss:packageName>com.google.android.calendar</ss:packageName>
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>

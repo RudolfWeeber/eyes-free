@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="inner_fill">#AAAA</color>
+    <color name="outer_fill">#8999</color>
+    <color name="corner_fill">#8999</color>
+    <color name="text_fill">#FFFF</color>
+    <color name="corner_text_fill">#FFFF</color>
+    <color name="outer_stroke">#AFFF</color>
+    <color name="corner_stroke">#AFFF</color>
+    <color name="selection_overlay">#FF00</color>
+    <color name="submenu_overlay">#F0F0</color>
+
+</resources>

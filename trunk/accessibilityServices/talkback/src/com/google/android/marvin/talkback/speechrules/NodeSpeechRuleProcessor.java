@@ -17,86 +17,46 @@
 package com.google.android.marvin.talkback.speechrules;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.Utterance;
+import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityNodeInfoCompatUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils.TopToBottomLeftToRightComparator;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.LinkedList;
+import java.util.TreeSet;
 
 /**
+ * Rule-based processor for {@link AccessibilityNodeInfoCompat}s.
+ *
  * @author alanv@google.com (Alan Viverette)
  */
 public class NodeSpeechRuleProcessor {
-    private static final String SEPARATOR = "\n";
+    /** Comparator for sorting on-screen content. */
+    private static final TopToBottomLeftToRightComparator
+            COMPARATOR = new TopToBottomLeftToRightComparator();
 
-    private final LinkedList<NodeSpeechRule> mRules = new LinkedList<NodeSpeechRule>();
-    private final Context mContext;
+    private static final LinkedList<NodeSpeechRule> mRules = new LinkedList<NodeSpeechRule>();
 
-    public NodeSpeechRuleProcessor(Context context) {
-        mContext = context;
-
-        loadRules();
-    }
-
-    /**
-     * Returns the best description for a node.
-     *
-     * @param node The node to describe.
-     * @param event The source event, may be {@code null} when called with
-     *            non-source nodes.
-     * @return The best description for a node.
-     */
-    public CharSequence process(AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
-        // Generate node description using rules.
-        final CharSequence text = processWithRules(node, event);
-
-        if (TextUtils.isEmpty(text)) {
-            return null;
-        }
-
-        final StringBuilder descriptionBuilder = new StringBuilder(text);
-
-        // Append the control's disabled state.
-        if (!node.isEnabled()) {
-            appendTextToBuilder(mContext.getString(R.string.value_disabled), descriptionBuilder);
-        }
-
-        // Append the control's checked state, if applicable.
-        if (node.isCheckable()) {
-            if (node.isChecked()) {
-                appendTextToBuilder(mContext.getString(R.string.value_checked), descriptionBuilder);
-            } else {
-                appendTextToBuilder(mContext.getString(R.string.value_not_checked), descriptionBuilder);
-            }
-        }
-
-        // Append the control's selected state.
-        // TODO: Selected had no meaning outside of TabWidget and ListView.
-        //if (node.isSelected()) {
-        //    appendTextToBuilder(mContext.getString(R.string.value_selected), descriptionBuilder);
-        //}
-
-        return descriptionBuilder;
-    }
-
-    /**
-     * Loads the default rule set.
-     */
-    private void loadRules() {
+    static {
         // Rules are matched in the order they are added, so make sure to place
         // general rules after specific ones (e.g. Button after RadioButton).
-        mRules.add(new RuleSimpleTemplate(android.widget.Spinner.class, R.string.template_spinner));
-        mRules.add(new RuleSimpleTemplate(android.widget.RadioButton.class, R.string.template_radio_button));
-        mRules.add(new RuleSimpleTemplate(android.widget.CompoundButton.class, R.string.template_checkbox));
-        mRules.add(new RuleSimpleTemplate(android.widget.ImageButton.class, R.string.template_button));
-        mRules.add(new RuleSimpleTemplate(android.widget.Button.class, R.string.template_button));
-        mRules.add(new RuleWebContent());
+        mRules.add(new RuleSimpleHintTemplate(android.widget.Spinner.class,
+                R.string.template_spinner, R.string.template_hint_spinner));
+        mRules.add(new RuleSimpleTemplate(android.widget.RadioButton.class,
+                R.string.template_radio_button));
+        mRules.add(new RuleSimpleTemplate(android.widget.CompoundButton.class,
+                R.string.template_checkbox));
+        mRules.add(new RuleSimpleTemplate(android.widget.ImageButton.class,
+                R.string.template_button));
+        mRules.add(new RuleSimpleTemplate(android.widget.Button.class,
+                R.string.template_button));
         mRules.add(new RuleImageView());
         mRules.add(new RuleEditText());
         mRules.add(new RuleSeekBar());
@@ -105,6 +65,108 @@ public class NodeSpeechRuleProcessor {
 
         // Always add the default rule last.
         mRules.add(new RuleDefault());
+    }
+
+    private final Context mContext;
+
+    public NodeSpeechRuleProcessor(Context context) {
+        mContext = context;
+    }
+
+    /**
+     * Returns the best description for the subtree rooted at
+     * {@code announcedNode}.
+     *
+     * @param announcedNode The root node of the subtree to describe.
+     * @param event The source event, may be {@code null} when called with
+     *            non-source nodes.
+     * @param source The event's source node.
+     * @return The best description for a node.
+     */
+    public CharSequence getDescriptionForTree(AccessibilityNodeInfoCompat announcedNode,
+            AccessibilityEvent event, AccessibilityNodeInfoCompat source) {
+        if (announcedNode == null) {
+            return null;
+        }
+
+        final StringBuilder builder = new StringBuilder();
+
+        appendDescriptionForTree(announcedNode, builder, event, source);
+        formatTextWithLabel(announcedNode, builder);
+        appendRootMetadataToBuilder(announcedNode, builder);
+
+        return builder.toString();
+    }
+
+    private void appendDescriptionForTree(AccessibilityNodeInfoCompat announcedNode,
+            StringBuilder builder, AccessibilityEvent event, AccessibilityNodeInfoCompat source) {
+        if (announcedNode == null) {
+            return;
+        }
+
+        // Setting a content description overrides subtree node descriptions.
+        // TODO(alanv): Should nodes with "full" text also block children?
+        final CharSequence announcedDescription = announcedNode.getContentDescription();
+        if (!TextUtils.isEmpty(announcedDescription)) {
+            StringBuilderUtils.appendWithSeparator(builder, announcedDescription);
+            return;
+        }
+
+        // Append the full description for the root node.
+        final AccessibilityEvent nodeEvent = (announcedNode.equals(source)) ? event : null;
+        final CharSequence nodeDesc = getDescriptionForNode(announcedNode, nodeEvent);
+        if (!TextUtils.isEmpty(nodeDesc)) {
+            StringBuilderUtils.appendWithSeparator(builder, nodeDesc);
+            appendMetadataToBuilder(announcedNode, builder);
+        }
+
+        // Recursively append descriptions for visible and non-focusable child nodes.
+        final TreeSet<AccessibilityNodeInfoCompat> children = getSortedChildren(announcedNode);
+        for (AccessibilityNodeInfoCompat child : children) {
+            if (AccessibilityNodeInfoUtils.isVisibleOrLegacy(child)
+                    && !AccessibilityNodeInfoUtils.isAccessibilityFocusable(mContext, child)) {
+                appendDescriptionForTree(child, builder, event, source);
+            }
+        }
+
+        AccessibilityNodeInfoUtils.recycleNodes(children);
+    }
+
+    /**
+     * Returns a sorted set of {@code node}'s direct children.
+     */
+    private TreeSet<AccessibilityNodeInfoCompat> getSortedChildren(
+            AccessibilityNodeInfoCompat node) {
+        final TreeSet<AccessibilityNodeInfoCompat> children =
+                new TreeSet<AccessibilityNodeInfoCompat>(COMPARATOR);
+
+        for (int i = 0; i < node.getChildCount(); i++) {
+            final AccessibilityNodeInfoCompat child = node.getChild(i);
+            if (child == null) {
+                continue;
+            }
+
+            children.add(child);
+        }
+
+        return children;
+    }
+
+    /**
+     * Returns hint text for a node.
+     *
+     * @param node The node to provide hint text for.
+     * @return The node's hint text.
+     */
+    public CharSequence getHintForNode(Context context, AccessibilityNodeInfoCompat node) {
+        for (NodeSpeechRule rule : mRules) {
+            if ((rule instanceof NodeHintRule) && rule.accept(mContext, node)) {
+                LogUtils.log(this, Log.VERBOSE, "Processing node hint using %s", rule);
+                return ((NodeHintRule) rule).getHintText(context, node);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -116,7 +178,8 @@ public class NodeSpeechRuleProcessor {
      * @return A string representing the given node, or {@code null} if the node
      *         could not be processed.
      */
-    private CharSequence processWithRules(AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
+    private CharSequence getDescriptionForNode(
+            AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
         for (NodeSpeechRule rule : mRules) {
             if (rule.accept(mContext, node)) {
                 LogUtils.log(this, Log.VERBOSE, "Processing node using %s", rule);
@@ -128,48 +191,62 @@ public class NodeSpeechRuleProcessor {
     }
 
     /**
-     * Returns the verbose description for a node.
-     *
-     * @param node The node to describe.
-     * @return The verbose description for a node.
+     * If the supplied node has a label, replaces the builder text with a
+     * version formatted with the label.
      */
-    public static CharSequence processVerbose(Context context, AccessibilityNodeInfoCompat node) {
-        final StringBuilder populator = new StringBuilder();
-        final CharSequence action = context.getString(
-                (Build.VERSION.SDK_INT >= 16) ? R.string.value_double_tap
-                        : R.string.value_single_tap);
-
-        // Append hints for clickable, long-clickable, etc.
-        // TODO: Allow hints based on node type.
-        if (node.isEnabled()) {
-            // Don't read both the checkable AND clickable hints!
-            if (node.isCheckable()) {
-                appendTextToBuilder(
-                        context.getString(R.string.template_hint_checkable, action), populator);
-            } else if (node.isClickable()) {
-                appendTextToBuilder(
-                        context.getString(R.string.template_hint_clickable, action), populator);
-            }
-
-            if (node.isLongClickable()) {
-                appendTextToBuilder(
-                        context.getString(R.string.template_hint_long_clickable, action),
-                        populator);
-            }
+    private void formatTextWithLabel(AccessibilityNodeInfoCompat node, StringBuilder builder) {
+        final AccessibilityNodeInfoCompat labelNode =
+                AccessibilityNodeInfoCompatUtils.getLabeledBy(node);
+        if (labelNode == null) {
+            return;
         }
 
-        return populator;
+        final StringBuilder labelDescription = new StringBuilder();
+        appendDescriptionForTree(labelNode, labelDescription, null, null);
+        if (TextUtils.isEmpty(labelDescription)) {
+            return;
+        }
+
+        final String labeled = mContext.getString(
+                R.string.template_labeled_item, builder, labelDescription);
+
+        // Replace the text of the builder.
+        builder.setLength(0);
+        builder.append(labeled);
     }
 
     /**
-     * Helper for appending the given {@link String} to the existing text in an
-     * {@link Utterance}. Also adds a punctuation separator.
-     *
-     * @param text {@link String} of text to append.
-     * @param builder {@link StringBuilder} to which text is appended.
+     * Appends meta-data about node's disabled state (if actionable).
+     * <p>
+     * This should only be applied to the root node of a tree.
      */
-    private static void appendTextToBuilder(CharSequence text, StringBuilder builder) {
-        builder.append(SEPARATOR);
-        builder.append(text);
+    private void appendRootMetadataToBuilder(
+            AccessibilityNodeInfoCompat node, StringBuilder descriptionBuilder) {
+        // Append state for actionable but disabled nodes.
+        if (AccessibilityNodeInfoUtils.isActionableForAccessibility(node) && !node.isEnabled()) {
+            StringBuilderUtils.appendWithSeparator(
+                    descriptionBuilder, mContext.getString(R.string.value_disabled));
+        }
+
+        // Append the control's selected state.
+        // TODO: Selected had no meaning outside of TabWidget and ListView.
+        // if (node.isSelected()) {
+        // StringBuilderUtils.appendWithSeparator(descriptionBuilder,
+        // mContext.getString(R.string.value_selected));
+        // }
+    }
+
+    /**
+     * Appends meta-data about the node's checked (if checkable) states.
+     * <p>
+     * This should be applied to all nodes in a tree, including the root.
+     */
+    private void appendMetadataToBuilder(
+            AccessibilityNodeInfoCompat node, StringBuilder descriptionBuilder) {
+        // Append the control's checked state, if applicable.
+        if (node.isCheckable()) {
+            final int res = node.isChecked() ? R.string.value_checked : R.string.value_not_checked;
+            StringBuilderUtils.appendWithSeparator(descriptionBuilder, mContext.getString(res));
+        }
     }
 }

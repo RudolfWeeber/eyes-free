@@ -18,7 +18,7 @@
       <ss:versionCode>&lt;30002002</ss:versionCode>
     </ss:filter>
     <ss:metadata>
-      <ss:vibration>@array/view_focused_or_selected_pattern</ss:vibration>
+      <ss:customVibration>@id/patterns_focused</ss:customVibration>
       <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
   </ss:rule>

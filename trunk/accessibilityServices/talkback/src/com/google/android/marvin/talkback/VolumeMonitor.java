@@ -20,20 +20,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.PixelFormat;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Message;
 import android.telephony.TelephonyManager;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnKeyListener;
-import android.view.WindowManager;
 
-import com.google.android.marvin.talkback.SpeechController.QueuingMode;
-import com.google.android.marvin.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.compat.media.AudioManagerCompatUtils;
-import com.googlecode.eyesfree.widget.SimpleOverlay;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 /**
  * Listens for and responds to volume changes.
@@ -43,8 +35,7 @@ public class VolumeMonitor {
     private static final int STREAM_MASTER = -100;
 
     /** Minimum API version required for this class to function. */
-    // TODO(alanv): Figure out if this works on API 10 (Honeycomb 3.0)
-    public static final int MIN_API_LEVEL = 14;
+    public static final int MIN_API_LEVEL = 16;
 
     /** Keep track of adjustments made by this class. */
     private final int[] mSelfAdjustments = new int[10];
@@ -53,7 +44,6 @@ public class VolumeMonitor {
     private SpeechController mSpeechController;
     private AudioManager mAudioManager;
     private TelephonyManager mTelephonyManager;
-    private VolumeOverlay mVolumeOverlay;
 
     /** The stream type currently being controlled. */
     private int mCurrentStream = -1;
@@ -61,19 +51,13 @@ public class VolumeMonitor {
     /**
      * Creates and initializes a new volume monitor.
      *
-     * @param context The parent context.
-     * @param speechController The speech controller.
+     * @param context The parent service.
      */
-    public VolumeMonitor(Context context, SpeechController speechController) {
+    public VolumeMonitor(TalkBackService context) {
         mContext = context;
-        mSpeechController = speechController;
+        mSpeechController = context.getSpeechController();
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-        // Volume control overlay isn't needed for SDK 16+.
-        if (Build.VERSION.SDK_INT < 16) {
-            mVolumeOverlay = new VolumeOverlay(context);
-        }
 
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(AudioManagerCompatUtils.VOLUME_CHANGED_ACTION);
@@ -133,9 +117,6 @@ public class VolumeMonitor {
             // If the current stream hasn't been set, acquire control.
             mCurrentStream = streamType;
             AudioManagerCompatUtils.forceVolumeControlStream(mAudioManager, mCurrentStream);
-            if (mVolumeOverlay != null) {
-                mVolumeOverlay.show();
-            }
             mHandler.onControlAcquired(streamType);
             return;
         }
@@ -202,9 +183,6 @@ public class VolumeMonitor {
     private void releaseControl() {
         mCurrentStream = -1;
         AudioManagerCompatUtils.forceVolumeControlStream(mAudioManager, -1);
-        if (mVolumeOverlay != null) {
-            mVolumeOverlay.hide();
-        }
     }
 
     /**
@@ -242,7 +220,8 @@ public class VolumeMonitor {
             return;
         }
 
-        mSpeechController.cleanUpAndSpeak(text, QueuingMode.QUEUE, null, completedAction);
+        mSpeechController.cleanUpAndSpeak(
+                text, SpeechController.QUEUE_MODE_QUEUE, 0, null, completedAction);
     }
 
     /**
@@ -449,39 +428,6 @@ public class VolumeMonitor {
          */
         public void onVolumeChanged(int type, int value, int prevValue) {
             obtainMessage(MSG_VOLUME_CHANGED, value, prevValue, type).sendToTarget();
-        }
-    }
-
-    /**
-     * An overlay used to capture the volume button events.
-     * <p>
-     * <b>Warning:</b> When shown, this overlay will capture <b>all</a> key events.
-     * </p>
-     */
-    private class VolumeOverlay extends SimpleOverlay implements OnKeyListener {
-        public VolumeOverlay(Context context) {
-            super(context);
-
-            final WindowManager.LayoutParams params = getParams();
-            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-            params.format = PixelFormat.OPAQUE;
-            params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
-            params.width = 0;
-            params.height = 0;
-            setParams(params);
-
-            setOnKeyListener(this);
-        }
-
-        @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            // Pressing any non-volume key should hide the overlay.
-            if ((keyCode != KeyEvent.KEYCODE_VOLUME_DOWN)
-                    && (keyCode != KeyEvent.KEYCODE_VOLUME_UP)) {
-                releaseControl();
-            }
-
-            return false;
         }
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- None of the strings here should be translated -->
     <string name="pref_category_when_to_speak_key">pref_category_when_to_speak</string>
     <string name="pref_speak_ringer_key">pref_speak_ringer</string>
@@ -13,10 +13,11 @@
     <string name="pref_log_level_key">pref_log_level</string>
     <string name="pref_soundback_volume_key">pref_soundback_volume</string>
     <string name="pref_intonation_key">pref_intonation</string>
-    <string name="pref_developer_overlay_key">pref_developer_overlay</string>
+    <string name="pref_keyboard_echo_key">pref_keyboard_echo</string>
     <string name="pref_tts_overlay_key">pref_tts_overlay</string>
-    <string name="pref_caller_id_key">pref_proximity</string>
+    <string name="pref_caller_id_key">pref_caller_id</string>
     <string name="pref_explore_by_touch_key">pref_explore_by_touch</string>
+    <string name="pref_explore_by_touch_reflect_key">pref_explore_by_touch_reflect</string>
     <string name="pref_tutorial_key">pref_tutorial</string>
     <string name="pref_category_miscellaneous_key">pref_category_miscellaneous</string>
     <string name="pref_category_touch_exploration_key">pref_category_touch_exploration</string>
@@ -26,6 +27,26 @@
     <string name="pref_shortcut_up_and_right_key">pref_shortcut_up_and_right</string>
     <string name="pref_shortcut_down_and_left_key">pref_shortcut_down_and_left</string>
     <string name="pref_shortcut_down_and_right_key">pref_shortcut_down_and_right</string>
+    <string name="pref_shortcut_right_and_down_key">pref_shortcut_right_and_down</string>
+    <string name="pref_shortcut_right_and_up_key">pref_shortcut_right_and_up</string>
+    <string name="pref_shortcut_left_and_down_key">pref_shortcut_left_and_down</string>
+    <string name="pref_shortcut_left_and_up_key">pref_shortcut_left_and_up</string>
+
+    <string name="pref_must_accept_gesture_change_notification">pref_must_accept_gesture_change_notification</string>
+
+    <!-- Keyboard echo preference entries -->
+    <string-array name="pref_keyboard_echo_entries">
+        <item>@string/value_keyboard_echo_always</item>
+        <item>@string/value_keyboard_echo_softkeys</item>
+        <item>@string/value_keyboard_echo_never</item>
+    </string-array>
+
+    <!-- Keyboard echo preference values -->
+    <string-array name="pref_keyboard_echo_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
     <!-- Log level preference entries -->
     <string-array name="pref_log_level_entries">
@@ -88,6 +109,8 @@
         <item>@string/shortcut_home</item>
         <item>@string/shortcut_recent_apps</item>
         <item>@string/shortcut_notifications</item>
+        <item>@string/shortcut_read_all_breakout</item>
+        <item>@string/shortcut_talkback_breakout</item>
     </string-array>
 
     <!-- Shortcut preference values -->
@@ -97,22 +120,49 @@
         <item>HOME</item>
         <item>RECENTS</item>
         <item>NOTIFICATIONS</item>
+        <item>READ_ALL_BREAKOUT</item>
+        <item>TALKBACK_BREAKOUT</item>
     </string-array>
 
     <!-- Assignable sounds -->
     <item type="id" name="sounds_hover">sounds_hover</item>
     <item type="id" name="sounds_actionable">sounds_actionable</item>
-    <item type="id" name="sounds_explore_begin">sounds_explore_begin</item>
-    <item type="id" name="sounds_explore_end">sounds_explore_end</item>
     <item type="id" name="sounds_clicked">sounds_clicked</item>
     <item type="id" name="sounds_focused">sounds_focused</item>
-    <item type="id" name="sounds_notification_state">sounds_notification_state</item>
+    <item type="id" name="sounds_selected">sounds_selected</item>
+    <item type="id" name="sounds_notification">sounds_notification</item>
+    <item type="id" name="sounds_window_state">sounds_window_state</item>
     <item type="id" name="sounds_text_changed">sounds_text_changed</item>
     <item type="id" name="sounds_scroll_for_more">sounds_scroll_for_more</item>
+
+    <!-- Default sounds -->
+    <item type="raw" name="def_sounds_hover">@raw/view_hover_enter</item>
+    <item type="raw" name="def_sounds_actionable">@raw/view_hover_enter_actionable</item>
+    <item type="raw" name="def_sounds_clicked">@raw/view_text_changed</item>
+    <item type="raw" name="def_sounds_focused">@raw/view_hover_enter</item>
+    <item type="raw" name="def_sounds_selected">@raw/view_hover_enter</item>
+    <item type="raw" name="def_sounds_notification">@raw/notification_state_changed</item>
+    <item type="raw" name="def_sounds_window_state">@raw/notification_state_changed</item>
+    <item type="raw" name="def_sounds_text_changed">@raw/view_text_changed</item>
+    <item type="raw" name="def_sounds_scroll_for_more">@raw/view_clicked</item>
 
     <!-- Assignable patterns -->
     <item type="id" name="patterns_hover">patterns_hover</item>
     <item type="id" name="patterns_actionable">patterns_actionable</item>
+    <item type="id" name="patterns_clicked">patterns_clicked</item>
+    <item type="id" name="patterns_focused">patterns_focused</item>
+    <item type="id" name="patterns_selected">patterns_selected</item>
+    <item type="id" name="patterns_notification">patterns_notification</item>
+    <item type="id" name="patterns_window_state">patterns_window_state</item>
+
+    <!-- Default patterns -->
+    <item type="array" name="def_patterns_hover">@array/view_hovered_pattern</item>
+    <item type="array" name="def_patterns_actionable">@array/view_actionable_pattern</item>
+    <item type="array" name="def_patterns_clicked">@array/view_clicked_pattern</item>
+    <item type="array" name="def_patterns_focused">@array/view_focused_or_selected_pattern</item>
+    <item type="array" name="def_patterns_selected">@array/view_focused_or_selected_pattern</item>
+    <item type="array" name="def_patterns_notification">@array/notification_or_window_state_changed_pattern</item>
+    <item type="array" name="def_patterns_window_state">@array/notification_or_window_state_changed_pattern</item>
 
     <!-- Default preferences -->
     <string name="pref_speak_ringer_default">0</string>
@@ -124,15 +174,25 @@
     <string name="pref_log_level_default">6</string>
     <string name="pref_soundback_volume_default">100</string>
     <bool name="pref_intonation_default">true</bool>
-    <bool name="pref_developer_overlay_default">false</bool>
+    <string name="pref_keyboard_echo_default">0</string>
     <bool name="pref_tts_overlay_default">false</bool>
-    <bool name="pref_caller_id_default">false</bool>
+    <bool name="pref_caller_id_default">true</bool>
     <bool name="pref_explore_by_touch_default">true</bool>
 
     <string name="pref_shortcut_up_and_left_default">HOME</string>
-    <string name="pref_shortcut_up_and_right_default">NOTIFICATIONS</string>
+    <string name="pref_shortcut_up_and_right_default">READ_ALL_BREAKOUT</string>
     <string name="pref_shortcut_down_and_left_default">BACK</string>
-    <string name="pref_shortcut_down_and_right_default">RECENTS</string>
+    <string name="pref_shortcut_down_and_right_default">TALKBACK_BREAKOUT</string>
+    <string name="pref_shortcut_right_and_down_default">NOTIFICATIONS</string>
+    <string name="pref_shortcut_right_and_up_default">UNASSIGNED</string>
+    <string name="pref_shortcut_left_and_down_default">UNASSIGNED</string>
+    <string name="pref_shortcut_left_and_up_default">RECENTS</string>
+
+    <!-- Old Defaults for shortcut preferences - Unused as of verison 74 -->
+    <string name="pref_deprecated_shortcut_up_and_left_default">HOME</string>
+    <string name="pref_deprecated_shortcut_up_and_right_default">NOTIFICATIONS</string>
+    <string name="pref_deprecated_shortcut_down_and_left_default">BACK</string>
+    <string name="pref_deprecated_shortcut_down_and_right_default">RECENTS</string>
 
     <!-- Test application -->
     <string name="test_username">Username</string>
@@ -142,4 +202,15 @@
 
     <!-- Accessibility tutorial -->
     <item name="accessibility_tutorial_tag_touched" type="id"/>
+
+    <string name="settings_manager_market_uri">market://details?id=com.marvin.preferences</string>
+
+    <!-- Intent ACTION for launching the gesture change notification activity -->
+    <string name="action_gesture_change_notification">com.google.android.marvin.talkback.NOTIFY_GESTURE_CHANGE</string>
+
+    <!-- This key is private and should not be uploaded to open-source. -->
+    <string name="backup_api_key">AEdPqrEAAAAIovFrC5KKjGNHfq_b6n2v1Ti_YrGkLuF6n9tf6g</string>
+
+    <!-- Notification IDs -->
+    <item type="id" name="notification_suspended" />
 </resources>

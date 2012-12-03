@@ -56,6 +56,9 @@ public class AccessibilityTutorialActivity extends Activity {
     /** The index of the module to show when first opening the tutorial. */
     private static final int DEFAULT_MODULE = 0;
 
+    /** Whether or not the tutorial is active. */
+    private static boolean sTutorialIsActive = false;
+
     /** View animator for switching between modules. */
     private ViewAnimator mViewAnimator;
 
@@ -66,7 +69,7 @@ public class AccessibilityTutorialActivity extends Activity {
     private int mSoundReady;
 
     private final AnimationListener mInAnimationListener = new AnimationListener() {
-            @Override
+        @Override
         public void onAnimationEnd(Animation animation) {
             final int index = mViewAnimator.getDisplayedChild();
             final TutorialModule module = (TutorialModule) mViewAnimator.getChildAt(index);
@@ -74,12 +77,12 @@ public class AccessibilityTutorialActivity extends Activity {
             activateModule(module);
         }
 
-            @Override
+        @Override
         public void onAnimationRepeat(Animation animation) {
             // Do nothing.
         }
 
-            @Override
+        @Override
         public void onAnimationStart(Animation animation) {
             // Do nothing.
         }
@@ -134,6 +137,18 @@ public class AccessibilityTutorialActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        sTutorialIsActive = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sTutorialIsActive = false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
@@ -174,6 +189,10 @@ public class AccessibilityTutorialActivity extends Activity {
         }
 
         return super.onCreateDialog(id);
+    }
+
+    public static boolean isTutorialActive() {
+        return sTutorialIsActive;
     }
 
     private void activateModule(TutorialModule module) {

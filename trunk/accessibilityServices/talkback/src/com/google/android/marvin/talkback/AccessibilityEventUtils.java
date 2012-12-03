@@ -48,36 +48,32 @@ public class AccessibilityEventUtils {
             return false;
         }
 
-        return AccessibilityEventUtils.eventMatchesClassByType(context, event,
-                android.view.ViewGroup.class);
+        return eventMatchesClass(context, event, "android.view.ViewGroup");
     }
 
     /**
-     * Determines if the generating class of an {@link AccessibilityEvent}
-     * matches a given {@link Class} by type.
+     * Determines if the generating class of an {@link AccessibilityEvent} is an
+     * instance of a given {@link Class}.
      *
+     * @param context The application context.
      * @param event An {@link AccessibilityEvent} dispatched by the
      *            accessibility framework.
-     * @param clazz A {@link Class} to match by type or inherited type.
-     * @return {@code true} if the {@link AccessibilityEvent} object matches
-     *         the {@link Class} by type or inherited type, {@code false}
-     *         otherwise.
+     * @param referenceClassName The name of a {@link Class} to match by type or
+     *            inherited type.
+     * @return {@code true} if the {@link AccessibilityEvent} object matches the
+     *         {@link Class} by type or inherited type, {@code false} otherwise.
      */
-    public static boolean eventMatchesClassByType(Context context, AccessibilityEvent event,
-            Class<?> clazz) {
-        if (event == null || clazz == null) {
+    public static boolean eventMatchesClass(
+            Context context, AccessibilityEvent event, String referenceClassName) {
+        if (event == null) {
             return false;
         }
 
-        final ClassLoadingManager classLoader = ClassLoadingManager.getInstance();
-        final CharSequence className = event.getClassName();
-        final Class<?> nodeClass = classLoader.loadOrGetCachedClass(context, className, null);
+        final ClassLoadingManager loader = ClassLoadingManager.getInstance();
+        final CharSequence eventClassName = event.getClassName();
+        final CharSequence appPackage = event.getPackageName();
 
-        if (nodeClass == null) {
-            return false;
-        }
-
-        return clazz.isAssignableFrom(nodeClass);
+        return loader.checkInstanceOf(context, eventClassName, appPackage, referenceClassName);
     }
 
     /**
@@ -115,13 +111,7 @@ public class AccessibilityEventUtils {
         final Iterator<CharSequence> it = eventText.iterator();
 
         while (it.hasNext()) {
-            final CharSequence text = it.next();
-
-            if (it.hasNext()) {
-                StringBuilderUtils.appendWithSeparator(aggregator, text);
-            } else {
-                aggregator.append(text);
-            }
+            StringBuilderUtils.appendWithSeparator(aggregator, it.next());
         }
 
         return aggregator;

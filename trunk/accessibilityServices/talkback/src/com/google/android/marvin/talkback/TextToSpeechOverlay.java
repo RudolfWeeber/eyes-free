@@ -23,7 +23,7 @@ import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.google.android.marvin.utils.WeakReferenceHandler;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 import com.googlecode.eyesfree.widget.SimpleOverlay;
 
 /**

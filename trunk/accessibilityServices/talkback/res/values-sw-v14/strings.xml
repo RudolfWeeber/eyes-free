@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Je, una uhakika unataka kusimamisha TalkBack?"\n\n"Wakati TalkBack imesimamishwa, kifaa chako hakitatoa majibu na Kuchunguza kwa Mguso kutalemazwa."\n\n"Unaweza kurudi kwenye TalkBack kutoka kwenye kivuli cha arifa au kwa kurudi kwenye skrini ya kufunga."</string>
+</resources>

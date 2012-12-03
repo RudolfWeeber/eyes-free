@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="symbol_apostrophe" msgid="1918560887723790157">"Comilla simple"</string>
+    <string name="symbol_apostrophe" msgid="5346507079221500519">"Apóstrofo"</string>
     <string name="symbol_ampersand" msgid="5698645694023845951">"Et"</string>
     <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Corchete angular de apertura"</string>
     <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Corchete angular de cierre"</string>
@@ -17,6 +17,7 @@
     <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Llave de apertura"</string>
     <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Llave de cierre"</string>
     <string name="symbol_degree" msgid="7006804982085051639">"Grado"</string>
+    <string name="symbol_division" msgid="4791397535826699505">"Signo de división"</string>
     <string name="symbol_dollar_sign" msgid="4816772894471123223">"Signo de dólar"</string>
     <string name="symbol_ellipsis" msgid="3891332472133850270">"Puntos suspensivos"</string>
     <string name="symbol_em_dash" msgid="658543896507447622">"Guión largo"</string>
@@ -26,6 +27,8 @@
     <string name="symbol_grave_accent" msgid="6594493842492693387">"Acento grave"</string>
     <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Guión"</string>
     <string name="symbol_low_double_quote" msgid="1677227578460338049">"Comilla doble baja"</string>
+    <string name="symbol_multiplication" msgid="596972035072689274">"Signo de multiplicación"</string>
+    <string name="symbol_new_line" msgid="7363881715875223224">"Nueva línea"</string>
     <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Marca de párrafo"</string>
     <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Paréntesis de apertura"</string>
     <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Paréntesis de cierre"</string>
@@ -47,5 +50,5 @@
     <string name="symbol_trademark" msgid="7855500032009132790">"Marca registrada"</string>
     <string name="symbol_underscore" msgid="4704253128574141726">"Subrayado"</string>
     <string name="symbol_vertical_bar" msgid="1048988153298679308">"Barra vertical"</string>
-    <string name="symbol_new_line" msgid="7363881715875223224">"Nueva línea"</string>
+    <string name="symbol_yen" msgid="3603544638369460075">"Yen"</string>
 </resources>

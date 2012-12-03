@@ -19,15 +19,13 @@
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Govorna pošta"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Reprodukcija"</string>
     <string name="template_current_tts_engine" msgid="2402080656466274253">"Upotreba opcije <xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
-    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> označeno"</string>
-    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"Neoznačena stavka <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Okvir za uređivanje. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Upozorenje <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> zamijenjeno je <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"Znakovi <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> zamijenjeni su znakovima <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g>"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Softver zvona <xliff:g id="PERCENT">%d</xliff:g> posto."</string>
-    <!-- no translation found for template_image_view (2368987212503613897) -->
-    <skip />
+    <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="ITEM">%1$s</xliff:g> za <xliff:g id="LABEL">%2$s</xliff:g>"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"Slika <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_list_view" msgid="4569888407076618446">"Popis <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Dugo pritisnuto: <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Gumb <xliff:g id="TITLE">%1$s</xliff:g>"</string>
@@ -38,7 +36,6 @@
     <string name="value_gridview" msgid="9093738961981389981">"Rešetka"</string>
     <string name="value_listview" msgid="3437715684913760710">"Popis"</string>
     <string name="value_tabwidget" msgid="5550633699198799743">"Traka kartica"</string>
-    <string name="value_container" msgid="439303423101134461">"Spremnik"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Prikazuju se stavke od <xliff:g id="FROM_INDEX">%d</xliff:g> do <xliff:g id="TO_INDEX">%d</xliff:g> od ukupno <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Prikazuje se stavka <xliff:g id="FROM_INDEX">%d</xliff:g> od ukupno <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g> padajući popis."</string>
@@ -48,7 +45,9 @@
     <string name="template_radio_button" msgid="4272970081436888704">"Radio gumb <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="value_password" msgid="52094746222829357">"zaporka"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Ladica je otvorena"</string>
+    <string name="value_notification_shade_opened" msgid="3832526419695611670">"Područje se otvorilo"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Opcije."</string>
+    <string name="value_text_cleared" msgid="3190458526844389854">"Pročišćeni tekst"</string>
     <string name="value_text_removed" msgid="2700105425865376595">"izbrisano"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"Sažetak obavijesti"</string>
     <string name="value_selected" msgid="6785267365387973217">"odabrano"</string>
@@ -57,10 +56,12 @@
     <string name="value_disabled" msgid="65077823320194685">"onemogućeno"</string>
     <string name="value_double_tap" msgid="7829968646330038608">"Dvaput dotaknite"</string>
     <string name="value_single_tap" msgid="6461432282985355533">"Dotaknite"</string>
-    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g> za aktiviranje."</string>
-    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> i držite za dugi klik."</string>
+    <string name="template_hint_clickable" msgid="1687873106975426560">"<xliff:g id="ACTION">%1$s</xliff:g> za odabir."</string>
+    <string name="template_hint_long_clickable" msgid="4276746786982054368">"<xliff:g id="ACTION">%1$s</xliff:g> i držite da biste dugo pritisnuli."</string>
     <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g> za prebacivanje."</string>
     <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g> za unos teksta."</string>
+    <string name="template_hint_spinner" msgid="1320498935380159474">"<xliff:g id="ACTION">%1$s</xliff:g> za promjenu."</string>
+    <string name="hint_radial_menu" msgid="7030043763037187865">"Dodirnite zaslon i istražite kako biste pronašli stavku, a zatim podignite za odabir."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"pomicanje je dostupno"</string>
     <string name="value_clicked" msgid="8306469740150249879">"kliknuto"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"neoznačeno"</string>
@@ -69,8 +70,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"Zaslon isključen."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Uređaj otključan."</string>
     <string name="value_web_view" msgid="8611542401983419041">"Web-sadržaj."</string>
-    <string name="value_unknown_object" msgid="3589473667352440925">"Neoznačena stavka."</string>
-    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Kada govoriti"</string>
+    <string name="title_pref_category_when_to_speak" msgid="9082038550046119493">"Govor"</string>
     <string name="title_pref_speech_volume" msgid="4013853601342391397">"Glasnoća govora"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Glasnoća softvera zvona"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Govori kada je zaslon isključen"</string>
@@ -82,22 +82,20 @@
     <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Dodirno istraživanje"</string>
     <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Upravljanje pokretima za prečace"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Upotrijebi promjene tona"</string>
+    <string name="title_pref_keyboard_echo" msgid="860353418869467119">"Odjek tipkovnice"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Izgovorite povratne informacije o tipkovnici nižim tonom glasa"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Ne mijenjajte visinu glasa dok govorite"</string>
-    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Povratne informacije"</string>
+    <string name="title_pref_category_feedback_settings" msgid="1245161004109313841">"Ostale povratne informacije"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Obavijest vibracijom"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Obavijest zvukom"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Glasnoća zvuka"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Razno"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Postavke razvojnog programera"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Razina izlaza dnevnika"</string>
-    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"Isticanje izvora događaja"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Prikaz govornog izlaza"</string>
     <string name="axis_character" msgid="5059604520074645703">"Navigacija prema znaku."</string>
     <string name="axis_word" msgid="7745798763195184060">"Navigacija prema riječi."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Navigacija prema rečenici."</string>
-    <string name="axis_paragraph" msgid="3453285809344289729">"Kretanje po odlomku."</string>
-    <string name="axis_object" msgid="7034325449094737671">"Kretanje po objektu."</string>
     <string name="axis_line" msgid="2210986915751668758">"Kretanje po retku."</string>
     <string name="axis_page" msgid="9146038615069235841">"Kretanje po stranici."</string>
     <string name="axis_heading" msgid="8928386537164255063">"Navigacija prema naslovu."</string>
@@ -105,7 +103,6 @@
     <string name="axis_document" msgid="1581988340856497809">"Navigacija prema dokumentu."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Navigacija prema zadanom ponašanju web-prikaza."</string>
     <string name="attention" msgid="627104955956154539">"Pažnja"</string>
-    <string name="explore_dialog_message" msgid="2796017207242981327">"Ova značajka mijenja način na koji uređaj reagira na dodir. Želite li ju uključiti?"</string>
     <string name="requires_talkback" msgid="3634159695179852501">"Za ovaj je vodič potrebno Istraživanje dodirom. Uključite TalkBack i omogućite Istraživanje dodirom prije pokretanja vodiča."</string>
     <string name="granularity_character" msgid="5828563809381090688">"Čitanje po znaku"</string>
     <string name="granularity_word" msgid="3660181391007381559">"Čitanje po riječi"</string>
@@ -118,16 +115,43 @@
     <string name="shortcut_home" msgid="3905505999818649470">"Gumb za početnu stranicu"</string>
     <string name="shortcut_recent_apps" msgid="4462279958679670485">"Gumb za nedavne aplikacije"</string>
     <string name="shortcut_notifications" msgid="7234767026975704922">"Otvori obavijesti"</string>
+    <string name="shortcut_read_all_breakout" msgid="4373114224519034620">"Otvorite izbornik za kontinuirano čitanje"</string>
+    <string name="shortcut_talkback_breakout" msgid="568168492542718040">"Otvorite izbornik za globalni kontekst"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Ponovite posljednju izjavu"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Slovkajte posljednju izjavu"</string>
-    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Kliznite dolje i lijevo"</string>
-    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Kliznite dolje i desno"</string>
-    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Kliznite gore i lijevo"</string>
-    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Kliznite gore i desno"</string>
-    <string name="value_volume_200_percent" msgid="2969698924281376143">"200% glasnoće medija"</string>
-    <string name="value_volume_150_percent" msgid="4668371157512150392">"150% glasnoće medija"</string>
-    <string name="value_volume_100_percent" msgid="6676030754946177658">"Podudaranje glasnoće medija"</string>
-    <string name="value_volume_75_percent" msgid="7578844180160160971">"75% glasnoće medija"</string>
-    <string name="value_volume_50_percent" msgid="2830571913174435107">"50% glasnoće medija"</string>
-    <string name="value_volume_25_percent" msgid="4441038207089946938">"25% glasnoće medija"</string>
+    <string name="shortcut_pause_feedback" msgid="1125364186583919621">"Pauziraj povratne informacije"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="5252410921504649704">"Kliznite dolje pa lijevo"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="70468539039651273">"Kliznite dolje pa desno"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="6488345551912922700">"Kliznite gore pa lijevo"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="8936164693273303141">"Kliznite gore pa desno"</string>
+    <string name="title_pref_shortcut_right_and_down" msgid="8367941430094918701">"Prijelaz desno, a zatim prema dolje"</string>
+    <string name="title_pref_shortcut_right_and_up" msgid="3803984082758463130">"Prijelaz desno, a zatim prema gore"</string>
+    <string name="title_pref_shortcut_left_and_down" msgid="7133444152727902323">"Prijelaz lijevo, a zatim prema dolje"</string>
+    <string name="title_pref_shortcut_left_and_up" msgid="2432229113065295801">"Prijelaz lijevo, a zatim prema gore"</string>
+    <string name="value_volume_100_percent" formatted="false" msgid="6676030754946177658">"Podudaranje glasnoće medija"</string>
+    <string name="value_volume_75_percent" formatted="false" msgid="7578844180160160971">"75% glasnoće medija"</string>
+    <string name="value_volume_50_percent" formatted="false" msgid="2830571913174435107">"50% glasnoće medija"</string>
+    <string name="value_volume_25_percent" formatted="false" msgid="4441038207089946938">"25% glasnoće medija"</string>
+    <string name="value_keyboard_echo_always" msgid="6227871839200687680">"Uvijek izgovaraj pritisnute tipke"</string>
+    <string name="value_keyboard_echo_softkeys" msgid="6592352879887617590">"Samo za tipkovnicu na zaslonu"</string>
+    <string name="value_keyboard_echo_never" msgid="7272733066649438914">"Nikada ne izgovaraj pritisnute tipke"</string>
+    <string name="title_talkback_settings_available" msgid="6764624676369520992">"Postavke pristupačnosti dostupne su"</string>
+    <string name="message_talkback_settings_available" msgid="8705763859411459771">"Dotaknite za preuzimanje aplikacije Postavke dostupnosti."</string>
+    <string name="notification_title_talkback_gestures_changed" msgid="8384253637363301938">"Promijenjeni su TalkBack pokreti"</string>
+    <string name="notification_message_talkback_gestures_changed" msgid="5639775622146513884">"Dodirnite za pregled promjena pokreta pristupačnosti"</string>
+    <string name="notification_title_talkback_suspended" msgid="2185046615850691522">"TalkBack je obustavljen"</string>
+    <string name="notification_message_talkback_suspended" msgid="3312683762001713772">"Dotaknite za nastavak."</string>
+    <string name="dialog_title_suspend_talkback" msgid="452536442417893349">"Želite li obustaviti TalkBack?"</string>
+    <string name="dialog_message_suspend_talkback" msgid="399684608846305231">"Jeste li sigurni da želite obustaviti TalkBack?"\n\n"Dok je TalkBack obustavljen, vaš uređaj neće davati povratne informacije."\n\n"TalkBack ponovo možete uključiti na zaslonu obavijesti ili tako da se vratite na zaključani zaslon."</string>
+    <string name="talkback_gesture_change_details" msgid="2919155220372343154">"Ova verzijaTalkBack uključuje promjene zadanih pokreta pristupačnosti. Radnje povezane s tim pokretima mogu se prilagoditi u postavkama za TalkBack. Kada je omogućena opcija Istraži dodirom, pomoću sljedećih pokreta možete izvršavati određene radnje."\n\n"<xliff:g id="MAPPINGS">%1$s</xliff:g>"</string>
+    <string name="button_accept_changed_gesture_mappings" msgid="3709582843147387025">"Prihvati pokrete"</string>
+    <string name="button_customize_gesture_mappings" msgid="6198453024008558647">"Prilagodi pokrete"</string>
+    <string name="dialog_title_disable_exploration" msgid="6318745977662978395">"Želite li onemogućiti istraživanje dodirom?"</string>
+    <string name="dialog_message_disable_exploration" msgid="206632033549219529">"Jeste li sigurni da želite isključiti istraživanje dodirom?"\n\n"Vaš uređaj više neće reagirati na pokrete prečaca niti izgovarati stavke kad dodirnete zaslon."</string>
+    <string name="read_from_top" msgid="4178188498867856189">"Pročitaj sve počevši od vrha"</string>
+    <string name="read_from_current" msgid="2331288178673192110">"Pročitaj sve iz sljedeće stavke"</string>
+    <string name="repeat_current" msgid="5909904824878426189">"Ponovi trenutačnu stavku"</string>
+    <string name="hint_script_injection" msgid="2973894305173271874">"Istraživanje dodirom nije dostupno u web-sadržaju. Uključite postavku <xliff:g id="PREFERENCE_NAME">%1$s</xliff:g> u postavkama pristupačnosti da biste istražili web-sadržaj."</string>
+    <string name="label_talkback_context_menu" msgid="102441078934343795">"Globalni kontekstni izbornik značajke TalkBack"</string>
+    <string name="permission_talkback_label" msgid="7399199628843033396">"Upravljanje značajkom TalkBack"</string>
 </resources>

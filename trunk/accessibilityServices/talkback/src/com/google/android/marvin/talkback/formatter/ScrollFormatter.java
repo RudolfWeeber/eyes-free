@@ -16,14 +16,12 @@
 
 package com.google.android.marvin.talkback.formatter;
 
-import android.content.Context;
 import android.os.SystemClock;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
-import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 
@@ -39,14 +37,7 @@ public class ScrollFormatter implements AccessibilityEventFormatter {
     private static long mLastScrollEvent = -1;
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
-        final CharSequence text = AccessibilityEventUtils.getEventText(event);
-
-        if (!TextUtils.isEmpty(text)) {
-            utterance.getText().append(text);
-            return true;
-        }
-
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         final long currentTime = SystemClock.uptimeMillis();
 
         if ((currentTime - mLastScrollEvent) < MIN_SCROLL_INTERVAL) {

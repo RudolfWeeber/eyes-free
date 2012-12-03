@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="symbol_apostrophe" msgid="1918560887723790157">"Tek tırnak"</string>
+    <string name="symbol_apostrophe" msgid="5346507079221500519">"Kesme işareti"</string>
     <string name="symbol_ampersand" msgid="5698645694023845951">"Ve işareti"</string>
     <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Sol açılı ayraç"</string>
     <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Sağ açılı ayraç"</string>
@@ -17,6 +17,7 @@
     <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Sol kıvrık ayraç"</string>
     <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Sağ kıvrık ayraç"</string>
     <string name="symbol_degree" msgid="7006804982085051639">"Derece"</string>
+    <string name="symbol_division" msgid="4791397535826699505">"Bölme işareti"</string>
     <string name="symbol_dollar_sign" msgid="4816772894471123223">"Dolar işareti"</string>
     <string name="symbol_ellipsis" msgid="3891332472133850270">"Üç nokta"</string>
     <string name="symbol_em_dash" msgid="658543896507447622">"Uzun çizgi"</string>
@@ -26,6 +27,8 @@
     <string name="symbol_grave_accent" msgid="6594493842492693387">"Aksan işareti"</string>
     <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Kısa çizgi"</string>
     <string name="symbol_low_double_quote" msgid="1677227578460338049">"Alt çift tırnak"</string>
+    <string name="symbol_multiplication" msgid="596972035072689274">"Çarpma işareti"</string>
+    <string name="symbol_new_line" msgid="7363881715875223224">"Yeni çizgi"</string>
     <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Paragraf işareti"</string>
     <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Sol parantez"</string>
     <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Sağ parantez"</string>
@@ -47,5 +50,5 @@
     <string name="symbol_trademark" msgid="7855500032009132790">"Ticari marka işareti"</string>
     <string name="symbol_underscore" msgid="4704253128574141726">"Alt çizgi"</string>
     <string name="symbol_vertical_bar" msgid="1048988153298679308">"Dikey çubuk"</string>
-    <string name="symbol_new_line" msgid="7363881715875223224">"Yeni çizgi"</string>
+    <string name="symbol_yen" msgid="3603544638369460075">"Yen"</string>
 </resources>

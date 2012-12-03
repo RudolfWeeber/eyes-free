@@ -16,10 +16,10 @@
 
 package com.google.android.marvin.talkback.formatter.calendar;
 
-import android.content.Context;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 
@@ -37,7 +37,7 @@ public class MonthViewSelectedFormatter implements AccessibilityEventFormatter {
     private String mLastDayFragment;
 
     @Override
-    public boolean format(AccessibilityEvent event, Context context, Utterance utterance) {
+    public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         StringBuilder textBuilder = utterance.getText();
         String eventText = event.getText().get(0).toString();
 

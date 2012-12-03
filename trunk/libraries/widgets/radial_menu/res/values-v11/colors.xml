@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="inner_fill">#33b5e5</color>
+    <color name="outer_fill">#282828</color>
+    <color name="corner_fill">#000000</color>
+    <color name="text_fill">#ffffff</color>
+    <color name="corner_text_fill">#a3a3a3</color>
+    <color name="inner_stroke">#2789af</color>
+    <color name="outer_stroke">#484848</color>
+    <color name="corner_stroke">#000000</color>
+    <color name="selection_overlay">#33ffffff</color>
+    <color name="submenu_overlay">#3300ff00</color>
+
+</resources>

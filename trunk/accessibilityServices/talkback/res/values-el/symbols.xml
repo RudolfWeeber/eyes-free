@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="symbol_apostrophe" msgid="1918560887723790157">"Μονό εισαγωγικό"</string>
+    <string name="symbol_apostrophe" msgid="5346507079221500519">"Απόστροφος"</string>
     <string name="symbol_ampersand" msgid="5698645694023845951">"Συμπλεκτικό σύμβολο"</string>
     <string name="symbol_angle_bracket_left" msgid="4012332036420438751">"Σύμβολο μικρότερο από"</string>
     <string name="symbol_angle_bracket_right" msgid="8089627029502892140">"Σύμβολο μεγαλύτερο από"</string>
@@ -17,6 +17,7 @@
     <string name="symbol_curly_bracket_left" msgid="8532637321657230438">"Αριστερό άγκιστρο"</string>
     <string name="symbol_curly_bracket_right" msgid="6985489217737970385">"Δεξιό άγκιστρο"</string>
     <string name="symbol_degree" msgid="7006804982085051639">"Σύμβολο μοίρας"</string>
+    <string name="symbol_division" msgid="4791397535826699505">"Σύμβολο διαίρεσης"</string>
     <string name="symbol_dollar_sign" msgid="4816772894471123223">"Σήμα δολαρίου"</string>
     <string name="symbol_ellipsis" msgid="3891332472133850270">"Αποσιωπητικά"</string>
     <string name="symbol_em_dash" msgid="658543896507447622">"Μεγάλη παύλα"</string>
@@ -26,6 +27,8 @@
     <string name="symbol_grave_accent" msgid="6594493842492693387">"Βαρεία"</string>
     <string name="symbol_hyphen_minus" msgid="1649545825116000516">"Παύλα"</string>
     <string name="symbol_low_double_quote" msgid="1677227578460338049">"Χαμηλό διπλό εισαγωγικό"</string>
+    <string name="symbol_multiplication" msgid="596972035072689274">"Σύμβολο πολλαπλασιασμού"</string>
+    <string name="symbol_new_line" msgid="7363881715875223224">"Νέα γραμμή"</string>
     <string name="symbol_paragraph_mark" msgid="6904765434705887290">"Σημάδι παραγράφου"</string>
     <string name="symbol_parenthesis_left" msgid="1458738253545330283">"Αριστερή παρένθεση"</string>
     <string name="symbol_parenthesis_right" msgid="8912693050994297988">"Δεξιά παρένθεση"</string>
@@ -47,5 +50,5 @@
     <string name="symbol_trademark" msgid="7855500032009132790">"Εμπορικό σήμα"</string>
     <string name="symbol_underscore" msgid="4704253128574141726">"Σύμβολο υπογράμμισης"</string>
     <string name="symbol_vertical_bar" msgid="1048988153298679308">"Κάθετη γραμμή"</string>
-    <string name="symbol_new_line" msgid="7363881715875223224">"Νέα γραμμή"</string>
+    <string name="symbol_yen" msgid="3603544638369460075">"Γιεν"</string>
 </resources>

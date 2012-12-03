@@ -2,7 +2,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_pref_tutorial" msgid="3245369379022519951">"「タッチガイド」チュートリアルを起動"</string>
-    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"ユーザー補助のチュートリアル"</string>
     <string name="accessibility_tutorial_title" msgid="3604139189214645351">"ユーザー補助のチュートリアル"</string>
     <string name="accessibility_tutorial_next" msgid="5403131568391761625">"次へ"</string>
     <string name="accessibility_tutorial_back" msgid="7953265962480572962">"前へ"</string>
@@ -21,13 +20,13 @@
     <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"リストをスクロールするには、2本の指を画面上でスライドさせます。たとえば現在の画面にはアプリ名のリストが表示されていて上下にスクロール可能です。まずは画面上をスライドし、どのアプリがあるか確認してみてください。"</string>
     <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"2本の指でリスト内のアイテムに触れて両指を上にスライドさせます。画面の一番上まで来たら両指を離し、リストの下の方に触れてまた上にスライドさせます。"</string>
     <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"画面上をスライドし、もう1つアプリを見つけてください。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"指をスワイプしてページ全体をスクロールすることもできます。左から右へすばやくスワイプして左に戻すと、次のページにスクロールできます。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"画面を指でスワイプしてページ全体をスクロールすることもできます。次のページにスクロールするには、右にスワイプしてから指を離さずに左にスワイプします。では、右にスワイプしてから左にスワイプして次のページにスクロールしてみてください。"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"再び画面上をスライドして、現在のページでアプリを見つけます。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"反対に左にスワイプして右に戻すと、前のページに戻ることができます。スワイプで前のページに戻ってみてください。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"反対方向に、つまり左にスワイプしてから指を離さずに右にスワイプすると、前のページに移動します。では、左にスワイプしてから右にスワイプして前のページにスクロールしてみてください。"</string>
     <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"次のレッスンに進むには、画面の右下にある[<xliff:g id="NEXT">%s</xliff:g>]ボタンを探して有効にしてください。"</string>
     <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"レッスン 3: 1文字ずつ読み上げる"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"デフォルトでは、左右にスワイプすると複数の段落からなるテキストをまとめて読み上げることができます。また、画面上のテキストを1語ずつまたは1文字ずつ読むこともできます。その場合は、まず「これは」で始まるテキストを探します。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"次に下にスワイプして上に戻すと、この段落の読み上げが特定のレベルで始まります。下にスワイプしてから上に戻してレベルを変更し、右にスワイプしてテキストを順番に読み上げてみましょう。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"現在の段落以外の場所に移動するには、デフォルトの読み上げレベルに戻る必要があります。デフォルトの読み上げレベルに戻るには、反対方向に上にスワイプしてから下に戻します。次に右下にある[<xliff:g id="FINISH">%s</xliff:g>]ボタンを探し、ダブルタップして有効にすると、チュートリアルが終了します。"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"これは長いテキストのサンプルです。このテキストを特定のレベルで読み上げるにはスワイプジェスチャーを、テキスト全体をまとめて読み上げるにはタップジェスチャーを使用します。"\n\n"これは第2段落です。"\n\n"これは最後の第3段落です。まず上下にスワイプして読み上げレベルを変更します。次に右にスワイプするとそのテキストを読み上げることができます。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"デフォルトでは、左または右にスワイプすると複数の段落からなるテキストがまとめて読み上げられます。また、画面上のテキストを1語ずつまたは1文字ずつ読むこともできます。ではまず、「これは」で始まるテキストを探してください。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"次に、下にスワイプしてから指を離さずに上にスワイプすると、特定の読み上げレベルでこの段落の読み上げを開始できます。では、下にスワイプしてから上にスワイプして読み上げレベルを変更し、次に右にスワイプしてテキストの読み上げを開始してみてください。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"現在の段落以外の場所に移動するには、デフォルトの読み上げレベルに戻る必要があります。デフォルトの読み上げレベルに戻るには、反対方向に、つまり上にスワイプしてから下にスワイプします。次に右下にある[<xliff:g id="FINISH">%s</xliff:g>]ボタンを探し、ダブルタップして有効にすると、チュートリアルが終了します。"</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"これは長いテキストのサンプルです。このテキストの中を特定の読み上げレベルで移動するにはスワイプジェスチャーを、テキスト全体をまとめて読み上げるにはタップジェスチャーを使用します。"\n\n"ここは第2段落です。"\n\n"ここは最後の第3段落です。では、下にスワイプしてから上にスワイプして読み上げレベルを変更し、次に右にスワイプしてテキスト内を移動してみてください。"</string>
 </resources>

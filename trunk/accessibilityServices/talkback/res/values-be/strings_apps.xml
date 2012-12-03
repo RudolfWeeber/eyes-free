@@ -18,7 +18,7 @@
     <!-- String.format failed for translation -->
     <!-- no translation found for template_stream_volume (7768533936282059501) -->
     <skip />
-    <string name="template_stream_volume_set" msgid="5961200256130745221">"Гук <xliff:g id="STREAM_NAME">%s</xliff:g> усталяваны на наступную колькасць адсоткаў: <xliff:g id="PERCENT">%d</xliff:g>."</string>
+    <string name="template_stream_volume_set" msgid="5961200256130745221">"Гук <xliff:g id="STREAM_NAME">%1$s</xliff:g> усталяваны на наступную колькасць адсоткаў: <xliff:g id="PERCENT">%2$d</xliff:g>."</string>
     <string name="value_stream_master" msgid="6130733378374740098">"Майстар"</string>
     <string name="value_stream_voice_call" msgid="5305385298856357591">"Тэлефонны выклік"</string>
     <string name="value_stream_system" msgid="3108718602352746749">"Гукі сістэмы"</string>

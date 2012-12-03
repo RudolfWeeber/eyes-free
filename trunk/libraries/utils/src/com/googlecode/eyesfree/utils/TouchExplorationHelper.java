@@ -160,7 +160,8 @@ public abstract class TouchExplorationHelper<T> extends AccessibilityNodeProvide
 
         final AccessibilityNodeInfoCompat cachedNode = mNodeCache.get(virtualViewId);
         if (cachedNode != null) {
-            return cachedNode;
+            // Allow the system to use a copy of the cached node.
+            return AccessibilityNodeInfoCompat.obtain(cachedNode);
         }
 
         final T item = getItemForId(virtualViewId);
@@ -170,8 +171,8 @@ public abstract class TouchExplorationHelper<T> extends AccessibilityNodeProvide
 
         final AccessibilityNodeInfoCompat node = getNodeForItem(item);
 
-        // Cache this node for later.
-        mNodeCache.put(virtualViewId, cachedNode);
+        // Cache a copy of this node for later.
+        mNodeCache.put(virtualViewId, AccessibilityNodeInfoCompat.obtain(node));
 
         return node;
     }

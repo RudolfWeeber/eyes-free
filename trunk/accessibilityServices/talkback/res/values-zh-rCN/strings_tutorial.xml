@@ -2,7 +2,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="title_pref_tutorial" msgid="3245369379022519951">"启动“触摸浏览”教程"</string>
-    <string name="accessibility_tutorial_label" msgid="6907295810073718248">"辅助功能教程"</string>
     <string name="accessibility_tutorial_title" msgid="3604139189214645351">"辅助功能教程"</string>
     <string name="accessibility_tutorial_next" msgid="5403131568391761625">"下一课"</string>
     <string name="accessibility_tutorial_back" msgid="7953265962480572962">"上一课"</string>
@@ -21,13 +20,13 @@
     <string name="accessibility_tutorial_lesson_2_text_1" msgid="3701529365516687824">"要滚动浏览列表，您可以沿着屏幕滑动两根手指。例如，当前屏幕包含了一个应用名称列表，可供您上下滚动浏览。请先试着浏览屏幕并找出一个应用。"</string>
     <string name="accessibility_tutorial_lesson_2_text_2" msgid="6798295786754555066">"现在，请将两根手指放到某个列表项上，并同时向上滑动两根手指。如果到达屏幕顶端，请移开手指，并将手指放在列表中的下方位置，然后继续向上滑动。"</string>
     <string name="accessibility_tutorial_lesson_2_text_3" msgid="3159628036244792602">"请浏览屏幕并再找到一个应用。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_4" msgid="3594924431835858494">"您还可以通过滑动手指滚动整个页面。通过快速从左侧滑到右侧，然后滑回左侧来滚动到下一页。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"您也可以通过滑动手指来滚动整个页面。要滚动到下一页，请使用先向右再向左滑动的组合手势。请尝试通过先向右再向左滑动来滚动到下一页。"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"请再次浏览屏幕并在当前页面上找到一个应用。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_6" msgid="2852881750486867975">"反向（即，先向左再向右滑动）滑动手指可移动到上一页。请尝试滑动手指滚动到上一页。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"反方向滑动（即先向左再向右滑动的组合手势）即可移动到上一页。请尝试通过先向左再向右滑动来滚动到上一页。"</string>
     <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"要开始学习下一课，请找到并激活“<xliff:g id="NEXT">%s</xliff:g>”按钮（位于屏幕右下角附近）。"</string>
     <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"第 3 课：按字符阅读"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4325727096261430044">"默认情况下，先向左再向右滑动手指可完整阅读全文。当然，您也可以逐字阅读屏幕上的文本。首先，请找到以“这”开头的文本段落。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="4885931745194411340">"接下来，您可以先向下再向上滑动手指，开始以特定级别阅读此段。请尝试上下滑动来更改阅读级别，然后向右滑动以阅读文本。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="8335498544146719194">"要离开当前这段文本，您需要返回默认阅读级别。请反方向（即，先向上再向下）滑动手指以便返回默认阅读级别。然后找到右下角的“<xliff:g id="FINISH">%s</xliff:g>”按钮并点按屏幕两次以将其激活，从而退出教程。"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="671188580925596736">"这是一个大段文本的示例。您可以使用滑动手势以特定的阅读级别在文本中跳转，也可以使用手势操作一次性完整阅读所有文本。"\n\n"这是第二段。"\n\n"这是第三段，也是最后一段。您可以上下滑动手指来更改阅读级别，然后向右滑动以在文本中跳转。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"默认情况下，向左或向右滑动手指可完整阅读全文。当然，您也可以逐字阅读屏幕上的文本。首先，请找到以“这”开头的文本段落。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"接下来，您可以使用先向下再向上滑动手指的组合手势，开始以特定级别阅读此段文本。请尝试先向下再向上滑动来更改阅读级别，然后向右滑动以阅读文本。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"要离开当前这段文本，您需要返回默认阅读级别。请反方向（即，先向上再向下）滑动手指以便返回默认阅读级别。然后找到右下角的“<xliff:g id="FINISH">%s</xliff:g>”按钮并点按屏幕两次以将其激活，从而退出教程。"</string>
+    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"这是一个大段文本的示例。您可以使用滑动手势以特定的阅读级别在文本中跳转，也可以使用手势操作一次性完整阅读所有文本。"\n\n"这是第二段。"\n\n"这是第三段，也是最后一段。您可以先向下再向上滑动手指来更改阅读级别，然后向右滑动以在此文本中跳转。"</string>
 </resources>

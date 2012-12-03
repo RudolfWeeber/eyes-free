@@ -19,10 +19,18 @@ package com.googlecode.eyesfree.compat.view.accessibility;
 import android.os.Parcel;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.googlecode.eyesfree.compat.CompatUtils;
+
+import java.lang.reflect.Method;
+
 /**
  * Provides backward-compatible access to method in {@link AccessibilityEvent}.
  */
 public class AccessibilityEventCompatUtils {
+    private static final Class<?> CLASS_AccessibilityEvent = AccessibilityEvent.class;
+    private static final Method METHOD_getToIndex = CompatUtils.getMethod(
+            CLASS_AccessibilityEvent, "getToIndex");
+
     private AccessibilityEventCompatUtils() {
         // This class is non-instantiable.
     }
@@ -30,7 +38,7 @@ public class AccessibilityEventCompatUtils {
     /**
      * Returns a cached instance if such is available or a new one is created.
      * The returned instance is initialized from the given <code>event</code>.
-     * 
+     *
      * @param event The other event.
      * @return An instance.
      */
@@ -47,5 +55,15 @@ public class AccessibilityEventCompatUtils {
         parcel.recycle();
 
         return clone;
+    }
+
+    /**
+     * Gets the index of text selection end or the index of the last
+     * visible item when scrolling.
+     *
+     * @return The index of selection end or last item index.
+     */
+    public static int getToIndex(AccessibilityEvent event) {
+        return (Integer) CompatUtils.invoke(event, -1, METHOD_getToIndex);
     }
 }

@@ -49,4 +49,11 @@
         <item>40</item>
     </integer-array>
 
+    <!-- Repeating vibration pattern for gesture recognition. -->
+    <integer-array name="gesture_recognition_repeating_pattern">
+        <item>0</item>
+        <item>10</item>
+        <item>70</item>
+        <item>10</item>
+    </integer-array>
 </resources>

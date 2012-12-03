@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/repeat_last_utterance"
+        android:title="@string/shortcut_repeat_last_utterance"/>
+    <item
+        android:id="@+id/spell_last_utterance"
+        android:title="@string/shortcut_spell_last_utterance"/>
+
+    <group android:id="@id/group_corners" >
+        <item
+            android:id="@+id/pause_feedback"
+            android:orderInCategory="@integer/corner_NW"
+            android:title="@string/shortcut_pause_feedback"/>
+        <item
+            android:id="@+id/talkback_settings"
+            android:orderInCategory="@integer/corner_NE"
+            android:title="@string/talkback_preferences_title"/>
+    </group>
+<!--
+    <item
+        android:id="@+id/unassigned_1"
+        android:title="@string/shortcut_unassigned"/>
+    <item
+        android:id="@+id/unassigned_2"
+        android:title="@string/shortcut_unassigned"/>
+
+    <group android:id="@id/group_corners" >
+        <item
+            android:id="@+id/breakout_NW"
+            android:orderInCategory="@integer/corner_NW"
+            android:title="@string/shortcut_unassigned"/>
+        <item
+            android:id="@+id/breakout_NE"
+            android:orderInCategory="@integer/corner_NE"
+            android:title="@string/shortcut_unassigned"/>
+        <item
+            android:id="@+id/breakout_SW"
+            android:orderInCategory="@integer/corner_SW"
+            android:title="@string/shortcut_unassigned"/>
+        <item
+            android:id="@+id/breakout_SE"
+            android:orderInCategory="@integer/corner_SE"
+            android:title="@string/shortcut_unassigned"/>
+    </group>
+-->
+</menu>

@@ -33,8 +33,8 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
     private static final IntentFilter STATE_CHANGED_FILTER = new IntentFilter(
             TelephonyManager.ACTION_PHONE_STATE_CHANGED);
 
-    private final SpeechController mSpeechController;
-    private final PreferenceFeedbackController mFeedbackController;
+    private final TalkBackService mService;
+    private final TelephonyManager mTelephonyManager;
 
     /** Handler to transfer broadcasts to the service thread. */
     private final CallStateHandler mHandler = new CallStateHandler(this);
@@ -42,10 +42,9 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
     /** Whether the infrastructure has been initialized. */
     private boolean mInfrastructureInitialized;
 
-    public CallStateMonitor(SpeechController speechController,
-            PreferenceFeedbackController feedbackController) {
-        mSpeechController = speechController;
-        mFeedbackController = feedbackController;
+    public CallStateMonitor(TalkBackService context) {
+        mService = context;
+        mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
     }
 
     @Override
@@ -54,17 +53,16 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
     }
 
     private void internalOnReceive(Intent intent) {
+        final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+
         if (!mInfrastructureInitialized) {
             LogUtils.log(CallStateMonitor.class, Log.WARN, "Service not initialized during "
                     + "broadcast.");
             return;
         }
 
-        final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-
         if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
-            mSpeechController.interrupt();
-            mFeedbackController.interrupt();
+            mService.interruptAllFeedback();
         }
     }
 
@@ -75,6 +73,15 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
 
     public IntentFilter getFilter() {
         return STATE_CHANGED_FILTER;
+    }
+
+    /**
+     * Returns the current device call state
+     *
+     * @return One of the call state constants from {@link TelephonyManager}.
+     */
+    public int getCurrentCallState() {
+        return mTelephonyManager.getCallState();
     }
 
     private static class CallStateHandler extends BroadcastHandler<CallStateMonitor> {

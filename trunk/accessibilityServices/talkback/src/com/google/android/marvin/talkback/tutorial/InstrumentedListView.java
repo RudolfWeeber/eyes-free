@@ -16,6 +16,7 @@
 
 package com.google.android.marvin.talkback.tutorial;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.widget.ListView;
 /**
  * Extends {@link ListView} by adding an accessibility action listener.
  */
+@TargetApi(16)
 public class InstrumentedListView extends ListView {
     private final Handler mHandler = new Handler();
 

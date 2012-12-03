@@ -37,6 +37,8 @@ import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
  * @author alanv@google.com (Alan Viverette)
  */
 class PreferenceFeedbackController extends FeedbackController {
+
+
     private final SharedPreferences mPrefs;
 
     private final ContentResolver mResolver;
@@ -87,24 +89,24 @@ class PreferenceFeedbackController extends FeedbackController {
                 R.string.pref_soundback_volume_key, R.string.pref_soundback_volume_default);
 
         final int kickBackVersionCode = PackageManagerUtils.getVersionCode(
-                context, TalkBackService.KICKBACK_PACKAGE);
+                context, TalkBackUpdateHelper.KICKBACK_PACKAGE);
         final int soundBackVersionCode = PackageManagerUtils.getVersionCode(
-                context, TalkBackService.SOUNDBACK_PACKAGE);
+                context, TalkBackUpdateHelper.SOUNDBACK_PACKAGE);
 
         final boolean vibrationPref;
         final boolean soundbackPref;
 
-        if (kickBackVersionCode >= TalkBackService.KICKBACK_REQUIRED_VERSION) {
+        if (kickBackVersionCode >= TalkBackUpdateHelper.KICKBACK_REQUIRED_VERSION) {
             vibrationPref = SecureSettingsUtils.isAccessibilityServiceEnabled(
-                    context, TalkBackService.KICKBACK_PACKAGE);
+                    context, TalkBackUpdateHelper.KICKBACK_PACKAGE);
         } else {
             vibrationPref = SharedPreferencesUtils.getBooleanPref(
                     prefs, res, R.string.pref_vibration_key, R.bool.pref_vibration_default);
         }
 
-        if (soundBackVersionCode >= TalkBackService.SOUNDBACK_REQUIRED_VERSION) {
+        if (soundBackVersionCode >= TalkBackUpdateHelper.SOUNDBACK_REQUIRED_VERSION) {
             soundbackPref = SecureSettingsUtils.isAccessibilityServiceEnabled(
-                    context, TalkBackService.SOUNDBACK_PACKAGE);
+                    context, TalkBackUpdateHelper.SOUNDBACK_PACKAGE);
         } else {
             soundbackPref = SharedPreferencesUtils.getBooleanPref(
                     prefs, res, R.string.pref_soundback_key, R.bool.pref_soundback_default);

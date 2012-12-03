@@ -16,12 +16,19 @@
 
 package com.google.android.marvin.utils;
 
-/**
- * @author alanv@google.com (Alan Viverette)
- */
 public class StringBuilderUtils {
-    private static final char SEPARATOR = ' ';
+    private static final String DEFAULT_SEPARATOR = " ";
 
+    /**
+     * Appends string representations of the specified arguments to a
+     * {@link StringBuilder}, creating one if the supplied builder is
+     * {@code null}.
+     *
+     * @param builder An existing {@link StringBuilderUtils}, or {@code null} to
+     *            create one.
+     * @param args The objects to append to the builder.
+     * @return A builder with the specified objects appended.
+     */
     public static StringBuilder appendWithSeparator(StringBuilder builder, Object... args) {
         if (builder == null) {
             builder = new StringBuilder();
@@ -32,8 +39,16 @@ public class StringBuilderUtils {
                 continue;
             }
 
-            builder.append(arg);
-            builder.append(SEPARATOR);
+            final String strArg = String.valueOf(arg);
+            if (strArg.length() == 0) {
+                continue;
+            }
+
+            if (builder.length() > 0) {
+                builder.append(DEFAULT_SEPARATOR);
+            }
+
+            builder.append(strArg);
         }
 
         return builder;

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.google.android.marvin.talkback"
+    android:installLocation="internalOnly"
     android:sharedUserId="com.google.android.marvin.feedback"
-    android:versionCode="68"
-    android:versionName="3.1.1_r68" >
+    android:versionCode="83"
+    android:versionName="3.2.1" >
 
     <uses-sdk
-        android:minSdkVersion="4"
-        android:targetSdkVersion="16" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+    <!-- Permission used to restrict sending gestures and resuming feedback. -->
+    <permission
+        android:name="com.google.android.marvin.feedback.permission.TALKBACK"
+        android:label="@string/permission_talkback_label"
+        android:protectionLevel="signature" />
 
     <!-- Required to monitor phone busy state. -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -15,29 +23,31 @@
     <!-- Required for haptic feedback. -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- Required for developer debug overlay. -->
+    <!-- Required for various overlays. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <!-- Hardware compatibility -->
-    <uses-feature
-        android:name="android.hardware.faketouch"
-        android:required="false" />
+    <!-- Required for keeping the screen awake during continuous reading. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Required for shortcuts and widgets. -->
+    <uses-permission android:name="com.google.android.marvin.feedback.permission.TALKBACK" />
+
+    <!-- Hardware compatibility. -->
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-    <uses-feature
-        android:name="android.hardware.bluetooth"
-        android:required="false" />
 
     <application
+        android:backupAgent="com.google.android.marvin.talkback.TalkBackBackupAgent"
         android:icon="@drawable/icon"
-        android:label="@string/talkback_title" >
+        android:label="@string/talkback_title"
+        android:allowBackup="true" >
 
         <!-- TalkBack -->
         <service
             android:name=".TalkBackService"
-            android:settingsActivity="com.google.android.marvin.talkback.TalkBackPreferencesActivity"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:settingsActivity="com.google.android.marvin.talkback.TalkBackPreferencesActivity" >
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
 
@@ -52,7 +62,9 @@
         <!-- TalkBack Preferences -->
         <activity
             android:name=".TalkBackPreferencesActivity"
-            android:label="@string/talkback_preferences_title" >
+            android:label="@string/talkback_preferences_title"
+            android:launchMode="singleTop"
+            tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,18 +72,32 @@
             </intent-filter>
         </activity>
 
-        <!-- Test Activities -->
-        <activity android:name="com.google.android.marvin.talkback.test.TextActivity">
+        <!-- TalkBack Shortcut Preferences -->
+        <activity
+            android:name=".TalkBackShortcutPreferencesActivity"
+            android:label="@string/talkback_preferences_title"
+            android:launchMode="singleTop"
+            tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
-        <!-- Status provider is required for pre-ICS (API 14) compatibility -->
+        <!-- Test Activities -->
+        <activity
+            android:name="com.google.android.marvin.talkback.test.TextActivity"
+            android:permission="com.google.android.marvin.talkback.permission.TEST" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <!-- Status provider is required for compatibility with pre-ICS (API 14) apps -->
         <provider
             android:name=".StatusProvider"
+            android:authorities="com.google.android.marvin.talkback.providers.StatusProvider"
             android:exported="true"
-            android:authorities="com.google.android.marvin.talkback.providers.StatusProvider" />
+            tools:ignore="ExportedContentProvider" />
 
         <!-- Accessibility tutorial -->
         <activity
@@ -80,9 +106,38 @@
             android:exported="false"
             android:immersive="true"
             android:label="@string/accessibility_tutorial_title"
-            android:process=":tutorial"
-            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
+        <!-- Gesture Change Notification Activity -->
+        <activity
+            android:name=".GestureChangeNotificationActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Dialog" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <!-- Proxy for search button long-press -->
+        <activity
+            android:name=".ShortcutProxyActivity"
+            android:enabled="false"
+            android:excludeFromRecents="true"
+            android:label="@string/label_talkback_context_menu"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoDisplay"
+            tools:ignore="ExportedActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH_LONG_PRESS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="@string/backup_api_key" />
     </application>
 
 </manifest>

@@ -242,10 +242,7 @@ public class SimpleOverlay {
             super(context);
         }
 
-        /**
-         * In API 14+ this is an override.
-         */
-        @SuppressWarnings("unused")
+        @Override
         public boolean requestSendAccessibilityEvent(View view, AccessibilityEvent event) {
             // Never send accessibility events.
             return false;

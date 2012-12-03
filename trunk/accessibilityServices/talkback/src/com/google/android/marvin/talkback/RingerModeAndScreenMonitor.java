@@ -27,7 +27,6 @@ import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.Log;
 
-import com.google.android.marvin.talkback.SpeechController.QueuingMode;
 import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.utils.InfrastructureStateListener;
 import com.googlecode.eyesfree.utils.LogUtils;
@@ -41,7 +40,6 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
     private final SpeechController mSpeechController;
     private final AudioManager mAudioManager;
     private final TelephonyManager mTelephonyManager;
-    private final NotificationCache mNotificationCache;
 
     /** The intent filter to match phone state changes. */
     private final IntentFilter mPhoneStateChangeFilter = new IntentFilter();
@@ -61,11 +59,9 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
     /**
      * Creates a new instance.
      */
-    public RingerModeAndScreenMonitor(Context context, SpeechController speechController,
-            NotificationCache notificationCache) {
+    public RingerModeAndScreenMonitor(TalkBackService context) {
         mContext = context;
-        mSpeechController = speechController;
-        mNotificationCache = notificationCache;
+        mSpeechController = context.getSpeechController();
 
         mAudioManager = (AudioManager) context.getSystemService(Service.AUDIO_SERVICE);
         mTelephonyManager = (TelephonyManager) context.getSystemService(Service.TELEPHONY_SERVICE);
@@ -135,7 +131,8 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
                 StringBuilderUtils.appendWithSeparator(null,
                         mContext.getString(R.string.value_device_unlocked));
 
-        mSpeechController.cleanUpAndSpeak(text, QueuingMode.UNINTERRUPTIBLE, null);
+        mSpeechController.cleanUpAndSpeak(
+                text, SpeechController.QUEUE_MODE_UNINTERRUPTIBLE, 0, null);
     }
 
     /**
@@ -163,12 +160,12 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
             appendRingerStateAnouncement(builder);
         }
 
-        mSpeechController.cleanUpAndSpeak(builder, QueuingMode.INTERRUPT, null);
+        mSpeechController.cleanUpAndSpeak(builder, SpeechController.QUEUE_MODE_INTERRUPT, 0, null);
     }
 
     /**
-     * Handles when the screen is turned off. Announces the current time, any
-     * cached notifications, and the current ringer state.
+     * Handles when the screen is turned on. Announces the current time and the
+     * current ringer state.
      */
     private void handleScreenOn() {
         mScreenIsOff = false;
@@ -184,10 +181,9 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
 
         final StringBuilder builder = new StringBuilder();
         appendCurrentTimeAnnouncement(builder);
-        appendCachedNotificationSummary(builder);
         appendRingerStateAnouncement(builder);
 
-        mSpeechController.cleanUpAndSpeak(builder, QueuingMode.INTERRUPT, null);
+        mSpeechController.cleanUpAndSpeak(builder, SpeechController.QUEUE_MODE_INTERRUPT, 0, null);
     }
 
     /**
@@ -200,7 +196,7 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
         final StringBuilder text = new StringBuilder();
         appendRingerStateAnouncement(text);
 
-        mSpeechController.cleanUpAndSpeak(text, QueuingMode.INTERRUPT, null);
+        mSpeechController.cleanUpAndSpeak(text, SpeechController.QUEUE_MODE_INTERRUPT, 0, null);
     }
 
     /**
@@ -208,6 +204,7 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
      *
      * @param builder The string to append to.
      */
+    @SuppressWarnings("deprecation")
     private void appendCurrentTimeAnnouncement(StringBuilder builder) {
         int timeFlags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_CAP_NOON_MIDNIGHT;
 
@@ -219,18 +216,6 @@ class RingerModeAndScreenMonitor extends BroadcastReceiver implements Infrastruc
                 DateUtils.formatDateTime(mContext, System.currentTimeMillis(), timeFlags);
 
         StringBuilderUtils.appendWithSeparator(builder, dateTime);
-    }
-
-    /**
-     * Appends the notification summary to a {@link StringBuilder}.
-     *
-     * @param builder The string to append to.
-     */
-    private void appendCachedNotificationSummary(StringBuilder builder) {
-        final CharSequence notificationSummary = mNotificationCache.getFormattedSummary();
-        mNotificationCache.clear();
-
-        StringBuilderUtils.appendWithSeparator(builder, notificationSummary);
     }
 
     /**

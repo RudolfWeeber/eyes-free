@@ -20,9 +20,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.media.SoundPool.OnLoadCompleteListener;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
+
+import java.util.ArrayList;
 
 /**
  * Provides auditory and haptic feedback.
@@ -49,11 +53,19 @@ public class FeedbackController {
      */
     private static final int NUMBER_OF_CHANNELS = 10;
 
+    /**
+     * Default delay time between repeated sounds.
+     */
+    private static final int DEFAULT_REPETITION_DELAY = 150;
+
     /** Map of resource IDs to vibration pattern arrays. */
     private final SparseArray<long[]> mResourceIdToVibrationPatternMap = new SparseArray<long[]>();
 
     /** Map of resource IDs to loaded sound stream IDs. */
     private final SparseIntArray mResourceIdToSoundMap = new SparseIntArray();
+
+    /** Unloaded resources to play post-load */
+    private final ArrayList<Integer> mPostLoadPlayables = new ArrayList<Integer>();
 
     /** Parent context. Required for mapping resource IDs to resources. */
     private final Context mContext;
@@ -63,6 +75,9 @@ public class FeedbackController {
 
     /** Sound pool used to play auditory icons. */
     private final SoundPool mSoundPool;
+
+    /** Handler used for delaying feedback */
+    private final Handler mHandler;
 
     /** Whether haptic feedback is enabled. */
     private boolean mHapticEnabled = true;
@@ -80,6 +95,21 @@ public class FeedbackController {
         mContext = context;
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         mSoundPool = new SoundPool(NUMBER_OF_CHANNELS, DEFAULT_STREAM, 1);
+        mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
+                if (status == 0) {
+                    synchronized (mPostLoadPlayables) {
+                        if (mPostLoadPlayables.contains(sampleId)) {
+                            soundPool.play(
+                                    sampleId, DEFAULT_VOLUME, DEFAULT_VOLUME, 1, 0, DEFAULT_RATE);
+                            mPostLoadPlayables.remove(Integer.valueOf(sampleId));
+                        }
+                    }
+                }
+            }
+        });
+        mHandler = new Handler();
 
         mResourceIdToSoundMap.clear();
         mResourceIdToVibrationPatternMap.clear();
@@ -140,7 +170,8 @@ public class FeedbackController {
      */
     public void preloadSound(int resId) {
         if (mResourceIdToSoundMap.indexOfKey(resId) < 0) {
-            mResourceIdToSoundMap.put(resId, mSoundPool.load(mContext, resId, 1));
+            final int soundPoolId = mSoundPool.load(mContext, resId, 1);
+            mResourceIdToSoundMap.put(resId, soundPoolId);
         }
     }
 
@@ -162,6 +193,8 @@ public class FeedbackController {
      * @param resId The sound file's resource identifier.
      * @param rate The rate at which to play back the sound, where 1.0 is normal
      *            speed and 0.5 is half-speed.
+     * @param volume The volume at which to play the sound, where 1.0 is normal
+     *            volume and 0.5 is half-volume.
      * @return {@code true} if successful
      */
     public boolean playSound(int resId, float rate, float volume) {
@@ -173,9 +206,9 @@ public class FeedbackController {
 
         if (soundId == 0) {
             // Make the sound available for the next time it is needed
-            // to preserve backwars compatibility with callers who don't
+            // to preserve backwards compatibility with callers who don't
             // preload the sounds.
-            preloadSound(resId);
+            loadAndPlaySound(resId);
 
             // Since we need to play the sound immediately after it loads, we
             // should just return true.
@@ -189,6 +222,42 @@ public class FeedbackController {
     }
 
     /**
+     * Plays the sound file specified by the given resource identifier repeatedly.
+     *
+     * @param resId The resource of the sound file to play
+     * @param repetitions The number of times to repeat the sound file
+     * @return {@code true} if successful
+     */
+    public boolean playRepeatedSound(int resId, int repetitions) {
+        return playRepeatedSound(
+                resId, DEFAULT_RATE, DEFAULT_VOLUME, repetitions, DEFAULT_REPETITION_DELAY);
+    }
+
+    /**
+     * Plays the sound file specified by the given resource identifier
+     * repeatedly.
+     *
+     * @param resId The resource of the sound file to play
+     * @param rate The rate at which to play the sound file
+     * @param volume The volume at which to play the sound, where 1.0 is normal
+     *            volume and 0.5 is half-volume.
+     * @param repetitions The number of times to repeat the sound file
+     * @param delay The amount of time between calls to start playback of the
+     *            sound in miliseconds. Should be the sound's playback time plus
+     *            some delay.
+     * @return {@code true} if successful
+     */
+    public boolean playRepeatedSound(
+            int resId, float rate, float volume, int repetitions, long delay) {
+        if (!mAuditoryEnabled) {
+            return false;
+        }
+
+        mHandler.post(new RepeatedSoundRunnable(resId, rate, volume, repetitions, delay));
+        return true;
+    }
+
+    /**
      * Plays the vibration pattern specified by the given resource identifier.
      *
      * @param resId The vibration pattern's resource identifier.
@@ -199,6 +268,50 @@ public class FeedbackController {
             return false;
         }
 
+        long[] pattern = getVibrationPattern(resId);
+        mVibrator.vibrate(pattern, -1);
+        return true;
+    }
+
+    /**
+     * Plays the vibration pattern specified by the given resource identifier
+     * and repeats it indefinitely from the specified index.
+     *
+     * @see #cancelVibration()
+     * @param resId The vibration pattern's resource identifier.
+     * @param repeatIndex The index at which to loop vibration in the pattern.
+     * @return {@code true} if successful
+     */
+    public boolean playRepeatedVibration(int resId, int repeatIndex) {
+        if (!mHapticEnabled || (mVibrator == null)) {
+            return false;
+        }
+
+        long[] pattern = getVibrationPattern(resId);
+
+        if (repeatIndex < 0 || repeatIndex >= pattern.length) {
+            throw new ArrayIndexOutOfBoundsException(repeatIndex);
+        }
+        mVibrator.vibrate(pattern, repeatIndex);
+        return true;
+    }
+
+    /**
+     * Cancels vibration feedback if in progress.
+     */
+    public void cancelVibration() {
+        if (mVibrator != null) {
+            mVibrator.cancel();
+        }
+    }
+
+    /**
+     * Retrieves the vibration pattern associated with the array resource.
+     *
+     * @param resId The array resource id of the pattern to retrieve.
+     * @return an array of {@code long} values from the pattern.
+     */
+    private long[] getVibrationPattern(int resId) {
         long[] pattern = mResourceIdToVibrationPatternMap.get(resId);
 
         if (pattern == null) {
@@ -206,7 +319,7 @@ public class FeedbackController {
             final int[] intPattern = resources.getIntArray(resId);
 
             if (intPattern == null) {
-                return false;
+                return new long[0];
             }
 
             pattern = new long[intPattern.length];
@@ -218,8 +331,55 @@ public class FeedbackController {
             mResourceIdToVibrationPatternMap.put(resId, pattern);
         }
 
-        mVibrator.vibrate(pattern, -1);
+        return pattern;
+    }
 
-        return true;
+    /**
+     * Loads the sound specified by the raw resource id and plays it.
+     * @param resId The resource id of the sound to play.
+     */
+    private void loadAndPlaySound(int resId) {
+        if (mResourceIdToSoundMap.indexOfKey(resId) < 0) {
+            final int soundPoolId = mSoundPool.load(mContext, resId, 1);
+            mPostLoadPlayables.add(soundPoolId);
+            mResourceIdToSoundMap.put(resId, soundPoolId);
+        }
+    }
+
+    /**
+     * Class used for repeated playing of sound resources.
+     */
+    private class RepeatedSoundRunnable implements Runnable {
+        private final int mResId;
+
+        private final float mPlaybackRate;
+
+        private final float mPlaybackVolume;
+
+        private final int mRepetitions;
+
+        private final long mDelay;
+
+        private int mTimesPlayed;
+
+        public RepeatedSoundRunnable(
+                int resId, float rate, float volume, int repetitions, long delay) {
+            mResId = resId;
+            mPlaybackRate = rate;
+            mPlaybackVolume = volume;
+            mRepetitions = repetitions;
+            mDelay = delay;
+
+            mTimesPlayed = 0;
+        }
+
+        @Override
+        public void run() {
+            if (mTimesPlayed < mRepetitions) {
+                playSound(mResId, mPlaybackRate, mPlaybackVolume);
+                mTimesPlayed++;
+                mHandler.postDelayed(this, mDelay);
+            }
+        }
     }
 }

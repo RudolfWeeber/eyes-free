@@ -6,7 +6,7 @@
     <string name="notification_type_text_message" msgid="2840489326612585077">"短信"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"短信发送失败"</string>
     <string name="notification_type_missed_call" msgid="4227042474220035667">"未接来电"</string>
-    <string name="notification_type_usb_connected" msgid="6285639671469979341">"USB 已连接"</string>
+    <string name="notification_type_usb_connected" msgid="6285639671469979341">"已连接 USB"</string>
     <string name="notification_type_status_mute" msgid="575502984311443548">"静音"</string>
     <string name="notification_type_status_chat" msgid="6270641711377218448">"聊天"</string>
     <string name="notification_type_status_error" msgid="9106600515811868558">"错误"</string>
@@ -19,15 +19,13 @@
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"语音信箱"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"正在播放"</string>
     <string name="template_current_tts_engine" msgid="2402080656466274253">"使用<xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
-    <string name="template_compound_button_checked" msgid="8969457633214121273">"已选中<xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"未选中<xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"编辑框。<xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
     <string name="template_alert_dialog_template" msgid="578525726030867650">"警报 <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"已将“<xliff:g id="OLD_TEXT">%1$s</xliff:g>”替换为“<xliff:g id="NEW_TEXT">%2$s</xliff:g>”"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"已将 <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> 个字符替换为 <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> 个字符"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"振铃器音量为百分之 <xliff:g id="PERCENT">%d</xliff:g>。"</string>
-    <!-- no translation found for template_image_view (2368987212503613897) -->
-    <skip />
+    <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="LABEL">%2$s</xliff:g> <xliff:g id="ITEM">%1$s</xliff:g>"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g>图片"</string>
     <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g>列表"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"长按<xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"<xliff:g id="TITLE">%1$s</xliff:g>按钮"</string>
@@ -40,7 +38,6 @@
     <string name="value_gridview" msgid="9093738961981389981">"网格"</string>
     <string name="value_listview" msgid="3437715684913760710">"列表"</string>
     <string name="value_tabwidget" msgid="5550633699198799743">"标签栏"</string>
-    <string name="value_container" msgid="439303423101134461">"容器"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"当前显示的是第 <xliff:g id="FROM_INDEX">%d</xliff:g> 项至第 <xliff:g id="TO_INDEX">%d</xliff:g> 项，共 <xliff:g id="TOTAL_COUNT">%d</xliff:g> 项。"</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"当前显示的是第 <xliff:g id="FROM_INDEX">%d</xliff:g> 项，共 <xliff:g id="TOTAL_COUNT">%d</xliff:g> 项。"</string>
     <string name="template_spinner" msgid="3914981448273826697">"<xliff:g id="TITLE">%1$s</xliff:g>下拉列表。"</string>
@@ -50,7 +47,9 @@
     <string name="template_radio_button" msgid="4272970081436888704">"<xliff:g id="TITLE">%1$s</xliff:g>单选按钮。"</string>
     <string name="value_password" msgid="52094746222829357">"密码"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"已打开滑动绘制窗口"</string>
+    <string name="value_notification_shade_opened" msgid="3832526419695611670">"系统栏已打开"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"选项。"</string>
+    <string name="value_text_cleared" msgid="3190458526844389854">"文本已清除"</string>
     <string name="value_text_removed" msgid="2700105425865376595">"已删除"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"通知摘要"</string>
     <string name="value_selected" msgid="6785267365387973217">"已选择"</string>
@@ -59,10 +58,12 @@
     <string name="value_disabled" msgid="65077823320194685">"已停用"</string>
     <string name="value_double_tap" msgid="7829968646330038608">"点按两次"</string>
     <string name="value_single_tap" msgid="6461432282985355533">"点按"</string>
-    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g>即可激活。"</string>
-    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g>并按住即可长按。"</string>
+    <string name="template_hint_clickable" msgid="1687873106975426560">"<xliff:g id="ACTION">%1$s</xliff:g>即可选中。"</string>
+    <string name="template_hint_long_clickable" msgid="4276746786982054368">"<xliff:g id="ACTION">%1$s</xliff:g>并按住即可长按。"</string>
     <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g>即可切换。"</string>
     <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g>即可输入文字。"</string>
+    <string name="template_hint_spinner" msgid="1320498935380159474">"<xliff:g id="ACTION">%1$s</xliff:g>以进行更改。"</string>
+    <string name="hint_radial_menu" msgid="7030043763037187865">"请触摸屏幕，并四处浏览以查找某项内容，找到后，请移开手指进行选择。"</string>
     <string name="value_scrollable" msgid="2310899165772659098">"可滚动"</string>
     <string name="value_clicked" msgid="8306469740150249879">"已点击"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"无标签"</string>
@@ -71,8 +72,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"已关闭屏幕。"</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"设备已解锁。"</string>
     <string name="value_web_view" msgid="8611542401983419041">"网络内容。"</string>
-    <string name="value_unknown_object" msgid="3589473667352440925">"未标记的项。"</string>
-    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"何时朗读"</string>
+    <string name="title_pref_category_when_to_speak" msgid="9082038550046119493">"语音"</string>
     <string name="title_pref_speech_volume" msgid="4013853601342391397">"语音音量"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"铃声音量"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"屏幕关闭时播放语音"</string>
@@ -84,22 +84,20 @@
     <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"触摸浏览"</string>
     <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"管理快捷手势"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"使用音调变化"</string>
+    <string name="title_pref_keyboard_echo" msgid="860353418869467119">"键盘敲击语音回应"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"以低音读出键盘反馈内容"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"说话时请勿改变音调"</string>
-    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"反馈"</string>
+    <string name="title_pref_category_feedback_settings" msgid="1245161004109313841">"其他反馈"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"振动反馈"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"声音反馈"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"音量"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"其他"</string>
-    <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"开发人员设置"</string>
+    <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"开发者设置"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"日志输出级别"</string>
-    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"突出显示事件源"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"显示语音输出"</string>
     <string name="axis_character" msgid="5059604520074645703">"按字符导航。"</string>
     <string name="axis_word" msgid="7745798763195184060">"按字词导航。"</string>
     <string name="axis_sentence" msgid="5569363499210008882">"按句子导航。"</string>
-    <string name="axis_paragraph" msgid="3453285809344289729">"按段落导航。"</string>
-    <string name="axis_object" msgid="7034325449094737671">"按对象导航。"</string>
     <string name="axis_line" msgid="2210986915751668758">"按行导航。"</string>
     <string name="axis_page" msgid="9146038615069235841">"按网页导航。"</string>
     <string name="axis_heading" msgid="8928386537164255063">"按标题导航。"</string>
@@ -107,7 +105,6 @@
     <string name="axis_document" msgid="1581988340856497809">"按文档导航。"</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"按默认网络视图行为导航。"</string>
     <string name="attention" msgid="627104955956154539">"注意"</string>
-    <string name="explore_dialog_message" msgid="2796017207242981327">"此功能会更改您的设备对触摸的响应方式。要启用吗？"</string>
     <string name="requires_talkback" msgid="3634159695179852501">"此教程需要启用“触摸浏览”功能。请先打开“话语提示”并启用“触摸浏览”，再启动此教程。"</string>
     <string name="granularity_character" msgid="5828563809381090688">"按字符阅读"</string>
     <string name="granularity_word" msgid="3660181391007381559">"按单词阅读"</string>
@@ -120,16 +117,43 @@
     <string name="shortcut_home" msgid="3905505999818649470">"“主屏幕”按钮"</string>
     <string name="shortcut_recent_apps" msgid="4462279958679670485">"“最近使用的应用”按钮"</string>
     <string name="shortcut_notifications" msgid="7234767026975704922">"打开通知栏"</string>
+    <string name="shortcut_read_all_breakout" msgid="4373114224519034620">"打开连续阅读菜单"</string>
+    <string name="shortcut_talkback_breakout" msgid="568168492542718040">"打开全局上下文菜单"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"重复上一条语音内容"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"拼出上一条语音内容"</string>
-    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"先向下再向左滑动"</string>
-    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"先向下再向右滑动"</string>
-    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"先向上再向左滑动"</string>
-    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"先向上再向右滑动"</string>
-    <string name="value_volume_200_percent" msgid="2969698924281376143">"媒体音量的 200％"</string>
-    <string name="value_volume_150_percent" msgid="4668371157512150392">"媒体音量的 150％"</string>
-    <string name="value_volume_100_percent" msgid="6676030754946177658">"与媒体音量一样大"</string>
-    <string name="value_volume_75_percent" msgid="7578844180160160971">"媒体音量的 75%"</string>
-    <string name="value_volume_50_percent" msgid="2830571913174435107">"媒体音量的 50％"</string>
-    <string name="value_volume_25_percent" msgid="4441038207089946938">"媒体音量的 25％"</string>
+    <string name="shortcut_pause_feedback" msgid="1125364186583919621">"暂停反馈"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="5252410921504649704">"先向下再向左滑动"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="70468539039651273">"先向下再向右滑动"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="6488345551912922700">"先向上再向左滑动"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="8936164693273303141">"先向上再向右滑动"</string>
+    <string name="title_pref_shortcut_right_and_down" msgid="8367941430094918701">"先向右再向下滑动"</string>
+    <string name="title_pref_shortcut_right_and_up" msgid="3803984082758463130">"先向右再向上滑动"</string>
+    <string name="title_pref_shortcut_left_and_down" msgid="7133444152727902323">"先向左再向下滑动"</string>
+    <string name="title_pref_shortcut_left_and_up" msgid="2432229113065295801">"先向左再向上滑动"</string>
+    <string name="value_volume_100_percent" formatted="false" msgid="6676030754946177658">"与媒体音量一样大"</string>
+    <string name="value_volume_75_percent" formatted="false" msgid="7578844180160160971">"媒体音量的 75%"</string>
+    <string name="value_volume_50_percent" formatted="false" msgid="2830571913174435107">"媒体音量的 50％"</string>
+    <string name="value_volume_25_percent" formatted="false" msgid="4441038207089946938">"媒体音量的 25％"</string>
+    <string name="value_keyboard_echo_always" msgid="6227871839200687680">"始终用语音提示所敲击的键"</string>
+    <string name="value_keyboard_echo_softkeys" msgid="6592352879887617590">"仅限于屏幕键盘"</string>
+    <string name="value_keyboard_echo_never" msgid="7272733066649438914">"不用语音提示所敲击的键"</string>
+    <string name="title_talkback_settings_available" msgid="6764624676369520992">"“辅助功能设置”现可供下载"</string>
+    <string name="message_talkback_settings_available" msgid="8705763859411459771">"点按即可下载“辅助功能设置”应用。"</string>
+    <string name="notification_title_talkback_gestures_changed" msgid="8384253637363301938">"话语提示手势已更改"</string>
+    <string name="notification_message_talkback_gestures_changed" msgid="5639775622146513884">"点按可查看辅助功能手势的更改"</string>
+    <string name="notification_title_talkback_suspended" msgid="2185046615850691522">"TalkBack 已暂停"</string>
+    <string name="notification_message_talkback_suspended" msgid="3312683762001713772">"点按即可继续。"</string>
+    <string name="dialog_title_suspend_talkback" msgid="452536442417893349">"暂停 TalkBack 吗？"</string>
+    <string name="dialog_message_suspend_talkback" msgid="399684608846305231">"确定要暂停“话语提示”吗？"\n\n"暂停该功能之后，设备将不再提供反馈。"\n\n"您可以在通知栏中（或通过返回锁定屏幕）恢复启用“话语提示”。"</string>
+    <string name="talkback_gesture_change_details" msgid="2919155220372343154">"此版本的“话语提示”对默认的辅助功能手势进行了一些更改。您可在话语提示设置中自定义与这些手势关联的操作。启用“触摸浏览”后，您可以使用以下手势执行特定的操作。"\n\n"<xliff:g id="MAPPINGS">%1$s</xliff:g>"</string>
+    <string name="button_accept_changed_gesture_mappings" msgid="3709582843147387025">"接受手势"</string>
+    <string name="button_customize_gesture_mappings" msgid="6198453024008558647">"自定义手势"</string>
+    <string name="dialog_title_disable_exploration" msgid="6318745977662978395">"停用触摸浏览功能吗？"</string>
+    <string name="dialog_message_disable_exploration" msgid="206632033549219529">"您确定要停用触摸浏览功能吗？"\n\n"当您触摸屏幕时，设备将不再对快捷手势或语音命令做出响应。"</string>
+    <string name="read_from_top" msgid="4178188498867856189">"从顶部开始阅读所有内容"</string>
+    <string name="read_from_current" msgid="2331288178673192110">"从下一项开始阅读全部内容"</string>
+    <string name="repeat_current" msgid="5909904824878426189">"重复当前项"</string>
+    <string name="hint_script_injection" msgid="2973894305173271874">"触摸浏览功能不可用于网络内容。要浏览网络内容，请打开辅助功能设置中的“<xliff:g id="PREFERENCE_NAME">%1$s</xliff:g>”。"</string>
+    <string name="label_talkback_context_menu" msgid="102441078934343795">"话语提示全局上下文菜单"</string>
+    <string name="permission_talkback_label" msgid="7399199628843033396">"控制话语提示"</string>
 </resources>

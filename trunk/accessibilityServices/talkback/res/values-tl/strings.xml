@@ -19,15 +19,13 @@
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Voicemail"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Nagpe-play"</string>
     <string name="template_current_tts_engine" msgid="2402080656466274253">"Ginagamit ang <xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
-    <string name="template_compound_button_checked" msgid="8969457633214121273">"<xliff:g id="TITLE">%1$s</xliff:g> nasuri"</string>
-    <string name="template_compound_button_not_checked" msgid="2022559641068252555">"Hindi nasuri ang <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Kahon sa pag-edit. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Alerto <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
     <string name="template_text_replaced" msgid="6030467088396825159">"Pinalitan ang <xliff:g id="OLD_TEXT">%1$s</xliff:g> ng <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"Pinalitan ang <xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> na character ng <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> na character"</string>
     <string name="template_ringer_volume" msgid="5136691769333649340">"Ringer <xliff:g id="PERCENT">%d</xliff:g> na porsyento."</string>
-    <!-- no translation found for template_image_view (2368987212503613897) -->
-    <skip />
+    <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="ITEM">%1$s</xliff:g> para sa <xliff:g id="LABEL">%2$s</xliff:g>"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> na larawan"</string>
     <string name="template_list_view" msgid="4569888407076618446">"Listahan ng <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Matagal na pinindot ang <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"button na <xliff:g id="TITLE">%1$s</xliff:g>"</string>
@@ -38,7 +36,6 @@
     <string name="value_gridview" msgid="9093738961981389981">"Grid"</string>
     <string name="value_listview" msgid="3437715684913760710">"Listahan"</string>
     <string name="value_tabwidget" msgid="5550633699198799743">"Bar na Tab"</string>
-    <string name="value_container" msgid="439303423101134461">"Lalagyan"</string>
     <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Ipinapakita ang mga item mula sa <xliff:g id="FROM_INDEX">%d</xliff:g> hangggang sa <xliff:g id="TO_INDEX">%d</xliff:g> ng <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_scroll_from_count" msgid="677594507054979865">"Ipinapakita ang item na <xliff:g id="FROM_INDEX">%d</xliff:g> ng <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Drop down list ng <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -48,7 +45,9 @@
     <string name="template_radio_button" msgid="4272970081436888704">"Radio button ng <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="value_password" msgid="52094746222829357">"password"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"bukas ang sliding drawer"</string>
+    <string name="value_notification_shade_opened" msgid="3832526419695611670">"Binuksan ang shade"</string>
     <string name="value_options_menu_open" msgid="8668502811176292723">"Mga Pagpipilian."</string>
+    <string name="value_text_cleared" msgid="3190458526844389854">"Na-clear na teksto"</string>
     <string name="value_text_removed" msgid="2700105425865376595">"tinanggal"</string>
     <string name="value_notification_summary" msgid="1053258094292920648">"Buod ng notification"</string>
     <string name="value_selected" msgid="6785267365387973217">"napili"</string>
@@ -57,10 +56,12 @@
     <string name="value_disabled" msgid="65077823320194685">"hindi pinagana"</string>
     <string name="value_double_tap" msgid="7829968646330038608">"Mag-double-tap"</string>
     <string name="value_single_tap" msgid="6461432282985355533">"I-tap"</string>
-    <string name="template_hint_clickable" msgid="3732923024418439340">"<xliff:g id="ACTION">%1$s</xliff:g> upang i-activate."</string>
-    <string name="template_hint_long_clickable" msgid="8710614198873717434">"<xliff:g id="ACTION">%1$s</xliff:g> nang matagal upang i-click nang matagal."</string>
+    <string name="template_hint_clickable" msgid="1687873106975426560">"<xliff:g id="ACTION">%1$s</xliff:g> upang piliin."</string>
+    <string name="template_hint_long_clickable" msgid="4276746786982054368">"<xliff:g id="ACTION">%1$s</xliff:g> at pindutin nang matagal."</string>
     <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g> upang i-toggle."</string>
     <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g> upang maglagay ng teksto."</string>
+    <string name="template_hint_spinner" msgid="1320498935380159474">"<xliff:g id="ACTION">%1$s</xliff:g> upang baguhin."</string>
+    <string name="hint_radial_menu" msgid="7030043763037187865">"I-touch ang screen at maggalugad upang maghanap ng item, pagkatapos ay bitawan upang pumili."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"maaaring i-scroll"</string>
     <string name="value_clicked" msgid="8306469740150249879">"na-click"</string>
     <string name="value_unlabeled" msgid="687358669952513717">"walang label"</string>
@@ -69,8 +70,7 @@
     <string name="value_screen_off" msgid="8705438751467344903">"Naka-off ang screen."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Na-unlock ang device."</string>
     <string name="value_web_view" msgid="8611542401983419041">"Nilalaman ng web."</string>
-    <string name="value_unknown_object" msgid="3589473667352440925">"Walang label na item."</string>
-    <string name="title_pref_category_when_to_speak" msgid="5198621261550006595">"Kailan magsasalita"</string>
+    <string name="title_pref_category_when_to_speak" msgid="9082038550046119493">"Pagsasalita"</string>
     <string name="title_pref_speech_volume" msgid="4013853601342391397">"Volume ng speech"</string>
     <string name="title_pref_speak_ringer" msgid="129787842665516896">"Volume ng ringer"</string>
     <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Magsalita kapag naka-off ang screen"</string>
@@ -82,22 +82,20 @@
     <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Paggalugad sa pagpindot"</string>
     <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Pamahalaan ang mga shortcut ng galaw"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Gumamit ng mga pagbabago sa pitch"</string>
+    <string name="title_pref_keyboard_echo" msgid="860353418869467119">"Echo ng keyboard"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Sabihin ang feedback ng keyboard gamit ang boses na mas mababa ang pitch"</string>
     <string name="summaryOff_pref_intonation" msgid="8702174746754615499">"Huwag baguhin ang pitch ng boses kapag nagsasalita."</string>
-    <string name="title_pref_category_feedback_settings" msgid="3979532731488931139">"Feedback"</string>
+    <string name="title_pref_category_feedback_settings" msgid="1245161004109313841">"Iba pang feedback"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Feedback sa vibration"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Feedback ng tunog"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Lakas ng tunog"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Miscellaneous"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Mga setting ng developer"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Antas ng output ng log"</string>
-    <string name="title_pref_developer_overlay" msgid="3149580897456358717">"I-highlight ang mga pinagmulan ng kaganapan"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Ipakita ang output ng pananalita"</string>
     <string name="axis_character" msgid="5059604520074645703">"Mag-navigate ayon sa character."</string>
     <string name="axis_word" msgid="7745798763195184060">"Mag-navigate ayon sa salita."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Mag-navigate ayon sa pangungusap."</string>
-    <string name="axis_paragraph" msgid="3453285809344289729">"Mag-navigate ayon sa talata."</string>
-    <string name="axis_object" msgid="7034325449094737671">"Mag-navigate ayon sa bagay."</string>
     <string name="axis_line" msgid="2210986915751668758">"Mag-navigate ayon sa linya."</string>
     <string name="axis_page" msgid="9146038615069235841">"Mag-navigate ayon sa pahina."</string>
     <string name="axis_heading" msgid="8928386537164255063">"Mag-navigate ayon sa heading."</string>
@@ -105,7 +103,6 @@
     <string name="axis_document" msgid="1581988340856497809">"Mag-navigate ayon sa dokumento."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Mag-navigate ayon sa default na pag-uugali ng pag-view sa web."</string>
     <string name="attention" msgid="627104955956154539">"Magbigay-pansin"</string>
-    <string name="explore_dialog_message" msgid="2796017207242981327">"Binabago ng tampok na ito ang paraan ng pagtugon ng iyong device sa pagpindot. I-on?"</string>
     <string name="requires_talkback" msgid="3634159695179852501">"Nangangailangan ang tutorial na ito ng Gumalugad sa pamamagitan ng pagpindot. Paki-on ang TalkBack at paganahin ang Gumalugad sa pamamagitan ng pagpindot bago ilunsad ang tutorial."</string>
     <string name="granularity_character" msgid="5828563809381090688">"Magbasa ayon sa bawat character"</string>
     <string name="granularity_word" msgid="3660181391007381559">"Magbasa ayon sa bawat salita"</string>
@@ -118,16 +115,43 @@
     <string name="shortcut_home" msgid="3905505999818649470">"Button na Home"</string>
     <string name="shortcut_recent_apps" msgid="4462279958679670485">"Button na Kamakailang apps"</string>
     <string name="shortcut_notifications" msgid="7234767026975704922">"Buksan ang mga notification"</string>
+    <string name="shortcut_read_all_breakout" msgid="4373114224519034620">"Buksan menu ng tuluy-tuloy na pagbabasa"</string>
+    <string name="shortcut_talkback_breakout" msgid="568168492542718040">"Buksan ang menu ng pandaigdigang konteksto"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Ulitin ang huling binigkas"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"I-spell ang huling binigkas"</string>
-    <string name="title_pref_shortcut_down_and_left" msgid="2192844280007232245">"Mag-swipe pababa at pakaliwa"</string>
-    <string name="title_pref_shortcut_down_and_right" msgid="2019081192177959094">"Mag-swipe pababa at pakanan"</string>
-    <string name="title_pref_shortcut_up_and_left" msgid="4312038055003207134">"Mag-swipe pataas at pakaliwa"</string>
-    <string name="title_pref_shortcut_up_and_right" msgid="2188463041751483131">"Mag-swipe pataas at pakanan"</string>
-    <string name="value_volume_200_percent" msgid="2969698924281376143">"200% ng volume ng media"</string>
-    <string name="value_volume_150_percent" msgid="4668371157512150392">"150% ng volume ng media"</string>
-    <string name="value_volume_100_percent" msgid="6676030754946177658">"Itugma ang volume ng media"</string>
-    <string name="value_volume_75_percent" msgid="7578844180160160971">"75% ng volume ng media"</string>
-    <string name="value_volume_50_percent" msgid="2830571913174435107">"50% ng volume ng media"</string>
-    <string name="value_volume_25_percent" msgid="4441038207089946938">"25% ng volume ng media"</string>
+    <string name="shortcut_pause_feedback" msgid="1125364186583919621">"I-pause ang feedback"</string>
+    <string name="title_pref_shortcut_down_and_left" msgid="5252410921504649704">"Mag-swipe pababa at pagkatapos, pakaliwa"</string>
+    <string name="title_pref_shortcut_down_and_right" msgid="70468539039651273">"Mag-swipe pababa at pagkatapos, pakanan"</string>
+    <string name="title_pref_shortcut_up_and_left" msgid="6488345551912922700">"Mag-swipe pataas at pagkatapos, pakaliwa"</string>
+    <string name="title_pref_shortcut_up_and_right" msgid="8936164693273303141">"Mag-swipe pataas at pagkatapos, pakanan"</string>
+    <string name="title_pref_shortcut_right_and_down" msgid="8367941430094918701">"Mag-swipe pakanan pagkatapos ay pababa"</string>
+    <string name="title_pref_shortcut_right_and_up" msgid="3803984082758463130">"Mag-swipe pakanan pagkatapos ay pataas"</string>
+    <string name="title_pref_shortcut_left_and_down" msgid="7133444152727902323">"Mag-swipe pakaliwa pagkatapos ay pababa"</string>
+    <string name="title_pref_shortcut_left_and_up" msgid="2432229113065295801">"Mag-swipe pakaliwa pagkatapos ay pataas"</string>
+    <string name="value_volume_100_percent" formatted="false" msgid="6676030754946177658">"Itugma ang volume ng media"</string>
+    <string name="value_volume_75_percent" formatted="false" msgid="7578844180160160971">"75% ng volume ng media"</string>
+    <string name="value_volume_50_percent" formatted="false" msgid="2830571913174435107">"50% ng volume ng media"</string>
+    <string name="value_volume_25_percent" formatted="false" msgid="4441038207089946938">"25% ng volume ng media"</string>
+    <string name="value_keyboard_echo_always" msgid="6227871839200687680">"Palaging sabihin ang mga tina-type na key"</string>
+    <string name="value_keyboard_echo_softkeys" msgid="6592352879887617590">"Para lang sa on-screen na keyboard"</string>
+    <string name="value_keyboard_echo_never" msgid="7272733066649438914">"Huwag kailanman sabihin ang mga tina-type na key"</string>
+    <string name="title_talkback_settings_available" msgid="6764624676369520992">"Avl. Kagustuhan Accessibility"</string>
+    <string name="message_talkback_settings_available" msgid="8705763859411459771">"I-tap upang i-download application ng Mga Kagustuhan sa Accessibility."</string>
+    <string name="notification_title_talkback_gestures_changed" msgid="8384253637363301938">"Nabago ang mga galaw sa TalkBack"</string>
+    <string name="notification_message_talkback_gestures_changed" msgid="5639775622146513884">"Tapikin upang suriin ang mga pagbabago sa mga galaw sa pagiging naa-access"</string>
+    <string name="notification_title_talkback_suspended" msgid="2185046615850691522">"Nakasuspinde ang TalkBack"</string>
+    <string name="notification_message_talkback_suspended" msgid="3312683762001713772">"Tapikin upang ituloy."</string>
+    <string name="dialog_title_suspend_talkback" msgid="452536442417893349">"Suspindehin ang TalkBack?"</string>
+    <string name="dialog_message_suspend_talkback" msgid="399684608846305231">"Sigurado ka bang nais mong suspendihin ang TalkBack?"\n\n"Habang nakasuspinde ang TalkBack, hindi magbibigay ng feedback ang iyong device."\n\n"Maaari mong ituloy ang TalkBack mula sa shade ng mga notification o sa pamamagitan ng pagbalik sa lock screen."</string>
+    <string name="talkback_gesture_change_details" msgid="2919155220372343154">"Kinabibilangan ang bersyong ito ng TalkBack ng mga pagbabago sa mga default na galaw sa pagiging naa-access. Mako-customize ang mga pagkilos na nauugnay sa mga galaw na ito sa loob ng mga setting ng TalkBack. Kapag pinapagana ang Maggalugad sa pamamagitan ng pagpindot, magagamit ang mga sumusunod na galaw upang magsagawa ng ilang partikular na pagkilos."\n\n"<xliff:g id="MAPPINGS">%1$s</xliff:g>"</string>
+    <string name="button_accept_changed_gesture_mappings" msgid="3709582843147387025">"Tanggapin ang mga galaw"</string>
+    <string name="button_customize_gesture_mappings" msgid="6198453024008558647">"I-customize ang mga galaw"</string>
+    <string name="dialog_title_disable_exploration" msgid="6318745977662978395">"Huwag paganahin ang Explore by touch?"</string>
+    <string name="dialog_message_disable_exploration" msgid="206632033549219529">"Sigurado ka bang nais mong i-off ang Explore by touch?"\n\n"Hindi na tutugon sa mga shortcut na galaw o magsasalita ng mga item ang iyong device kapag pinindot mo ang screen."</string>
+    <string name="read_from_top" msgid="4178188498867856189">"Basahin lahat mula sa tuktok"</string>
+    <string name="read_from_current" msgid="2331288178673192110">"Basahin lahat mula sa susunod na item"</string>
+    <string name="repeat_current" msgid="5909904824878426189">"Ulitin ang kasalukuyang item"</string>
+    <string name="hint_script_injection" msgid="2973894305173271874">"Hindi available sa nilalaman ng web ang Maggalugad gamit ang pagpindot. I-on ang <xliff:g id="PREFERENCE_NAME">%1$s</xliff:g> sa mga setting ng Accessibility upang galugarin ang nilalaman ng web."</string>
+    <string name="label_talkback_context_menu" msgid="102441078934343795">"Menu ng pangkalahatang konteksto ng TalkBack"</string>
+    <string name="permission_talkback_label" msgid="7399199628843033396">"Kontrolin ang TalkBack"</string>
 </resources>
