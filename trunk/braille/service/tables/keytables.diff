@@ -16,7 +16,7 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-android-chords.kti mytables/brl-and
 +bind \{Space}+Dot1+Dot2+Dot3 LEARN
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb mytables/brl-bm-default.ktb
 --- jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb	2012-06-20 15:42:57.517223847 -0700
-+++ mytables/brl-bm-default.ktb	2012-08-09 13:58:35.546344115 -0700
++++ mytables/brl-bm-default.ktb	2012-08-30 08:16:52.000000000 -0700
 @@ -18,6 +18,15 @@
  
  title Baum (default)
@@ -35,8 +35,14 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb mytables/brl-bm-defa
  include brl-bm-routing6.kti
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-display6.kti
 --- jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti	2012-06-20 15:42:57.517223847 -0700
-+++ mytables/brl-bm-display6.kti	2012-07-02 15:48:18.000000000 -0700
-@@ -24,15 +24,12 @@
++++ mytables/brl-bm-display6.kti	2012-08-30 08:35:32.000000000 -0700
+@@ -21,30 +21,39 @@
+ note * The three at the left are named Display1 through Display3.
+ note * The three at the right are named Display4 through Display6.
+ 
++bind Display1 LNUP
++bind Display4 LNDN
++
  bind Display2 FWINLT
  bind Display5 FWINRT
  
@@ -44,6 +50,21 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-dis
 -bind Display4+Display6 CHRRT
 +bind Display3 CHRLT
 +bind Display6 CHRRT
++
++# Back key
++bind Display1+Display2 KEY_ESCAPE
++# Home key
++bind Display1+Display2+Display5 KEY_FUNCTION+0
++# Recent apps key
++bind Display1+Display2+Display3+Display5 KEY_FUNCTION+1
++# Notifications bar
++bind Display1+Display3+Display4+Display5 KEY_FUNCTION+2
++# Scroll backwards
++bind Display2+Display3 WINUP
++# Scroll forwards
++bind Display5+Display6 WINDN
++# Keyboard help
++bind Display1+Display4+Display5+Display6 LEARN
  
  bind Display1+Display2+Display3 LNBEG
  bind Display4+Display5+Display6 LNEND
@@ -54,7 +75,19 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-dis
  bind Display1+Display4 TOP
  bind Display3+Display6 BOT
  
-@@ -54,9 +51,6 @@
+ bind Display2+Display4 TOP_LEFT
+ bind Display2+Display6 BOT_LEFT
+ 
+-bind Display5+Display4 PRDIFLN
+-bind Display5+Display6 NXDIFLN
+-
+-bind Display2+Display1 ATTRUP
+-bind Display2+Display3 ATTRDN
+-
+ bind Display2+Display5+Display1+Display4 PRPROMPT
+ bind Display2+Display5+Display3+Display6 NXPROMPT
+ 
+@@ -54,9 +63,6 @@
  bind Display2+Display4+Display6+Display1 PRSEARCH
  bind Display2+Display4+Display6+Display3 NXSEARCH
  
@@ -64,7 +97,18 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-dis
  bind Display1+Display6 BACK
  
  bind Display2+Display4+Display6 HOME
-@@ -79,7 +73,6 @@
+@@ -68,18 +74,14 @@
+ bind Display1+Display4+Display5 DISPMD
+ bind Display1+Display5 TIME
+ bind Display1+Display2+Display4 FREEZE
+-bind Display1+Display2+Display5 HELP
+ bind Display1+Display3+Display4 PREFMENU
+ bind Display1+Display2+Display3+Display4 PASTE
+-bind Display1+Display2+Display3+Display5 PREFLOAD
+ bind Display2+Display3+Display4 RESTARTSPEECH
+ bind Display2+Display3+Display4+Display5 ATTRVIS
+-bind Display2+Display4+Display5+Display6 PREFSAVE
+ 
  bind Display2+Display3+Display5 SIXDOTS+on
  bind Display2+Display3+Display6 SIXDOTS+off
  
@@ -188,7 +232,7 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti mytables/brl-eu-jo
  
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-common.kti mytables/brl-fs-common.kti
 --- jni/brlttywrapper/brltty/Tables/brl-fs-common.kti	2012-06-20 15:42:57.517223847 -0700
-+++ mytables/brl-fs-common.kti	2012-08-24 10:04:09.368191064 -0700
++++ mytables/brl-fs-common.kti	2012-08-24 10:04:09.000000000 -0700
 @@ -19,8 +19,10 @@
  bind LeftWheelPress LNBEG
  bind RightWheelPress LNEND
@@ -278,6 +322,92 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-rockers.kti mytables/brl-fs-rock
 +bind RightRockerUp CHRLT
 +# Next item
 +bind RightRockerDown CHRRT
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-hm-sense.ktb mytables/brl-hm-sense.ktb
+--- jni/brlttywrapper/brltty/Tables/brl-hm-sense.ktb	2012-06-20 15:42:57.517223847 -0700
++++ mytables/brl-hm-sense.ktb	2012-11-07 15:50:43.062379274 -0800
+@@ -23,6 +23,11 @@
+ # Default Bindings #
+ ####################
+ 
++assign Space Space
++assign Dot7 Dot7
++assign Dot8 Dot8
++include brl-android-chords.kti
++
+ map Dot1 DOT1
+ map Dot2 DOT2
+ map Dot3 DOT3
+@@ -37,8 +42,6 @@
+ 
+ bind RoutingKey ROUTE
+ 
+-bind F4 HOME
+-bind F1+F4 BACK
+ bind F2+F3 CSRJMP_VERT
+ 
+ bind Backward FWINLT
+@@ -66,8 +69,8 @@
+ bind F1+F2+Backward TOP_LEFT
+ bind F1+F2+Forward BOT_LEFT
+ 
+-bind F3+F4+Backward CHRLT
+-bind F3+F4+Forward CHRRT
++bind Space+Dot1+F3 CHRLT
++bind Space+Dot1+F4 CHRRT
+ 
+ bind F1+F3+F4 CONTEXT+1 # RoutingKey -> CLIP_NEW
+ bind F2+F3+F4 CONTEXT+2 # RoutingKey -> CLIP_ADD
+@@ -88,18 +91,10 @@
+ bind Space+Dot1+Dot4+dot7 CSRVIS+off
+ bind Space+Dot1+Dot4+Dot8 CSRVIS+on
+ bind Space+Dot1+Dot2+Dot4 FREEZE
+-bind Space+Dot1+Dot2+Dot5 HELP
+ bind Space+Dot2+Dot4 SKPIDLNS
+ bind Space+Dot2+Dot4+dot7 SKPIDLNS+off
+ bind Space+Dot2+Dot4+Dot8 SKPIDLNS+on
+-bind Space+Dot1+Dot2+Dot3 LEARN
+-bind Space+Dot1+Dot2+Dot3+Dot4 PREFMENU
+-bind Space+Dot1+Dot2+Dot3+Dot4+Dot7 PREFLOAD
+-bind Space+Dot1+Dot2+Dot3+Dot4+Dot8 PREFSAVE
+-bind Space+Dot2+Dot3+Dot4 INFO
+-bind Space+Dot2+Dot3+Dot4+Dot5 CSRTRK
+-bind Space+Dot2+Dot3+Dot4+Dot5+dot7 CSRTRK+off
+-bind Space+Dot2+Dot3+Dot4+Dot5+Dot8 CSRTRK+on
++
+ bind Space+Dot1+Dot3+Dot6 ATTRVIS
+ bind Space+Dot1+Dot3+Dot6+dot7 ATTRVIS+off
+ bind Space+Dot1+Dot3+Dot6+Dot8 ATTRVIS+on
+@@ -109,21 +104,14 @@
+ bind Space+Dot2+Dot3+Dot5 SIXDOTS+on
+ bind Space+Dot2+Dot3+Dot6 SIXDOTS+off
+ 
+-bind Space+Dot7 KEY_BACKSPACE
+-bind Space+Dot8 KEY_ENTER
+-bind Space+Dot7+Dot8 KEY_TAB
+-
+ bind Space+Dot2+Dot3 KEY_CURSOR_LEFT
+ bind Space+Dot5+Dot6 KEY_CURSOR_RIGHT
+-bind Space+Dot2+Dot5 KEY_CURSOR_UP
+-bind Space+Dot3+Dot6 KEY_CURSOR_DOWN
+ 
+-bind Space+Dot5 KEY_PAGE_UP
+-bind Space+Dot6 KEY_PAGE_DOWN
+-bind Space+Dot2 KEY_HOME
+-bind Space+Dot3 KEY_END
++# Scroll backward
++bind Space+F2 WINUP
++# Scroll forward
++bind Space+F3 WINDN
+ 
+-bind Space+Dot2+Dot6 KEY_ESCAPE
+ bind Space+Dot3+Dot5 KEY_INSERT
+ bind Space+Dot2+Dot5+Dot6 KEY_DELETE
+ bind Space+Dot2+Dot3+Dot5+Dot6 CONTEXT+8 # RoutingKey -> KEY_FUNCTION
+@@ -172,4 +160,3 @@
+ 
+ context 8
+ bind !RoutingKey KEY_FUNCTION
+-
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb mytables/brl-hw-all.ktb
 --- jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb	2012-06-20 15:42:57.517223847 -0700
 +++ mytables/brl-hw-all.ktb	2012-07-02 15:48:18.000000000 -0700

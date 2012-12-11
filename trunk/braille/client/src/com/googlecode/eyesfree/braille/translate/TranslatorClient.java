@@ -26,6 +26,9 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Client-side interface to the central braille translator service.
  *
@@ -42,9 +45,9 @@ import android.util.Log;
  * The object must be destroyed on the same thread it was created.
  * Other methods may be called from any thread.
  */
-public class TranslatorManager {
+public class TranslatorClient {
     private static final String LOG_TAG =
-            TranslatorManager.class.getSimpleName();
+            TranslatorClient.class.getSimpleName();
     private static final String ACTION_TRANSLATOR_SERVICE =
             "com.googlecode.eyesfree.braille.service.ACTION_TRANSLATOR_SERVICE";
     private static final Intent mServiceIntent =
@@ -73,8 +76,8 @@ public class TranslatorManager {
     }
 
     private final Context mContext;
-    private final TranslatorManagerHandler mHandler =
-            new TranslatorManagerHandler();
+    private final TranslatorClientHandler mHandler =
+            new TranslatorClientHandler();
     private final ServiceCallback mServiceCallback = new ServiceCallback();
 
     private OnInitListener mOnInitListener;
@@ -87,7 +90,7 @@ public class TranslatorManager {
      * called (they will fail) until {@code onInitListener.onInit()}
      * is called.
      */
-    public TranslatorManager(Context context, OnInitListener onInitListener) {
+    public TranslatorClient(Context context, OnInitListener onInitListener) {
         mContext = context;
         mOnInitListener = onInitListener;
         doBindService();
@@ -104,16 +107,33 @@ public class TranslatorManager {
     }
 
     /**
-     * Returns a new {@link BrailleTranslator} for the translation
-     * table specified by {@code tableName}.
+     * Returns a list of installed translation tables with meta-data
+     * describing them.  Returns {@code null} if the translation service has
+     * not been initialized, or an error occurs.
      */
-    // TODO: Document how to discover valid table names.
-    public BrailleTranslator getTranslator(String tableName) {
+    public List<TableInfo> getTables() {
         ITranslatorService localService = getTranslatorService();
         if (localService != null) {
             try {
-                if (localService.checkTable(tableName)) {
-                    return new BrailleTranslatorImpl(tableName);
+                return Arrays.asList(localService.getTableInfos());
+            } catch (RemoteException ex) {
+                Log.e(LOG_TAG, "Error in getTables", ex);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns a new {@link BrailleTranslator} for the translation table
+     * specified by {@code tableId}.  Translation tables can be discovered
+     * using {@link #getTables}.  @see {@link TableInfo#getId}.
+     */
+    public BrailleTranslator getTranslator(String tableId) {
+        ITranslatorService localService = getTranslatorService();
+        if (localService != null) {
+            try {
+                if (localService.checkTable(tableId)) {
+                    return new BrailleTranslatorImpl(tableId);
                 }
             } catch (RemoteException ex) {
                 Log.e(LOG_TAG, "Error in getTranslator", ex);
@@ -182,18 +202,19 @@ public class TranslatorManager {
     }
 
     private class BrailleTranslatorImpl implements BrailleTranslator {
-        private final String mTable;
+        private final String mTableId;
 
-        public BrailleTranslatorImpl(String table) {
-            mTable = table;
+        public BrailleTranslatorImpl(String tableId) {
+            mTableId = tableId;
         }
 
         @Override
-        public byte[] translate(String text) {
+        public TranslationResult translate(String text, int cursorPosition) {
             ITranslatorService localService = getTranslatorService();
             if (localService != null) {
                 try {
-                    return localService.translate(text, mTable);
+                    return localService.translate(text, mTableId,
+                            cursorPosition);
                 } catch (RemoteException ex) {
                     Log.e(LOG_TAG, "Error in translate", ex);
                 }
@@ -206,12 +227,34 @@ public class TranslatorManager {
             ITranslatorService localService = getTranslatorService();
             if (localService != null) {
                 try {
-                    return localService.backTranslate(cells, mTable);
+                    return localService.backTranslate(cells, mTableId);
                 } catch (RemoteException ex) {
                     Log.e(LOG_TAG, "Error in backTranslate", ex);
                 }
             }
             return null;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o instanceof BrailleTranslatorImpl) {
+                BrailleTranslatorImpl other = (BrailleTranslatorImpl) o;
+                return mTableId.equals(other.mTableId);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return mTableId.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return String.format("{BrailleTranslatorImpl %s}", mTableId);
         }
     }
 
@@ -222,7 +265,7 @@ public class TranslatorManager {
         }
     }
 
-    private class TranslatorManagerHandler extends Handler {
+    private class TranslatorClientHandler extends Handler {
         private static final int MSG_ON_INIT = 1;
         private static final int MSG_REBIND_SERVICE = 2;
 

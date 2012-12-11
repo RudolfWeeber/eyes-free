@@ -19,6 +19,7 @@
 package com.googlecode.eyesfree.braille.service.display;
 
 import android.app.Service;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -77,6 +78,9 @@ public class DisplayService extends Service
                     // is going to be frustrating if the screen went off
                     // accidentally.
                     mHandler.scheduleDisconnect(SCREEN_OFF_DISCONNECT_DELAY);
+                } else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(
+                                action)) {
+                    connectFromBroadcastIntent(intent);
                 } else {
                     Log.w(LOG_TAG, "Unexpected broadcast " + action);
             }
@@ -88,6 +92,7 @@ public class DisplayService extends Service
     private static final int STATE_DISCONNECTED = 0;
     private static final int STATE_CONNECTED = 1;
     private int mConnectionState = STATE_DISCONNECTED;
+    private String mConnectionProgress = null;
     /**
      * Delay between the screen goes off and the display gets automatically
      * disconnected.
@@ -103,6 +108,7 @@ public class DisplayService extends Service
      * we are still disconnecting.
      */
     private boolean mConnectPending;
+    private String mPendingBluetoothAddress;
 
     @Override
     public void onCreate() {
@@ -181,6 +187,11 @@ public class DisplayService extends Service
             }
             localDriverThread.writeWindow(patterns);
         }
+
+        @Override
+        public void poll() {
+            mHandler.connectBraille();
+        }
     }
 
     /*package*/ void onDisplayConnected(
@@ -190,6 +201,10 @@ public class DisplayService extends Service
 
     /*package*/ void onDisplayDisconnected() {
         mHandler.onDisplayDisconnected();
+    }
+
+    /*package*/ void setConnectionProgress(String description) {
+        mHandler.setConnectionProgress(description);
     }
 
     /**
@@ -233,15 +248,40 @@ public class DisplayService extends Service
             // a connect, so just set the flag here.
             mConnectPending = true;
         } else {
-            mReadThread = new ReadThread(this, mTablesDir);
+            mReadThread = new ReadThread(this, mTablesDir,
+                    mPendingBluetoothAddress);
+            mPendingBluetoothAddress = null;
             mReadThread.start();
         }
+    }
+
+    /**
+     * If {@code intent} indicates that a new device has been
+     * paired, try to connect to it.
+     */
+    private void connectFromBroadcastIntent(Intent intent) {
+        if (mConnectionState == STATE_CONNECTED) {
+            return;
+        }
+        int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE,
+                BluetoothDevice.BOND_NONE);
+        if (bondState != BluetoothDevice.BOND_BONDED) {
+            return;
+        }
+        BluetoothDevice bthDev = intent.getParcelableExtra(
+                BluetoothDevice.EXTRA_DEVICE);
+        if (bthDev == null) {
+            return;
+        }
+        mPendingBluetoothAddress = bthDev.getAddress();
+        connectBraille();
     }
 
     private void registerBroadcastReceiver() {
         String[] actions = new String[] {
             Intent.ACTION_SCREEN_ON,
             Intent.ACTION_SCREEN_OFF,
+            BluetoothDevice.ACTION_BOND_STATE_CHANGED,
         };
         IntentFilter filter = new IntentFilter();
         for (String action : actions) {
@@ -270,11 +310,32 @@ public class DisplayService extends Service
         }
     }
 
+    private void sendConnectionProgress(IBrailleServiceCallback callback) {
+        try {
+            callback.onConnectionChangeProgress(mConnectionProgress);
+        } catch (RemoteException ex) {
+            // Nothing to do, the callback list will remove the callback
+            // later.
+        }
+    }
+
     private void broadcastConnectionState() {
         int i = mClients.beginBroadcast();
         try {
             while (i-- > 0) {
                 sendConnectionState(mClients.getBroadcastItem(i));
+            }
+        } finally {
+            mClients.finishBroadcast();
+        }
+    }
+
+    private void broadcastConnectionProgress() {
+        Log.v(LOG_TAG, "Broadcasting connection progress");
+        int i = mClients.beginBroadcast();
+        try {
+            while (i-- > 0) {
+                sendConnectionProgress(mClients.getBroadcastItem(i));
             }
         } finally {
             mClients.finishBroadcast();
@@ -341,8 +402,10 @@ public class DisplayService extends Service
         private static final int MSG_REGISTER_CALLBACK = 1;
         private static final int MSG_ON_DISPLAY_CONNECTED = 2;
         private static final int MSG_ON_DISPLAY_DISCONNECTED = 3;
-        private static final int MSG_ON_INPUT_EVENT = 4;
-        private static final int MSG_DISCONNECT_BRAILLE = 5;
+        private static final int MSG_SET_CONNECTION_PROGRESS = 4;
+        private static final int MSG_ON_INPUT_EVENT = 5;
+        private static final int MSG_CONNECT_BRAILLE = 6;
+        private static final int MSG_DISCONNECT_BRAILLE = 7;
 
         public void registerCallback(IBrailleServiceCallback callback) {
             obtainMessage(MSG_REGISTER_CALLBACK, callback).sendToTarget();
@@ -356,6 +419,11 @@ public class DisplayService extends Service
             sendEmptyMessage(MSG_ON_DISPLAY_DISCONNECTED);
         }
 
+        public void setConnectionProgress(String description) {
+            obtainMessage(MSG_SET_CONNECTION_PROGRESS, description)
+                    .sendToTarget();
+        }
+
         public void onInputEvent(BrailleInputEvent event) {
             obtainMessage(MSG_ON_INPUT_EVENT, event).sendToTarget();
         }
@@ -366,6 +434,10 @@ public class DisplayService extends Service
 
         public void scheduleDisconnect(long delayMillis) {
             sendEmptyMessageDelayed(MSG_DISCONNECT_BRAILLE, delayMillis);
+        }
+
+        public void connectBraille() {
+            sendEmptyMessage(MSG_CONNECT_BRAILLE);
         }
 
         @Override
@@ -381,8 +453,14 @@ public class DisplayService extends Service
                 case MSG_ON_DISPLAY_DISCONNECTED:
                     handleOnDisplayDisconnected();
                     break;
+                case MSG_SET_CONNECTION_PROGRESS:
+                    handleSetConnectionProgress((String) msg.obj);
+                    break;
                 case MSG_ON_INPUT_EVENT:
                     handleOnInputEvent((BrailleInputEvent) msg.obj);
+                    break;
+                case MSG_CONNECT_BRAILLE:
+                    DisplayService.this.connectBraille();
                     break;
                 case MSG_DISCONNECT_BRAILLE:
                     disconnectBraille();
@@ -397,15 +475,18 @@ public class DisplayService extends Service
                             && mReadThread != null)) {
                 // Extraction or connection in progress, there will be a
                 // broadcast of the state when it either succeeds or fails.
+                if (mConnectionProgress != null) {
+                    sendConnectionProgress(callback);
+                }
                 return;
             }
-            Log.d(LOG_TAG, "Broadcasting connection state right after connection established");
             sendConnectionState(callback);
         }
 
         private void handleOnDisplayConnected(
             BrailleDisplayProperties properties) {
             mConnectionState = STATE_CONNECTED;
+            mConnectionProgress = null;
             mDisplayProperties = properties;
             mConnectPending = false;
             broadcastConnectionState();
@@ -416,12 +497,26 @@ public class DisplayService extends Service
             if (mConnectionState != STATE_DISCONNECTED) {
                 mConnectionState = STATE_DISCONNECTED;
                 broadcastConnectionState();
+                mConnectionProgress = null;
+            } else {
+                setConnectionProgress(null);
             }
             if (mConnectPending) {
                 // Don't get stuck retrying if connecting fails.
                 mConnectPending = false;
                 connectBraille();
             }
+        }
+
+        private void handleSetConnectionProgress(String description) {
+            Log.v(LOG_TAG, "handleSetConnectionProgress " + description);
+            if ((description == null && mConnectionProgress == null)
+                    || (description != null && description.equals(
+                                    mConnectionProgress))) {
+                return;
+            }
+            mConnectionProgress = description;
+            broadcastConnectionProgress();
         }
 
         private void handleOnInputEvent(BrailleInputEvent event) {

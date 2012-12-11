@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">BrailleService</string>
     <string name="service_label">Braille Service</string>
+    <!-- Displayed to the user when trying to connect to a braille display. -->
+    <string name="connprog_trying">Looking for: %s</string>
+    <!-- Displayed to the user when a braile device was found and the display driver is being initialized. -->
+    <string name="connprog_initializing">Initializing: %s</string>
 </resources>

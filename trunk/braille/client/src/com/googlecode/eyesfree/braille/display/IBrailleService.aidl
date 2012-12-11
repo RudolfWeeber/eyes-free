@@ -40,4 +40,12 @@ interface IBrailleService {
      * @return {@code true} on success and {@code false} otherwise.
      */
     void displayDots(in byte[] patterns);
+
+    /**
+     * Asks the service to try to connect to a display.  Normally, the service
+     * deals with connecting and disconnecting based on whether the screen is
+     * on and whether there are connected clients.  This is intended to be
+     * used in response to an explicit user action.
+     */
+    oneway void poll();
 }

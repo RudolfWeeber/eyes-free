@@ -60,7 +60,8 @@ class VerticalContainerBrailleRule implements BrailleRule {
         result.append(context.getString(res));
     }
 
-    public boolean includeChildren(AccessibilityNodeInfoCompat node) {
+    public boolean includeChildren(AccessibilityNodeInfoCompat node,
+            Context context) {
         return false;
     }
 }

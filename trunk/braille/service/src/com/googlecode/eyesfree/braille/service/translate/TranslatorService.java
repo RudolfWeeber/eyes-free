@@ -29,15 +29,18 @@ import android.util.Log;
 import com.googlecode.eyesfree.braille.service.R;
 import com.googlecode.eyesfree.braille.translate.ITranslatorService;
 import com.googlecode.eyesfree.braille.translate.ITranslatorServiceCallback;
-import com.googlecode.eyesfree.braille.translate.TranslatorManager;
+import com.googlecode.eyesfree.braille.translate.TableInfo;
+import com.googlecode.eyesfree.braille.translate.TranslationResult;
+import com.googlecode.eyesfree.braille.translate.TranslatorClient;
 import com.googlecode.eyesfree.braille.utils.ZipResourceExtractor;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
- * The service for the {@link TranslatorManager} client.
+ * The service for the {@link TranslatorClient} client.
  */
 public class TranslatorService extends Service {
     private static final String LOG_TAG =
@@ -46,6 +49,7 @@ public class TranslatorService extends Service {
     private static final int FILES_ERROR = -1;
     private static final int FILES_NOT_EXTRACTED = 0;
     private static final int FILES_EXTRACTED = 1;
+
     // Written in main thread, read in binder threads.
     private volatile int mDataFileState = FILES_NOT_EXTRACTED;
     private final ServiceImpl mServiceImpl = new ServiceImpl();
@@ -53,10 +57,12 @@ public class TranslatorService extends Service {
             new TranslatorServiceHandler();
     private final Set<ITranslatorServiceCallback> mPendingCallbacks =
             new HashSet<ITranslatorServiceCallback>();
+    private TableList mTableList;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mTableList = new TableList(getResources());
         extractDataFiles();
     }
 
@@ -104,8 +110,8 @@ public class TranslatorService extends Service {
     private void callOnInit(ITranslatorServiceCallback callback) {
         try {
             callback.onInit(mDataFileState == FILES_EXTRACTED
-                    ? TranslatorManager.SUCCESS
-                    : TranslatorManager.ERROR);
+                    ? TranslatorClient.SUCCESS
+                    : TranslatorClient.ERROR);
         } catch (RemoteException ex) {
             // The client died before we initialized.  This is rare and
             // harmless for us.
@@ -124,44 +130,67 @@ public class TranslatorService extends Service {
         }
 
         @Override
-        public boolean checkTable(String tableName) {
-            if (tableName == null) {
-                Log.e(LOG_TAG, "Received null table name in checkTable");
+        public TableInfo[] getTableInfos() {
+            List<TableInfo> l = mTableList.getTables();
+            return l.toArray(new TableInfo[l.size()]);
+        }
+
+        @Override
+        public boolean checkTable(String tableId) {
+            if (tableId == null) {
+                Log.e(LOG_TAG, "Received null table id in checkTable");
                 return false;
             }
             if (!checkDataFiles()) {
+                return false;
+            }
+            String tableName = mTableList.getFileName(tableId);
+            if (tableName == null) {
+                Log.e(LOG_TAG, "Unknown table id in checkTable: " + tableId);
                 return false;
             }
             return LibLouisWrapper.checkTable(tableName);
         }
 
         @Override
-        public byte[] translate(String text, String tableName) {
+        public TranslationResult translate(String text, String tableId,
+                int cursorPosition) {
             if (text == null) {
                 Log.e(LOG_TAG, "Received null text in translate");
                 return null;
             }
-            if (tableName == null) {
+            if (tableId == null) {
                 Log.e(LOG_TAG, "Received null table name in translate");
                 return null;
             }
             if (!checkDataFiles()) {
                 return null;
             }
-            return LibLouisWrapper.translate(text, tableName);
+            String tableName = mTableList.getFileName(tableId);
+            if (tableName == null) {
+                Log.e(LOG_TAG, "Unknown table id in translate: " + tableId);
+                return null;
+            }
+            return LibLouisWrapper.translate(text, tableName, cursorPosition);
         }
 
         @Override
-        public String backTranslate(byte[] cells, String tableName) {
+        public String backTranslate(byte[] cells, String tableId) {
             if (cells == null) {
                 Log.e(LOG_TAG, "Received null text in backTranslate");
                 return null;
             }
-            if (tableName == null) {
+            if (tableId == null) {
                 Log.e(LOG_TAG, "Received null table name in translate");
                 return null;
             }
             if (!checkDataFiles()) {
+                return null;
+            }
+            String tableName = mTableList.getFileName(tableId);
+            if (tableName == null) {
+                Log.e(LOG_TAG, "Unknown table id in backTranslate: "
+                        + tableId);
                 return null;
             }
             return LibLouisWrapper.backTranslate(cells, tableName);

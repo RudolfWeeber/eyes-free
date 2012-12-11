@@ -17,10 +17,10 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.googlecode.eyesfree.brailleback"
-      android:versionCode="4"
-      android:versionName="0.9_r4">
+      android:versionCode="5"
+      android:versionName="0.9.1beta1">
 
-    <uses-sdk android:minSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="17" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="com.googlecode.eyesfree.braille.display.PERMISSION_CONNECT" />
@@ -39,7 +39,8 @@
         android:icon="@drawable/icon">
 
         <service android:name=".BrailleBackService"
-                 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+                 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+                 android:settingsActivity=".BrailleBackPreferencesActivity" >
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -71,6 +72,13 @@
         </service>
 
         <service
+            android:name=".SelfBrailleService">
+            <intent-filter>
+                <action android:name="com.googlecode.eyesfree.braille.service.ACTION_SELF_BRAILLE_SERVICE" />
+            </intent-filter>
+        </service>
+
+        <service
             android:name="com.googlecode.eyesfree.braille.service.translate.TranslatorService"
             android:process=":service">
             <intent-filter>
@@ -80,7 +88,8 @@
 
         <activity
             android:name=".BrailleBackPreferencesActivity"
-            android:title="@string/preferences_title" >
+            android:title="@string/preferences_title"
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

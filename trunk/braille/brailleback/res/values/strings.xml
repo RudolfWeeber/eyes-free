@@ -36,15 +36,38 @@
     <string name="type_seekbar">Seek Control</string>
     <string name="type_quickcontact">Contact</string>
 
-    <!-- Default 8 dot (computer braille) braille translation table for this locale -->
-    <string name="brailletable_8dot_default">en-us-comp8.ctb</string>
-
     <!-- Title for the BrailleBack Preferences activity. -->
     <string name="preferences_title">BrailleBack Preferences</string>
     <!-- Label for the Device preferences category. Contains preferences specific to a user's Braille display. [CHAR_LIMIT=25] -->
     <string name="pref_category_device_title">Device</string>
-    <!-- Label for the Key Bindings preference. Displays an activity that show the user key bindings for their device. [CHAR_LIMIT=25] -->
+    <!-- Label for the status preference. [CHAR_LIMIT=25] -->
+    <string name="pref_connection_status_title">Status</string>
+    <!-- Label for the Key Bindings preference. Displays an activity that shows the user key bindings for their device. [CHAR_LIMIT=25] -->
     <string name="pref_key_bindings_title">Key bindings</string>
+    <!-- Label for the Braille preferences category. Contains settings for braille translation. [CHAR_LIMIT=25] -->
+    <string name="pref_category_braille_title">Braille</string>
+    <!-- Label for the braille type preference. Let's the user switch between computer and literary braille. -->
+    <string name="pref_braille_type_title">Braille type</string>
+    <!-- Label for the 6 dot (literary braille) preference. Pops up the list of literary braille tables. [CHAR_LIMIT=25] -->
+    <string name="pref_six_dot_braille_table_title">Literary braille table</string>
+    <!-- Lable for the 8 dot (computer braille) table preference. Pops up the list of computer braille tables. [CHAR_LIMIT=25] -->
+    <string name="pref_eight_dot_braille_table_title">Computer braille table</string>
+
+    <!-- Shown under the Status preference when no braille display is connected. -->
+    <string name="connstate_not_connected">Not connected</string>
+    <!-- Shown under the Status preference when a braille display is connected. -->
+    <string name="connstate_connected">Connected</string>
+    <!-- Shown under the Status preference when the braille display service is not available. -->
+    <string name="connstate_error">Not available</string>
+
+    <!-- Label for the six dot braille type. One of the possible values of the braille type preference. -->
+    <string name="pref_braille_type_six_dot_label">Literary braille</string>
+    <!-- Label for the eight dot braille type. One of the possible values of the braille type preference. -->
+    <string name="pref_braille_type_eight_dot_label">Computer braille</string>
+    <!-- Label for the braille table preference that set the translation table from the user's locale. The argument is the table used wwith the current locale. -->
+    <string name="pref_braille_table_default_label">Auto (%1$s)</string>
+    <!-- Label for the braille table preference that set the table from the user's locale when there is no table available for the current locale.  For example, if a user locale only has a 6 dot table available, then setting the table to the default for 8 dot braille will show this value in the preference. -->
+    <string name="pref_braille_table_default_none_label">Auto (none)</string>
 
     <!-- Title for the Key Bindings activity, which shows the user key bindings for their device. [CHAR_LIMIT=25] -->
     <string name="key_bindings_title">Key bindings</string>
@@ -58,4 +81,7 @@
     <string name="braille_keyboard_active">BrailleBack keyboard active</string>
     <!-- Label for the button that switches from the BrailleBack input method to the system keyboard. -->
     <string name="tap_to_switch_ime">Tap to switch to default keyboard</string>
+
+    <!-- Braille table dispaly name template. Used for a 6 dot braille table when there are more than one contraction grades available. ARguments are locale as a string and the contractiion grade as an int -->
+    <string name="table_name_grade">%1$s - grade %2$d</string>
 </resources>

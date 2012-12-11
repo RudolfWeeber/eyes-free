@@ -24,8 +24,11 @@ public interface BrailleTranslator {
     /**
      * Translates a string into the corresponding dot patterns and returns the
      * resulting byte array.  Returns {@code null} on error.
+     * {@code cursorPosition}, if positive, will be mapped to the corresponding
+     * position in the output.  This is sometimes more accurate than the
+     * position maps in the {@link TranslationResult}.
      */
-    byte[] translate(String text);
+    TranslationResult translate(String text, int cursorPosition);
 
     /**
      * Translates the braille {@code cells} into the corresponding text, which

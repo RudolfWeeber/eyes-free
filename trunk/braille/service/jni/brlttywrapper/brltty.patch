@@ -1,3 +1,16 @@
+diff --strip-trailing-cr -Pur a/brltty/Drivers/Braille/HIMS/braille.c b/brltty/Drivers/Braille/HIMS/braille.c
+--- a/brltty/Drivers/Braille/HIMS/braille.c	2012-07-03 09:12:59.678655571 -0700
++++ b/brltty/Drivers/Braille/HIMS/braille.c	2012-11-07 16:04:39.000000000 -0800
+@@ -560,7 +560,8 @@
+       }
+ 
+       case IPT_KEYS: {
+-        uint16_t bits = packet.data.reserved[0] | (packet.data.reserved[1] << 8);
++        uint16_t bits = packet.data.reserved[0] | (packet.data.reserved[1] << 8)
++            | (packet.data.reserved[2] << 8);
+         uint16_t bit = 0X1;
+         unsigned char key = 0;
+ 
 diff --strip-trailing-cr -Pur a/brltty/Drivers/Braille/Papenmeier/braille.c b/brltty/Drivers/Braille/Papenmeier/braille.c
 --- a/brltty/Drivers/Braille/Papenmeier/braille.c	2012-07-03 09:12:52.418560018 -0700
 +++ b/brltty/Drivers/Braille/Papenmeier/braille.c	2012-07-02 14:05:19.000000000 -0700

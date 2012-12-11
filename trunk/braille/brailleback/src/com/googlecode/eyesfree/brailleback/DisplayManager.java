@@ -25,21 +25,25 @@ import android.os.PowerManager;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.Spanned;
 import android.util.Log;
+import android.util.SparseIntArray;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.braille.display.Display;
 import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
+import com.googlecode.eyesfree.braille.translate.TranslationResult;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Keeps track of the current display content and handles panning.
  */
 public class DisplayManager
         implements Display.OnConnectionStateChangeListener,
-        Display.OnInputEventListener {
+                   Display.OnInputEventListener,
+                   TranslatorManager.OnTablesChangedListener {
 
     /** Dot pattern used to overlay characters under a selection. */
     // TODO: Make customizable.
@@ -106,10 +110,35 @@ public class DisplayManager
      * the {@link Spannable}.
      */
     public static class Content {
+        /**
+         * Pan strategy that moves the display to the leftmost position.
+         * This is the default panning strategy.
+         */
+        public static final int PAN_RESET = 0;
+
+        /**
+         * Pan strategy that positions the display so that it overlaps the
+         * start of a selection or focus mark.  Falls back on {@code PAN_RESET}
+         * if there is no selection or focus.
+         */
+        public static final int PAN_CURSOR = 1;
+
+        /**
+         * Pan strategy that tries to position the display close to the
+         * position that corresponds to the panning position in the previously
+         * displayed content.  Spans of type
+         * {@link AccessibilityNodeInfoCompat} are used to identify the
+         * corresponding content in the old and new display content.
+         * Falls back on {@code SPAN_CURSOR} if a corresponding position can't
+         * be found.
+         */
+        public static final int PAN_KEEP = 2;
 
         private CharSequence mText;
         private AccessibilityNodeInfoCompat mFirstNode;
         private AccessibilityNodeInfoCompat mLastNode;
+        private int mPanStrategy;
+        private boolean mSplitParagraphs;
 
         public Content() {
         }
@@ -157,6 +186,24 @@ public class DisplayManager
             return mLastNode;
         }
 
+        public Content setPanStrategy(int strategy) {
+            mPanStrategy = strategy;
+            return this;
+        }
+
+        public int getPanStrategy() {
+            return mPanStrategy;
+        }
+
+        public Content setSplitParagraphs(boolean value) {
+            mSplitParagraphs = true;
+            return this;
+        }
+
+        public boolean isSplitParagraphs() {
+            return mSplitParagraphs;
+        }
+
         public void recycle() {
             AccessibilityNodeInfoUtils.recycleNodes(
                 mFirstNode, mLastNode);
@@ -166,7 +213,7 @@ public class DisplayManager
         }
     }
 
-    private final BrailleTranslator mTranslator;
+    private final TranslatorManager mTranslatorManager;
     private final Context mContext;
     // Not final, because it is initialized in the handler thread.
     private Display mDisplay;
@@ -182,6 +229,15 @@ public class DisplayManager
     // Read and written in display handler thread only.
 
     private boolean mConnected = false;
+    /** Cursor position last passed to the translate method of the translator.
+     * We use this because it is more reliable than the position maps inside
+     * contracted words.  In the common case where there is just one
+     * selection/focus on the display at the same time, this gives better
+     * results.  Otherwise, we fall back on the position map, whic is also
+     * used for keeping the pan position.
+     */
+    private int mCursorPosition;
+    private TranslationResult mTranslationResult;
     /** Display content without overlays for cursors, focus etc. */
     private byte[] mBrailleContent = new byte[0];
     /**
@@ -192,6 +248,13 @@ public class DisplayManager
     // Position in cells of the leftmost cell of the dipslay.
     private int mDisplayPosition;
     private Content mCurrentContent;
+    /**
+     * An array where the keys are translated positions that should always
+     * correspond to the left-most position on the braille display if at all
+     * inclded.  This is used to split the output at line breaks.  The values
+     * are not used and currently set to 1.
+    */
+    private final SparseIntArray mSplitPoints = new SparseIntArray();
 
     /**
      * Creates an instance of this class and starts the internal thread to
@@ -201,12 +264,14 @@ public class DisplayManager
      * on the same thread that was used to create this object.  The current
      * thread must have a prepared looper.
      */
-    public DisplayManager(BrailleTranslator translator,
+    public DisplayManager(TranslatorManager translatorManager,
             Context context,
             OnPanOverflowListener panOverflowListener,
-            Display.OnConnectionStateChangeListener connectionStateChangeListener,
+            Display.OnConnectionStateChangeListener
+                connectionStateChangeListener,
             OnMappedInputEventListener mappedInputEventListener) {
-        mTranslator = translator;
+        mTranslatorManager = translatorManager;
+        mTranslatorManager.addOnTablesChangedListener(this);
         mContext = context;
         mPanOverflowListener = panOverflowListener;
         mConnectionStateChangeListener = connectionStateChangeListener;
@@ -230,6 +295,7 @@ public class DisplayManager
 
     public void shutdown() {
         mDisplayHandler.stop();
+        mTranslatorManager.removeOnTablesChangedListener(this);
     }
 
     /**
@@ -241,25 +307,18 @@ public class DisplayManager
         mDisplayHandler.setContent(content);
     }
 
-    private boolean markSelection(CharSequence chars) {
-        if (!(chars instanceof Spanned)) {
-            return false;
-        }
-        Spanned spanned = (Spanned) chars;
+    private boolean markSelection(Spanned spanned) {
         DisplaySpans.SelectionSpan[] spans =
                 spanned.getSpans(0, spanned.length(),
                         DisplaySpans.SelectionSpan.class);
         for (DisplaySpans.SelectionSpan span : spans) {
-            int start = spanned.getSpanStart(span);
-            int end = spanned.getSpanEnd(span);
+            int start = textToDisplayPosition(mTranslationResult,
+                    mCursorPosition, spanned.getSpanStart(span));
+            int end = textToDisplayPosition(mTranslationResult,
+                    mCursorPosition, spanned.getSpanEnd(span));
             if (start == end) {
                 end = start + 1;
             }
-            // TODO: For anything but computer braille, we need to
-            // translate positions.
-            // Special case: the selection (cursor) can extend to after
-            // the last character.  Allow it to extend one cell
-            // beyond.
             if (end > mBrailleContent.length) {
                 extendContentForCursor();
             }
@@ -269,7 +328,9 @@ public class DisplayManager
                  ++i) {
                 mOverlaidBrailleContent[i] |= SELECTION_DOTS;
             }
-            panTo(start);
+            if (mDisplayPosition < 0) {
+                mDisplayPosition = fixDisplayPosition(start);
+            }
         }
         return spans.length > 0;
     }
@@ -293,34 +354,37 @@ public class DisplayManager
                 mOverlaidBrailleContent.length + 1);
     }
 
-    private void markFocus(CharSequence chars) {
-        if (!(chars instanceof Spanned)) {
-            return;
-        }
-        Spanned spanned = (Spanned) chars;
+    private void markFocus(Spanned spanned) {
         DisplaySpans.FocusSpan[] spans =
                 spanned.getSpans(0, spanned.length(),
                         DisplaySpans.FocusSpan.class);
         for (DisplaySpans.FocusSpan span : spans) {
-            int start = spanned.getSpanStart(span);
+            int start = textToDisplayPosition(mTranslationResult,
+                    mCursorPosition, spanned.getSpanStart(span));
             if (start < mOverlaidBrailleContent.length) {
                 copyOverlaidContent();
-                // TODO: When not using computer braille, map char position
-                // to braille position.
                 mOverlaidBrailleContent[start] |= FOCUS_DOTS;
-                panTo(start);
+                if (mDisplayPosition < 0) {
+                    mDisplayPosition = fixDisplayPosition(start);
+                }
             }
         }
     }
 
-    private void panTo(int position) {
-        if (mDisplayPosition <= position
-                && position < mDisplayPosition + getNumTextCells()) {
-            // Display overlaps desired position.
-        } else {
-            mDisplayPosition =
-                    (position / getNumTextCells()) * getNumTextCells();
-        }
+    /**
+     * Adjust {@code position} so that it is the largest multiple of the
+     * current display size that is {@code <= position}, counting from the
+     * largest split point that is before or at {@code position}.
+     *
+     * This is used when panning the display according to a cursor position so
+     * that the display keeps its position in the text when the cursor moves
+     * within the area covered by the display.
+     */
+    private int fixDisplayPosition(int position) {
+        int numCells = getNumTextCells();
+        int splitIndex = findSplitPointIndex(position);
+        int splitLimit = splitIndex < 0 ? 0 : mSplitPoints.keyAt(splitIndex);
+        return ((position - splitLimit) / numCells * numCells) + splitLimit;
     }
 
     @Override
@@ -353,16 +417,32 @@ public class DisplayManager
         }
     }
 
+    @Override
+    public void onTablesChanged() {
+        mDisplayHandler.retranslate();
+    }
+
     private void sendMappedEvent(BrailleInputEvent event) {
         if (BrailleInputEvent.argumentType(event.getCommand())
                 == BrailleInputEvent.ARGUMENT_POSITION) {
-            // Create a new event with the position ofset to the display
-            // pan position.
-            // TODO: when we support non-computer braille, map from cell to
-            // character.
-            int newArgument = event.getArgument() + mDisplayPosition;
-            event = new BrailleInputEvent(event.getCommand(),
-                    newArgument, event.getEventTime());
+            int oldArgument = event.getArgument();
+            // Offset argument by pan position and make sure it is less than
+            // the next split position.
+            int offsetArgument = oldArgument + mDisplayPosition;
+            if (offsetArgument >= findRightSplitLimit()) {
+                // The event is outisde the currently displayed
+                // content, drop the event.
+                return;
+            }
+            // The mapped event argument is the translated offset argument.
+            int newArgument = displayToTextPosition(
+                    mTranslationResult, mCursorPosition,
+                    offsetArgument);
+            // Create a new event if the argument actually differs.
+            if (newArgument != oldArgument) {
+                event = new BrailleInputEvent(event.getCommand(),
+                        newArgument, event.getEventTime());
+            }
         }
         mCallbackHandler.onMappedInputEvent(event);
     }
@@ -373,13 +453,14 @@ public class DisplayManager
             return;
         }
         mDisplayPosition = Math.max(
-            0,
+            findLeftSplitLimit(),
             mDisplayPosition - getNumTextCells());
         refresh();
     }
 
     private void panRight() {
-        int newPosition = mDisplayPosition + getNumTextCells();
+        int newPosition = Math.min(mDisplayPosition + getNumTextCells(),
+                findRightSplitLimit());
         if (newPosition >= mBrailleContent.length) {
             mCallbackHandler.onPanRightOverflow();
             return;
@@ -390,8 +471,9 @@ public class DisplayManager
 
     private class DisplayHandler extends Handler {
         private static final int MSG_SET_CONTENT = 1;
-        private static final int MSG_PULSE = 2;
-        private static final int MSG_STOP = 3;
+        private static final int MSG_RETRANSLATE = 2;
+        private static final int MSG_PULSE = 3;
+        private static final int MSG_STOP = 4;
 
         public DisplayHandler(Looper looper) {
             super(looper);
@@ -399,6 +481,10 @@ public class DisplayManager
 
         public void setContent(Content content) {
             obtainMessage(MSG_SET_CONTENT, content).sendToTarget();
+        }
+
+        public void retranslate() {
+            sendEmptyMessage(MSG_RETRANSLATE);
         }
 
         public void schedulePulse() {
@@ -424,6 +510,9 @@ public class DisplayManager
                 case MSG_SET_CONTENT:
                     handleSetContent((Content) msg.obj);
                     break;
+                case MSG_RETRANSLATE:
+                    handleRetranslate();
+                    break;
                 case MSG_PULSE:
                     handlePulse();
                     break;
@@ -434,7 +523,47 @@ public class DisplayManager
         }
 
         private void handleSetContent(Content content) {
-            if (mCurrentContent != null) {
+            Content oldContent = mCurrentContent;
+            mCurrentContent = content;
+            mCursorPosition = findCursorPosition(content);
+            TranslationResult oldTranslationResult = mTranslationResult;
+            translateCurrentContent();
+            cancelPulse();
+            // Adjust the pan position according to the panning strategy.
+            // Setting the position to -1 below has the effect that the
+            // the calls to markSelection() and markFocus() below will adjust
+            // panning according to the cursor if there is one, or resetting it
+            // to the beginning of the line if there is no selection or focus.
+            switch (content.mPanStrategy) {
+                default:
+                    LogUtils.log(this, Log.ERROR,
+                            "Unknown pan strategy: %d", content.mPanStrategy);
+                    // Fall through.
+                case Content.PAN_RESET:
+                    mDisplayPosition = 0;
+                    break;
+                case Content.PAN_KEEP:
+                    if (oldContent != null) {
+                        // We don't align the display position to the size of
+                        // the display in this case so that content doesn't
+                        // jump around on the dipslay if content before the
+                        // current display position changes size.
+                        mDisplayPosition = findMatchingPanPosition(
+                            oldContent, content,
+                            oldTranslationResult, mTranslationResult,
+                            mDisplayPosition);
+                    } else {
+                        mDisplayPosition = -1;
+                    }
+                    break;
+                case Content.PAN_CURSOR:
+                    mDisplayPosition = -1;
+                    break;
+            }
+            markCursor();
+            clampDisplayPosition();
+            refresh();
+            if (oldContent != null) {
                 // Have the callback handler recycle the old content so that
                 // the thread in which the callbck handler is running is the
                 // only thread modifying it.  It is safe for the callback
@@ -444,18 +573,26 @@ public class DisplayManager
                 // have already been sent will be processed by trhe callback
                 // thread before the recycle message arrives because of the
                 // guaranteed ordering of message handling.
-                mCallbackHandler.recycleContent(mCurrentContent);
+                mCallbackHandler.recycleContent(oldContent);
             }
-            mCurrentContent = content;
-            String textContent = content.mText.toString();
-            mBrailleContent = mTranslator.translate(textContent);
-            mOverlaidBrailleContent = mBrailleContent;
-            // TODO: Try to be smarter about when to reset the pan position.
-            mDisplayPosition = 0;
+        }
+
+        private void handleRetranslate() {
+            if (mCurrentContent == null) {
+                return;
+            }
+            TranslationResult oldTranslationResult = mTranslationResult;
+            translateCurrentContent();
+            mDisplayPosition = textToDisplayPosition(
+                    mTranslationResult,
+                    mCursorPosition,
+                    displayToTextPosition(
+                            mTranslationResult,
+                            mCursorPosition,
+                            mDisplayPosition));
+            markCursor();
+            clampDisplayPosition();
             cancelPulse();
-            if (!markSelection(content.mText)) {
-                markFocus(content.mText);
-            }
             refresh();
         }
 
@@ -558,6 +695,51 @@ public class DisplayManager
         }
     }
 
+    private void translateCurrentContent() {
+        // Use an uncontracted translator if there is a editing cursor
+        // because editing doesn't work in contracted braille.
+        // TODO: Refine to only use the uncontracted translator for the current
+        // word.
+        BrailleTranslator translator =
+                hasEditCursor(mCurrentContent)
+                ? mTranslatorManager.getUncontractedTranslator()
+                : mTranslatorManager.getTranslator();
+        String textContent = mCurrentContent.mText.toString();
+        if (translator != null) {
+            mTranslationResult = translator.translate(textContent,
+                    mCursorPosition);
+        } else {
+            mTranslationResult = new TranslationResult(
+                    new byte[0], new int[textContent.length()], new int[0],
+                    0);
+        }
+        calculateSplitPoints();
+        mBrailleContent = mTranslationResult.getCells();
+        mOverlaidBrailleContent = mBrailleContent;
+    }
+
+    private void markCursor() {
+        Spanned spanned = mCurrentContent.getSpanned();
+        if (spanned == null) {
+            return;
+        }
+        if (!markSelection(spanned)) {
+            markFocus(spanned);
+        }
+    }
+
+    private void clampDisplayPosition() {
+        if (mDisplayPosition < 0) {
+            mDisplayPosition = 0;
+        } else if (mDisplayPosition >= mBrailleContent.length) {
+            // If we've fallen outside of the content, align the display
+            // so that it gets filled with the rightmost part
+            // of the content.
+            mDisplayPosition = Math.max(0,
+                    mBrailleContent.length - getNumTextCells());
+        }
+    }
+
     private void refresh() {
         if (!mConnected) {
             return;
@@ -565,13 +747,13 @@ public class DisplayManager
         byte[] content = mOverlaysOn
                 ? mOverlaidBrailleContent
                 : mBrailleContent;
-        int length = Math.min(
-            content.length - mDisplayPosition,
-            getNumTextCells());
+        int rightEdge = Math.min(
+            findRightSplitLimit(),
+            mDisplayPosition + getNumTextCells());
         byte[] toDisplay = Arrays.copyOfRange(content,
-                mDisplayPosition, mDisplayPosition + length);
+                mDisplayPosition, rightEdge);
         mDisplay.displayDots(toDisplay);
-        if (blinkNeeded()) {
+        if (blinkNeeded(rightEdge)) {
             mDisplayHandler.schedulePulse();
         } else {
             mDisplayHandler.cancelPulse();
@@ -579,16 +761,18 @@ public class DisplayManager
     }
 
     /**
-     * Returns {@code true} if the current display content is such that
-     * it requires blinking.
+     * Returns {@code true} if the current display content is such that it
+     * requires blinking.  {@code rightEdge} is the end position of currently
+     * displayed content.  This is
+     * {@code mDisplayPosition + getNumTextCells()}, or a smaller number if
+     * there is a split point that causes part of the display to not be
+     * populated.
      */
-    private boolean blinkNeeded() {
+    private boolean blinkNeeded(int rightEdge) {
         if (mBrailleContent == mOverlaidBrailleContent) {
             return false;
         }
-        int max = Math.min(mDisplayPosition + getNumTextCells(),
-                mBrailleContent.length);
-        for (int i = mDisplayPosition; i < max; ++i) {
+        for (int i = mDisplayPosition; i < rightEdge; ++i) {
             if (mBrailleContent[i] != mOverlaidBrailleContent[i]) {
                 return true;
             }
@@ -617,5 +801,187 @@ public class DisplayManager
             return 1;
         }
         return mDisplay.getDisplayProperties().getNumTextCells();
+    }
+
+    private int findMatchingPanPosition(
+            Content oldContent, Content newContent,
+            TranslationResult oldTranslationResult,
+            TranslationResult newTranslationResult,
+            int oldDisplayPosition) {
+        Spanned oldSpanned = oldContent.getSpanned();
+        Spanned newSpanned = newContent.getSpanned();
+        if (oldSpanned == null || newSpanned == null) {
+            return -1;
+        }
+        // Map the current display start and past-the-end positions
+        // to the corresponding input positions.
+        int oldTextStart = displayToTextPosition(oldTranslationResult,
+                -1 /*cursorPosition*/, oldDisplayPosition);
+        int oldTextEnd = displayToTextPosition(oldTranslationResult,
+                -1 /*cursorPosition*/, oldDisplayPosition + getNumTextCells());
+        // Find the nodes that overlap with the display.
+        AccessibilityNodeInfoCompat[] displayedNodes =
+                oldSpanned.getSpans(oldTextStart, oldTextEnd,
+                        AccessibilityNodeInfoCompat.class);
+        Arrays.sort(displayedNodes,
+                new ByDistanceComparator(oldSpanned, oldTextStart));
+        // Find corresponding node in new content.
+        for (AccessibilityNodeInfoCompat oldNode : displayedNodes) {
+            AccessibilityNodeInfoCompat newNode =
+                    DisplaySpans.getEqualSpan(newSpanned, oldNode);
+            if (newNode == null) {
+                continue;
+            }
+            int oldDisplayStart = textToDisplayPosition(oldTranslationResult,
+                    -1 /*cursorPosition*/, oldSpanned.getSpanStart(oldNode));
+            int newDisplayStart = textToDisplayPosition(newTranslationResult,
+                    -1 /*cursorPosition*/, newSpanned.getSpanStart(newNode));
+            // Offset position according to diff in node position.
+            int newDisplayPosition = oldDisplayPosition
+                    + (newDisplayStart - oldDisplayStart);
+            return newDisplayPosition;
+        }
+        return -1;
+    }
+
+    private static class ByDistanceComparator
+            implements Comparator<AccessibilityNodeInfoCompat> {
+        private final Spanned mSpanned;
+        private final int mStart;
+        public ByDistanceComparator(Spanned spanned, int start) {
+            mSpanned = spanned;
+            mStart = start;
+        }
+
+        @Override
+        public int compare(
+            AccessibilityNodeInfoCompat a,
+            AccessibilityNodeInfoCompat b) {
+            int aStart = mSpanned.getSpanStart(a);
+            int bStart = mSpanned.getSpanStart(b);
+            int aDist = Math.abs(mStart - aStart);
+            int bDist = Math.abs(mStart - bStart);
+            if (aDist != bDist) {
+                return aDist - bDist;
+            }
+            // They are on the same distance, compare by length.
+            int aLength = aStart + mSpanned.getSpanEnd(a);
+            int bLength = bStart + mSpanned.getSpanEnd(b);
+            return aLength - bLength;
+        }
+    }
+
+    private static int textToDisplayPosition(
+            TranslationResult translationResult,
+            int cursorPosition,
+            int textPosition) {
+        if (textPosition == cursorPosition) {
+            return translationResult.getCursorPosition();
+        }
+        int[] posMap = translationResult.getTextToBraillePositions();
+        // Any position past-the-end of the position map maps to the
+        // corresponding past-the-end position in the braille.
+        if (textPosition >= posMap.length) {
+            return translationResult.getBrailleToTextPositions().length;
+        }
+        return posMap[textPosition];
+    }
+
+    private static int displayToTextPosition(
+            TranslationResult translationResult,
+            int cursorPosition,
+            int displayPosition) {
+        if (displayPosition == translationResult.getCursorPosition()) {
+            return cursorPosition;
+        }
+        int[] posMap = translationResult.getBrailleToTextPositions();
+        // Any position past-the-end of the position map maps to the
+        // corresponding past-the-end position in the braille.
+        if (displayPosition >= posMap.length) {
+            return translationResult.getTextToBraillePositions().length;
+        }
+        return posMap[displayPosition];
+    }
+
+    private static int findCursorPosition(Content content) {
+        Spanned spanned = content.getSpanned();
+        if (spanned == null) {
+            return -1;
+        }
+        DisplaySpans.SelectionSpan[] selectionSpans =
+                spanned.getSpans(0, spanned.length(),
+                        DisplaySpans.SelectionSpan.class);
+        if (selectionSpans.length > 0) {
+            return spanned.getSpanStart(selectionSpans[0]);
+        }
+        DisplaySpans.FocusSpan[] focusSpans =
+                spanned.getSpans(0, spanned.length(),
+                        DisplaySpans.FocusSpan.class);
+        if (focusSpans.length > 0) {
+            return spanned.getSpanStart(focusSpans[0]);
+        }
+        return -1;
+    }
+
+    private boolean hasEditCursor(Content content) {
+        Spanned spanned = content.getSpanned();
+        if (spanned == null) {
+            return false;
+        }
+        DisplaySpans.SelectionSpan[] selectionSpans =
+                spanned.getSpans(0, spanned.length(),
+                        DisplaySpans.SelectionSpan.class);
+        return selectionSpans.length > 0;
+    }
+
+    private void calculateSplitPoints() {
+        mSplitPoints.clear();
+        if (!mCurrentContent.isSplitParagraphs()) {
+            return;
+        }
+        CharSequence text = mCurrentContent.mText;
+        for (int i = 0; i < text.length() - 1; ++i) {
+            if (text.charAt(i) == '\n') {
+                mSplitPoints.append(textToDisplayPosition(mTranslationResult,
+                                mCursorPosition, i + 1), 1);
+            }
+        }
+    }
+
+    private int findSplitPointIndex(int displayPosition) {
+        int index = mSplitPoints.indexOfKey(displayPosition);
+        if (index >= 0) {
+            // Exact match.
+            return index;
+        }
+        // One's complement gives index where the element would be inserted
+        // in sorted order.
+        index = ~index;
+        if (index > 0) {
+            return index - 1;
+        }
+        return -1;
+    }
+
+    private int findLeftSplitLimit() {
+        int index = findSplitPointIndex(mDisplayPosition);
+        if (index >= 0) {
+            int limit = mSplitPoints.keyAt(index);
+            if (limit < mDisplayPosition) {
+                return limit;
+            }
+            if (index > 0) {
+                return mSplitPoints.keyAt(index - 1);
+            }
+        }
+        return 0;
+    }
+
+    private int findRightSplitLimit() {
+        int index = findSplitPointIndex(mDisplayPosition) + 1;
+        if (index >= mSplitPoints.size()) {
+            return mBrailleContent.length;
+        }
+        return mSplitPoints.keyAt(index);
     }
 }

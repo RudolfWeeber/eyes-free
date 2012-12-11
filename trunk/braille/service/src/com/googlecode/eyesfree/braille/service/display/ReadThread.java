@@ -20,9 +20,11 @@ package com.googlecode.eyesfree.braille.service.display;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
+import com.googlecode.eyesfree.braille.service.R;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +40,7 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
     private final DisplayService mDisplayService;
     private final DeviceFinder mDeviceFinder;
     private final File mTablesDir;
+    private final String mBluetoothAddressToConnectTo;
     private volatile BluetoothSocket mSocket;
     private volatile boolean mDisconnecting;
     private volatile DriverThread mDriverThread;
@@ -48,11 +51,15 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
      * {@code displayService} will get called when the display is either
      * connected or disconnected.  {@code tablesDir} is a directory that
      * contains keyboard tables and is forwarded to the driver thread.
+     * {@code bluetoothAddressToConnectTo}, if non-null, makes the connection
+     * process only consider a device with the give bluetooth address.
      */
-    public ReadThread(DisplayService displayService, File tablesDir) {
+    public ReadThread(DisplayService displayService, File tablesDir,
+            String bluetoothAddressToConnectTo) {
         mDisplayService = displayService;
         mDeviceFinder = new DeviceFinder(displayService);
         mTablesDir = tablesDir;
+        mBluetoothAddressToConnectTo = bluetoothAddressToConnectTo;
     }
 
     @Override
@@ -87,10 +94,15 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
         List<DeviceFinder.DeviceInfo> bonded = mDeviceFinder.findDevices();
         tryToConnect(bonded);
         if (mSocket != null) {
+            Resources res = mDisplayService.getResources();
+            BluetoothDevice bthDev = mConnectedDeviceInfo.getBluetoothDevice();
+            mDisplayService.setConnectionProgress(
+                    res.getString(R.string.connprog_initializing,
+                            bthDev.getName()));
             try {
                 mDriverThread = new DriverThread(mSocket.getOutputStream(),
                         mConnectedDeviceInfo,
-                        mDisplayService.getResources(),
+                        res,
                         mTablesDir,
                         this /*initListener*/,
                         mDisplayService /*inputEventListener*/);
@@ -128,6 +140,15 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
                 return;
             }
             BluetoothDevice bthDev = dev.getBluetoothDevice();
+            if (mBluetoothAddressToConnectTo != null
+                    && !mBluetoothAddressToConnectTo.equals(
+                            bthDev.getAddress())) {
+                continue;
+            }
+            mDisplayService.setConnectionProgress(
+                    mDisplayService.getResources().getString(
+                            R.string.connprog_trying,
+                            bthDev.getName()));
             Log.d(LOG_TAG, "Trying to connect to braille device: "
                     + bthDev.getName());
             try {
@@ -172,6 +193,7 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
             mDriverThread = null;
             localDriverThread.stop();
         }
+        // HERE: clear progress.
         mDisplayService.onDisplayDisconnected();
         Log.i(LOG_TAG, "Display disconnected");
     }

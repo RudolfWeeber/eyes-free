@@ -16,23 +16,21 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import com.googlecode.eyesfree.utils.LogUtils;
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
 
 import com.googlecode.eyesfree.brailleback.rule.BrailleRule;
 import com.googlecode.eyesfree.brailleback.rule.BrailleRuleRepository;
 import com.googlecode.eyesfree.brailleback.utils.StringUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoRef;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -61,25 +59,24 @@ public class NodeBrailler {
      * Returns the new content, or {@code null} if the event doesn't have
      * a source node.
      */
-    public DisplayManager.Content brailleNode(AccessibilityEvent event) {
-        AccessibilityNodeInfoCompat eventNode = getNodeFromEvent(event);
-        if (eventNode == null) {
-            return null;
+    public DisplayManager.Content brailleNode(
+        AccessibilityNodeInfoCompat node) {
+        DisplayManager.Content content = selfBrailleContent(node);
+        if (content == null) {
+            ArrayList<AccessibilityNodeInfoCompat> toFormat =
+                    new ArrayList<AccessibilityNodeInfoCompat>();
+            findNodesToFormat(node, toFormat);
+            LogUtils.log(this, Log.VERBOSE, "Going to format %d nodes",
+                    toFormat.size());
+            SpannableStringBuilder sb = new SpannableStringBuilder();
+            for (AccessibilityNodeInfoCompat n : toFormat) {
+                formatSubtree(n, sb);
+            }
+            content = new DisplayManager.Content(sb);
+            content.setFirstNode(toFormat.get(0))
+                    .setLastNode(toFormat.get(toFormat.size() - 1));
+            AccessibilityNodeInfoUtils.recycleNodes(toFormat);
         }
-        ArrayList<AccessibilityNodeInfoCompat> toFormat =
-                new ArrayList<AccessibilityNodeInfoCompat>();
-        findNodesToFormat(eventNode, toFormat);
-        LogUtils.log(this, Log.VERBOSE, "Going to format %d nodes",
-                toFormat.size());
-        SpannableStringBuilder sb = new SpannableStringBuilder();
-        for (AccessibilityNodeInfoCompat n : toFormat) {
-            formatSubtree(n, sb);
-        }
-        DisplayManager.Content content = new DisplayManager.Content(sb);
-        content.setFirstNode(toFormat.get(0))
-                .setLastNode(toFormat.get(toFormat.size() - 1));
-        eventNode.recycle();
-        AccessibilityNodeInfoUtils.recycleNodes(toFormat);
         return content;
     }
 
@@ -96,7 +93,7 @@ public class NodeBrailler {
         BrailleRule rule = mRuleRepository.find(node);
         SpannableStringBuilder subtreeResult = new SpannableStringBuilder();
         rule.format(subtreeResult, mContext, node);
-        if (rule.includeChildren(node)) {
+        if (rule.includeChildren(node, mContext)) {
             int childCount = node.getChildCount();
             for (int i = 0; i < childCount; ++i) {
                 AccessibilityNodeInfoCompat child = node.getChild(i);
@@ -156,11 +153,21 @@ public class NodeBrailler {
         node.getBoundsInScreen(nodeRect);
         AccessibilityNodeInfoRef current =
                 AccessibilityNodeInfoRef.unOwned(node);
+        boolean currentIncludesChildren = includesChildren(current.get());
         // Walk up the node tree as long as all siblings overlap
         // the original node vertically on screen.
         do {
-            if (!findOverlappingRange(current.get(), nodeRect,
-                            outLeft, outRight)) {
+            if (currentIncludesChildren) {
+                if (!findOverlappingRange(current.get(), nodeRect,
+                                outLeft, outRight)) {
+                    break;
+                }
+            } else {
+                // If the start node doesn't include its children, don't
+                // include any adjacent nodes, since that causes line-by-line
+                // navigation to be confusing and get stuck in a cycle.
+                outLeft.reset(current);
+                outRight.reset(current);
                 break;
             }
             if (!current.parent()) {
@@ -168,13 +175,10 @@ public class NodeBrailler {
             }
             // TODO: why not format bottom-up and avoid having to lookup the
             // rule twice?  Consider that at some point.
-            BrailleRule rule = mRuleRepository.find(current.get());
+            currentIncludesChildren = includesChildren(current.get());
             // Don't let any parent prevent us from getting onto the
             // display, *we* contain the focused node.
-            if (!rule.includeChildren(current.get())) {
-                break;
-            }
-        } while (true);
+        } while (currentIncludesChildren);
     }
 
     /**
@@ -212,7 +216,8 @@ public class NodeBrailler {
         outLeft.reset(left);
         while (left.previousSibling()) {
             left.get().getBoundsInScreen(tmpRect);
-            if (!shouldPutOnSameLine(tmpRect, rect)) {
+            if (!includesChildren(left.get())
+                || !shouldPutOnSameLine(tmpRect, rect)) {
                 ret = false;
                 break;
             }
@@ -223,7 +228,8 @@ public class NodeBrailler {
         outRight.reset(right);
         while (right.nextSibling()) {
             right.get().getBoundsInScreen(tmpRect);
-            if (!shouldPutOnSameLine(tmpRect, rect)) {
+            if (!includesChildren(right.get())
+                    || !shouldPutOnSameLine(tmpRect, rect)) {
                 ret = false;
                 break;
             }
@@ -234,12 +240,6 @@ public class NodeBrailler {
         left.recycle();
         right.recycle();
         return ret;
-    }
-
-    private AccessibilityNodeInfoCompat getNodeFromEvent(
-            AccessibilityEvent event) {
-        AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
-        return record.getSource();
     }
 
     /**
@@ -258,5 +258,19 @@ public class NodeBrailler {
             }
         }
         return ret;
+    }
+
+    private boolean includesChildren(AccessibilityNodeInfoCompat node) {
+        BrailleRule rule = mRuleRepository.find(node);
+        return rule.includeChildren(node, mContext);
+    }
+
+    private DisplayManager.Content selfBrailleContent(
+        AccessibilityNodeInfoCompat node) {
+        SelfBrailleService service = SelfBrailleService.getActiveInstance();
+        if (service == null) {
+            return null;
+        }
+        return service.contentForNode(node);
     }
 }

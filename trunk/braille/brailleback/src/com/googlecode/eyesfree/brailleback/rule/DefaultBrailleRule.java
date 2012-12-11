@@ -28,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.QuickContactBadge;
 
+import com.googlecode.eyesfree.brailleback.FocusFinder;
 import com.googlecode.eyesfree.brailleback.R;
 import com.googlecode.eyesfree.brailleback.utils.StringUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
@@ -72,13 +73,18 @@ class DefaultBrailleRule implements BrailleRule {
     }
 
     @Override
-    public boolean includeChildren(AccessibilityNodeInfoCompat node) {
+    public boolean includeChildren(AccessibilityNodeInfoCompat node,
+            Context context) {
         // This is intended to deal with containers that have content
         // descriptions (such as in the launcher).  This might need to be
         // refined if it takes away text that won't get accessibility focus by
         // itself.
         if (!TextUtils.isEmpty(node.getContentDescription())) {
-            return false;
+            AccessibilityNodeInfoCompat firstDescendant =
+                    FocusFinder.findFirstFocusableDescendant(node, context);
+
+            AccessibilityNodeInfoUtils.recycleNodes(firstDescendant);
+            return firstDescendant == null;
         }
         return true;
     }

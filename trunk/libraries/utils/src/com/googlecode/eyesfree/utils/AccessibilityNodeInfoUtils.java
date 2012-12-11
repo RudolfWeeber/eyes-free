@@ -23,14 +23,10 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Provides a series of utilities for interacting with AccessibilityNodeInfo
@@ -94,32 +90,6 @@ public class AccessibilityNodeInfoUtils {
         } while (parent != null);
 
         return current;
-    }
-
-    /**
-     * Returns {@code true} if the specified node is a view group or has
-     * children.
-     *
-     * @param node The node to test.
-     * @return {@code true} if the specified node is a view group or has
-     *         children.
-     */
-    public static boolean isViewGroup(Context context, AccessibilityNodeInfoCompat node) {
-        if (node == null) {
-            return false;
-        }
-
-        if (node.getChildCount() > 0) {
-            // This is an implicit group.
-            return true;
-        }
-
-        if (nodeMatchesClassByType(context, node, android.view.ViewGroup.class)) {
-            // This is an explicit group.
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -342,29 +312,12 @@ public class AccessibilityNodeInfoUtils {
     }
 
     /**
-     * Check whether a given node is scrollable or has a scrollable predecessor.
-     *
-     * @param node The node to examine.
-     * @return {@code true} if the node or one of its predecessors is
-     *         scrollable.
-     */
-    public static boolean isScrollableOrHasScrollablePredecessor(
-            Context context, AccessibilityNodeInfoCompat node) {
-        if (node == null) {
-            return false;
-        }
-
-        return (FILTER_SCROLLABLE.accept(context, node)
-                || hasMatchingPredecessor(context, node, FILTER_SCROLLABLE));
-    }
-
-    /**
      * Check whether a given node has a scrollable predecessor.
      *
      * @param node The node to examine.
      * @return {@code true} if one of the node's predecessors is scrollable.
      */
-    public static boolean hasMatchingPredecessor(
+    private static boolean hasMatchingPredecessor(
             Context context, AccessibilityNodeInfoCompat node, NodeFilter filter) {
         if (node == null) {
             return false;
@@ -401,7 +354,7 @@ public class AccessibilityNodeInfoUtils {
      * Returns the first predecessor of {@code node} that matches the
      * {@code filter}. Returns {@code null} if no nodes match.
      */
-    public static AccessibilityNodeInfoCompat getMatchingPredecessor(
+    private static AccessibilityNodeInfoCompat getMatchingPredecessor(
             Context context, AccessibilityNodeInfoCompat node, NodeFilter filter) {
         if (node == null) {
             return null;
@@ -441,7 +394,7 @@ public class AccessibilityNodeInfoUtils {
      * @param node The node to examine.
      * @return {@code true} if the node is scrollable.
      */
-    public static boolean isScrollable(AccessibilityNodeInfoCompat node) {
+    private static boolean isScrollable(AccessibilityNodeInfoCompat node) {
         if (node.isScrollable()) {
             return true;
         }
@@ -457,7 +410,7 @@ public class AccessibilityNodeInfoUtils {
      * @param node The node to check.
      * @return {@code true} if the node has text.
      */
-    public static boolean hasText(AccessibilityNodeInfoCompat node) {
+    private static boolean hasText(AccessibilityNodeInfoCompat node) {
         if (node == null) {
             return false;
         }
@@ -649,39 +602,6 @@ public class AccessibilityNodeInfoUtils {
     }
 
     /**
-     * Gets all the parent {@link AccessibilityNodeInfoCompat} nodes, up to the
-     * view root.
-     *
-     * @param node The {@link AccessibilityNodeInfoCompat} child from which to
-     *            begin collecting parents.
-     * @return An unordered set of predecessor nodes.
-     */
-    public static Set<AccessibilityNodeInfoCompat> getPredecessors(
-            AccessibilityNodeInfoCompat node) {
-        if (node == null) {
-            return Collections.emptySet();
-        }
-
-        final Set<AccessibilityNodeInfoCompat> predecessors =
-                new HashSet<AccessibilityNodeInfoCompat>();
-
-        node = node.getParent();
-
-        while (node != null) {
-            if (!predecessors.add(node)) {
-                // This should never happen, but if there's a serious cache
-                // error or a malicious developer then there may be a loop.
-                LogUtils.log(Log.ASSERT, "Found duplicate node while computing predecessors");
-                break;
-            }
-
-            node = node.getParent();
-        }
-
-        return predecessors;
-    }
-
-    /**
      * Recycles the given nodes.
      *
      * @param nodes The nodes to recycle.
@@ -715,79 +635,6 @@ public class AccessibilityNodeInfoUtils {
                 node.recycle();
             }
         }
-    }
-
-    /**
-     * Adds all descendant nodes of the given
-     * {@link AccessibilityNodeInfoCompat} in breadth first order.
-     *
-     * @param root {@link AccessibilityNodeInfoCompat} for which to add
-     *            descendants.
-     * @param outDescendants The list to which to add descendants.
-     * @param comparator Optional comparator for sorting children.
-     * @param filter Optional filter for selecting sub-set of nodes.
-     * @return The number of nodes that failed to match the filter.
-     */
-    public static int addDescendantsBfs(Context context, AccessibilityNodeInfoCompat root,
-            ArrayList<AccessibilityNodeInfoCompat> outDescendants,
-            Comparator<AccessibilityNodeInfoCompat> comparator, NodeFilter filter) {
-        final int oldOutDescendantsSize = outDescendants.size();
-
-        int failedFilter = addChildren(context, root, outDescendants, comparator, filter);
-
-        final int newOutDescendantsSize = outDescendants.size();
-
-        for (int i = oldOutDescendantsSize; i < newOutDescendantsSize; i++) {
-            final AccessibilityNodeInfoCompat child = outDescendants.get(i);
-
-            failedFilter += addDescendantsBfs(context, child, outDescendants, comparator, filter);
-        }
-
-        return failedFilter;
-    }
-
-    /**
-     * Adds only the children of the given {@link AccessibilityNodeInfoCompat}.
-     *
-     * @param node {@link AccessibilityNodeInfoCompat} for which to add
-     *            children.
-     * @param outChildren The list to which to add the children.
-     * @param comparator Optional comparator for sorting children.
-     * @param filter Optional filter for selecting sub-set of nodes.
-     * @return The number of nodes that failed to match the filter.
-     */
-    private static int addChildren(Context context, AccessibilityNodeInfoCompat node,
-            List<AccessibilityNodeInfoCompat> outChildren,
-            Comparator<AccessibilityNodeInfoCompat> comparator,
-            NodeFilter filter) {
-        final int childCount = node.getChildCount();
-        final ArrayList<AccessibilityNodeInfoCompat> children =
-                new ArrayList<AccessibilityNodeInfoCompat>(childCount);
-
-        int failedFilter = 0;
-
-        for (int i = 0; i < childCount; i++) {
-            final AccessibilityNodeInfoCompat child = node.getChild(i);
-
-            if (child == null) {
-                continue;
-            }
-
-            if (filter == null || filter.accept(context, child)) {
-                children.add(child);
-            } else {
-                child.recycle();
-                failedFilter++;
-            }
-        }
-
-        if (comparator != null) {
-            Collections.sort(children, comparator);
-        }
-
-        outChildren.addAll(children);
-
-        return failedFilter;
     }
 
     /**

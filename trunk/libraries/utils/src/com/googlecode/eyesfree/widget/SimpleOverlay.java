@@ -247,5 +247,11 @@ public class SimpleOverlay {
             // Never send accessibility events.
             return false;
         }
+
+        @Override
+        public void sendAccessibilityEventUnchecked(AccessibilityEvent event) {
+            // Never send accessibility events.
+            return;
+        }
     }
 }

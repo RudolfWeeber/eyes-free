@@ -23,6 +23,7 @@ import static com.googlecode.eyesfree.brailleback.BrailleBackService.DOT4;
 import static com.googlecode.eyesfree.brailleback.BrailleBackService.DOT5;
 
 import android.graphics.Rect;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -160,6 +161,12 @@ public class TreeDebugNavigationMode implements NavigationMode {
             makePendingNodeCurrent();
             displayCurrentNode();
         }
+    }
+
+    @Override
+    public void onInvalidateAccessibilityNode(
+        AccessibilityNodeInfoCompat node) {
+        // Nothing to do.
     }
 
     private void setPendingNode(AccessibilityNodeInfo newNode) {

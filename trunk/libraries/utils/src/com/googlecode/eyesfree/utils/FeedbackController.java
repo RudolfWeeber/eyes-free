@@ -176,6 +176,24 @@ public class FeedbackController {
     }
 
     /**
+     * Convenience method for playing different sounds based on a boolean
+     * result.
+     *
+     * @param result The conditional that controls which sound resource is
+     *            played.
+     * @param trueResId The resource to play if the result is {@code true}.
+     * @param falseResId The resource to play if the result is {@code false}.
+     * @see #playSound(int)
+     */
+    public void playSoundConditional(boolean result, int trueResId, int falseResId) {
+        final int resId = (result ? trueResId : falseResId);
+
+        if (resId > 0) {
+            playSound(resId);
+        }
+    }
+
+    /**
      * Plays the sound file specified by the given resource identifier at the
      * default rate.
      *

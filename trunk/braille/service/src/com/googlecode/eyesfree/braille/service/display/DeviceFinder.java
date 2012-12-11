@@ -334,6 +334,29 @@ public class DeviceFinder {
                         .build(),
                         "Brailliant BI"));
 
+        // HIMS
+        l.add(new NamePrefixSupportedDevice("hm", false,
+                new KeyNameMapBuilder()
+                        .dots8()
+                        .routing()
+                        .add("Space", R.string.key_Space)
+                        .build(),
+                        "HansoneLX"));
+        l.add(new NamePrefixSupportedDevice("hm", false,
+                new KeyNameMapBuilder()
+                        .dots8()
+                        .routing()
+                        .add("Space", R.string.key_Space)
+                        .build(),
+                        "BrailleSenseU2"));
+        l.add(new NamePrefixSupportedDevice("hm", false,
+                new KeyNameMapBuilder()
+                        .dots8()
+                        .routing()
+                        .add("Space", R.string.key_Space)
+                        .build(),
+                        "BrailleEDGE"));
+
         // APH Refreshabraille.
         // Secure connections get prematurely closed 50% of the time
         // by the Refreshabraille.
@@ -352,6 +375,22 @@ public class DeviceFinder {
                         .add("B10", R.string.key_Space)
                         .build(),
                         "Refreshabraille"));
+
+        // Older Brailliant, from Humanware group. Uses Baum
+        // protocol. No Braille keyboard on this one. Secure
+        // connections currently fail on Android devices with this
+        // display.
+        l.add(new NamePrefixSupportedDevice("bm", false,
+                new KeyNameMapBuilder()
+                        .add("Display1", R.string.key_hwg_brailliant_Display1)
+                        .add("Display2", R.string.key_hwg_brailliant_Display2)
+                        .add("Display3", R.string.key_hwg_brailliant_Display3)
+                        .add("Display4", R.string.key_hwg_brailliant_Display4)
+                        .add("Display5", R.string.key_hwg_brailliant_Display5)
+                        .add("Display6", R.string.key_hwg_brailliant_Display6)
+                        .routing()
+                        .build(),
+                        "HWG Brailliant"));
 
         // Braillex Trio
         l.add(new NamePrefixSupportedDevice("pm", true,

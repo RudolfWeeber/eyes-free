@@ -28,6 +28,7 @@ extern const BrailleDriver brl_driver_fs;
 extern const BrailleDriver brl_driver_hw;
 extern const BrailleDriver brl_driver_bm;
 extern const BrailleDriver brl_driver_pm;
+extern const BrailleDriver brl_driver_hm;
 static const DriverEntry driverTable[] = {
   {&brl_driver_vo, &brl_driver_vo.definition},
   {&brl_driver_eu, &brl_driver_eu.definition},
@@ -35,5 +36,6 @@ static const DriverEntry driverTable[] = {
   {&brl_driver_hw, &brl_driver_hw.definition},
   {&brl_driver_bm, &brl_driver_bm.definition},
   {&brl_driver_pm, &brl_driver_pm.definition},
+  {&brl_driver_hm, &brl_driver_hm.definition},
   {NULL, NULL}
 };

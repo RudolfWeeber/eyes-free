@@ -16,16 +16,43 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import java.util.Collections;
+import java.util.Comparator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceGroup;
+import android.util.Log;
+
+import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.braille.translate.TableInfo;
+import com.googlecode.eyesfree.utils.LogUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Activity used to set BrailleBack's service preferences.
  */
-public class BrailleBackPreferencesActivity extends PreferenceActivity {
+public class BrailleBackPreferencesActivity extends PreferenceActivity
+    implements Display.OnConnectionStateChangeListener,
+               Display.OnConnectionChangeProgressListener,
+               TranslatorManager.OnTablesChangedListener,
+               Preference.OnPreferenceChangeListener,
+               Preference.OnPreferenceClickListener {
+    private static final TableInfoComparator TABLE_INFO_COMPARATOR =
+            new TableInfoComparator();
+
+    private Display mDisplay;
+    private TranslatorManager mTranslatorManager;
+    private Preference mStatusPreference;
+    private ListPreference mBrailleTypePreference;
+    private ListPreference mSixDotTablePreference;
+    private ListPreference mEightDotTablePreference;
+    private int mConnectionState = Display.STATE_NOT_CONNECTED;
+    private List<TableInfo> mTables;
+
     @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,28 +60,87 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.preferences);
 
+        mStatusPreference =
+                findPreferenceByResId(R.string.pref_connection_status_key);
+        mStatusPreference.setOnPreferenceClickListener(this);
         assignKeyBindingsIntent();
+
+        mBrailleTypePreference = (ListPreference) findPreferenceByResId(
+                R.string.pref_braille_type_key);
+        mBrailleTypePreference.setOnPreferenceChangeListener(this);
+        mSixDotTablePreference = (ListPreference) findPreferenceByResId(
+                R.string.pref_six_dot_braille_table_key);
+        mSixDotTablePreference.setOnPreferenceChangeListener(this);
+        mEightDotTablePreference = (ListPreference) findPreferenceByResId(
+                R.string.pref_eight_dot_braille_table_key);
+        mEightDotTablePreference.setOnPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mDisplay = new Display(this, this);
+        mDisplay.setOnConnectionChangeProgressListener(this);
+        mTranslatorManager = new TranslatorManager(this);
+        mTranslatorManager.addOnTablesChangedListener(this);
+        onConnectionStateChanged(Display.STATE_NOT_CONNECTED);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mTranslatorManager.removeOnTablesChangedListener(this);
+        mTranslatorManager.shutdown();
+    }
+
+    @Override
+    public void onConnectionStateChanged(int state) {
+        mConnectionState = state;
+        CharSequence summary;
+        boolean enableBindings = false;
+        switch (state) {
+            case Display.STATE_CONNECTED:
+                summary = getText(R.string.connstate_connected);
+                enableBindings = true;
+                break;
+            case Display.STATE_NOT_CONNECTED:
+                summary = getText(R.string.connstate_not_connected);
+                break;
+            default:
+                summary = getText(R.string.connstate_error);
+                break;
+        }
+        Preference bindingsPref =
+                findPreferenceByResId(R.string.pref_key_bindings_key);
+        bindingsPref.setEnabled(enableBindings);
+        mStatusPreference.setSummary(summary);
+    }
+
+    @Override
+    public void onConnectionChangeProgress(String description) {
+        if (description == null) {
+            onConnectionStateChanged(mConnectionState);
+            return;
+        }
+        // The description is localized by the server.
+        Preference statusPref =
+                findPreferenceByResId(R.string.pref_connection_status_key);
+        statusPref.setSummary(description);
+    }
+
+    @Override
+    public void onTablesChanged() {
+        mTables = mTranslatorManager.getTranslatorClient().getTables();
+        addTableList(mSixDotTablePreference, false);
+        addTableList(mEightDotTablePreference, true);
     }
 
     /**
      * Assigns the appropriate intent to the key bindings preference.
      */
     private void assignKeyBindingsIntent() {
-        final PreferenceGroup category = (PreferenceGroup) findPreferenceByResId(
-                R.string.pref_category_device_key);
-        final Preference pref = findPreferenceByResId(R.string.pref_key_bindings_key);
-
-        if ((category == null) || (pref == null)) {
-            return;
-        }
-
-        // TODO: If no device is connected, we should probably remove the
-        // preference.
-
-        // if (!isDeviceConnected) {
-        // category.removePreference(pref);
-        // return;
-        // }
+        Preference pref =
+                findPreferenceByResId(R.string.pref_key_bindings_key);
 
         final Intent intent = new Intent(this, KeyBindingsActivity.class);
 
@@ -70,5 +156,105 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity {
     @SuppressWarnings("deprecation")
     private Preference findPreferenceByResId(int resId) {
         return findPreference(getString(resId));
+    }
+
+    private void addTableList(ListPreference pref, boolean eightDot) {
+        ArrayList<TableInfo> tables = new ArrayList<TableInfo>();
+        for (TableInfo info : mTables) {
+            if (eightDot == info.isEightDot()) {
+                tables.add(info);
+            }
+        }
+        Collections.sort(tables, TABLE_INFO_COMPARATOR);
+        CharSequence[] entryValues = new CharSequence[tables.size() + 1];
+        CharSequence[] entries = new CharSequence[tables.size() + 1];
+        int index = 0;
+        TableInfo defaultInfo = mTranslatorManager.findDefaultTableInfo(
+                eightDot);
+        if (defaultInfo != null) {
+            entries[index] = getString(
+                    R.string.pref_braille_table_default_label,
+                    createTableDisplayName(defaultInfo));
+        } else {
+            entries[index] = getText(
+                    R.string.pref_braille_table_default_none_label);
+        }
+        entryValues[index] = getString(R.string.table_value_default);
+        ++index;
+        for (TableInfo info : tables) {
+            entries[index] = createTableDisplayName(info);
+            entryValues[index] = info.getId();
+            ++index;
+        }
+        pref.setEntries(entries);
+        pref.setEntryValues(entryValues);
+    }
+
+    private String createTableDisplayName(TableInfo tableInfo) {
+        String localeDisplayName = tableInfo.getLocale().getDisplayName();
+        if (tableInfo.isEightDot()) {
+            // The fact that this is computer braille is obvious
+            // from context.
+            return localeDisplayName;
+        }
+        List<TableInfo> related =
+                mTranslatorManager.getRelatedTables(tableInfo);
+        int gradeCount = 0;
+        for (TableInfo relatedInfo : related) {
+            if (relatedInfo.isEightDot()) {
+                continue;
+            }
+            ++gradeCount;
+        }
+        if (gradeCount <= 1) {
+            // Only one of our kind.
+            return localeDisplayName;
+        }
+        return getString(R.string.table_name_grade,
+                localeDisplayName, tableInfo.getGrade());
+    }
+
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        // Always update the summary based on the list preference value.
+        if (preference instanceof ListPreference) {
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue((String) newValue);
+            CharSequence entries[] = listPreference.getEntries();
+            if (index < 0 || index >= entries.length) {
+                LogUtils.log(this, Log.ERROR,
+                        "Unknown preference value for %s: %s",
+                        preference.getKey(), newValue);
+                return false;
+            }
+            listPreference.setSummary(entries[index]);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onPreferenceClick(Preference pref) {
+        LogUtils.log(this, Log.VERBOSE, "Polling display");
+        mDisplay.poll();
+        return true;
+    }
+
+    private static class TableInfoComparator
+        implements Comparator<TableInfo> {
+        @Override
+        public int compare(TableInfo first, TableInfo second) {
+            if (first.equals(second)) {
+                return 0;
+            }
+            int ret = first.getLocale().getDisplayName().compareTo(
+                    second.getLocale().getDisplayName());
+            if (ret == 0 && first.isEightDot() != second.isEightDot()) {
+                ret = first.isEightDot() ? 1 : -1;
+            }
+            if (ret == 0) {
+                ret = first.getGrade() - second.getGrade();
+            }
+            return ret;
+        }
     }
 }

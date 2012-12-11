@@ -83,4 +83,50 @@ public class FocusFinder {
         return next;
     }
 
+    public static AccessibilityNodeInfoCompat findFirstFocusableDescendant(
+            AccessibilityNodeInfoCompat root, Context context) {
+        // null guard and shortcut for leaf nodes.
+        if (root == null || root.getChildCount() <= 0) {
+            return null;
+        }
+        HashSet<AccessibilityNodeInfoCompat> seenNodes =
+                new HashSet<AccessibilityNodeInfoCompat>();
+        seenNodes.add(root);
+        try {
+            return findFirstFocusableDescendantInternal(
+                    root, context, seenNodes);
+        } finally {
+            seenNodes.remove(root);  // Not owned by us.
+            AccessibilityNodeInfoUtils.recycleNodes(seenNodes);
+        }
+    }
+
+    private static AccessibilityNodeInfoCompat
+          findFirstFocusableDescendantInternal(
+                  AccessibilityNodeInfoCompat root, Context context,
+                  HashSet<AccessibilityNodeInfoCompat> seenNodes) {
+        for (int i = 0, end = root.getChildCount(); i < end; ++i) {
+            AccessibilityNodeInfoCompat child = root.getChild(i);
+            if (child == null) {
+                continue;
+            }
+            if (AccessibilityNodeInfoUtils.shouldFocusNode(
+                            context, child)) {
+                return child;
+            }
+            if (!seenNodes.add(child)) {
+                LogUtils.log(FocusFinder.class, Log.ERROR,
+                        "Cycle in node tree");
+                child.recycle();
+                return null;
+            }
+            AccessibilityNodeInfoCompat n =
+                    findFirstFocusableDescendantInternal(
+                            root, context, seenNodes);
+            if (n != null) {
+                return n;
+            }
+        }
+        return null;
+    }
 }

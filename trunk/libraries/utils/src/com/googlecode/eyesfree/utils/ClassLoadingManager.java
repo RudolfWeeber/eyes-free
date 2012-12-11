@@ -31,7 +31,7 @@ import java.util.List;
  * @author svetoslavganov@google.com (Svetoslav R. Ganov)
  * @author alanv@google.com (Alan Viverette)
  */
-public class ClassLoadingManager implements InfrastructureStateListener {
+public class ClassLoadingManager {
 
     /**
      * The singleton instance of this class.
@@ -67,16 +67,23 @@ public class ClassLoadingManager implements InfrastructureStateListener {
         return sInstance;
     }
 
-    @Override
-    public void onInfrastructureStateChange(Context context, boolean isInitialized) {
-        if (isInitialized) {
-            buildInstalledPackagesCache(context);
-            mPackageMonitor.register(context);
-        } else {
-            clearInstalledPackagesCache();
-            mClassNameToClassMap.clear();
-            mPackageMonitor.unregister();
-        }
+    /**
+     * Builds the package cache and registers the package monitor
+     *
+     * @param context The {@link Context} to use for monitor registration
+     */
+    public void init(Context context) {
+        buildInstalledPackagesCache(context);
+        mPackageMonitor.register(context);
+    }
+
+    /**
+     * Clears the package cache and unregisteres the package monitor
+     */
+    public void shutdown() {
+        clearInstalledPackagesCache();
+        mClassNameToClassMap.clear();
+        mPackageMonitor.unregister();
     }
 
     /**

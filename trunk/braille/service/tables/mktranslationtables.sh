@@ -26,15 +26,15 @@ function cleanup() {
 mkdir -p "$tempdir/liblouis/tables"
 trap cleanup exit
 
-tableglob="$srcdir/*.ctb $srcdir/*.utb $srcdir/*.dis"
-# Files that are large or have missing dependencies and are not currently
-# used.
-# The excludes are basenames only.
-excludes="-X compress.ctb -X boxes.ctb -X zh-tw.ctb -X zh-hk.ctb \
--X de-g2-core.ctb"
+# Use the files refered in the table list resource file.  This depends on the
+# lexical format of this file, notably the fileName attributes being
+# on the same lines as their values and the values being quoted with
+# double quotes.
+tablefiles=$(egrep 'fileName ?=' $basedir/res/xml/tablelist.xml \
+  |sed -re "s#^.*fileName ?= ?\"([^\"]+)\".*\$#${srcdir}/\1#")
 
 echo "Copying translation tables..."
-$scriptdir/copywithdeps.py $excludes $tableglob $tempdir/liblouis/tables
+$scriptdir/copywithdeps.py $tablefiles $tempdir/liblouis/tables
 echo "Creating archive..."
 (cd "$tempdir" && zip -9 translationtables.zip liblouis/tables/*)
 mv "$tempdir/translationtables.zip" "$dstdir"

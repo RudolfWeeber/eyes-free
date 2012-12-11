@@ -74,6 +74,15 @@
     <string name="key_APH_AdvanceLeft">AdvanceLeft</string>
     <string name="key_APH_AdvanceRight">AdvanceRight</string>
 
+    <!-- HWG Brailliant (older model) -->
+    <string name="key_hwg_brailliant_Display1">Display1</string>
+    <string name="key_hwg_brailliant_Display2">Display2</string>
+    <string name="key_hwg_brailliant_Display3">Display3</string>
+    <string name="key_hwg_brailliant_Display4">Display4</string>
+    <string name="key_hwg_brailliant_Display5">Display5</string>
+    <string name="key_hwg_brailliant_Display6">Display6</string>
+
+
     <!-- Braillex -->
     <string name="key_braillex_RightKeyFront">RightKeyFront</string>
     <string name="key_braillex_RightKeyRear">RightKeyRear</string>

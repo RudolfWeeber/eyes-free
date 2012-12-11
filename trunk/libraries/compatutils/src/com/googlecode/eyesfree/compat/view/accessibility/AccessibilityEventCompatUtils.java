@@ -30,6 +30,8 @@ public class AccessibilityEventCompatUtils {
     private static final Class<?> CLASS_AccessibilityEvent = AccessibilityEvent.class;
     private static final Method METHOD_getToIndex = CompatUtils.getMethod(
             CLASS_AccessibilityEvent, "getToIndex");
+    private static final Method METHOD_getMovementGranularity = CompatUtils.getMethod(
+            CLASS_AccessibilityEvent, "getMovementGranularity");
 
     private AccessibilityEventCompatUtils() {
         // This class is non-instantiable.
@@ -65,5 +67,14 @@ public class AccessibilityEventCompatUtils {
      */
     public static int getToIndex(AccessibilityEvent event) {
         return (Integer) CompatUtils.invoke(event, -1, METHOD_getToIndex);
+    }
+
+    /**
+     * Gets the movement granularity that was traversed.
+     *
+     * @return The granularity.
+     */
+    public static int getMovementGranularity(AccessibilityEvent event) {
+        return (Integer) CompatUtils.invoke(event, -1, METHOD_getMovementGranularity);
     }
 }

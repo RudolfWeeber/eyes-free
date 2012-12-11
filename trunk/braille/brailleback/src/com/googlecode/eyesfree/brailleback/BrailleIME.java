@@ -52,6 +52,8 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
     private static final MarkingSpan EDIT_TEXT_SPAN = new MarkingSpan();
     /** Marks the extent of the action button. */
     private static final MarkingSpan ACTION_LABEL_SPAN = new MarkingSpan();
+    private static final int DIRECTION_FORWARD = 1;
+    private static final int DIRECTION_BACKWARD = -1;
 
     private static BrailleIME sInstance;
 
@@ -73,7 +75,7 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
      * The text that is shown on the display.  Might be only part of the
      * full edit field if it is larger than {@code MAX_REQUEST_CHARS}.
      */
-    private StringBuffer mCurrentText = new StringBuffer();
+    private StringBuilder mCurrentText = new StringBuilder();
     // Whether accessibility and input focus are both on the same
     // node and that node represents an edit field.
     private boolean mEditFieldFocused = false;
@@ -106,9 +108,7 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
             mExtractedText = null;
         }
         updateCurrentText();
-        if (isInEditField()) {
-            updateDisplay();
-        }
+        updateDisplay();
         updateState();
     }
 
@@ -234,11 +234,23 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
             DisplayManager.Content content) {
         switch (event.getCommand()) {
             case BrailleInputEvent.CMD_NAV_ITEM_PREVIOUS:
-                // TODO: Stop sending key events.
-                return sendAndroidKey(KeyEvent.KEYCODE_DPAD_LEFT);
+                return moveCursor(DIRECTION_BACKWARD,
+                        AccessibilityNodeInfoCompat
+                        .MOVEMENT_GRANULARITY_CHARACTER);
             case BrailleInputEvent.CMD_NAV_ITEM_NEXT:
-                // TODO: Stop sending key events.
-                return sendAndroidKey(KeyEvent.KEYCODE_DPAD_RIGHT);
+                return moveCursor(DIRECTION_FORWARD,
+                        AccessibilityNodeInfoCompat
+                        .MOVEMENT_GRANULARITY_CHARACTER);
+            case BrailleInputEvent.CMD_NAV_LINE_PREVIOUS:
+                // Line navigation moves by paragraph since there's no way of
+                // knowing the line extents in the edit text.
+                return moveCursor(DIRECTION_BACKWARD,
+                        AccessibilityNodeInfoCompat
+                        .MOVEMENT_GRANULARITY_PARAGRAPH);
+            case BrailleInputEvent.CMD_NAV_LINE_NEXT:
+                return moveCursor(DIRECTION_FORWARD,
+                        AccessibilityNodeInfoCompat
+                        .MOVEMENT_GRANULARITY_PARAGRAPH);
             case BrailleInputEvent.CMD_KEY_DEL:
                 return sendAndroidKey(KeyEvent.KEYCODE_DEL);
             case BrailleInputEvent.CMD_KEY_ENTER:
@@ -268,7 +280,7 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
                         FeedbackManager.TYPE_COMMAND_FAILED);
                 } else if (spans[0] == EDIT_TEXT_SPAN) {
                     return emitFeedbackOnFailure(
-                        moveSelection(ic,
+                        setCursor(ic,
                                 position - text.getSpanStart(EDIT_TEXT_SPAN)),
                         FeedbackManager.TYPE_COMMAND_FAILED);
                 }
@@ -287,6 +299,9 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
     }
 
     private boolean sendDefaultAction() {
+        if (!allowsDefaultAction()) {
+            return false;
+        }
         EditorInfo ei = getCurrentInputEditorInfo();
         InputConnection ic = getCurrentInputConnection();
         if (ei == null || ic == null) {
@@ -301,7 +316,53 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         }
     }
 
-    private boolean moveSelection(InputConnection ic, int pos) {
+    private boolean moveCursor(int direction, int granularity) {
+        if (mCurrentText == null) {
+            return false;
+        }
+        switch (granularity) {
+            case AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_CHARACTER:
+                int keyCode = (direction == DIRECTION_BACKWARD)
+                    ? KeyEvent.KEYCODE_DPAD_LEFT
+                    : KeyEvent.KEYCODE_DPAD_RIGHT;
+                return sendAndroidKey(keyCode);
+            case AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PARAGRAPH:
+                if (!isMultiLineField()) {
+                    return false;
+                }
+                int newPos = (direction == DIRECTION_BACKWARD)
+                    ? findParagraphBreakBackward()
+                    : findParagraphBreakForward();
+                // newPos == the length means having the insertion point after
+                // the last character, so the below comparison is correct.
+                if (newPos < 0 || newPos > mCurrentText.length()) {
+                    return false;
+                }
+                return setCursor(getCurrentInputConnection(), newPos);
+        }
+        return false;
+    }
+
+    private int findParagraphBreakBackward() {
+        if (mSelectionStart <= 0) {
+            return -1;
+        }
+        return mCurrentText.lastIndexOf("\n", mSelectionStart - 2) + 1;
+    }
+
+    private int findParagraphBreakForward() {
+        if (mSelectionEnd >= mCurrentText.length()) {
+            return -1;
+        }
+        int index = mCurrentText.indexOf("\n", mSelectionEnd);
+        if (index >= 0 && index < mCurrentText.length()) {
+            return index + 1;
+        } else {
+            return mCurrentText.length();
+        }
+    }
+
+    private boolean setCursor(InputConnection ic, int pos) {
         if (mCurrentText == null) {
             return false;
         }
@@ -346,6 +407,12 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
+        // Nothing to do.
+    }
+
+    @Override
+    public void onInvalidateAccessibilityNode(
+        AccessibilityNodeInfoCompat node) {
         // Nothing to do.
     }
 
@@ -401,7 +468,7 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
     private BrailleTranslator getCurrentBrailleTranslator() {
         BrailleBackService service = BrailleBackService.getActiveInstance();
         if (service != null) {
-            return service.mTranslator;
+            return service.mTranslatorManager.getUncontractedTranslator();
         }
         return null;
     }
@@ -423,6 +490,9 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
     }
 
     private void updateDisplay() {
+        if (!isInEditField()) {
+            return;
+        }
         DisplayManager displayManager = getCurrentDisplayManager();
         if (displayManager == null) {
             return;
@@ -457,7 +527,9 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         DisplaySpans.addSelection(text,
             editStart + mSelectionStart, editStart + mSelectionEnd);
         displayManager.setContent(
-            new DisplayManager.Content(text));
+            new DisplayManager.Content(text)
+                .setPanStrategy(DisplayManager.Content.PAN_CURSOR)
+                .setSplitParagraphs(isMultiLineField()));
     }
 
     private CharSequence getActionLabel() {
@@ -465,10 +537,38 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         if (ei == null) {
             return null;
         }
+        if (!allowsDefaultAction()) {
+            // The edit field asks us to not show this inline in the
+            // editor.
+            return null;
+        }
         if (ei.actionLabel != null) {
             return ei.actionLabel;
         }
         return getTextForImeAction(ei.imeOptions);
+    }
+
+    private boolean allowsDefaultAction() {
+        EditorInfo ei = getCurrentInputEditorInfo();
+        if (ei != null
+                && (ei.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION) == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isMultiLineField() {
+        EditorInfo ei = getCurrentInputEditorInfo();
+        if (ei == null) {
+            return false;
+        }
+        int type = ei.inputType;
+        final int mask = EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE
+            | EditorInfo.TYPE_TEXT_FLAG_IME_MULTI_LINE;
+        // Consider this a multiline field if it is multiline in the main
+        // text field, and not multiline only in the ime fullscreen mode.
+        return ((type & mask)
+                == EditorInfo.TYPE_TEXT_FLAG_MULTI_LINE);
     }
 
     private void addMarkingSpan(Spannable spannable, MarkingSpan span,
@@ -515,6 +615,23 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
             AccessibilityNodeInfoUtils.recycleNodes(
                 root, inputFocused, accessibilityFocused);
             mEditFieldFocused = result;
+        }
+    }
+
+    private AccessibilityNodeInfoCompat getNodeWithInputFocus() {
+        AccessibilityNodeInfoCompat root = null;
+        try {
+            BrailleBackService service = BrailleBackService.getActiveInstance();
+            if (service == null) {
+                return null;
+            }
+            root = getRootInActiveWindow(service);
+            if (root == null) {
+                return null;
+            }
+            return root.findFocus(AccessibilityNodeInfoCompat.FOCUS_INPUT);
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(root);
         }
     }
 

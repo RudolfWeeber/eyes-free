@@ -16,6 +16,7 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
@@ -29,6 +30,7 @@ public interface NavigationMode {
     void onDeactivate();
     void onObserveAccessibilityEvent(AccessibilityEvent event);
     void onAccessibilityEvent(AccessibilityEvent event);
+    void onInvalidateAccessibilityNode(AccessibilityNodeInfoCompat node);
     boolean onPanLeftOverflow(DisplayManager.Content content);
     boolean onPanRightOverflow(DisplayManager.Content content);
     boolean onMappedInputEvent(BrailleInputEvent event,

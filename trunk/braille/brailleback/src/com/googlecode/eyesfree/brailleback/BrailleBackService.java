@@ -17,16 +17,18 @@
 package com.googlecode.eyesfree.brailleback;
 
 import android.accessibilityservice.AccessibilityService;
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.braille.display.Display;
-import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
-import com.googlecode.eyesfree.braille.translate.TranslatorManager;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
@@ -59,12 +61,11 @@ public class BrailleBackService
 
     /*package*/ FeedbackManager mFeedbackManager;
 
+    /*package*/ TranslatorManager mTranslatorManager;
+
     /** Braille display manager. */
     /*package*/ DisplayManager mDisplayManager;
 
-    private TranslatorManager mTranslatorManager;
-    /** Used to translate text into braille. */
-    /*package*/ BrailleTranslator mTranslator;
     private IMEHelper mIMEHelper;
 
     /** Set if the infrastructure is initialized. */
@@ -84,6 +85,7 @@ public class BrailleBackService
         public void handleMessage(Message message) {
             switch (message.what) {
                 case WHAT_START:
+                    updateServiceInfo();
                     initializeDependencies();
                     return;
                 case WHAT_SHUTDOWN:
@@ -225,6 +227,13 @@ public class BrailleBackService
         // Nothing to interrupt.
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfiguration) {
+        if (mTranslatorManager != null) {
+            mTranslatorManager.onConfigurationChanged(newConfiguration);
+        }
+    }
+
     public void imeOpened(BrailleIME ime) {
         if (mModeSwitcher != null) {
             mModeSwitcher.overrideMode(ime);
@@ -239,27 +248,20 @@ public class BrailleBackService
 
     private void initializeDependencies() {
         mFeedbackManager = new FeedbackManager(this);
-        mTranslatorManager = new TranslatorManager(
-            this, new TranslatorManager.OnInitListener() {
-                    @Override
-                    public void onInit(int status) {
-                        if (status != TranslatorManager.SUCCESS) {
-                            LogUtils.log(this, Log.ERROR,
-                                    "Couldn't initialize braille translator");
-                            return;
-                        }
-                        initializeDisplayManager();
-                        initializeModeSwitcher();
-                    }
-                });
+        mTranslatorManager = new TranslatorManager(this);
+        initializeDisplayManager();
+        initializeModeSwitcher();
         mIMEHelper = new IMEHelper(this);
     }
 
+    private void updateServiceInfo() {
+        AccessibilityServiceInfo info = getServiceInfo();
+        info.feedbackType |= AccessibilityServiceInfo.FEEDBACK_BRAILLE;
+        setServiceInfo(info);
+    }
+
     private void initializeDisplayManager() {
-        // TODO: Allow a user to override this with a setting.
-        mTranslator = mTranslatorManager.getTranslator(
-            getString(R.string.brailletable_8dot_default));
-        mDisplayManager = new DisplayManager(mTranslator,
+        mDisplayManager = new DisplayManager(mTranslatorManager,
                 this /*context*/,
                 this /*panOverflowListener*/,
                 this /*connectionStateChangeListener*/,
@@ -283,7 +285,7 @@ public class BrailleBackService
             mDisplayManager = null;
         }
         if (mTranslatorManager != null) {
-            mTranslatorManager.destroy();
+            mTranslatorManager.shutdown();
             mTranslatorManager = null;
         }
         // TODO: Shut down feedback manager and braille translator
@@ -305,4 +307,15 @@ public class BrailleBackService
         return sInstance;
     }
 
+    /**
+     * Signal that this node, or one of its descendants, has been changed in a
+     * way that could affect how it is displayed.  If the node is contributing
+     * to the content of the display, the display content will be updated
+     * accordingly.
+     */
+    public void invalidateNode(AccessibilityNodeInfo node) {
+        AccessibilityNodeInfoCompat wrapped =
+                new AccessibilityNodeInfoCompat(node);
+        mModeSwitcher.onInvalidateAccessibilityNode(wrapped);
+    }
 }

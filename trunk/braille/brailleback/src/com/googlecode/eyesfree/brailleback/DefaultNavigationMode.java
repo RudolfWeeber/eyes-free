@@ -17,6 +17,7 @@
 package com.googlecode.eyesfree.brailleback;
 
 import android.accessibilityservice.AccessibilityService;
+import android.os.Bundle;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -30,6 +31,7 @@ import com.googlecode.eyesfree.brailleback.utils.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoRef;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.WebInterfaceUtils;
 
 /**
  * Navigation mode that is based on traversing the node tree using
@@ -37,20 +39,39 @@ import com.googlecode.eyesfree.utils.LogUtils;
  */
 // TODO: Consolidate parts of this class with similar code in TalkBack.
 class DefaultNavigationMode implements NavigationMode {
+    private static final int DIRECTION_BACKWARD =
+        WebInterfaceUtils.DIRECTION_BACKWARD;
+    private static final int DIRECTION_FORWARD =
+        WebInterfaceUtils.DIRECTION_FORWARD;
+    /**
+     * Granularity used in web view navigation when the user presses the line
+     * navigation keys or pan overflows.  Corresponds to chromevox group
+     * granularity.
+     */
+    private static final int GRANULARITY_LINE =
+        AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PARAGRAPH;
+    /**
+     * Granularity used in web view navigation when the user presses the item
+     * navigation keys.  Corresponds to chromevox object navigation.
+     */
+    private static final int GRANULARITY_ITEM =
+        AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_LINE;
     private final DisplayManager mDisplayManager;
     private final AccessibilityService mAccessibilityService;
     private final NodeBrailler mNodeBrailler;
     private final FeedbackManager mFeedbackManager;
     private final FocusFinder mFocusFinder;
     private final BrailleRuleRepository mRuleRepository;
+    private final Bundle mArgumentBundle = new Bundle();
 
     private boolean mActive = false;
-    private AccessibilityEvent mLastEvent;
+    private AccessibilityNodeInfoRef mLastFocusedNode =
+            new AccessibilityNodeInfoRef();
 
     public DefaultNavigationMode(
-        DisplayManager displayManager,
-        AccessibilityService accessibilityService,
-        FeedbackManager feedbackManager) {
+            DisplayManager displayManager,
+            AccessibilityService accessibilityService,
+            FeedbackManager feedbackManager) {
         mDisplayManager = displayManager;
         mAccessibilityService = accessibilityService;
         mRuleRepository = new BrailleRuleRepository(mAccessibilityService);
@@ -68,25 +89,35 @@ class DefaultNavigationMode implements NavigationMode {
     }
 
     private boolean onPanLeftOverflowInternal(DisplayManager.Content content) {
-        AccessibilityNodeInfoRef firstNode =
-                AccessibilityNodeInfoRef.refreshed(
-                    content.getFirstNode());
-        // If the content doesn't have a first node, fall back on the
-        // currently focused node.
-        if (AccessibilityNodeInfoRef.isNull(firstNode)
-                || !firstNode.get().isVisibleToUser()) {
-            firstNode = AccessibilityNodeInfoRef.owned(getFocusedNode(true));
-        }
-        if (AccessibilityNodeInfoRef.isNull(firstNode)) {
-            return false;
-        }
-        AccessibilityNodeInfoCompat target =
-                mFocusFinder.linear(firstNode.get(),
-                        FocusFinder.SEARCH_BACKWARD);
+        AccessibilityNodeInfoCompat currentNode = null;
+        AccessibilityNodeInfoCompat firstNode = null;
         try {
-            return moveFocus(firstNode.get(), FocusFinder.SEARCH_BACKWARD);
+            // If the currently focused node is a web view, we attempt
+            // to delegate navigation to the web view first.
+            currentNode = getFocusedNode(true);
+            if (currentNode != null
+                    && WebInterfaceUtils.hasWebContent(currentNode)
+                    && WebInterfaceUtils.performNavigationAtGranularityAction(
+                            currentNode, DIRECTION_BACKWARD, GRANULARITY_LINE)) {
+                return true;
+            }
+            firstNode = AccessibilityNodeInfoUtils.refreshNode(
+                    content.getFirstNode());
+            // If the content doesn't have a first node, fall back on the
+            // currently focused node.
+            if (firstNode == null || !firstNode.isVisibleToUser()) {
+                AccessibilityNodeInfoUtils.recycleNodes(firstNode);
+                firstNode = currentNode;
+                currentNode = null;
+            }
+            if (firstNode == null) {
+                return false;
+            }
+            AccessibilityNodeInfoCompat target =
+                mFocusFinder.linear(firstNode, FocusFinder.SEARCH_BACKWARD);
+            return moveFocus(firstNode, DIRECTION_BACKWARD);
         } finally {
-            firstNode.recycle();
+            AccessibilityNodeInfoUtils.recycleNodes(currentNode, firstNode);
         }
     }
 
@@ -98,7 +129,18 @@ class DefaultNavigationMode implements NavigationMode {
     }
 
     private boolean onPanRightOverflowInternal(
-        DisplayManager.Content content) {
+            DisplayManager.Content content) {
+        AccessibilityNodeInfoCompat currentNode = getFocusedNode(true);
+        try {
+            if (currentNode != null
+                    && WebInterfaceUtils.hasWebContent(currentNode)
+                    && WebInterfaceUtils.performNavigationAtGranularityAction(
+                            currentNode, DIRECTION_FORWARD, GRANULARITY_LINE)) {
+                return true;
+            }
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(currentNode);
+        }
         AccessibilityNodeInfoRef target = findNodeForPanRight(content);
         if (AccessibilityNodeInfoRef.isNull(target)) {
             return false;
@@ -117,59 +159,71 @@ class DefaultNavigationMode implements NavigationMode {
      * while some (such as containers) don't.
      */
     private AccessibilityNodeInfoRef findNodeForPanRight(
-        DisplayManager.Content content) {
+            DisplayManager.Content content) {
         AccessibilityNodeInfoRef current =
                 AccessibilityNodeInfoRef.refreshed(content.getFirstNode());
+        if (current == null) {
+            current = new AccessibilityNodeInfoRef();
+        }
         // Simplify the algorithm by finding the node to stop our traversal
         // at, which is null if the display is at the end of the tree
         // (in pre-order traversal order).
         AccessibilityNodeInfoRef sentinel =
                 AccessibilityNodeInfoRef.refreshed(content.getLastNode());
-        if (AccessibilityNodeInfoRef.isNull(current)
-                || !current.get().isVisibleToUser()
-                || AccessibilityNodeInfoRef.isNull(sentinel)) {
-            return AccessibilityNodeInfoRef.owned(
-                linearSearch(FocusFinder.SEARCH_FORWARD));
-        }
-        nextUpwardsOrClear(sentinel);
-        while (!AccessibilityNodeInfoRef.isNull(current)
-                && !current.get().equals(sentinel.get())) {
-            BrailleRule rule = mRuleRepository.find(current.get());
-            // If children of this node are not included on the display, look
-            // for focusable descendants.
-            if (!rule.includeChildren(current.get())) {
-                AccessibilityNodeInfoCompat focusableDescendant =
-                        findFirstFocusableDescendant(current.get());
-                if (focusableDescendant != null) {
-                    current.reset(focusableDescendant);
-                    return current;
-                }
-                nextUpwardsOrClear(current);
-            } else {
-                if (!current.nextInOrder()) {
-                    current.clear();
-                }
-            }
-        }
-        if (AccessibilityNodeInfoRef.isNull(current)) {
-            if (!AccessibilityNodeInfoRef.isNull(sentinel)) {
-                // We missed the sentinel, which would happen if there is some
-                // node tree change under our feet.  Fall back on a normal
-                // linear forward search so the user doesn't get stuck.
+        try {
+            if (AccessibilityNodeInfoRef.isNull(current)
+                    || !current.get().isVisibleToUser()
+                    || AccessibilityNodeInfoRef.isNull(sentinel)) {
                 current.reset(linearSearch(FocusFinder.SEARCH_FORWARD));
-            } else {
-                // Reached the end of the tree.
+                return current;
             }
-        } else {
-            // We reached the sentinel, now focus that node or one that we
-            // find by linear forward search.
-            if (!AccessibilityNodeInfoUtils.shouldFocusNode(
-                mAccessibilityService, current.get())) {
-                current.reset(mFocusFinder.linear(current.get(),
-                                FocusFinder.SEARCH_FORWARD));
+            nextUpwardsOrClear(sentinel);
+            while (!AccessibilityNodeInfoRef.isNull(current)
+                    && !current.get().equals(sentinel.get())) {
+                BrailleRule rule = mRuleRepository.find(current.get());
+                // If children of this node are not included on the display,
+                // look for focusable descendants.
+                if (!rule.includeChildren(current.get(),
+                                mAccessibilityService)) {
+                    AccessibilityNodeInfoCompat focusableDescendant =
+                        FocusFinder.findFirstFocusableDescendant(
+                                current.get(), mAccessibilityService);
+                    if (focusableDescendant != null) {
+                        current.reset(focusableDescendant);
+                        return current;
+                    }
+                    nextUpwardsOrClear(current);
+                } else {
+                    if (!current.nextInOrder()) {
+                        current.clear();
+                    }
+                }
+            }
+            if (AccessibilityNodeInfoRef.isNull(current)) {
+                if (!AccessibilityNodeInfoRef.isNull(sentinel)) {
+                    // We missed the sentinel, which would happen if there is
+                    // some node tree change under our feet.  Fall back on a
+                    // normal linear forward search so the user doesn't get
+                    // stuck.
+                    current.reset(linearSearch(FocusFinder.SEARCH_FORWARD));
+                } else {
+                    // Reached the end of the tree.
+                }
+            } else {
+                // We reached the sentinel, now focus that node or one that we
+                // find by linear forward search.
+                if (!AccessibilityNodeInfoUtils.shouldFocusNode(
+                                mAccessibilityService, current.get())) {
+                    current.reset(mFocusFinder.linear(current.get(),
+                                    FocusFinder.SEARCH_FORWARD));
+                }
+            }
+            return current;
+        } finally {
+            if (sentinel != null) {
+                sentinel.recycle();
             }
         }
-        return current;
     }
 
     /**
@@ -190,76 +244,70 @@ class DefaultNavigationMode implements NavigationMode {
         node.clear();
     }
 
-    // TODO: Protect against cycles.
-    private AccessibilityNodeInfoCompat findFirstFocusableDescendant(
-        AccessibilityNodeInfoCompat root) {
-        if (root == null) {
-            return null;
-        }
-        AccessibilityNodeInfoRef current =
-                AccessibilityNodeInfoRef.unOwned(root);
-        try {
-            if (!current.firstChild()) {
-                return null;
-            }
-            do {
-                if (AccessibilityNodeInfoUtils.shouldFocusNode(
-                        mAccessibilityService, current.get())) {
-                    return current.release();
-                }
-                AccessibilityNodeInfoCompat n = findFirstFocusableDescendant(
-                    current.get());
-                if (n != null) {
-                    return n;
-                }
-            } while (current.nextSibling());
-        } finally {
-            current.recycle();
-        }
-        return null;
-    }
-
     private boolean linePrevious(DisplayManager.Content content) {
         return mFeedbackManager.emitOnFailure(
             linePreviousInternal(content),
             FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
     }
 
+    /**
+     * Moves accessibility focus to the first focusable node of the previous
+     * 'line'.
+     */
     private boolean linePreviousInternal(DisplayManager.Content content) {
-        AccessibilityNodeInfoRef firstNode =
-                AccessibilityNodeInfoRef.unOwned(
-                    content.getFirstNode());
-        // If the content doesn't have a first node, fall back on the
-        // currently focused node.
-        if (AccessibilityNodeInfoRef.isNull(firstNode)) {
-            firstNode = AccessibilityNodeInfoRef.owned(getFocusedNode(true));
-        }
-        if (AccessibilityNodeInfoRef.isNull(firstNode)) {
-            return false;
-        }
-        AccessibilityNodeInfoCompat target =
-                mFocusFinder.linear(firstNode.get(),
-                        FocusFinder.SEARCH_BACKWARD);
-        if (target == null) {
-            return false;
-        }
         AccessibilityNodeInfoRef left = new AccessibilityNodeInfoRef();
         AccessibilityNodeInfoRef right = new AccessibilityNodeInfoRef();
-        mNodeBrailler.findDisplayExtentFromNode(target, left, right);
-        if (!AccessibilityNodeInfoUtils.shouldFocusNode(mAccessibilityService,
-                        left.get())) {
-            left.reset(mFocusFinder.linear(left.get(),
-                            FocusFinder.SEARCH_FORWARD));
-        }
-        if (AccessibilityNodeInfoRef.isNull(left)) {
-            left.reset(target);
-            target = null;
-        }
+        AccessibilityNodeInfoCompat target = null;
+        AccessibilityNodeInfoCompat currentNode = getFocusedNode(true);
         try {
+            if (currentNode != null
+                    && WebInterfaceUtils.hasWebContent(currentNode)
+                    && WebInterfaceUtils.performNavigationAtGranularityAction(
+                            currentNode, DIRECTION_BACKWARD, GRANULARITY_LINE)) {
+                return true;
+            }
+            AccessibilityNodeInfoRef firstNode =
+                AccessibilityNodeInfoRef.unOwned(
+                        content.getFirstNode());
+            // If the content doesn't have a first node, fall back on the
+            // currently focused node.
+            if (AccessibilityNodeInfoRef.isNull(firstNode)) {
+                firstNode = AccessibilityNodeInfoRef.owned(currentNode);
+                currentNode = null;
+            }
+            if (AccessibilityNodeInfoRef.isNull(firstNode)) {
+                return false;
+            }
+            // Move backwards one step from the first node that is currently
+            // displayed.
+            target = mFocusFinder.linear(firstNode.get(),
+                    FocusFinder.SEARCH_BACKWARD);
+            firstNode.recycle();
+            if (target == null) {
+                return false;
+            }
+            // Find what would be covered by the display if target
+            // would have accessibility focus.
+            mNodeBrailler.findDisplayExtentFromNode(target, left, right);
+            // Find the first focusable nodes moving forward from left,
+            // i fleft is not focusable itself.
+            if (!AccessibilityNodeInfoUtils.shouldFocusNode(
+                            mAccessibilityService,
+                            left.get())) {
+                left.reset(mFocusFinder.linear(left.get(),
+                                FocusFinder.SEARCH_FORWARD));
+            }
+            // If we didn't find a focusable node at the beginning of the
+            // line we are trying to move to, just move to target as
+            // a fallback.
+            if (AccessibilityNodeInfoRef.isNull(left)) {
+                left.reset(target);
+                target = null;
+            }
             return left.get().performAction(
-                AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
+                    AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
         } finally {
-            AccessibilityNodeInfoUtils.recycleNodes(target);
+            AccessibilityNodeInfoUtils.recycleNodes(target, currentNode);
             left.recycle();
             right.recycle();
         }
@@ -269,20 +317,41 @@ class DefaultNavigationMode implements NavigationMode {
         return onPanRightOverflow(content);
     }
 
+    private boolean itemPrevious() {
+        return mFeedbackManager.emitOnFailure(
+                navigateItem(DIRECTION_BACKWARD),
+            FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
+    }
+
+    private boolean navigateItem(int direction) {
+        AccessibilityNodeInfoCompat currentNode = getFocusedNode(true);
+        try {
+            if (currentNode != null
+                    && WebInterfaceUtils.hasWebContent(currentNode)
+                    && WebInterfaceUtils.performNavigationAtGranularityAction(
+                            currentNode, direction, GRANULARITY_ITEM)) {
+                return true;
+            }
+            return moveFocus(currentNode, direction);
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(currentNode);
+        }
+    }
+
+    private boolean itemNext() {
+        return mFeedbackManager.emitOnFailure(
+                navigateItem(DIRECTION_FORWARD),
+            FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
+    }
+
     @Override
     public boolean onMappedInputEvent(BrailleInputEvent event,
             DisplayManager.Content content) {
         switch (event.getCommand()) {
             case BrailleInputEvent.CMD_NAV_ITEM_PREVIOUS:
-                return mFeedbackManager.emitOnFailure(
-                    moveFocus(getFocusedNode(true),
-                            FocusFinder.SEARCH_BACKWARD),
-                    FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
+                return itemPrevious();
             case BrailleInputEvent.CMD_NAV_ITEM_NEXT:
-                return mFeedbackManager.emitOnFailure(
-                    moveFocus(getFocusedNode(true),
-                            FocusFinder.SEARCH_FORWARD),
-                    FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
+                return itemNext();
             case BrailleInputEvent.CMD_NAV_LINE_PREVIOUS:
                 return linePrevious(content);
             case BrailleInputEvent.CMD_NAV_LINE_NEXT:
@@ -316,10 +385,8 @@ class DefaultNavigationMode implements NavigationMode {
     @Override
     public void onActivate() {
         mActive = true;
-        if (mLastEvent != null) {
-            onAccessibilityEvent(mLastEvent);
-            setLastEvent(null);
-        }
+        mLastFocusedNode.clear();
+        brailleFocusedNode();
     }
 
     @Override
@@ -329,52 +396,48 @@ class DefaultNavigationMode implements NavigationMode {
 
     @Override
     public void onObserveAccessibilityEvent(AccessibilityEvent event) {
-        if (isInteresting(event)) {
-            setLastEvent(event);
-        }
+        // Nothing to do.
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (!isInteresting(event)) {
-            return;
+        switch (event.getEventType()) {
+            case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
+                brailleNodeFromEvent(event);
+                break;
+            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+                brailleFocusedNode();
+                break;
+            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
+                if (!brailleFocusedNode()) {
+                    // Since focus is typically not set in a newly opened
+                    // window, so braille the window as-if the first focusable
+                    // node had focus.  We don't update the focus because that
+                    // will make other services (e.g. talkback) reflect this
+                    // change, which is not desired.
+                    brailleFirstFocusableNode();
+                }
+                break;
         }
-        mDisplayManager.setContent(
-            formatEventToBraille(event));
     }
 
-    private void setLastEvent(AccessibilityEvent event) {
-        if (mLastEvent != null) {
-            mLastEvent.recycle();
-        }
-        if (event != null) {
-            mLastEvent = AccessibilityEvent.obtain(event);
-        } else {
-            mLastEvent = null;
-        }
-    }
-
-    private boolean isInteresting(AccessibilityEvent event)  {
-        int t = event.getEventType();
-        if ((t & (AccessibilityEvent.TYPE_VIEW_FOCUSED
-                                | AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED
-                                | AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED))
-                != 0) {
-            return true;
-        }
-        return false;
-
+    @Override
+    public void onInvalidateAccessibilityNode(
+            AccessibilityNodeInfoCompat node) {
+        brailleFocusedNode();
     }
 
     private boolean moveFocus(AccessibilityNodeInfoCompat from,
             int direction) {
+        int searchDirection = (direction == DIRECTION_BACKWARD)
+            ? FocusFinder.SEARCH_BACKWARD
+            : FocusFinder.SEARCH_FORWARD;
         AccessibilityNodeInfoCompat next = null;
-        next = mFocusFinder.linear(from, direction);
+        next = mFocusFinder.linear(from, searchDirection);
         try {
             if (next != null) {
-                boolean ret = next.performAction(
-                    AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
-                return ret;
+               return next.performAction(
+                       AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
             }
         } finally {
             AccessibilityNodeInfoUtils.recycleNodes(next);
@@ -386,26 +449,32 @@ class DefaultNavigationMode implements NavigationMode {
             boolean fallbackOnRoot) {
         AccessibilityNodeInfo root =
                 mAccessibilityService.getRootInActiveWindow();
-        if (root != null) {
-            try {
-                AccessibilityNodeInfo focused =
-                        root.findFocus(
-                            AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
-                if ((focused == null || !focused.isVisibleToUser()
-                                && fallbackOnRoot)) {
-                    focused = root;
+        AccessibilityNodeInfo focused = null;
+        try {
+            AccessibilityNodeInfo ret = null;
+            if (root != null) {
+                focused = root.findFocus(
+                    AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
+                if (focused != null && focused.isVisibleToUser()) {
+                    ret = focused;
+                    focused = null;
+                } else if (fallbackOnRoot) {
+                    ret = root;
                     root = null;
                 }
-                if (focused != null) {
-                    return new AccessibilityNodeInfoCompat(focused);
-                }
-            } finally {
-                if (root != null) {
-                    root.recycle();
-                }
+            } else {
+                LogUtils.log(this, Log.ERROR, "No current window root");
             }
-        } else {
-            LogUtils.log(this, Log.ERROR, "No current window root");
+            if (ret != null) {
+                return new AccessibilityNodeInfoCompat(ret);
+            }
+        } finally {
+            if (root != null) {
+                root.recycle();
+            }
+            if (focused != null) {
+                focused.recycle();
+            }
         }
         return null;
     }
@@ -463,10 +532,14 @@ class DefaultNavigationMode implements NavigationMode {
      * @return The formatted utterance.
      */
     private DisplayManager.Content formatEventToBraille(
-        AccessibilityEvent event) {
-        DisplayManager.Content content = mNodeBrailler.brailleNode(event);
-        if (content != null) {
-            return content;
+            AccessibilityEvent event) {
+        AccessibilityNodeInfoCompat eventNode = getNodeFromEvent(event);
+        if (eventNode != null) {
+            DisplayManager.Content ret = mNodeBrailler.brailleNode(
+                eventNode);
+            ret.setPanStrategy(DisplayManager.Content.PAN_CURSOR);
+            mLastFocusedNode.reset(eventNode);
+            return ret;
         }
 
         // Fall back on putting the event text on the display.
@@ -474,8 +547,74 @@ class DefaultNavigationMode implements NavigationMode {
         // done in a more disciplined manner.
         LogUtils.log(this, Log.VERBOSE,
                 "No node on event, falling back on event text");
+        mLastFocusedNode.clear();
         return new DisplayManager.Content(
             AccessibilityEventUtils.getEventText(event));
+    }
+
+    private void brailleNodeFromEvent(AccessibilityEvent event) {
+        mDisplayManager.setContent(
+            formatEventToBraille(event));
+    }
+
+    private boolean brailleFocusedNode() {
+        AccessibilityNodeInfoCompat focused = getFocusedNode(false);
+        if (focused != null) {
+            DisplayManager.Content content = mNodeBrailler.brailleNode(
+                focused);
+            if (focused.equals(mLastFocusedNode.get())
+                    && (content.getPanStrategy()
+                            == DisplayManager.Content.PAN_RESET)) {
+                content.setPanStrategy(DisplayManager.Content.PAN_KEEP);
+            }
+            mDisplayManager.setContent(content);
+            mLastFocusedNode.reset(focused);
+            return true;
+        }
+        return false;
+    }
+
+    private void brailleFirstFocusableNode() {
+        AccessibilityNodeInfo unwrappedRoot =
+                mAccessibilityService.getRootInActiveWindow();
+        if (unwrappedRoot != null) {
+            AccessibilityNodeInfoCompat root =
+                    new AccessibilityNodeInfoCompat(unwrappedRoot);
+            AccessibilityNodeInfoCompat toBraille = null;
+            if (AccessibilityNodeInfoUtils.shouldFocusNode(
+                            mAccessibilityService, root)) {
+                toBraille = root;
+                root = null;
+            } else {
+                toBraille = mFocusFinder.linear(root,
+                        FocusFinder.SEARCH_FORWARD);
+                if (toBraille == null) {
+                    // Fall back on root as a last resort.
+                    toBraille = root;
+                    root = null;
+                }
+            }
+            DisplayManager.Content content = mNodeBrailler.brailleNode(
+                toBraille);
+            if (AccessibilityNodeInfoRef.isNull(mLastFocusedNode)
+                    && (content.getPanStrategy()
+                            == DisplayManager.Content.PAN_RESET)) {
+                content.setPanStrategy(DisplayManager.Content.PAN_KEEP);
+            }
+            mLastFocusedNode.clear();
+            mDisplayManager.setContent(content);
+            AccessibilityNodeInfoUtils.recycleNodes(root, toBraille);
+        }
+    }
+
+    private AccessibilityNodeInfoCompat getNodeFromEvent(
+            AccessibilityEvent event) {
+        AccessibilityNodeInfo node = event.getSource();
+        if (node != null) {
+            return new AccessibilityNodeInfoCompat(node);
+        } else {
+            return null;
+        }
     }
 
     private AccessibilityNodeInfoCompat linearSearch(int direction) {
@@ -513,4 +652,5 @@ class DefaultNavigationMode implements NavigationMode {
                     , scrollableNode);
         }
     }
+
 }

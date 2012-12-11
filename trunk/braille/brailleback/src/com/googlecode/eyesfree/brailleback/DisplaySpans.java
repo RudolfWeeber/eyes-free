@@ -144,4 +144,19 @@ public class DisplaySpans {
             spannable.removeSpan(node);
         }
     }
+
+    /**
+     * Returns a span in {@code spanned} that is {@link Object#equals}
+     * to {@code obj}.
+     */
+    public static <T> T getEqualSpan(Spanned spanned, T obj) {
+        Object[] spans = spanned.getSpans(0, spanned.length(),
+                obj.getClass());
+        for (Object span : spans) {
+            if (obj.equals(span)) {
+                return (T) span;
+            }
+        }
+        return null;
+    }
 }

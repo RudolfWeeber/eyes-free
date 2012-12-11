@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Google Inc.
+ * Copyright (C) 2012 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.googlecode.eyesfree.utils;
+package com.googlecode.eyesfree.utils.test;
 
-import android.content.Context;
+import android.app.Activity;
 
 /**
- * Interface for listeners for the TalkBack initialization state.
+ * Dummy activity used for various tests.
  */
-public interface InfrastructureStateListener {
-    public void onInfrastructureStateChange(Context context, boolean isInitialized);
+public class TestActivity extends Activity {
+    // Move along, nothing to see here.
 }

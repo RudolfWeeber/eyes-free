@@ -17,6 +17,8 @@
 package com.googlecode.eyesfree.braille.translate;
 
 import com.googlecode.eyesfree.braille.translate.ITranslatorServiceCallback;
+import com.googlecode.eyesfree.braille.translate.TableInfo;
+import com.googlecode.eyesfree.braille.translate.TranslationResult;
 
 interface ITranslatorService {
     /**
@@ -28,20 +30,28 @@ interface ITranslatorService {
     void setCallback(ITranslatorServiceCallback callback);
 
     /**
-     * Makes sure that the given table string is valid and that the
-     * table compiles.
+     * Returns a list of translation tables that are available on the system.
      */
-    boolean checkTable(String tableName);
+    TableInfo[] getTableInfos();
 
     /**
-     * Translates text into braille according to the give tableName.
+     * Makes sure that the given table id is valid and that the
+     * table compiles.
+     */
+    boolean checkTable(String tableId);
+
+    /**
+     * Translates {@code text} into braille according to the given
+     * {@code tableId}.  {@code cursorPosition}, if non-negative, will be
+     * mapped to the corresponding position in the translation result.
      * Returns null on fatal translation errors.
      */
-    byte[] translate(String text, String tableName);
+    TranslationResult translate(String text, String tableId,
+            int cursorPosition);
 
     /**
      * Translates braille cells into text according to the given table
-     * name.  Returns null on fatal translation errors.
+     * id.  Returns null on fatal translation errors.
      */
-    String backTranslate(in byte[] cells, String tableName);
+    String backTranslate(in byte[] cells, String tableId);
 }

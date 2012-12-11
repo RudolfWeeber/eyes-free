@@ -99,7 +99,7 @@ LOCAL_SRC_FILES+= \
 	brltty/Programs/dataarea.c
 
 LOCAL_MODULE := brltty
-LOCAL_WHOLE_STATIC_LIBRARIES := libbrvo libbreu libbrfs libbrhw libbrbm libbrpm
+LOCAL_WHOLE_STATIC_LIBRARIES := libbrvo libbreu libbrfs libbrhw libbrbm libbrpm libbrhm
 include $(BUILD_STATIC_LIBRARY)
 
 
@@ -219,3 +219,23 @@ LOCAL_CFLAGS += \
 
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_STATIC_LIBRARY)
+
+#----------------------------------------------------------------
+# HIMS driver
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := libbrhm
+LOCAL_C_INCLUDES:= $(LOCAL_PATH)/brltty $(LOCAL_PATH)/brltty/Programs
+LOCAL_SRC_FILES := brltty/Drivers/Braille/HIMS/braille.c
+LOCAL_CFLAGS += $(VISIBILITY)
+LOCAL_CFLAGS += \
+	-DDRIVER_CODE=hm \
+	-DDRIVER_NAME=HIMS \
+	-DDRIVER_COMMENT="\"Braille Sense, SyncBraille\"" \
+	-DDRIVER_VERSION="\"\"" \
+	-DDRIVER_DEVELOPERS="\"Dave Mielke <dave@mielke.cc>\"" \
+	-DHAVE_CONFIG_H
+
+LOCAL_MODULE_TAGS := optional
+include $(BUILD_STATIC_LIBRARY)
+

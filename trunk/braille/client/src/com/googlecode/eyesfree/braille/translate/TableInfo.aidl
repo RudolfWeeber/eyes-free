@@ -14,18 +14,6 @@
  * the License.
  */
 
-package com.googlecode.eyesfree.braille.display;
+package com.googlecode.eyesfree.braille.translate;
 
-import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-
-/**
- * Callback interface that a braille display client can expose to
- * get information about various braille display events.
- */
-interface IBrailleServiceCallback {
-    void onDisplayConnected(in BrailleDisplayProperties displayProperties);
-    void onDisplayDisconnected();
-    void onInput(in BrailleInputEvent inputEvent);
-    oneway void onConnectionChangeProgress(String descroption);
-}
+parcelable TableInfo;

@@ -43,5 +43,5 @@ public interface BrailleRule {
      * Returns {@code true} if the children of this node should be
      * appended after formatting with this rule.
      */
-    boolean includeChildren(AccessibilityNodeInfoCompat node);
+    boolean includeChildren(AccessibilityNodeInfoCompat node, Context context);
 }

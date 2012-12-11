@@ -55,7 +55,7 @@ $ diff -Pu jni/brlttywrapper/brltty/Tables mytables \
 BRLTTY To Android Key Mappings
 ------------------------------
 
-The set of commands on Android is slightly different form what is available in
+The set of commands on Android is slightly different from what is available in
 the BRLTTY built-in command set.  Many commands, however, have a reasonable
 mapping, which allows most of the mapping tables to be reused on Android.  For
 the definitive list of mappings, see the file

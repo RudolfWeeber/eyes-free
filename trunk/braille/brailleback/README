@@ -15,11 +15,13 @@ brltty drivers, to add support for a new braille display to BrailleBack.
 Building BrailleBack From The Command Line
 ==========================================
 
-This document contains instructions for building BrailleBack from the command
-line.  See the Android developer documentation for general instructions on how
-to build android packages, please refer to the documentation at
-http://developer.android.com.  These build instructions apply to building
-on Linux.
+This section contains instructions for building BrailleBack from the command
+line.  See the Android developer documentation at http://developer.android.com
+for general instructions on how to build android packages.  These build
+instructions apply to building on Linux.
+
+NOTE: There's a build script (build.sh) that automates most of the process
+for a clean build.  See below for how to use it.
 
 Prerequisites
 -------------
@@ -27,40 +29,54 @@ Prerequisites
 BrailleBack has a few dependencies that need to be available before it can be
 built:
 
-- Android SDK for JellyBean (API level 16) and NDK, revision 7a or later.
+* Android SDK for JellyBean (API level 16) and NDK, revision 7a or later.
   These can be downloaded from developer.android.com/sdk.
   You'll need the platform tools r20 or later for JellyBean.
   Make sure that the SDK and NDK tools (android, ndk-build, etc) are
   available in your $PATH.
 
-- Apache ant version 1.8 or later.
+* Apache ant version 1.8 or later.
 
-- A checked out copy of the eyes-free source code.  Check out of subversion
+* A checked out copy of the eyes-free source code.  Check out of subversion
   as follows:
   $ svn checkout http://eyes-free.googlecode.com/svn/trunk/ eyes-free
-
-- A copy of brltty, version 4.4.  This can be checked out from subversion
-  as follows (run from within the eyes-free directory as per above):
-  $ svn checkout svn://mielke.cc//releases/brltty-4.4 \
-    braille/service/jni/brlttywrapper/brltty
-
-- A copy of liblouis, version 2.4.1.  This can be checked out from subversion
-  as follows (run from within the eyes-free directory as per above):
-  $ svn checkout http://liblouis.googlecode.com/svn/tags/liblouis_2_4_1 \
-    braille/service/jni/liblouiswrapper/liblouis
 
 Building
 --------
 
 After making sure that the dependencies are in place (see Prerequisites
 above), perform the following steps to build the BrailleBack apk.
-Make sure to run all commands from the root of the eyes-free source tree.
+Please run all commands from the root of the eyes-free source tree.
 
-- Apply patches to brltty and liblouis:
+* If you are building on Linux, you might be able to use the shell script
+  that automates the build process.  this script builds a debug apk.
+  It performs a clean build, which takes longer than an incremental build.
+  You might want to use some of the steps below while developing.
+
+  $ braille/brailleback/build.sh
+
+  If the script finishes with a success message, then you're done and
+  can skp the rest of this section.  Use the adb command to install
+  the apk on a device.  Otherwise, follow and adjust the steps below for your
+  build environment.
+
+* Make sure to have a copy of brltty, version 4.4 checked out.  This can be
+  checked out from subversion as follows (run from within the eyes-free
+  directory as per above):
+  $ svn checkout svn://mielke.cc//releases/brltty-4.4 \
+    braille/service/jni/brlttywrapper/brltty
+
+* Make sure to have a copy of liblouis, version 2.5.1 checked out.  This can
+  be checked out from subversion as follows (run from within the eyes-free
+  directory as per above):
+  $ svn checkout http://liblouis.googlecode.com/svn/tags/liblouis_2_5_1 \
+    braille/service/jni/liblouiswrapper/liblouis
+
+* Apply patches to brltty and liblouis:
   $ (cd braille/service/jni/brlttywrapper && patch -p1 < brltty.patch)
   $ (cd braille/service/jni/liblouiswrapper && patch -p1 < liblouis.patch)
 
-- Update the local ant property files:
+* Update the local ant property files:
   $ android update project -p libraries/utils
   $ android update project -p libraries/compatutils
   $ android update project -p braille/client
@@ -192,19 +208,19 @@ If all the above steps were implemented correctly, BrailleBack should be able
 to find and start using the display when it is paired in the bluetooth
 settings screen.  If that's not the case, try some of the debugging tips below:
 
-- Write a small app that uses the braille display service directly to not have
+* Write a small app that uses the braille display service directly to not have
   to debug with the accessibility service.  BrailleBack uses a thin client
   library located in braille/client.  This library can be used to connect to
   the display service for testing.
 
-- adb logcat is your friend.  Look for logs from the various classes in the
+* adb logcat is your friend.  Look for logs from the various classes in the
   display service (they use the simple class name as log tags).  The native
   C code uses log tags starting with Brltty.
 
-- Issues in brltty (including the driver and keyboard maps) might be easier to
+* Issues in brltty (including the driver and keyboard maps) might be easier to
   debug on a development system than on a real device.
 
-- Bluetooth connectivity issues: for certain displays, a bluetooth connection
+* Bluetooth connectivity issues: for certain displays, a bluetooth connection
   may be established and then disconnected within a few seconds.
   One thing to try in this case is to set the connectSecurely flag to false
   when constructing the NamePrefixSupportedDevice object for the display

@@ -26,6 +26,14 @@
 
 #define LOG_TAG "LibLouisWrapper_Native"
 
+#define TRANSLATE_PACKAGE "com/googlecode/eyesfree/braille/translate/"
+
+static jclass class_TranslationResult;
+static jmethodID method_TranslationResult_ctor;
+static jclass class_OutOfMemoryError;
+
+static jclass getGlobalClassRef(JNIEnv* env, const char *name);
+
 jboolean
 Java_com_googlecode_eyesfree_braille_service_translate_LibLouisWrapper_checkTableNative
 (JNIEnv* env, jclass clazz, jstring tableName) {
@@ -40,45 +48,82 @@ Java_com_googlecode_eyesfree_braille_service_translate_LibLouisWrapper_checkTabl
   return ret;
 }
 
-jbyteArray
+jobject
 Java_com_googlecode_eyesfree_braille_service_translate_LibLouisWrapper_translateNative
-(JNIEnv* env, jclass clazz, jstring text, jstring tableName) {
-  jbyteArray ret = NULL;
+(JNIEnv* env, jclass clazz, jstring text, jstring tableName,
+ int cursorPosition) {
+  jobject ret = NULL;
   const jchar* textUtf16 = (*env)->GetStringChars(env, text, NULL);
   const jbyte* tableNameUtf8 = (*env)->GetStringUTFChars(env, tableName, NULL);
   int inlen = (*env)->GetStringLength(env, text);
-  int outlen = inlen * 2;
   // TODO: Need to do this in a buffer like usual character encoding
   // translations, but for now we assume that double size is good enough.
+  int outlen = inlen * 2;
   jchar* outbuf = malloc(sizeof(jchar) * outlen);
-  int result = lou_translateString(tableNameUtf8, textUtf16, &inlen,
-				   outbuf, &outlen,
-				   NULL/*typeform*/, NULL/*spacing*/,
-				   dotsIO/*mode*/);
+  // Maps character position to braille cell position.
+  int* outputpos = malloc(sizeof(int) * inlen);
+  // The oposite of outputpos: maps braille cell position to
+  // character position.
+  int* inputpos = malloc(sizeof(int) * outlen);
+  if (outbuf == NULL || outputpos == NULL || inputpos == NULL) {
+    (*env)->ThrowNew(env, class_OutOfMemoryError, NULL);
+  }
+  int cursoroutpos;
+  int* cursorposp = NULL;
+  if (cursorPosition < 0) {
+    cursoroutpos = -1;
+  } else if (cursorPosition < inlen) {
+    cursoroutpos = cursorPosition;
+    cursorposp = &cursoroutpos;
+  }
+  int result = lou_translate(tableNameUtf8, textUtf16, &inlen,
+                             outbuf, &outlen,
+                             NULL/*typeform*/, NULL/*spacing*/,
+                             outputpos, inputpos, cursorposp,
+                             dotsIO/*mode*/);
   if (result == 0) {
     LOGE("Translation failed.");
-    goto freeoutbuf;
+    goto freebufs;
   }
   LOGV("Successfully translated %d characters to %d cells, "
        "consuming %d characters", (*env)->GetStringLength(env, text),
        outlen, inlen);
-  ret = (*env)->NewByteArray(env, outlen);
-  if (!ret) {
-    goto freeoutbuf;
+  jbyteArray cellsarray = (*env)->NewByteArray(env, outlen);
+  if (cellsarray == NULL) {
+    goto freebufs;
   }
-  jbyte* retbuf = (*env)->GetByteArrayElements(env, ret, NULL);
-  if (!retbuf) {
-    ret = NULL;
-    goto freeoutbuf;
+  jbyte* cells = (*env)->GetByteArrayElements(env, cellsarray, NULL);
+  if (cells == NULL) {
+    goto freebufs;
   }
   int i;
   for (i = 0; i < outlen; ++i) {
-    retbuf[i] = outbuf[i] & 0xff;
+    cells[i] = outbuf[i] & 0xff;
   }
- releaseretbuf:
-  (*env)->ReleaseByteArrayElements(env, ret, retbuf, 0);
- freeoutbuf:
+  (*env)->ReleaseByteArrayElements(env, cellsarray, cells, 0);
+  jintArray outputposarray = (*env)->NewIntArray(env, inlen);
+  if (outputposarray == NULL) {
+    goto freebufs;
+  }
+  (*env)->SetIntArrayRegion(env, outputposarray, 0, inlen, outputpos);
+  jintArray inputposarray = (*env)->NewIntArray(env, outlen);
+  if (inputposarray == NULL) {
+    goto freebufs;
+  }
+  (*env)->SetIntArrayRegion(env, inputposarray, 0, outlen, inputpos);
+  if (cursorposp == NULL && cursorPosition >= 0) {
+    // The cursor position was past-the-end of the input, normalize to
+    // past-the-end of the output.
+    cursoroutpos = outlen;
+  }
+  ret = (*env)->NewObject(
+      env, class_TranslationResult, method_TranslationResult_ctor,
+      cellsarray, outputposarray, inputposarray, cursoroutpos);
+
+ freebufs:
   free(outbuf);
+  free(inputpos);
+  free(outputpos);
  out:
   (*env)->ReleaseStringChars(env, text, textUtf16);
   (*env)->ReleaseStringUTFChars(env, tableName, tableNameUtf8);
@@ -144,4 +189,35 @@ Java_com_googlecode_eyesfree_braille_service_translate_LibLouisWrapper_setTables
   LOGV("Setting tables path to: %s", pathUtf8);
   lou_setDataPath((char*)pathUtf8);
   (*env)->ReleaseStringUTFChars(env, path, pathUtf8);
+}
+
+void
+Java_com_googlecode_eyesfree_braille_service_translate_LibLouisWrapper_classInitNative(
+    JNIEnv* env, jclass clazz) {
+  if (!(class_TranslationResult = getGlobalClassRef(env,
+          TRANSLATE_PACKAGE "TranslationResult"))) {
+    return;
+  }
+  if (!(method_TranslationResult_ctor = (*env)->GetMethodID(
+          env, class_TranslationResult, "<init>", "([B[I[II)V"))) {
+    return;
+  }
+  if (!(class_OutOfMemoryError =
+        getGlobalClassRef(env, "java/lang/OutOfMemoryError"))) {
+    return;
+  }
+}
+
+static jclass
+getGlobalClassRef(JNIEnv* env, const char *name) {
+  jclass localRef = (*env)->FindClass(env, name);
+  if (!localRef) {
+    LOGE("Couldn't find class %s", name);
+    return NULL;
+  }
+  jclass globalRef = (*env)->NewGlobalRef(env, localRef);
+  if (globalRef == NULL) {
+    LOGE("Couldn't create global ref for class %s", name);
+  }
+  return globalRef;
 }

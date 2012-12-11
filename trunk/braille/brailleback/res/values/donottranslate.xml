@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Preference keys -->
-    <string name="pref_key_bindings_key">key_bindings</string>
     <string name="pref_category_device_key">category_device</string>
+    <string name="pref_connection_status_key">connection_statusc</string>
+    <string name="pref_key_bindings_key">key_bindings</string>
+    <string name="pref_category_braille_key">category_braille</string>
+    <string name="pref_braille_type_key">braille_type</string>
+    <string name="pref_six_dot_braille_table_key">six_dot_braille_table</string>
+    <string name="pref_eight_dot_braille_table_key">eight_dot_braille_table</string>
+    <!-- Used when the user hasn't specified any table and it is determined by the user locale. -->
+    <string name="table_value_default">auto</string>
+    <string name="pref_braille_type_six_dot_value">six_dot</string>
+    <string name="pref_braille_type_eight_dot_value">eight_dot</string>
+    <string name="pref_braille_type_default">@string/pref_braille_type_eight_dot_value</string>
+    <string-array name="pref_braille_type_values">
+        <item>@string/pref_braille_type_six_dot_value</item>
+        <item>@string/pref_braille_type_eight_dot_value</item>
+    </string-array>
+    <string-array name="pref_braille_type_entries">
+        <item>@string/pref_braille_type_six_dot_label</item>
+        <item>@string/pref_braille_type_eight_dot_label</item>
+    </string-array>
 </resources>

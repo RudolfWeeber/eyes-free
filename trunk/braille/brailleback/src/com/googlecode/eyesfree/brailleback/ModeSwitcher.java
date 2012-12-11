@@ -16,6 +16,7 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
@@ -94,5 +95,10 @@ public class ModeSwitcher {
             mode.onObserveAccessibilityEvent(event);
         }
         getCurrentMode().onAccessibilityEvent(event);
+    }
+
+    public void onInvalidateAccessibilityNode(
+        AccessibilityNodeInfoCompat node) {
+        getCurrentMode().onInvalidateAccessibilityNode(node);
     }
 }

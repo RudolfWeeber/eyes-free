@@ -34,6 +34,7 @@ tablefiles="\
   $srcdir/brl-eu-esys_small.ktb \
   $srcdir/brl-fs-focus_small.ktb \
   $srcdir/brl-hw-all.ktb \
+  $srcdir/brl-hm-sense.ktb \
   $srcdir/brl-pm-trio.ktb \
   $srcdir/brl-vo-bp.ktb"
 
