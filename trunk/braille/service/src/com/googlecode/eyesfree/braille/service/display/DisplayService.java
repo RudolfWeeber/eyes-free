@@ -64,7 +64,6 @@ public class DisplayService extends Service
             @Override
             public void onReceive(Context context, Intent intent) {
                 String action = intent.getAction();
-                Log.v(LOG_TAG, "Action to BrailleService: " + action);
                 if (Intent.ACTION_SCREEN_ON.equals(action)) {
                     // Try reconnecting to Braille device on screen on action.
                     // This is done so that if a display was turned on
@@ -331,7 +330,6 @@ public class DisplayService extends Service
     }
 
     private void broadcastConnectionProgress() {
-        Log.v(LOG_TAG, "Broadcasting connection progress");
         int i = mClients.beginBroadcast();
         try {
             while (i-- > 0) {
@@ -470,21 +468,21 @@ public class DisplayService extends Service
 
         private void handleRegisterCallback(IBrailleServiceCallback callback) {
             mClients.register(callback);
+            if (mConnectionProgress != null) {
+                sendConnectionProgress(callback);
+            }
             if (mDataFileState == FILES_NOT_EXTRACTED ||
                     (mConnectionState == STATE_DISCONNECTED
                             && mReadThread != null)) {
                 // Extraction or connection in progress, there will be a
                 // broadcast of the state when it either succeeds or fails.
-                if (mConnectionProgress != null) {
-                    sendConnectionProgress(callback);
-                }
                 return;
             }
             sendConnectionState(callback);
         }
 
         private void handleOnDisplayConnected(
-            BrailleDisplayProperties properties) {
+                BrailleDisplayProperties properties) {
             mConnectionState = STATE_CONNECTED;
             mConnectionProgress = null;
             mDisplayProperties = properties;
@@ -497,9 +495,6 @@ public class DisplayService extends Service
             if (mConnectionState != STATE_DISCONNECTED) {
                 mConnectionState = STATE_DISCONNECTED;
                 broadcastConnectionState();
-                mConnectionProgress = null;
-            } else {
-                setConnectionProgress(null);
             }
             if (mConnectPending) {
                 // Don't get stuck retrying if connecting fails.
@@ -509,7 +504,6 @@ public class DisplayService extends Service
         }
 
         private void handleSetConnectionProgress(String description) {
-            Log.v(LOG_TAG, "handleSetConnectionProgress " + description);
             if ((description == null && mConnectionProgress == null)
                     || (description != null && description.equals(
                                     mConnectionProgress))) {

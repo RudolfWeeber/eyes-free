@@ -41,6 +41,7 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
     private final DeviceFinder mDeviceFinder;
     private final File mTablesDir;
     private final String mBluetoothAddressToConnectTo;
+    private final Resources mResources;
     private volatile BluetoothSocket mSocket;
     private volatile boolean mDisconnecting;
     private volatile DriverThread mDriverThread;
@@ -60,6 +61,7 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
         mDeviceFinder = new DeviceFinder(displayService);
         mTablesDir = tablesDir;
         mBluetoothAddressToConnectTo = bluetoothAddressToConnectTo;
+        mResources = displayService.getResources();
     }
 
     @Override
@@ -92,17 +94,21 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
 
     private boolean connect() {
         List<DeviceFinder.DeviceInfo> bonded = mDeviceFinder.findDevices();
-        tryToConnect(bonded);
+        if (bonded.size() > 0) {
+            tryToConnect(bonded);
+        } else {
+            mDisplayService.setConnectionProgress(
+                    mResources.getString(R.string.connprog_no_devices));
+        }
         if (mSocket != null) {
-            Resources res = mDisplayService.getResources();
             BluetoothDevice bthDev = mConnectedDeviceInfo.getBluetoothDevice();
             mDisplayService.setConnectionProgress(
-                    res.getString(R.string.connprog_initializing,
+                    mResources.getString(R.string.connprog_initializing,
                             bthDev.getName()));
             try {
                 mDriverThread = new DriverThread(mSocket.getOutputStream(),
                         mConnectedDeviceInfo,
-                        res,
+                        mResources,
                         mTablesDir,
                         this /*initListener*/,
                         mDisplayService /*inputEventListener*/);
@@ -135,41 +141,46 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
 
     private void tryToConnect(List<DeviceFinder.DeviceInfo> bonded) {
         mSocket = null;
-        for (DeviceFinder.DeviceInfo dev : bonded) {
-            if (mDisconnecting) {
-                return;
-            }
-            BluetoothDevice bthDev = dev.getBluetoothDevice();
-            if (mBluetoothAddressToConnectTo != null
-                    && !mBluetoothAddressToConnectTo.equals(
-                            bthDev.getAddress())) {
-                continue;
-            }
-            mDisplayService.setConnectionProgress(
-                    mDisplayService.getResources().getString(
-                            R.string.connprog_trying,
-                            bthDev.getName()));
-            Log.d(LOG_TAG, "Trying to connect to braille device: "
-                    + bthDev.getName());
-            try {
-                BluetoothSocket socket;
-                if (dev.getConnectSecurely()) {
-                    socket = bthDev
-                        .createRfcommSocketToServiceRecord(
-                            dev.getSdpUuid());
-                } else {
-                    socket = bthDev
-                        .createInsecureRfcommSocketToServiceRecord(
-                            dev.getSdpUuid());
+        try {
+            for (DeviceFinder.DeviceInfo dev : bonded) {
+                if (mDisconnecting) {
+                    return;
                 }
-                if (socket != null) {
-                    socket.connect();
-                    mSocket = socket;
-                    mConnectedDeviceInfo = dev;
+                BluetoothDevice bthDev = dev.getBluetoothDevice();
+                if (mBluetoothAddressToConnectTo != null
+                        && !mBluetoothAddressToConnectTo.equals(
+                                bthDev.getAddress())) {
+                    continue;
                 }
-                return;
-            } catch (IOException ex) {
-                Log.e(LOG_TAG, "Error opening a socket: " + ex.toString());
+                mDisplayService.setConnectionProgress(
+                        mResources.getString(R.string.connprog_trying,
+                                bthDev.getName()));
+                Log.d(LOG_TAG, "Trying to connect to braille device: "
+                        + bthDev.getName());
+                try {
+                    BluetoothSocket socket;
+                    if (dev.getConnectSecurely()) {
+                        socket = bthDev
+                                .createRfcommSocketToServiceRecord(
+                                        dev.getSdpUuid());
+                    } else {
+                        socket = bthDev
+                                .createInsecureRfcommSocketToServiceRecord(
+                                        dev.getSdpUuid());
+                    }
+                    if (socket != null) {
+                        socket.connect();
+                        mSocket = socket;
+                        mConnectedDeviceInfo = dev;
+                    }
+                    return;
+                } catch (IOException ex) {
+                    Log.e(LOG_TAG, "Error opening a socket: " + ex.toString());
+                }
+            }
+        } finally {
+            if (mSocket == null) {
+                mDisplayService.setConnectionProgress(null);
             }
         }
     }
@@ -193,7 +204,6 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
             mDriverThread = null;
             localDriverThread.stop();
         }
-        // HERE: clear progress.
         mDisplayService.onDisplayDisconnected();
         Log.i(LOG_TAG, "Display disconnected");
     }
@@ -203,8 +213,14 @@ class ReadThread extends Thread implements DriverThread.OnInitListener {
         // We're in the driver thread.
         if (properties != null) {
             mDeviceFinder.rememberSuccessfulConnection(mConnectedDeviceInfo);
+            mDisplayService.setConnectionProgress(null);
             mDisplayService.onDisplayConnected(properties);
         } else {
+            BluetoothDevice bthDev = mConnectedDeviceInfo.getBluetoothDevice();
+            mDisplayService.setConnectionProgress(
+                    mResources.getString(
+                            R.string.connprog_failed_to_initialize,
+                            bthDev.getName()));
             disconnect();
             return;
         }

@@ -174,8 +174,12 @@ public class DeviceFinder {
         @Override
         public DeviceInfo match(BluetoothDevice bluetoothDevice) {
             String name = bluetoothDevice.getName();
+            int nameLength = name.length();
             for (String prefix : mNamePrefixes) {
-                if (name.startsWith(prefix)) {
+                int prefixLength = prefix.length();
+                if (nameLength >= prefixLength
+                        && name.substring(0, prefixLength).equalsIgnoreCase(
+                                prefix)) {
                     return new DeviceInfo(bluetoothDevice, mDriverCode,
                             SERIAL_BOARD_UUID, mConnectSecurely,
                             mFriendlyKeyNames);
@@ -348,7 +352,7 @@ public class DeviceFinder {
                         .routing()
                         .add("Space", R.string.key_Space)
                         .build(),
-                        "BrailleSenseU2"));
+                        "BrailleSense"));
         l.add(new NamePrefixSupportedDevice("hm", false,
                 new KeyNameMapBuilder()
                         .dots8()

@@ -52,11 +52,11 @@ public class CompatUtils {
         if (targetClass == null || TextUtils.isEmpty(name))
             return null;
         try {
-            return targetClass.getField(name);
+            return targetClass.getDeclaredField(name);
         } catch (SecurityException e) {
             // ignore
         } catch (NoSuchFieldException e) {
-            // ignore
+            e.printStackTrace();
         }
         return null;
     }
@@ -93,6 +93,7 @@ public class CompatUtils {
             return method.invoke(receiver, args);
         } catch (Exception e) {
             Log.e(TAG, "Exception in invoke: " + e.getClass().getSimpleName());
+            e.printStackTrace();
         }
         return defaultValue;
     }

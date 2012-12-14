@@ -2,7 +2,7 @@
 <resources>
   <!-- Names of commands that are supported by BrailleBack and
        in what order they are presented in the keyboard help -->
-  <string-array name="help_supportedCommands">
+  <string-array name="help_supportedCommands" translatable="false">
     <item>CMD_NAV_PAN_RIGHT</item>
     <item>CMD_NAV_PAN_LEFT</item>
     <item>CMD_NAV_ITEM_NEXT</item>
@@ -24,6 +24,7 @@
     <item>CMD_HELP</item>
   </string-array>
 
+  <!-- Command descriptions, shown on the help screen -->
   <string-array name="help_commandDescriptions">
     <item>Pan right</item>
     <item>Pan left</item>
@@ -34,7 +35,7 @@
     <item>Scroll forward</item>
     <item>Scroll backward</item>
     <item>Activate the item under the finger</item>
-    <item>Activate the currently focused item</item>
+    <item>Activate the current item</item>
     <item>Enter a braille character</item>
     <item>Activate the back button</item>
     <item>Activate the home button</item>

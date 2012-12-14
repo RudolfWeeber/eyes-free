@@ -51,6 +51,7 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
     private ListPreference mSixDotTablePreference;
     private ListPreference mEightDotTablePreference;
     private int mConnectionState = Display.STATE_NOT_CONNECTED;
+    private String mConnectionProgress = null;
     private List<TableInfo> mTables;
 
     @SuppressWarnings("deprecation")
@@ -91,6 +92,7 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
         super.onPause();
         mTranslatorManager.removeOnTablesChangedListener(this);
         mTranslatorManager.shutdown();
+        mDisplay.shutdown();
     }
 
     @Override
@@ -113,19 +115,29 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
         Preference bindingsPref =
                 findPreferenceByResId(R.string.pref_key_bindings_key);
         bindingsPref.setEnabled(enableBindings);
-        mStatusPreference.setSummary(summary);
+        if (mConnectionProgress == null) {
+            mStatusPreference.setSummary(summary);
+            announceConnectionState(summary);
+        }
     }
 
     @Override
     public void onConnectionChangeProgress(String description) {
+        mConnectionProgress = description;
         if (description == null) {
             onConnectionStateChanged(mConnectionState);
             return;
         }
         // The description is localized by the server.
-        Preference statusPref =
-                findPreferenceByResId(R.string.pref_connection_status_key);
-        statusPref.setSummary(description);
+        mStatusPreference.setSummary(description);
+        announceConnectionState(description);
+    }
+
+    private void announceConnectionState(CharSequence state) {
+        // TODO: Ideally, this announcement would be sent from the
+        // view of the actual preference, if there only was a way to get
+        // to that node.
+        getWindow().getDecorView().announceForAccessibility(state);
     }
 
     @Override
@@ -234,7 +246,6 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
 
     @Override
     public boolean onPreferenceClick(Preference pref) {
-        LogUtils.log(this, Log.VERBOSE, "Polling display");
         mDisplay.poll();
         return true;
     }

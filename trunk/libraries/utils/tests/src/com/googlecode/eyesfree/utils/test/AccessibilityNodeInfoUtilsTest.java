@@ -17,9 +17,14 @@
 package com.googlecode.eyesfree.utils.test;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.googlecode.eyesfree.testing.AccessibilityInstrumentationTestCase;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
@@ -30,45 +35,209 @@ import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
  * functional {@link AccessibilityNodeInfoCompat}s from {@link View}s.
  */
 @TargetApi(14)
-public class AccessibilityNodeInfoUtilsTest extends LayoutInstrumentationTestCase {
-    public void testShouldFocusNode() {
-        setContentViewWithLayout(R.layout.non_speaking_container);
+public class AccessibilityNodeInfoUtilsTest extends AccessibilityInstrumentationTestCase {
+    public void testInstrumentation() {
+        setContentView(R.layout.non_speaking_container);
+
+        final AccessibilityNodeInfoCompat container = getNodeForId(R.id.container);
+        assertNotNull("Obtained container", container);
+
+        final AccessibilityNodeInfoCompat textView = getNodeForId(R.id.textView);
+        assertNotNull("Obtained text view", textView);
+
+        final AccessibilityNodeInfoCompat parent = textView.getParent();
+        assertNotNull("Text view has a parent node", parent);
+
+        final AccessibilityNodeInfoCompat child = container.getChild(0);
+        assertNotNull("Container has a child node", child);
+
+        assertEquals("Container is text view's parent", container, parent);
+        assertEquals("Text view is container's child", textView, child);
+
+        AccessibilityNodeInfoUtils.recycleNodes(container, textView, parent, child);
+    }
+
+    public void testShouldFocusNode() throws Exception {
+        setContentView(R.layout.non_speaking_container);
 
         assertShouldFocusNode("Container is not focusable", R.id.container, false);
         assertShouldFocusNode("Text is focusable", R.id.textView, true);
         assertShouldFocusNode("Button is focusable", R.id.button, true);
     }
 
-    private void assertShouldFocusNode(String message, int id, boolean expectedValue) {
-        final AccessibilityNodeInfoCompat node = getNodeForView(id);
+    public void testListWithSingleItem() throws Throwable {
+        setContentView(R.layout.list_with_single_item);
 
-        assertNotNull("Obtain node", node);
-        assertEquals(message, expectedValue,
-                AccessibilityNodeInfoUtils.shouldFocusNode(getActivity(), node));
+        final Context context = getActivity();
+        final ListView list = (ListView) getViewForId(R.id.list);
 
-        AccessibilityNodeInfoUtils.recycleNodes(node);
+        // Add an adapter with a single item.
+        final ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+        adapter.add(context.getString(R.string.single_list_item));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                list.setAdapter(adapter);
+            }
+        });
+
+        waitForAccessibilityIdleSync();
+
+        final View firstItem = list.getChildAt(0);
+        assertNotNull("Obtain first item of " + list.getChildCount(), firstItem);
+
+        assertShouldFocusNode("List is not focusable", R.id.list, false);
+        assertShouldFocusNode("First item is focusable", firstItem, true);
+    }
+
+    public void testListWithHeaderOnly() throws Throwable {
+        setContentView(R.layout.list_with_single_item);
+
+        final Context context = getActivity();
+        final ListView list = (ListView) getViewForId(R.id.list);
+
+        // Add a single list header.
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        final View headerView = inflater.inflate(R.layout.list_header_row, list, false);
+
+        // Add an adapter with no items.
+        final ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                list.addHeaderView(headerView, context.getString(R.string.list_header), false);
+                list.setAdapter(adapter);
+            }
+        });
+
+        waitForAccessibilityIdleSync();
+
+        assertShouldFocusNode("List is not focusable", R.id.list, false);
+        assertShouldFocusNode("Non-selectable header is focusable", R.id.header_item, true);
+
+        assertFocusFromHover("List does not receive focus", R.id.list, -1);
+        assertFocusFromHover("Non-selectable header receives focus",
+                R.id.header_item, R.id.header_item);
+    }
+
+    public void testListWithNonSelectableHeader() throws Throwable {
+        setContentView(R.layout.list_with_single_item);
+
+        final Context context = getActivity();
+        final ListView list = (ListView) getViewForId(R.id.list);
+
+        // Add a single list header.
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        final View headerView = inflater.inflate(R.layout.list_header_row, list, false);
+
+        // Add an adapter with two items.
+        final ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1);
+        adapter.add(context.getString(R.string.first_list_item));
+        adapter.add(context.getString(R.string.second_list_item));
+
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                list.addHeaderView(headerView, mInsCtx.getString(R.string.list_header), false);
+                list.setAdapter(adapter);
+            }
+        });
+
+        waitForAccessibilityIdleSync();
+
+        final View firstItem = list.getChildAt(1);
+        final View secondItem = list.getChildAt(2);
+
+        assertNotNull("Obtain first item", firstItem);
+        assertNotNull("Obtain second item", secondItem);
+
+        assertShouldFocusNode("List is not focusable", R.id.list, false);
+        assertShouldFocusNode("Non-selectable header is focusable", R.id.header_item, true);
+        assertShouldFocusNode("First item is focusable", firstItem, true);
+        assertShouldFocusNode("Second item is focusable", secondItem, true);
+
+        assertFocusFromHover("List does not receive focus", R.id.list, -1);
+        assertFocusFromHover("Non-selectable header receives focus",
+                R.id.header_item, R.id.header_item);
+        assertFocusFromHover("First item receives focus", firstItem, firstItem);
+        assertFocusFromHover("Second item receives focus", secondItem, secondItem);
     }
 
     public void testFindFocusFromHover() {
-        setContentViewWithLayout(R.layout.non_speaking_container);
+        setContentView(R.layout.non_speaking_container);
 
-        assertFocusFromHover("Container does place focus", R.id.container, -1);
+        assertFocusFromHover("Container does not receive focus", R.id.container, -1);
         assertFocusFromHover("Text receives focus", R.id.textView, R.id.textView);
         assertFocusFromHover("Button receives focus", R.id.button, R.id.button);
     }
 
-    private void assertFocusFromHover(String message, int hoveredId, int expectedId) {
-        final AccessibilityNodeInfoCompat hoveredNode = getNodeForView(hoveredId);
+    /**
+     * Assert that passing the node for the {@link View} with id {@code viewId}
+     * to {@link AccessibilityNodeInfoUtils#shouldFocusNode} returns
+     * {@code expectedValue}.
+     */
+    private void assertShouldFocusNode(String message, int viewId, boolean expectedValue) {
+        final AccessibilityNodeInfoCompat node = getNodeForId(viewId);
+        assertNotNull("Obtain node from view ID", node);
+        assertShouldFocusNodeInternal(message, node, expectedValue);
+        AccessibilityNodeInfoUtils.recycleNodes(node);
+    }
 
-        assertNotNull("Obtain hovered node", hoveredNode);
+    /**
+     * Assert that passing the node for {@code view} to
+     * {@link AccessibilityNodeInfoUtils#shouldFocusNode} returns
+     * {@code expectedValue}.
+     */
+    private void assertShouldFocusNode(String message, View view, boolean expectedValue) {
+        final AccessibilityNodeInfoCompat node = getNodeForView(view);
+        assertNotNull("Obtain node from view", node);
+        assertShouldFocusNodeInternal(message, node, expectedValue);
+        AccessibilityNodeInfoUtils.recycleNodes(node);
+    }
 
-        final AccessibilityNodeInfoCompat expectedNode = getNodeForView(expectedId);
+    /**
+     * Assert that passing the node for the {@link View} with id {@code viewId}
+     * to {@link AccessibilityNodeInfoUtils#findFocusFromHover} returns the node
+     * for the {@link View} with id {@code expectedId}.
+     */
+    private void assertFocusFromHover(String message, int viewId, int expectedId) {
+        final AccessibilityNodeInfoCompat node = getNodeForId(viewId);
+        assertNotNull("Obtain node from view ID", node);
+        final AccessibilityNodeInfoCompat expectedNode = getNodeForId(expectedId);
+        assertFocusFromHoverInternal(message, node, expectedNode);
+        AccessibilityNodeInfoUtils.recycleNodes(node, expectedNode);
+    }
+
+    /**
+     * Assert that passing the node for {@code view} to
+     * {@link AccessibilityNodeInfoUtils#findFocusFromHover} returns the node
+     * for {@code expectedView}.
+     */
+    private void assertFocusFromHover(String message, View view, View expectedView) {
+        final AccessibilityNodeInfoCompat node = getNodeForView(view);
+        assertNotNull("Obtain node from view", node);
+        final AccessibilityNodeInfoCompat expectedNode = getNodeForView(expectedView);
+        assertFocusFromHoverInternal(message, node, expectedNode);
+        AccessibilityNodeInfoUtils.recycleNodes(node, expectedNode);
+    }
+
+    private void assertFocusFromHoverInternal(
+            String message, final AccessibilityNodeInfoCompat node,
+            final AccessibilityNodeInfoCompat expectedNode) {
         final AccessibilityNodeInfoCompat actualNode =
-                AccessibilityNodeInfoUtils.findFocusFromHover(getActivity(), hoveredNode);
-
-        // The expected and actual nodes may intentionally be null.
+                AccessibilityNodeInfoUtils.findFocusFromHover(mInsCtx, node);
         assertEquals(message, expectedNode, actualNode);
+        AccessibilityNodeInfoUtils.recycleNodes(actualNode);
+    }
 
-        AccessibilityNodeInfoUtils.recycleNodes(hoveredNode, expectedNode, actualNode);
+    private void assertShouldFocusNodeInternal(
+            String message, AccessibilityNodeInfoCompat node, boolean expectedValue) {
+        final boolean actualValue = AccessibilityNodeInfoUtils.shouldFocusNode(mInsCtx, node);
+        assertEquals(message, expectedValue, actualValue);
     }
 }
