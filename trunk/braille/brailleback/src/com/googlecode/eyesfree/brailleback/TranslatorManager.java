@@ -65,6 +65,7 @@ public class TranslatorManager
     private final Map<Locale, List<TableInfo>> mLocalesToTables
             = new HashMap<Locale, List<TableInfo>>();
     private Configuration mConfiguration;
+    private boolean mClientInitialized = false;
 
     /**
      * Callback interface to be invoked when one or both of the current
@@ -108,10 +109,11 @@ public class TranslatorManager
                     @Override
                     public void onInit(int status) {
                         if (status != TranslatorClient.SUCCESS) {
-                            LogUtils.log(this, Log.ERROR,
+                            LogUtils.log(TranslatorManager.this, Log.ERROR,
                                     "Couldn't initialize braille translator");
                             return;
                         }
+                        mClientInitialized = true;
                         onConfigurationChanged(
                                 context.getResources().getConfiguration());
                     }
@@ -125,6 +127,7 @@ public class TranslatorManager
     public void shutdown() {
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         mTranslatorClient.destroy();
+        mClientInitialized = false;
         mTranslator = null;
         mUncontractedTranslator = null;
     }
@@ -179,8 +182,10 @@ public class TranslatorManager
      * new configuration.
      */
     public void onConfigurationChanged(Configuration newConfiguration) {
-        if (mConfiguration != null
-                && mConfiguration.locale.equals(newConfiguration.locale)) {
+        if (!mClientInitialized ||
+                (mConfiguration != null
+                        && mConfiguration.locale.equals(
+                                newConfiguration.locale))) {
             return;
         }
         mConfiguration = newConfiguration;
@@ -192,7 +197,7 @@ public class TranslatorManager
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs,
             String key) {
-        if (mConfiguration != null && isTablePreferenceKey(key)) {
+        if (mClientInitialized && isTablePreferenceKey(key)) {
             updateTranslators();
         }
     }

@@ -113,9 +113,9 @@ On a high level, the following steps need to be performed:
 * Add the display in the braille display service source code
   so it gets automatically detected.
 
-* Adjust keyboard maps for Android
+* Adjust keyboard maps for Android.
 
-* Test the display with actual hardware
+* Test the display with actual hardware.
 
 Support for hardware braille displays is handled by a service that is separate
 from BrailleBack.  The source code for the display service is located in the
@@ -144,9 +144,8 @@ Including The Driver In The Build
 The brltty native library is compiled using the Android NDK.  The source files
 for a new driver need to be added in the file:
   braille/service/jni/brlttywrapper/Android.mk
-Copy the definitions for an existing driver library and modify it as
-appropriate.  Make sure that the library is listed in
-LOCAL_WHOLE_STATIC_LIBRARIES in the definition of libbrltty.
+If not already present, add the base name of the driver directory to the list
+in the build-braille-drivers function call close to the top of this file.
 
 The new driver also needs to be listed in the file
   braille/service/jni/brlttywrapper/brl.auto.h
