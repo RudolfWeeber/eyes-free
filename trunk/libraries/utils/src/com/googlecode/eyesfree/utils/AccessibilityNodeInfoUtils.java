@@ -128,8 +128,11 @@ public class AccessibilityNodeInfoUtils {
                 return true;
             }
         } else {
-            // In post-JellyBean, only focus top-level list items with text.
-            if (hasText(node) && isTopLevelScrollItem(context, node)) {
+            // In post-JellyBean, only focus top-level list items with
+            // non-actionable speaking children.
+            if (isTopLevelScrollItem(context, node)
+                    && (isSpeakingNode(context, node)
+                            || hasNonActionableSpeakingChildren(context, node))) {
                 return true;
             }
         }
@@ -230,7 +233,8 @@ public class AccessibilityNodeInfoUtils {
         return false;
     }
 
-    private static boolean hasNonActionableSpeakingChildren(Context context, AccessibilityNodeInfoCompat node) {
+    private static boolean hasNonActionableSpeakingChildren(
+            Context context, AccessibilityNodeInfoCompat node) {
         final int childCount = node.getChildCount();
 
         AccessibilityNodeInfoCompat child = null;
@@ -592,13 +596,25 @@ public class AccessibilityNodeInfoUtils {
      *
      * @param node A sealed {@link AccessibilityNodeInfoCompat} dispatched by
      *            the accessibility framework.
-     * @param className A class name to match.
+     * @param referenceClassName A class name to match.
      * @return {@code true} if the {@link AccessibilityNodeInfoCompat} matches
      *         the class name.
      */
     public static boolean nodeMatchesClassByName(
-            AccessibilityNodeInfoCompat node, CharSequence className) {
-        return TextUtils.equals(node.getClassName(), className);
+            Context context, AccessibilityNodeInfoCompat node, CharSequence referenceClassName) {
+        if ((node == null) || (referenceClassName == null)) {
+            return false;
+        }
+
+        // Attempt to take a shortcut.
+        final CharSequence nodeClassName = node.getClassName();
+        if (TextUtils.equals(nodeClassName, referenceClassName)) {
+            return true;
+        }
+
+        final ClassLoadingManager loader = ClassLoadingManager.getInstance();
+        final CharSequence appPackage = node.getPackageName();
+        return loader.checkInstanceOf(context, nodeClassName, appPackage, referenceClassName);
     }
 
     /**

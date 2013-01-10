@@ -700,4 +700,30 @@ diff --strip-trailing-cr -Pur a/liblouis/tables/braille-patterns.cti b/liblouis/
  
  
  # ----------------------------------------------------------------------------------------------
+diff --strip-trailing-cr -Pur a/liblouis/tables/da.ctb b/liblouis/tables/da.ctb
+--- a/liblouis/tables/da.ctb	2012-12-10 15:20:04.808069943 -0800
++++ b/liblouis/tables/da.ctb	2013-01-09 13:58:47.000000000 -0800
+@@ -214,11 +214,11 @@
+ punctuation \x00bf 348		INVERTED QUESTION MARK
+ uppercase \x00c0 123567		LATIN CAPITAL LETTER A WITH GRAVE
+ uppercase \x00c1 1235678		LATIN CAPITAL LETTER A WITH ACUTE
+-uppercase \x00c2 16		LATIN CAPITAL LETTER A WITH CIRCUMFLEX
++uppercase \x00c2 1678		LATIN CAPITAL LETTER A WITH CIRCUMFLEX
+ uppercase \x00c3 14678		LATIN CAPITAL LETTER A WITH TILDE
+ uppercase \x00c4 34578		LATIN CAPITAL LETTER A WITH DIAERESIS
+ uppercase \x00c5 167		LATIN CAPITAL LETTER A WITH RING ABOVE
+-uppercase \x00c6 345		LATIN CAPITAL LETTER AE
++uppercase \x00c6 3457		LATIN CAPITAL LETTER AE
+ uppercase \x00c7 123467		LATIN CAPITAL LETTER C WITH CEDILLA
+ uppercase \x00c8 23467		LATIN CAPITAL LETTER E WITH GRAVE
+ uppercase \x00c9 1234567		LATIN CAPITAL LETTER E WITH ACUTE
+@@ -236,7 +236,7 @@
+ uppercase \x00d5 145678		LATIN CAPITAL LETTER O WITH TILDE
+ uppercase \x00d6 24678		LATIN CAPITAL LETTER O WITH DIAERESIS
+ punctuation \x00d7 13468		MULTIPLICATION SIGN
+-uppercase \x00d8 246		LATIN CAPITAL LETTER O WITH STROKE
++uppercase \x00d8 2467		LATIN CAPITAL LETTER O WITH STROKE
+ uppercase \x00d9 234567		LATIN CAPITAL LETTER U WITH GRAVE
+ uppercase \x00da 125678		LATIN CAPITAL LETTER U WITH ACUTE
+ uppercase \x00db 1567		LATIN CAPITAL LETTER U WITH CIRCUMFLEX
 Only in a/liblouis: tests

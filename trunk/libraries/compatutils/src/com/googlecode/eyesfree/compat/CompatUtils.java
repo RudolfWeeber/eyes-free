@@ -26,96 +26,138 @@ import java.lang.reflect.Method;
 public class CompatUtils {
     private static final String TAG = CompatUtils.class.getSimpleName();
 
+    /** Whether to log debug output. */
+    public static boolean DEBUG = false;
+
     public static Class<?> getClass(String className) {
+        if (TextUtils.isEmpty(className)) {
+            return null;
+        }
+
         try {
             return Class.forName(className);
         } catch (ClassNotFoundException e) {
-            return null;
+            if (DEBUG) {
+                e.printStackTrace();
+            }
         }
+
+        return null;
     }
 
     public static Method getMethod(Class<?> targetClass, String name,
             Class<?>... parameterTypes) {
-        if (targetClass == null || TextUtils.isEmpty(name))
+        if ((targetClass == null) || TextUtils.isEmpty(name)) {
             return null;
-        try {
-            return targetClass.getMethod(name, parameterTypes);
-        } catch (SecurityException e) {
-            // ignore
-        } catch (NoSuchMethodException e) {
-            // ignore
         }
+
+        try {
+            return targetClass.getDeclaredMethod(name, parameterTypes);
+        } catch (Exception e) {
+            if (DEBUG) {
+                e.printStackTrace();
+            }
+        }
+
         return null;
     }
 
     public static Field getField(Class<?> targetClass, String name) {
-        if (targetClass == null || TextUtils.isEmpty(name))
+        if ((targetClass == null) || (TextUtils.isEmpty(name))) {
             return null;
+        }
+
         try {
             return targetClass.getDeclaredField(name);
-        } catch (SecurityException e) {
-            // ignore
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            if (DEBUG) {
+                e.printStackTrace();
+            }
         }
+
         return null;
     }
 
     public static Constructor<?> getConstructor(Class<?> targetClass, Class<?>... types) {
-        if (targetClass == null || types == null)
+        if ((targetClass == null) || (types == null)) {
             return null;
+        }
+
         try {
             return targetClass.getConstructor(types);
-        } catch (SecurityException e) {
-            // ignore
-        } catch (NoSuchMethodException e) {
-            // ignore
+        } catch (Exception e) {
+            if (DEBUG) {
+                e.printStackTrace();
+            }
         }
+
         return null;
     }
 
     public static Object newInstance(Constructor<?> constructor, Object... args) {
-        if (constructor == null)
+        if (constructor == null) {
             return null;
+        }
+
         try {
             return constructor.newInstance(args);
         } catch (Exception e) {
             Log.e(TAG, "Exception in newInstance: " + e.getClass().getSimpleName());
+
+            if (DEBUG) {
+                e.printStackTrace();
+            }
         }
+
         return null;
     }
 
     public static Object invoke(
             Object receiver, Object defaultValue, Method method, Object... args) {
-        if (method == null)
+        if (method == null) {
             return defaultValue;
+        }
+
         try {
             return method.invoke(receiver, args);
         } catch (Exception e) {
             Log.e(TAG, "Exception in invoke: " + e.getClass().getSimpleName());
-            e.printStackTrace();
+
+            if (DEBUG) {
+                e.printStackTrace();
+            }
         }
+
         return defaultValue;
     }
 
     public static Object getFieldValue(Object receiver, Object defaultValue, Field field) {
-        if (field == null)
+        if (field == null) {
             return defaultValue;
+        }
+
         try {
             return field.get(receiver);
         } catch (Exception e) {
-            Log.e(TAG, "Exception in getFieldValue: " + e.getClass().getSimpleName());
+            if (DEBUG) {
+                e.printStackTrace();
+            }
         }
+
         return defaultValue;
     }
 
     public static void setFieldValue(Object receiver, Field field, Object value) {
-        if (field == null)
+        if (field == null) {
             return;
+        }
+
         try {
             field.set(receiver, value);
         } catch (Exception e) {
-            Log.e(TAG, "Exception in setFieldValue: " + e.getClass().getSimpleName());
+            if (DEBUG) {
+                e.printStackTrace();
+            }
         }
     }
 

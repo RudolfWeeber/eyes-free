@@ -116,12 +116,12 @@ public class AccessibilityNodeInfoUtilsTest extends AccessibilityInstrumentation
 
         waitForAccessibilityIdleSync();
 
-        assertShouldFocusNode("List is not focusable", R.id.list, false);
         assertShouldFocusNode("Non-selectable header is focusable", R.id.header_item, true);
+        assertShouldFocusNode("List is not focusable", R.id.list, false);
 
-        assertFocusFromHover("List does not receive focus", R.id.list, -1);
         assertFocusFromHover("Non-selectable header receives focus",
                 R.id.header_item, R.id.header_item);
+        assertFocusFromHover("List does not receive focus", R.id.list, -1);
     }
 
     public void testListWithNonSelectableHeader() throws Throwable {
@@ -156,16 +156,16 @@ public class AccessibilityNodeInfoUtilsTest extends AccessibilityInstrumentation
         assertNotNull("Obtain first item", firstItem);
         assertNotNull("Obtain second item", secondItem);
 
-        assertShouldFocusNode("List is not focusable", R.id.list, false);
         assertShouldFocusNode("Non-selectable header is focusable", R.id.header_item, true);
         assertShouldFocusNode("First item is focusable", firstItem, true);
         assertShouldFocusNode("Second item is focusable", secondItem, true);
+        assertShouldFocusNode("List is not focusable", R.id.list, false);
 
-        assertFocusFromHover("List does not receive focus", R.id.list, -1);
         assertFocusFromHover("Non-selectable header receives focus",
                 R.id.header_item, R.id.header_item);
         assertFocusFromHover("First item receives focus", firstItem, firstItem);
         assertFocusFromHover("Second item receives focus", secondItem, secondItem);
+        assertFocusFromHover("List does not receive focus", R.id.list, -1);
     }
 
     public void testFindFocusFromHover() {

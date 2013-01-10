@@ -28,8 +28,10 @@ import java.lang.reflect.Method;
  */
 public class AccessibilityEventCompatUtils {
     private static final Class<?> CLASS_AccessibilityEvent = AccessibilityEvent.class;
+    private static final Class<?> CLASS_AccessibilityRecord = CompatUtils.getClass(
+            "android.view.accessibility.AccessibilityRecord");
     private static final Method METHOD_getToIndex = CompatUtils.getMethod(
-            CLASS_AccessibilityEvent, "getToIndex");
+            CLASS_AccessibilityRecord, "getToIndex");
     private static final Method METHOD_getMovementGranularity = CompatUtils.getMethod(
             CLASS_AccessibilityEvent, "getMovementGranularity");
 

@@ -61,6 +61,7 @@ public class Display {
     private static final int REBIND_DELAY_MILLIS = 500;
     private static final int MAX_REBIND_ATTEMPTS = 5;
     private int mNumFailedBinds = 0;
+    private volatile boolean mShutdown = false;
 
     /**
      * A callback interface to get informed about connection state changes.
@@ -94,7 +95,7 @@ public class Display {
      * Constructs an instance and connects to the braille display service.
      * The current thread must have an {@link android.os.Looper} associated
      * with it.  Callbacks from this object will all be executed on the
-     * current thread.  Connection state will be reported to {@code listener).
+     * current thread.  Connection state will be reported to {@code listener}.
      */
     public Display(Context context, OnConnectionStateChangeListener listener) {
         this(context, listener, null);
@@ -183,6 +184,7 @@ public class Display {
      * is no longer in use by this client.
      */
     public void shutdown() {
+        mShutdown = true;
         doUnbindService();
     }
 
@@ -328,6 +330,9 @@ public class Display {
 
         @Override
         public void handleMessage(Message msg) {
+            if (mShutdown) {
+                return;
+            }
             switch (msg.what) {
                 case MSG_REPORT_CONNECTION_STATE:
                     handleReportConnectionState(msg.arg1,

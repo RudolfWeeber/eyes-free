@@ -200,6 +200,15 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
         }
         pref.setEntries(entries);
         pref.setEntryValues(entryValues);
+
+        index = pref.findIndexOfValue(pref.getValue());
+        if (index < 0 || index >= entries.length) {
+            LogUtils.log(this, Log.ERROR,
+                    "Unknown preference value for %s: %s",
+                    pref.getKey(), pref.getValue());
+        } else {
+            pref.setSummary(entries[index]);
+        }
     }
 
     private String createTableDisplayName(TableInfo tableInfo) {

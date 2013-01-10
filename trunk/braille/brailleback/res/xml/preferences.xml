@@ -22,15 +22,18 @@
              android:defaultValue="@string/pref_braille_type_default"
              android:entries="@array/pref_braille_type_entries"
              android:entryValues="@array/pref_braille_type_values" />
+
+        <!-- android:summary is not used here because the entry values are
+             populated by a service. If the service responds slowly (e.g.
+             because it is not yet running), %s would be displayed instead.
+             Instead, setSummary is called explicitly in onTablesChanged. -->
         <ListPreference
              android:key="@string/pref_six_dot_braille_table_key"
              android:title="@string/pref_six_dot_braille_table_title"
-             android:summary="%1$s"
              android:defaultValue="@string/table_value_default" />
         <ListPreference
              android:key="@string/pref_eight_dot_braille_table_key"
              android:title="@string/pref_eight_dot_braille_table_title"
-             android:summary="%1$s"
              android:defaultValue="@string/table_value_default" />
     </PreferenceCategory>
 </PreferenceScreen>

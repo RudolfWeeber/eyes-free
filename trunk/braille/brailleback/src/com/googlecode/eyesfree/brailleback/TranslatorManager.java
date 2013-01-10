@@ -64,7 +64,7 @@ public class TranslatorManager
     private List<TableInfo> mTables;
     private final Map<Locale, List<TableInfo>> mLocalesToTables
             = new HashMap<Locale, List<TableInfo>>();
-    private Configuration mConfiguration;
+    private Locale mLocale;
     private boolean mClientInitialized = false;
 
     /**
@@ -182,13 +182,10 @@ public class TranslatorManager
      * new configuration.
      */
     public void onConfigurationChanged(Configuration newConfiguration) {
-        if (!mClientInitialized ||
-                (mConfiguration != null
-                        && mConfiguration.locale.equals(
-                                newConfiguration.locale))) {
+        if (!mClientInitialized || newConfiguration.locale.equals(mLocale)) {
             return;
         }
-        mConfiguration = newConfiguration;
+        mLocale = newConfiguration.locale;
         mTables = mTranslatorClient.getTables();
         updateLocalesToTables();
         updateTranslators();
@@ -219,7 +216,7 @@ public class TranslatorManager
                 findBrailleTranslator(eightDot, true/*fallback*/);
         if (newTranslator == null) {
             LogUtils.log(this, Log.ERROR, "Couldn't find braille translator "
-                    + "for %s", mConfiguration.locale);
+                    + "for %s", mLocale);
             return;
         }
         // TODO: For six dot braille, get the table with smallest grade.
@@ -244,13 +241,12 @@ public class TranslatorManager
             LogUtils.log(this, Log.ERROR, "Couldn't get translation tables");
             return null;
         }
-        Locale userLocale = mConfiguration.locale;
         TableInfo best = null;
         for (TableInfo info : mTables) {
             if (eightDot != info.isEightDot()) {
                 continue;
             }
-            if (betterTable(info, best, userLocale)) {
+            if (betterTable(info, best)) {
                 best = info;
             }
         }
@@ -298,17 +294,16 @@ public class TranslatorManager
         return null;
     }
 
-    private boolean betterTable(TableInfo first, TableInfo second,
-            Locale userLocale) {
+    private boolean betterTable(TableInfo first, TableInfo second) {
         Locale firstLocale = first.getLocale();
         Locale secondLocale = second != null
                 ? second.getLocale()
                 : Locale.ROOT;
-        return matchRank(firstLocale, userLocale)
-                > matchRank(secondLocale, userLocale);
+        return matchRank(firstLocale, mLocale)
+                > matchRank(secondLocale, mLocale);
     }
 
-    private int matchRank(Locale first, Locale second) {
+    private static int matchRank(Locale first, Locale second) {
         int ret = first.getLanguage().equals(second.getLanguage()) ? 1 : 0;
         if (ret > 0) {
             ret += (first.getCountry().equals(second.getCountry()) ? 1 : 0);
