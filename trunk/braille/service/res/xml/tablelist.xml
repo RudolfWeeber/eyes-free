@@ -115,14 +115,6 @@
          dots="8"
          fileName="et-g0.utb" />
 
-    <!-- Farsi -->
-    <table
-         id="fa-g1"
-         locale="fa"
-         dots="6"
-         grade="1"
-         fileName="ar-fa.utb" />
-
     <!-- French -->
     <table
          id="fr-comp8"
