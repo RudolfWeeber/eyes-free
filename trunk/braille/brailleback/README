@@ -49,7 +49,7 @@ above), perform the following steps to build the BrailleBack apk.
 Please run all commands from the root of the eyes-free source tree.
 
 * If you are building on Linux, you might be able to use the shell script
-  that automates the build process.  this script builds a debug apk.
+  that automates the build process.  This script builds a debug apk.
   It performs a clean build, which takes longer than an incremental build.
   You might want to use some of the steps below while developing.
 
@@ -72,9 +72,17 @@ Please run all commands from the root of the eyes-free source tree.
   $ svn checkout http://liblouis.googlecode.com/svn/tags/liblouis_2_5_1 \
     braille/service/jni/liblouiswrapper/liblouis
 
-* Apply patches to brltty and liblouis:
+* Make sure to have the android-midi-library checked out.  This can be
+  checked out from subversion as follows (run from within the eyes-free
+  directory as per above):
+  $ svn checkout -r31 \
+    http://android-midi-lib.googlecode.com/svn/trunk/src/com/leff \
+    libraries/utils/src/com/leff
+
+* Apply patches to the dependencies:
   $ (cd braille/service/jni/brlttywrapper && patch -p1 < brltty.patch)
   $ (cd braille/service/jni/liblouiswrapper && patch -p1 < liblouis.patch)
+  $ (cd libraries/utils/src/com/ && patch -p1 < android-midi-lib.patch
 
 * Update the local ant property files:
   $ android update project -p libraries/utils

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_description" msgid="3837907778560523486">"Kapag naka-on ang BrailleBack, kokonekta ang iyong device sa isang nakapares na bluetooth na braille display at ipapakita ang nilalaman ng screen nang naka-braille. Maaaring gamitin ang mga key sa braille display upang mag-navigate sa screen, mag-activate ng mga item at maglagay ng teksto. Para sa higit pang impormasyon, pindutin ang space at mga tuldok na 1, 2 at 3 (ang titik l sa braille) sa iyong display kapag nakakonekta."</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"Braille hardware keyboard"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Wizard ng Braille Hardware Keyboard"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Paganahin ang braille hardware keyboard"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Upang magamit ang braille hardware keyboard, kailangan mo itong paganahin sa mga setting ng pamamaraan ng pag-input at pagkatapos ay itakda ito bilang default na pamamaraan ng pag-input."</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"Laktawan"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Buksan ang Mga Setting ng Pamamaraan ng Pag-input"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Itakda ang Default na Pamamaraan ng Pag-input"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Upang magamit ang braille hardware keyboard, kailangan mo itong itakda bilang default na pamamaraan ng pag-input."</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Buksan ang Picker ng Pamamaraan ng Pag-input"</string>
+    <string name="permlab_displayConnect" msgid="2251586694368462088">"Kumonekta sa isang braille display"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"Nagbibigay-daan sa isang isang app na magsulat ng output at magbasa ng input ng keyboard mula sa isang braille display"</string>
+    <string name="type_emptygridview" msgid="4226780230155385397">"Walang Lamang Grid"</string>
+    <string name="type_gridview" msgid="8453985146958342779">"Grid"</string>
+    <string name="type_emptylistview" msgid="4497688410987085349">"Walang Lamang Listahan"</string>
+    <string name="type_listview" msgid="195039477703126884">"Listahan"</string>
+    <string name="type_emptyscrollview" msgid="8276432333933865406">"Walang Lamang Naso-scroll na Nilalaman"</string>
+    <string name="type_scrollview" msgid="800452819520995482">"Naso-scroll na Nilalaman"</string>
+    <string name="type_edittext" msgid="4305739343129651595">"Kahon para sa Pag-edit"</string>
+    <string name="type_image" msgid="3688576211222019626">"Larawan"</string>
+    <string name="type_button" msgid="3639574187835564558">"Button"</string>
+    <string name="type_seekbar" msgid="979094491475615458">"Kontrol ng Paghahanap"</string>
+    <string name="type_quickcontact" msgid="5224329178093450337">"Contact"</string>
+    <string name="preferences_title" msgid="368535298674637475">"Mga Kagustuhan sa BrailleBack"</string>
+    <string name="pref_category_device_title" msgid="8644919099122845217">"Device"</string>
+    <string name="pref_connection_status_title" msgid="8350285056432214602">"Katayuan"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Mga key binding"</string>
+    <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
+    <string name="pref_braille_type_title" msgid="830832481671746224">"Uri ng Braille"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Table ng literary braille"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Table ng computer braille"</string>
+    <string name="connstate_not_connected" msgid="3876972842771373901">"Hindi nakakonekta"</string>
+    <string name="connstate_connected" msgid="7552950461156525524">"Nakakonekta"</string>
+    <string name="connstate_error" msgid="8717968034812924474">"Hindi available"</string>
+    <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"Literary braille"</string>
+    <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Computer braille"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Auto (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Auto (wala)"</string>
+    <string name="pref_category_developer_title" msgid="7276576143816692867">"Mga opsyon ng developer"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Ipakita ang Braille sa screen"</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"Mga key binding"</string>
+    <string name="display_connected" msgid="2008600513914815101">"brlback on"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"brlback off"</string>
+    <string name="braille_keyboard_active" msgid="7094321134174837395">"Aktibo ang BrailleBack keyboard"</string>
+    <string name="tap_to_switch_ime" msgid="8521400813452643324">"I-tap upang lumipat sa default na keyboard"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - grade <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+</resources>

@@ -77,7 +77,7 @@ static jint mapBrlttyCommand(int brlttyCommand,
                              jint* outCommand, jint* outArg);
 // Callback used when listing the brltty keymap.
 static int reportKeyBinding(int command, int keyCount, const char* keys[],
-                            void* data);
+                            int isLongPress, void* data);
 
 // Maps from brltty command codes (without arguments and flags)
 // to constants in the BrailleInputEvent java class.
@@ -85,8 +85,11 @@ static CommandMap* brlttyCommandMap = NULL;
 // Maps brltty special key constants to constants in the BrailleInputEvent
 // java class.
 static CommandMap* brlttyKeyMap = NULL;
-// Command that is special-cased when mapping.
+// Commands that are special-cased when mapping.
 static jint cmdActivateCurrent = -1;
+static jint cmdLongPressCurrent = -1;
+static jint cmdRoute = -1;
+static jint cmdLongPressRoute = -1;
 
 static jclass class_BrlttyWrapper;
 static jclass class_BrailleKeyBinding;
@@ -98,6 +101,7 @@ static jclass class_String;
 static jfieldID field_mNativeData;
 static jfieldID field_mTablesDir;
 static jmethodID method_sendBytesToDevice;
+static jmethodID method_readDelayed;
 static jmethodID method_BrailleKeyBinding_ctor;
 
 // Data for the reportKeyBinding callback.
@@ -298,10 +302,18 @@ out:
 jint
 Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_readCommandNative(
     JNIEnv* env, jobject thiz) {
-  while (1) {
-    int brlttyCommand = brltty_readCommand();
+  int ret = -1;
+  int readDelayMillis = -1;
+  while (ret < 0) {
+    int innerDelayMillis = -1;
+    int brlttyCommand = brltty_readCommand(&innerDelayMillis);
+    if (readDelayMillis < 0 ||
+        (innerDelayMillis > 0 && innerDelayMillis < readDelayMillis)) {
+      readDelayMillis = innerDelayMillis;
+    }
     if (brlttyCommand == EOF) {
-      return -1;
+      ret = -1;
+      break;
     }
     jint mappedCommand, mappedArg;
     mapBrlttyCommand(brlttyCommand, &mappedCommand, &mappedArg);
@@ -311,8 +323,13 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_readCommandNa
       // of which cases the loop will terminate.
       continue;
     }
-    return (mappedArg << 16) | mappedCommand;
+    ret = (mappedArg << 16) | mappedCommand;
   }
+  if (readDelayMillis > 0) {
+    (*env)->CallVoidMethod(env, thiz, method_readDelayed,
+                           (jlong) readDelayMillis);
+  }
+  return ret;
 }
 
 // TODO: This method should throw more exceptions.
@@ -370,6 +387,11 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_classInitNati
     LOGE("Couldn't find sendBytesToDevice method");
     return;
   }
+  if (!(method_readDelayed = (*env)->GetMethodID(
+          env, clazz, "readDelayed", "(J)V"))) {
+    LOGE("Couldn't find readDelayed method");
+    return;
+  }
   if (!(field_mNativeData = (*env)->GetFieldID(
           env, clazz, "mNativeData", "I"))) {
     LOGE("Couldn't find mNativeData field");
@@ -387,7 +409,7 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_classInitNati
   if (!(method_BrailleKeyBinding_ctor =
         (*env)->GetMethodID(
             env, class_BrailleKeyBinding, "<init>",
-            "(I[Ljava/lang/String;)V"))) {
+            "(I[Ljava/lang/String;Z)V"))) {
     return;
   }
   if (!(class_OutOfMemoryError =
@@ -495,7 +517,6 @@ initCommandTables(JNIEnv* env) {
     { "CMD_SELECTION_START", BRL_BLK_CLIP_NEW },
     { "CMD_SELECTION_END", BRL_BLK_COPY_LINE },
     { "CMD_SELECTION_PASTE", BRL_CMD_PASTE },
-    { "CMD_ROUTE", BRL_BLK_ROUTE },
     { "CMD_BRAILLE_KEY", BRL_BLK_PASSDOTS },
     { "CMD_HELP", BRL_CMD_LEARN },
   };
@@ -530,6 +551,18 @@ initCommandTables(JNIEnv* env) {
     goto cleanup;
   }
   cmdActivateCurrent = getStaticIntField(env, cls, "CMD_ACTIVATE_CURRENT");
+  if ((*env)->ExceptionCheck(env)) {
+    goto cleanup;
+  }
+  cmdLongPressCurrent = getStaticIntField(env, cls, "CMD_LONG_PRESS_CURRENT");
+  if ((*env)->ExceptionCheck(env)) {
+    goto cleanup;
+  }
+  cmdRoute = getStaticIntField(env, cls, "CMD_ROUTE");
+  if ((*env)->ExceptionCheck(env)) {
+    goto cleanup;
+  }
+  cmdLongPressRoute = getStaticIntField(env, cls, "CMD_LONG_PRESS_ROUTE");
   if ((*env)->ExceptionCheck(env)) {
     goto cleanup;
   }
@@ -607,6 +640,7 @@ mapBrlttyCommand(int brlttyCommand,
   // Mask away some flags and bits we don't care about.
   int maskedCommand;
   int brlttyArg;
+  int brlttyFlags = brlttyCommand & BRL_MSK_FLG;
   if ((brlttyCommand & BRL_MSK_BLK) != 0) {
     maskedCommand = (brlttyCommand & BRL_MSK_BLK);
     brlttyArg = (brlttyCommand & BRL_MSK_ARG);
@@ -617,11 +651,17 @@ mapBrlttyCommand(int brlttyCommand,
   if (maskedCommand == BRL_BLK_PASSKEY) {
     *outCommand = commandMapGet(brlttyKeyMap, brlttyArg);
     *outArg = 0;
-  } else if (maskedCommand == BRL_BLK_ROUTE
-             && brlttyArg >= brltty_getTextCells()) {
-    // Treat a routing command outside of the display as a distinct command.
-    *outCommand = cmdActivateCurrent;
-    *outArg = 0;
+  } else if (maskedCommand == BRL_BLK_ROUTE) {
+    int longPress = (brlttyArg & BRLTTY_ROUTE_ARG_FLG_LONG_PRESS);
+    brlttyArg &= ~BRLTTY_ROUTE_ARG_FLG_LONG_PRESS;
+    if (brlttyArg >= brltty_getTextCells()) {
+      // Treat a routing command outside of the display as a distinct command.
+      *outArg = 0;
+      *outCommand = longPress ? cmdLongPressCurrent : cmdActivateCurrent;
+    } else {
+      *outArg = brlttyArg;
+      *outCommand = longPress ? cmdLongPressRoute : cmdRoute;
+    }
   } else {
     *outCommand = commandMapGet(brlttyCommandMap, maskedCommand);
     *outArg = brlttyArg;
@@ -629,8 +669,9 @@ mapBrlttyCommand(int brlttyCommand,
 }
 
 static int
-reportKeyBinding(
-    int command, int keyNameCount, const char* keyNames[], void* data) {
+reportKeyBinding(int command, int keyNameCount, const char* keyNames[],
+                 int isLongPress,
+                 void* data) {
   int mappedCommand, mappedArg;
   mapBrlttyCommand(command, &mappedCommand, &mappedArg);
   if (mappedCommand < 0) {
@@ -670,7 +711,7 @@ reportKeyBinding(
   }
   jobject binding = (*env)->NewObject(
       env, class_BrailleKeyBinding, method_BrailleKeyBinding_ctor,
-      mappedCommand, keys);
+      mappedCommand, keys, isLongPress);
   if (binding == NULL) {
     return 0;
   }

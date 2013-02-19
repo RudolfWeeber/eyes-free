@@ -16,7 +16,6 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;
@@ -30,7 +29,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
@@ -40,6 +38,7 @@ import android.widget.EditText;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
+import com.googlecode.eyesfree.compat.accessibilityservice.AccessibilityServiceCompatUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
@@ -596,7 +595,8 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
             if (service == null) {
                 return;
             }
-            root = getRootInActiveWindow(service);
+            root = AccessibilityServiceCompatUtils.getRootInActiveWindow(
+                    service);
             if (root == null) {
                 return;
             }
@@ -625,26 +625,14 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
             if (service == null) {
                 return null;
             }
-            root = getRootInActiveWindow(service);
+            root = AccessibilityServiceCompatUtils.getRootInActiveWindow(
+                    service);
             if (root == null) {
                 return null;
             }
             return root.findFocus(AccessibilityNodeInfoCompat.FOCUS_INPUT);
         } finally {
             AccessibilityNodeInfoUtils.recycleNodes(root);
-        }
-    }
-
-    /**
-     * Returns the root node of the active window.
-     */
-    private static AccessibilityNodeInfoCompat getRootInActiveWindow(
-        AccessibilityService service) {
-        AccessibilityNodeInfo root = service.getRootInActiveWindow();
-        if (root != null) {
-            return new AccessibilityNodeInfoCompat(root);
-        } else {
-            return null;
         }
     }
 

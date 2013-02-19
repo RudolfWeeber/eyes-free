@@ -90,7 +90,7 @@ public class LibLouisWrapper {
     private static native void classInitNative();
 
     static {
-        System.loadLibrary("louis");
+        System.loadLibrary("louiswrap");
         classInitNative();
     }
 }

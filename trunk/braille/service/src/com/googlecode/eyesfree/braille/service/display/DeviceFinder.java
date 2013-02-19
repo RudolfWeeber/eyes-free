@@ -116,8 +116,12 @@ public class DeviceFinder {
      * should be tried.
      */
     public List<DeviceInfo> findDevices() {
-        List<DeviceInfo> ret = new ArrayList<DeviceInfo>();
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        if (adapter == null) {
+            return Collections.emptyList();
+        }
+
+        List<DeviceInfo> ret = new ArrayList<DeviceInfo>();
         Set<BluetoothDevice> bondedDevices = adapter.getBondedDevices();
         for (BluetoothDevice dev : bondedDevices) {
             for (SupportedDevice matcher : SUPPORTED_DEVICES) {
@@ -339,26 +343,23 @@ public class DeviceFinder {
                         "Brailliant BI"));
 
         // HIMS
-        l.add(new NamePrefixSupportedDevice("hm", false,
+        Map<String, Integer> himsKeys =
                 new KeyNameMapBuilder()
                         .dots8()
                         .routing()
                         .add("Space", R.string.key_Space)
-                        .build(),
+                        .add("F1", R.string.key_F1)
+                        .add("F2", R.string.key_F2)
+                        .add("F3", R.string.key_F3)
+                        .add("F4", R.string.key_F4)
+                        .add("Backward", R.string.key_Backward)
+                        .add("Forward", R.string.key_Forward)
+                        .build();
+        l.add(new NamePrefixSupportedDevice("hm", false, himsKeys,
                         "HansoneLX"));
-        l.add(new NamePrefixSupportedDevice("hm", false,
-                new KeyNameMapBuilder()
-                        .dots8()
-                        .routing()
-                        .add("Space", R.string.key_Space)
-                        .build(),
+        l.add(new NamePrefixSupportedDevice("hm", false, himsKeys,
                         "BrailleSense"));
-        l.add(new NamePrefixSupportedDevice("hm", false,
-                new KeyNameMapBuilder()
-                        .dots8()
-                        .routing()
-                        .add("Space", R.string.key_Space)
-                        .build(),
+        l.add(new NamePrefixSupportedDevice("hm", false, himsKeys,
                         "BrailleEDGE"));
 
         // APH Refreshabraille.
@@ -379,6 +380,22 @@ public class DeviceFinder {
                         .add("B10", R.string.key_Space)
                         .build(),
                         "Refreshabraille"));
+        // Baum VarioConnect
+        l.add(new NamePrefixSupportedDevice("bm", false,
+                new KeyNameMapBuilder()
+                        .dots8()
+                        .add("Left", R.string.key_JoystickLeft)
+                        .add("Right", R.string.key_JoystickRight)
+                        .add("Up", R.string.key_JoystickUp)
+                        .add("Down", R.string.key_JoystickDown)
+                        .add("Press", R.string.key_JoystickCenter)
+                        .routing()
+                        .add("Display2", R.string.key_APH_AdvanceLeft)
+                        .add("Display5", R.string.key_APH_AdvanceRight)
+                        .add("B9", R.string.key_Space)
+                        .add("B10", R.string.key_Space)
+                        .build(),
+                        "VarioConnect"));
 
         // Older Brailliant, from Humanware group. Uses Baum
         // protocol. No Braille keyboard on this one. Secure
@@ -412,8 +429,8 @@ public class DeviceFinder {
                         .add("BarRight2", R.string.key_braillex_BarRight2)
                         .add("BarUp1", R.string.key_braillex_BarUp1)
                         .add("BarUp2", R.string.key_braillex_BarUp2)
-                        .add("BarRight1", R.string.key_braillex_BarRight1)
-                        .add("BarRight2", R.string.key_braillex_BarRight2)
+                        .add("BarDown1", R.string.key_braillex_BarDown1)
+                        .add("BarDown2", R.string.key_braillex_BarDown2)
                         .add("LeftKeyRear", R.string.key_braillex_LeftKeyRear)
                         .add("LeftKeyFront", R.string.key_braillex_LeftKeyFront)
                         .add("RightKeyRear", R.string.key_braillex_RightKeyRear)

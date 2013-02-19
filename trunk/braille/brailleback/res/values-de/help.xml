@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Nach rechts schwenken"</item>
+    <item msgid="992384288929754258">"Nach links schwenken"</item>
+    <item msgid="2311009411708911700">"Zum nächsten Element navigieren"</item>
+    <item msgid="4868322620432152139">"Zum vorherigen Element navigieren"</item>
+    <item msgid="713256521059720189">"Zur nächsten Zeile navigieren"</item>
+    <item msgid="7111316948614107646">"Zur vorherigen Zeile navigieren"</item>
+    <item msgid="1092717670413169154">"Vorwärts scrollen"</item>
+    <item msgid="2672802569950877806">"Rückwärts scrollen"</item>
+    <item msgid="8530687760031648049">"Element unter dem Finger aktivieren"</item>
+    <item msgid="2965010005667399914">"Element lange mit dem Finger drücken"</item>
+    <item msgid="7114563790387768347">"Aktuelles Element aktivieren"</item>
+    <item msgid="6083375034241022486">"Aktuelles Element lange drücken"</item>
+    <item msgid="6434332125338405390">"Braillezeichen eingeben"</item>
+    <item msgid="2845805874940074674">"Schaltfläche \"Zurück\" aktivieren"</item>
+    <item msgid="6272261186186982128">"Schaltfläche \"Startseite\" aktivieren"</item>
+    <item msgid="2876656758414605716">"Benachrichtigungsfenster öffnen"</item>
+    <item msgid="2554673553387851889">"Fenster \"Zuletzt geöffnete Apps\" öffnen"</item>
+    <item msgid="4863807959891911585">"Eingabetaste bei der Textbearbeitung aktivieren"</item>
+    <item msgid="5917526604121492276">"Bei der Textbearbeitung rückwärts löschen"</item>
+    <item msgid="6047263121281919980">"Bei der Textbearbeitung vorwärts löschen"</item>
+    <item msgid="2622805964649872487">"BrailleBack-Tastaturhilfe öffnen"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"<xliff:g id="KEY_LIST">%s</xliff:g> lange drücken"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Verschieben Sie den Bildschirmfokus mithilfe der Richtungstasten."\n"Geben Sie mit den Brailletasten Text in ein Bearbeitungsfeld ein."\n"Nachfolgend finden Sie eine Liste aller Tastaturbefehle, die von Ihrem Gerät unterstützt werden."</string>
+</resources>

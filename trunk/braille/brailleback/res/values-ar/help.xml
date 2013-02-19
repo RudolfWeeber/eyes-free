@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"تحريك لليمين"</item>
+    <item msgid="992384288929754258">"تحريك لليسار"</item>
+    <item msgid="2311009411708911700">"التنقل إلى العنصر التالي"</item>
+    <item msgid="4868322620432152139">"التنقل إلى العنصر السابق"</item>
+    <item msgid="713256521059720189">"التنقل إلى السطر التالي"</item>
+    <item msgid="7111316948614107646">"التنقل إلى السطر السابق"</item>
+    <item msgid="1092717670413169154">"تمرير للأمام"</item>
+    <item msgid="2672802569950877806">"تمرير للخلف"</item>
+    <item msgid="8530687760031648049">"تنشيط العنصر أسفل الإصبع"</item>
+    <item msgid="2965010005667399914">"الضغط الطويل على العنصر أسفل الإصبع"</item>
+    <item msgid="7114563790387768347">"تنشيط العنصر الحالي"</item>
+    <item msgid="6083375034241022486">"الضغط الطويل على العنصر الحالي"</item>
+    <item msgid="6434332125338405390">"إدخال حرف برايل"</item>
+    <item msgid="2845805874940074674">"تنشيط زر الرجوع"</item>
+    <item msgid="6272261186186982128">"تنشيط زر الصفحة الرئيسية"</item>
+    <item msgid="2876656758414605716">"فتح نافذة الإشعارات"</item>
+    <item msgid="2554673553387851889">"فتح نافذة التطبيقات الأخيرة"</item>
+    <item msgid="4863807959891911585">"تنشيط مفتاح الإدخال أثناء تعديل النص"</item>
+    <item msgid="5917526604121492276">"الحذف للوراء أثناء تعديل النص"</item>
+    <item msgid="6047263121281919980">"الحذف للأمام أثناء تعديل النص"</item>
+    <item msgid="2622805964649872487">"فتح مساعدة لوحة مفاتيح BrailleBack"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"اضغط ضغطة طويلة على <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"استخدم مفاتيح التنقل لتحريك التركيز على الشاشة."\n"استخدم مفاتيح برايل لإدخال نص في مربع التعديل."\n"فيما يلي قائمة كاملة بأوامر المفاتيح التي تتوافق مع جهازك."</string>
+</resources>

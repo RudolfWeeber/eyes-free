@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Przesuń w prawo"</item>
+    <item msgid="992384288929754258">"Przesuń w lewo"</item>
+    <item msgid="2311009411708911700">"Przejdź do następnego elementu"</item>
+    <item msgid="4868322620432152139">"Przejdź do poprzedniego elementu"</item>
+    <item msgid="713256521059720189">"Przejdź do następnego wiersza"</item>
+    <item msgid="7111316948614107646">"Przejdź do poprzedniego wiersza"</item>
+    <item msgid="1092717670413169154">"Przewiń do przodu"</item>
+    <item msgid="2672802569950877806">"Przewiń do tyłu"</item>
+    <item msgid="8530687760031648049">"Aktywuj element pod palcem"</item>
+    <item msgid="2965010005667399914">"Naciśnij i przytrzymaj element pod palcem"</item>
+    <item msgid="7114563790387768347">"Aktywuj bieżący element"</item>
+    <item msgid="6083375034241022486">"Naciśnij i przytrzymaj bieżący element"</item>
+    <item msgid="6434332125338405390">"Wpisz znak brajla"</item>
+    <item msgid="2845805874940074674">"Aktywuj przycisk Back (Wstecz)"</item>
+    <item msgid="6272261186186982128">"Aktywuj przycisk Home (Ekran główny)"</item>
+    <item msgid="2876656758414605716">"Otwórz okno powiadomień"</item>
+    <item msgid="2554673553387851889">"Otwórz okno ostatnich aplikacji"</item>
+    <item msgid="4863807959891911585">"Aktywuj klawisz Enter podczas edycji tekstu"</item>
+    <item msgid="5917526604121492276">"Usuwaj do tyłu podczas edycji tekstu"</item>
+    <item msgid="6047263121281919980">"Usuwaj do przodu podczas edycji tekstu"</item>
+    <item msgid="2622805964649872487">"Otwórz pomoc klawiatury BrailleBack"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Naciskanie i przytrzymywanie <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Użyj klawiszy nawigacyjnych, by przenosić aktywność na ekranie."\n"Użyj klawiszy brajla, by wpisać tekst w polu edycji."\n"Poniżej podano pełną listę poleceń klawiszy obsługiwanych przez Twoje urządzenie."</string>
+</resources>

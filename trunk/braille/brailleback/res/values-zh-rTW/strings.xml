@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- no translation found for service_description (3837907778560523486) -->
+    <skip />
+    <string name="braille_ime_name" msgid="819430885692057322">"實體點字鍵盤"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"實體點字鍵盤精靈"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"啟用實體點字鍵盤"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"如要使用實體點字鍵盤，您必須先前往輸入法設定中啟用實體點字鍵盤，然後將其設為預設輸入法。"</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"略過"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"開啟輸入法設定"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"設定預設輸入法"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"如要使用實體點字鍵盤，您必須先將實體點字鍵盤設為預設輸入法。"</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"開啟輸入法選取工具"</string>
+    <string name="permlab_displayConnect" msgid="2251586694368462088">"連接到點字顯示器"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"允許應用程式以點字顯示器為介面，寫入輸出內容及讀取鍵盤輸入內容"</string>
+    <string name="type_emptygridview" msgid="4226780230155385397">"空白格狀檢視"</string>
+    <string name="type_gridview" msgid="8453985146958342779">"格狀檢視"</string>
+    <string name="type_emptylistview" msgid="4497688410987085349">"空白清單檢視"</string>
+    <string name="type_listview" msgid="195039477703126884">"清單檢視"</string>
+    <string name="type_emptyscrollview" msgid="8276432333933865406">"空白可捲動內容檢視"</string>
+    <string name="type_scrollview" msgid="800452819520995482">"可捲動內容檢視"</string>
+    <string name="type_edittext" msgid="4305739343129651595">"編輯框"</string>
+    <string name="type_image" msgid="3688576211222019626">"圖片"</string>
+    <string name="type_button" msgid="3639574187835564558">"按鈕"</string>
+    <string name="type_seekbar" msgid="979094491475615458">"搜尋控制介面"</string>
+    <string name="type_quickcontact" msgid="5224329178093450337">"聯絡人"</string>
+    <string name="preferences_title" msgid="368535298674637475">"BrailleBack 偏好設定"</string>
+    <string name="pref_category_device_title" msgid="8644919099122845217">"裝置"</string>
+    <string name="pref_connection_status_title" msgid="8350285056432214602">"狀態"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"按鍵繫結"</string>
+    <string name="pref_category_braille_title" msgid="2900211401917503360">"點字"</string>
+    <string name="pref_braille_type_title" msgid="830832481671746224">"點字類型"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"文書點字參考表"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"電腦點字參考表"</string>
+    <string name="connstate_not_connected" msgid="3876972842771373901">"尚未連接"</string>
+    <string name="connstate_connected" msgid="7552950461156525524">"已連接"</string>
+    <string name="connstate_error" msgid="8717968034812924474">"不支援"</string>
+    <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"文書點字"</string>
+    <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"電腦點字"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"自動選取 (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"自動選取 (無)"</string>
+    <string name="pref_category_developer_title" msgid="7276576143816692867">"開發人員選項"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"在螢幕上顯示點字輸出"</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"按鍵繫結"</string>
+    <!-- no translation found for display_connected (2008600513914815101) -->
+    <skip />
+    <!-- no translation found for shutting_down (1303701310644298807) -->
+    <skip />
+    <string name="braille_keyboard_active" msgid="7094321134174837395">"已啟用 BrailleBack 鍵盤"</string>
+    <string name="tap_to_switch_ime" msgid="8521400813452643324">"輕觸即可切換預設鍵盤"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - <xliff:g id="GRADE_NUMBER">%2$d</xliff:g> 級點字"</string>
+</resources>

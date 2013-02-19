@@ -7,23 +7,23 @@
     <string translatable="false" name="key_Backspace">Backspace</string>
     <!-- Name for the space key on the braille display. -->
     <string translatable="false" name="key_Space">Space</string>
-    <!-- Name for the key tha trepresents braille dot 1 on the braille display. -->
+    <!-- Name for the key that represents braille dot 1 on the braille display. -->
     <string translatable="false" name="key_Dot1">Dot1</string>
-    <!-- Name for the key tha trepresents braille dot 2 on the braille display. -->
+    <!-- Name for the key that represents braille dot 2 on the braille display. -->
     <string translatable="false" name="key_Dot2">Dot2</string>
-    <!-- Name for the key tha trepresents braille dot 3 on the braille display. -->
+    <!-- Name for the key that represents braille dot 3 on the braille display. -->
     <string translatable="false" name="key_Dot3">Dot3</string>
-    <!-- Name for the key tha trepresents braille dot 4 on the braille display. -->
+    <!-- Name for the key that represents braille dot 4 on the braille display. -->
     <string translatable="false" name="key_Dot4">Dot4</string>
-    <!-- Name for the key tha trepresents braille dot 5 on the braille display. -->
+    <!-- Name for the key that represents braille dot 5 on the braille display. -->
     <string translatable="false" name="key_Dot5">Dot5</string>
-    <!-- Name for the key tha trepresents braille dot 6 on the braille display. -->
+    <!-- Name for the key that represents braille dot 6 on the braille display. -->
     <string translatable="false" name="key_Dot6">Dot6</string>
-    <!-- Name for the key tha trepresents braille dot 7 on the braille display. -->
+    <!-- Name for the key that represents braille dot 7 on the braille display. -->
     <string translatable="false" name="key_Dot7">Dot7</string>
-    <!-- Name for the key tha trepresents braille dot 8 on the braille display. -->
+    <!-- Name for the key that represents braille dot 8 on the braille display. -->
     <string translatable="false" name="key_Dot8">Dot8</string>
-    <!-- Name for the routing key on the braille display.  A key in a set of keys located close to the braille line with one key for each braille cell. -->
+    <!-- Name for any of the routing keys on the braille display.  A key in a set of keys located close to the braille line with one key for each braille cell. -->
     <string translatable="false" name="key_Routing">RoutingKey</string>
     <!-- Key name representing pressing the joystick left on the braille display. -->
     <string translatable="false" name="key_JoystickLeft">JoystickLeft</string>
@@ -35,6 +35,18 @@
     <string translatable="false" name="key_JoystickDown">JoystickDown</string>
     <!-- Key name representing pressing the joystick in the center on the braille display. -->
     <string translatable="false" name="key_JoystickCenter">JoystickCenter</string>
+    <!-- Name of a numbered function key on a braille display. -->
+    <string translatable="false" name="key_F1">F1</string>
+    <!-- Name of a numbered function key on a braille display. -->
+    <string translatable="false" name="key_F2">F2</string>
+    <!-- Name of a numbered function key on a braille display. -->
+    <string translatable="false" name="key_F3">F3</string>
+    <!-- Name of a numbered function key on a braille display. -->
+    <string translatable="false" name="key_F4">F4</string>
+    <!-- Name of the backward key on a braille display -->
+    <string translatable="false" name="key_Backward">Backward</string>
+    <!-- Name of the forward key on a braille display -->
+    <string translatable="false" name="key_Forward">Forward</string>
 
     <!-- BraillePen keys -->
 

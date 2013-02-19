@@ -21,8 +21,8 @@
 #include <string.h>
 #include <jni.h>
 #include "alog.h"
-#include "liblouis/liblouis/liblouis.h"
-#include "liblouis/liblouis/louis.h"  // for MAXSTRING
+#include "liblouis/liblouis.h"
+#include "liblouis/louis.h"  // for MAXSTRING
 
 #define LOG_TAG "LibLouisWrapper_Native"
 

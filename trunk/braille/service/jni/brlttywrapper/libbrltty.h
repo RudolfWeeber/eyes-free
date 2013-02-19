@@ -41,6 +41,21 @@ extern "C" {
 #endif /* __cplusplus */
 
 /*
+ * If this flag is set in the argument of CMD_ROUTE, this is a long
+ * press route.  The flag is put in the argument instead of the separate
+ * flag bits, because it can be included in the keymap (by using
+ * CMD_ROUTE+128).
+ */
+#define BRLTTY_ROUTE_ARG_FLG_LONG_PRESS 0X80
+
+/*
+ * Maximum number text cells that are supported.  Since the high
+ * order bit is used to indicate long press, and the maximum 7-bit value is
+ * used for the 'activate current' command, we end up with this value.
+ */
+#define BRLTTY_MAX_TEXT_CELLS 0X7F
+
+/*
  * Initializes a given braille driver, trying to connect to a given
  * device.  Returns non-zero on success.
  */
@@ -58,9 +73,12 @@ brltty_destroy(void);
 /*
  * Polls the driver for a single key command.  This call is non-blocking.
  * If no command is available, EOF is returned.
+ * If readDelay is >0 on return, a new call will be scheduled after that
+ * number of milliseconds, even if no more input data has been detected at that
+ * time.
  */
 int
-brltty_readCommand(void);
+brltty_readCommand(int *readDelayMillis);
 
 /*
  * Updates the display with a dot pattern.  dotPattern should contain
@@ -94,6 +112,7 @@ brltty_getStatusCells(void);
  */
 typedef int (*KeyMapEntryCallback)(int command, int keyCount,
                                    const char *keys[],
+                                   int isLongPress,
                                    void *data);
 
 /*

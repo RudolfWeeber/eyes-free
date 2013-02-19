@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Deplasați la dreapta"</item>
+    <item msgid="992384288929754258">"Deplasați la stânga"</item>
+    <item msgid="2311009411708911700">"Navigați la elementul următor"</item>
+    <item msgid="4868322620432152139">"Navigați la elementul anterior"</item>
+    <item msgid="713256521059720189">"Navigați la rândul următor"</item>
+    <item msgid="7111316948614107646">"Navigați la rândul anterior"</item>
+    <item msgid="1092717670413169154">"Derulați înainte"</item>
+    <item msgid="2672802569950877806">"Derulați înapoi"</item>
+    <item msgid="8530687760031648049">"Activați elementul aflat sub deget"</item>
+    <item msgid="2965010005667399914">"Apăsați lung elementul aflat sub deget"</item>
+    <item msgid="7114563790387768347">"Activați elementul actual"</item>
+    <item msgid="6083375034241022486">"Apăsați lung elementul actual"</item>
+    <item msgid="6434332125338405390">"Introduceți un caracter braille"</item>
+    <item msgid="2845805874940074674">"Activați butonul Înapoi"</item>
+    <item msgid="6272261186186982128">"Activați butonul Ecran de pornire"</item>
+    <item msgid="2876656758414605716">"Deschideți fereastra Notificări"</item>
+    <item msgid="2554673553387851889">"Deschideți fereastra Aplicații recente"</item>
+    <item msgid="4863807959891911585">"Activați tasta Enter la editarea textului"</item>
+    <item msgid="5917526604121492276">"Ștergeți înapoi la editarea textului"</item>
+    <item msgid="6047263121281919980">"Ștergeți înainte la editarea textului"</item>
+    <item msgid="2622805964649872487">"Deschideți secțiunea de ajutor pentru tastatura BrailleBack"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Apăsați lung <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Utilizați tastele de navigare pentru a muta punctul central pe ecran."\n"Utilizați tastele braille pentru a introduce text într-o casetă de editare."\n"Mai jos se află o listă completă cu comenzile pentru taste acceptate de gadgetul dvs."</string>
+</resources>

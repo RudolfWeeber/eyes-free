@@ -33,6 +33,8 @@ brlttydir="${brailledir}/service/jni/brlttywrapper/brltty"
 brlttysvnurl="svn://mielke.cc/releases/brltty-4.4"
 liblouisdir="${brailledir}/service/jni/liblouiswrapper/liblouis"
 liblouissvnurl="http://liblouis.googlecode.com/svn/tags/liblouis_2_5_1"
+midilibdir="${eyesfreedir}/libraries/utils/src/com/leff"
+midilibsvnurl="http://android-midi-lib.googlecode.com/svn/trunk/src/com/leff"
 apkname="${scriptdir}/bin/BrailleBack-debug.apk"
 
 which android > /dev/null || \
@@ -44,6 +46,7 @@ which ant > /dev/null || \
 
 ensureSvnDependency "brltty" "${brlttydir}" "${brlttysvnurl}"
 ensureSvnDependency "liblouis" "${liblouisdir}" "${liblouissvnurl}"
+ensureSvnDependency "android-midi-lib" "${midilibdir}" "${midilibsvnurl}"
 
 for dir in libraries/compatutils libraries/utils braille/client \
     braille/service braille/brailleback; do

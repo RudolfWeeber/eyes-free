@@ -122,7 +122,7 @@ public class FocusFinder {
             }
             AccessibilityNodeInfoCompat n =
                     findFirstFocusableDescendantInternal(
-                            root, context, seenNodes);
+                            child, context, seenNodes);
             if (n != null) {
                 return n;
             }

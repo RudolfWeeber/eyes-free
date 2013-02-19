@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_description" msgid="3837907778560523486">"Apabila BrailleBack aktif, perangkat Anda akan tersambung ke tampilan braille Bluetooth yang disandingkan dan menyajikan konten layar dalam braille. Tombol di tampilan braille dapat digunakan untuk menavigasi layar, mengaktifkan item, dan memasukkan teks. Untuk informasi lebih lanjut, tekan spasi dan titik 1, 2, dan 3 (huruf l di braille) pada tampilan Anda saat tersambung."</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"Keyboard perangkat keras braille"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Wizard Keyboard Perangkat Keras Braille"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Aktifkan keyboard perangkat keras braille"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Untuk menggunakan keyboard perangkat keras braille, Anda harus mengaktifkannya di setelan metode masukan, lalu menyetelnya sebagai metode masukan default."</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"Lewati"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Buka Setelan Metode Masukan"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Setel Metode Masukan Default"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Untuk menggunakan keyboard perangkat keras braille, Anda harus menyetelnya sebagai metode masukan default."</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Buka Alat Pilih Metode Masukan"</string>
+    <string name="permlab_displayConnect" msgid="2251586694368462088">"Menghubungkan ke tampilan braille"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"Memungkinkan aplikasi menulis keluaran ke dan membaca masukan keyboard dari tampilan braille"</string>
+    <string name="type_emptygridview" msgid="4226780230155385397">"Kisi Kosong"</string>
+    <string name="type_gridview" msgid="8453985146958342779">"Kisi"</string>
+    <string name="type_emptylistview" msgid="4497688410987085349">"Daftar Kosong"</string>
+    <string name="type_listview" msgid="195039477703126884">"Daftar"</string>
+    <string name="type_emptyscrollview" msgid="8276432333933865406">"Konten yang Dapat Digulir Kosong"</string>
+    <string name="type_scrollview" msgid="800452819520995482">"Konten yang Dapat Digulir"</string>
+    <string name="type_edittext" msgid="4305739343129651595">"Kotak Edit"</string>
+    <string name="type_image" msgid="3688576211222019626">"Gambar"</string>
+    <string name="type_button" msgid="3639574187835564558">"Tombol"</string>
+    <string name="type_seekbar" msgid="979094491475615458">"Kontrol Penelisikan"</string>
+    <string name="type_quickcontact" msgid="5224329178093450337">"Kenalan"</string>
+    <string name="preferences_title" msgid="368535298674637475">"Preferensi BrailleBack"</string>
+    <string name="pref_category_device_title" msgid="8644919099122845217">"Perangkat"</string>
+    <string name="pref_connection_status_title" msgid="8350285056432214602">"Status"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Pengikatan tombol"</string>
+    <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
+    <string name="pref_braille_type_title" msgid="830832481671746224">"Jenis braille"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabel braille tertulis"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Tabel braille komputer"</string>
+    <string name="connstate_not_connected" msgid="3876972842771373901">"Tidak terhubung"</string>
+    <string name="connstate_connected" msgid="7552950461156525524">"Terhubung"</string>
+    <string name="connstate_error" msgid="8717968034812924474">"Tidak tersedia"</string>
+    <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"Braille tertulis"</string>
+    <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Braille komputer"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Otomatis (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Otomatis (tidak ada)"</string>
+    <string name="pref_category_developer_title" msgid="7276576143816692867">"Opsi pengembang"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Tampilkan keluaran Braille di layar"</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"Pengikatan tombol"</string>
+    <string name="display_connected" msgid="2008600513914815101">"brlback aktf"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"brlback mati"</string>
+    <string name="braille_keyboard_active" msgid="7094321134174837395">"Keyboard BrailleBack aktif"</string>
+    <string name="tap_to_switch_ime" msgid="8521400813452643324">"Ketuk untuk beralih ke keyboard default"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - tingkat <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+</resources>

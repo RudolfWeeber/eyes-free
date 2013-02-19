@@ -66,6 +66,8 @@ public class BrailleBackService
     /** Braille display manager. */
     /*package*/ DisplayManager mDisplayManager;
 
+    private FocusTracker mFocusTracker;
+
     private IMEHelper mIMEHelper;
 
     /** Set if the infrastructure is initialized. */
@@ -103,6 +105,9 @@ public class BrailleBackService
         } else if (state == Display.STATE_CONNECTED) {
             mFeedbackManager.emitFeedback(
                 FeedbackManager.TYPE_DISPLAY_CONNECTED);
+        }
+        if (mFocusTracker != null) {
+            mFocusTracker.onConnectionStateChanged(state);
         }
     }
 
@@ -252,6 +257,8 @@ public class BrailleBackService
         initializeDisplayManager();
         initializeModeSwitcher();
         mIMEHelper = new IMEHelper(this);
+        mFocusTracker = new FocusTracker(this);
+        mFocusTracker.register();
     }
 
     private void updateServiceInfo() {
@@ -294,11 +301,17 @@ public class BrailleBackService
             mIMEHelper.destroy();
             mIMEHelper = null;
         }
+        if (mFocusTracker != null) {
+            mFocusTracker.unregister();
+            mFocusTracker = null;
+        }
     }
 
     public boolean runHelp() {
         Intent intent = new Intent(this, KeyBindingsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         return true;
     }

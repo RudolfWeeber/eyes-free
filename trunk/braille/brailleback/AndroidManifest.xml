@@ -17,13 +17,16 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.googlecode.eyesfree.brailleback"
-      android:versionCode="9"
-      android:versionName="0.91.0">
+      android:versionCode="10"
+      android:versionName="0.91.1beta1">
 
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="17" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="com.googlecode.eyesfree.braille.display.PERMISSION_CONNECT" />
+
+    <!-- Required for overlays. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <permission
         android:name="com.googlecode.eyesfree.braille.display.PERMISSION_CONNECT"
@@ -32,11 +35,15 @@
         android:description="@string/permdesc_displayConnect"
         android:protectionLevel="signature" />
 
-
+    <!-- Hardware compatibility. -->
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
 
     <application
         android:label="@string/brailleback_setup_title"
-        android:icon="@drawable/icon">
+        android:icon="@drawable/icon"
+        android:supportsRtl="true">
 
         <service android:name=".BrailleBackService"
                  android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
@@ -110,7 +117,7 @@
         <activity
              android:name=".IMESetupWizardActivity"
              android:label="@string/ime_setup_wizard_name"
-             android:theme="@android:style/Theme.Dialog"
+             android:theme="@android:style/Theme.Holo.Dialog"
              android:excludeFromRecents="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

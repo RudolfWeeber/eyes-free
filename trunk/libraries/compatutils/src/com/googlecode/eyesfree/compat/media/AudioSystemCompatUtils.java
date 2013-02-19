@@ -16,6 +16,8 @@
 
 package com.googlecode.eyesfree.compat.media;
 
+import android.os.Build;
+
 import com.googlecode.eyesfree.compat.CompatUtils;
 
 import java.lang.reflect.Method;
@@ -25,10 +27,13 @@ public class AudioSystemCompatUtils {
             "android.media.AudioSystem");
     private static final Method METHOD_isStreamActive = CompatUtils.getMethod(
             CLASS_AudioSystem, "isStreamActive", int.class, int.class);
+    private static final Method METHOD_LEGACY_isStreamActive = CompatUtils.getMethod(
+            CLASS_AudioSystem, "isStreamActive", int.class);
 
     /**
      * Calls into AudioSystem to check the current status of audio streams.
-     *
+     * <p>
+     * The inPastMs value is only used by the system on API 11+.
      * @param stream The stream ID to query
      * @param inPastMs The time interval allowance, in milliseconds, for
      *            checking active streams
@@ -36,6 +41,11 @@ public class AudioSystemCompatUtils {
      *         {@code inPastMs} milliseconds, {@code false} otherwise
      */
     public static boolean isStreamActive(int stream, int inPastMs) {
-        return (Boolean) CompatUtils.invoke(null, false, METHOD_isStreamActive, stream, inPastMs);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return (Boolean) CompatUtils.invoke(
+                    null, false, METHOD_isStreamActive, stream, inPastMs);
+        } else {
+            return (Boolean) CompatUtils.invoke(null, false, METHOD_LEGACY_isStreamActive, stream);
+        }
     }
 }

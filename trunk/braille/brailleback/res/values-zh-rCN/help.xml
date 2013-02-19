@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"向右平移"</item>
+    <item msgid="992384288929754258">"向左平移"</item>
+    <item msgid="2311009411708911700">"导航到下一项"</item>
+    <item msgid="4868322620432152139">"导航到上一项"</item>
+    <item msgid="713256521059720189">"导航到下一行"</item>
+    <item msgid="7111316948614107646">"导航到上一行"</item>
+    <item msgid="1092717670413169154">"向前滚动"</item>
+    <item msgid="2672802569950877806">"向后滚动"</item>
+    <item msgid="8530687760031648049">"激活手指触摸处内容"</item>
+    <item msgid="2965010005667399914">"长按手指触摸处内容"</item>
+    <item msgid="7114563790387768347">"激活当前内容"</item>
+    <item msgid="6083375034241022486">"长按当前内容"</item>
+    <item msgid="6434332125338405390">"输入盲文字符"</item>
+    <item msgid="2845805874940074674">"激活返回按钮"</item>
+    <item msgid="6272261186186982128">"激活主屏幕按钮"</item>
+    <item msgid="2876656758414605716">"打开通知窗口"</item>
+    <item msgid="2554673553387851889">"打开近期使用的应用窗口"</item>
+    <item msgid="4863807959891911585">"编辑文本时激活 Enter 键"</item>
+    <item msgid="5917526604121492276">"编辑文本时向后删除内容"</item>
+    <item msgid="6047263121281919980">"编辑文本时向前删除内容"</item>
+    <item msgid="2622805964649872487">"打开 BrailleBack 键盘帮助"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"长按 <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"使用导航键在屏幕上移动焦点。"\n"使用盲文键在编辑框中输入文字。"\n"以下是您的设备支持的键命令完整列表。"</string>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Panoramēt pa labi"</item>
+    <item msgid="992384288929754258">"Panoramēt pa kreisi"</item>
+    <item msgid="2311009411708911700">"Pāriet uz nākamo vienumu"</item>
+    <item msgid="4868322620432152139">"Pāriet uz iepriekšējo vienumu"</item>
+    <item msgid="713256521059720189">"Pāriet uz nākamo rindiņu"</item>
+    <item msgid="7111316948614107646">"Pāriet uz iepriekšējo rindiņu"</item>
+    <item msgid="1092717670413169154">"Ritināt uz priekšu"</item>
+    <item msgid="2672802569950877806">"Ritināt atpakaļ"</item>
+    <item msgid="8530687760031648049">"Aktivizēt zem pirksta esošo vienumu"</item>
+    <item msgid="2965010005667399914">"Turēt nospiestu zem pirksta esošo vienumu"</item>
+    <item msgid="7114563790387768347">"Aktivizēt pašreizējo vienumu"</item>
+    <item msgid="6083375034241022486">"Turēt nospiestu pašreizējo vienumu"</item>
+    <item msgid="6434332125338405390">"Ievadīt Braila rakstzīmi"</item>
+    <item msgid="2845805874940074674">"Aktivizēt pogu Atpakaļ"</item>
+    <item msgid="6272261186186982128">"Aktivizēt pogu Sākums"</item>
+    <item msgid="2876656758414605716">"Atvērt logu “Paziņojumi”"</item>
+    <item msgid="2554673553387851889">"Atvērt logu “Nesen izmantotās lietotnes”"</item>
+    <item msgid="4863807959891911585">"Rediģējot tekstu, aktivizēt ievadīšanas taustiņu"</item>
+    <item msgid="5917526604121492276">"Rediģējot tekstu, dzēst virzienā atpakaļ"</item>
+    <item msgid="6047263121281919980">"Rediģējot tekstu, dzēst virzienā uz priekšu"</item>
+    <item msgid="2622805964649872487">"Atvērt BrailleBack tastatūras palīdzību"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Turēt nospiestu <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Izmantojiet navigācijas taustiņus, lai ekrānā pārvietotu fokusu."\n"Lietojiet Braila raksta taustiņus, lai rediģēšanas lodziņā ievadītu tekstu."\n"Tālāk ir norādīts visu jūsu ierīcē atbalstīto taustiņu komandu saraksts."</string>
+</resources>

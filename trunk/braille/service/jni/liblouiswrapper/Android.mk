@@ -14,18 +14,37 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-LOCAL_PATH := $(call my-dir)
+WRAPPER_PATH := $(call my-dir)
+LOCAL_PATH := $(WRAPPER_PATH)
+LIBLOUIS_PATH := $(WRAPPER_PATH)/liblouis
+
+#----------------------------------------------------------------
+# liblouiswrap
 
 include $(CLEAR_VARS)
 
+LOCAL_PATH := $(WRAPPER_PATH)
+LOCAL_LDLIBS := -llog -landroid
+LOCAL_MODULE := louiswrap
+LOCAL_SRC_FILES := LibLouisWrapper.c
+LOCAL_C_INCLUDES := $(WRAPPER_PATH)/.. $(LIBLOUIS_PATH)
+LOCAL_WHOLE_STATIC_LIBRARIES := liblouis
+
+include $(BUILD_SHARED_LIBRARY)
+
+#----------------------------------------------------------------
+# liblouis
+
+include $(CLEAR_VARS)
+
+LOCAL_PATH := $(LIBLOUIS_PATH)
 LOCAL_LDLIBS := -llog -landroid
 LOCAL_MODULE := louis
 LOCAL_SRC_FILES := \
-	liblouis/liblouis/compileTranslationTable.c \
-	liblouis/liblouis/lou_backTranslateString.c \
-	liblouis/liblouis/lou_translateString.c \
-	liblouis/liblouis/wrappers.c \
-	LibLouisWrapper.c
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/..
+	liblouis/compileTranslationTable.c \
+	liblouis/lou_backTranslateString.c \
+	liblouis/lou_translateString.c \
+	liblouis/wrappers.c
+LOCAL_C_INCLUDES := $(WRAPPER_PATH)/.. $(WRAPPER_PATH)
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)

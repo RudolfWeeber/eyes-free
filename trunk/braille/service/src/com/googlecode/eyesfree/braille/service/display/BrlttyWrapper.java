@@ -24,6 +24,8 @@ import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
 import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,7 +87,7 @@ public class BrlttyWrapper {
     }
 
     public BrailleDisplayProperties getDisplayProperties() {
-        BrailleKeyBinding[] keyBindings = getKeyMapNative();
+        BrailleKeyBinding[] keyBindings = getKeyMap();
         return new BrailleDisplayProperties(
             getTextCellsNative(), getStatusCellsNative(),
             keyBindings, getFriendlyKeyNames(keyBindings));
@@ -136,8 +138,36 @@ public class BrlttyWrapper {
                 mDeviceInfo.getBluetoothDevice().getAddress());
     }
 
+    private BrailleKeyBinding[] getKeyMap() {
+        BrailleKeyBinding[] fullKeyMap = getKeyMapNative();
+        ArrayList<BrailleKeyBinding> arrayList =
+                new ArrayList<BrailleKeyBinding>(fullKeyMap.length);
+        for (int i = 0, len = fullKeyMap.length; i < len; ++i) {
+            BrailleKeyBinding binding = fullKeyMap[i];
+            if (hasAllFriendlyKeyNames(binding)) {
+                arrayList.add(binding);
+            }
+        }
+        if (arrayList.size() == fullKeyMap.length) {
+            return fullKeyMap;
+        }
+        BrailleKeyBinding[] relevantBindings = arrayList.toArray(
+                fullKeyMap);
+        return Arrays.copyOf(relevantBindings, arrayList.size());
+    }
+
+    private boolean hasAllFriendlyKeyNames(BrailleKeyBinding binding) {
+        Map<String, Integer> friendlyNames = mDeviceInfo.getFriendlyKeyNames();
+        for (String key : binding.getKeyNames()) {
+            if (!friendlyNames.containsKey(key)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private Map<String, String> getFriendlyKeyNames(
-        BrailleKeyBinding[] bindings) {
+            BrailleKeyBinding[] bindings) {
         Map<String, String> result = new HashMap<String, String>();
         Map<String, Integer> friendlyNames = mDeviceInfo.getFriendlyKeyNames();
         for (BrailleKeyBinding binding : bindings) {
@@ -174,6 +204,16 @@ public class BrlttyWrapper {
     @SuppressWarnings("unused")
     private boolean sendBytesToDevice(byte[] command) {
         return mDriverThread.sendBytesToDevice(command);
+    }
+
+    /**
+     * Called from the command logic in the driver to have the driver thread
+     * woken up to read another command after {@code delayMillis}
+     * milliseconds.
+     */
+    @SuppressWarnings("unused")
+    private void readDelayed(long delayMillis) {
+        mDriverThread.readDelayed(delayMillis);
     }
 
     // End callbacks.

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Pakreipti dešinėn"</item>
+    <item msgid="992384288929754258">"Pakreipti kairėn"</item>
+    <item msgid="2311009411708911700">"Eiti prie kito elemento"</item>
+    <item msgid="4868322620432152139">"Eiti prie ankstesnio elemento"</item>
+    <item msgid="713256521059720189">"Eiti į kitą eilutę"</item>
+    <item msgid="7111316948614107646">"Eiti į ankstesnę eilutę"</item>
+    <item msgid="1092717670413169154">"Slinkti pirmyn"</item>
+    <item msgid="2672802569950877806">"Slinkti atgal"</item>
+    <item msgid="8530687760031648049">"Aktyvinti liečiamą elementą"</item>
+    <item msgid="2965010005667399914">"Ilgai spausti liečiamą elementą"</item>
+    <item msgid="7114563790387768347">"Aktyvinti esamą elementą"</item>
+    <item msgid="6083375034241022486">"Ilgai spausti esamą elementą"</item>
+    <item msgid="6434332125338405390">"Įvesti Brailio rašto simbolį"</item>
+    <item msgid="2845805874940074674">"Aktyvinti grįžimo mygtuką"</item>
+    <item msgid="6272261186186982128">"Aktyvinti pagrindinio ekrano mygtuką"</item>
+    <item msgid="2876656758414605716">"Atidaryti pranešimų langą"</item>
+    <item msgid="2554673553387851889">"Atidaryti neseniai naudotų programų langą"</item>
+    <item msgid="4863807959891911585">"Redaguojant tekstą aktyvinti įvedimo klavišą"</item>
+    <item msgid="5917526604121492276">"Redaguojant tekstą trinti atgal"</item>
+    <item msgid="6047263121281919980">"Redaguojant tekstą trinti pirmyn"</item>
+    <item msgid="2622805964649872487">"Atidaryti „BrailleBack“ klaviatūros pagalbą"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Ilgai spausti <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Perkelkite židinį ekrane naudodami naršymo klavišus."\n"Įveskite tekstą į redagavimo laukelį naudodami Brailio rašto klavišus."\n"Toliau nurodytos visos klavišais atliekamos komandos, kurios yra palaikomos jūsų įrenginyje."</string>
+</resources>

@@ -23,9 +23,19 @@ import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 
+import com.leff.midi.MidiFile;
+import com.leff.midi.MidiTrack;
+import com.leff.midi.event.Controller;
+import com.leff.midi.event.ProgramChange;
+import com.leff.midi.event.meta.Tempo;
+import com.leff.midi.event.meta.TimeSignature;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -37,25 +47,42 @@ public class FeedbackController {
     /** Default stream for audio feedback. */
     private static final int DEFAULT_STREAM = AudioManager.STREAM_MUSIC;
 
-    /**
-     * Default volume for sound playback. Use 1.0f to match the current stream
-     * volume.
-     */
+    /** Default volume for sound playback relative to current stream volume. */
     private static final float DEFAULT_VOLUME = 1.0f;
 
-    /**
-     * Default rate for sound playback. Use 1.0f for normal speed playback.
-     */
+    /** Default rate for sound playback. Use 1.0f for normal speed playback. */
     private static final float DEFAULT_RATE = 1.0f;
 
-    /**
-     * Number of channels to use in SoundPool for auditory icon feedback.
-     */
+    /** Number of channels to use in SoundPool for auditory icon feedback. */
     private static final int NUMBER_OF_CHANNELS = 10;
 
-    /**
-     * Default delay time between repeated sounds.
-     */
+    /** Default beats-per-minute for MIDI tracks. You can dance to 95. */
+    private static final int MIDI_DEFAULT_BPM = 95;
+
+    /** Default channel for MIDI tracks. This should be 0. */
+    private static final int MIDI_DEFAULT_CHANNEL = 0;
+
+    /** Controller type for the most significant 7 bits of volume. */
+    private static final int MIDI_CONTROLLER_VOLUME_MSB = 0x07;
+
+    /** Default volume for MIDI tracks. Maximum value is 0x7F. */
+    private static final int MIDI_DEFAULT_VOLUME = 0x7F;
+
+    /** Default tempo track for MIDI compositions. Uses 4/4 signature. */
+    private static final MidiTrack MIDI_DEFAULT_TEMPO_TRACK = new MidiTrack();
+
+    static {
+        final TimeSignature timeSignature = new TimeSignature();
+        final Tempo tempo = new Tempo();
+        timeSignature.setTimeSignature(
+                4, 4, TimeSignature.DEFAULT_METER, TimeSignature.DEFAULT_DIVISION);
+        tempo.setBpm(MIDI_DEFAULT_BPM);
+
+        MIDI_DEFAULT_TEMPO_TRACK.insertEvent(timeSignature);
+        MIDI_DEFAULT_TEMPO_TRACK.insertEvent(tempo);
+    }
+
+    /** Default delay time between repeated sounds. */
     private static final int DEFAULT_REPETITION_DELAY = 150;
 
     /** Map of resource IDs to vibration pattern arrays. */
@@ -69,6 +96,9 @@ public class FeedbackController {
 
     /** Parent context. Required for mapping resource IDs to resources. */
     private final Context mContext;
+
+    /** Parent resources. Used to distinguish raw and MIDI resources. */
+    private final Resources mResources;
 
     /** Vibration service used to play vibration patterns. */
     private final Vibrator mVibrator;
@@ -89,10 +119,41 @@ public class FeedbackController {
     private float mVolume = DEFAULT_VOLUME;
 
     /**
+     * Used with {@link #playMidiScale(int, int, int, int, int, int)} to
+     * generate a major scale
+     */
+    public static final int MIDI_SCALE_TYPE_MAJOR = 1;
+
+    /**
+     * Used with {@link #playMidiScale(int, int, int, int, int, int)} to
+     * generate a natural minor scale
+     */
+    public static final int MIDI_SCALE_TYPE_NATURAL_MINOR = 2;
+
+    /**
+     * Used with {@link #playMidiScale(int, int, int, int, int, int)} to
+     * generate a harmonic minor scale
+     */
+    public static final int MIDI_SCALE_TYPE_HARMONIC_MINOR = 3;
+
+    /**
+     * Used with {@link #playMidiScale(int, int, int, int, int, int)} to
+     * generate a melodic minor scale
+     */
+    public static final int MIDI_SCALE_TYPE_MELODIC_MINOR = 4;
+
+    /**
+     * Used with {@link #playMidiScale(int, int, int, int, int, int)} to
+     * generate a pentatonic major scale
+     */
+    public static final int MIDI_SCALE_TYPE_PENTATONIC = 5;
+
+    /**
      * Constructs and initializes a new feedback controller.
      */
     public FeedbackController(Context context) {
         mContext = context;
+        mResources = context.getResources();
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         mSoundPool = new SoundPool(NUMBER_OF_CHANNELS, DEFAULT_STREAM, 1);
         mSoundPool.setOnLoadCompleteListener(new OnLoadCompleteListener() {
@@ -166,13 +227,30 @@ public class FeedbackController {
      * enabled. Sounds should be loaded using this function whenever audio
      * feedback is enabled.
      *
-     * @param resId resource id of the sound to be loaded
+     * @param resId Resource ID of the sound to be loaded.
+     * @return The sound pool identifier for the resource.
      */
-    public void preloadSound(int resId) {
-        if (mResourceIdToSoundMap.indexOfKey(resId) < 0) {
-            final int soundPoolId = mSoundPool.load(mContext, resId, 1);
-            mResourceIdToSoundMap.put(resId, soundPoolId);
+    public int preloadSound(int resId) {
+        final int soundPoolId;
+
+        final String resType = mResources.getResourceTypeName(resId);
+        if ("raw".equals(resType)) {
+            soundPoolId = mSoundPool.load(mContext, resId, 1);
+        } else if ("array".equals(resType)) {
+            final int[] notes = mResources.getIntArray(resId);
+            soundPoolId = loadMidiSoundFromArray(notes, false);
+        } else {
+            LogUtils.log(this, Log.ERROR, "Failed to load sound: Unknown resource type");
+            return -1;
         }
+
+        if (soundPoolId < 0) {
+            LogUtils.log(this, Log.ERROR, "Failed to load sound: Invalid sound pool ID");
+            return -1;
+        }
+
+        mResourceIdToSoundMap.put(resId, soundPoolId);
+        return soundPoolId;
     }
 
     /**
@@ -276,6 +354,122 @@ public class FeedbackController {
     }
 
     /**
+     * Generates and plays a MIDI scale.
+     *
+     * @param program The MIDI program ID to use
+     * @param velocity The MIDI velocity to use for each note
+     * @param duration The duration in milliseconds of each note
+     * @param startingPitch The MIDI pitch value on which the scale should begin
+     * @param pitchesToPlay The number of pitches to play. 7 pitches (or 5
+     *            pentatonic) is a complete scale. 8 (or 6 pentatonic) for a
+     *            resolved scale.
+     * @param scaleType The MIDI_SCALE_TYPE_* constant associated with the type
+     *            of scale to play.
+     *
+     * @return {@code true} if successful, {@code false} otherwise.
+     */
+    public boolean playMidiScale(int program, int velocity, int duration, int startingPitch,
+            int pitchesToPlay, int scaleType) {
+        if (!mAuditoryEnabled || pitchesToPlay <= 0 || duration <= 0) {
+            return false;
+        }
+
+        if (scaleType == MIDI_SCALE_TYPE_PENTATONIC) {
+            // Pentatonic are 5-note scales that drop the 4th and 7th notes in
+            // each scale. To play the correct number of pitches, we must add
+            // the number of notes to be dropped to the original major scale.
+            int completeScales = pitchesToPlay / 5;
+            int notesInPartialScale = pitchesToPlay % 5;
+
+            pitchesToPlay += (completeScales * 2) + ((notesInPartialScale > 3) ? 1 : 0);
+        }
+
+        final ArrayList<Integer> notes = new ArrayList<Integer>();
+
+        // Generate as much of a major scale is needed.
+        int nextPitch = startingPitch;
+        for (int i = 1; i <= pitchesToPlay; ++i) {
+            notes.add(nextPitch);
+
+            // Calculate the next pitch based on scale position.
+            final int noteInScale = (i % 7);
+            switch (noteInScale) {
+                case 1:
+                case 2:
+                case 4:
+                case 5:
+                case 6:
+                    nextPitch += 2;
+                    break;
+                case 0:
+                case 3:
+                    nextPitch += 1;
+                    break;
+            }
+        }
+
+        if (scaleType == MIDI_SCALE_TYPE_NATURAL_MINOR
+                || scaleType == MIDI_SCALE_TYPE_HARMONIC_MINOR
+                || scaleType == MIDI_SCALE_TYPE_MELODIC_MINOR) {
+            for (int i = 0; i < notes.size(); ++i) {
+                final int noteInScale = (i + 1) % 7;
+
+                // Lower the 3rd, 6th, and 7th of each scale by a half step
+                // based on the type of minor scale.
+                switch (noteInScale) {
+                    case 3:
+                        notes.add(i, (notes.remove(i) - 1));
+                        break;
+                    case 6:
+                        if (scaleType == MIDI_SCALE_TYPE_NATURAL_MINOR
+                                || scaleType == MIDI_SCALE_TYPE_HARMONIC_MINOR) {
+                            notes.add(i, (notes.remove(i) - 1));
+                        }
+                        break;
+                    case 0:
+                        if (scaleType == MIDI_SCALE_TYPE_NATURAL_MINOR) {
+                            notes.add(i, (notes.remove(i) - 1));
+                        }
+                        break;
+                }
+            }
+        } else if (scaleType == MIDI_SCALE_TYPE_PENTATONIC) {
+            ArrayList<Integer> indiciesToRemove = new ArrayList<Integer>();
+            for (int i = 0; i < notes.size(); ++i) {
+                final int noteInScale = (i + 1) % 7;
+
+                // Petatonic scales are derived by removing the 4th and 7th from each scale.
+                switch (noteInScale) {
+                    case 4:
+                    case 0:
+                        indiciesToRemove.add(i);
+                }
+            }
+
+            for (int i = indiciesToRemove.size(); i > 0; --i) {
+                notes.remove((int) indiciesToRemove.get(i - 1));
+            }
+        }
+
+        // Generate the MIDI sequence array from the derived notes
+        int[] midiSequence = new int[(notes.size() * 3) + 1];
+        midiSequence[0] = program;
+        for (int i = 1; i < midiSequence.length; i += 3) {
+            midiSequence[i] = notes.remove(0);
+            midiSequence[i + 1] = velocity;
+            midiSequence[i + 2] = duration;
+        }
+
+        // TODO(caseyburkhardt): See if these can be cached reasonably.
+        final int soundPoolId = loadMidiSoundFromArray(midiSequence, true);
+        if (soundPoolId < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Plays the vibration pattern specified by the given resource identifier.
      *
      * @param resId The vibration pattern's resource identifier.
@@ -330,37 +524,131 @@ public class FeedbackController {
      * @return an array of {@code long} values from the pattern.
      */
     private long[] getVibrationPattern(int resId) {
-        long[] pattern = mResourceIdToVibrationPatternMap.get(resId);
-
-        if (pattern == null) {
-            final Resources resources = mContext.getResources();
-            final int[] intPattern = resources.getIntArray(resId);
-
-            if (intPattern == null) {
-                return new long[0];
-            }
-
-            pattern = new long[intPattern.length];
-
-            for (int i = 0; i < pattern.length; i++) {
-                pattern[i] = intPattern[i];
-            }
-
-            mResourceIdToVibrationPatternMap.put(resId, pattern);
+        final long[] cachedPattern = mResourceIdToVibrationPatternMap.get(resId);
+        if (cachedPattern != null) {
+            return cachedPattern;
         }
+
+        final int[] intPattern = mResources.getIntArray(resId);
+        if (intPattern == null) {
+            return new long[0];
+        }
+
+        final long[] pattern = new long[intPattern.length];
+        for (int i = 0; i < pattern.length; i++) {
+            pattern[i] = intPattern[i];
+        }
+
+        mResourceIdToVibrationPatternMap.put(resId, pattern);
 
         return pattern;
     }
 
     /**
-     * Loads the sound specified by the raw resource id and plays it.
+     * Loads the sound specified by the raw resource id and plays it. If
+     *
      * @param resId The resource id of the sound to play.
      */
     private void loadAndPlaySound(int resId) {
-        if (mResourceIdToSoundMap.indexOfKey(resId) < 0) {
-            final int soundPoolId = mSoundPool.load(mContext, resId, 1);
-            mPostLoadPlayables.add(soundPoolId);
-            mResourceIdToSoundMap.put(resId, soundPoolId);
+        if (mResourceIdToSoundMap.indexOfKey(resId) >= 0) {
+            // The sound is already loaded.
+            return;
+        }
+
+        final int soundPoolId = preloadSound(resId);
+        mPostLoadPlayables.add(soundPoolId);
+    }
+
+    public void playMidiSoundFromPool(int soundID) {
+        mSoundPool.play(soundID, DEFAULT_VOLUME, DEFAULT_VOLUME, 1, 0, DEFAULT_RATE);
+    }
+
+    public int loadMidiSoundFromArray(int[] notes, boolean playOnLoad) {
+        final MidiTrack track = readMidiTrackFromArray(notes);
+        if (track == null) {
+            return -1;
+        }
+
+        final File midiFile = writeMidiTrackToTempFile(track);
+        if (midiFile == null) {
+            return -1;
+        }
+
+        final int soundId = mSoundPool.load(midiFile.getPath(), 1);
+
+        if (playOnLoad) {
+            mPostLoadPlayables.add(soundId);
+        }
+
+        return soundId;
+    }
+
+    /**
+     * Reads a MIDI track from an array of notes. The array format must be:
+     * <ul>
+     * <li>Program ID,
+     * <li>Note pitch, velocity, duration,
+     * <li>(additional notes)
+     * </ul>
+     *
+     * @param notes The array to read as a MIDI track.
+     * @return A MIDI track.
+     */
+    private MidiTrack readMidiTrackFromArray(int[] notes) {
+        final MidiTrack noteTrack = new MidiTrack();
+        int tick = 0;
+
+        final int program = notes[0];
+        if ((program < 0) || (program > 127)) {
+            throw new IllegalArgumentException("MIDI track program must be in the range [0,127]");
+        }
+
+        noteTrack.insertEvent(new Controller(
+                0, 0, MIDI_DEFAULT_CHANNEL, MIDI_CONTROLLER_VOLUME_MSB, MIDI_DEFAULT_VOLUME));
+        noteTrack.insertEvent(new ProgramChange(0, 0, program));
+
+        if ((notes.length % 3) != 1) {
+            throw new IllegalArgumentException(
+                    "MIDI note array must contain a single integer followed by triplets");
+        }
+
+        for (int i = 1; i < (notes.length - 2); i += 3) {
+            final int pitch = notes[i];
+            if ((pitch < 21) || (pitch > 108)) {
+                throw new IllegalArgumentException("MIDI note pitch must be in the range [21,108]");
+            }
+
+            final int velocity = notes[i + 1];
+            if ((velocity < 0) || (velocity > 127)) {
+                throw new IllegalArgumentException(
+                        "MIDI note velocity must be in the range [0,127]");
+            }
+
+            final int duration = notes[i + 2];
+
+            noteTrack.insertNote(MIDI_DEFAULT_CHANNEL, pitch, velocity, tick, duration);
+
+            tick += duration;
+        }
+
+        return noteTrack;
+    }
+
+    private File writeMidiTrackToTempFile(MidiTrack noteTrack) {
+        // Always add the default tempo track first.
+        final ArrayList<MidiTrack> tracks = new ArrayList<MidiTrack>();
+        tracks.add(MIDI_DEFAULT_TEMPO_TRACK);
+        tracks.add(noteTrack);
+
+        // Attempt to write the track to a file and return it.
+        try {
+            final MidiFile midi = new MidiFile(MidiFile.DEFAULT_RESOLUTION, tracks);
+            final File output = File.createTempFile("talkback", "mid");
+            midi.writeToFile(output);
+            return output;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

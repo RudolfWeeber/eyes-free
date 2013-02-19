@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Pan right"</item>
+    <item msgid="992384288929754258">"Pan left"</item>
+    <item msgid="2311009411708911700">"Navigate to the next item"</item>
+    <item msgid="4868322620432152139">"Navigate to the previous item"</item>
+    <item msgid="713256521059720189">"Navigate to the next line"</item>
+    <item msgid="7111316948614107646">"Navigate to the previous line"</item>
+    <item msgid="1092717670413169154">"Scroll forwards"</item>
+    <item msgid="2672802569950877806">"Scroll backwards"</item>
+    <item msgid="8530687760031648049">"Activate the item under the finger"</item>
+    <item msgid="2965010005667399914">"Long press the item under the finger"</item>
+    <item msgid="7114563790387768347">"Activate the current item"</item>
+    <item msgid="6083375034241022486">"Long press the current item"</item>
+    <item msgid="6434332125338405390">"Enter a braille character"</item>
+    <item msgid="2845805874940074674">"Activate the back button"</item>
+    <item msgid="6272261186186982128">"Activate the home button"</item>
+    <item msgid="2876656758414605716">"Open the notifications window"</item>
+    <item msgid="2554673553387851889">"Open the recent apps window"</item>
+    <item msgid="4863807959891911585">"Activate the enter key when editing text"</item>
+    <item msgid="5917526604121492276">"Delete backwards when editing text"</item>
+    <item msgid="6047263121281919980">"Delete forwards when editing text"</item>
+    <item msgid="2622805964649872487">"Open the BrailleBack keyboard help"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Long press <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Use navigation keys to move focus on the screen."\n"Use the braille keys to enter text in an edit box."\n"Below is a full list of key commands supported by your device."</string>
+</resources>

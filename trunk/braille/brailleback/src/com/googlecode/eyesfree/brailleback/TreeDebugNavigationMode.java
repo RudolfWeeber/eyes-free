@@ -25,10 +25,14 @@ import static com.googlecode.eyesfree.brailleback.BrailleBackService.DOT5;
 import android.graphics.Rect;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+import com.googlecode.eyesfree.utils.LogUtils;
+
+import java.util.HashSet;
 
 /**
  * A debugging navigation mode that allows navigating through the
@@ -107,6 +111,11 @@ public class TreeDebugNavigationMode implements NavigationMode {
                     }
                     makePendingNodeCurrent();
                     displayCurrentNode();
+                    return true;
+                }
+                if (event.getArgument()
+                        == (DOT1 | DOT2 | DOT3 | DOT4)) {  // letter p
+                    printNodes();
                     return true;
                 }
                 break;
@@ -501,5 +510,49 @@ public class TreeDebugNavigationMode implements NavigationMode {
         mCurrentNode.getBoundsInScreen(rect);
         mDisplayManager.setContent(
             new DisplayManager.Content("b: " + rect));
+    }
+
+    /**
+     * Outputs the node tree from the current node using dfs preorder
+     * traversal.
+     */
+    private void printNodes() {
+        HashSet<AccessibilityNodeInfo> seen =
+                new HashSet<AccessibilityNodeInfo>();
+        if (mCurrentNode == null) {
+            LogUtils.log(this, Log.VERBOSE, "No current node");
+            return;
+        }
+        LogUtils.log(this, Log.VERBOSE, "Printing nodes");
+        printNodeTree(AccessibilityNodeInfo.obtain(mCurrentNode), "", seen);
+        for (AccessibilityNodeInfo node : seen) {
+            node.recycle();
+        }
+    }
+
+    private void printNodeTree(AccessibilityNodeInfo node,
+            String indent, HashSet<AccessibilityNodeInfo> seen) {
+        if (node == null) {
+            return;
+        }
+        if (!seen.add(node)) {
+            LogUtils.log(this, Log.VERBOSE, "Cycle: %d", node.hashCode());
+            return;
+        }
+        // Include the hash code as a "poor man's" id, knowing that it
+        // might not always be unique.
+        LogUtils.log(this, Log.VERBOSE, "%s(%d)%s", indent, node.hashCode(),
+                formatNode(node));
+        int childCount = node.getChildCount();
+        String childIndent = indent + "  ";
+        for (int i = 0; i < childCount; ++i) {
+            AccessibilityNodeInfo child = node.getChild(i);
+            if (child == null) {
+                LogUtils.log(this, Log.VERBOSE, "%sCouldn't get child %d",
+                        indent, i);
+                continue;
+            }
+            printNodeTree(child, childIndent, seen);
+        }
     }
 }

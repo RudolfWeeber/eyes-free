@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- no translation found for help_commandDescriptions:9 (2965010005667399914) -->
+    <!-- no translation found for help_commandDescriptions:10 (7114563790387768347) -->
+    <!-- no translation found for help_commandDescriptions:11 (6083375034241022486) -->
+    <!-- no translation found for help_commandDescriptions:12 (6434332125338405390) -->
+    <!-- no translation found for help_commandDescriptions:13 (2845805874940074674) -->
+    <!-- no translation found for help_commandDescriptions:14 (6272261186186982128) -->
+    <!-- no translation found for help_commandDescriptions:15 (2876656758414605716) -->
+    <!-- no translation found for help_commandDescriptions:16 (2554673553387851889) -->
+    <!-- no translation found for help_commandDescriptions:17 (4863807959891911585) -->
+    <!-- no translation found for help_commandDescriptions:18 (5917526604121492276) -->
+    <!-- no translation found for help_commandDescriptions:19 (6047263121281919980) -->
+    <!-- no translation found for help_commandDescriptions:20 (2622805964649872487) -->
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <!-- no translation found for help_longPressTemplate (5028857601567358274) -->
+    <skip />
+    <string name="key_bindings_instructions" msgid="123530902329533100">"使用瀏覽鍵來移動螢幕上的游標。"\n"使用點字按鍵在編輯框中輸入文字。"\n"以下列出您的裝置支援所有按鍵指令。"</string>
+</resources>

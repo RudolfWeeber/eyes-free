@@ -4,8 +4,8 @@
     <!-- Title for the brailleback, preferences activity. -->
     <string name="brailleback_setup_title" translatable="false">BrailleBack</string>
 
-    <!-- Displayed on the accessibility settings screen when the user has selected BrailleBack. -->
-    <string name="service_description">When BrailleBack is on, your device will connect to a paired bluetooth braille display and present the screen content in braille. Keys on the braille display can be used to navigate the screen, activate items and enter text. For more information, press Space+Dot1+Dot2+Dot3 (the letter l in braille) on your display when connected.</string>
+    <!-- Displayed on the accessibility settings screen when the user has selected BrailleBack. Note that in the phrase "the letter l", the letter is a lowercase L, not an uppercase I. -->
+    <string name="service_description">When BrailleBack is on, your device will connect to a paired bluetooth braille display and present the screen content in braille. Keys on the braille display can be used to navigate the screen, activate items and enter text. For more information, press space and dots 1, 2 and 3 (the letter l in braille) on your display when connected.</string>
 
     <!-- Name of the input method for typing using the braille keys on the display. -->
     <string name="braille_ime_name">Braille hardware keyboard</string>
@@ -16,15 +16,15 @@
     <string name="ime_setup_need_enable_title">Enable braille hardware keyboard</string>
     <!-- Dialog message that lets the user know to enable the input method -->
     <string name="ime_setup_need_enable_message">To use the braille hardware keyboard, you need to enable it in the input method settings and then set it as the default input method.</string>
-    <!-- Label for a button in the braille input method wizard that lets the user skip the setup. -->
+    <!-- Label for a button in the braille input method wizard that lets the user skip the setup. [CHAR_LIMIT=15] -->
     <string name="ime_setup_skip">Skip</string>
-    <!-- Button in the enable braille hardware keyboard input method wizard that opens the system dialog to enable the ime. -->
+    <!-- Button in the enable braille hardware keyboard input method wizard that opens the system dialog to enable the ime. [CHAR_LIMIT=45] -->
     <string name="ime_setup_need_enable_positive">Open Input Method Settings</string>
     <!-- Title for the dialog that lets the user know to switch to the braille hardware keyboard input method. -->
     <string name="ime_setup_need_default_title">Set Default Input Method</string>
     <!-- Text for the dialog that lets the user know to switch to the braille hardware keyboard input method. -->
     <string name="ime_setup_need_default_message">To use the braille hardware keyboard, you need to set it as the default input method.</string>
-    <!-- Label for a button in the dialog that lets the user know to switch to the braille hardware keyboard input method. Opens the system dialog that lets the user switch to an input method. -->
+    <!-- Label for a button in the dialog that lets the user know to switch to the braille hardware keyboard input method. Opens the system dialog that lets the user switch to an input method. [CHAR_LIMIT=60] -->
     <string name="ime_setup_need_default_positive">Open Input Method Picker</string>
 
     <!-- Braille display permission -->
@@ -62,19 +62,19 @@
 
     <!-- Title for the BrailleBack Preferences activity. -->
     <string name="preferences_title">BrailleBack Preferences</string>
-    <!-- Label for the Device preferences category. Contains preferences specific to a user's Braille display. [CHAR_LIMIT=25] -->
+    <!-- Label for the Device preferences category. Contains preferences specific to a user's Braille display. [CHAR_LIMIT=45] -->
     <string name="pref_category_device_title">Device</string>
-    <!-- Label for the status preference. [CHAR_LIMIT=25] -->
+    <!-- Label for the status preference. [CHAR_LIMIT=45] -->
     <string name="pref_connection_status_title">Status</string>
-    <!-- Label for the Key Bindings preference. Displays an activity that shows the user key bindings for their device. [CHAR_LIMIT=25] -->
+    <!-- Label for the Key Bindings preference. Displays an activity that shows the user key bindings for their device. [CHAR_LIMIT=45] -->
     <string name="pref_key_bindings_title">Key bindings</string>
-    <!-- Label for the Braille preferences category. Contains settings for braille translation. [CHAR_LIMIT=25] -->
+    <!-- Label for the Braille preferences category. Contains settings for braille translation. [CHAR_LIMIT=45] -->
     <string name="pref_category_braille_title">Braille</string>
-    <!-- Label for the braille type preference. Let's the user switch between computer and literary braille. -->
+    <!-- Label for the braille type preference. Let's the user switch between computer and literary braille. [CHAR_LIMIT=45] -->
     <string name="pref_braille_type_title">Braille type</string>
-    <!-- Label for the 6 dot (literary braille) preference. Pops up the list of literary braille tables. [CHAR_LIMIT=25] -->
+    <!-- Label for the 6 dot (literary braille) preference. Pops up the list of literary braille tables. [CHAR_LIMIT=45] -->
     <string name="pref_six_dot_braille_table_title">Literary braille table</string>
-    <!-- Label for the 8 dot (computer braille) table preference. Pops up the list of computer braille tables. [CHAR_LIMIT=25] -->
+    <!-- Label for the 8 dot (computer braille) table preference. Pops up the list of computer braille tables. [CHAR_LIMIT=45] -->
     <string name="pref_eight_dot_braille_table_title">Computer braille table</string>
 
     <!-- Shown under the Status preference when no braille display is connected. -->
@@ -93,13 +93,18 @@
     <!-- Label for the braille table preference that set the table from the user's locale when there is no table available for the current locale.  For example, if a user locale only has a 6 dot table available, then setting the table to the default for 8 dot braille will show this value in the preference. -->
     <string name="pref_braille_table_default_none_label">Auto (none)</string>
 
+    <!-- Label for the Developer options category. Contains settings for debugging and demos. [CHAR_LIMIT=25] -->
+    <string name="pref_category_developer_title">Developer options</string>
+    <!-- Label for the on-screen overlay checkbox preference. [CHAR_LIMIT=45] -->
+    <string name="pref_braille_overlay_title">Show Braille output on screen</string>
+
     <!-- Title for the Key Bindings activity, which shows the user key bindings for their device. [CHAR_LIMIT=25] -->
     <string name="key_bindings_title">Key bindings</string>
 
-    <!-- Shown on the display when connected to the device. [CHAR_LIMIT=12]-->
-    <string name="display_connected">BrlBack on</string>
-    <!-- Shown on the braille display when brailleback is being destroyed [CHAR_LIMIT=12]-->
-    <string name="shutting_down">BrlBack off"</string>
+    <!-- Shown on the display when connected to the device. This string has a short size limit to fit on small braille displays. It should not be capitalized, because that can take up extra space on the display. [CHAR_LIMIT=12]-->
+    <string name="display_connected">brlback on</string>
+    <!-- Shown on the braille display when brailleback is being destroyed. This string has a short size limit to fit on small braille displays. It should not be capitalized, because that can take up extra space on the display. [CHAR_LIMIT=12]-->
+    <string name="shutting_down">brlback off</string>
 
     <!-- Label shown when the BrailleBack input method is active. -->
     <string name="braille_keyboard_active">BrailleBack keyboard active</string>

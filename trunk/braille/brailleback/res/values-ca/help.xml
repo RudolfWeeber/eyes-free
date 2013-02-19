@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Cap a la dreta"</item>
+    <item msgid="992384288929754258">"Cap a l\'esquerra"</item>
+    <item msgid="2311009411708911700">"Navega a l\'element següent"</item>
+    <item msgid="4868322620432152139">"Navega a l\'element anterior"</item>
+    <item msgid="713256521059720189">"Navega a la línia següent"</item>
+    <item msgid="7111316948614107646">"Navega a la línia anterior"</item>
+    <item msgid="1092717670413169154">"Desplaça\'t cap endavant"</item>
+    <item msgid="2672802569950877806">"Desplaça\'t cap enrere"</item>
+    <item msgid="8530687760031648049">"Activa l\'element sota el dit"</item>
+    <item msgid="2965010005667399914">"Mantenir premut l\'element que hi ha sota el dit"</item>
+    <item msgid="7114563790387768347">"Activa l\'element actual"</item>
+    <item msgid="6083375034241022486">"Mantenir premut l\'element actual"</item>
+    <item msgid="6434332125338405390">"Introdueix un caràcter en Braille"</item>
+    <item msgid="2845805874940074674">"Activa el botó Enrere"</item>
+    <item msgid="6272261186186982128">"Activa el botó Inici"</item>
+    <item msgid="2876656758414605716">"Obre la finestra de notificacions"</item>
+    <item msgid="2554673553387851889">"Obre la finestra d\'aplicacions recents"</item>
+    <item msgid="4863807959891911585">"Activa la tecla Retorn en editar text"</item>
+    <item msgid="5917526604121492276">"Suprimeix cap enrere en editar text"</item>
+    <item msgid="6047263121281919980">"Suprimeix cap endavant en editar text"</item>
+    <item msgid="2622805964649872487">"Obre l\'ajuda del teclat de BrailleBack"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Mantenir premut <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Utilitzeu les tecles de navegació per desplaçar-vos per la pantalla."\n"Utilitzeu les tecles de braille per introduir text en un quadre d\'edició."\n"A continuació trobareu una llista completa de tecles d\'ordre compatibles amb el vostre dispositiu."</string>
+</resources>

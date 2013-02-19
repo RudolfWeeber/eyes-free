@@ -14,10 +14,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-LOCAL_PATH := $(call my-dir)
-BRLTTY_PATH := $(LOCAL_PATH)/brltty
+WRAPPER_PATH := $(call my-dir)
+LOCAL_PATH := $(WRAPPER_PATH)
+BRLTTY_PATH := $(WRAPPER_PATH)/brltty
 
-include $(LOCAL_PATH)/build/driver.mk
+include $(WRAPPER_PATH)/build/driver.mk
 
 # Uncomment the second line below and comment out the first one
 # to get a smaller binary with less symbols.
@@ -43,20 +44,24 @@ $(call build-braille-drivers,\
 
 include $(CLEAR_VARS)
 
+LOCAL_PATH := $(WRAPPER_PATH)
 LOCAL_MODULE    := brlttywrap
 LOCAL_LDLIBS := -llog
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(LOCAL_PATH)/brltty/Programs
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/.. $(BRLTTY_PATH)/Programs
 LOCAL_SRC_FILES := BrlttyWrapper.c
-LOCAL_WHOLE_STATIC_LIBRARIES := libbrltty
+LOCAL_WHOLE_STATIC_LIBRARIES := libbrltty-android
 
 include $(BUILD_SHARED_LIBRARY)
 
 #----------------------------------------------------------------
-# libbrltty
+# libbrltty-android
+
 include $(CLEAR_VARS)
 
-LOCAL_C_INCLUDES:= $(LOCAL_PATH)/brltty \
-	$(LOCAL_PATH)/brltty/Programs \
+LOCAL_PATH := $(WRAPPER_PATH)
+
+LOCAL_C_INCLUDES := $(BRLTTY_PATH) \
+	$(BRLTTY_PATH)/Programs \
 	$(LOCAL_PATH)
 
 LOCAL_CFLAGS+=-DHAVE_CONFIG_H $(VISIBILITY)
@@ -65,55 +70,72 @@ LOCAL_CFLAGS+=-D__ANDROID__
 LOCAL_SRC_FILES:= \
 	libbrltty.c \
 	bluetooth_android.c \
-	brltty/Programs/cmd.c \
-	brltty/Programs/charset.c \
-	brltty/Programs/charset_none.c \
-	brltty/Programs/lock.c \
-	brltty/Programs/drivers.c \
-	brltty/Programs/driver.c \
-	brltty/Programs/ttb_translate.c \
-	brltty/Programs/ttb_compile.c \
-	brltty/Programs/ttb_native.c
+	sys_android.c
+
+LOCAL_MODULE := brltty-android
+LOCAL_WHOLE_STATIC_LIBRARIES := libbrltty
+include $(BUILD_STATIC_LIBRARY)
+
+#----------------------------------------------------------------
+# libbrltty
+include $(CLEAR_VARS)
+
+LOCAL_PATH := $(BRLTTY_PATH)
+
+LOCAL_C_INCLUDES:= $(BRLTTY_PATH) \
+	$(BRLTTY_PATH)/Programs \
+	$(WRAPPER_PATH)
+
+LOCAL_CFLAGS+=-DHAVE_CONFIG_H $(VISIBILITY)
+LOCAL_CFLAGS+=-D__ANDROID__
+
+LOCAL_SRC_FILES:= \
+	Programs/cmd.c \
+	Programs/charset.c \
+	Programs/charset_none.c \
+	Programs/lock.c \
+	Programs/drivers.c \
+	Programs/driver.c \
+	Programs/ttb_translate.c \
+	Programs/ttb_compile.c \
+	Programs/ttb_native.c
 
 # Base objects
 LOCAL_SRC_FILES+= \
-	brltty/Programs/log.c \
-	brltty/Programs/file.c \
-	brltty/Programs/device.c \
-	brltty/Programs/parse.c \
-	brltty/Programs/timing.c \
-	brltty/Programs/io_misc.c
+	Programs/log.c \
+	Programs/file.c \
+	Programs/device.c \
+	Programs/parse.c \
+	Programs/timing.c \
+	Programs/io_misc.c
 
 # Braille objects
 LOCAL_SRC_FILES+= \
-	brltty/Programs/brl.c
+	Programs/brl.c
 
 # IO objects
 LOCAL_SRC_FILES+= \
-	brltty/Programs/io_generic.c
+	Programs/io_generic.c
 
 # Bluetooth objects
 LOCAL_SRC_FILES+= \
-	brltty/Programs/bluetooth.c \
-
-# System objects
-LOCAL_SRC_FILES+= sys_android.c
+	Programs/bluetooth.c \
 
 # Other, not sure where they come from.
 LOCAL_SRC_FILES+= \
-	brltty/Programs/unicode.c \
-	brltty/Programs/queue.c \
-	brltty/Programs/serial.c \
-	brltty/Programs/serial_none.c \
-	brltty/Programs/usb.c \
-	brltty/Programs/usb_none.c \
-	brltty/Programs/usb_hid.c \
-	brltty/Programs/usb_serial.c \
-	brltty/Programs/ktb_translate.c \
-	brltty/Programs/ktb_compile.c \
-	brltty/Programs/async.c \
-	brltty/Programs/datafile.c \
-	brltty/Programs/dataarea.c
+	Programs/unicode.c \
+	Programs/queue.c \
+	Programs/serial.c \
+	Programs/serial_none.c \
+	Programs/usb.c \
+	Programs/usb_none.c \
+	Programs/usb_hid.c \
+	Programs/usb_serial.c \
+	Programs/ktb_translate.c \
+	Programs/ktb_compile.c \
+	Programs/async.c \
+	Programs/datafile.c \
+	Programs/dataarea.c
 
 LOCAL_MODULE := brltty
 LOCAL_WHOLE_STATIC_LIBRARIES := $(DRIVER_MODULES)

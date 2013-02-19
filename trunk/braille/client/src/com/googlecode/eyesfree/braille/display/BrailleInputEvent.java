@@ -58,6 +58,8 @@ public class BrailleInputEvent implements Parcelable {
 
     /** Keyboard command: Activate the currently selected/focused item. */
     public static final int CMD_ACTIVATE_CURRENT = 20;
+    /** Keyboard command: Long press the currently selected/focused item. */
+    public static final int CMD_LONG_PRESS_CURRENT = 21;
 
     // Scrolling.
 
@@ -93,6 +95,14 @@ public class BrailleInputEvent implements Parcelable {
      * was pressed.
      */
     public static final int CMD_ROUTE = 50;
+    /**
+     * Keyboard command: Primary routing key long pressed, typically
+     * used to long press the item under the key.
+     * The argument is the zero-based position, relative to the first cell
+     * on the display, of the cell that is closed to the key that
+     * was pressed.
+     */
+    public static final int CMD_LONG_PRESS_ROUTE = 51;
 
     // Braille keyboard input.
 
@@ -158,6 +168,7 @@ public class BrailleInputEvent implements Parcelable {
         CMD_NAMES.append(CMD_NAV_TOP, "CMD_NAV_TOP");
         CMD_NAMES.append(CMD_NAV_BOTTOM, "CMD_NAV_BOTTOM");
         CMD_NAMES.append(CMD_ACTIVATE_CURRENT, "CMD_ACTIVATE_CURRENT");
+        CMD_NAMES.append(CMD_LONG_PRESS_CURRENT, "CMD_LONG_PRESS_CURRENT");
         CMD_NAMES.append(CMD_SCROLL_BACKWARD, "CMD_SCROLL_BACKWARD");
         CMD_NAMES.append(CMD_SCROLL_FORWARD, "CMD_SCROLL_FORWARD");
         CMD_NAMES.append(CMD_SELECTION_START, "CMD_SELECTION_START");
@@ -167,6 +178,7 @@ public class BrailleInputEvent implements Parcelable {
         CMD_NAMES.append(CMD_SELECTION_COPY, "CMD_SELECTION_COPY");
         CMD_NAMES.append(CMD_SELECTION_PASTE, "CMD_SELECTION_PASTE");
         CMD_NAMES.append(CMD_ROUTE, "CMD_ROUTE");
+        CMD_NAMES.append(CMD_LONG_PRESS_ROUTE, "CMD_LONG_PRESS_ROUTE");
         CMD_NAMES.append(CMD_BRAILLE_KEY, "CMD_BRAILLE_KEY");
         CMD_NAMES.append(CMD_KEY_ENTER, "CMD_KEY_ENTER");
         CMD_NAMES.append(CMD_KEY_DEL, "CMD_KEY_DEL");
@@ -245,6 +257,7 @@ public class BrailleInputEvent implements Parcelable {
             case CMD_SELECTION_START:
             case CMD_SELECTION_END:
             case CMD_ROUTE:
+            case CMD_LONG_PRESS_ROUTE:
                 return ARGUMENT_POSITION;
             case CMD_BRAILLE_KEY:
                 return ARGUMENT_DOTS;

@@ -93,7 +93,7 @@ public class IMESetupWizardActivity extends Activity {
                         .setMessage(R.string.ime_setup_need_default_message)
                         .setPositiveButton(
                             R.string.ime_setup_need_default_positive,
-                                           mNeedDefaultListener)
+                            mNeedDefaultListener)
                         .setOnCancelListener(mOnCancelListener)
                         .create();
             }

@@ -1,6 +1,6 @@
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-android-chords.kti mytables/brl-android-chords.kti
 --- jni/brlttywrapper/brltty/Tables/brl-android-chords.kti	1969-12-31 16:00:00.000000000 -0800
-+++ mytables/brl-android-chords.kti	2012-11-07 15:55:56.000000000 -0800
++++ mytables/brl-android-chords.kti	2013-01-09 16:26:15.000000000 -0800
 @@ -0,0 +1,12 @@
 +# Back key
 +bind \{Space}+Dot1+Dot2 KEY_ESCAPE
@@ -15,8 +15,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-android-chords.kti mytables/brl-and
 +# Keyboard help
 +bind \{Space}+Dot1+Dot2+Dot3 LEARN
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb mytables/brl-bm-default.ktb
---- jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-bm-default.ktb	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-bm-default.ktb	2013-01-09 16:26:15.000000000 -0800
 @@ -18,6 +18,15 @@
  
  title Baum (default)
@@ -34,8 +34,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-default.ktb mytables/brl-bm-defa
  include brl-bm-keyboard.kti
  include brl-bm-routing6.kti
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-display6.kti
---- jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-bm-display6.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-bm-display6.kti	2013-01-09 16:26:15.000000000 -0800
 @@ -21,30 +21,39 @@
  note * The three at the left are named Display1 through Display3.
  note * The three at the right are named Display4 through Display6.
@@ -117,9 +117,9 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-display6.kti mytables/brl-bm-dis
  bind Display3+Display4+Display5+Display6 SWITCHVT_PREV
  
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti mytables/brl-bm-keyboard.kti
---- jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-bm-keyboard.kti	2012-11-07 15:55:56.000000000 -0800
-@@ -41,24 +41,17 @@
+--- jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-bm-keyboard.kti	2013-02-08 11:37:13.870989110 -0800
+@@ -41,24 +41,22 @@
  map B10 SPACE
  map B11 SPACE
  
@@ -129,7 +129,12 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti mytables/brl-bm-key
 -bind Left KEY_CURSOR_LEFT
 -bind Right KEY_CURSOR_RIGHT
 +# Activate the currently focused item.
-+bind Press Route+255
++bind Press ROUTE+127
++# Long press the currently focused item
++# (The joystick press, at least on the Refreshabraille, will not send
++# a key down at key press, but instead the down/up pair are sent
++# in quick succession when the key is released.)
++bind Dot6+Press ROUTE+255
 +bind Up LNUP
 +bind Down LNDN
 +bind Left CHRLT
@@ -151,8 +156,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-bm-keyboard.kti mytables/brl-bm-key
 -bind Dot6+Right CHRRT
 -
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-braille.kti mytables/brl-eu-braille.kti
---- jni/brlttywrapper/brltty/Tables/brl-eu-braille.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-eu-braille.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-eu-braille.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-eu-braille.kti	2013-01-09 16:26:15.000000000 -0800
 @@ -40,31 +40,6 @@
  bind Space+Dot2+Dot5+Dot6 KEY_TAB
  bind Space+Dot2+Dot3+Dot6 KEY_TAB+shift
@@ -186,8 +191,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-braille.kti mytables/brl-eu-brai
 -bind Backspace+Dot1+Dot2+Dot3 KEY_FUNCTION+11
 -
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-common.kti mytables/brl-eu-common.kti
---- jni/brlttywrapper/brltty/Tables/brl-eu-common.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-eu-common.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-eu-common.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-eu-common.kti	2013-01-09 16:26:15.000000000 -0800
 @@ -23,4 +23,8 @@
  bind RoutingKey1 ROUTE
  bind RoutingKey2 DESCCHAR
@@ -198,8 +203,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-common.kti mytables/brl-eu-commo
 +include brl-android-chords.kti
  include brl-eu-braille.kti
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti mytables/brl-eu-joysticks.kti
---- jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-eu-joysticks.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-eu-joysticks.kti	2013-02-06 10:25:34.000000000 -0800
 @@ -18,12 +18,18 @@
  
  note The joysticks are the small, round, five-way (left, right, up, down, press) controls to the left and right of the cursor routing keys.
@@ -208,7 +213,7 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti mytables/brl-eu-jo
 -bind RightJoystickLeft FWINLT
 -bind RightJoystickRight FWINRT
 +# Activate currently focused item.
-+bind RightJoystickPress ROUTE+255
++bind RightJoystickPress ROUTE+127
 +bind RightJoystickLeft CHRLT
 +bind RightJoystickRight CHRRT
  bind RightJoystickUp LNUP
@@ -231,8 +236,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-eu-joysticks.kti mytables/brl-eu-jo
  
  
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-common.kti mytables/brl-fs-common.kti
---- jni/brlttywrapper/brltty/Tables/brl-fs-common.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-fs-common.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-fs-common.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-fs-common.kti	2013-02-05 16:32:05.000000000 -0800
 @@ -19,8 +19,10 @@
  bind LeftWheelPress LNBEG
  bind RightWheelPress LNEND
@@ -259,9 +264,18 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-common.kti mytables/brl-fs-commo
  
  bind LeftWheelPress+!LeftWheelUp PRDIFLN
  bind LeftWheelPress+!LeftWheelDown NXDIFLN
+@@ -56,7 +60,7 @@
+ bind RightGdf+!LeftWheelUp PRSEARCH
+ bind RightGdf+!LeftWheelDown NXSEARCH
+ 
+-bind !RoutingKey ROUTE
++bind RoutingKey ROUTE
+ bind LeftWheelPress+!RoutingKey SETLEFT
+ bind RightWheelPress+!RoutingKey DESCCHAR
+ 
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-focus_basic.kti mytables/brl-fs-focus_basic.kti
---- jni/brlttywrapper/brltty/Tables/brl-fs-focus_basic.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-fs-focus_basic.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-fs-focus_basic.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-fs-focus_basic.kti	2013-01-09 16:26:15.000000000 -0800
 @@ -18,22 +18,6 @@
  
  # This key subtable is for all FreedomScientific Focus displays.
@@ -297,8 +311,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-focus_basic.kti mytables/brl-fs-
  
  bind !NavrowKey DESCCHAR
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-focus_small.ktb mytables/brl-fs-focus_small.ktb
---- jni/brlttywrapper/brltty/Tables/brl-fs-focus_small.ktb	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-fs-focus_small.ktb	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-fs-focus_small.ktb	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-fs-focus_small.ktb	2013-01-09 16:26:15.000000000 -0800
 @@ -18,5 +18,9 @@
  
  title FreedomScientific Focus Blue
@@ -310,8 +324,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-focus_small.ktb mytables/brl-fs-
  include brl-fs-focus_basic.kti
  include brl-fs-rockers.kti
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-rockers.kti mytables/brl-fs-rockers.kti
---- jni/brlttywrapper/brltty/Tables/brl-fs-rockers.kti	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-fs-rockers.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-fs-rockers.kti	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-fs-rockers.kti	2013-01-09 16:26:15.000000000 -0800
 @@ -21,5 +21,7 @@
  bind LeftRockerUp LNUP
  bind LeftRockerDown LNDN
@@ -323,8 +337,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-fs-rockers.kti mytables/brl-fs-rock
 +# Next item
 +bind RightRockerDown CHRRT
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-hm-sense.ktb mytables/brl-hm-sense.ktb
---- jni/brlttywrapper/brltty/Tables/brl-hm-sense.ktb	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-hm-sense.ktb	2013-01-09 15:37:06.648710241 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-hm-sense.ktb	2013-01-31 16:06:02.329062862 -0800
++++ mytables/brl-hm-sense.ktb	2013-01-09 16:26:15.000000000 -0800
 @@ -23,6 +23,11 @@
  # Default Bindings #
  ####################
@@ -420,8 +434,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-hm-sense.ktb mytables/brl-hm-sense.
  bind !RoutingKey KEY_FUNCTION
 -
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb mytables/brl-hw-all.ktb
---- jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb	2012-11-30 15:45:19.974057650 -0800
-+++ mytables/brl-hw-all.ktb	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb	2013-01-31 16:06:02.339062993 -0800
++++ mytables/brl-hw-all.ktb	2013-01-09 16:26:15.000000000 -0800
 @@ -52,19 +52,18 @@
  map Thumb2 META
  map Thumb3 CONTROL
@@ -438,12 +452,11 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb mytables/brl-hw-all.ktb
 -bind Space+Dot2+Dot4 KEY_INSERT
 -bind Space+Dot2+Dot3+Dot4+Dot5 KEY_TAB
 -bind Space+RoutingKey KEY_FUNCTION
--
 +# Scroll backward
 +bind Space+Thumb2 WINUP
 +# Scroll forward
 +bind Space+Thumb3 WINDN
-+
+ 
 +assign Space Space
 +assign Dot7 Dot7
 +assign Dot8 Dot8
@@ -452,8 +465,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-hw-all.ktb mytables/brl-hw-all.ktb
  include brl-bm-routing6.kti
  
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-bar.kti mytables/brl-pm-bar.kti
---- jni/brlttywrapper/brltty/Tables/brl-pm-bar.kti	2012-11-30 15:45:19.984057782 -0800
-+++ mytables/brl-pm-bar.kti	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-pm-bar.kti	2013-01-31 16:06:02.339062993 -0800
++++ mytables/brl-pm-bar.kti	2013-01-09 16:26:15.000000000 -0800
 @@ -58,3 +58,15 @@
  include brl-pm-keys.kti
  ifkey RoutingKey2 bind !RoutingKey2 DESCCHAR
@@ -470,9 +483,29 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-bar.kti mytables/brl-pm-bar.kti
 +ifkey RightSpace bind RightSpace+BarUp1 WINUP
 +ifkey RightSpace bind RightSpace+BarDown1 WINDN
 +hide off
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-keys.kti mytables/brl-pm-keys.kti
+--- jni/brlttywrapper/brltty/Tables/brl-pm-keys.kti	2013-01-31 16:06:02.339062993 -0800
++++ mytables/brl-pm-keys.kti	2013-02-08 13:17:40.789937241 -0800
+@@ -21,7 +21,6 @@
+ bind LeftKeyRear BACK
+ bind LeftKeyFront HOME
+ bind RightKeyRear HELP
+-bind RightKeyFront LEARN
+ 
+ bind LeftKeyRear+BarUp1 SIXDOTS
+ bind LeftKeyRear+BarDown1 PASTE
+diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-routing.kti mytables/brl-pm-routing.kti
+--- jni/brlttywrapper/brltty/Tables/brl-pm-routing.kti	2013-01-31 16:06:02.339062993 -0800
++++ mytables/brl-pm-routing.kti	2013-02-06 10:36:32.000000000 -0800
+@@ -19,4 +19,4 @@
+ # This key subtable is for Papenmeier displays which have primary routing keys.
+ note RoutingKey1 refers to any of the keys behind the text cells.
+ 
+-bind !RoutingKey1 ROUTE
++bind RoutingKey1 ROUTE
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-trio.ktb mytables/brl-pm-trio.ktb
---- jni/brlttywrapper/brltty/Tables/brl-pm-trio.ktb	2012-11-30 15:45:19.984057782 -0800
-+++ mytables/brl-pm-trio.ktb	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-pm-trio.ktb	2013-01-31 16:06:02.339062993 -0800
++++ mytables/brl-pm-trio.ktb	2013-01-09 16:26:15.000000000 -0800
 @@ -18,6 +18,21 @@
  
  title Papenmeier BrailleX Trio
@@ -496,8 +529,8 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-pm-trio.ktb mytables/brl-pm-trio.kt
  include brl-pm-bar.kti
  include brl-pm-keyboard.kti
 diff -Pu jni/brlttywrapper/brltty/Tables/brl-vo-bp.ktb mytables/brl-vo-bp.ktb
---- jni/brlttywrapper/brltty/Tables/brl-vo-bp.ktb	2012-11-30 15:45:19.984057782 -0800
-+++ mytables/brl-vo-bp.ktb	2012-11-07 15:55:56.000000000 -0800
+--- jni/brlttywrapper/brltty/Tables/brl-vo-bp.ktb	2013-01-31 16:06:02.339062993 -0800
++++ mytables/brl-vo-bp.ktb	2013-02-06 10:25:34.000000000 -0800
 @@ -32,14 +32,10 @@
  bind ScrollLeft+ScrollRight HOME
  bind ScrollLeft FWINLT
@@ -521,7 +554,7 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-vo-bp.ktb mytables/brl-vo-bp.ktb
  bind Dot1+Dot2+Dot3+Dot4+JoystickEnter PREFMENU
  bind Dot1+Dot2+Dot3+Dot4+JoystickLeft PREFLOAD
  bind Dot1+Dot2+Dot3+Dot4+JoystickRight PREFSAVE
-@@ -108,79 +103,26 @@
+@@ -108,79 +103,28 @@
  map Control DOT8
  map Space SPACE
  
@@ -552,7 +585,9 @@ diff -Pu jni/brlttywrapper/brltty/Tables/brl-vo-bp.ktb mytables/brl-vo-bp.ktb
  
 -bind JoystickEnter ROUTE
 +# Activate the currently focused item
-+bind JoystickEnter ROUTE+255
++bind JoystickEnter ROUTE+127
++# Long press the currently focused item.
++bind Space+JoystickEnter ROUTE+255
  bind JoystickLeft KEY_CURSOR_LEFT
  bind JoystickRight KEY_CURSOR_RIGHT
  bind JoystickUp KEY_CURSOR_UP

@@ -27,6 +27,7 @@
 
 #include "libbrltty.h"
 #include "brl.h"
+#include "cmd.h"
 #include "file.h"
 #include "ktb.h"
 #include "ktbdefs.h"
@@ -34,6 +35,12 @@
 #include "ktb_inspect.h"
 #include "log.h"
 #include "parse.h"
+
+// TODO: Consider making these adjustable by the user
+/* Initial delay before the first autorepeat and as long press timeout. */
+#define AUTOREPEAT_INITIAL_DELAY_MS 500
+/* Interval between autorepeats. */
+#define AUTOREPEAT_INTERVAL_MS 300
 
 /*
  * The global variable 'braille' is the driver struct with vtable etc.  It is
@@ -53,6 +60,7 @@ static void* brailleSharedObject = NULL;
  * (dimensions, the display buffer etc).
  */
 static BrailleDisplay brailleDisplay;
+static RepeatState repeatState;
 
 /*
  * Array of driver-specific parameters.
@@ -93,6 +101,7 @@ findKeyName(const KeyTable* keyTable, const KeyValue* value);
 int
 brltty_initialize (const char* driverCode, const char* brailleDevice,
                    const char* tablesDir) {
+  // TODO: Fix the cleanup code in the error handling cases.
   int ret = 0;
   systemLogLevel = LOG_DEBUG;
 
@@ -120,6 +129,12 @@ brltty_initialize (const char* driverCode, const char* brailleDevice,
     goto freeParameters;
   }
 
+  if (brltty_getTextCells() > BRLTTY_MAX_TEXT_CELLS) {
+    logMessage(LOG_ERR, "Unsupported display size: %d",
+               brltty_getTextCells());
+    goto freeParameters;
+  }
+
   if (!compileKeys(tablesDir)) {
     goto freeParameters;
   }
@@ -131,6 +146,8 @@ brltty_initialize (const char* driverCode, const char* brailleDevice,
     logMessage(LOG_ERR, "Couldn't allocate braille buffer");
     goto freeParameters;
   }
+
+  resetRepeatState(&repeatState);
 
   logMessage(LOG_NOTICE, "Successfully initialized braille driver "
              "%s on device %s", driverCode, brailleDevice);
@@ -159,22 +176,91 @@ brltty_destroy(void) {
   braille = NULL;
 }
 
+/*
+ * Handles long press for CMD_ROUTE, updating the repeat state and
+ * *cmd as appropriate.  Returns non-zero if the command was handled
+ * by this function and zero if autorepeat should be handling the
+ * current state and command.
+ */
+static int
+handleLongPress(int* cmd) {
+  TimeValue now;
+  getCurrentTime(&now);
+
+  /* Are we in the middle of a CMD_ROUTE? */
+  if ((repeatState.command & BRL_MSK_BLK) == BRL_BLK_ROUTE
+      && repeatState.timeout != 0) {
+    /* Periodic check for long press timeout (or spurious read). */
+    if (*cmd == EOF) {
+      if (millisecondsBetween(&repeatState.time, &now) > repeatState.timeout) {
+        /* Emit the long press and reset the repeat state to not
+         * cause any further commands from this key press.
+         */
+        *cmd = repeatState.command | BRLTTY_ROUTE_ARG_FLG_LONG_PRESS;
+        resetRepeatState(&repeatState);
+      }
+      return 1;
+    }
+
+    /* If we get the same command after a key press (without repeat
+     * flags), the key was released before the timeout, so this
+     * is a 'short press'.
+     */
+    if (*cmd == repeatState.command) {
+      resetRepeatState(&repeatState);
+      return 1;
+    }
+    // We were handling a routing key and got a different command.  Reset the
+    // repeat state and let the autorepeat code handle the new keystroke.
+    resetRepeatState(&repeatState);
+    return 0;
+  } else if ((*cmd & BRL_MSK_BLK) == BRL_BLK_ROUTE) {
+
+    /* Not currently handling a route key press. */
+    if ((*cmd & BRL_FLG_REPEAT_DELAY) != 0) {
+      /* Initial event for the key press, set up the state
+       * with the long press timeout. */
+      repeatState.time = now;
+      repeatState.timeout = AUTOREPEAT_INITIAL_DELAY_MS;
+      repeatState.command = *cmd & ~BRL_FLG_REPEAT_MASK;
+      repeatState.started = 0;
+    } else {
+      resetRepeatState(&repeatState);
+    }
+    *cmd = BRL_CMD_NOOP;
+    return 1;
+  }
+  return 0;
+}
+
+/*
+ * Handles autorepeat and long press.  Implements long press
+ * support for the CMD_ROUTE command and calls through to brltty's
+ * autorepeat handling code for other commands.
+ */
+static void
+handleRepeatAndLongPress(int* cmd) {
+  if (!handleLongPress(cmd)) {
+    /* Fall back on brltty's autorepeat functionality.
+     * The panning argument below reflects a preference in brltty
+     * whether to autorepeat while panning or not.  Since we don't have that
+     * preference in BrailleBack, this is always set to 1 here.
+     */
+    handleRepeatFlags(cmd, &repeatState, 1 /*panning*/,
+                      AUTOREPEAT_INITIAL_DELAY_MS, AUTOREPEAT_INTERVAL_MS);
+  }
+}
+
 int
-brltty_readCommand(void) {
+brltty_readCommand(int *readDelayMillis) {
   if (braille == NULL) {
     return BRL_CMD_RESTARTBRL;
   }
   int cmd = readBrailleCommand(&brailleDisplay, KTB_CTX_DEFAULT);
-  /* We don't support auto-repeat at the moment, but we need to get those
-   * spurious autorepeat commands filtered out.
-   * This can turn the command into a no-op, which the caller
-   * can tolerate. */
-  handleRepeatFlags(
-      &cmd,
-      NULL /*repeatState*/,
-      0 /*panning*/,
-      0 /*delay*/,
-      0 /*interval*/);
+  handleRepeatAndLongPress(&cmd);
+  if (repeatState.timeout > 0) {
+    *readDelayMillis = repeatState.timeout;
+  }
   return cmd;
 }
 
@@ -339,7 +425,20 @@ listKeyBinding(const KeyBinding *binding, const KeyTable *keyTable,
     keys[i++] = name;
   }
   keys[i] = NULL;
-  return callback(binding->command, i, keys, data);
+  int ret = callback(binding->command, i, keys, 0 /*isLongPress*/, data);
+  if (!ret) {
+    return ret;
+  }
+  /* Since we implement long press automatically, add a corresponding
+   * binding to the route command if this route command isn't already
+   * a long press in the key table.
+   */
+  if ((binding->command & (BRL_MSK_BLK | BRLTTY_ROUTE_ARG_FLG_LONG_PRESS))
+      == BRL_BLK_ROUTE) {
+    ret = callback(binding->command | BRLTTY_ROUTE_ARG_FLG_LONG_PRESS,
+                   i, keys, 1 /*isLongPress*/, data);
+  }
+  return ret;
 }
 
 static int

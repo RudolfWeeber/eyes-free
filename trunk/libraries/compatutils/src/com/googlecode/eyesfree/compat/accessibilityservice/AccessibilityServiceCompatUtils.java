@@ -18,6 +18,7 @@ package com.googlecode.eyesfree.compat.accessibilityservice;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 
 import com.googlecode.eyesfree.compat.CompatUtils;
 
@@ -28,6 +29,8 @@ public class AccessibilityServiceCompatUtils {
             AccessibilityService.class, "performGlobalAction", int.class);
     private static final Method METHOD_getServiceInfo = CompatUtils.getMethod(
             AccessibilityService.class, "getServiceInfo");
+    private static final Method METHOD_getRootInActiveWindow = CompatUtils.getMethod(
+            AccessibilityService.class, "getRootInActiveWindow");
 
     public static boolean performGlobalAction(AccessibilityService service, int action) {
         return (Boolean) CompatUtils.invoke(service, false, METHOD_performGlobalAction, action);
@@ -35,5 +38,15 @@ public class AccessibilityServiceCompatUtils {
 
     public static AccessibilityServiceInfo getServiceInfo(AccessibilityService service) {
         return (AccessibilityServiceInfo) CompatUtils.invoke(service, null, METHOD_getServiceInfo);
+    }
+
+    public static AccessibilityNodeInfoCompat getRootInActiveWindow(
+            AccessibilityService service) {
+        Object root = CompatUtils.invoke(service, null, METHOD_getRootInActiveWindow);
+        if (root != null) {
+            return new AccessibilityNodeInfoCompat(root);
+        } else {
+            return null;
+        }
     }
 }

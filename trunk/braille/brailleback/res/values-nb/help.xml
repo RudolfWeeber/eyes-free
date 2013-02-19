@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Panorer mot høyre"</item>
+    <item msgid="992384288929754258">"Panorer mot venstre"</item>
+    <item msgid="2311009411708911700">"Naviger til neste element"</item>
+    <item msgid="4868322620432152139">"Naviger til forrige element"</item>
+    <item msgid="713256521059720189">"Naviger til neste linje"</item>
+    <item msgid="7111316948614107646">"Naviger til forrige linje"</item>
+    <item msgid="1092717670413169154">"Rull fremover"</item>
+    <item msgid="2672802569950877806">"Rull bakover"</item>
+    <item msgid="8530687760031648049">"Aktiver elementet under fingeren"</item>
+    <item msgid="2965010005667399914">"Trykk lenge på elementet under fingeren"</item>
+    <item msgid="7114563790387768347">"Aktiver gjeldende element"</item>
+    <item msgid="6083375034241022486">"Trykk lenge på det gjeldende elementet"</item>
+    <item msgid="6434332125338405390">"Skriv inn et punktskrifttegn"</item>
+    <item msgid="2845805874940074674">"Aktiver tilbake-knappen"</item>
+    <item msgid="6272261186186982128">"Aktiver startside-knappen"</item>
+    <item msgid="2876656758414605716">"Åpne varselvinduet"</item>
+    <item msgid="2554673553387851889">"Åpne det siste app-vinduet"</item>
+    <item msgid="4863807959891911585">"Aktiver Enter-tasten når du redigerer tekst"</item>
+    <item msgid="5917526604121492276">"Slett bakover når du redigerer tekst"</item>
+    <item msgid="6047263121281919980">"Slett fremover når du redigerer tekst"</item>
+    <item msgid="2622805964649872487">"Åpne tastaturhjelp for BrailleBack"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Trykk lenge på <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Bruk navigasjonstastene til å flytte fokus på skjermen."\n"Bruk tastene for punktskrift for å skrive inn tekst i en redigeringsboks."\n"Nedenfor er en liste over viktige kommandoer som støttes av enheten din."</string>
+</resources>

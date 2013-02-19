@@ -24,15 +24,21 @@ import android.os.Parcelable;
  * command as declared in {@link BrailleInputEvent}.
  */
 public class BrailleKeyBinding implements Parcelable {
+    private static final int FLAG_LONG_PRESS = 0x00000001;
+
     private int mCommand;
     private String[] mKeyNames;
+    private int mFlags;
 
     public BrailleKeyBinding() {
     }
 
-    public BrailleKeyBinding(int command, String[] keyNames) {
+    public BrailleKeyBinding(int command,
+            String[] keyNames,
+            boolean longPress) {
         mCommand = command;
         mKeyNames = keyNames;
+        mFlags = longPress ? FLAG_LONG_PRESS : 0;
     }
 
     /**
@@ -52,6 +58,15 @@ public class BrailleKeyBinding implements Parcelable {
     }
 
     /**
+     * Sets whether this is a long press key binding.
+     */
+    public BrailleKeyBinding setLongPress(boolean longPress) {
+        mFlags = (mFlags & ~FLAG_LONG_PRESS)
+                | (longPress ? FLAG_LONG_PRESS : 0);
+        return this;
+    }
+
+    /**
      * Returns the command for this key binding.
      * @see {@link BrailleInputEvent}.
      */
@@ -65,6 +80,13 @@ public class BrailleKeyBinding implements Parcelable {
      */
     public String[] getKeyNames() {
         return mKeyNames;
+    }
+
+    /**
+     * Returns whether this is a long press key binding.
+     */
+    public boolean isLongPress() {
+        return (mFlags & FLAG_LONG_PRESS) != 0;
     }
 
     // For Parcelable support.
@@ -91,10 +113,12 @@ public class BrailleKeyBinding implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(mCommand);
         out.writeStringArray(mKeyNames);
+        out.writeInt(mFlags);
     }
 
     private BrailleKeyBinding(Parcel in) {
         mCommand = in.readInt();
         mKeyNames = in.createStringArray();
+        mFlags = in.readInt();
     }
 }

@@ -19,9 +19,11 @@ package com.googlecode.eyesfree.brailleback;
 import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,6 +34,7 @@ import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
 import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.braille.display.DisplayClient;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -45,19 +48,22 @@ import java.util.List;
  */
 public class KeyBindingsActivity extends Activity
         implements Display.OnConnectionStateChangeListener {
-    Display mDisplay;
+    DisplayClient mDisplay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle(R.string.key_bindings_title);
         setContentView(R.layout.key_bindings);
-
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     protected void onStart() {
-        mDisplay = new Display(this, this);
+        mDisplay = new DisplayClient(this);
+        mDisplay.setOnConnectionStateChangeListener(this);
         super.onStart();
     }
 
@@ -74,6 +80,20 @@ public class KeyBindingsActivity extends Activity
     public void onConnectionStateChanged(int state) {
         if (state == Display.STATE_CONNECTED) {
             populateListView();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this,
+                        BrailleBackPreferencesActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -115,7 +135,7 @@ public class KeyBindingsActivity extends Activity
                     && sortedBindings.get(index - 1).getCommand() == command) {
                 index -= 1;
             }
-            addBindingsForCommand(sortedBindings, index, descriptions[i],
+            addBindingForCommand(sortedBindings.get(index), descriptions[i],
                     friendlyKeyNames, result);
         }
 
@@ -128,32 +148,20 @@ public class KeyBindingsActivity extends Activity
         list.setAdapter(adapter);
     }
 
-    private void addBindingsForCommand(
-            List<BrailleKeyBinding> bindings, int startIndex,
+    private void addBindingForCommand(
+            BrailleKeyBinding binding,
             String commandDescription,
             Map<String, String> friendlyKeyNames,
             List<KeyBinding> result) {
         String delimiter = getString(R.string.help_keyBindingDelimiter);
-        int command = bindings.get(startIndex).getCommand();
-        int index = startIndex;
-        BrailleKeyBinding prevBinding = null;
-        do {
-            BrailleKeyBinding binding = bindings.get(index);
-            // Skip over duplicates in the keymap.
-            if (prevBinding == null
-                || !Arrays.equals(
-                        prevBinding.getKeyNames(),
-                        binding.getKeyNames())) {
-                result.add(new KeyBinding(
-                    commandDescription,
-                    TextUtils.join(delimiter,
-                            getFriendlyKeyNames(binding.getKeyNames(),
-                                    friendlyKeyNames))));
-            }
-            prevBinding = binding;
-            index += 1;
-        } while (index < bindings.size()
-                && bindings.get(index).getCommand() == command);
+        int command = binding.getCommand();
+        String keys = TextUtils.join(delimiter,
+                getFriendlyKeyNames(binding.getKeyNames(),
+                        friendlyKeyNames));
+        if (binding.isLongPress()) {
+            keys = getString(R.string.help_longPressTemplate, keys);
+        }
+        result.add(new KeyBinding(commandDescription, keys));
     }
 
     private static String[] getFriendlyKeyNames(String[] unfriendlyNames,
@@ -202,10 +210,11 @@ public class KeyBindingsActivity extends Activity
     }
 
     /**
-     * Compares key bindings by command number, then by number of keys in the
-     * binding, and finally by key names for consistency.  Used for sorting.
+     * Compares key bindings by command number, then in an order that is
+     * deterministic and that makes sure that the binding that should
+     * appear on the help screen comes first.
      */
-    private static final Comparator COMPARE_BINDINGS =
+    private static final Comparator<BrailleKeyBinding> COMPARE_BINDINGS =
             new Comparator<BrailleKeyBinding>() {
             @Override
             public int compare(BrailleKeyBinding lhs, BrailleKeyBinding rhs) {
@@ -214,11 +223,19 @@ public class KeyBindingsActivity extends Activity
                 if (command1 != command2) {
                     return command1 - command2;
                 }
+                // Prefer a binding without long press.
+                boolean longPress1 = lhs.isLongPress();
+                boolean longPress2 = rhs.isLongPress();
+                if (longPress1 != longPress2) {
+                    return longPress1 ? 1 : -1;
+                }
                 String[] names1 = lhs.getKeyNames();
                 String[] names2 = rhs.getKeyNames();
+                // Prefer fewer keys.
                 if (names1.length != names2.length) {
                     return names1.length - names2.length;
                 }
+                // Compare key names for determinism.
                 for (int i = 0; i < names1.length; ++i) {
                     String key1 = names1[i];
                     String key2 = names2[i];
@@ -234,7 +251,8 @@ public class KeyBindingsActivity extends Activity
     /**
      * Compares key bindings by command number.  Used for search.
      */
-    private static final Comparator COMPARE_BINDINGS_BY_COMMAND =
+    private static final Comparator<BrailleKeyBinding>
+        COMPARE_BINDINGS_BY_COMMAND =
             new Comparator<BrailleKeyBinding>() {
             @Override
             public int compare(BrailleKeyBinding lhs, BrailleKeyBinding rhs) {

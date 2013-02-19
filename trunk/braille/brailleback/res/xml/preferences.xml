@@ -36,4 +36,13 @@
              android:title="@string/pref_eight_dot_braille_table_title"
              android:defaultValue="@string/table_value_default" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/pref_category_developer_key"
+        android:title="@string/pref_category_developer_title">
+        <CheckBoxPreference
+            android:key="@string/pref_braille_overlay_key"
+            android:title="@string/pref_braille_overlay_title"
+            android:defaultValue="@bool/pref_braille_overlay_default" />
+    </PreferenceCategory>
 </PreferenceScreen>

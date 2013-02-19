@@ -56,6 +56,12 @@ class DefaultNavigationMode implements NavigationMode {
      */
     private static final int GRANULARITY_ITEM =
         AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_LINE;
+
+    // Actions in this range are reserved for Braille use.
+    // TODO: use event arguments instead of this hack.
+    private static final int ACTION_BRAILLE_CLICK_MAX = -275000000;
+    private static final int ACTION_BRAILLE_CLICK_MIN = -275999999;
+
     private final DisplayManager mDisplayManager;
     private final AccessibilityService mAccessibilityService;
     private final NodeBrailler mNodeBrailler;
@@ -362,12 +368,28 @@ class DefaultNavigationMode implements NavigationMode {
                 return mFeedbackManager.emitOnFailure(
                     activateNode(getFocusedNode(false)),
                     FeedbackManager.TYPE_COMMAND_FAILED);
-            case BrailleInputEvent.CMD_ROUTE:
+            case BrailleInputEvent.CMD_LONG_PRESS_CURRENT:
+                // Long click the current node, but don't fall back on the
+                // root if focus is cleared.
+                return mFeedbackManager.emitOnFailure(
+                    longClickNode(getFocusedNode(false)),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_ROUTE: {
                 AccessibilityNodeInfoCompat node =
                         DisplaySpans.getAccessibilityNodeFromPosition(
                             event.getArgument(), content.getText());
-                return mFeedbackManager.emitOnFailure(activateNode(node),
+                return mFeedbackManager.emitOnFailure(
+                        activateNode(node, event.getArgument()),
                         FeedbackManager.TYPE_COMMAND_FAILED);
+            }
+            case BrailleInputEvent.CMD_LONG_PRESS_ROUTE: {
+                AccessibilityNodeInfoCompat node =
+                        DisplaySpans.getAccessibilityNodeFromPosition(
+                            event.getArgument(), content.getText());
+                return mFeedbackManager.emitOnFailure(
+                        longClickNode(node),
+                        FeedbackManager.TYPE_COMMAND_FAILED);
+            }
             case BrailleInputEvent.CMD_SCROLL_FORWARD:
                 return mFeedbackManager.emitOnFailure(
                     attemptScrollAction(
@@ -480,6 +502,11 @@ class DefaultNavigationMode implements NavigationMode {
     }
 
     private boolean activateNode(AccessibilityNodeInfoCompat node) {
+        return activateNode(node, -1);
+    }
+
+    private boolean activateNode(AccessibilityNodeInfoCompat node,
+            int position) {
         if (node == null) {
             return false;
         }
@@ -507,6 +534,29 @@ class DefaultNavigationMode implements NavigationMode {
                         // activate the editing.
                         action = AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS;
                     }
+                } else if (position >= 0 && isSelfBrailled(current.get())
+                        && (supportedActions
+                                & AccessibilityNodeInfo.ACTION_CLICK) != 0) {
+                    // Generate a fake "action". For instance, a click at
+                    // position 33 maps to -275000033.
+                    // TODO: Remove this hack when a better way to pass this
+                    // information exists.
+                    int fakeAction = ACTION_BRAILLE_CLICK_MAX - position;
+                    if (fakeAction < ACTION_BRAILLE_CLICK_MIN) {
+                        LogUtils.log(this, Log.WARN,
+                            "underflow activating node %s at position %d",
+                            current.get(), position);
+                        fakeAction = ACTION_BRAILLE_CLICK_MIN;
+                    } else if (fakeAction > ACTION_BRAILLE_CLICK_MAX) {
+                        LogUtils.log(this, Log.WARN,
+                            "overflow activating node %s at position %d",
+                            current.get(), position);
+                        fakeAction = ACTION_BRAILLE_CLICK_MAX;
+                    }
+                    if (WebInterfaceUtils.performSpecialAction(current.get(),
+                                fakeAction)) {
+                        return true;
+                    }
                 } else if ((supportedActions
                                 & AccessibilityNodeInfo.ACTION_CLICK) != 0) {
                     action = AccessibilityNodeInfo.ACTION_CLICK;
@@ -522,6 +572,29 @@ class DefaultNavigationMode implements NavigationMode {
             current.recycle();
         }
         LogUtils.log(this, Log.VERBOSE, "Click action failed");
+        return false;
+    }
+
+    private boolean longClickNode(AccessibilityNodeInfoCompat node) {
+        if (node == null) {
+            return false;
+        }
+        AccessibilityNodeInfoRef current =
+                AccessibilityNodeInfoRef.unOwned(node);
+        try {
+            do {
+                LogUtils.log(this, Log.VERBOSE,
+                        "Considering to long click: %s",
+                        current.get().getInfo());
+                if (current.get().performAction(
+                                AccessibilityNodeInfo.ACTION_LONG_CLICK)) {
+                    return true;
+                }
+            } while (current.parent());
+        } finally {
+            current.recycle();
+        }
+        LogUtils.log(this, Log.VERBOSE, "Long click action failed");
         return false;
     }
 
@@ -651,6 +724,11 @@ class DefaultNavigationMode implements NavigationMode {
             AccessibilityNodeInfoUtils.recycleNodes(focusedNode
                     , scrollableNode);
         }
+    }
+
+    private boolean isSelfBrailled(AccessibilityNodeInfoCompat node) {
+        SelfBrailleService service = SelfBrailleService.getActiveInstance();
+        return service != null && service.contentForNode(node) != null;
     }
 
 }

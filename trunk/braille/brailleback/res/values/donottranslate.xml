@@ -21,4 +21,7 @@
         <item>@string/pref_braille_type_six_dot_label</item>
         <item>@string/pref_braille_type_eight_dot_label</item>
     </string-array>
+    <string name="pref_category_developer_key">category_developer</string>
+    <string name="pref_braille_overlay_key">overlay_enabled</string>
+    <bool name="pref_braille_overlay_default">false</bool>
 </resources>

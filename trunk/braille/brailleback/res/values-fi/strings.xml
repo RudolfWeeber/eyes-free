@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_description" msgid="3837907778560523486">"Kun BrailleBack on käytössä, laitteesi muodostaa yhteyden siihen yhdistettyyn bluetooth-pistekirjoitusnäyttöön ja näyttää ruudun sisällön pistekirjoituksena. Voit liikkua ruudulla, aktivoida kohteita ja kirjoittaa tekstiä pistekirjoitusnäytön näppäimien avulla. Saat lisätietoja painamalla välilyöntiä ja pisteitä 1, 2 ja 3 (pistekirjoituskirjain I) näytöllä muodostettuasi yhteyden."</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"Pistekirjoituslaitteiston näppäimistö"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Pistekirjoituslaitteiston näppäimistön ohjattu asennusohjelma"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Ota pistekirjoituslaitteiston näppäimistö käyttöön"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Jos haluat käyttää pistekirjoituslaitteiston näppäimistöä, sinun täytyy ottaa se käyttöön syöttötapa-asetuksissa ja valita se oletussyöttötavaksi."</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"Ohita"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Avaa syöttötapa-asetukset"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Valitse oletussyöttötapa"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Jos haluat käyttää pistekirjoituslaitteiston näppäimistöä, sinun täytyy valita se oletussyöttötavaksi."</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Avaa syöttötavan valinta"</string>
+    <string name="permlab_displayConnect" msgid="2251586694368462088">"Muodosta yhteys pistekirjoitusnäyttöön"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"Antaa sovelluksen kirjoittaa pistekirjoitusnäyttöön ja lukea näppäimistön painalluksia pistekirjoitusnäytöstä"</string>
+    <string name="type_emptygridview" msgid="4226780230155385397">"Tyhjä ruudukko"</string>
+    <string name="type_gridview" msgid="8453985146958342779">"Ruudukko"</string>
+    <string name="type_emptylistview" msgid="4497688410987085349">"Tyhjä luettelo"</string>
+    <string name="type_listview" msgid="195039477703126884">"Luettelo"</string>
+    <string name="type_emptyscrollview" msgid="8276432333933865406">"Tyhjä vieritettävä sisältö"</string>
+    <string name="type_scrollview" msgid="800452819520995482">"Vieritettävä sisältö"</string>
+    <string name="type_edittext" msgid="4305739343129651595">"Muokkauskenttä"</string>
+    <string name="type_image" msgid="3688576211222019626">"Kuva"</string>
+    <string name="type_button" msgid="3639574187835564558">"Painike"</string>
+    <string name="type_seekbar" msgid="979094491475615458">"Etsinnän hallinta"</string>
+    <string name="type_quickcontact" msgid="5224329178093450337">"Yhteydenotto"</string>
+    <string name="preferences_title" msgid="368535298674637475">"BrailleBack-asetukset"</string>
+    <string name="pref_category_device_title" msgid="8644919099122845217">"Laite"</string>
+    <string name="pref_connection_status_title" msgid="8350285056432214602">"Tila"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Näppäinmääritykset"</string>
+    <string name="pref_category_braille_title" msgid="2900211401917503360">"Pistekirjoitus"</string>
+    <string name="pref_braille_type_title" msgid="830832481671746224">"Pistekirjoitustyyppi"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Perint. brailletaulukko"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Tietokone-braille-taul."</string>
+    <string name="connstate_not_connected" msgid="3876972842771373901">"Ei yhdistetty"</string>
+    <string name="connstate_connected" msgid="7552950461156525524">"Yhdistetty"</string>
+    <string name="connstate_error" msgid="8717968034812924474">"Ei saatavilla"</string>
+    <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"Perinteinen pistekirjoitus"</string>
+    <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Tietokoneella käytettävä pistekirjoitus"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automaattinen (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automaattinen (–)"</string>
+    <string name="pref_category_developer_title" msgid="7276576143816692867">"Kehittäjäasetukset"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Näytä pistekirj. ruudulla"</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"Näppäinmääritykset"</string>
+    <string name="display_connected" msgid="2008600513914815101">"brlback käyt"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"brlback pois"</string>
+    <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack-näppäimistö on käytössä"</string>
+    <string name="tap_to_switch_ime" msgid="8521400813452643324">"Vaihda oletusnäppäimistöön napauttamalla"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – lyhennystaso <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+</resources>

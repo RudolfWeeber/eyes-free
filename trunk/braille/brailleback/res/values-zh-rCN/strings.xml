@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_description" msgid="3837907778560523486">"打开 BrailleBack 后，用户的设备将会连接到已配对的蓝牙盲文显示屏，并以盲文形式呈现屏幕内容。盲文显示屏上的键可以用来导航屏幕、激活内容及输入文字。有关详情，请在连接后按显示屏上的空格键以及点 1、2、3（盲文中的字母 I）。"</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"盲文硬件键盘"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"盲文硬件键盘向导"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"启用盲文硬件键盘"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"要使用盲文硬件键盘，用户需要在输入法设置中启用盲文硬件键盘，然后将其设置为默认输入法。"</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"跳过"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"打开输入法设置"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"设置默认输入法"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"要使用盲文硬件键盘，用户需要将其设置为默认输入法。"</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"打开输入法选择器"</string>
+    <string name="permlab_displayConnect" msgid="2251586694368462088">"连接到盲文显示屏"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"允许应用向盲文显示屏写入输出并从中读取键盘输入"</string>
+    <string name="type_emptygridview" msgid="4226780230155385397">"空网格"</string>
+    <string name="type_gridview" msgid="8453985146958342779">"网格"</string>
+    <string name="type_emptylistview" msgid="4497688410987085349">"空列表"</string>
+    <string name="type_listview" msgid="195039477703126884">"列表"</string>
+    <string name="type_emptyscrollview" msgid="8276432333933865406">"没有可滚动的内容"</string>
+    <string name="type_scrollview" msgid="800452819520995482">"可滚动的内容"</string>
+    <string name="type_edittext" msgid="4305739343129651595">"编辑框"</string>
+    <string name="type_image" msgid="3688576211222019626">"图片"</string>
+    <string name="type_button" msgid="3639574187835564558">"按钮"</string>
+    <string name="type_seekbar" msgid="979094491475615458">"搜索控件"</string>
+    <string name="type_quickcontact" msgid="5224329178093450337">"联系人"</string>
+    <string name="preferences_title" msgid="368535298674637475">"BrailleBack 偏好设置"</string>
+    <string name="pref_category_device_title" msgid="8644919099122845217">"设备"</string>
+    <string name="pref_connection_status_title" msgid="8350285056432214602">"状态"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"按键组合"</string>
+    <string name="pref_category_braille_title" msgid="2900211401917503360">"盲文"</string>
+    <string name="pref_braille_type_title" msgid="830832481671746224">"盲文类型"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"书面盲文表格"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"计算机盲文表格"</string>
+    <string name="connstate_not_connected" msgid="3876972842771373901">"未连接"</string>
+    <string name="connstate_connected" msgid="7552950461156525524">"已连接"</string>
+    <string name="connstate_error" msgid="8717968034812924474">"不可用"</string>
+    <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"书面盲文"</string>
+    <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"计算机盲文"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"自动（<xliff:g id="TABLE_NAME">%1$s</xliff:g>）"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"自动（无）"</string>
+    <string name="pref_category_developer_title" msgid="7276576143816692867">"开发者选项"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"在屏幕上显示盲文输出"</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"按键组合"</string>
+    <string name="display_connected" msgid="2008600513914815101">"BrlBack 已打开"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"BrlBack 已关闭"</string>
+    <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack 键盘已启用"</string>
+    <string name="tap_to_switch_ime" msgid="8521400813452643324">"点按切换到默认键盘"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - <xliff:g id="GRADE_NUMBER">%2$d</xliff:g> 级"</string>
+</resources>

@@ -17,7 +17,7 @@
 # This file defines the make function build-braille-drivers to  build a
 # set of modules for a list of brltty braille drivers.
 
-DRIVER_BASE_PATH := brltty/Drivers/Braille
+DRIVER_BASE_PATH := Drivers/Braille
 
 # This gets appended the name of each driver module.
 DRIVER_MODULES := $(empty)
@@ -29,8 +29,9 @@ SRC_TOP := $(LOCAL_PATH)/build/
 # Internal template to generate the code to build a driver module.
 define ev-build-braille-driver
 include $$(CLEAR_VARS)
+LOCAL_PATH := $$(BRLTTY_PATH)
 DRIVER_PATH := $$(DRIVER_BASE_PATH)/$1
-LOCAL_C_INCLUDES := $$(BRLTTY_PATH) $$(BRLTTY_PATH)/Programs
+LOCAL_C_INCLUDES := $$(BRLTTY_PATH) $$(BRLTTY_PATH)/Programs $$(WRAPPER_PATH)
 # Set by the included make file if the sources are not the standard one.
 SRC_FILES := $$(empty)
 # Clear variables that should be set by the included make file.

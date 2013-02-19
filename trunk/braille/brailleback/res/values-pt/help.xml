@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Mover para a direita"</item>
+    <item msgid="992384288929754258">"Mover para a esquerda"</item>
+    <item msgid="2311009411708911700">"Navegar para o próximo item"</item>
+    <item msgid="4868322620432152139">"Navegar para o item anterior"</item>
+    <item msgid="713256521059720189">"Navegar para a próxima linha"</item>
+    <item msgid="7111316948614107646">"Navegar para a linha anterior"</item>
+    <item msgid="1092717670413169154">"Rolar para a frente"</item>
+    <item msgid="2672802569950877806">"Rolar para trás"</item>
+    <item msgid="8530687760031648049">"Ativar o item abaixo do dedo"</item>
+    <item msgid="2965010005667399914">"Pressione por alguns instantes o item sob o dedo"</item>
+    <item msgid="7114563790387768347">"Ative o item atual"</item>
+    <item msgid="6083375034241022486">"Pressione por alguns instantes o item atual"</item>
+    <item msgid="6434332125338405390">"Insira um caractere braile"</item>
+    <item msgid="2845805874940074674">"Ative o botão Voltar"</item>
+    <item msgid="6272261186186982128">"Ative o botão Página inicial"</item>
+    <item msgid="2876656758414605716">"Abra a janela de notificações"</item>
+    <item msgid="2554673553387851889">"Abra a janela de aplicativos recentes"</item>
+    <item msgid="4863807959891911585">"Ative a tecla Enter ao editar texto"</item>
+    <item msgid="5917526604121492276">"Exclua para trás ao editar texto"</item>
+    <item msgid="6047263121281919980">"Exclua para frente ao editar texto"</item>
+    <item msgid="2622805964649872487">"Abra a ajuda do teclado do BrailleBack"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Pressione por alguns instantes <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Use as teclas de navegação para mover o foco na tela."\n"Use as teclas braille para inserir texto em uma caixa de edição."\n"Veja abaixo uma lista completa de comandos importantes compatíveis com seu dispositivo."</string>
+</resources>

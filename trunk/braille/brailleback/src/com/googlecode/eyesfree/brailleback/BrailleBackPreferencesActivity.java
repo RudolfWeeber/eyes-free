@@ -26,6 +26,7 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 
 import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.braille.display.DisplayClient;
 import com.googlecode.eyesfree.braille.translate.TableInfo;
 import com.googlecode.eyesfree.utils.LogUtils;
 
@@ -44,7 +45,7 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
     private static final TableInfoComparator TABLE_INFO_COMPARATOR =
             new TableInfoComparator();
 
-    private Display mDisplay;
+    private DisplayClient mDisplay;
     private TranslatorManager mTranslatorManager;
     private Preference mStatusPreference;
     private ListPreference mBrailleTypePreference;
@@ -80,7 +81,8 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
     @Override
     public void onResume() {
         super.onResume();
-        mDisplay = new Display(this, this);
+        mDisplay = new DisplayClient(this);
+        mDisplay.setOnConnectionStateChangeListener(this);
         mDisplay.setOnConnectionChangeProgressListener(this);
         mTranslatorManager = new TranslatorManager(this);
         mTranslatorManager.addOnTablesChangedListener(this);

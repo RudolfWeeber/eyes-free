@@ -2,6 +2,7 @@
 package com.googlecode.eyesfree.utils;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 
 import java.lang.ref.WeakReference;
@@ -35,6 +36,18 @@ public abstract class WeakReferenceHandler<T> extends Handler {
      * @param parent The handler's parent class.
      */
     public WeakReferenceHandler(T parent) {
+        mParentRef = new WeakReference<T>(parent);
+    }
+
+    /**
+     * Constructs a new {@link WeakReferenceHandler} with a reference to its
+     * parent class.
+     *
+     * @param parent The handler's parent class.
+     * @param looper The looper.
+     */
+    public WeakReferenceHandler(T parent, Looper looper) {
+        super(looper);
         mParentRef = new WeakReference<T>(parent);
     }
 

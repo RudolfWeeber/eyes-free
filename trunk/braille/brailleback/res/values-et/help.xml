@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Paremale panoraamimine"</item>
+    <item msgid="992384288929754258">"Vasakule panoraamimine"</item>
+    <item msgid="2311009411708911700">"Järgmisele üksusele liikumine"</item>
+    <item msgid="4868322620432152139">"Eelmisele üksusele liikumine"</item>
+    <item msgid="713256521059720189">"Järgmisele reale liikumine"</item>
+    <item msgid="7111316948614107646">"Eelmisele reale liikumine"</item>
+    <item msgid="1092717670413169154">"Edasi kerimine"</item>
+    <item msgid="2672802569950877806">"Tagasi kerimine"</item>
+    <item msgid="8530687760031648049">"Sõrme all oleva üksuse aktiveerimine"</item>
+    <item msgid="2965010005667399914">"Vajutage pikalt sõrme all olevat üksust"</item>
+    <item msgid="7114563790387768347">"Praeguse üksuse aktiveerimine"</item>
+    <item msgid="6083375034241022486">"Vajutage pikalt praegust üksust"</item>
+    <item msgid="6434332125338405390">"Braille\'i tähemärkide sisestamine"</item>
+    <item msgid="2845805874940074674">"Tagasinupu aktiveerimine"</item>
+    <item msgid="6272261186186982128">"Avalehenupu aktiveerimine"</item>
+    <item msgid="2876656758414605716">"Märguannete akna avamine"</item>
+    <item msgid="2554673553387851889">"Uusimate rakenduste akna avamine"</item>
+    <item msgid="4863807959891911585">"Sisestusklahvi aktiveerimine teksti muutmiseks"</item>
+    <item msgid="5917526604121492276">"Teksti muutmisel tagasisuunas kustutamine"</item>
+    <item msgid="6047263121281919980">"Teksti muutmisel ettesuunas kustutamine"</item>
+    <item msgid="2622805964649872487">"BrailleBacki klaviatuuri abi avamine"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Vajutage pikalt klahvikombinatsiooni <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Fookuse viimiseks ekraanile kasutage navigeerimisklahve."\n"Teksti sisestamiseks muutmiskasti kasutage Braille\'i klahve."\n"Allpool on loend klahvikäskudest, mida teie seade toetab."</string>
+</resources>

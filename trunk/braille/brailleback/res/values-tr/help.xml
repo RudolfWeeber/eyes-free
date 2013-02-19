@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Sağa yatay kaydır"</item>
+    <item msgid="992384288929754258">"Sola yatay kaydır"</item>
+    <item msgid="2311009411708911700">"Sonraki öğeye git"</item>
+    <item msgid="4868322620432152139">"Önceki öğeye git"</item>
+    <item msgid="713256521059720189">"Sonraki satıra git"</item>
+    <item msgid="7111316948614107646">"Önceki satıra git"</item>
+    <item msgid="1092717670413169154">"İleri kaydır"</item>
+    <item msgid="2672802569950877806">"Geri kaydır"</item>
+    <item msgid="8530687760031648049">"Parmağın altındaki öğeyi etkinleştir"</item>
+    <item msgid="2965010005667399914">"Parmağınızın altındaki öğeyi basılı tutun"</item>
+    <item msgid="7114563790387768347">"Mevcut öğeyi etkinleştirin"</item>
+    <item msgid="6083375034241022486">"Mevcut öğeyi basılı tutun"</item>
+    <item msgid="6434332125338405390">"Braille karakteri girin"</item>
+    <item msgid="2845805874940074674">"Geri düğmesini etkinleştirin"</item>
+    <item msgid="6272261186186982128">"Ana sayfa düğmesini etkinleştirin"</item>
+    <item msgid="2876656758414605716">"Bildirimler penceresini açın"</item>
+    <item msgid="2554673553387851889">"Son uygulamalar penceresini açın"</item>
+    <item msgid="4863807959891911585">"Metin düzenlerken enter tuşunu etkinleştirin"</item>
+    <item msgid="5917526604121492276">"Metin düzenlerken geriye doğru silin"</item>
+    <item msgid="6047263121281919980">"Metin düzenlerken ileriye doğru silin"</item>
+    <item msgid="2622805964649872487">"BrailleBack klavyesi yardımını açın"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"<xliff:g id="KEY_LIST">%s</xliff:g> tuşlarını basılı tutun"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Odağı ekranda taşımak için gezinme tuşlarını kullanın."\n"Bir düzenleme kutusunda metin girerken braille tuşlarını kullanın."\n"Cihazınızın desteklediği tüm tuş komutlarının listesini aşağıda bulabilirsiniz."</string>
+</resources>

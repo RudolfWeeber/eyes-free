@@ -47,25 +47,45 @@ public class WebInterfaceUtils {
     public static final int DIRECTION_BACKWARD = -1;
 
     /**
-     * HTML element argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
+     * Action argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
      * int, int)} to instruct ChromeVox to read the currently focused element
      * within the node. within the page.
      */
     public static final int ACTION_READ_CURRENT_HTML_ELEMENT = -1;
 
     /**
-     * HTML element argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
+     * Action argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
      * int, int)} to instruct ChromeVox to read the title of the page within
      * the node.
      */
     public static final int ACTION_READ_PAGE_TITLE_ELEMENT = -2;
 
     /**
-     * HTML element argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
+     * Action argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
      * int, int)} to instruct ChromeVox to stop all speech and automatic
      * actions.
      */
     public static final int ACTION_STOP_SPEECH = -3;
+
+    /**
+     * HTML element argument to use with {@link #performNavigationToHtmlElementAction(AccessibilityNodeInfoCompat,
+     * int, String)} to instruct ChromeVox to move to the next or previous page
+     * section.
+     */
+    public static final String HTML_ELEMENT_MOVE_BY_SECTION = "SECTION";
+
+    /**
+     * HTML element argument to use with {@link #performNavigationToHtmlElementAction(AccessibilityNodeInfoCompat,
+     * int, String)} to instruct ChromeVox to move to the next or previous list.
+     */
+    public static final String HTML_ELEMENT_MOVE_BY_LIST = "LIST";
+
+    /**
+     * HTML element argument to use with {@link #performNavigationToHtmlElementAction(AccessibilityNodeInfoCompat,
+     * int, String)} to instruct ChromeVox to move to the next or previous
+     * control.
+     */
+    public static final String HTML_ELEMENT_MOVE_BY_CONTROL = "CONTROL";
 
     /**
      * Sends an instruction to ChromeVox to read the specified HTML element in

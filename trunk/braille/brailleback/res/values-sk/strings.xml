@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_description" msgid="3837907778560523486">"Keď je aplikácia BrailleBack zapnutá, pripojí sa vaše zariadenie ku spárovanému hmatovému displeju a sprostredkuje obsah obrazovky v podobe Braillovho písma. Pomocou klávesov na hmatovom displeji je možné prechádzať medzi položkami na obrazovke, aktivovať ich a zadávať text. Viac informácií získate stlačením medzerníka a bodov 1, 2 a 3 (Braillov zápis písmena L) na pripojenom displeji."</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"Hardvérová klávesnica s Braillovým písmom"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Sprievodca nastavením hardvérovej klávesnice s Braillovým písmom"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Povoliť hardvérovú klávesnicu s Braillovým písmom"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Ak chcete používať hardvérovú klávesnicu s Braillovým písmom, musíte ju povoliť v nastaveniach metódy vstupu a potom ju nastaviť ako predvolenú metódu vstupu."</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"Preskočiť"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Otvoriť nastavenia metódy vstupu"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Nastaviť predvolenú metódu vstupu"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Ak chcete používať hardvérovú klávesnicu s Braillovým písmom, musíte ju nastaviť ako predvolenú metódu vstupu."</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Otvoriť výber metódy vstupu"</string>
+    <string name="permlab_displayConnect" msgid="2251586694368462088">"Pripojiť k hmatovému displeju"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"Umožňuje aplikácii zapisovať výstup na hmatový displej a čítať vstup z jeho klávesnice"</string>
+    <string name="type_emptygridview" msgid="4226780230155385397">"Prázdna mriežka"</string>
+    <string name="type_gridview" msgid="8453985146958342779">"Mriežka"</string>
+    <string name="type_emptylistview" msgid="4497688410987085349">"Prázdny zoznam"</string>
+    <string name="type_listview" msgid="195039477703126884">"Zoznam"</string>
+    <string name="type_emptyscrollview" msgid="8276432333933865406">"Prázdny posúvateľný obsah"</string>
+    <string name="type_scrollview" msgid="800452819520995482">"Posúvateľný obsah"</string>
+    <string name="type_edittext" msgid="4305739343129651595">"Pole úprav"</string>
+    <string name="type_image" msgid="3688576211222019626">"Obrázok"</string>
+    <string name="type_button" msgid="3639574187835564558">"Tlačidlo"</string>
+    <string name="type_seekbar" msgid="979094491475615458">"Ovládanie hľadania"</string>
+    <string name="type_quickcontact" msgid="5224329178093450337">"Kontakt"</string>
+    <string name="preferences_title" msgid="368535298674637475">"Predvoľby aplikácie BrailleBack"</string>
+    <string name="pref_category_device_title" msgid="8644919099122845217">"Zariadenie"</string>
+    <string name="pref_connection_status_title" msgid="8350285056432214602">"Stav"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Priradenie klávesov"</string>
+    <string name="pref_category_braille_title" msgid="2900211401917503360">"Braillovo písmo"</string>
+    <string name="pref_braille_type_title" msgid="830832481671746224">"Typ Braillovho písma"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabuľka 6-bodového písma"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Tabuľka 8-bodového písma"</string>
+    <string name="connstate_not_connected" msgid="3876972842771373901">"Nepripojené"</string>
+    <string name="connstate_connected" msgid="7552950461156525524">"Pripojené"</string>
+    <string name="connstate_error" msgid="8717968034812924474">"Nie je k dispozícii"</string>
+    <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"6-bodové Braillovo písmo"</string>
+    <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"8-bodové Braillovo písmo"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automaticky (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automaticky (žiadne)"</string>
+    <string name="pref_category_developer_title" msgid="7276576143816692867">"Možnosti vývojára"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Zob.výstup Brail.na obr."</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"Priradenie klávesov"</string>
+    <string name="display_connected" msgid="2008600513914815101">"brlback zap"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"brlback vyp"</string>
+    <string name="braille_keyboard_active" msgid="7094321134174837395">"Klávesnica aplikácie BrailleBack je aktívna"</string>
+    <string name="tap_to_switch_ime" msgid="8521400813452643324">"Klepnutím prepnete na predvolenú klávesnicu"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – úroveň <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+</resources>

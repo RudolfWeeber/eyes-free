@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="service_description" msgid="3837907778560523486">"Khi BrailleBack được bật, thiết bị của bạn sẽ kết nối với màn hình chữ nổi bluetooth được ghép nối và hiển thị nội dung màn hình bằng chữ nổi. Các phím trên màn hình chữ nổi có thể được sử dụng để điều hướng màn hình, kích hoạt mục và nhập văn bản. Để biết thêm thông tin, nhấn dấu cách và các dấu chấm 1, 2 và 3 (chữ cái l trong chữ nổi) trên màn hình của bạn khi được kết nối."</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"Bàn phím phần cứng chữ nổi"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Trình hướng dẫn bàn phím phần cứng chữ nổi"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Bật bàn phím phần cứng chữ nổi"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Để sử dụng bàn phím phần cứng chữ nổi, bạn cần bật bàn phím trong cài đặt phương thức nhập và sau đó đặt phương thức đó làm phương thức nhập mặc định."</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"Bỏ qua"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Mở cài đặt phương thức nhập"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Đặt phương thức nhập mặc định"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Để sử dụng bàn phím phần cứng chữ nổi, bạn cần đặt phương thức đó làm phương thức nhập mặc định."</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Mở bộ chọn phương thức nhập"</string>
+    <string name="permlab_displayConnect" msgid="2251586694368462088">"Kết nối với màn hình chữ nổi"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"Cho phép ứng dụng ghi đầu ra và đọc dữ liệu nhập bằng bàn phím từ màn hình chữ nổi"</string>
+    <string name="type_emptygridview" msgid="4226780230155385397">"Lưới trống"</string>
+    <string name="type_gridview" msgid="8453985146958342779">"Lưới"</string>
+    <string name="type_emptylistview" msgid="4497688410987085349">"Danh sách trống"</string>
+    <string name="type_listview" msgid="195039477703126884">"Danh sách"</string>
+    <string name="type_emptyscrollview" msgid="8276432333933865406">"Nội dung có thể cuộn trống"</string>
+    <string name="type_scrollview" msgid="800452819520995482">"Nội dung có thể cuộn"</string>
+    <string name="type_edittext" msgid="4305739343129651595">"Hộp chỉnh sửa"</string>
+    <string name="type_image" msgid="3688576211222019626">"Hình ảnh"</string>
+    <string name="type_button" msgid="3639574187835564558">"Nút"</string>
+    <string name="type_seekbar" msgid="979094491475615458">"Kiểm soát tìm kiếm"</string>
+    <string name="type_quickcontact" msgid="5224329178093450337">"Liên hệ"</string>
+    <string name="preferences_title" msgid="368535298674637475">"Tùy chọn BrailleBack"</string>
+    <string name="pref_category_device_title" msgid="8644919099122845217">"Thiết bị"</string>
+    <string name="pref_connection_status_title" msgid="8350285056432214602">"Trạng thái"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Nối kết phím"</string>
+    <string name="pref_category_braille_title" msgid="2900211401917503360">"Chữ nổi"</string>
+    <string name="pref_braille_type_title" msgid="830832481671746224">"Loại chữ nổi"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Bảng chữ nổi văn học"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Bảng chữ nổi máy tính"</string>
+    <string name="connstate_not_connected" msgid="3876972842771373901">"Chưa kết nối"</string>
+    <string name="connstate_connected" msgid="7552950461156525524">"Đã kết nối"</string>
+    <string name="connstate_error" msgid="8717968034812924474">"Không khả dụng"</string>
+    <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"Chữ nổi văn học"</string>
+    <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Chữ nổi máy tính"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Tự động (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Tự động (không có)"</string>
+    <string name="pref_category_developer_title" msgid="7276576143816692867">"Tùy chọn dành cho nhà phát triển"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Hiển thị chữ nổi đầu ra trên màn hình"</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"Nối kết phím"</string>
+    <string name="display_connected" msgid="2008600513914815101">"bật brlback"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"tắt brlback"</string>
+    <string name="braille_keyboard_active" msgid="7094321134174837395">"Bàn phím BrailleBack đang hoạt động"</string>
+    <string name="tap_to_switch_ime" msgid="8521400813452643324">"Nhấn để chuyển sang bàn phím mặc định"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - cấp <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+</resources>

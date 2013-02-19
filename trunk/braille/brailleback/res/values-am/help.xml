@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"ወደ ቀኝ ያንፏቅቁ"</item>
+    <item msgid="992384288929754258">"ወደ ግራ ያንፏቅቁ"</item>
+    <item msgid="2311009411708911700">"ወደ ቀጣዩ ንጥል ያስሱ"</item>
+    <item msgid="4868322620432152139">"ወደ ቀዳሚው ንጥል ያስሱ"</item>
+    <item msgid="713256521059720189">"ወደ ቀጣዩ መስመር ያስሱ"</item>
+    <item msgid="7111316948614107646">"ወደ ቀዳሚው ቀዳሚው ያስሱ"</item>
+    <item msgid="1092717670413169154">"ወደ ፊት ያሸብልሉ"</item>
+    <item msgid="2672802569950877806">"ወደ ኋላ ያሸብልሉ"</item>
+    <item msgid="8530687760031648049">"በጣቱ ስር ያለውን ንጥል ያግብሩ"</item>
+    <item msgid="2965010005667399914">"ከጣቱ ስር ያለውን ንጥል ለረጅም ጊዜ ይጫኑት"</item>
+    <item msgid="7114563790387768347">"የአሁኑን ንጥል ያግብሩ"</item>
+    <item msgid="6083375034241022486">"የአሁኑን ንጥል ለረጅም ጊዜ ይጫኑት"</item>
+    <item msgid="6434332125338405390">"የብሬይል ቁምፊ ያስገቡ"</item>
+    <item msgid="2845805874940074674">"የተመለስ አዝራሩን ያግብሩ"</item>
+    <item msgid="6272261186186982128">"የመነሻ አዝራሩን ያግብሩ"</item>
+    <item msgid="2876656758414605716">"የማሳወቂያዎች መስኮቱን ይክፈቱ"</item>
+    <item msgid="2554673553387851889">"የቅርብ ጊዜ መተግበሪያዎች መስኮቱን ይክፈቱ"</item>
+    <item msgid="4863807959891911585">"ጽሑፍ ሲያርቱዑ የenter ቁልፉን ያግብሩ"</item>
+    <item msgid="5917526604121492276">"ጽሑፍ ሲያርትዑ ወደ ኋላ ይሰርዙ"</item>
+    <item msgid="6047263121281919980">"ጽሑፍ ሲያርትዑ ወደ ፊት ይሰርዙ"</item>
+    <item msgid="2622805964649872487">"የBrailleBack ቁልፍ ሰሌዳ እገዛን ይክፈቱ"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"<xliff:g id="KEY_LIST">%s</xliff:g>ን ለረምጅ ጊዜ ይጫኑት"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"ማያ ገጹ ላይ ያለውን ትኩረት ለመውሰድ የማሰሺያ ቁልፎቹን ይጠቀሙ።"\n"ጽሑፍ በአርትዖት ሳጥኑ ውስጥ ለማስገባት የብሬይል ቁልፎቹን ይጠቀሙ።"\n"ከታች በመሣሪያዎ የሚደገፉ የሙሉ ቁልፍ ትዕዛዞች ዝርዝር ነው።"</string>
+</resources>

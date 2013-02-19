@@ -29,6 +29,7 @@ import android.util.SparseIntArray;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.braille.display.DisplayClient;
 import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
 import com.googlecode.eyesfree.braille.translate.TranslationResult;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
@@ -236,8 +237,9 @@ public class DisplayManager
      * results.  Otherwise, we fall back on the position map, whic is also
      * used for keeping the pan position.
      */
-    private int mCursorPosition;
-    private TranslationResult mTranslationResult;
+    private int mCursorPosition = 0;
+    private TranslationResult mTranslationResult = new TranslationResult(
+        new byte[0], new int[0], new int[0], 0);
     /** Display content without overlays for cursors, focus etc. */
     private byte[] mBrailleContent = new byte[0];
     /**
@@ -246,8 +248,8 @@ public class DisplayManager
     private byte[] mOverlaidBrailleContent = mBrailleContent;
     private boolean mOverlaysOn;
     // Position in cells of the leftmost cell of the dipslay.
-    private int mDisplayPosition;
-    private Content mCurrentContent;
+    private int mDisplayPosition = 0;
+    private Content mCurrentContent = new Content("");
     /**
      * An array where the keys are translated positions that should always
      * correspond to the left-most position on the braille display if at all
@@ -255,6 +257,14 @@ public class DisplayManager
      * are not used and currently set to 1.
     */
     private final SparseIntArray mSplitPoints = new SparseIntArray();
+
+    // Displayed content, already trimmed based on the display position.
+    // Updated in updateDisplayedContent() and used in refresh().
+    private byte[] mDisplayedBraille = new byte[0];
+    private byte[] mDisplayedOverlaidBraille = new byte[0];
+    private CharSequence mDisplayedText = "";
+    private int[] mDisplayedBrailleToTextPositions = new int[0];
+    private boolean mBlinkNeeded = false;
 
     /**
      * Creates an instance of this class and starts the internal thread to
@@ -284,7 +294,10 @@ public class DisplayManager
         mHandlerThread = new HandlerThread("DisplayManager") {
             @Override
             public void onLooperPrepared() {
-                mDisplay = new Display(mContext, DisplayManager.this);
+                mDisplay = new OverlayDisplay(mContext,
+                        new DisplayClient(mContext));
+                mDisplay.setOnConnectionStateChangeListener(
+                        DisplayManager.this);
                 mDisplay.setOnInputEventListener(DisplayManager.this);
             }
         };
@@ -391,7 +404,7 @@ public class DisplayManager
     public void onConnectionStateChanged(int state) {
         if (state == Display.STATE_CONNECTED) {
             mConnected = true;
-            refresh();
+            updateDisplayedContent();
         } else {
             mConnected = false;
         }
@@ -455,7 +468,7 @@ public class DisplayManager
         mDisplayPosition = Math.max(
             findLeftSplitLimit(),
             mDisplayPosition - getNumTextCells());
-        refresh();
+        updateDisplayedContent();
     }
 
     private void panRight() {
@@ -466,7 +479,7 @@ public class DisplayManager
             return;
         }
         mDisplayPosition = newPosition;
-        refresh();
+        updateDisplayedContent();
     }
 
     private class DisplayHandler extends Handler {
@@ -562,7 +575,7 @@ public class DisplayManager
             }
             markCursor();
             clampDisplayPosition();
-            refresh();
+            updateDisplayedContent();
             if (oldContent != null) {
                 // Have the callback handler recycle the old content so that
                 // the thread in which the callbck handler is running is the
@@ -593,7 +606,7 @@ public class DisplayManager
             markCursor();
             clampDisplayPosition();
             cancelPulse();
-            refresh();
+            updateDisplayedContent();
         }
 
         private void handlePulse() {
@@ -740,20 +753,63 @@ public class DisplayManager
         }
     }
 
+    private void updateDisplayedContent() {
+        if (!mConnected || mCurrentContent == null) {
+            return;
+        }
+        int rightEdge = Math.min(
+            findRightSplitLimit(),
+            mDisplayPosition + getNumTextCells());
+
+        // Compute equivalent text and mapping.
+        int[] brailleToTextPositions =
+                mTranslationResult.getBrailleToTextPositions();
+        int textLeft = mDisplayPosition >= brailleToTextPositions.length
+                ? 0
+                : brailleToTextPositions[mDisplayPosition];
+        int textRight = rightEdge >= brailleToTextPositions.length
+                ? mCurrentContent.mText.length()
+                : brailleToTextPositions[rightEdge];
+        StringBuilder text = new StringBuilder(
+                mCurrentContent.mText.subSequence(textLeft, textRight));
+        int[] trimmedBrailleToTextPositions =
+                new int[rightEdge - mDisplayPosition];
+        for (int i = 0; i < trimmedBrailleToTextPositions.length; i++) {
+            if (mDisplayPosition + i < brailleToTextPositions.length) {
+                trimmedBrailleToTextPositions[i] =
+                        brailleToTextPositions[mDisplayPosition + i] - textLeft;
+            } else {
+                trimmedBrailleToTextPositions[i] = text.length();
+                text.append(' ');
+            }
+        }
+
+        // Store all data needed by refresh().
+        mDisplayedBraille = Arrays.copyOfRange(mBrailleContent,
+                mDisplayPosition, rightEdge);
+        if (mBrailleContent != mOverlaidBrailleContent) {
+            mDisplayedOverlaidBraille = Arrays.copyOfRange(
+                    mOverlaidBrailleContent, mDisplayPosition, rightEdge);
+        } else {
+            mDisplayedOverlaidBraille = mDisplayedBraille;
+        }
+        mDisplayedText = text.toString();
+        mDisplayedBrailleToTextPositions = trimmedBrailleToTextPositions;
+        mBlinkNeeded = blinkNeeded(rightEdge);
+
+        refresh();
+    }
+
     private void refresh() {
         if (!mConnected) {
             return;
         }
-        byte[] content = mOverlaysOn
-                ? mOverlaidBrailleContent
-                : mBrailleContent;
-        int rightEdge = Math.min(
-            findRightSplitLimit(),
-            mDisplayPosition + getNumTextCells());
-        byte[] toDisplay = Arrays.copyOfRange(content,
-                mDisplayPosition, rightEdge);
-        mDisplay.displayDots(toDisplay);
-        if (blinkNeeded(rightEdge)) {
+        byte[] toDisplay = mOverlaysOn
+                ? mDisplayedOverlaidBraille
+                : mDisplayedBraille;
+        mDisplay.displayDots(toDisplay, mDisplayedText,
+                mDisplayedBrailleToTextPositions);
+        if (mBlinkNeeded) {
             mDisplayHandler.schedulePulse();
         } else {
             mDisplayHandler.cancelPulse();

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string-array name="help_commandDescriptions">
+    <item msgid="618606498966330378">"Sorot ke kanan"</item>
+    <item msgid="992384288929754258">"Sorot ke kiri"</item>
+    <item msgid="2311009411708911700">"Navigasi ke item seterusnya"</item>
+    <item msgid="4868322620432152139">"Navigasi ke item sebelumnya"</item>
+    <item msgid="713256521059720189">"Navigasi ke baris seterusnya"</item>
+    <item msgid="7111316948614107646">"Navigasi ke baris sebelumnya"</item>
+    <item msgid="1092717670413169154">"Tatal ke hadapan"</item>
+    <item msgid="2672802569950877806">"Tatal ke belakang"</item>
+    <item msgid="8530687760031648049">"Aktifkan item di bawah jari"</item>
+    <item msgid="2965010005667399914">"Tekan lama-lama item di bawah jari"</item>
+    <item msgid="7114563790387768347">"Aktifkan item semasa"</item>
+    <item msgid="6083375034241022486">"Tekan lama-lama item semasa"</item>
+    <item msgid="6434332125338405390">"Masukkan aksara braille"</item>
+    <item msgid="2845805874940074674">"Aktifkan butang kembali"</item>
+    <item msgid="6272261186186982128">"Aktifkan butang laman utama"</item>
+    <item msgid="2876656758414605716">"Buka tetingkap pemberitahuan"</item>
+    <item msgid="2554673553387851889">"Buka tetingkap apl terkini"</item>
+    <item msgid="4863807959891911585">"Aktifkan kekunci enter apabila mengedit teks"</item>
+    <item msgid="5917526604121492276">"Padam ke belakang apabila mengedit teks"</item>
+    <item msgid="6047263121281919980">"Padam ke hadapan apabila mengedit teks"</item>
+    <item msgid="2622805964649872487">"Buka bantuan papan kekunci BrailleBack"</item>
+  </string-array>
+    <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
+    <string name="help_longPressTemplate" msgid="5028857601567358274">"Tekan lama-lama <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Gunakan kekunci navigasi untuk menggerakkan fokus pada skrin. "\n"Gunakan kekunci braille untuk memasukkan teks ke dalam kotak pengeditan. "\n"Di bawah terdapat senarai penuh arahan kekunci yang disokong oleh peranti anda."</string>
+</resources>

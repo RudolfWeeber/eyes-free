@@ -193,6 +193,15 @@ public class DriverThread {
         return false;
     }
 
+    /**
+     * Called from the command logic in the driver to have the driver thread
+     * woken up to read another command after {@code delayMillis}
+     * milliseconds.
+     */
+    public void readDelayed(long delayMillis) {
+        mHandler.sendEmptyMessageDelayed(MSG_READ, delayMillis);
+    }
+        
     private class DriverHandler extends Handler {
         public DriverHandler(Looper looper) {
             super(looper);
