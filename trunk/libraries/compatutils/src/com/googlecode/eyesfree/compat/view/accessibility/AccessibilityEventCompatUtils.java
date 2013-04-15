@@ -34,6 +34,8 @@ public class AccessibilityEventCompatUtils {
             CLASS_AccessibilityRecord, "getToIndex");
     private static final Method METHOD_getMovementGranularity = CompatUtils.getMethod(
             CLASS_AccessibilityEvent, "getMovementGranularity");
+    private static final Method METHOD_getAction = CompatUtils.getMethod(
+            CLASS_AccessibilityEvent, "getAction");
 
     private AccessibilityEventCompatUtils() {
         // This class is non-instantiable.
@@ -78,5 +80,14 @@ public class AccessibilityEventCompatUtils {
      */
     public static int getMovementGranularity(AccessibilityEvent event) {
         return (Integer) CompatUtils.invoke(event, -1, METHOD_getMovementGranularity);
+    }
+
+    /**
+     * Gets the performed action that triggered this event.
+     *
+     * @return The action.
+     */
+    public static int getAction(AccessibilityEvent event) {
+        return (Integer) CompatUtils.invoke(event, -1, METHOD_getAction);
     }
 }

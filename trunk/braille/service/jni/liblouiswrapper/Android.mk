@@ -24,6 +24,7 @@ LIBLOUIS_PATH := $(WRAPPER_PATH)/liblouis
 include $(CLEAR_VARS)
 
 LOCAL_PATH := $(WRAPPER_PATH)
+LOCAL_LDFLAGS := $(LIBLOUIS_LDFLAGS)
 LOCAL_LDLIBS := -llog -landroid
 LOCAL_MODULE := louiswrap
 LOCAL_SRC_FILES := LibLouisWrapper.c

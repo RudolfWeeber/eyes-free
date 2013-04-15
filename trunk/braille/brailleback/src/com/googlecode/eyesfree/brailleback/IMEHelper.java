@@ -16,7 +16,10 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,13 +29,9 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.InputMethodManager;
-
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.List;
 
@@ -82,13 +81,6 @@ public class IMEHelper {
      * the item for the Braille IME.
      */
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        // Since the IME is only temporarily overriding the current
-        // navigation mode, it won't get this call from the mode switcher.
-        // Invoke it here instead so it can keep track of focus.
-        BrailleIME ime = BrailleIME.getActiveInstance();
-        if (ime != null) {
-            ime.onObserveAccessibilityEvent(event);
-        }
         if (mWaitingForImePicker) {
             checkIMEPicker(event);
         }
@@ -128,14 +120,22 @@ public class IMEHelper {
      */
     public static boolean isInputMethodEnabled(Context context,
             Class<?> IMEClass) {
-        final String targetIMEPackage = IMEClass.getPackage().getName();
-        final String targetIMEClass = IMEClass.getSimpleName();
+        final ComponentName imeComponentName =
+            new ComponentName(context, IMEClass);
         final String enabledIMEIds = Settings.Secure.getString(
             context.getContentResolver(),
             Settings.Secure.ENABLED_INPUT_METHODS);
+        if (enabledIMEIds == null) {
+            return false;
+        }
 
-        return enabledIMEIds != null && enabledIMEIds.contains(targetIMEPackage)
-                && enabledIMEIds.contains(targetIMEClass);
+        for (String enabledIMEId : enabledIMEIds.split(":")) {
+            if (imeComponentName.equals(ComponentName.unflattenFromString(
+                            enabledIMEId))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -144,14 +144,14 @@ public class IMEHelper {
      */
     public static boolean isInputMethodDefault(Context context,
             Class<?> IMEClass) {
-        final String targetIMEPackage = IMEClass.getPackage().getName();
-        final String targetIMEClass = IMEClass.getSimpleName();
+        final ComponentName imeComponentName =
+            new ComponentName(context, IMEClass);
         final String defaultIMEId = Settings.Secure.getString(
             context.getContentResolver(),
             Settings.Secure.DEFAULT_INPUT_METHOD);
 
-        return defaultIMEId != null && defaultIMEId.contains(targetIMEPackage)
-                && defaultIMEId.contains(targetIMEClass);
+        return defaultIMEId != null && imeComponentName.equals(
+                ComponentName.unflattenFromString(defaultIMEId));
     }
 
     private void tryIMESwitch() {

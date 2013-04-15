@@ -18,6 +18,9 @@
 
 package com.googlecode.eyesfree.braille.service.display;
 
+import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -25,9 +28,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
-
-import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -137,7 +137,7 @@ public class DriverThread {
      * driver to read more input.  This can be called from any thread.
      * The first {@code size} {@code bytes} are added.
      */
-    public void addReadOperation(byte[] bytes, int size) {
+    public void addReadOperation(byte[] bytes, int size) throws IOException {
         mBrlttyWrapper.addBytesFromDevice(bytes, size);
         mHandler.sendEmptyMessage(MSG_READ);
     }

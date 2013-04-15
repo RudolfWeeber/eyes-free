@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- no translation found for service_description (3837907778560523486) -->
-    <skip />
+    <string name="service_description" msgid="3837907778560523486">"開啟 BrailleBack 時，系統會將您的裝置連接到已配對的藍牙點字顯示器，並以點字顯示螢幕內容。您可以使用點字顯示器上的按鍵，來瀏覽螢幕、啟用項目及輸入文字。如需詳細資訊，請將裝置連接到點字顯示器後，按住點字顯示器上的空格鍵，然後同時按下第一、第二和第三點 (即英文字母「l」的點字按鍵組合)。"</string>
     <string name="braille_ime_name" msgid="819430885692057322">"實體點字鍵盤"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"實體點字鍵盤精靈"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"啟用實體點字鍵盤"</string>
@@ -43,10 +42,8 @@
     <string name="pref_category_developer_title" msgid="7276576143816692867">"開發人員選項"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"在螢幕上顯示點字輸出"</string>
     <string name="key_bindings_title" msgid="5482900913343271532">"按鍵繫結"</string>
-    <!-- no translation found for display_connected (2008600513914815101) -->
-    <skip />
-    <!-- no translation found for shutting_down (1303701310644298807) -->
-    <skip />
+    <string name="display_connected" msgid="2008600513914815101">"BrlBack 開啟"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"BrlBack 關閉"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"已啟用 BrailleBack 鍵盤"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"輕觸即可切換預設鍵盤"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - <xliff:g id="GRADE_NUMBER">%2$d</xliff:g> 級點字"</string>

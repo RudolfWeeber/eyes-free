@@ -16,6 +16,13 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.brailleback.rule.BrailleRule;
+import com.googlecode.eyesfree.brailleback.rule.BrailleRuleRepository;
+import com.googlecode.eyesfree.brailleback.utils.StringUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoRef;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.content.Context;
 import android.graphics.Rect;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
@@ -24,13 +31,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.googlecode.eyesfree.brailleback.rule.BrailleRule;
-import com.googlecode.eyesfree.brailleback.rule.BrailleRuleRepository;
-import com.googlecode.eyesfree.brailleback.utils.StringUtils;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoRef;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
-import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.ArrayList;
 
@@ -46,11 +46,14 @@ public class NodeBrailler {
     private static final int HEIGHT_DIFF_THRESHOLD = 4;
     private final Context mContext;
     private final BrailleRuleRepository mRuleRepository;
+    private final SelfBrailleManager mSelfBrailleManager;
 
     public NodeBrailler(Context context,
-            BrailleRuleRepository ruleRepository) {
+            BrailleRuleRepository ruleRepository,
+            SelfBrailleManager selfBrailleManager) {
         mContext = context;
         mRuleRepository = ruleRepository;
+        mSelfBrailleManager = selfBrailleManager;
     }
 
     /**
@@ -61,7 +64,8 @@ public class NodeBrailler {
      */
     public DisplayManager.Content brailleNode(
         AccessibilityNodeInfoCompat node) {
-        DisplayManager.Content content = selfBrailleContent(node);
+        DisplayManager.Content content =
+            mSelfBrailleManager.contentForNode(node);
         if (content == null) {
             ArrayList<AccessibilityNodeInfoCompat> toFormat =
                     new ArrayList<AccessibilityNodeInfoCompat>();
@@ -263,14 +267,5 @@ public class NodeBrailler {
     private boolean includesChildren(AccessibilityNodeInfoCompat node) {
         BrailleRule rule = mRuleRepository.find(node);
         return rule.includeChildren(node, mContext);
-    }
-
-    private DisplayManager.Content selfBrailleContent(
-        AccessibilityNodeInfoCompat node) {
-        SelfBrailleService service = SelfBrailleService.getActiveInstance();
-        if (service == null) {
-            return null;
-        }
-        return service.contentForNode(node);
     }
 }

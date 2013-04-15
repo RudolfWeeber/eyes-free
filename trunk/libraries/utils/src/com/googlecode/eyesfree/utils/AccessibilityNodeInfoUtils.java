@@ -23,6 +23,8 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.googlecode.eyesfree.compat.CompatUtils;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -39,6 +41,10 @@ import java.util.LinkedList;
 public class AccessibilityNodeInfoUtils {
     /** Whether isVisibleToUser() is supported by the current SDK. */
     private static final boolean SUPPORTS_VISIBILITY = (Build.VERSION.SDK_INT >= 16);
+
+    /** Class extended by Samsung's TouchWiz implementation of ListView. */
+    private static final Class<?> CLASS_TOUCHWIZ_TWADAPTERVIEW = CompatUtils.getClass(
+            "com.sec.android.touchwiz.widget.twadapterview");
 
     private AccessibilityNodeInfoUtils() {
         // This class is not instantiable.
@@ -454,7 +460,8 @@ public class AccessibilityNodeInfoUtils {
             // whether the parent is scrollable OR is a focusable container that
             // should not block its children from receiving focus.
             if (nodeMatchesAnyClassByType(context, parent, android.widget.AdapterView.class,
-                    android.widget.ScrollView.class, android.widget.HorizontalScrollView.class)
+                    android.widget.ScrollView.class, android.widget.HorizontalScrollView.class,
+                    CLASS_TOUCHWIZ_TWADAPTERVIEW)
                     && !nodeMatchesAnyClassByType(context, parent, android.widget.Spinner.class)) {
                 return true;
             }
@@ -680,7 +687,7 @@ public class AccessibilityNodeInfoUtils {
     /**
      * Returns the result of applying a filter using breadth-first traversal.
      *
-     * @param context The activity context.
+     * @param context The parent context.
      * @param node The root node to traverse from.
      * @param filter The filter to satisfy.
      * @return The first node reached via BFS traversal that satisfies the
@@ -718,6 +725,35 @@ public class AccessibilityNodeInfoUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Performs in-order traversal from a given node in a particular direction
+     * until a node matching the specified filter is reached.
+     *
+     * @param context The parent context.
+     * @param root The root node to traverse from.
+     * @param filter The filter to satisfy.
+     * @return The first node reached via in-order traversal that satisfies the
+     *         filter.
+     */
+    public static AccessibilityNodeInfoCompat searchFromInOrderTraversal(
+            Context context, AccessibilityNodeInfoCompat root, NodeFilter filter, int direction) {
+        AccessibilityNodeInfoCompat currentNode = NodeFocusFinder.focusSearch(root, direction);
+
+        final HashSet<AccessibilityNodeInfoCompat> seenNodes =
+                new HashSet<AccessibilityNodeInfoCompat>();
+
+        while ((currentNode != null) && !seenNodes.contains(currentNode)
+                && !filter.accept(context, currentNode)) {
+            seenNodes.add(currentNode);
+            currentNode = NodeFocusFinder.focusSearch(currentNode, direction);
+        }
+
+        // Recycle all the seen nodes.
+        AccessibilityNodeInfoUtils.recycleNodes(seenNodes);
+
+        return currentNode;
     }
 
     /**
@@ -807,7 +843,11 @@ public class AccessibilityNodeInfoUtils {
         }
     };
 
-    private static final NodeFilter FILTER_SHOULD_FOCUS = new NodeFilter() {
+    /**
+     * Filter for items that should receive accessibility focus. Equivalent to
+     * calling {@link #shouldFocusNode(Context, AccessibilityNodeInfoCompat)}.
+     */
+    public static final NodeFilter FILTER_SHOULD_FOCUS = new NodeFilter() {
         @Override
         public boolean accept(Context context, AccessibilityNodeInfoCompat node) {
             return shouldFocusNode(context, node);

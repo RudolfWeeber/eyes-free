@@ -16,16 +16,16 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
+import com.googlecode.eyesfree.braille.translate.TableInfo;
+import com.googlecode.eyesfree.braille.translate.TranslatorClient;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
-import com.googlecode.eyesfree.braille.translate.TableInfo;
-import com.googlecode.eyesfree.braille.translate.TranslatorClient;
-import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

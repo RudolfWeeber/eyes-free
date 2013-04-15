@@ -16,7 +16,13 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import java.util.Map;
+import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
+import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.braille.display.DisplayClient;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,18 +36,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
-import com.googlecode.eyesfree.braille.display.Display;
-import com.googlecode.eyesfree.braille.display.DisplayClient;
-import com.googlecode.eyesfree.utils.LogUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Shows key bindings for the currently connected Braille display.

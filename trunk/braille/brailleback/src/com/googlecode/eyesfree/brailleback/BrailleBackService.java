@@ -16,6 +16,10 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Intent;
@@ -26,10 +30,6 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.braille.display.Display;
-import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
  * An accessibility service that provides feedback through a braille
@@ -44,9 +44,6 @@ public class BrailleBackService
     /** Start the service, initializing a few components. */
     private static final int WHAT_START = 2;
 
-    /** Shut down the service. */
-    private static final int WHAT_SHUTDOWN = 3;
-
     // Braille dot bit pattern constants.
     public static final int DOT1 = 0x01;
     public static final int DOT2 = 0x02;
@@ -59,21 +56,17 @@ public class BrailleBackService
 
     private static BrailleBackService sInstance;
 
-    /*package*/ FeedbackManager mFeedbackManager;
-
-    /*package*/ TranslatorManager mTranslatorManager;
-
-    /** Braille display manager. */
-    /*package*/ DisplayManager mDisplayManager;
-
+    private FeedbackManager mFeedbackManager;
+    private TranslatorManager mTranslatorManager;
+    private DisplayManager mDisplayManager;
+    private SelfBrailleManager mSelfBrailleManager;
     private FocusTracker mFocusTracker;
-
     private IMEHelper mIMEHelper;
+    private NavigationMode mNavigationMode;
+    private ModeSwitcher mModeSwitcher;
 
     /** Set if the infrastructure is initialized. */
     private boolean isInfrastructureInitialized;
-
-    private ModeSwitcher mModeSwitcher;
 
     /**
      * Dot combination for switching navigation mode.
@@ -90,21 +83,20 @@ public class BrailleBackService
                     updateServiceInfo();
                     initializeDependencies();
                     return;
-                case WHAT_SHUTDOWN:
-                    shutdownDependencies();
-                    return;
             }
         }
     };
 
     @Override
     public void onConnectionStateChanged(int state) {
-        if (state == Display.STATE_NOT_CONNECTED) {
-            mFeedbackManager.emitFeedback(
-                FeedbackManager.TYPE_DISPLAY_DISCONNECTED);
-        } else if (state == Display.STATE_CONNECTED) {
-            mFeedbackManager.emitFeedback(
-                FeedbackManager.TYPE_DISPLAY_CONNECTED);
+        if (!mDisplayManager.isSimulatedDisplay()) {
+            if (state == Display.STATE_NOT_CONNECTED) {
+                mFeedbackManager.emitFeedback(
+                    FeedbackManager.TYPE_DISPLAY_DISCONNECTED);
+            } else if (state == Display.STATE_CONNECTED) {
+                mFeedbackManager.emitFeedback(
+                    FeedbackManager.TYPE_DISPLAY_CONNECTED);
+            }
         }
         if (mFocusTracker != null) {
             mFocusTracker.onConnectionStateChanged(state);
@@ -114,7 +106,7 @@ public class BrailleBackService
     @Override
     public void onMappedInputEvent(BrailleInputEvent event,
             DisplayManager.Content content) {
-        if (mModeSwitcher == null) {
+        if (mNavigationMode == null) {
             return;
         }
         // Global commands can't be overriden.
@@ -127,7 +119,7 @@ public class BrailleBackService
             mModeSwitcher.switchMode();
             return;
         }
-        if (mModeSwitcher.onMappedInputEvent(event, content)) {
+        if (mNavigationMode.onMappedInputEvent(event, content)) {
             return;
         }
         if (mIMEHelper.onInputEvent(event)) {
@@ -167,8 +159,8 @@ public class BrailleBackService
 
     @Override
     public void onPanLeftOverflow(DisplayManager.Content content) {
-        if (mModeSwitcher != null
-                && !mModeSwitcher.onPanLeftOverflow(content)) {
+        if (mNavigationMode != null
+                && !mNavigationMode.onPanLeftOverflow(content)) {
             mFeedbackManager.emitFeedback(
                 FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
         }
@@ -176,8 +168,8 @@ public class BrailleBackService
 
     @Override
     public void onPanRightOverflow(DisplayManager.Content content) {
-        if (mModeSwitcher != null
-                && !mModeSwitcher.onPanRightOverflow(content)) {
+        if (mNavigationMode != null
+                && !mNavigationMode.onPanRightOverflow(content)) {
             mFeedbackManager.emitFeedback(
                 FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
         }
@@ -208,11 +200,11 @@ public class BrailleBackService
         if (mDisplayManager != null) {
             mDisplayManager.setContent(
                 new DisplayManager.Content(getString(R.string.shutting_down)));
-            mHandler.sendEmptyMessage(WHAT_SHUTDOWN);
 
             // We are not in an initialized state anymore.
             isInfrastructureInitialized = false;
         }
+        shutdownDependencies();
     }
 
     @Override
@@ -222,8 +214,9 @@ public class BrailleBackService
         if (mIMEHelper != null) {
             mIMEHelper.onAccessibilityEvent(event);
         }
-        if (mModeSwitcher != null) {
-            mModeSwitcher.onAccessibilityEvent(event);
+        if (mNavigationMode != null) {
+            mNavigationMode.onObserveAccessibilityEvent(event);
+            mNavigationMode.onAccessibilityEvent(event);
         }
     }
 
@@ -239,23 +232,12 @@ public class BrailleBackService
         }
     }
 
-    public void imeOpened(BrailleIME ime) {
-        if (mModeSwitcher != null) {
-            mModeSwitcher.overrideMode(ime);
-        }
-    }
-
-    public void imeClosed() {
-        if (mModeSwitcher != null) {
-            mModeSwitcher.overrideMode(null);
-        }
-    }
-
     private void initializeDependencies() {
         mFeedbackManager = new FeedbackManager(this);
         mTranslatorManager = new TranslatorManager(this);
+        mSelfBrailleManager = new SelfBrailleManager();
         initializeDisplayManager();
-        initializeModeSwitcher();
+        initializeNavigationMode();
         mIMEHelper = new IMEHelper(this);
         mFocusTracker = new FocusTracker(this);
         mFocusTracker.register();
@@ -277,13 +259,23 @@ public class BrailleBackService
             new DisplayManager.Content(getString(R.string.display_connected)));
     }
 
-    private void initializeModeSwitcher() {
+    private void initializeNavigationMode() {
         mModeSwitcher = new ModeSwitcher(
-            new DefaultNavigationMode(mDisplayManager, this, mFeedbackManager),
+            new DefaultNavigationMode(
+                mDisplayManager,
+                this,
+                mFeedbackManager,
+                mSelfBrailleManager),
             new TreeDebugNavigationMode(
                 mDisplayManager,
                 mFeedbackManager,
                 this));
+        IMENavigationMode imeNavigationMode = new IMENavigationMode(
+                mModeSwitcher, this, mDisplayManager, mFeedbackManager,
+                mSelfBrailleManager, mTranslatorManager);
+        BrailleIME.setSingletonHost(imeNavigationMode);
+        mNavigationMode = imeNavigationMode;
+        mNavigationMode.onActivate();
     }
 
     private void shutdownDependencies() {
@@ -305,6 +297,7 @@ public class BrailleBackService
             mFocusTracker.unregister();
             mFocusTracker = null;
         }
+        BrailleIME.setSingletonHost(null);
     }
 
     public boolean runHelp() {
@@ -329,6 +322,6 @@ public class BrailleBackService
     public void invalidateNode(AccessibilityNodeInfo node) {
         AccessibilityNodeInfoCompat wrapped =
                 new AccessibilityNodeInfoCompat(node);
-        mModeSwitcher.onInvalidateAccessibilityNode(wrapped);
+        mNavigationMode.onInvalidateAccessibilityNode(wrapped);
     }
 }

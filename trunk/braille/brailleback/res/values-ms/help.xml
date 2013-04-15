@@ -20,8 +20,8 @@
     <item msgid="2876656758414605716">"Buka tetingkap pemberitahuan"</item>
     <item msgid="2554673553387851889">"Buka tetingkap apl terkini"</item>
     <item msgid="4863807959891911585">"Aktifkan kekunci enter apabila mengedit teks"</item>
-    <item msgid="5917526604121492276">"Padam ke belakang apabila mengedit teks"</item>
-    <item msgid="6047263121281919980">"Padam ke hadapan apabila mengedit teks"</item>
+    <item msgid="5917526604121492276">"Padamkan ke belakang apabila mengedit teks"</item>
+    <item msgid="6047263121281919980">"Padamkan ke hadapan apabila mengedit teks"</item>
     <item msgid="2622805964649872487">"Buka bantuan papan kekunci BrailleBack"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>

@@ -18,10 +18,10 @@
     <item msgid="2845805874940074674">"Aktiveer die terugknoppie"</item>
     <item msgid="6272261186186982128">"Aktiveer die tuisknoppie"</item>
     <item msgid="2876656758414605716">"Maak die kennisgewings-venster oop"</item>
-    <item msgid="2554673553387851889">"Maak die onlangse programme-venster oop"</item>
+    <item msgid="2554673553387851889">"Maak die onlangseprogramme-venster oop"</item>
     <item msgid="4863807959891911585">"Aktiveer die invoersleutel wanneer teks gewysig word"</item>
-    <item msgid="5917526604121492276">"Vee agteruit uit wanneer teks gewysig word"</item>
-    <item msgid="6047263121281919980">"Vee vorentoe uit wanneer teks gewysig word"</item>
+    <item msgid="5917526604121492276">"Vee agteruit uit wanneer teks geredigeer word"</item>
+    <item msgid="6047263121281919980">"Vee vorentoe uit wanneer teks geredigeer word"</item>
     <item msgid="2622805964649872487">"Maak die BrailleBack-sleutelbordhulp oop"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>

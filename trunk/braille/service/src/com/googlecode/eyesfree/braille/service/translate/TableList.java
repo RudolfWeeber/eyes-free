@@ -18,14 +18,14 @@
 
 package com.googlecode.eyesfree.braille.service.translate;
 
+import com.googlecode.eyesfree.braille.service.BuildConfig;
+import com.googlecode.eyesfree.braille.service.R;
+import com.googlecode.eyesfree.braille.translate.TableInfo;
+
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.googlecode.eyesfree.braille.service.BuildConfig;
-import com.googlecode.eyesfree.braille.service.R;
-import com.googlecode.eyesfree.braille.translate.TableInfo;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

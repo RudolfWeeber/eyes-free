@@ -2,14 +2,14 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_description" msgid="3837907778560523486">"Kad funkcija BrailleBack ir ieslēgta, ierīcē tiek izveidots savienojums pārī ar Bluetooth Braila displeju un ekrāna saturs tiek attēlots Braila rakstā. Braila displejā esošos taustiņus var izmantot navigācijai ekrānā, vienumu aktivizēšanai un teksta ievadei. Lai iegūtu plašāku informāciju, kad ir izveidots savienojums, displejā nospiediet atstarpes taustiņu un 1., 2. un 3. punktu (burtu “l” Braila rakstā)."</string>
-    <string name="braille_ime_name" msgid="819430885692057322">"Braila aparatūras tastatūra"</string>
-    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Braila aparatūras tastatūras vednis"</string>
-    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Braila aparatūras tastatūras iespējošana"</string>
-    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Lai izmantotu Braila aparatūras tastatūru, iespējojiet to ievades metodes iestatījumos un pēc tam iestatiet to kā noklusējuma ievades metodi."</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"Braila fiziskā tastatūra"</string>
+    <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Braila fiziskās tastatūras vednis"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Braila fiziskās tastatūras iespējošana"</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Lai izmantotu Braila fizisko tastatūru, iespējojiet to ievades metodes iestatījumos un pēc tam iestatiet to kā noklusējuma ievades metodi."</string>
     <string name="ime_setup_skip" msgid="4399160517982183408">"Izlaist"</string>
     <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Atvērt ievades metodes iestatījumus"</string>
     <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Noklusējuma ievades metodes iestatīšana"</string>
-    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Lai izmantotu Braila aparatūras tastatūru, tā ir jāiestata kā noklusējuma ievades metode."</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Lai izmantotu Braila fizisko tastatūru, tā ir jāiestata kā noklusējuma ievades metode."</string>
     <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Atvērt ievades metodes atlasītāju"</string>
     <string name="permlab_displayConnect" msgid="2251586694368462088">"Izveidot savienojumu ar Braila displeju"</string>
     <string name="permdesc_displayConnect" msgid="3519598574125084994">"Ļauj lietotnei rakstīt tekstu Braila displejā, izmantojot tastatūru, kā arī lasīt ievadīto tekstu."</string>

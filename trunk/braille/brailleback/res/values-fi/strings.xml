@@ -46,5 +46,5 @@
     <string name="shutting_down" msgid="1303701310644298807">"brlback pois"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack-näppäimistö on käytössä"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Vaihda oletusnäppäimistöön napauttamalla"</string>
-    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – lyhennystaso <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – lyhennystaso <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
 </resources>

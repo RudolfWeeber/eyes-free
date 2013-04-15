@@ -19,6 +19,7 @@
 package com.googlecode.eyesfree.braille.service.display;
 
 import com.googlecode.eyesfree.braille.service.R;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -28,8 +29,8 @@ import android.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 

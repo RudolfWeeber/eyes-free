@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="service_description" msgid="3837907778560523486">"Wanneer BrailleBack aan is, sal jou toestel aan \'n gepaarde bluetooth braille-vertoonbord koppel en die skerminhoud in braille vertoon. Sleutels op die braille-vertoonbord kan gebruik word om jou weg op die skerm te vind, items te aktiveer en teks in te voer. Vir meer inligting, druk die spasiebalk en punte 1,2 en 3 (letter l in braille) op jou vertoonbord wanneer jy gekoppel is."</string>
+    <string name="service_description" msgid="3837907778560523486">"Wanneer BrailleBack aan is, sal jou toestel aan \'n gepaarde bluetooth-braille-vertoonbord koppel en die skerminhoud in braille vertoon. Sleutels op die braille-vertoonbord kan gebruik word om jou weg op die skerm te vind, items te aktiveer en teks in te voer. Vir meer inligting, druk die spasiebalk en punte 1, 2 en 3 (letter l in braille) op jou vertoonbord wanneer jy gekoppel is."</string>
     <string name="braille_ime_name" msgid="819430885692057322">"Braillehardeware-sleutelbord"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Braillehardeware-sleutelbordassistent"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Aktiveer braillehardeware-sleutelbord"</string>

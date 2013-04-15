@@ -40,7 +40,7 @@
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Otomatis (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Otomatis (tidak ada)"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Opsi pengembang"</string>
-    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Tampilkan keluaran Braille di layar"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Keluaran braille tampil di layar"</string>
     <string name="key_bindings_title" msgid="5482900913343271532">"Pengikatan tombol"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback aktf"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback mati"</string>

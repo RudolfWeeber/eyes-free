@@ -18,9 +18,9 @@
 
 package com.googlecode.eyesfree.braille.service.translate;
 
-import android.util.Log;
-
 import com.googlecode.eyesfree.braille.translate.TranslationResult;
+
+import android.util.Log;
 
 /**
  * Wraps the liblouis functions to translate to and from braille.

@@ -5,11 +5,11 @@
     <string name="braille_ime_name" msgid="819430885692057322">"Брайлова хардуерна клавиатура"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Съветник за брайловата хардуерна клавиатура"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Активиране на брайловата хардуерна клавиатура"</string>
-    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"За да използвате брайловата хардуерна клавиатура, трябва да я активирате в настройките за метода на въвеждане и след това да я зададете като метода по подразбиране."</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"За да използвате брайловата хардуерна клавиатура, трябва да я активирате в настройките за метода на въвеждане и след това да я зададете като метод по подразбиране."</string>
     <string name="ime_setup_skip" msgid="4399160517982183408">"Пропускане"</string>
-    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Отваряне на настройките за метода на въвеждане"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Отваряне на настройките"</string>
     <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Задаване на метод на въвеждане по подразбиране"</string>
-    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"За да използвате брайловата хардуерна клавиатура, трябва да я зададете като метода на въвеждане по подразбиране."</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"За да използвате брайловата хардуерна клавиатура, трябва да я зададете като метод на въвеждане по подразбиране."</string>
     <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Отваряне на инструмента за избор на метод на въвеждане"</string>
     <string name="permlab_displayConnect" msgid="2251586694368462088">"Свързване с брайлов дисплей"</string>
     <string name="permdesc_displayConnect" msgid="3519598574125084994">"Разрешава на приложение да пише върху брайлов дисплей и да чете от него въведени с клавиатурата данни"</string>

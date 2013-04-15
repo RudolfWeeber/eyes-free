@@ -20,11 +20,11 @@
     <item msgid="2876656758414605716">"Deschideți fereastra Notificări"</item>
     <item msgid="2554673553387851889">"Deschideți fereastra Aplicații recente"</item>
     <item msgid="4863807959891911585">"Activați tasta Enter la editarea textului"</item>
-    <item msgid="5917526604121492276">"Ștergeți înapoi la editarea textului"</item>
-    <item msgid="6047263121281919980">"Ștergeți înainte la editarea textului"</item>
+    <item msgid="5917526604121492276">"Ștergeți textul anterior la editare"</item>
+    <item msgid="6047263121281919980">"Ștergeți textul următor la editare"</item>
     <item msgid="2622805964649872487">"Deschideți secțiunea de ajutor pentru tastatura BrailleBack"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
     <string name="help_longPressTemplate" msgid="5028857601567358274">"Apăsați lung <xliff:g id="KEY_LIST">%s</xliff:g>"</string>
-    <string name="key_bindings_instructions" msgid="123530902329533100">"Utilizați tastele de navigare pentru a muta punctul central pe ecran."\n"Utilizați tastele braille pentru a introduce text într-o casetă de editare."\n"Mai jos se află o listă completă cu comenzile pentru taste acceptate de gadgetul dvs."</string>
+    <string name="key_bindings_instructions" msgid="123530902329533100">"Utilizați tastele de navigare pentru a muta punctul central pe ecran."\n"Utilizați tastele braille pentru a introduce text într-o casetă de editare."\n"Mai jos, găsiți o listă completă cu comenzile pentru taste acceptate de gadgetul dvs."</string>
 </resources>

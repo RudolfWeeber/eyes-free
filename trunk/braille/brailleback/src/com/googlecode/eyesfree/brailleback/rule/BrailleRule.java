@@ -16,10 +16,9 @@
 
 package com.googlecode.eyesfree.brailleback.rule;
 
-import android.text.Editable;
 import android.content.Context;
-import android.view.accessibility.AccessibilityEvent;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.text.Editable;
 
 /**
  * Decides how to format a single node for output on a braille

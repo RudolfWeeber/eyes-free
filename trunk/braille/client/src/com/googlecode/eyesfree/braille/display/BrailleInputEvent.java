@@ -270,7 +270,7 @@ public class BrailleInputEvent implements Parcelable {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("BrailleInputEvent {");
-        sb.append("amd=");
+        sb.append("cmd=");
         sb.append(commandToString(mCommand));
         sb.append(", arg=");
         sb.append(mArgument);

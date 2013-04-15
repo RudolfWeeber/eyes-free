@@ -18,14 +18,6 @@
 
 package com.googlecode.eyesfree.braille.service.translate;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.RemoteException;
-import android.util.Log;
-
 import com.googlecode.eyesfree.braille.service.R;
 import com.googlecode.eyesfree.braille.translate.ITranslatorService;
 import com.googlecode.eyesfree.braille.translate.ITranslatorServiceCallback;
@@ -34,7 +26,15 @@ import com.googlecode.eyesfree.braille.translate.TranslationResult;
 import com.googlecode.eyesfree.braille.translate.TranslatorClient;
 import com.googlecode.eyesfree.braille.utils.ZipResourceExtractor;
 
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.os.RemoteException;
+import android.util.Log;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,12 +51,10 @@ public class TranslatorService extends Service {
     private static final int FILES_EXTRACTED = 1;
 
     // Written in main thread, read in binder threads.
-    private volatile int mDataFileState = FILES_NOT_EXTRACTED;
     private final ServiceImpl mServiceImpl = new ServiceImpl();
-    private final TranslatorServiceHandler mHandler =
-            new TranslatorServiceHandler();
     private final Set<ITranslatorServiceCallback> mPendingCallbacks =
             new HashSet<ITranslatorServiceCallback>();
+    private int mDataFileState = FILES_NOT_EXTRACTED;
     private TableList mTableList;
 
     @Override
@@ -84,11 +82,13 @@ public class TranslatorService extends Service {
             this, R.raw.translationtables, tablesDir) {
             @Override
             protected void onPostExecute(Integer result) {
-                if (result == RESULT_OK) {
-                    mDataFileState = FILES_EXTRACTED;
-                } else {
-                    Log.e(LOG_TAG, "Couldn't extract data files");
-                    mDataFileState = FILES_ERROR;
+                synchronized (TranslatorService.this) {
+                    if (result == RESULT_OK) {
+                        mDataFileState = FILES_EXTRACTED;
+                    } else {
+                        Log.e(LOG_TAG, "Couldn't extract data files");
+                        mDataFileState = FILES_ERROR;
+                    }
                 }
                 callPendingOnInits();
             }
@@ -96,25 +96,46 @@ public class TranslatorService extends Service {
         extractor.execute();
     }
 
-    private boolean checkDataFiles() {
+    private synchronized boolean checkDataFiles() {
         return (mDataFileState == FILES_EXTRACTED);
     }
 
-    private void callPendingOnInits() {
-        for (ITranslatorServiceCallback callback : mPendingCallbacks) {
-            callOnInit(callback);
-        }
-        mPendingCallbacks.clear();
-    }
-
-    private void callOnInit(ITranslatorServiceCallback callback) {
+    private void callOnInit(ITranslatorServiceCallback callback,
+            int dataFileState) {
         try {
-            callback.onInit(mDataFileState == FILES_EXTRACTED
+            callback.onInit(dataFileState == FILES_EXTRACTED
                     ? TranslatorClient.SUCCESS
                     : TranslatorClient.ERROR);
         } catch (RemoteException ex) {
             // The client died before we initialized.  This is rare and
             // harmless for us.
+        }
+    }
+
+    private void setCallback(ITranslatorServiceCallback callback) {
+        int dataFileState;
+        synchronized (this) {
+            dataFileState = mDataFileState;
+            if (dataFileState == FILES_NOT_EXTRACTED) {
+                mPendingCallbacks.add(callback);
+                return;
+            }
+        }
+        callOnInit(callback, dataFileState);
+    }
+
+    private void callPendingOnInits() {
+        Collection<ITranslatorServiceCallback> pendingCallbacks;
+        int dataFileState;
+        synchronized (this) {
+            pendingCallbacks = new ArrayList<ITranslatorServiceCallback>(
+                    mPendingCallbacks);
+            dataFileState = mDataFileState;
+            mPendingCallbacks.clear();
+        }
+
+        for (ITranslatorServiceCallback callback : pendingCallbacks) {
+            callOnInit(callback, dataFileState);
         }
     }
 
@@ -126,7 +147,7 @@ public class TranslatorService extends Service {
                 Log.e(LOG_TAG, "Received null callback");
                 return;
             }
-            mHandler.setCallback(callback);
+            TranslatorService.this.setCallback(callback);
         }
 
         @Override
@@ -194,31 +215,6 @@ public class TranslatorService extends Service {
                 return null;
             }
             return LibLouisWrapper.backTranslate(cells, tableName);
-        }
-    }
-
-    private class TranslatorServiceHandler extends Handler {
-        private static final int MSG_SET_CALLBACK = 1;
-
-        public void setCallback(ITranslatorServiceCallback callback) {
-            obtainMessage(MSG_SET_CALLBACK, callback).sendToTarget();
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_SET_CALLBACK:
-                    handleSetCallback((ITranslatorServiceCallback) msg.obj);
-                    break;
-            }
-        }
-
-        private void handleSetCallback(ITranslatorServiceCallback callback) {
-            if (mDataFileState == FILES_NOT_EXTRACTED) {
-                mPendingCallbacks.add(callback);
-            } else {
-                callOnInit(callback);
-            }
         }
     }
 }

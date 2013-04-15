@@ -16,6 +16,14 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.braille.display.DisplayClient;
+import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
+import com.googlecode.eyesfree.braille.translate.TranslationResult;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -26,14 +34,6 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.Spanned;
 import android.util.Log;
 import android.util.SparseIntArray;
-
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.braille.display.Display;
-import com.googlecode.eyesfree.braille.display.DisplayClient;
-import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
-import com.googlecode.eyesfree.braille.translate.TranslationResult;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
-import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -135,10 +135,23 @@ public class DisplayManager
          */
         public static final int PAN_KEEP = 2;
 
+        /**
+         * Default contraction behaviour, allow contractions unless there is a
+         * selection span in the content.
+         */
+        public static final int CONTRACT_DEFAULT = 0;
+
+        /**
+         * Allow contraction, regardless of the presence of a selection
+         * span.
+         */
+        public static final int CONTRACT_ALWAYS_ALLOW = 1;
+
         private CharSequence mText;
         private AccessibilityNodeInfoCompat mFirstNode;
         private AccessibilityNodeInfoCompat mLastNode;
         private int mPanStrategy;
+        private int mContractionMode;
         private boolean mSplitParagraphs;
 
         public Content() {
@@ -196,8 +209,17 @@ public class DisplayManager
             return mPanStrategy;
         }
 
+        public Content setContractionMode(int mode) {
+            mContractionMode = mode;
+            return this;
+        }
+
+        public int getContractionMode() {
+            return mContractionMode;
+        }
+
         public Content setSplitParagraphs(boolean value) {
-            mSplitParagraphs = true;
+            mSplitParagraphs = value;
             return this;
         }
 
@@ -211,6 +233,11 @@ public class DisplayManager
             mFirstNode = mLastNode = null;
             DisplaySpans.recycleSpans(mText);
             mText = null;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("DisplayManager.Content {text=%s}", getText());
         }
     }
 
@@ -230,6 +257,7 @@ public class DisplayManager
     // Read and written in display handler thread only.
 
     private boolean mConnected = false;
+    private volatile boolean mIsSimulatedDisplay = false;
     /** Cursor position last passed to the translate method of the translator.
      * We use this because it is more reliable than the position maps inside
      * contracted words.  In the common case where there is just one
@@ -320,6 +348,11 @@ public class DisplayManager
         mDisplayHandler.setContent(content);
     }
 
+    /** Returns true if the current display is simulated. */
+    public boolean isSimulatedDisplay() {
+        return mIsSimulatedDisplay;
+    }
+
     private boolean markSelection(Spanned spanned) {
         DisplaySpans.SelectionSpan[] spans =
                 spanned.getSpans(0, spanned.length(),
@@ -408,6 +441,7 @@ public class DisplayManager
         } else {
             mConnected = false;
         }
+        mIsSimulatedDisplay = mDisplay.isSimulated();
         mCallbackHandler.onConnectionStateChanged(state);
     }
 
@@ -714,9 +748,9 @@ public class DisplayManager
         // TODO: Refine to only use the uncontracted translator for the current
         // word.
         BrailleTranslator translator =
-                hasEditCursor(mCurrentContent)
-                ? mTranslatorManager.getUncontractedTranslator()
-                : mTranslatorManager.getTranslator();
+                allowContractedBraille(mCurrentContent)
+                ? mTranslatorManager.getTranslator()
+                : mTranslatorManager.getUncontractedTranslator();
         String textContent = mCurrentContent.mText.toString();
         if (translator != null) {
             mTranslationResult = translator.translate(textContent,
@@ -883,7 +917,7 @@ public class DisplayManager
                 new ByDistanceComparator(oldSpanned, oldTextStart));
         // Find corresponding node in new content.
         for (AccessibilityNodeInfoCompat oldNode : displayedNodes) {
-            AccessibilityNodeInfoCompat newNode =
+            AccessibilityNodeInfoCompat newNode = (AccessibilityNodeInfoCompat)
                     DisplaySpans.getEqualSpan(newSpanned, oldNode);
             if (newNode == null) {
                 continue;
@@ -979,15 +1013,18 @@ public class DisplayManager
         return -1;
     }
 
-    private boolean hasEditCursor(Content content) {
+    private boolean allowContractedBraille(Content content) {
+        if (content.getContractionMode() == Content.CONTRACT_ALWAYS_ALLOW) {
+            return true;
+        }
         Spanned spanned = content.getSpanned();
         if (spanned == null) {
-            return false;
+            return true;
         }
         DisplaySpans.SelectionSpan[] selectionSpans =
                 spanned.getSpans(0, spanned.length(),
                         DisplaySpans.SelectionSpan.class);
-        return selectionSpans.length > 0;
+        return selectionSpans.length == 0;
     }
 
     private void calculateSplitPoints() {

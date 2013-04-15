@@ -22,15 +22,15 @@ import static com.googlecode.eyesfree.brailleback.BrailleBackService.DOT3;
 import static com.googlecode.eyesfree.brailleback.BrailleBackService.DOT4;
 import static com.googlecode.eyesfree.brailleback.BrailleBackService.DOT5;
 
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.graphics.Rect;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
-
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.utils.LogUtils;
 
 import java.util.HashSet;
 
@@ -447,6 +447,9 @@ public class TreeDebugNavigationMode implements NavigationMode {
     }
 
     private boolean moveNext() {
+        if (mCurrentNode == null) {
+            return false;
+        }
         int feedbackType = FeedbackManager.TYPE_NONE;
         AccessibilityNodeInfo target = getFirstChild(mCurrentNode);
         if (target != null) {

@@ -2,13 +2,13 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="service_description" msgid="3837907778560523486">"Po uruchomieniu aplikacji BrailleBack telefon łączy się ze sparowanym wyświetlaczem brajlowskim z modułem Bluetooth i prezentuje zawartość ekranu brajlem. Możesz użyć klawiszy wyświetlacza brajlowskiego do poruszania się po ekranie, aktywowania elementów i wpisywania tekstu. Aby uzyskać więcej informacji, naciśnij spację oraz kropki 1, 2 i 3 (litera l brajlem) na podłączonym wyświetlaczu."</string>
-    <string name="braille_ime_name" msgid="819430885692057322">"Sprzętowa klawiatura brajlowska"</string>
+    <string name="braille_ime_name" msgid="819430885692057322">"Klawiatura brajlowska"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Kreator sprzętowej klawiatury brajlowskiej"</string>
-    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Włącz sprzętową klawiaturę brajlowską"</string>
+    <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Włącz klawiaturę brajlowską"</string>
     <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"By użyć sprzętowej klawiatury brajlowskiej, należy włączyć ją w ustawieniach metody wprowadzania, a następnie ustawić jako domyślną metodę wprowadzania."</string>
     <string name="ime_setup_skip" msgid="4399160517982183408">"Pomiń"</string>
     <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Otwórz ustawienia metody wprowadzania"</string>
-    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Ustaw domyślną metodę wprowadzania"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Domyślna metoda wprowadzania"</string>
     <string name="ime_setup_need_default_message" msgid="1795926966023907502">"By użyć sprzętowej klawiatury brajlowskiej, musisz ustawić ją jako domyślną metodę wprowadzania."</string>
     <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Otwórz selektor metody wprowadzania"</string>
     <string name="permlab_displayConnect" msgid="2251586694368462088">"Połącz z monitorem brajlowskim"</string>

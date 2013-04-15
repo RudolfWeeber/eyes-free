@@ -16,11 +16,8 @@
 
 package com.googlecode.eyesfree.brailleback.utils;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
-
-import com.googlecode.eyesfree.utils.ClassLoadingManager;
 
 import java.util.Iterator;
 import java.util.List;

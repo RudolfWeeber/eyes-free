@@ -18,6 +18,13 @@
 
 package com.googlecode.eyesfree.braille.service.display;
 
+import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+import com.googlecode.eyesfree.braille.display.IBrailleService;
+import com.googlecode.eyesfree.braille.display.IBrailleServiceCallback;
+import com.googlecode.eyesfree.braille.service.R;
+import com.googlecode.eyesfree.braille.utils.ZipResourceExtractor;
+
 import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -30,13 +37,6 @@ import android.os.Message;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.util.Log;
-
-import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.braille.display.IBrailleService;
-import com.googlecode.eyesfree.braille.display.IBrailleServiceCallback;
-import com.googlecode.eyesfree.braille.service.R;
-import com.googlecode.eyesfree.braille.utils.ZipResourceExtractor;
 
 import java.io.File;
 

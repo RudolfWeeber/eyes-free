@@ -16,13 +16,13 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import android.content.Context;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.util.Log;
-
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.NodeFocusFinder;
+
+import android.content.Context;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.util.Log;
 
 import java.util.HashSet;
 

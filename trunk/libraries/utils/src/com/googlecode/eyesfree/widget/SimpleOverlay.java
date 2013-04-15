@@ -20,8 +20,10 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -41,6 +43,7 @@ public class SimpleOverlay {
     private final LayoutParams mParams;
 
     private SimpleOverlayListener mListener;
+    private OnTouchListener mTouchListener;
     private OnKeyListener mKeyListener;
     private boolean mVisible;
 
@@ -61,6 +64,15 @@ public class SimpleOverlay {
                 }
 
                 return super.dispatchKeyEvent(event);
+            }
+
+            @Override
+            public boolean dispatchTouchEvent(MotionEvent event) {
+                if ((mTouchListener != null) && mTouchListener.onTouch(mContentView, event)) {
+                    return true;
+                }
+
+                return super.dispatchTouchEvent(event);
             }
         };
 
@@ -84,8 +96,17 @@ public class SimpleOverlay {
      *
      * @param keyListener
      */
-    public void setOnKeyListener (OnKeyListener keyListener) {
+    public void setOnKeyListener(OnKeyListener keyListener) {
         mKeyListener = keyListener;
+    }
+
+    /**
+     * Sets the touch listener.
+     *
+     * @param touchListener
+     */
+    public void setOnTouchListener(OnTouchListener touchListener) {
+        mTouchListener = touchListener;
     }
 
     /**

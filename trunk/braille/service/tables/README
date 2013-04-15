@@ -1,55 +1,32 @@
 Braille Key Mapping Tables And Android
 ======================================
 
-The keyboard mapping for the supported braille displays are extracted from the
-brltty source code, modified according to a patch in this directory and then
-archived in a zip file.  This zip archive is included as a raw resource in the
-Android package and extracted at run-time by the Braille Display service.
-
-
-Generating The Tables
----------------------
-
-The zip file can be generated and put in the correct location by the
-mkkeytables.sh shell script.  Just run the script like so:
-
-$ tables/mkkeytables.sh
-
-...
-Keyboard table archive successfully created.
+BrailleBack has its own keyboard mapping files for the supported braille
+displays.  These are typically based on the tables from BRLTTY and modified to
+support the BrailleBack commands.  The tables are stored in the subdirectory
+'braille/service/tables/keytables'.  A compressed copy is stored as a zip
+archive and included as a raw resource in the Android package, which is
+extracted at run-time by the Braille Display service.  After editing the
+key tables to add support for a new display or change existing key bindings,
+the zip file needs to be regenerated before rebuilding BrailleBack as described
+below.
 
 
 Updating The Tables
 -------------------
 
-To update the keyboard mappings, you need to do the following:
+The key tables can be edited directly in 'braille/service/tables/keytables'.
+If adding a new display, start by copying the tables from BRLTTY and
+adjust them appropriately to support the BrailleBack commands.
 
-* Generate the zip archive as described above if it doesn't already
-  exist.
+After editing, the zipped resource needs to be regenerated and put
+in the correct location.  The 'mkkeytables.sh' shell script can be used
+to do this.  Just run the script like so:
 
-* Unzip the archive into a temporary directory:
+$ braille/service/tables/mkkeytables.sh
 
-$ mkdir mytables
-$ (cd mytables && unzip ../res/raw/keytables.zip)
-
-* Update the tables as required.
-
-* Update the zip file in the resource directory:
-
-$ zip -j -r res/raw/keytables.zip mytables
-
-To generate the key table patch from a modified directory as per above:
-
-* Get rid of any backup files so they don't get included in the patch.
-
-* Generate the diff:
-
-$ diff -Pu jni/brlttywrapper/brltty/Tables mytables \
-  |egrep -v "^Only in " \
-  > tables/keytables.diff
-
-* If you have added files from the brltty sources, make sure to add them to
-  tablefiles variable in the mkkeytables.sh script.
+...
+Keyboard table archive successfully created.
 
 
 BRLTTY To Android Key Mappings

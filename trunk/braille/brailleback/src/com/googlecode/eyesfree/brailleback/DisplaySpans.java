@@ -16,12 +16,12 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.util.Log;
-
-import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
  * Static utilities for text spans that control how text is displayed on the
@@ -149,12 +149,12 @@ public class DisplaySpans {
      * Returns a span in {@code spanned} that is {@link Object#equals}
      * to {@code obj}.
      */
-    public static <T> T getEqualSpan(Spanned spanned, T obj) {
+    public static Object getEqualSpan(Spanned spanned, Object obj) {
         Object[] spans = spanned.getSpans(0, spanned.length(),
                 obj.getClass());
         for (Object span : spans) {
             if (obj.equals(span)) {
-                return (T) span;
+                return span;
             }
         }
         return null;

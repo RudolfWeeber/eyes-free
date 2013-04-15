@@ -27,21 +27,21 @@
     <string name="preferences_title" msgid="368535298674637475">"Preferência de BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Dispositivo"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Estado"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Enlaces de teclas"</string>
+    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Teclas de atalho"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Tipo de braille"</string>
-    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabela de braille lit."</string>
-    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Tab. de braille de comp."</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabela braille literário"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Tabela braille computador"</string>
     <string name="connstate_not_connected" msgid="3876972842771373901">"Desligado"</string>
     <string name="connstate_connected" msgid="7552950461156525524">"Ligado"</string>
     <string name="connstate_error" msgid="8717968034812924474">"Não disponível"</string>
     <string name="pref_braille_type_six_dot_label" msgid="1083263483756364123">"Braille literário"</string>
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Braille de computador"</string>
-    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automático (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
-    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automático (nenhum)"</string>
+    <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Auto (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
+    <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Auto (nenhum)"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Opções de programador"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Mostrar saída Braille: ecrã"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Enlaces de teclas"</string>
+    <string name="key_bindings_title" msgid="5482900913343271532">"Teclas de atalho"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback lig."</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback des."</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Teclado BrailleBack ativo"</string>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="service_description" msgid="3837907778560523486">"Când aplicația BrailleBack este activă, gadgetul se va conecta la un afișaj braille împerecheat prin bluetooth și va afișa în braille conținutul ecranului. Puteți utiliza tastele de pe afișajul braille ca să navigați pe ecran, să activați diferite elemente și să introduceți text. Pentru mai multe informații, apăsați tasta de spațiu și punctele 1, 2 și 3 (litera l în braille) de pe afișaj când sunteți conectat(ă)."</string>
+    <string name="service_description" msgid="3837907778560523486">"Când aplicația BrailleBack este activă, gadgetul se va conecta la un afișaj braille împerecheat prin bluetooth și va afișa în braille conținutul ecranului. Puteți utiliza tastele de pe afișajul braille ca să navigați pe ecran, să activați diferite elemente și să introduceți text. Pentru mai multe informații, apăsați tasta spațiu și punctele 1, 2 și 3 (litera l în braille) de pe afișaj când sunteți conectat(ă)."</string>
     <string name="braille_ime_name" msgid="819430885692057322">"Tastatură hardware braille"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Aplicație-asistent pentru tastatura hardware braille"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Activați tastatura hardware braille"</string>
-    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Pentru a utiliza tastatura hardware braille, este necesar să o activați din setările metodei de introducere, apoi să o setați ca metodă de introducere prestabilită."</string>
+    <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"Pentru a utiliza tastatura hardware braille, trebuie să o activați din setările metodei de introducere de text și să o setați ca metodă de introducere de text prestabilită."</string>
     <string name="ime_setup_skip" msgid="4399160517982183408">"Omiteți"</string>
-    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Deschideți setările metodei de introducere"</string>
-    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Setați metoda de introducere prestabilită"</string>
-    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Pentru a utiliza tastatura hardware braille, este necesar să o setați ca metodă de introducere prestabilită."</string>
-    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Deschideți selectorul metodei de introducere"</string>
+    <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"Deschideți setări metodă introducere text"</string>
+    <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Setați metoda de introducere de text prestabilită"</string>
+    <string name="ime_setup_need_default_message" msgid="1795926966023907502">"Pentru a utiliza tastatura hardware braille, trebuie să o setați ca metodă de introducere de text prestabilită."</string>
+    <string name="ime_setup_need_default_positive" msgid="8994613547123179413">"Deschideți selectorul metodei de introducere de text"</string>
     <string name="permlab_displayConnect" msgid="2251586694368462088">"Conectați la un afișaj braille"</string>
-    <string name="permdesc_displayConnect" msgid="3519598574125084994">"Permite unei aplicații să scrie și să citească textul introdus la tastatura unui afișaj braille"</string>
+    <string name="permdesc_displayConnect" msgid="3519598574125084994">"Permite unei aplicații să scrie și să citească textul introdus de la tastatura unui afișaj braille"</string>
     <string name="type_emptygridview" msgid="4226780230155385397">"Grilă goală"</string>
     <string name="type_gridview" msgid="8453985146958342779">"Grilă"</string>
     <string name="type_emptylistview" msgid="4497688410987085349">"Listă goală"</string>

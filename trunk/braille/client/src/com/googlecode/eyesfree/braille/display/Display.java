@@ -108,5 +108,12 @@ public interface Display {
      * is no longer in use by this client.
      */
     void shutdown();
+
+    /**
+     * Returns {@code true} if this display is simulated.
+     * Intended for user feedback purposes. This value may change, but only
+     * while the display is disconnected.
+     */
+    boolean isSimulated();
 }
 

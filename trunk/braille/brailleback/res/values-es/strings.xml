@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- no translation found for service_description (3837907778560523486) -->
-    <skip />
+    <string name="service_description" msgid="3837907778560523486">"Cuando BrailleBack se active, tu dispositivo se conectará a una pantalla braille Bluetooth sincronizada y mostrará en braille el contenido en pantalla. Las teclas de la pantalla braille se pueden utilizar para navegar por la pantalla, activar elementos e introducir texto. Para obtener más información, presiona la barra espaciadora y los puntos 1, 2 y 3 (la letra l en braille) en la pantalla cuando se haya establecido conexión."</string>
     <string name="braille_ime_name" msgid="819430885692057322">"Teclado braille"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Asistente del teclado braille"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Habilita el teclado braille"</string>
@@ -43,10 +42,8 @@
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Opciones de desarrollador"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Texto braille en pantalla"</string>
     <string name="key_bindings_title" msgid="5482900913343271532">"Enlaces clave"</string>
-    <!-- no translation found for display_connected (2008600513914815101) -->
-    <skip />
-    <!-- no translation found for shutting_down (1303701310644298807) -->
-    <skip />
+    <string name="display_connected" msgid="2008600513914815101">"brlback act."</string>
+    <string name="shutting_down" msgid="1303701310644298807">"brlback des."</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Teclado de BrailleBack activo"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Tocar para cambiar al teclado predeterminado"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g>: grado <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>

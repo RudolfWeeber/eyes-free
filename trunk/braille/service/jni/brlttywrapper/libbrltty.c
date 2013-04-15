@@ -101,7 +101,6 @@ findKeyName(const KeyTable* keyTable, const KeyValue* value);
 int
 brltty_initialize (const char* driverCode, const char* brailleDevice,
                    const char* tablesDir) {
-  // TODO: Fix the cleanup code in the error handling cases.
   int ret = 0;
   systemLogLevel = LOG_DEBUG;
 
@@ -132,11 +131,11 @@ brltty_initialize (const char* driverCode, const char* brailleDevice,
   if (brltty_getTextCells() > BRLTTY_MAX_TEXT_CELLS) {
     logMessage(LOG_ERR, "Unsupported display size: %d",
                brltty_getTextCells());
-    goto freeParameters;
+    goto destructBraille;
   }
 
   if (!compileKeys(tablesDir)) {
-    goto freeParameters;
+    goto destructBraille;
   }
 
   // TODO: Should set bufferResized to catch buffer size changes if we want to
@@ -144,7 +143,7 @@ brltty_initialize (const char* driverCode, const char* brailleDevice,
   logMessage(LOG_DEBUG, "Allocating braille buffer");
   if (!ensureBrailleBuffer(&brailleDisplay, LOG_INFO)) {
     logMessage(LOG_ERR, "Couldn't allocate braille buffer");
-    goto freeParameters;
+    goto destructBraille;
   }
 
   resetRepeatState(&repeatState);
@@ -153,6 +152,9 @@ brltty_initialize (const char* driverCode, const char* brailleDevice,
              "%s on device %s", driverCode, brailleDevice);
   ret = 1;
   goto out;
+
+destructBraille:
+  braille->destruct(&brailleDisplay);
 
 freeParameters:
   freeDriverParameters();

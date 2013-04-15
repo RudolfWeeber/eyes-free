@@ -30,8 +30,8 @@
     <string name="pref_key_bindings_title" msgid="2713182458852540311">"Συνδέσεις πλήκτρων"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Τύπος Braille"</string>
-    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Πίν.Braille 6 κουκκίδων"</string>
-    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Πίν.Braille 8 κουκκίδων"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Πίνακας Braille 6 κουκ."</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Πίνακας Braille 8 κουκ."</string>
     <string name="connstate_not_connected" msgid="3876972842771373901">"Δεν έχει συνδεθεί"</string>
     <string name="connstate_connected" msgid="7552950461156525524">"Έχει συνδεθεί"</string>
     <string name="connstate_error" msgid="8717968034812924474">"Δεν είναι διαθέσιμη"</string>
@@ -40,10 +40,10 @@
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Αυτόματο (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Αυτόματο (κανένα)"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Επιλογές προγραμματιστή"</string>
-    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Εμφ.εξόδ.Braille σε οθ."</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Εμφάνιση Braille στην οθόνη"</string>
     <string name="key_bindings_title" msgid="5482900913343271532">"Συνδέσεις πλήκτρων"</string>
-    <string name="display_connected" msgid="2008600513914815101">"εν.BrlBack."</string>
-    <string name="shutting_down" msgid="1303701310644298807">"ανεν.BrlBack"</string>
+    <string name="display_connected" msgid="2008600513914815101">"BrlBack on"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"BrlBack off"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Ενεργό πληκτρολόγιο BrailleBack"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Πατήστε για εναλλαγή στο προεπιλεγμένο πληκτρολόγιο"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - βαθμός <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>

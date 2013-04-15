@@ -16,14 +16,6 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import android.accessibilityservice.AccessibilityService;
-import android.os.Bundle;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
-import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityNodeInfo;
-import android.widget.EditText;
-
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.brailleback.rule.BrailleRule;
 import com.googlecode.eyesfree.brailleback.rule.BrailleRuleRepository;
@@ -32,6 +24,14 @@ import com.googlecode.eyesfree.utils.AccessibilityNodeInfoRef;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.WebInterfaceUtils;
+
+import android.accessibilityservice.AccessibilityService;
+import android.os.Bundle;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.EditText;
 
 /**
  * Navigation mode that is based on traversing the node tree using
@@ -43,19 +43,6 @@ class DefaultNavigationMode implements NavigationMode {
         WebInterfaceUtils.DIRECTION_BACKWARD;
     private static final int DIRECTION_FORWARD =
         WebInterfaceUtils.DIRECTION_FORWARD;
-    /**
-     * Granularity used in web view navigation when the user presses the line
-     * navigation keys or pan overflows.  Corresponds to chromevox group
-     * granularity.
-     */
-    private static final int GRANULARITY_LINE =
-        AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PARAGRAPH;
-    /**
-     * Granularity used in web view navigation when the user presses the item
-     * navigation keys.  Corresponds to chromevox object navigation.
-     */
-    private static final int GRANULARITY_ITEM =
-        AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_LINE;
 
     // Actions in this range are reserved for Braille use.
     // TODO: use event arguments instead of this hack.
@@ -64,6 +51,7 @@ class DefaultNavigationMode implements NavigationMode {
 
     private final DisplayManager mDisplayManager;
     private final AccessibilityService mAccessibilityService;
+    private final SelfBrailleManager mSelfBrailleManager;
     private final NodeBrailler mNodeBrailler;
     private final FeedbackManager mFeedbackManager;
     private final FocusFinder mFocusFinder;
@@ -77,12 +65,14 @@ class DefaultNavigationMode implements NavigationMode {
     public DefaultNavigationMode(
             DisplayManager displayManager,
             AccessibilityService accessibilityService,
-            FeedbackManager feedbackManager) {
+            FeedbackManager feedbackManager,
+            SelfBrailleManager selfBrailleManager) {
         mDisplayManager = displayManager;
         mAccessibilityService = accessibilityService;
+        mSelfBrailleManager = selfBrailleManager;
         mRuleRepository = new BrailleRuleRepository(mAccessibilityService);
         mNodeBrailler = new NodeBrailler(mAccessibilityService,
-                mRuleRepository);
+                mRuleRepository, mSelfBrailleManager);
         mFeedbackManager = feedbackManager;
         mFocusFinder = new FocusFinder(mAccessibilityService);
     }
@@ -104,7 +94,9 @@ class DefaultNavigationMode implements NavigationMode {
             if (currentNode != null
                     && WebInterfaceUtils.hasWebContent(currentNode)
                     && WebInterfaceUtils.performNavigationAtGranularityAction(
-                            currentNode, DIRECTION_BACKWARD, GRANULARITY_LINE)) {
+                            currentNode, DIRECTION_BACKWARD,
+                            AccessibilityNodeInfoCompat
+                            .MOVEMENT_GRANULARITY_LINE)) {
                 return true;
             }
             firstNode = AccessibilityNodeInfoUtils.refreshNode(
@@ -141,7 +133,9 @@ class DefaultNavigationMode implements NavigationMode {
             if (currentNode != null
                     && WebInterfaceUtils.hasWebContent(currentNode)
                     && WebInterfaceUtils.performNavigationAtGranularityAction(
-                            currentNode, DIRECTION_FORWARD, GRANULARITY_LINE)) {
+                            currentNode, DIRECTION_FORWARD,
+                            AccessibilityNodeInfoCompat
+                            .MOVEMENT_GRANULARITY_LINE)) {
                 return true;
             }
         } finally {
@@ -269,7 +263,9 @@ class DefaultNavigationMode implements NavigationMode {
             if (currentNode != null
                     && WebInterfaceUtils.hasWebContent(currentNode)
                     && WebInterfaceUtils.performNavigationAtGranularityAction(
-                            currentNode, DIRECTION_BACKWARD, GRANULARITY_LINE)) {
+                            currentNode, DIRECTION_BACKWARD,
+                            AccessibilityNodeInfoCompat
+                            .MOVEMENT_GRANULARITY_LINE)) {
                 return true;
             }
             AccessibilityNodeInfoRef firstNode =
@@ -334,8 +330,8 @@ class DefaultNavigationMode implements NavigationMode {
         try {
             if (currentNode != null
                     && WebInterfaceUtils.hasWebContent(currentNode)
-                    && WebInterfaceUtils.performNavigationAtGranularityAction(
-                            currentNode, direction, GRANULARITY_ITEM)) {
+                    && WebInterfaceUtils.performNavigationByDOMObject(
+                            currentNode, direction)) {
                 return true;
             }
             return moveFocus(currentNode, direction);
@@ -727,8 +723,7 @@ class DefaultNavigationMode implements NavigationMode {
     }
 
     private boolean isSelfBrailled(AccessibilityNodeInfoCompat node) {
-        SelfBrailleService service = SelfBrailleService.getActiveInstance();
-        return service != null && service.contentForNode(node) != null;
+        return mSelfBrailleManager.hasContentForNode(node);
     }
 
 }

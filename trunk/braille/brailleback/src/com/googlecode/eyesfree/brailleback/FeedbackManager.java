@@ -16,9 +16,9 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import android.content.Context;
-
 import com.googlecode.eyesfree.utils.FeedbackController;
+
+import android.content.Context;
 
 /**
  * Provides 'out of band feedback', that is feedback that is typically

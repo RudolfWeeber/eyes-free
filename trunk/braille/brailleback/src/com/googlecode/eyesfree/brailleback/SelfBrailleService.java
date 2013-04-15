@@ -16,6 +16,12 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.braille.selfbraille.ISelfBrailleService;
+import com.googlecode.eyesfree.braille.selfbraille.WriteData;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils.NodeFilter;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -28,12 +34,7 @@ import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.googlecode.eyesfree.braille.selfbraille.ISelfBrailleService;
-import com.googlecode.eyesfree.braille.selfbraille.WriteData;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils.NodeFilter;
-import com.googlecode.eyesfree.utils.LogUtils;
-
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -44,7 +45,7 @@ import java.util.Set;
  * for parts of the accessibility node tree.
  */
 public class SelfBrailleService extends Service {
-    private static SelfBrailleService sInstance;
+    private static WeakReference<SelfBrailleService> sInstance;
     private final ServiceImpl mServiceImpl = new ServiceImpl();
     private final Map<IBinder, ClientInfo> mClients =
             new HashMap<IBinder, ClientInfo>();
@@ -52,13 +53,13 @@ public class SelfBrailleService extends Service {
             new HashMap<AccessibilityNodeInfo, NodeState>();
     private final SelfBrailleHandler mHandler = new SelfBrailleHandler();
 
-    public static SelfBrailleService getActiveInstance() {
-        return sInstance;
+    /*package*/ static SelfBrailleService getActiveInstance() {
+        return sInstance != null ? sInstance.get() : null;
     }
 
     @Override
     public void onCreate() {
-        sInstance = this;
+        sInstance = new WeakReference<SelfBrailleService>(this);
     }
 
     @Override

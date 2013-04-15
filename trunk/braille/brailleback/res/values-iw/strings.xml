@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="service_description" msgid="3837907778560523486">"כאשר BrailleBack מופעל, המכשיר שלך יחובר לצג בריית מותאם של Bluetooth ויציג את תוכן המסך בכתב ברייל. ניתן להשתמש במקשים של צג הברייל כדי לנווט במסך, להפעיל פריטים ולהזין טקסט. למידע נוסף, הקש על מקש הרווח ועל הנקודות 1, 2 ו-3 (האות l בברייל) בצג שלך כאשר אתה מחובר."</string>
+    <string name="service_description" msgid="3837907778560523486">"כאשר BrailleBack מופעל, המכשיר שלך יחובר לצג ברייל מותאם של Bluetooth ויציג את תוכן המסך בכתב ברייל. ניתן להשתמש במקשים של צג הברייל כדי לנווט במסך, להפעיל פריטים ולהזין טקסט. למידע נוסף, הקש על מקש הרווח ועל הנקודות 1, 2 ו-3 (האות l בברייל) בצג שלך כאשר אתה מחובר."</string>
     <string name="braille_ime_name" msgid="819430885692057322">"מקלדת חומרה בכתב ברייל"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"אשף מקלדת החומרה בכתב ברייל"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"הפעל מקלדת חומרה בכתב ברייל"</string>

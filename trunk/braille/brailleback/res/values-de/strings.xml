@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="service_description" msgid="3837907778560523486">"Wenn BrailleBack aktiviert ist, wird eine Verbindung zwischen Ihrem Gerät und dem Bluetooth-Braille-Anzeigegerät mit aktivem Pairing hergestellt. Die Inhalte auf dem Bildschirm sind somit in Braille zu sehen. Mit den Tasten des Braille-Anzeigegeräts können Sie auf dem Bildschirm navigieren, Elemente aktivieren und Text eingeben. Falls Sie weitere Informationen benötigen, drücken Sie die Leertaste und die Punkte 1, 2 und 3 (der Buchstabe l in Braille) auf dem verbundenen Anzeigegerät."</string>
+    <string name="service_description" msgid="3837907778560523486">"Wenn BrailleBack aktiviert ist, wird eine Verbindung zwischen Ihrem Gerät und dem Bluetooth-Braille-Anzeigegerät mit aktivem Pairing hergestellt. Die Inhalte auf dem Bildschirm sind somit in Braille zu sehen. Mithilfe der Tasten des Braille-Anzeigegeräts können Sie auf dem Bildschirm navigieren, Elemente aktivieren und Text eingeben. Falls Sie weitere Informationen benötigen, drücken Sie die Leertaste und die Punkte 1, 2 und 3 (der Buchstabe l in Braille) auf dem verbundenen Anzeigegerät."</string>
     <string name="braille_ime_name" msgid="819430885692057322">"Brailletastatur"</string>
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Brailletastatur-Assistent"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"Brailletastatur aktivieren"</string>
@@ -46,5 +46,5 @@
     <string name="shutting_down" msgid="1303701310644298807">"brlback aus"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack-Tastatur aktiv"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Zur Standardtastatur wechseln"</string>
-    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – Kürzungsgrad&#xA0;<xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – Kürzungsgrad <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
 </resources>

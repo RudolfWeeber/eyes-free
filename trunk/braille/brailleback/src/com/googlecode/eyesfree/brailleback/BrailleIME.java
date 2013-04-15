@@ -16,6 +16,9 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;
@@ -28,34 +31,99 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.braille.translate.BrailleTranslator;
-import com.googlecode.eyesfree.compat.accessibilityservice.AccessibilityServiceCompatUtils;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
-import com.googlecode.eyesfree.utils.LogUtils;
+import java.lang.ref.WeakReference;
 
 /**
  * Input method service for keys from the connected braille display.
  */
-public class BrailleIME extends InputMethodService implements NavigationMode {
+public class BrailleIME extends InputMethodService {
+
+    /** Interface between the IME and a "host" in the accessibility service. */
+    public interface Host {
+        /**
+         * Returns a translator for input, if available.
+         * The IME will ignore text input if no translator is available.
+         */
+        BrailleTranslator getBrailleTranslator();
+
+        /**
+         * Returns a display manager for output, if available.
+         * The IME will not generate output if no display manager is available.
+         */
+        DisplayManager getDisplayManager();
+
+        /**
+         * Returns a feedback manager, if available.
+         * No feedback will be emitted if no feedback manager is available.
+         */
+        FeedbackManager getFeedbackManager();
+
+        /**
+         * Called when the IME has been created by the system.
+         * @see InputMethodService#onCreate()
+         */
+        void onCreateIME();
+
+        /**
+         * Called when the IME is being destroyed by the system.
+         * @see InputMethodService#onDestroy()
+         */
+        void onDestroyIME();
+
+        /**
+         * Called when the IME has associated with an input connection.
+         * @see InputMethodService#onBindInput()
+         */
+        void onBindInput();
+
+        /**
+         * Called when the IME has disassociated from an input connection.
+         * @see InputMethodService#onUnbindInput()
+         */
+        void onUnbindInput();
+
+        /**
+         * Called when the IME has started an input session.
+         * @see InputMethodService#onStartInput(EditorInfo, boolean)
+         */
+        void onStartInput(EditorInfo attribute, boolean restarting);
+
+        /**
+         * Called when the IME has finished an input session.
+         * @see InputMethodService#onFinishInput()
+         */
+        void onFinishInput();
+
+        /**
+         * Called when the IME opens the input view.
+         * @see InputMethodService#onStartInputView(EditorInfo, boolean)
+         */
+        void onStartInputView(EditorInfo info, boolean restarting);
+
+        /**
+         * Called when the IME closes the input view.
+         * @see InputMethodService#onFinishInputView(boolean)
+         */
+        void onFinishInputView(boolean finishingInput);
+    }
+
+    public static final int DIRECTION_FORWARD = 1;
+    public static final int DIRECTION_BACKWARD = -1;
     private static final int MAX_REQUEST_CHARS = 1000;
     /** Marks the extent of the editable text. */
     private static final MarkingSpan EDIT_TEXT_SPAN = new MarkingSpan();
     /** Marks the extent of the action button. */
     private static final MarkingSpan ACTION_LABEL_SPAN = new MarkingSpan();
-    private static final int DIRECTION_FORWARD = 1;
-    private static final int DIRECTION_BACKWARD = -1;
 
-    private static BrailleIME sInstance;
-
+    private static WeakReference<BrailleIME> sInstance;
+    private static WeakReference<Host> sHost;
+    private final Host mHost;  // for testing
     private InputMethodManager mInputMethodManager;
 
     private ExtractedText mExtractedText;
@@ -75,17 +143,75 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
      * full edit field if it is larger than {@code MAX_REQUEST_CHARS}.
      */
     private StringBuilder mCurrentText = new StringBuilder();
-    // Whether accessibility and input focus are both on the same
-    // node and that node represents an edit field.
-    private boolean mEditFieldFocused = false;
+
+    public static BrailleIME getActiveInstance() {
+        return sInstance != null ? sInstance.get() : null;
+    }
+
+    public static void setSingletonHost(Host host) {
+        sHost = host != null ? new WeakReference<Host>(host) : null;
+    }
+
+    /** Constructor for general use. */
+    public BrailleIME() {
+        mHost = null;
+    }
+
+    /** Constructor for testing. Allows using a non-global host object. */
+    /*package*/ BrailleIME(Host host, Context baseContext) {
+        mHost = host;
+        attachBaseContext(baseContext);
+    }
+
+    /* InputMethodService implementation */
 
     @Override
     public void onCreate() {
         super.onCreate();
-        sInstance = this;
+        sInstance = new WeakReference<BrailleIME>(this);
         mInputMethodManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
         LogUtils.log(this, Log.VERBOSE, "Created Braille IME");
+
+        Host host = getHost();
+        if (host != null) {
+            host.onCreateIME();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // onFinishInput is not called when switching away from this IME
+        // to another one, so clear the state here as well.
+        mExtractedText = null;
+        updateCurrentText();
+        sInstance = null;
+
+        Host host = getHost();
+        if (host != null) {
+            host.onDestroyIME();
+        }
+    }
+
+    @Override
+    public void onBindInput() {
+        super.onBindInput();
+
+        Host host = getHost();
+        if (host != null) {
+            host.onBindInput();
+        }
+    }
+
+    @Override
+    public void onUnbindInput() {
+        super.onUnbindInput();
+
+        Host host = getHost();
+        if (host != null) {
+            host.onUnbindInput();
+        }
     }
 
     @Override
@@ -108,7 +234,11 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         }
         updateCurrentText();
         updateDisplay();
-        updateState();
+
+        Host host = getHost();
+        if (host != null) {
+            host.onStartInput(attribute, restarting);
+        }
     }
 
     @Override
@@ -117,29 +247,33 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         LogUtils.log(this, Log.VERBOSE, "onFinishInput");
         mExtractedText = null;
         updateCurrentText();
-        updateState();
-    }
 
-    private void updateState() {
-        BrailleBackService service = BrailleBackService.getActiveInstance();
-        if (service != null) {
-            if (isInEditField()) {
-                service.imeOpened(this);
-            } else {
-                service.imeClosed();
-            }
+        Host host = getHost();
+        if (host != null) {
+            host.onFinishInput();
         }
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // onFinishInput is not called when switching away from this IME
-        // to another one, so clear the state here as well.
-        mExtractedText = null;
-        updateCurrentText();
-        updateState();
-        sInstance = null;
+    public void onStartInputView(EditorInfo info, boolean restarting) {
+        super.onStartInputView(info, restarting);
+        LogUtils.log(this, Log.VERBOSE, "onStartInputView");
+
+        Host host = getHost();
+        if (host != null) {
+            host.onStartInputView(info, restarting);
+        }
+    }
+
+    @Override
+    public void onFinishInputView(boolean finishingInput) {
+        super.onFinishInputView(finishingInput);
+        LogUtils.log(this, Log.VERBOSE, "onFinishInputView");
+
+        Host host = getHost();
+        if (host != null) {
+            host.onFinishInputView(finishingInput);
+        }
     }
 
     @Override
@@ -151,15 +285,12 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
     public View onCreateInputView() {
         final LayoutInflater inflater = getLayoutInflater();
         final View inputView = inflater.inflate(R.layout.braille_ime, null);
-        final View.OnClickListener clickListener = new View.OnClickListener() {
+        inputView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switchAwayFromThisIme();
             }
-        };
-
-        inputView.setOnClickListener(clickListener);
-
+        });
         return inputView;
     }
 
@@ -194,79 +325,9 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         }
     }
 
-    private void updateCurrentText() {
-        if (mExtractedText == null) {
-            mCurrentText.setLength(0);
-            mSelectionStart = mSelectionEnd = 0;
-            return;
-        }
-        if (mExtractedText.text != null) {
-            int len = mCurrentText.length();
-            if (mExtractedText.partialStartOffset < 0) {
-                // Complete update.
-                mCurrentText.replace(0, len, mExtractedText.text.toString());
-            } else {
-                int start = Math.min(mExtractedText.partialStartOffset, len);
-                int end = Math.min(mExtractedText.partialEndOffset, len);
-                mCurrentText.replace(start, end,
-                        mExtractedText.text.toString());
-            }
-        }
+    /* Exposed for use by the host. */
 
-        // Update selection, keeping it within the text range even if the
-        // client messed up.
-        int len = mCurrentText.length();
-        int start = mExtractedText.selectionStart;
-        start = start < 0 ? 0 : (start > len ? len : start);
-        int end = mExtractedText.selectionEnd;
-        end = end < 0 ? 0 : (end > len ? len : end);
-        mSelectionStart = start;
-        mSelectionEnd = end;
-    }
-
-    public static BrailleIME getActiveInstance() {
-        return sInstance;
-    }
-
-    @Override
-    public boolean onMappedInputEvent(BrailleInputEvent event,
-            DisplayManager.Content content) {
-        switch (event.getCommand()) {
-            case BrailleInputEvent.CMD_NAV_ITEM_PREVIOUS:
-                return moveCursor(DIRECTION_BACKWARD,
-                        AccessibilityNodeInfoCompat
-                        .MOVEMENT_GRANULARITY_CHARACTER);
-            case BrailleInputEvent.CMD_NAV_ITEM_NEXT:
-                return moveCursor(DIRECTION_FORWARD,
-                        AccessibilityNodeInfoCompat
-                        .MOVEMENT_GRANULARITY_CHARACTER);
-            case BrailleInputEvent.CMD_NAV_LINE_PREVIOUS:
-                // Line navigation moves by paragraph since there's no way of
-                // knowing the line extents in the edit text.
-                return moveCursor(DIRECTION_BACKWARD,
-                        AccessibilityNodeInfoCompat
-                        .MOVEMENT_GRANULARITY_PARAGRAPH);
-            case BrailleInputEvent.CMD_NAV_LINE_NEXT:
-                return moveCursor(DIRECTION_FORWARD,
-                        AccessibilityNodeInfoCompat
-                        .MOVEMENT_GRANULARITY_PARAGRAPH);
-            case BrailleInputEvent.CMD_KEY_DEL:
-                return sendAndroidKey(KeyEvent.KEYCODE_DEL);
-            case BrailleInputEvent.CMD_KEY_ENTER:
-                return sendAndroidKey(KeyEvent.KEYCODE_ENTER);
-            case BrailleInputEvent.CMD_ACTIVATE_CURRENT:
-                return sendDefaultAction();
-            case BrailleInputEvent.CMD_KEY_FORWARD_DEL:
-                return sendAndroidKey(KeyEvent.KEYCODE_FORWARD_DEL);
-            case BrailleInputEvent.CMD_BRAILLE_KEY:
-                return handleBrailleKey(event.getArgument());
-            case BrailleInputEvent.CMD_ROUTE:
-                return route(event.getArgument(), content);
-        }
-        return false;
-    }
-
-    private boolean route(int position, DisplayManager.Content content) {
+    public boolean route(int position, DisplayManager.Content content) {
         InputConnection ic = getCurrentInputConnection();
         Spanned text = content.getSpanned();
         if (ic != null && text != null) {
@@ -297,7 +358,7 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         return true;
     }
 
-    private boolean sendDefaultAction() {
+    public boolean sendDefaultAction() {
         if (!allowsDefaultAction()) {
             return false;
         }
@@ -315,7 +376,7 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         }
     }
 
-    private boolean moveCursor(int direction, int granularity) {
+    public boolean moveCursor(int direction, int granularity) {
         if (mCurrentText == null) {
             return false;
         }
@@ -342,154 +403,24 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         return false;
     }
 
-    private int findParagraphBreakBackward() {
-        if (mSelectionStart <= 0) {
-            return -1;
-        }
-        return mCurrentText.lastIndexOf("\n", mSelectionStart - 2) + 1;
-    }
-
-    private int findParagraphBreakForward() {
-        if (mSelectionEnd >= mCurrentText.length()) {
-            return -1;
-        }
-        int index = mCurrentText.indexOf("\n", mSelectionEnd);
-        if (index >= 0 && index < mCurrentText.length()) {
-            return index + 1;
-        } else {
-            return mCurrentText.length();
-        }
-    }
-
-    private boolean setCursor(InputConnection ic, int pos) {
-        if (mCurrentText == null) {
-            return false;
-        }
-        int textLen = mCurrentText.length();
-        pos = (pos < 0) ? 0 : ((pos <= textLen) ? pos : textLen);
-        return ic.setSelection(pos, pos);
-    }
-
-    /**
-     * Returns {@code true} if the input method is currently connected to an
-     * active edit field and that field can handle direct text edits, in
-     * contrast to just raw key events.
-     */
-    private boolean isInEditField() {
-        return mExtractedText != null && mEditFieldFocused;
-    }
-
-    @Override
-    public boolean onPanLeftOverflow(DisplayManager.Content content) {
-        return false;
-    }
-
-    @Override
-    public boolean onPanRightOverflow(DisplayManager.Content content) {
-        return false;
-    }
-
-    @Override
-    public void onActivate() {
-        updateDisplay();
-    }
-
-    @Override
-    public void onDeactivate() {
-    }
-
-    @Override
-    public void onObserveAccessibilityEvent(AccessibilityEvent event) {
-        checkEditFieldFocused();
-        updateState();
-    }
-
-    @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
-        // Nothing to do.
-    }
-
-    @Override
-    public void onInvalidateAccessibilityNode(
-        AccessibilityNodeInfoCompat node) {
-        // Nothing to do.
-    }
-
     /**
      * Attempts to send down and up key events for a raw {@code keyCode}
      * through an input connection.
      */
-    private boolean sendAndroidKey(int keyCode) {
+    public boolean sendAndroidKey(int keyCode) {
         return emitFeedbackOnFailure(
             sendAndroidKeyInternal(keyCode),
             FeedbackManager.TYPE_COMMAND_FAILED);
     }
 
-    private boolean sendAndroidKeyInternal(int keyCode) {
-        LogUtils.log(this, Log.VERBOSE, "sendAndroidKey: %d", keyCode);
-        InputConnection ic = getCurrentInputConnection();
-        if (ic == null) {
-            return false;
-        }
-        long eventTime = SystemClock.uptimeMillis();
-        if (!ic.sendKeyEvent(new KeyEvent(eventTime, eventTime,
-                                KeyEvent.ACTION_DOWN, keyCode, 0 /*repeat*/))) {
-            return false;
-        }
-        return ic.sendKeyEvent(
-            new KeyEvent(eventTime, eventTime,
-                    KeyEvent.ACTION_UP, keyCode, 0 /*repeat*/));
-    }
-
-    private boolean handleBrailleKey(int dots) {
+    public boolean handleBrailleKey(int dots) {
         return emitFeedbackOnFailure(
             handleBrailleKeyInternal(dots),
             FeedbackManager.TYPE_COMMAND_FAILED);
     }
 
-    private boolean handleBrailleKeyInternal(int dots) {
-        // TODO: Support more than computer braille.  This means that
-        // there's not a 1:1 correspondence between a cell and a character,
-        // so requires more book-keeping.
-        BrailleTranslator translator = getCurrentBrailleTranslator();
-        InputConnection ic = getCurrentInputConnection();
-        if (translator == null || ic == null) {
-            return false;
-        }
-        CharSequence text = translator.backTranslate(
-            new byte[] {(byte) dots});
-        if (!TextUtils.isEmpty(text)) {
-            return ic.commitText(text, 1);
-        }
-        return true;
-    }
-
-    private BrailleTranslator getCurrentBrailleTranslator() {
-        BrailleBackService service = BrailleBackService.getActiveInstance();
-        if (service != null) {
-            return service.mTranslatorManager.getUncontractedTranslator();
-        }
-        return null;
-    }
-
-    private DisplayManager getCurrentDisplayManager() {
-        BrailleBackService service = BrailleBackService.getActiveInstance();
-        if (service != null) {
-            return service.mDisplayManager;
-        }
-        return null;
-    }
-
-    private FeedbackManager getCurrentFeedbackManager() {
-        BrailleBackService service = BrailleBackService.getActiveInstance();
-        if (service != null) {
-            return service.mFeedbackManager;
-        }
-        return null;
-    }
-
-    private void updateDisplay() {
-        if (!isInEditField()) {
+    public void updateDisplay() {
+        if (mExtractedText == null) {
             return;
         }
         DisplayManager displayManager = getCurrentDisplayManager();
@@ -529,6 +460,127 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
             new DisplayManager.Content(text)
                 .setPanStrategy(DisplayManager.Content.PAN_CURSOR)
                 .setSplitParagraphs(isMultiLineField()));
+    }
+
+    /* Private */
+
+    private void updateCurrentText() {
+        if (mExtractedText == null) {
+            mCurrentText.setLength(0);
+            mSelectionStart = mSelectionEnd = 0;
+            return;
+        }
+        if (mExtractedText.text != null) {
+            int len = mCurrentText.length();
+            if (mExtractedText.partialStartOffset < 0) {
+                // Complete update.
+                mCurrentText.replace(0, len, mExtractedText.text.toString());
+            } else {
+                int start = Math.min(mExtractedText.partialStartOffset, len);
+                int end = Math.min(mExtractedText.partialEndOffset, len);
+                mCurrentText.replace(start, end,
+                        mExtractedText.text.toString());
+            }
+        }
+
+        // Update selection, keeping it within the text range even if the
+        // client messed up.
+        int len = mCurrentText.length();
+        int start = mExtractedText.selectionStart;
+        start = start < 0 ? 0 : (start > len ? len : start);
+        int end = mExtractedText.selectionEnd;
+        end = end < 0 ? 0 : (end > len ? len : end);
+        mSelectionStart = start;
+        mSelectionEnd = end;
+    }
+
+
+    private int findParagraphBreakBackward() {
+        if (mSelectionStart <= 0) {
+            return -1;
+        }
+        return mCurrentText.lastIndexOf("\n", mSelectionStart - 2) + 1;
+    }
+
+    private int findParagraphBreakForward() {
+        if (mSelectionEnd >= mCurrentText.length()) {
+            return -1;
+        }
+        int index = mCurrentText.indexOf("\n", mSelectionEnd);
+        if (index >= 0 && index < mCurrentText.length()) {
+            return index + 1;
+        } else {
+            return mCurrentText.length();
+        }
+    }
+
+    private boolean setCursor(InputConnection ic, int pos) {
+        if (mCurrentText == null) {
+            return false;
+        }
+        int textLen = mCurrentText.length();
+        pos = (pos < 0) ? 0 : ((pos <= textLen) ? pos : textLen);
+        return ic.setSelection(pos, pos);
+    }
+
+    private boolean sendAndroidKeyInternal(int keyCode) {
+        LogUtils.log(this, Log.VERBOSE, "sendAndroidKey: %d", keyCode);
+        InputConnection ic = getCurrentInputConnection();
+        if (ic == null) {
+            return false;
+        }
+        long eventTime = SystemClock.uptimeMillis();
+        if (!ic.sendKeyEvent(new KeyEvent(eventTime, eventTime,
+                                KeyEvent.ACTION_DOWN, keyCode, 0 /*repeat*/))) {
+            return false;
+        }
+        return ic.sendKeyEvent(
+            new KeyEvent(eventTime, eventTime,
+                    KeyEvent.ACTION_UP, keyCode, 0 /*repeat*/));
+    }
+
+    private boolean handleBrailleKeyInternal(int dots) {
+        // TODO: Support more than computer braille.  This means that
+        // there's not a 1:1 correspondence between a cell and a character,
+        // so requires more book-keeping.
+        BrailleTranslator translator = getCurrentBrailleTranslator();
+        InputConnection ic = getCurrentInputConnection();
+        if (translator == null || ic == null) {
+            LogUtils.log(this, Log.WARN, "missing translator %s or IC %s",
+                    translator, ic);
+            return false;
+        }
+        CharSequence text = translator.backTranslate(
+            new byte[] {(byte) dots});
+        if (!TextUtils.isEmpty(text)) {
+            return ic.commitText(text, 1);
+        }
+        return true;
+    }
+
+    private Host getHost() {
+        if (mHost != null) {
+            return mHost;
+        } else if (sHost != null) {
+            return sHost.get();
+        } else {
+            return null;
+        }
+    }
+
+    private BrailleTranslator getCurrentBrailleTranslator() {
+        Host host = getHost();
+        return host != null ? host.getBrailleTranslator() : null;
+    }
+
+    private DisplayManager getCurrentDisplayManager() {
+        Host host = getHost();
+        return host != null ? host.getDisplayManager() : null;
+    }
+
+    private FeedbackManager getCurrentFeedbackManager() {
+        Host host = getHost();
+        return host != null ? host.getFeedbackManager() : null;
     }
 
     private CharSequence getActionLabel() {
@@ -578,62 +630,12 @@ public class BrailleIME extends InputMethodService implements NavigationMode {
         }
     }
 
-    private void switchAwayFromThisIme() {
+    // Visible for testing.
+    /*package*/ void switchAwayFromThisIme() {
         LogUtils.log(this, Log.DEBUG, "Switching to last IME");
         mInputMethodManager.switchToNextInputMethod(
             getWindow().getWindow().getAttributes().token,
             false);
-    }
-
-    private void checkEditFieldFocused() {
-        boolean result = false;
-        AccessibilityNodeInfoCompat root = null;
-        AccessibilityNodeInfoCompat inputFocused = null;
-        AccessibilityNodeInfoCompat accessibilityFocused = null;
-        try {
-            BrailleBackService service = BrailleBackService.getActiveInstance();
-            if (service == null) {
-                return;
-            }
-            root = AccessibilityServiceCompatUtils.getRootInActiveWindow(
-                    service);
-            if (root == null) {
-                return;
-            }
-            inputFocused = root.findFocus(
-                AccessibilityNodeInfoCompat.FOCUS_INPUT);
-            if (!AccessibilityNodeInfoUtils.nodeMatchesClassByType(
-                    this,
-                    inputFocused,
-                    EditText.class)) {
-                return;
-            }
-            accessibilityFocused = root.findFocus(
-                AccessibilityNodeInfoCompat.FOCUS_ACCESSIBILITY);
-            result = inputFocused.equals(accessibilityFocused);
-        } finally {
-            AccessibilityNodeInfoUtils.recycleNodes(
-                root, inputFocused, accessibilityFocused);
-            mEditFieldFocused = result;
-        }
-    }
-
-    private AccessibilityNodeInfoCompat getNodeWithInputFocus() {
-        AccessibilityNodeInfoCompat root = null;
-        try {
-            BrailleBackService service = BrailleBackService.getActiveInstance();
-            if (service == null) {
-                return null;
-            }
-            root = AccessibilityServiceCompatUtils.getRootInActiveWindow(
-                    service);
-            if (root == null) {
-                return null;
-            }
-            return root.findFocus(AccessibilityNodeInfoCompat.FOCUS_INPUT);
-        } finally {
-            AccessibilityNodeInfoUtils.recycleNodes(root);
-        }
     }
 
     private void emitFeedback(int type) {

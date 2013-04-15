@@ -18,12 +18,13 @@
 
 package com.googlecode.eyesfree.braille.service.display;
 
-import android.content.res.Resources;
-
 import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
 import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
 
+import android.content.res.Resources;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -125,7 +126,7 @@ public class BrlttyWrapper {
      * this method during other calls that might consume input so that they
      * can proceed and consume that input.
      */
-    public void addBytesFromDevice(byte[] bytes, int size) {
+    public void addBytesFromDevice(byte[] bytes, int size) throws IOException {
         addBytesFromDeviceNative(bytes, size);
     }
 
@@ -191,7 +192,8 @@ public class BrlttyWrapper {
     private native void stopNative();
     private native boolean writeWindowNative(byte[] pattern);
     private native int readCommandNative();
-    private native void addBytesFromDeviceNative(byte[] bytes, int size);
+    private native void addBytesFromDeviceNative(byte[] bytes, int size)
+        throws IOException;
     private native BrailleKeyBinding[] getKeyMapNative();
     private native int getTextCellsNative();
     private native int getStatusCellsNative();

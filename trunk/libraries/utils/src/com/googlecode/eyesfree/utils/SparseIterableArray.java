@@ -44,7 +44,7 @@ public class SparseIterableArray<T> extends SparseArrayCompat<T> implements Iter
                 throw new NoSuchElementException();
             }
 
-            return get(mIndex++);
+            return valueAt(mIndex++);
         }
 
         @Override

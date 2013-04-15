@@ -115,6 +115,25 @@ public class WebInterfaceUtils {
     }
 
     /**
+     * Sends an instruction to ChromeVox to navigate by DOM object in
+     * the given direction within a node.
+     *
+     * @param node The node containing web content with ChromeVox to which the
+     *            message should be sent
+     * @param direction {@link #DIRECTION_FORWARD} or
+     *            {@link #DIRECTION_BACKWARD}
+     * @return {@code true} if the action was performed, {@code false}
+     *         otherwise.
+     */
+    public static boolean performNavigationByDOMObject(
+            AccessibilityNodeInfoCompat node, int direction) {
+        final int action = (direction == DIRECTION_FORWARD)
+                ? AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT
+                : AccessibilityNodeInfoCompat.ACTION_PREVIOUS_HTML_ELEMENT;
+        return node.performAction(action);
+    }
+
+    /**
      * Sends an instruction to ChromeVox to move within a page at a specified
      * granularity in a given direction.
      *

@@ -19,10 +19,10 @@
     <item msgid="6272261186186982128">"Aktywuj przycisk Home (Ekran główny)"</item>
     <item msgid="2876656758414605716">"Otwórz okno powiadomień"</item>
     <item msgid="2554673553387851889">"Otwórz okno ostatnich aplikacji"</item>
-    <item msgid="4863807959891911585">"Aktywuj klawisz Enter podczas edycji tekstu"</item>
-    <item msgid="5917526604121492276">"Usuwaj do tyłu podczas edycji tekstu"</item>
-    <item msgid="6047263121281919980">"Usuwaj do przodu podczas edycji tekstu"</item>
-    <item msgid="2622805964649872487">"Otwórz pomoc klawiatury BrailleBack"</item>
+    <item msgid="4863807959891911585">"Aktywuj Enter podczas edycji"</item>
+    <item msgid="5917526604121492276">"Usuwaj do tyłu podczas edycji"</item>
+    <item msgid="6047263121281919980">"Usuwaj do przodu podczas edycji"</item>
+    <item msgid="2622805964649872487">"Otwórz pomoc BrailleBack"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
     <string name="help_longPressTemplate" msgid="5028857601567358274">"Naciskanie i przytrzymywanie <xliff:g id="KEY_LIST">%s</xliff:g>"</string>

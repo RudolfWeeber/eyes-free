@@ -16,23 +16,23 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.accessibility.AccessibilityEvent;
-
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 
 /**
  * Keeps track of the current navigation mode and dispatches events
  * to the navigation modes depending on which one is active.
  */
-public class ModeSwitcher {
+public class ModeSwitcher implements NavigationMode {
     private final NavigationMode[] mModes;
     private int mModeIndex = 0;
     private NavigationMode mOverrideMode;
+    private boolean mActive = false;
 
     public ModeSwitcher(NavigationMode... modes) {
         mModes = modes;
-        getCurrentMode().onActivate();
     }
 
     public NavigationMode getCurrentMode() {
@@ -40,10 +40,14 @@ public class ModeSwitcher {
     }
 
     public void switchMode() {
-        getCurrentMode().onDeactivate();
+        if (mActive) {
+            getCurrentMode().onDeactivate();
+        }
         mModeIndex = (mModeIndex + 1) % mModes.length;
         mOverrideMode = null;
-        getCurrentMode().onActivate();
+        if (mActive) {
+            getCurrentMode().onActivate();
+        }
     }
 
     /**
@@ -60,11 +64,28 @@ public class ModeSwitcher {
         if (newMode == oldMode) {
             return;
         }
-        oldMode.onDeactivate();
+        if (mActive) {
+            oldMode.onDeactivate();
+        }
         mOverrideMode = newOverrideMode;
-        newMode.onActivate();
+        if (mActive) {
+            newMode.onActivate();
+        }
     }
 
+    @Override
+    public void onActivate() {
+        mActive = true;
+        getCurrentMode().onActivate();
+    }
+
+    @Override
+    public void onDeactivate() {
+        getCurrentMode().onDeactivate();
+        mActive = false;
+    }
+
+    @Override
     public boolean onPanLeftOverflow(DisplayManager.Content content) {
         boolean ret = getCurrentMode().onPanLeftOverflow(content);
         if (!ret && mOverrideMode != null) {
@@ -73,6 +94,7 @@ public class ModeSwitcher {
         return ret;
     }
 
+    @Override
     public boolean onPanRightOverflow(DisplayManager.Content content) {
         boolean ret = getCurrentMode().onPanRightOverflow(content);
         if (!ret && mOverrideMode != null) {
@@ -81,6 +103,7 @@ public class ModeSwitcher {
         return ret;
     }
 
+    @Override
     public boolean onMappedInputEvent(BrailleInputEvent event,
                                       DisplayManager.Content content) {
         boolean ret = getCurrentMode().onMappedInputEvent(event, content);
@@ -90,13 +113,19 @@ public class ModeSwitcher {
         return ret;
     }
 
-    public void onAccessibilityEvent(AccessibilityEvent event) {
+    @Override
+    public void onObserveAccessibilityEvent(AccessibilityEvent event) {
         for (NavigationMode mode : mModes) {
             mode.onObserveAccessibilityEvent(event);
         }
+    }
+
+    @Override
+    public void onAccessibilityEvent(AccessibilityEvent event) {
         getCurrentMode().onAccessibilityEvent(event);
     }
 
+    @Override
     public void onInvalidateAccessibilityNode(
         AccessibilityNodeInfoCompat node) {
         getCurrentMode().onInvalidateAccessibilityNode(node);

@@ -6,7 +6,7 @@
     <string name="ime_setup_wizard_name" msgid="3001767325395835523">"Hardveres Braille-billentyűzet varázsló"</string>
     <string name="ime_setup_need_enable_title" msgid="4607530771880167657">"A hardveres Braille-billentyűzet engedélyezése"</string>
     <string name="ime_setup_need_enable_message" msgid="8737455883604029146">"A hardveres Braille-billentyűzet használatához engedélyeznie kell azt a beviteli mód beállításaiban, és alapértelmezett beviteli módként kell beállítania."</string>
-    <string name="ime_setup_skip" msgid="4399160517982183408">"Kihagyás"</string>
+    <string name="ime_setup_skip" msgid="4399160517982183408">"Kihagy"</string>
     <string name="ime_setup_need_enable_positive" msgid="7265430214257219110">"A beviteli mód beállításainak megnyitása"</string>
     <string name="ime_setup_need_default_title" msgid="3966077707390872268">"Alapértelmezett beviteli mód beállítása"</string>
     <string name="ime_setup_need_default_message" msgid="1795926966023907502">"A hardveres Braille-billentyűzet használatához alapértelmezett beviteli módként kell azt beállítania."</string>
@@ -30,8 +30,8 @@
     <string name="pref_key_bindings_title" msgid="2713182458852540311">"Billentyűpárosítások"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Braille-típus"</string>
-    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Hatpontos Braille-tábl."</string>
-    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Számítóg. Braille-tábla"</string>
+    <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Hatpontos Braille-tábla"</string>
+    <string name="pref_eight_dot_braille_table_title" msgid="1960546664278216814">"Számítógépes Braille-tábla"</string>
     <string name="connstate_not_connected" msgid="3876972842771373901">"Nincs csatlakoztatva"</string>
     <string name="connstate_connected" msgid="7552950461156525524">"Csatlakoztatva"</string>
     <string name="connstate_error" msgid="8717968034812924474">"Nem érhető el"</string>
@@ -40,7 +40,7 @@
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automatikus (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automatikus (nincs)"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Fejlesztői lehetőségek"</string>
-    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Br-írás megjel. a kép.-n"</string>
+    <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Braille-írás a képernyőn"</string>
     <string name="key_bindings_title" msgid="5482900913343271532">"Billentyűpárosítások"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback be"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback ki"</string>

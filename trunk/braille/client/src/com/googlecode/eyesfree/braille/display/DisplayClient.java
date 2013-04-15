@@ -125,6 +125,11 @@ public class DisplayClient implements Display {
         doUnbindService();
     }
 
+    @Override
+    public boolean isSimulated() {
+        return false;
+    }
+
     // NOTE: The methods in this class will be executed in the main
     // application thread.
     private class Connection implements ServiceConnection {

@@ -16,8 +16,11 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import java.util.Collections;
-import java.util.Comparator;
+import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.braille.display.DisplayClient;
+import com.googlecode.eyesfree.braille.translate.TableInfo;
+import com.googlecode.eyesfree.utils.LogUtils;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -25,13 +28,14 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
-import com.googlecode.eyesfree.braille.display.Display;
-import com.googlecode.eyesfree.braille.display.DisplayClient;
-import com.googlecode.eyesfree.braille.translate.TableInfo;
-import com.googlecode.eyesfree.utils.LogUtils;
-
+import java.text.CollationKey;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Activity used to set BrailleBack's service preferences.
@@ -42,7 +46,7 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
                TranslatorManager.OnTablesChangedListener,
                Preference.OnPreferenceChangeListener,
                Preference.OnPreferenceClickListener {
-    private static final TableInfoComparator TABLE_INFO_COMPARATOR =
+    private final TableInfoComparator TABLE_INFO_COMPARATOR =
             new TableInfoComparator();
 
     private DisplayClient mDisplay;
@@ -262,14 +266,18 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
     }
 
     private static class TableInfoComparator
-        implements Comparator<TableInfo> {
+            implements Comparator<TableInfo> {
+        private static final int KEY_MAP_INITIAL_CAPACITY = 50;
+        private final Collator mCollator = Collator.getInstance();
+        private final Map<TableInfo, CollationKey> mCollationKeyMap =
+            new HashMap<TableInfo, CollationKey>(KEY_MAP_INITIAL_CAPACITY);
+
         @Override
         public int compare(TableInfo first, TableInfo second) {
             if (first.equals(second)) {
                 return 0;
             }
-            int ret = first.getLocale().getDisplayName().compareTo(
-                    second.getLocale().getDisplayName());
+            int ret = getCollationKey(first).compareTo(getCollationKey(second));
             if (ret == 0 && first.isEightDot() != second.isEightDot()) {
                 ret = first.isEightDot() ? 1 : -1;
             }
@@ -277,6 +285,16 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
                 ret = first.getGrade() - second.getGrade();
             }
             return ret;
+        }
+
+        private CollationKey getCollationKey(TableInfo tableInfo) {
+            CollationKey key = mCollationKeyMap.get(tableInfo);
+            if (key == null) {
+                key = mCollator.getCollationKey(
+                    tableInfo.getLocale().getDisplayName());
+                mCollationKeyMap.put(tableInfo, key);
+            }
+            return key;
         }
     }
 }

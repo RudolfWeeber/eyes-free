@@ -23,7 +23,8 @@ import com.googlecode.eyesfree.compat.CompatUtils;
 import java.lang.reflect.Method;
 
 public class AudioManagerCompatUtils {
-    private static final Class<?> CLASS_OnAudioFocusChangeListener = CompatUtils.getClass("android.media.AudioManager$OnAudioFocusChangeListener");
+    private static final Class<?> CLASS_OnAudioFocusChangeListener = CompatUtils.getClass(
+            "android.media.AudioManager$OnAudioFocusChangeListener");
 
     private static final Method METHOD_requestAudioFocus = CompatUtils.getMethod(AudioManager.class,
             "requestAudioFocus", CLASS_OnAudioFocusChangeListener, int.class, int.class);
@@ -31,6 +32,8 @@ public class AudioManagerCompatUtils {
             AudioManager.class, "abandonAudioFocus", CLASS_OnAudioFocusChangeListener);
     private static final Method METHOD_forceVolumeControlStream = CompatUtils.getMethod(
             AudioManager.class, "forceVolumeControlStream", int.class);
+    private static final Method METHOD_isSpeechRecognitionActive = CompatUtils.getMethod(
+            AudioManager.class, "isSpeechRecognitionActive");
 
     /** The audio stream for DTMF Tones */
     public static final int STREAM_DTMF = 8;
@@ -86,23 +89,26 @@ public class AudioManagerCompatUtils {
     public static final String EXTRA_PREV_MASTER_VOLUME_VALUE =
             "android.media.EXTRA_PREV_MASTER_VOLUME_VALUE";
 
-
     /**
-     * Used to indicate a gain of audio focus, or a request of audio focus, of unknown duration.
+     * Used to indicate a gain of audio focus, or a request of audio focus, of
+     * unknown duration.
      */
     public static final int AUDIOFOCUS_GAIN = 1;
+
     /**
-     * Used to indicate a temporary gain or request of audio focus, anticipated to last a short
-     * amount of time. Examples of temporary changes are the playback of driving directions, or an
-     * event notification.
+     * Used to indicate a temporary gain or request of audio focus, anticipated
+     * to last a short amount of time. Examples of temporary changes are the
+     * playback of driving directions, or an event notification.
      */
     public static final int AUDIOFOCUS_GAIN_TRANSIENT = 2;
+
     /**
-     * Used to indicate a temporary request of audio focus, anticipated to last a short
-     * amount of time, and where it is acceptable for other audio applications to keep playing
-     * after having lowered their output level (also referred to as "ducking").
-     * Examples of temporary changes are the playback of driving directions where playback of music
-     * in the background is acceptable.
+     * Used to indicate a temporary request of audio focus, anticipated to last
+     * a short amount of time, and where it is acceptable for other audio
+     * applications to keep playing after having lowered their output level
+     * (also referred to as "ducking"). Examples of temporary changes are the
+     * playback of driving directions where playback of music in the background
+     * is acceptable.
      */
     public static final int AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK = 3;
 
@@ -120,9 +126,8 @@ public class AudioManagerCompatUtils {
     }
 
     /**
-     * Forces the stream controlled by hard volume keys
-     * specifying streamType == -1 releases control to the
-     * logic.
+     * Forces the stream controlled by hard volume keys specifying streamType ==
+     * -1 releases control to the logic.
      * <p>
      * <b>Warning:</b> This is a private API, and it may not exist in API 16+.
      * </p>
@@ -132,18 +137,22 @@ public class AudioManagerCompatUtils {
     }
 
     /**
-     *  Request audio focus.
-     *  Send a request to obtain the audio focus
-     *  @param l the listener to be notified of audio focus changes
-     *  @param streamType the main audio stream type affected by the focus request
-     *  @param durationHint use {@link #AUDIOFOCUS_GAIN_TRANSIENT} to indicate this focus request
-     *      is temporary, and focus will be abandoned shortly. Examples of transient requests are
-     *      for the playback of driving directions, or notifications sounds.
-     *      Use {@link #AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK} to indicate also that it's ok for
-     *      the previous focus owner to keep playing if it ducks its audio output.
-     *      Use {@link #AUDIOFOCUS_GAIN} for a focus request of unknown duration such
-     *      as the playback of a song or a video.
-     *  @return {@link #AUDIOFOCUS_REQUEST_FAILED} or {@link #AUDIOFOCUS_REQUEST_GRANTED}
+     * Request audio focus. Send a request to obtain the audio focus
+     *
+     * @param l the listener to be notified of audio focus changes
+     * @param streamType the main audio stream type affected by the focus
+     *            request
+     * @param durationHint use {@link #AUDIOFOCUS_GAIN_TRANSIENT} to indicate
+     *            this focus request is temporary, and focus will be abandoned
+     *            shortly. Examples of transient requests are for the playback
+     *            of driving directions, or notifications sounds. Use
+     *            {@link #AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK} to indicate also
+     *            that it's ok for the previous focus owner to keep playing if
+     *            it ducks its audio output. Use {@link #AUDIOFOCUS_GAIN} for a
+     *            focus request of unknown duration such as the playback of a
+     *            song or a video.
+     * @return {@link #AUDIOFOCUS_REQUEST_FAILED} or
+     *         {@link #AUDIOFOCUS_REQUEST_GRANTED}
      */
     public static int requestAudioFocus(
             AudioManager receiver, Object l, int streamType, int durationHint) {
@@ -152,12 +161,29 @@ public class AudioManagerCompatUtils {
     }
 
     /**
-     *  Abandon audio focus. Causes the previous focus owner, if any, to receive focus.
-     *  @param l the listener with which focus was requested.
-     *  @return {@link #AUDIOFOCUS_REQUEST_FAILED} or {@link #AUDIOFOCUS_REQUEST_GRANTED}
+     * Abandon audio focus. Causes the previous focus owner, if any, to receive
+     * focus.
+     *
+     * @param l the listener with which focus was requested.
+     * @return {@link #AUDIOFOCUS_REQUEST_FAILED} or
+     *         {@link #AUDIOFOCUS_REQUEST_GRANTED}
      */
     public static int abandonAudioFocus(AudioManager receiver, Object l) {
         return (Integer) CompatUtils.invoke(receiver, AUDIOFOCUS_REQUEST_FAILED,
                 METHOD_abandonAudioFocus, l);
+    }
+
+    /**
+     * Checks whether speech recognition is active.
+     * <p>
+     * <b>Note:</b> Only supported on API 17+. Always returns {@code false} on
+     * unsupported platforms.
+     *
+     * @return {@code true} if a recording with source
+     *         {@link android.media.MediaRecorder.AudioSource#VOICE_RECOGNITION}
+     *         is underway.
+     */
+    public static boolean isSpeechRecognitionActive(AudioManager receiver) {
+        return (Boolean) CompatUtils.invoke(receiver, false, METHOD_isSpeechRecognitionActive);
     }
 }

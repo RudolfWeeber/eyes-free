@@ -97,6 +97,7 @@ static jclass class_IndexOutOfBoundsException;
 static jclass class_OutOfMemoryError;
 static jclass class_NullPointerException;
 static jclass class_RuntimeException;
+static jclass class_IOException;
 static jclass class_String;
 static jfieldID field_mNativeData;
 static jfieldID field_mTablesDir;
@@ -201,16 +202,16 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_startNative
   if (!brltty_initialize(driverCodeChars, brailleDeviceChars,
                          tablesDirChars)) {
     LOGE("Couldn't initialize braille driver");
-    goto releaseDriverCodeChars;
+    goto releaseTablesDirChars;
   }
   LOGI("Braille driver initialized");
   result = JNI_TRUE;
-releaseDriverCodeChars:
-  (*env)->ReleaseStringUTFChars(env, driverCode, driverCodeChars);
-releaseBrailleDeviceChars:
-  (*env)->ReleaseStringUTFChars(env, brailleDevice, brailleDeviceChars);
 releaseTablesDirChars:
   (*env)->ReleaseStringUTFChars(env, tablesDir, tablesDirChars);
+releaseBrailleDeviceChars:
+  (*env)->ReleaseStringUTFChars(env, brailleDevice, brailleDeviceChars);
+releaseDriverCodeChars:
+  (*env)->ReleaseStringUTFChars(env, driverCode, driverCodeChars);
 out:
   return result;
 }
@@ -219,12 +220,12 @@ void
 Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_stopNative(
     JNIEnv* env, jobject thiz) {
   LOGI("Stopping braille driver");
-  brltty_destroy();
   NativeData *nat = getNativeData(env, thiz);
   if (nat == NULL) {
     LOGE("Driver already stopped");
     return;
   }
+  brltty_destroy();
   (*env)->SetIntField(env, thiz, field_mNativeData, 0);
   bluetoothAndroidSetConnection(NULL);
   close(nat->pipefd[0]);
@@ -296,7 +297,6 @@ releasebytes:
   (*env)->ReleaseByteArrayElements(env, pattern, bytes, JNI_ABORT);
 out:
   return ret;
-
 }
 
 jint
@@ -332,7 +332,6 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_readCommandNa
   return ret;
 }
 
-// TODO: This method should throw more exceptions.
 void
 Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_addBytesFromDeviceNative(
     JNIEnv* env, jobject thiz, jbyteArray bytes, jint size) {
@@ -343,16 +342,13 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_addBytesFromD
     return;
   }
   jsize bytesLen = (*env)->GetArrayLength(env, bytes);
-  if (bytesLen < 0) {
-    LOGE("Negative array length");
-    return;
-  }
-  if (size > bytesLen) {
+  if (size < 0 || size > bytesLen) {
     (*env)->ThrowNew(env, class_IndexOutOfBoundsException, NULL);
     return;
   }
   jbyte *b = (*env)->GetByteArrayElements(env, bytes, NULL);
   if (!b) {
+    // Out of memory thrown.
     return;
   }
   char *writeptr = b;
@@ -363,9 +359,11 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_addBytesFromD
         continue;
       }
       LOGE("Can't write to driver: %s", strerror(errno));
+      (*env)->ThrowNew(env, class_IOException, strerror(errno));
       goto releasebytes;
     } else if (res == 0) {
       LOGE("Can't write to driver");
+      (*env)->ThrowNew(env, class_IOException, NULL);
       goto releasebytes;
     }
     size -= res;
@@ -426,6 +424,9 @@ Java_com_googlecode_eyesfree_braille_service_display_BrlttyWrapper_classInitNati
   }
   if (!(class_RuntimeException =
         getGlobalClassRef(env, "java/lang/RuntimeException"))) {
+    return;
+  }
+  if (!(class_IOException = getGlobalClassRef(env, "java/io/IOException"))) {
     return;
   }
   if (!(class_String =

@@ -35,8 +35,18 @@ public class SettingsCompatUtils {
         public static final String ACCESSIBILITY_SPEAK_PASSWORD = "speak_password";
 
         /**
+         * Stores the default TTS locales on a per engine basis. Stored as a
+         * comma separated list of values, each value being of the form
+         * {@code engine_name:locale} for example,
+         * {@code com.foo.ttsengine:eng-USA,com.bar.ttsengine:esp-ESP}. Apps
+         * should never need to read this setting directly, and can query the
+         * TextToSpeech framework classes for the locale that is in use.
+         */
+        public static final String TTS_DEFAULT_LOCALE = "tts_default_locale";
+
+        /**
          * Returns whether to speak passwords while in accessibility mode.
-         * 
+         *
          * @param context The parent context.
          * @return {@code true} if passwords should always be spoken aloud.
          */

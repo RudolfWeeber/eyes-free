@@ -16,7 +16,13 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import java.util.Collections;
+import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
+import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
+import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
+import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.utils.MotionEventUtils;
+import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
+import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -28,13 +34,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.googlecode.eyesfree.braille.display.BrailleDisplayProperties;
-import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
-import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
-import com.googlecode.eyesfree.braille.display.Display;
-import com.googlecode.eyesfree.utils.MotionEventUtils;
-import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
-import com.googlecode.eyesfree.utils.WeakReferenceHandler;
+import java.util.Collections;
 
 /**
  * A display which may present an on-screen overlay which mirrors the content
@@ -134,6 +134,11 @@ public final class OverlayDisplay implements Display,
         mMainThreadHandler.hideOverlay();
 
         mBackingDisplay.shutdown();
+    }
+
+    @Override
+    public boolean isSimulated() {
+        return mSimulateDisplay;
     }
 
     @Override

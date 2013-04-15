@@ -1,0 +1,12 @@
+# Back key
+bind \{Space}+Dot1+Dot2 KEY_ESCAPE
+# Home key
+bind \{Space}+Dot1+Dot2+Dot5 KEY_FUNCTION+0
+# Recent apps key
+bind \{Space}+Dot1+Dot2+Dot3+Dot5 KEY_FUNCTION+1
+# Notifications bar
+bind \{Space}+Dot1+Dot3+Dot4+Dot5 KEY_FUNCTION+2
+bind \{Space}+\{Dot7} KEY_BACKSPACE
+bind \{Space}+\{Dot8} KEY_ENTER
+# Keyboard help
+bind \{Space}+Dot1+Dot2+Dot3 LEARN

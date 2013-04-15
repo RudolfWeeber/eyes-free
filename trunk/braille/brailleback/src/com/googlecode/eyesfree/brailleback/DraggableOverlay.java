@@ -16,19 +16,19 @@
 
 package com.googlecode.eyesfree.brailleback;
 
+import com.googlecode.eyesfree.utils.MotionEventUtils;
+import com.googlecode.eyesfree.widget.SimpleOverlay;
+
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.Message;
-import android.view.HapticFeedbackConstants;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
-
-import com.googlecode.eyesfree.utils.MotionEventUtils;
-import com.googlecode.eyesfree.widget.SimpleOverlay;
 
 /**
  * Overlay that can be long-pressed, and then dragged to the top or bottom of

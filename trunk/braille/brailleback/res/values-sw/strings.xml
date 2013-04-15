@@ -42,8 +42,8 @@
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Chaguo za wasanidi programu"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Onyesha matokeo ya Breli kwenye skrini"</string>
     <string name="key_bindings_title" msgid="5482900913343271532">"Miunganisho ya vitufe"</string>
-    <string name="display_connected" msgid="2008600513914815101">"brlback inawaka"</string>
-    <string name="shutting_down" msgid="1303701310644298807">"brlback imezimika"</string>
+    <string name="display_connected" msgid="2008600513914815101">"brlback imewashwa"</string>
+    <string name="shutting_down" msgid="1303701310644298807">"brlback imezimwa"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Kibodi ya BrailleBack inafanya kazi"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Gonga ili ubadilishe hadi kibodi chaguo-msingi"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - gredi <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
