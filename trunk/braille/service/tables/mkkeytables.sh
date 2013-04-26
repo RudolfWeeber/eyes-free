@@ -15,6 +15,6 @@ dstdir="$basedir/res/raw"
 mkdir -p $dstdir
 
 echo "Creating archive..."
-zip -j -9 "$dstdir/keytables.zip" "$srcdir/"*.k??
+zip -j -9 -q "$dstdir/keytables.zip" "$srcdir/"*.k??
 
 echo "Keyboard table archive successfully created."

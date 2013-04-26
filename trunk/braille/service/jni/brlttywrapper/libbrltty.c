@@ -388,8 +388,8 @@ listKeyContext(const KeyContext *context, const KeyTable* keyTable,
                KeyMapEntryCallback callback,
                void *data) {
   int i;
-  for (i = 0; i < context->keyBindingsSize; ++i) {
-    const KeyBinding* binding = &context->keyBindingTable[i];
+  for (i = 0; i < context->keyBindings.count; ++i) {
+    const KeyBinding* binding = &context->keyBindings.table[i];
     if (binding->flags & KBF_HIDDEN) {
       continue;
     }

@@ -1,97 +1,14 @@
-diff --strip-trailing-cr -Pur a/brltty/Drivers/Braille/HIMS/braille.c b/brltty/Drivers/Braille/HIMS/braille.c
---- a/brltty/Drivers/Braille/HIMS/braille.c	2012-07-03 09:12:59.678655571 -0700
-+++ b/brltty/Drivers/Braille/HIMS/braille.c	2012-11-07 16:04:39.000000000 -0800
-@@ -560,7 +560,8 @@
-       }
- 
-       case IPT_KEYS: {
--        uint16_t bits = packet.data.reserved[0] | (packet.data.reserved[1] << 8);
-+        uint16_t bits = packet.data.reserved[0] | (packet.data.reserved[1] << 8)
-+            | (packet.data.reserved[2] << 8);
-         uint16_t bit = 0X1;
-         unsigned char key = 0;
- 
-diff --strip-trailing-cr -Pur a/brltty/Drivers/Braille/Papenmeier/braille.c b/brltty/Drivers/Braille/Papenmeier/braille.c
---- a/brltty/Drivers/Braille/Papenmeier/braille.c	2012-07-03 09:12:52.418560018 -0700
-+++ b/brltty/Drivers/Braille/Papenmeier/braille.c	2012-07-02 14:05:19.000000000 -0700
-@@ -1182,7 +1182,8 @@
-       serialParameters.flowControl = io->flowControl;
-       logMessage(LOG_DEBUG, "probing Papenmeier display at %u baud", *baud);
- 
--      if (gioReconfigureResource(gioEndpoint, &serialParameters)) {
-+      if (io == &bluetoothOperations
-+          || gioReconfigureResource(gioEndpoint, &serialParameters)) {
-         if (gioDiscardInput(gioEndpoint)) {
-           if (identifyTerminal(brl)) {
-             brl->setFirmness = protocol->setFirmness;
-diff --strip-trailing-cr -Pur a/brltty/Programs/cmd.c b/brltty/Programs/cmd.c
---- a/brltty/Programs/cmd.c	2012-07-03 09:10:37.246781003 -0700
-+++ b/brltty/Programs/cmd.c	2012-07-02 15:07:58.000000000 -0700
-@@ -527,6 +527,7 @@
-   }
- }
- 
-+#ifdef ENABLE_API
- static brlapi_keyCode_t
- cmdWCharToBrlapi (wchar_t wc) {
-   if (iswLatin1(wc)) {
-@@ -661,3 +662,4 @@
-   | (code & BRLAPI_KEY_FLG_SHIFT		? BRL_FLG_CHAR_SHIFT	: 0)
-     ;
- }
-+#endif /* ENABLE_API */
-diff --strip-trailing-cr -Pur a/brltty/Programs/cmd.h b/brltty/Programs/cmd.h
---- a/brltty/Programs/cmd.h	2012-07-03 09:10:37.246781003 -0700
-+++ b/brltty/Programs/cmd.h	2012-07-02 15:07:58.000000000 -0700
-@@ -20,7 +20,9 @@
- #define BRLTTY_INCLUDED_CMD
- 
- #include "timing.h"
-+#ifdef ENABLE_API
- #include "brlapi_keycodes.h"
-+#endif /* ENABLE_API */
- 
- #ifdef __cplusplus
- extern "C" {
-@@ -78,8 +80,10 @@
- extern void resetRepeatState (RepeatState *state);
- extern void handleRepeatFlags (int *command, RepeatState *state, int panning, int delay, int interval);
- 
-+#ifdef ENABLE_API
- extern brlapi_keyCode_t cmdBrlttyToBrlapi (int command, int retainDots);
- extern int cmdBrlapiToBrltty (brlapi_keyCode_t code);
-+#endif /* ENABLE_API */
- 
- #ifdef __cplusplus
- }
+Only in a/brltty/Android/Application/res: values-de
+Only in a/brltty/Android/Application/res/xml: input_service.xml
 diff --strip-trailing-cr -Pur a/brltty/Programs/cmds.auto.h b/brltty/Programs/cmds.auto.h
 --- a/brltty/Programs/cmds.auto.h	1969-12-31 16:00:00.000000000 -0800
-+++ b/brltty/Programs/cmds.auto.h	2012-07-02 15:36:36.000000000 -0700
-@@ -0,0 +1,1026 @@
-+/*
-+ * BRLTTY - A background process providing access to the console screen (when in
-+ *          text mode) for a blind person using a refreshable braille display.
-+ *
-+ * Copyright (C) 1995-2012 by The BRLTTY Developers.
-+ *
-+ * BRLTTY comes with ABSOLUTELY NO WARRANTY.
-+ *
-+ * This is free software, placed under the terms of the
-+ * GNU General Public License, as published by the Free Software
-+ * Foundation; either version 2 of the License, or (at your option) any
-+ * later version. Please see the file LICENSE-GPL for details.
-+ *
-+ * Web Page: http://mielke.cc/brltty/
-+ *
-+ * This software is maintained by Dave Mielke <dave@mielke.cc>.
-+ */
-+
++++ b/brltty/Programs/cmds.auto.h	2013-04-15 16:14:11.401259795 -0700
+@@ -0,0 +1,1011 @@
 +/*
 + * NOTE: Manually generated on Linux and added to version control to be used
 + * when building under the Android NDK.
 + * This file is created by the native brltty build system.
 + */
-+
 +{
 +  .name = "NOOP",
 +  .code = BRL_CMD_NOOP,
@@ -608,25 +525,29 @@ diff --strip-trailing-cr -Pur a/brltty/Programs/cmds.auto.h b/brltty/Programs/cm
 +{
 +  .name = "SHIFT",
 +  .code = BRL_CMD_SHIFT,
-+  .description = strtext("add shift modifier to next typed character or emulated key")
++  .isToggle = 1,
++  .description = strtext("set shift modifier of next typed character or emulated key on/off")
 +}
 +,
 +{
 +  .name = "UPPER",
 +  .code = BRL_CMD_UPPER,
-+  .description = strtext("add upper modifier to next typed character or emulated key")
++  .isToggle = 1,
++  .description = strtext("set upper modifier of next typed character or emulated key on/off")
 +}
 +,
 +{
 +  .name = "CONTROL",
 +  .code = BRL_CMD_CONTROL,
-+  .description = strtext("add control modifier to next typed character or emulated key")
++  .isToggle = 1,
++  .description = strtext("set control modifier of next typed character or emulated key on/off")
 +}
 +,
 +{
 +  .name = "META",
 +  .code = BRL_CMD_META,
-+  .description = strtext("add meta modifier to next typed character or emulated key")
++  .isToggle = 1,
++  .description = strtext("set meta modifier of next typed character or emulated key on/off")
 +}
 +,
 +{
@@ -1094,48 +1015,3 @@ diff --strip-trailing-cr -Pur a/brltty/Programs/cmds.auto.h b/brltty/Programs/cm
 +  .description = strtext("switch to command context")
 +}
 +,
-diff --strip-trailing-cr -Pur a/brltty/Programs/log.c b/brltty/Programs/log.c
---- a/brltty/Programs/log.c	2012-07-03 09:10:37.246781003 -0700
-+++ b/brltty/Programs/log.c	2012-06-08 15:35:08.000000000 -0700
-@@ -30,6 +30,10 @@
- #include <pthread.h>
- #endif /* __MINGW32__ */
- 
-+#ifdef ANDROID
-+#include <android/log.h>
-+#endif /* ANDROID */
-+
- #include "log.h"
- #include "timing.h"
- 
-@@ -100,6 +104,21 @@
-   return EVENTLOG_INFORMATION_TYPE;
- }
- 
-+#elif defined(ANDROID)
-+static int
-+toLogPrio(int level) {
-+  switch (level) {
-+    case LOG_EMERG:   return ANDROID_LOG_FATAL;
-+    case LOG_ALERT:   return ANDROID_LOG_FATAL;
-+    case LOG_CRIT:    return ANDROID_LOG_FATAL;
-+    case LOG_ERR:     return ANDROID_LOG_ERROR;
-+    case LOG_WARNING: return ANDROID_LOG_WARN;
-+    case LOG_NOTICE:  return ANDROID_LOG_INFO;
-+    case LOG_INFO:    return ANDROID_LOG_INFO;
-+    case LOG_DEBUG:   return ANDROID_LOG_DEBUG;
-+    default:          return ANDROID_LOG_UNKNOWN;
-+  }
-+}
- #endif /* system log internal definitions */
- 
- static const char *logPrefix = NULL;
-@@ -246,6 +265,8 @@
-         }
- #elif defined(__MSDOS__)
- 
-+#elif defined(ANDROID)
-+        __android_log_write(toLogPrio(level), "Brltty", record);
- #endif /* write system log */
-       }
- 

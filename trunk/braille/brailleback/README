@@ -60,10 +60,10 @@ Please run all commands from the root of the eyes-free source tree.
   the apk on a device.  Otherwise, follow and adjust the steps below for your
   build environment.
 
-* Make sure to have a copy of brltty, version 4.4 checked out.  This can be
+* Make sure to have a copy of brltty, version 4.5 checked out.  This can be
   checked out from subversion as follows (run from within the eyes-free
   directory as per above):
-  $ svn checkout svn://mielke.cc//releases/brltty-4.4 \
+  $ svn checkout svn://mielke.cc//releases/brltty-4.5 \
     braille/service/jni/brlttywrapper/brltty
 
 * Make sure to have a copy of liblouis, version 2.5.1 checked out.  This can
