@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="BarGraph">
+        <attr name="values" format="reference" />
+        <attr name="barMargin" format="dimension" />
+        <attr name="barMinWidth" format="dimension" />
+        <attr name="barMinHeight" format="dimension" />
+        <attr name="title" format="reference|string" />
+        <attr name="titleSize" format="dimension" />
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bar Graph</string>
+    <string name="sample_title">Sample Bar Graph</string>
+    <string name="bar_desc">Bar %1$d, value %2$d</string>
+    <string name="bar_desc_highlight">Bar %1$d, value %2$d highlighted</string>
+    <string name="bar_graph_description">%1$s, showing %2$d bars</string>
+
+</resources>

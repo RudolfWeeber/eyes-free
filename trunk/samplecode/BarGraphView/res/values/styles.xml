@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BarGraph" >
+        <item name="barMargin">4dp</item>
+        <item name="barMinWidth">8dp</item>
+        <item name="barMinHeight">16dp</item>
+        <item name="titleSize">14sp</item>
+    </style>
+
+</resources>
