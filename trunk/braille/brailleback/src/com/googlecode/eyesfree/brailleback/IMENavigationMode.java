@@ -36,6 +36,13 @@ import android.widget.EditText;
  * Forwards calls not handled by the hosted IME to another NavigationMode.
  */
 public class IMENavigationMode implements NavigationMode, BrailleIME.Host {
+    /** Accessibility event types that warrant rechecking the current state. */
+    private final static int UPDATE_STATE_EVENT_MASK = (
+            AccessibilityEvent.TYPE_VIEW_FOCUSED |
+            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED |
+            AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED |
+            AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED |
+            AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED);
     private final NavigationMode mNext;
     private final AccessibilityService mAccessibilityService;
     private final DisplayManager mDisplayManager;
@@ -133,17 +140,19 @@ public class IMENavigationMode implements NavigationMode, BrailleIME.Host {
 
     @Override
     public void onObserveAccessibilityEvent(AccessibilityEvent event) {
-        updateState();
+        if ((event.getEventType() & UPDATE_STATE_EVENT_MASK) != 0) {
+            updateState();
+        }
         mNext.onObserveAccessibilityEvent(event);
     }
 
     @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
+    public boolean onAccessibilityEvent(AccessibilityEvent event) {
         BrailleIME ime = getIME();
         if (ime != null && mState.controlsDisplay()) {
-            return;
+            return true;
         }
-        mNext.onAccessibilityEvent(event);
+        return mNext.onAccessibilityEvent(event);
     }
 
     @Override
@@ -353,10 +362,10 @@ public class IMENavigationMode implements NavigationMode, BrailleIME.Host {
         }
         if (!mInputBound) {
             setState(State.INACTIVE);
-        } else if (!isImeOpen()) {
-            setState(State.TEXT_ONLY);
         } else if (isModalFieldFocused()) {
             setState(State.MODAL_EDITOR);
+        } else if (!isImeOpen()) {
+            setState(State.TEXT_ONLY);
         } else if (isSelfBrailledFieldFocused()) {
             setState(State.TEXT_AND_NAVIGATION);
         } else {
@@ -389,7 +398,6 @@ public class IMENavigationMode implements NavigationMode, BrailleIME.Host {
         // Only instances of EditText with both input and accessibility focus
         // should be edited modally.
         AccessibilityNodeInfoCompat root = null;
-        AccessibilityNodeInfoCompat inputFocused = null;
         AccessibilityNodeInfoCompat accessibilityFocused = null;
         try {
             root = AccessibilityServiceCompatUtils.getRootInActiveWindow(
@@ -397,18 +405,16 @@ public class IMENavigationMode implements NavigationMode, BrailleIME.Host {
             if (root == null) {
                 return false;
             }
-            inputFocused = root.findFocus(
-                AccessibilityNodeInfoCompat.FOCUS_INPUT);
-            if (!AccessibilityNodeInfoUtils.nodeMatchesClassByType(
-                    mAccessibilityService, inputFocused, EditText.class)) {
-                return false;
-            }
             accessibilityFocused = root.findFocus(
                 AccessibilityNodeInfoCompat.FOCUS_ACCESSIBILITY);
-            return inputFocused.equals(accessibilityFocused);
+            return (accessibilityFocused != null &&
+                    accessibilityFocused.isFocused() &&
+                    AccessibilityNodeInfoUtils.nodeMatchesClassByType(
+                            mAccessibilityService, accessibilityFocused,
+                            EditText.class));
         } finally {
             AccessibilityNodeInfoUtils.recycleNodes(
-                root, inputFocused, accessibilityFocused);
+                root, accessibilityFocused);
         }
     }
 

@@ -201,7 +201,7 @@ public class DriverThread {
     public void readDelayed(long delayMillis) {
         mHandler.sendEmptyMessageDelayed(MSG_READ, delayMillis);
     }
-        
+
     private class DriverHandler extends Handler {
         public DriverHandler(Looper looper) {
             super(looper);

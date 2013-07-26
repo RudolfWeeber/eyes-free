@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Préférences BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Appareil"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"État"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Raccourcis clavier"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Aide du clavier"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Type de braille"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Table braille à 6 points"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Braille à 8 points"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automatique (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automatique (aucune)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Divers"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Options pour développeurs"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Superposition à l\'écran"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Afficher texte en braille"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Raccourcis clavier"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Lancer le didacticiel"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Niveau de consignation"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Aide du clavier BrailleBack"</string>
     <string name="display_connected" msgid="2008600513914815101">"bb activé"</string>
     <string name="shutting_down" msgid="1303701310644298807">"bb désactivé"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Clavier BrailleBack activé"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Appuyer pour passer au clavier par défaut"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> : <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Panoramique à gauche"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Panoramique à droite"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Didacticiel superposition"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Quitter"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"La superposition en braille simule une plage braille. Les cellules en braille sont affichées, avec le texte correspondant, tel qu\'il serait présenté sur une planche physique. Nous vous recommandons d\'activer TalkBack et l\'exploration au toucher avant de poursuivre."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Paramètres d\'accessibilité"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Vous pouvez faire un panoramique sur la plage braille en appuyant sur l\'un des boutons correspondants à côté du texte."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Plusieurs éléments peuvent s\'afficher simultanément. Vous pouvez cliquer sur l\'un d\'eux en appuyant sur l\'une des cellules en braille dans le texte. Cela revient à appuyer sur l\'une des touches sur une plage braille."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Si la superposition recouvre un autre élément à l\'écran, vous pouvez la déplacer. Appuyez sur celle-ci de manière prolongée, puis faites-la glisser. Elle se place alors en haut ou en bas de l\'écran lorsque vous relevez le doigt."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Aff. didacticiel superposition"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Nous vous recommandons de regarder le didacticiel concernant la superposition à l\'écran avant d\'utiliser celle-ci."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"R :"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Recherche : <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Didacticiel de la recherche sur l\'écran"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"La recherche sur l\'écran vous permet d\'accéder rapidement aux éléments de l\'écran en saisissant une partie de leur description. À mesure de la saisie, l\'élément correspondant est sélectionné."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Appuyez sur <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> pour passer au résultat suivant et sur <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> pour passer au résultat précédent. Appuyez sur <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> pour quitter le mode de recherche sur l\'écran et sélectionner le résultat. Appuyez sur <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> pour revenir à l\'élément précédemment sélectionné."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Ne plus afficher"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Fermer"</string>
 </resources>

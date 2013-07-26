@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Predvoľby aplikácie BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Zariadenie"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Stav"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Priradenie klávesov"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Pomocník klávesnice"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braillovo písmo"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Typ Braillovho písma"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabuľka 6-bodového písma"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"8-bodové Braillovo písmo"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automaticky (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automaticky (žiadne)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Rôzne"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Možnosti vývojára"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Prekrytie obrazovky"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Zob.výstup Brail.na obr."</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Priradenie klávesov"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Spustiť príručku"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Zaznamenať úroveň výstupu"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Pomocník klávesnice BrailleBack"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback zap"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback vyp"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Klávesnica aplikácie BrailleBack je aktívna"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Klepnutím prepnete na predvolenú klávesnicu"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – úroveň <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Posunúť doľava"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Posunúť doprava"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Príručka ku prekrytiu"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Dokončiť"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Hmatové prekrytie simuluje obnoviteľný hmatový displej. Zobrazuje hmatové bunky spolu s príslušným textom, ktorý by sa zobrazil na hardvérovom displeji. Skôr ako začnete, odporúčame vám najprv povoliť funkciu TalkBack a režim preskúmania dotykom."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Nast. zjednod. ovládania."</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Hmatový displej môžete posúvať stlačením jedného z tlačidiel posúvania vedľa textu."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Na displeji sa môžu naraz zobrazovať viaceré prvky. Klepnutím na niektorú hmatovú bunku v texte na ne môžete kliknúť. Korešponduje to so stlačením jedného zo smerových klávesov na hmatovom displeji."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Ak prekrytie zakrýva iný prvok na obrazovke, môžete ho posunúť. Stlačte a podržte prekrytie a presuňte ho. Po uvoľnení prsta sa uchytí v hornej alebo dolnej časti obrazovky."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Zobraziť príručku ku prekrytiu"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Odporúčame vám, aby ste si pred použitím prekrytia obrazovky pozreli príručku."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"V:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Vyhľadávací dopyt: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Príručka Vyhľadávanie na obrazovke"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Vyhľadávanie na obrazovke vám umožňuje rýchlo prechádzať medzi položkami na obrazovke tak, že napíšte časť ich textového popisu. Počas písania sa mení zameranie vyhľadávania na ďalšie položky, ktoré sa zhodujú s hľadaným výrazom."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Ak chcete prejsť na ďalší výsledok, použite kláves <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g>. Ak chcete prejsť na predchádzajúci výsledok, použite kláves <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>. Stlačením klávesa <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> ukončíte režim vyhľadávania a ponecháte zameranie na výsledku. Stlačením klávesa <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> sa vrátite na predchádzajúcu zameranú položku."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Túto správu už nezobrazovať"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Zavrieť"</string>
 </resources>

@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBack-beállítások"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Eszköz"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Állapot"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Billentyűpárosítások"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Billentyűzet súgó"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Braille-típus"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Hatpontos Braille-tábla"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Számítógépes Braille"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automatikus (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automatikus (nincs)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Vegyes"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Fejlesztői lehetőségek"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Képernyőn megjelenő fedvény"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Braille-írás a képernyőn"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Billentyűpárosítások"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Útmutató indítása"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Naplózási kimenet szintje"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"A BrailleBack-billentyűzet súgója"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback be"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback ki"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"A BrailleBack-billentyűzet aktív"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Koppintson az alapértelmezett billentyűzetre való váltáshoz"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>. fok"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Görgetés balra"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Görgetés jobbra"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Fedvényútmutató"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Befejezés"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"A Braille-fedvény egy frissíthető Braille-kijelzőt szimulál. A hardveres kijelzőkön is megjelenő Braille-cellákat jeleníti meg a megfelelő szöveggel együtt. Javasoljuk, hogy mielőtt továbblépne, engedélyezze a TalkBack funkciót és az érintéses felfedezési módot."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Kisegítő lehetőségek beállításai"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"A Braille-kijelzőt a szöveg melletti görgetőgombok egyikét megnyomva görgetheti."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"A képernyőn egyszerre több elem is megjelenhet. Ezekre a szövegben lévő Braille-cellák valamelyikére koppintva kattinthat. Ez megfelel a Braille-kijelző egyik kurzorirányító billentyűje lenyomásának."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Ha a fedvény a képernyőn lévő valamely másik elemet is lefedi, akkor el lehet távolítani az útból. Nyomja le hosszan a fedvényt, majd húzza arrébb. Amikor felemeli ujját, a fedvény a képernyő tetejéhez vagy aljához igazodik."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Fedvényútmutató megjelenítése"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Javasoljuk, hogy a képernyőn megjelenő fedvény használata előtt tekintse át a vonatkozó útmutatót."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"T:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Keresés: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Képernyőn történő keresés – Útmutató"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"A képernyőn történő keresés segítségével gyorsan az egyes elemekhez léphet, úgy, hogy elkezdi beírni szöveges leírásukat. Gépelés közben a fókusz mindig a következő egyező elemre kerül."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"A(z) <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> használatával a következő találatra, míg a(z) <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> segítségével az előző találatra léphet. A(z) <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> lenyomásával kiléphet a keresőmódból, és a találatra fókuszálhat. Egy korábban fókuszált elemre lépéshez nyomja le a(z) <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> lehetőséget."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Ne jelenjen meg többé"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Bezárás"</string>
 </resources>

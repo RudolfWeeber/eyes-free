@@ -42,9 +42,12 @@ public class AccessibilityNodeInfoUtils {
     /** Whether isVisibleToUser() is supported by the current SDK. */
     private static final boolean SUPPORTS_VISIBILITY = (Build.VERSION.SDK_INT >= 16);
 
-    /** Class extended by Samsung's TouchWiz implementation of ListView. */
+    /**
+     * Class for Samsung's TouchWiz implementation of AdapterView. May be
+     * {@code null} on non-Samsung devices.
+     */
     private static final Class<?> CLASS_TOUCHWIZ_TWADAPTERVIEW = CompatUtils.getClass(
-            "com.sec.android.touchwiz.widget.twadapterview");
+            "com.sec.android.touchwiz.widget.TwAdapterView");
 
     private AccessibilityNodeInfoUtils() {
         // This class is not instantiable.
@@ -183,12 +186,12 @@ public class AccessibilityNodeInfoUtils {
             }
         }
 
-        // If this node has no focusable predecessors, but it still has text,
+        // If this node has no focusable ancestors, but it still has text,
         // then it should receive focus from navigation and be read aloud.
-        if (!hasMatchingPredecessor(context, node, FILTER_ACCESSIBILITY_FOCUSABLE)
+        if (!hasMatchingAncestor(context, node, FILTER_ACCESSIBILITY_FOCUSABLE)
                 && hasText(node)) {
             LogUtils.log(AccessibilityNodeInfoUtils.class, Log.VERBOSE,
-                    "Focus, node has text and no focusable predecessors");
+                    "Focus, node has text and no focusable ancestors");
             return true;
         }
 
@@ -204,7 +207,7 @@ public class AccessibilityNodeInfoUtils {
      */
     public static AccessibilityNodeInfoCompat findFocusFromHover(
             Context context, AccessibilityNodeInfoCompat touched) {
-        return AccessibilityNodeInfoUtils.getSelfOrMatchingPredecessor(
+        return AccessibilityNodeInfoUtils.getSelfOrMatchingAncestor(
                 context, touched, FILTER_SHOULD_FOCUS);
     }
 
@@ -306,48 +309,92 @@ public class AccessibilityNodeInfoUtils {
             return false;
         }
 
-        if (node.isClickable() || node.isLongClickable() || node.isFocusable()) {
+        // Nodes that are clickable are always actionable.
+        if (isClickable(node) || isLongClickable(node)) {
             return true;
         }
 
-        if (supportsAnyAction(node, AccessibilityNodeInfoCompat.ACTION_CLICK,
-                AccessibilityNodeInfoCompat.ACTION_LONG_CLICK,
-                AccessibilityNodeInfoCompat.ACTION_FOCUS,
+        if (node.isFocusable()) {
+            return true;
+        }
+
+        return supportsAnyAction(node, AccessibilityNodeInfoCompat.ACTION_FOCUS,
                 AccessibilityNodeInfoCompat.ACTION_NEXT_HTML_ELEMENT,
-                AccessibilityNodeInfoCompat.ACTION_PREVIOUS_HTML_ELEMENT)) {
-            return true;
-        }
-
-        return false;
+                AccessibilityNodeInfoCompat.ACTION_PREVIOUS_HTML_ELEMENT);
     }
 
     /**
-     * Check whether a given node has a scrollable predecessor.
+     * Returns whether a node is clickable. That is, the node supports at least one of the
+     * following:
+     * <ul>
+     * <li>{@link AccessibilityNodeInfoCompat#isClickable()}</li>
+     * <li>{@link AccessibilityNodeInfoCompat#ACTION_CLICK}</li>
+     * </ul>
      *
      * @param node The node to examine.
-     * @return {@code true} if one of the node's predecessors is scrollable.
+     * @return {@code true} if node is clickable.
      */
-    private static boolean hasMatchingPredecessor(
+    public static boolean isClickable(AccessibilityNodeInfoCompat node) {
+        if (node == null) {
+            return false;
+        }
+
+        if (node.isClickable()) {
+            return true;
+        }
+
+        return supportsAnyAction(node, AccessibilityNodeInfoCompat.ACTION_CLICK);
+    }
+
+    /**
+     * Returns whether a node is long clickable. That is, the node supports at least one of the
+     * following:
+     * <ul>
+     * <li>{@link AccessibilityNodeInfoCompat#isLongClickable()}</li>
+     * <li>{@link AccessibilityNodeInfoCompat#ACTION_LONG_CLICK}</li>
+     * </ul>
+     *
+     * @param node The node to examine.
+     * @return {@code true} if node is long clickable.
+     */
+    public static boolean isLongClickable(AccessibilityNodeInfoCompat node) {
+        if (node == null) {
+            return false;
+        }
+
+        if (node.isLongClickable()) {
+            return true;
+        }
+
+        return supportsAnyAction(node, AccessibilityNodeInfoCompat.ACTION_LONG_CLICK);
+    }
+
+    /**
+     * Check whether a given node has a scrollable ancestor.
+     *
+     * @param node The node to examine.
+     * @return {@code true} if one of the node's ancestors is scrollable.
+     */
+    private static boolean hasMatchingAncestor(
             Context context, AccessibilityNodeInfoCompat node, NodeFilter filter) {
         if (node == null) {
             return false;
         }
 
-        final AccessibilityNodeInfoCompat result = getMatchingPredecessor(context, node, filter);
-
-        if (result != null) {
-            result.recycle();
-            return true;
+        final AccessibilityNodeInfoCompat result = getMatchingAncestor(context, node, filter);
+        if (result == null) {
+            return false;
         }
 
-        return false;
+        result.recycle();
+        return true;
     }
 
     /**
      * Returns the {@code node} if it matches the {@code filter}, or the first
-     * matching predecessor. Returns {@code null} if no nodes match.
+     * matching ancestor. Returns {@code null} if no nodes match.
      */
-    public static AccessibilityNodeInfoCompat getSelfOrMatchingPredecessor(
+    public static AccessibilityNodeInfoCompat getSelfOrMatchingAncestor(
             Context context, AccessibilityNodeInfoCompat node, NodeFilter filter) {
         if (node == null) {
             return null;
@@ -357,28 +404,28 @@ public class AccessibilityNodeInfoUtils {
             return AccessibilityNodeInfoCompat.obtain(node);
         }
 
-        return getMatchingPredecessor(context, node, filter);
+        return getMatchingAncestor(context, node, filter);
     }
 
     /**
-     * Returns the first predecessor of {@code node} that matches the
+     * Returns the first ancestor of {@code node} that matches the
      * {@code filter}. Returns {@code null} if no nodes match.
      */
-    private static AccessibilityNodeInfoCompat getMatchingPredecessor(
+    private static AccessibilityNodeInfoCompat getMatchingAncestor(
             Context context, AccessibilityNodeInfoCompat node, NodeFilter filter) {
         if (node == null) {
             return null;
         }
 
-        final HashSet<AccessibilityNodeInfoCompat> predecessors =
+        final HashSet<AccessibilityNodeInfoCompat> ancestors =
                 new HashSet<AccessibilityNodeInfoCompat>();
 
         try {
-            predecessors.add(AccessibilityNodeInfoCompat.obtain(node));
+            ancestors.add(AccessibilityNodeInfoCompat.obtain(node));
             node = node.getParent();
 
             while (node != null) {
-                if (!predecessors.add(node)) {
+                if (!ancestors.add(node)) {
                     // Already seen this node, so abort!
                     node.recycle();
                     return null;
@@ -392,7 +439,7 @@ public class AccessibilityNodeInfoUtils {
                 node = node.getParent();
             }
         } finally {
-            recycleNodes(predecessors);
+            recycleNodes(ancestors);
         }
 
         return null;
@@ -474,22 +521,44 @@ public class AccessibilityNodeInfoUtils {
 
     /**
      * Determines if the current item is at the edge of a list by checking the
-     * scrollable predecessors of the items on either side.
+     * scrollable predecessors of the items on both sides.
      *
+     * @param context The parent context.
+     * @param node The node to check.
      * @return true if the current item is at the edge of a list.
      */
     public static boolean isEdgeListItem(Context context, AccessibilityNodeInfoCompat node) {
+        return isEdgeListItem(context, node, 0, null);
+    }
+
+    /**
+     * Determines if the current item is at the edge of a list by checking the
+     * scrollable predecessors of the items on either or both sides.
+     *
+     * @param context The parent context.
+     * @param node The node to check.
+     * @param direction The direction in which to check, one of:
+     *            <ul>
+     *            <li>{@code -1} to check backward
+     *            <li>{@code 0} to check both backward and forward
+     *            <li>{@code 1} to check forward
+     *            </ul>
+     * @param filter (Optional) Filter used to validate list-type ancestors.
+     * @return true if the current item is at the edge of a list.
+     */
+    public static boolean isEdgeListItem(
+            Context context, AccessibilityNodeInfoCompat node, int direction, NodeFilter filter) {
         if (node == null) {
             return false;
         }
 
-        if (isMatchingEdgeListItem(context, node, FILTER_SCROLL_BACKWARD,
-                NodeFocusFinder.SEARCH_BACKWARD)) {
+        if ((direction <= 0) && isMatchingEdgeListItem(context, node,
+                NodeFocusFinder.SEARCH_BACKWARD, FILTER_SCROLL_BACKWARD.and(filter))) {
             return true;
         }
 
-        if (isMatchingEdgeListItem(context, node, FILTER_SCROLL_FORWARD,
-                NodeFocusFinder.SEARCH_FORWARD)) {
+        if ((direction >= 0) && isMatchingEdgeListItem(context, node,
+                NodeFocusFinder.SEARCH_FORWARD, FILTER_SCROLL_FORWARD.and(filter))) {
             return true;
         }
 
@@ -500,25 +569,26 @@ public class AccessibilityNodeInfoUtils {
      * Utility method for determining if a searching past a particular node will
      * fall off the edge of a scrollable container.
      *
-     * @param cursor
-     * @param filter
-     * @param direction
+     * @param cursor Node to check.
+     * @param direction The direction in which to move from the cursor.
+     * @param filter Filter used to validate list-type ancestors.
      * @return {@code true} if focusing search in the specified direction will
      *         fall off the edge of the container.
      */
-    private static boolean isMatchingEdgeListItem(
-            Context context, AccessibilityNodeInfoCompat cursor, NodeFilter filter, int direction) {
-        AccessibilityNodeInfoCompat predecessor = null;
+    private static boolean isMatchingEdgeListItem(Context context,
+            AccessibilityNodeInfoCompat cursor, int direction, NodeFilter filter) {
+        AccessibilityNodeInfoCompat ancestor = null;
         AccessibilityNodeInfoCompat searched = null;
-        AccessibilityNodeInfoCompat searchedPredecessor = null;
+        AccessibilityNodeInfoCompat searchedAncestor = null;
 
         try {
-            predecessor = getMatchingPredecessor(null, cursor, filter);
-            if (predecessor == null) {
+            ancestor = getMatchingAncestor(null, cursor, filter);
+            if (ancestor == null) {
                 // Not contained in a scrollable list.
                 return false;
             }
 
+            // Search in the specified direction until we find a focusable node.
             // TODO: This happens elsewhere -- make into a single utility method.
             searched = NodeFocusFinder.focusSearch(cursor, direction);
             while ((searched != null)
@@ -528,18 +598,18 @@ public class AccessibilityNodeInfoUtils {
                 temp.recycle();
             }
 
-            if ((searched == null) || searched.equals(predecessor)) {
+            if ((searched == null) || searched.equals(ancestor)) {
                 // Can't move from this position.
                 return true;
             }
 
-            searchedPredecessor = getMatchingPredecessor(null, searched, filter);
-            if (!predecessor.equals(searchedPredecessor)) {
+            searchedAncestor = getMatchingAncestor(null, searched, filter);
+            if (!ancestor.equals(searchedAncestor)) {
                 // Moves outside of the scrollable list.
                 return true;
             }
         } finally {
-            recycleNodes(predecessor, searched, searchedPredecessor);
+            recycleNodes(ancestor, searched, searchedAncestor);
         }
 
         return false;
@@ -864,11 +934,16 @@ public class AccessibilityNodeInfoUtils {
      * Convenience class for a {@link NodeFilter} that checks whether nodes
      * support a specific action or set of actions.
      */
-    private static class NodeActionFilter implements NodeFilter {
+    private static class NodeActionFilter extends NodeFilter {
         private final int mAction;
 
-        public NodeActionFilter(int action) {
-            mAction = action;
+        /**
+         * Creates a new action filter with the specified action mask.
+         *
+         * @param actionMask The bit mask of actions to accept.
+         */
+        public NodeActionFilter(int actionMask) {
+            mAction = actionMask;
         }
 
         @Override
@@ -935,16 +1010,5 @@ public class AccessibilityNodeInfoUtils {
             // and stable, hence this is deterministic tie breaking.
             return first.hashCode() - second.hashCode();
         }
-    }
-
-    /**
-     * Filters {@link AccessibilityNodeInfoCompat}s.
-     */
-    public static interface NodeFilter {
-        /**
-         * @param node The node info to filter.
-         * @return {@code true} if the node is accepted
-         */
-        public boolean accept(Context context, AccessibilityNodeInfoCompat node);
     }
 }

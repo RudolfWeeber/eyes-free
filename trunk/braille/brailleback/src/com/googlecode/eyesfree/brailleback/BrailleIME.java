@@ -218,7 +218,7 @@ public class BrailleIME extends InputMethodService {
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
         LogUtils.log(this, Log.VERBOSE,
-                "onStartInput: inputType: %d, imeOption: %d, " +
+                "onStartInput: inputType: %x, imeOption: %x, " +
                 ", label: %s, hint: %s, package: %s, ",
                 attribute.inputType, attribute.imeOptions, attribute.label,
                 attribute.hintText, attribute.packageName);

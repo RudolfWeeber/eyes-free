@@ -16,7 +16,10 @@
 
 package com.googlecode.eyesfree.utils;
 
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+
+import java.util.List;
 
 public class StringBuilderUtils {
     /**
@@ -24,36 +27,59 @@ public class StringBuilderUtils {
      * appropriate amount. Using a period breaks pronunciation of street
      * abbreviations, and using a new line doesn't work in eSpeak.
      */
-    /* package */static final String DEFAULT_BREAKING_SEPARATOR = ", ";
+    public static final String DEFAULT_BREAKING_SEPARATOR = ", ";
 
     /**
      * Non-breaking separator inserted between text. Used when text already ends
      * with some sort of breaking separator or non-alphanumeric character.
      */
-    /* package */static final String DEFAULT_SEPARATOR = " ";
+    public static final String DEFAULT_SEPARATOR = " ";
 
     /**
-     * Appends string representations of the specified arguments to a
-     * {@link StringBuilder}, creating one if the supplied builder is
+     * Generates the aggregate text from a list of {@link CharSequence}s,
+     * separating as necessary.
+     *
+     * @param textList The list of text to process.
+     * @return The separated aggregate text, or null if no text was appended.
+     */
+    public static CharSequence getAggregateText(List<CharSequence> textList) {
+        final CharSequence aggregateText;
+        if (textList == null || textList.isEmpty()) {
+            aggregateText = null;
+        } else {
+            final SpannableStringBuilder builder = new SpannableStringBuilder();
+            for (CharSequence text : textList) {
+                appendWithSeparator(builder, text);
+            }
+
+            aggregateText = builder;
+        }
+
+        return aggregateText;
+    }
+
+    /**
+     * Appends CharSequence representations of the specified arguments to a
+     * {@link SpannableStringBuilder}, creating one if the supplied builder is
      * {@code null}.
      *
-     * @param builder An existing {@link StringBuilderUtils}, or {@code null} to
+     * @param builder An existing {@link SpannableStringBuilder}, or {@code null} to
      *            create one.
      * @param args The objects to append to the builder.
      * @return A builder with the specified objects appended.
      */
-    public static StringBuilder appendWithSeparator(StringBuilder builder, Object... args) {
+    public static SpannableStringBuilder appendWithSeparator(
+            SpannableStringBuilder builder, CharSequence... args) {
         if (builder == null) {
-            builder = new StringBuilder();
+            builder = new SpannableStringBuilder();
         }
 
-        for (Object arg : args) {
+        for (CharSequence arg : args) {
             if (arg == null) {
                 continue;
             }
 
-            final String strArg = String.valueOf(arg);
-            if (strArg.length() == 0) {
+            if (arg.toString().length() == 0) {
                 continue;
             }
 
@@ -65,7 +91,7 @@ public class StringBuilderUtils {
                 }
             }
 
-            builder.append(strArg);
+            builder.append(arg);
         }
 
         return builder;

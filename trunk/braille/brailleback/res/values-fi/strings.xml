@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBack-asetukset"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Laite"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Tila"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Näppäinmääritykset"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Näppäimistöohje"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Pistekirjoitus"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Pistekirjoitustyyppi"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Perint. brailletaulukko"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Tietokoneella käytettävä pistekirjoitus"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automaattinen (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automaattinen (–)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Muut"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Kehittäjäasetukset"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Ruudulla näkyvä peittokuva"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Näytä pistekirj. ruudulla"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Näppäinmääritykset"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Käynnistä opetusohjelma"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Lokiin tallennuksen lähtötaso"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"BrailleBack-näppäimistöohje"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback käyt"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback pois"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack-näppäimistö on käytössä"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Vaihda oletusnäppäimistöön napauttamalla"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – lyhennystaso <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Panoroi vasemmalle"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Panoroi oikealle"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Peittokuvan opetusohjelma"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Lopeta"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Pistekirjoitus-peittokuva on virtuaalinen pistekirjoitusnäyttö. Se näyttää pistekirjoitussuunnikkaat sekä niitä vastaavan tekstin, jotka näytettäisiin erillisellä näytöllä. Suosittelemme ottamaan TalkBackin ja kosketuksella tutkimisen käyttöön ennen kuin jatkat."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Esteettömyysasetukset"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Voit panoroida pistekirjoitusnäyttöä painamalla yhtä tekstin vieressä olevista panorointipainikkeista."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Näkyvissä voi olla useita elementtejä yhtä aikaa. Voit klikata elementtiä napauttamalla yhtä tekstissä olevaa pistekirjoitussuunnikasta. Tämä vastaa yhden pistekirjoitusnäytön reititysnäppäimen painamista."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Jos peittokuva peittää toisen ruudun elementin, voit siirtää sen pois tieltä. Paina peittokuvaa pitkään ja vedä sitä. Peittokuva kiinnitetään ruudun alalaitaan, kun irrotat sormen ruudulta."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Näytä peittokuvan opetusohj."</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Suosittelemme tutustumaan peittokuvan opetusohjelmaan ennen virtuaalinäytön käyttämistä."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"H"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Haku: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Ruudulta haku -ohje"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Ruudulta haun avulla voit siirtyä nopeasti ruudun kohteisiin kirjoittamalla osan kohteiden kuvausta. Kirjoittaessasi tekstiä ruutu keskitetään seuraavaan antamaasi tekstiä vastaavaan kohteeseen."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Siirry seuraavaan tulokseen painamalla näppäintä <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> ja edelliseen tulokseen painamalla näppäintä <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>. Sulje hakutila ja pidä tulos keskitettynä painamalla <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g>. Palaa edelliseen keskitettyyn kohteeseen painamalla <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g>."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Älä näytä tätä uudelleen"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Sulje"</string>
 </resources>

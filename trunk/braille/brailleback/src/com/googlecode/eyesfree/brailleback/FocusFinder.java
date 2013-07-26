@@ -20,9 +20,11 @@ import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.NodeFocusFinder;
 
+import android.accessibilityservice.AccessibilityService;
 import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.HashSet;
 
@@ -125,6 +127,88 @@ public class FocusFinder {
                             child, context, seenNodes);
             if (n != null) {
                 return n;
+            }
+        }
+        return null;
+    }
+
+    public static AccessibilityNodeInfoCompat findLastFocusableDescendant(
+            AccessibilityNodeInfoCompat root, Context context) {
+        // null guard and shortcut for leaf nodes.
+        if (root == null || root.getChildCount() <= 0) {
+            return null;
+        }
+        HashSet<AccessibilityNodeInfoCompat> seenNodes =
+                new HashSet<AccessibilityNodeInfoCompat>();
+        seenNodes.add(root);
+        try {
+            return findLastFocusableDescendantInternal(
+                    root, context, seenNodes);
+        } finally {
+            seenNodes.remove(root);  // Not owned by us.
+            AccessibilityNodeInfoUtils.recycleNodes(seenNodes);
+        }
+    }
+
+    private static AccessibilityNodeInfoCompat
+          findLastFocusableDescendantInternal(
+                  AccessibilityNodeInfoCompat root, Context context,
+                  HashSet<AccessibilityNodeInfoCompat> seenNodes) {
+        for (int end = root.getChildCount(), i = end - 1; i >= 0; --i) {
+            AccessibilityNodeInfoCompat child = root.getChild(i);
+            if (child == null) {
+                continue;
+            }
+
+            AccessibilityNodeInfoCompat n =
+                    findLastFocusableDescendantInternal(
+                            child, context, seenNodes);
+            if (n != null) {
+                return n;
+            }
+
+            if (AccessibilityNodeInfoUtils.shouldFocusNode(context, child)) {
+                return child;
+            }
+            if (!seenNodes.add(child)) {
+                LogUtils.log(FocusFinder.class, Log.ERROR,
+                        "Cycle in node tree");
+                child.recycle();
+                return null;
+            }
+        }
+        return null;
+    }
+
+    public static AccessibilityNodeInfoCompat getFocusedNode(
+        AccessibilityService service, boolean fallbackOnRoot) {
+        AccessibilityNodeInfo root =
+                service.getRootInActiveWindow();
+        AccessibilityNodeInfo focused = null;
+        try {
+            AccessibilityNodeInfo ret = null;
+            if (root != null) {
+                focused = root.findFocus(
+                    AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
+                if (focused != null && focused.isVisibleToUser()) {
+                    ret = focused;
+                    focused = null;
+                } else if (fallbackOnRoot) {
+                    ret = root;
+                    root = null;
+                }
+            } else {
+                LogUtils.log(service, Log.ERROR, "No current window root");
+            }
+            if (ret != null) {
+                return new AccessibilityNodeInfoCompat(ret);
+            }
+        } finally {
+            if (root != null) {
+                root.recycle();
+            }
+            if (focused != null) {
+                focused.recycle();
             }
         }
         return null;

@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Okuncamelayo kwe-BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Idivayisi"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Isimo"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Ukubophezeleka okungukhiye"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Usizo lwekhibhodi"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"I-Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Uhlobo lwe-Braille"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Ithebula lokuloba le-braille"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"I-braille yokuloba"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Ezenzakalelayo (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Ezenzakalelayo (lutho)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Okwahlukahlukene"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Ukukhetha konjiniyela"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Imbondela ekuskrini"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Bonisa okukhishwa yi-Braille kusikrini"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Ukubophezeleka okungukhiye"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Qalisa okokufundisa"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Izinga lokukhiphayo kwelogu"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Usizo lwekhibhodi ye-BrailleBack"</string>
     <string name="display_connected" msgid="2008600513914815101">"I-brlback ivuliwe"</string>
     <string name="shutting_down" msgid="1303701310644298807">"i-brlback ivaliwe"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Ikhibhodi ye-BrailleBack iyasebenza"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Thepha ukuze ushintshele kukhibhodi yokuzenzakalela"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - ibanga lokukhuphuka <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Nyakazisela ngakwesobunxele"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Nyakazisela ngakwesokudla"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Okokufundisa kwembondela"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Qeda"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Imbondela yohlobo lombhalo wezimpumputhe ilinganisa okokubonisa okuqabulekayo. Kubonisa amaseli wohlobo lombhalo wezimpumputhe, kanye nombhalo ohambelanayo ozothulwa kwisibonisi sezingxenyekazi zekhompyutha. Kunconywa ukuba unike amandla imodi yokuphequlula ngokuthinta ne-TalkBack ngaphambi kokuba uqhubeke."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Izilungiselelo zokufinyelela"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Ungakwazi ukunyakazisa okokubonisa uhlobo lombhalo wezimpumputhe ngokucindezela ibhathini eyodwa kulezi zokunyakazisa eseduze nombhalo."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Izingxenye eziningi zingase zivele kwisibonisi ngesikhathi esisodwa. Ungachofoza eyodwa yazo ngokuthepha okukodwa kwamaseli ohlobo lombhalo wezimpumputhe embhalweni. Lokhu kuhambelana nokucindezela okukodwa kokhiye bokuthumela kwisibonisi sohlobo lombhalo wezimpumputhe."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Uma imbondela yemboze enye ingxenye kwiskrini, ungakwazi ukuyisusa endleleni. Cindezela isikhathi eside imbondela, bese uyayihudula. Izoqondanisela ngaphezulu noma ngezansi kweskrini lapho ukhulula umunwe wakho."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Bonisa okokufundisa kwembondela"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Sincoma ukuba ubuke okokufundisa kwembondela ekuskrini ngaphambi kokuba ukusebenzise."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"S:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Sesha: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Sesha kokokufundisa kweskrini"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Ukusesha kuskrini kukuvumela ukuba weqele ngokushesha kuzinto ezikuskrini ngokuthayipha ingxenye yencazelo yazo yombhalo. Njengoba uthayipha, ukugxila kuzoya kwinto efanayo elandelayo."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Sebenzisa i-<xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> ukuya kumphumela olandelayo ne-<xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> ukuya kumphumela wangaphambilini. Cindezela i-<xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> ukuphuma kwimodi yokusesha futhi ugxile kumphumela. Cindezela i-<xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> ukubuyela emuva kwinto okugxilwe kuyo ngaphambilini."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Ungaphinde ubonise lokhu futhi"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Vala"</string>
 </resources>

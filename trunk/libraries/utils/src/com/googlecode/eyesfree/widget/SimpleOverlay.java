@@ -41,6 +41,7 @@ public class SimpleOverlay {
     private final WindowManager mWindowManager;
     private final ViewGroup mContentView;
     private final LayoutParams mParams;
+    private final int mId;
 
     private SimpleOverlayListener mListener;
     private OnTouchListener mTouchListener;
@@ -53,6 +54,16 @@ public class SimpleOverlay {
      * @param context The parent context.
      */
     public SimpleOverlay(Context context) {
+        this(context, 0);
+    }
+
+    /**
+     * Creates a new simple overlay.
+     *
+     * @param context The parent context.
+     * @param id An optional identifier for the overlay.
+     */
+    public SimpleOverlay(Context context, int id) {
         mContext = context;
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mContentView = new SilentFrameLayout(context) {
@@ -81,6 +92,8 @@ public class SimpleOverlay {
         mParams.format = PixelFormat.TRANSLUCENT;
         mParams.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
+        mId = id;
+
         mVisible = false;
     }
 
@@ -89,6 +102,14 @@ public class SimpleOverlay {
      */
     public Context getContext() {
         return mContext;
+    }
+
+    /**
+     * @return The overlay identifier, or {@code 0} if no identifier was
+     *         provided at construction.
+     */
+    public int getId() {
+        return mId;
     }
 
     /**
@@ -120,9 +141,9 @@ public class SimpleOverlay {
 
     /**
      * Shows the overlay. Calls the listener's
-     * {@link SimpleOverlayListener#onHide(SimpleOverlay)} if available.
+     * {@link SimpleOverlayListener#onShow(SimpleOverlay)} if available.
      */
-    public final void show() {
+    public void show() {
         if (mVisible) {
             return;
         }
@@ -141,7 +162,7 @@ public class SimpleOverlay {
      * Hides the overlay. Calls the listener's
      * {@link SimpleOverlayListener#onHide(SimpleOverlay)} if available.
      */
-    public final void hide() {
+    public void hide() {
         if (!mVisible) {
             return;
         }

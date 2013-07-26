@@ -161,15 +161,17 @@ public class TreeDebugNavigationMode implements NavigationMode {
     }
 
     @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
+    public boolean onAccessibilityEvent(AccessibilityEvent event) {
         if (mPendingNode == null) {
-            return;
+            return false;
         }
         if (mCurrentNode == null ||
                 mCurrentNode.getWindowId() != mPendingNode.getWindowId()) {
             makePendingNodeCurrent();
             displayCurrentNode();
+            return true;
         }
+        return false;
     }
 
     @Override

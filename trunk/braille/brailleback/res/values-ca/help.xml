@@ -10,19 +10,28 @@
     <item msgid="7111316948614107646">"Vés a la línia anterior"</item>
     <item msgid="1092717670413169154">"Desplaça\'t cap endavant"</item>
     <item msgid="2672802569950877806">"Desplaça\'t cap enrere"</item>
-    <item msgid="8530687760031648049">"Activa l\'element sota el dit"</item>
-    <item msgid="2965010005667399914">"Manté premut l\'element de sota el dit"</item>
-    <item msgid="7114563790387768347">"Activa l\'element actual"</item>
-    <item msgid="6083375034241022486">"Manté premut l\'element actual"</item>
-    <item msgid="6434332125338405390">"Introdueix un caràcter en Braille"</item>
-    <item msgid="2845805874940074674">"Activa el botó Enrere"</item>
-    <item msgid="6272261186186982128">"Activa el botó Inici"</item>
-    <item msgid="2876656758414605716">"Obre la finestra de notificacions"</item>
-    <item msgid="2554673553387851889">"Obre la finestra d\'aplicacions recents"</item>
-    <item msgid="4863807959891911585">"Activa la tecla Retorn en editar text"</item>
-    <item msgid="5917526604121492276">"Suprimeix el text anterior al cursor"</item>
-    <item msgid="6047263121281919980">"Suprimeix el text posterior al cursor"</item>
-    <item msgid="2622805964649872487">"Obre l\'ajuda del teclat de BrailleBack"</item>
+    <item msgid="6858389246595464611">"Navega a la part superior de la pàgina"</item>
+    <item msgid="6077703163925348890">"Navega a la part inferior de la pàgina"</item>
+    <item msgid="880847480793051862">"Activa l\'element de sota el dit"</item>
+    <item msgid="2643484595828025643">"Manté premut l\'element de sota el dit"</item>
+    <item msgid="2225564744515622940">"Activa l\'element actual"</item>
+    <item msgid="2039335960797511513">"Manté premut l\'element actual"</item>
+    <item msgid="5703473744103522479">"Introdueix un caràcter en Braille"</item>
+    <item msgid="397805118186944475">"Activa el botó Enrere"</item>
+    <item msgid="2057979808256674943">"Activa el botó Inici"</item>
+    <item msgid="3851017077578326256">"Obre la finestra de notificacions"</item>
+    <item msgid="7100928240716386910">"Obre la finestra d\'aplicacions recents"</item>
+    <item msgid="1288748126248312152">"Activa la tecla Retorn en editar text"</item>
+    <item msgid="6030744298808090187">"Suprimeix el text anterior al cursor"</item>
+    <item msgid="4072293104009433677">"Suprimeix el text posterior al cursor"</item>
+    <item msgid="5307038145607249298">"Navega a la secció següent del contingut web"</item>
+    <item msgid="8804572703982019495">"Navega a la secció anterior del contingut web"</item>
+    <item msgid="5442875833766760122">"Navega a l\'enllaç/al control/al camp de formulari següent del contingut web"</item>
+    <item msgid="65542415754308243">"Navega a l\'enllaç/al control/al camp de formulari anterior del contingut web"</item>
+    <item msgid="8658175115960567526">"Navega a la llista següent del contingut web"</item>
+    <item msgid="561134957068368670">"Navega a la llista anterior del contingut web"</item>
+    <item msgid="4431278105955644176">"Activa la cerca en mode de pantalla"</item>
+    <item msgid="2754093362613614658">"Obre l\'ajuda del teclat de BrailleBack"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
     <string name="help_longPressTemplate" msgid="5028857601567358274">"Mantenir premut <xliff:g id="KEY_LIST">%s</xliff:g>"</string>

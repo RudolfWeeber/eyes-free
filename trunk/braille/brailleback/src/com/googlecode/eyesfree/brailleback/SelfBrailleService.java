@@ -16,12 +16,6 @@
 
 package com.googlecode.eyesfree.brailleback;
 
-import com.googlecode.eyesfree.braille.selfbraille.ISelfBrailleService;
-import com.googlecode.eyesfree.braille.selfbraille.WriteData;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils.NodeFilter;
-import com.googlecode.eyesfree.utils.LogUtils;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +27,12 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.accessibility.AccessibilityNodeInfo;
+
+import com.googlecode.eyesfree.braille.selfbraille.ISelfBrailleService;
+import com.googlecode.eyesfree.braille.selfbraille.WriteData;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.NodeFilter;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
@@ -113,7 +113,7 @@ public class SelfBrailleService extends Service {
             return null;
         }
         AccessibilityNodeInfoCompat match =
-                AccessibilityNodeInfoUtils.getSelfOrMatchingPredecessor(
+                AccessibilityNodeInfoUtils.getSelfOrMatchingAncestor(
                     this, node, mFilterHaveNodeState);
         if (match == null) {
             return null;

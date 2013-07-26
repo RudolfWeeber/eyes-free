@@ -17,6 +17,7 @@
 package com.googlecode.eyesfree.utils;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -107,7 +108,11 @@ public class AccessibilityEventUtils {
      * @return The event text.
      */
     public static CharSequence getEventAggregateText(AccessibilityEvent event) {
-        final StringBuilder aggregator = new StringBuilder();
+        if (event == null) {
+            return null;
+        }
+
+        final SpannableStringBuilder aggregator = new SpannableStringBuilder();
         final List<CharSequence> eventText = event.getText();
         final Iterator<CharSequence> it = eventText.iterator();
 

@@ -38,11 +38,35 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="@string/pref_category_developer_key"
-        android:title="@string/pref_category_developer_title">
-        <CheckBoxPreference
-            android:key="@string/pref_braille_overlay_key"
-            android:title="@string/pref_braille_overlay_title"
-            android:defaultValue="@bool/pref_braille_overlay_default" />
+        android:key="@string/pref_category_miscellaneous_key"
+        android:title="@string/pref_category_miscellaneous_title">
+        <PreferenceScreen
+            android:key="@string/pref_category_developer_key"
+            android:title="@string/pref_category_developer_title">
+
+            <!-- Forced to VERBOSE in debug builds. -->
+            <ListPreference
+                android:defaultValue="@string/pref_log_level_default"
+                android:dialogTitle="@string/pref_log_level_label"
+                android:entries="@array/pref_log_level_entries"
+                android:entryValues="@array/pref_log_level_values"
+                android:key="@string/pref_log_level_key"
+                android:summary="%s"
+                android:title="@string/pref_log_level_label" />
+
+            <PreferenceCategory
+                android:key="@string/pref_category_braille_overlay_key"
+                android:title="@string/pref_category_braille_overlay_title">
+                <CheckBoxPreference
+                    android:key="@string/pref_braille_overlay_key"
+                    android:title="@string/pref_braille_overlay_title"
+                    android:defaultValue="@bool/pref_braille_overlay_default" />
+                <Preference
+                    android:key="@string/pref_braille_overlay_tutorial_key"
+                    android:title="@string/pref_braille_overlay_tutorial_title"
+                    android:dependency="@string/pref_braille_overlay_key" />
+            </PreferenceCategory>
+
+        </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

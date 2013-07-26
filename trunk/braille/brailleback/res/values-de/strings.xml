@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBack-Einstellungen"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Gerät"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Status"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Tastenbindungen"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Tastaturhilfe"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Brailletyp"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabellen mit Literaturbraille"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Computerbraille (8 Punkte)"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automatisch (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automatisch (keine)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Verschiedenes"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Entwickleroptionen"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Bildschirm-Overlay"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Brailleausgabe auf Bildschirm"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Tastenbindungen"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Anleitung starten"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Ebene für Protokollausgabe"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"BrailleBack-Tastaturhilfe"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback an"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback aus"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack-Tastatur aktiv"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Zur Standardtastatur wechseln"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – Kürzungsgrad <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Nach links schwenken"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Nach rechts schwenken"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Overlay-Anleitung"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Beenden"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Mit dem Braille-Overlay wird eine aktualisierbare Braillezeile simuliert. Die Braillezeichen werden zusammen mit dem entsprechenden Text angezeigt, der auf einem Hardware-Bildschirm zu sehen wäre. Wir empfehlen Ihnen, TalkBack und den Erkundungsmodus zu aktivieren, bevor Sie fortfahren."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Bedienungshilfen"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Schwenken Sie die Braillezeile, indem Sie eine der Tasten neben dem Text drücken."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Unter Umständen erscheinen mehrere Elemente gleichzeitig. Sie können auf ein Element klicken, indem Sie eines der Braillezeichen im Text antippen. Dies entspricht dem Drücken einer Steuertaste auf einer Braillezeile."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Wenn das Overlay ein anderes Element auf dem Bildschirm verdeckt, können Sie es beiseite schieben. Halten Sie das Overlay einige Sekunden lang gedrückt und ziehen Sie es dann. Sobald Sie den Finger anheben, wird das Overlay am oberen oder unteren Bildschirmrand ausgerichtet."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Overlay-Anleitung anzeigen"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Wir empfehlen Ihnen, sich die Anleitung für das Bildschirm-Overlay anzusehen, bevor Sie es verwenden."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"S:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Suchen: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Anleitung für die Bildschirmsuche"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Mit der Bildschirmsuche können Sie einfach zu Elementen auf dem Bildschirm springen, indem Sie einen Teil der Textbeschreibung des Elements eingeben. Während der Eingabe wird jeweils das nächste übereinstimmende Element markiert."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Mit \"<xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g>\" können Sie zum nächsten Ergebnis wechseln. Mit \"<xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>\" kehren Sie zum vorherigen Ergebnis zurück. Drücken Sie auf \"<xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g>\", um den Suchmodus zu schließen. Das Ergebnis bleibt dabei markiert. Drücken Sie \"<xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g>\", um zum vorherigen markierten Element zu wechseln."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Nicht mehr anzeigen"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Schließen"</string>
 </resources>

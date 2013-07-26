@@ -177,7 +177,9 @@ public final class OverlayDisplay implements Display,
                 R.bool.pref_braille_overlay_default);
         if (mOverlayEnabled) {
             mMainThreadHandler.showOverlay();
-            connectSimulatedDisplay();
+
+            // Don't connect display yet. We'll connect when the overlay
+            // has been shown.
         } else {
             mMainThreadHandler.hideOverlay();
             disconnectSimulatedDisplay();
@@ -315,6 +317,7 @@ public final class OverlayDisplay implements Display,
                 mOverlay = new BrailleOverlay(mContext, parent);
             }
             mOverlay.show();
+            parent.mDisplayThreadHandler.connectSimulatedDisplay();
         }
 
         private void handleHide() {
@@ -367,6 +370,7 @@ public final class OverlayDisplay implements Display,
         private static final int MSG_PREFERENCE_CHANGE = 1;
         private static final int MSG_RESIZE_DISPLAY = 2;
         private static final int MSG_SEND_INPUT_EVENT = 3;
+        private static final int MSG_CONNECT_SIMULATED_DISPLAY = 4;
 
         public DisplayThreadHandler(OverlayDisplay parent) {
             super(parent);
@@ -382,6 +386,10 @@ public final class OverlayDisplay implements Display,
 
         public void sendInputEvent(BrailleInputEvent event) {
             obtainMessage(MSG_SEND_INPUT_EVENT, event).sendToTarget();
+        }
+
+        public void connectSimulatedDisplay() {
+            sendEmptyMessage(MSG_CONNECT_SIMULATED_DISPLAY);
         }
 
         @Override
@@ -400,6 +408,8 @@ public final class OverlayDisplay implements Display,
                 case MSG_SEND_INPUT_EVENT:
                     parent.sendInputEvent((BrailleInputEvent) msg.obj);
                     break;
+                case MSG_CONNECT_SIMULATED_DISPLAY:
+                    parent.connectSimulatedDisplay();
             }
         }
     }

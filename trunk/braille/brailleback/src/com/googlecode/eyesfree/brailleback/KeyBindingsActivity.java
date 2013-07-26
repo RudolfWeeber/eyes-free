@@ -21,6 +21,7 @@ import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.braille.display.BrailleKeyBinding;
 import com.googlecode.eyesfree.braille.display.Display;
 import com.googlecode.eyesfree.braille.display.DisplayClient;
+import com.googlecode.eyesfree.brailleback.utils.BrailleKeyBindingUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import android.app.Activity;
@@ -102,10 +103,8 @@ public class KeyBindingsActivity extends Activity
         if (props == null) {
             return;
         }
-        BrailleKeyBinding[] bindings = props.getKeyBindings();
         ArrayList<BrailleKeyBinding> sortedBindings =
-                new ArrayList<BrailleKeyBinding>(Arrays.asList(bindings));
-        Collections.sort(sortedBindings, COMPARE_BINDINGS);
+                BrailleKeyBindingUtils.getSortedBindingsForDisplay(props);
 
         ArrayList<KeyBinding> result = new ArrayList<KeyBinding>();
 
@@ -118,24 +117,14 @@ public class KeyBindingsActivity extends Activity
         for (int i = 0; i < supportedCommands.length; ++i) {
             String name = supportedCommands[i];
             int command = BrailleInputEvent.stringToCommand(name);
-            if (command == BrailleInputEvent.CMD_NONE) {
-                LogUtils.log(this, Log.WARN,
-                        "Unknown command %s in resource", name);
+            BrailleKeyBinding binding =
+                    BrailleKeyBindingUtils.getBrailleKeyBindingForCommand(
+                        command, sortedBindings);
+            if (binding == null) {
+                // No supported binding for this display. That's normal.
                 continue;
             }
-            dummyBinding.setCommand(command);
-            int index = Collections.binarySearch(sortedBindings,
-                    dummyBinding, COMPARE_BINDINGS_BY_COMMAND);
-            if (index < 0) {
-                // No bindings for this command for this display, that's
-                // normal.
-                continue;
-            }
-            while (index > 0
-                    && sortedBindings.get(index - 1).getCommand() == command) {
-                index -= 1;
-            }
-            addBindingForCommand(sortedBindings.get(index), descriptions[i],
+            addBindingForCommand(binding, descriptions[i],
                     friendlyKeyNames, result);
         }
 
@@ -153,29 +142,9 @@ public class KeyBindingsActivity extends Activity
             String commandDescription,
             Map<String, String> friendlyKeyNames,
             List<KeyBinding> result) {
-        String delimiter = getString(R.string.help_keyBindingDelimiter);
-        int command = binding.getCommand();
-        String keys = TextUtils.join(delimiter,
-                getFriendlyKeyNames(binding.getKeyNames(),
-                        friendlyKeyNames));
-        if (binding.isLongPress()) {
-            keys = getString(R.string.help_longPressTemplate, keys);
-        }
+        String keys = BrailleKeyBindingUtils.getFriendlyKeyNamesForCommand(
+                    binding, friendlyKeyNames, this);
         result.add(new KeyBinding(commandDescription, keys));
-    }
-
-    private static String[] getFriendlyKeyNames(String[] unfriendlyNames,
-            Map<String, String> friendlyNames) {
-        String[] result = new String[unfriendlyNames.length];
-        for (int i = 0; i < unfriendlyNames.length; ++i) {
-            String friendlyName = friendlyNames.get(unfriendlyNames[i]);
-            if (friendlyName != null) {
-                result[i] = friendlyName;
-            } else {
-                result[i] = unfriendlyNames[i];
-            }
-        }
-        return result;
     }
 
     private static class KeyBindingsAdapter extends ArrayAdapter<KeyBinding> {
@@ -208,55 +177,4 @@ public class KeyBindingsActivity extends Activity
             return label;
         }
     }
-
-    /**
-     * Compares key bindings by command number, then in an order that is
-     * deterministic and that makes sure that the binding that should
-     * appear on the help screen comes first.
-     */
-    private static final Comparator<BrailleKeyBinding> COMPARE_BINDINGS =
-            new Comparator<BrailleKeyBinding>() {
-            @Override
-            public int compare(BrailleKeyBinding lhs, BrailleKeyBinding rhs) {
-                int command1 = lhs.getCommand();
-                int command2 = rhs.getCommand();
-                if (command1 != command2) {
-                    return command1 - command2;
-                }
-                // Prefer a binding without long press.
-                boolean longPress1 = lhs.isLongPress();
-                boolean longPress2 = rhs.isLongPress();
-                if (longPress1 != longPress2) {
-                    return longPress1 ? 1 : -1;
-                }
-                String[] names1 = lhs.getKeyNames();
-                String[] names2 = rhs.getKeyNames();
-                // Prefer fewer keys.
-                if (names1.length != names2.length) {
-                    return names1.length - names2.length;
-                }
-                // Compare key names for determinism.
-                for (int i = 0; i < names1.length; ++i) {
-                    String key1 = names1[i];
-                    String key2 = names2[i];
-                    int res = key1.compareTo(key2);
-                    if (res != 0) {
-                        return res;
-                    }
-                }
-                return 0;
-            }
-    };
-
-    /**
-     * Compares key bindings by command number.  Used for search.
-     */
-    private static final Comparator<BrailleKeyBinding>
-        COMPARE_BINDINGS_BY_COMMAND =
-            new Comparator<BrailleKeyBinding>() {
-            @Override
-            public int compare(BrailleKeyBinding lhs, BrailleKeyBinding rhs) {
-                return lhs.getCommand() - rhs.getCommand();
-            }
-    };
 }

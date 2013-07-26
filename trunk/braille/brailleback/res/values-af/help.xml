@@ -10,19 +10,28 @@
     <item msgid="7111316948614107646">"Navigeer na die vorige reël"</item>
     <item msgid="1092717670413169154">"Rollees vorentoe"</item>
     <item msgid="2672802569950877806">"Rollees agteruit"</item>
-    <item msgid="8530687760031648049">"Aktiveer die item onder die vinger"</item>
-    <item msgid="2965010005667399914">"Langdruk die item onder die vinger"</item>
-    <item msgid="7114563790387768347">"Aktiveer die huidige item"</item>
-    <item msgid="6083375034241022486">"Langdruk die huidige item"</item>
-    <item msgid="6434332125338405390">"Voer \'n braille-karakter in"</item>
-    <item msgid="2845805874940074674">"Aktiveer die terugknoppie"</item>
-    <item msgid="6272261186186982128">"Aktiveer die tuisknoppie"</item>
-    <item msgid="2876656758414605716">"Maak die kennisgewings-venster oop"</item>
-    <item msgid="2554673553387851889">"Maak die onlangseprogramme-venster oop"</item>
-    <item msgid="4863807959891911585">"Aktiveer die invoersleutel wanneer teks gewysig word"</item>
-    <item msgid="5917526604121492276">"Vee agteruit uit wanneer teks geredigeer word"</item>
-    <item msgid="6047263121281919980">"Vee vorentoe uit wanneer teks geredigeer word"</item>
-    <item msgid="2622805964649872487">"Maak die BrailleBack-sleutelbordhulp oop"</item>
+    <item msgid="6858389246595464611">"Navigeer na die bokant van die bladsy"</item>
+    <item msgid="6077703163925348890">"Navigeer na die onderkant van die bladsy"</item>
+    <item msgid="880847480793051862">"Aktiveer die item onder die vinger"</item>
+    <item msgid="2643484595828025643">"Langdruk die item onder die vinger"</item>
+    <item msgid="2225564744515622940">"Aktiveer die huidige item"</item>
+    <item msgid="2039335960797511513">"Langdruk die huidige item"</item>
+    <item msgid="5703473744103522479">"Voer \'n braillekarakter in"</item>
+    <item msgid="397805118186944475">"Aktiveer die terugknoppie"</item>
+    <item msgid="2057979808256674943">"Aktiveer die tuisknoppie"</item>
+    <item msgid="3851017077578326256">"Maak die kennisgewingsvenster oop"</item>
+    <item msgid="7100928240716386910">"Maak die onlangse programme-venster oop"</item>
+    <item msgid="1288748126248312152">"Aktiveer die invoersleutel wanneer teks gewysig word"</item>
+    <item msgid="6030744298808090187">"Vee na agtertoe uit wanneer teks gewysig word"</item>
+    <item msgid="4072293104009433677">"Vee vorentoe uit wanneer teks gewysig word"</item>
+    <item msgid="5307038145607249298">"Navigeer na volgende afdeling in webinhoud"</item>
+    <item msgid="8804572703982019495">"Navigeer na vorige afdeling in webinhoud"</item>
+    <item msgid="5442875833766760122">"Navigeer na volgende skakel/kontrole/vormveld in webinhoud"</item>
+    <item msgid="65542415754308243">"Navigeer na vorige skakel/kontrole/vormveld in webinhoud"</item>
+    <item msgid="8658175115960567526">"Navigeer na volgende lys in webinhoud"</item>
+    <item msgid="561134957068368670">"Navigeer na vorige lys in webinhoud"</item>
+    <item msgid="4431278105955644176">"Wissel soek-op-skerm-modus"</item>
+    <item msgid="2754093362613614658">"Maak die BrailleBack-sleutelbordhulp oop"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
     <string name="help_longPressTemplate" msgid="5028857601567358274">"Langdruk <xliff:g id="KEY_LIST">%s</xliff:g>"</string>

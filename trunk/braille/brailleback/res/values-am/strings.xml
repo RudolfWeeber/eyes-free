@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"የBrailleBack ምርጫዎች"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"መሣሪያ"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"ሁኔታ"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"የቁልፍ ማሰሪያዎች"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"የቁልፍ ሰሌዳ እገዛ"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"ብሬይል"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"የብሬይል አይነት"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"የስነ ጽሑፍ ብሬይል ሠንጠረዥ"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"የኮምፒውተር ብሬይል"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"በራሱ (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"በራሱ (ምንም)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"የተለያዩ"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"የገንቢ አማራጮች"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"የማያ ገጽ ላይ ተደራቢ"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"የብሬይል ውጽዓት በማያ ገሱ ላይ አሳይ"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"የቁልፍ ማሰሪያዎች"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"አጋዥ ስልጠናውን አስጀምር"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"የውጽአት ደረጃን መዝግብ"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"የBrailleBack ቁልፍ ሰሌዳ እገዛ"</string>
     <string name="display_connected" msgid="2008600513914815101">"BrlBack በርቷል"</string>
     <string name="shutting_down" msgid="1303701310644298807">"BrlBack ጠፍቷል"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"የBrailleBack ቁልፍ ሰሌዳ ገባሪ ነው"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"ወደ ነባሪው ቁልፍ ሰሌዳ ለመቀየር መታ ያድርጉ"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - ደረጃ <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"ወደ ግራ ያንፏቅቁ"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"ወደ ቀኝ ያንፏቅቁ"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"የተደራቢ አጋዥ ስልጠና"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"ጨርስ"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"የብሬይል ተደራቢው ታዳሽ የብሬይል ማሳያን አስመስሎ ይሰራል። የብሬይል ነጥቦቹን ከሚወክለው ጽሑፍ ጋር ያሳያል፣ ያ ደግሞ በሃርድዌር ማሳያ ላይ ይታያል። ከመቀጠልዎ በፊት TalkBackንን የንክኪ አሰሳን እንዲያነቁ ይመከራሉ።"</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"የተደራሽነት ቅንብሮች"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"ከጽሑፉ ጎን ካሉት አዝራሮች ውስጥ አንዱን በመጫን የብሬይል ማሳያውን ሊያንፏቅቁት ይችላሉ።"</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"በርካታ አካላት በአንድ ጊዜ ማሳያው ላይ ሊታዩ ይችላሉ። በጽሑፉ ውስጥ ካሉት የብሬይል ነጥቦች ውስጥ አንዱን መታ በማድረግ አንዳቸውን ጠቅ ማድረግ ይችላሉ። ይሄ በብሬይል ማሳያው ላይ ካሉት የማዞሪያ ቁልፎች ውስጥ ከአንዱ ጋር ይዛመዳል።"</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"ተደራቢው በማያ ገጹ ላይ ያለ ሌላ አካል እየሸፈነ ከሆነ ዘወር ሊያደርጉት ይችላሉ። ተደራቢውን ለረጅም ጊዜ ተጭነው ይያዙትና ከዚያ ይጎትቱት። ጣትዎን ሲለቁ ከማያ ገጹ ላይኛው ወይም ታችኛው ክፍል ጋር ይገጣጠማል።"</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"የተደራቢ አጋዥ ስልጠና አሳይ"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"ተደራቢውን ከመጠቀምዎ በፊት ለማያ ገጹ ላይ ተደራቢ ያለው አጋዥ ስልጠናውን እንዲመለከቱት እንመክራለን።"</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"ፍለጋ"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"ፍለጋ፦ <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"በማያ ገጽ ላይ መፈለግ አጋዥ ስልጠና"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"በማያ ገጽ ላይ መፈለግ ከፊል የጽሑፍ ማብራሪያቸውን በመተየብ በፍጥነት ወደ ንጥሎች ዘልለው እንዲሄዱ ያስችልዎታል።"</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"ወደ ቀጣዩ ውጤት ለመሄድ <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g>ን፣ ወደ ቀዳሚው ውጤት ለመሄድ ደግሞ <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>ን ይጠቀሙ። ከፍለጋ ሁነታ ወጥተው በውጤቱ ላይ ለማተኮር <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g>ን ይጫኑ። ከዚህ በፊት ወደተተኮረበት ንጥል ለመመለስ <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g>ን ይጫኑ።"</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"ይህን በፍፁም ድጋሚ አታሳይ"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"ዝጋ"</string>
 </resources>

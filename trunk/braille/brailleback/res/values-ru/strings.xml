@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Настройки BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Устройство"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Статус"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Привязка клавиш"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Справка по клавиатуре"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Шрифт Брайля"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Тип шрифта Брайля"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Литературная табл. Брайля"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Компьютерный"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"автоматически (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"автоматически (не задано)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Прочее"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Для разработчиков"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Экранная накладка"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Отображать на экране вводимый текст"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Привязка клавиш"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Запустить руководство"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Уровень вывода журнала"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Справка по клавиатуре Брайля"</string>
     <string name="display_connected" msgid="2008600513914815101">"BrlBack вкл"</string>
     <string name="shutting_down" msgid="1303701310644298807">"BrlBack выкл"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Клавиатура BrailleBack активна"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Нажмите, чтобы переключиться на обычную клавиатуру"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – уровень <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Передвинуть влево"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Передвинуть вправо"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Как работать с накладкой"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Готово"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Накладка, использующая шрифт Брайля, имитирует обновляемый рельефный дисплей. На ней отображаются ячейки Брайля с соответствующим текстом, который выводится на рельефный дисплей. Прежде чем продолжить, рекомендуем включить функцию TalkBack и сенсорный режим."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Настройки"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Брайлевский дисплей можно панорамировать при помощи кнопок рядом с текстом."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"На экране могут отображаться сразу несколько элементов. Чтобы нажать на элемент, коснитесь ячейки Брайля в тексте. Это действие соответствует нажатию клавиши на брайлевском дисплее."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Если накладка перекрывает другой элемент на экране, то ее можно передвинуть. Нажмите и удерживайте накладку, а затем перетащите ее. Как только вы отпустите палец, накладка окажется зафиксированной в верхней или нижней части экрана."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Как работать с накладкой"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Перед началом работы с экранной накладкой советуем изучить руководство."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"П:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Поиск: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Руководство Поиска по экрану"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Поиск по экрану позволяет быстро перейти к объектам, указывая часть их текстового описания. По мере ввода система будет предлагать подходящие объекты."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Используйте \"<xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g>\", чтобы перейти к следующему результату, или \"<xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>\", чтобы вернуться к предыдущему. Нажмите \"<xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g>\", чтобы выйти из режима поиска и выбрать найденный объект, или \"<xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g>\", чтобы вернуться к предыдущему."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Больше не показывать"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Закрыть"</string>
 </resources>

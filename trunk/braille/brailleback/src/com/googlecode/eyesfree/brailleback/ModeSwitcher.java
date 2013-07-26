@@ -121,8 +121,12 @@ public class ModeSwitcher implements NavigationMode {
     }
 
     @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
-        getCurrentMode().onAccessibilityEvent(event);
+    public boolean onAccessibilityEvent(AccessibilityEvent event) {
+        if (mOverrideMode == null ||
+                !mOverrideMode.onAccessibilityEvent(event)) {
+            return mModes[mModeIndex].onAccessibilityEvent(event);
+        }
+        return true;
     }
 
     @Override

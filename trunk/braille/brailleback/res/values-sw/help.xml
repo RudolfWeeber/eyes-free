@@ -10,19 +10,28 @@
     <item msgid="7111316948614107646">"Rambaza hadi kwenye mstari wa awali"</item>
     <item msgid="1092717670413169154">"Tembeza mbele"</item>
     <item msgid="2672802569950877806">"Tembeza nyuma"</item>
-    <item msgid="8530687760031648049">"Washa kipengee kilicho chini ya kidole"</item>
-    <item msgid="2965010005667399914">"Bonyeza kipengee kwa muda mrefu kwa kidole"</item>
-    <item msgid="7114563790387768347">"Washa kipengee cha sasa"</item>
-    <item msgid="6083375034241022486">"Bonyeza kipengee cha sasa kwa muda mrefu"</item>
-    <item msgid="6434332125338405390">"Ingiza kibambo cha breli"</item>
-    <item msgid="2845805874940074674">"Washa kitufe cha nyuma"</item>
-    <item msgid="6272261186186982128">"Washa kitufe cha mwanzo"</item>
-    <item msgid="2876656758414605716">"Fungua dirisha la arifa"</item>
-    <item msgid="2554673553387851889">"Fungua dirisha la programu za hivi punde"</item>
-    <item msgid="4863807959891911585">"Washa kitufe cha kuingia unapohariri maandishi"</item>
-    <item msgid="5917526604121492276">"Futa kwa kurudi nyuma unapohariri maandishi"</item>
-    <item msgid="6047263121281919980">"Futa kwa kusonga mbele unapohariri maandishi"</item>
-    <item msgid="2622805964649872487">"Fungua usaidizi wa kibodi ya BrailleBack"</item>
+    <item msgid="6858389246595464611">"Nenda hadi juu ya ukurasa"</item>
+    <item msgid="6077703163925348890">"Nenda hadi chini ya ukurasa"</item>
+    <item msgid="880847480793051862">"Washa kipengee kilicho chini ya kidole"</item>
+    <item msgid="2643484595828025643">"Bonyeza kipengee kilicho chini ya kidole kwa muda mrefu"</item>
+    <item msgid="2225564744515622940">"Washa kipengee cha sasa"</item>
+    <item msgid="2039335960797511513">"Bonyeza kipengee cha sasa kwa muda mrefu"</item>
+    <item msgid="5703473744103522479">"Ingiza herufi ya breli"</item>
+    <item msgid="397805118186944475">"Washa kitufe cha nyuma"</item>
+    <item msgid="2057979808256674943">"Washa kitufe cha mwanzo"</item>
+    <item msgid="3851017077578326256">"Fungua dirisha la arifa"</item>
+    <item msgid="7100928240716386910">"Fungua dirisha la programu za hivi punde"</item>
+    <item msgid="1288748126248312152">"Washa kitufe cha enter unapohariri maandishi"</item>
+    <item msgid="6030744298808090187">"Futa kwa kurudi nyuma unapohariri maandishi"</item>
+    <item msgid="4072293104009433677">"Futa kwa kusogea mbele unapohariri maandishi"</item>
+    <item msgid="5307038145607249298">"Nenda kwenye sehemu inayofuata katika maudhui ya tovuti"</item>
+    <item msgid="8804572703982019495">"Nenda kwenye sehemu iliyotangulia katika maudhui ya tovuti"</item>
+    <item msgid="5442875833766760122">"Nenda kwenye sehemu ya kiungo/dhibiti/fomu inayofuata katika maudhui ya tovuti"</item>
+    <item msgid="65542415754308243">"Nenda kwenye sehemu ya kiungo/dhibiti/fomu iliyotangulia katika maudhui ya tovuti"</item>
+    <item msgid="8658175115960567526">"Nenda kwenye orodha inayofuata katika maudhui ya tovuti"</item>
+    <item msgid="561134957068368670">"Nenda kwenye orodha iliyotangulia katika maudhui ya tovuti"</item>
+    <item msgid="4431278105955644176">"Geuza utafutaji kwenye hali ya skrini"</item>
+    <item msgid="2754093362613614658">"Fungua usaidizi wa kibodi ya BrailleBack"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
     <string name="help_longPressTemplate" msgid="5028857601567358274">"Bonyeza <xliff:g id="KEY_LIST">%s</xliff:g> kwa muda mrefu"</string>

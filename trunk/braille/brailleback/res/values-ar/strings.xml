@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"تفضيلات BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"الجهاز"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"الحالة"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"روابط المفاتيح"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"مساعدة لوحة المفاتيح"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"برايل"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"الكتابة بطريقة برايل"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"جدول برايل الكتابي"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"برايل الكمبيوتر"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"تلقائي (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"تلقائي (لا شيء)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"متنوعة"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"خيارات مطوري البرامج"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"التراكب على الشاشة"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"عرض مخرجات برايل على الشاشة"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"روابط المفاتيح"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"تشغيل البرنامج التعليمي"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"مستوى مخرجات التسجيل"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"مساعدة لوحة مفاتيح BrailleBack"</string>
     <string name="display_connected" msgid="2008600513914815101">"تشغيل BrlBack"</string>
     <string name="shutting_down" msgid="1303701310644298807">"إيقاف تشغيل BrlBack"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"لوحة مفاتيح BrailleBack نشطة"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"النقر للتبديل إلى لوحة المفاتيح الافتراضية"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - درجة <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"عرض شامل لليسار"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"عرض شامل لليمين"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"برنامج تعليمي حول التراكب"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"إنهاء"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"إن ميزة تراكب برايل تحاكي شاشة برايل قابلة للتحديث. فهي تعرض خلايا برايل مع النص المقابل، الذي يظهر على شاشة جهاز. يوصى بتمكين TalkBack ولمس وضع الاكتشاف قبل المتابعة."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"إعدادات إمكانية الوصول"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"يمكنك إجراء عرض شامل لشاشة برايل عبر الضغط على أحد أزرار العرض الشامل بجوار النص."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"قد تظهر عناصر متعددة على الشاشة في آنٍ واحد. يمكنك النقر على أحدها من خلال النقر على إحدى خلايا برايل في النص. هذا يقابل الضغط على أحد مفاتيح التوجيه على شاشة برايل."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"إذا كان التراكب يغطي عنصرًا آخر على الشاشة، فيمكنك نقله بعيدًا. اضغط مطولاً على التراكب ثم اسحبه. ستتم محاذاته إلى أعلى أو أسفل الشاشة عند رفع إصبعك."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"عرض برنامج تعليمي حول التراكب"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"نوصيك بمشاهدة برنامج تعليمي حول التراكب على الشاشة قبل استخدامه."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"بحث"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"بحث: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"البحث في برنامج تعليمي على الشاشة"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"يتيح لك البحث على الشاشة الانتقال سريعًا إلى العناصر على الشاشة عن طريق كتابة جزء من الوصف النصي لها. وأثناء الكتابة، سينتقل التركيز إلى العنصر المطابق التالي."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"يُمكنك استخدام <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> للانتقال إلى النتيجة التالية، كما يُمكنك استخدام <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> للانتقال إلى النتيجة السابقة. ويُمكنك الضغط <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> للخروج من وضع البحث والتركيز على النتيجة. بينما يُمكنك الضغط على <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> للرجوع إلى العنصر السابق الذي تمّ التركيز عليه."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"عدم إظهار ذلك مرة أخرى"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"إغلاق"</string>
 </resources>

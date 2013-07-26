@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.Set;
 import java.util.UUID;
 
@@ -159,32 +160,28 @@ public class DeviceFinder {
         DeviceInfo match(BluetoothDevice bluetoothDevice);
     }
 
-    private static class NamePrefixSupportedDevice
+    private static class NameRegexSupportedDevice
             implements SupportedDevice {
         private final String mDriverCode;
         private final boolean mConnectSecurely;
         private final Map<String, Integer> mFriendlyKeyNames;
-        private final String[] mNamePrefixes;
+        private final Pattern[] mNameRegexes;
 
-        public NamePrefixSupportedDevice(String driverCode,
+        public NameRegexSupportedDevice(String driverCode,
                 boolean connectSecurely,
                 Map<String, Integer> friendlyKeyNames,
-                String... namePrefixes) {
+                Pattern... nameRegexes) {
             mDriverCode = driverCode;
             mConnectSecurely = connectSecurely;
             mFriendlyKeyNames = friendlyKeyNames;
-            mNamePrefixes = namePrefixes;
+            mNameRegexes = nameRegexes;
         }
 
         @Override
         public DeviceInfo match(BluetoothDevice bluetoothDevice) {
             String name = bluetoothDevice.getName();
-            int nameLength = name.length();
-            for (String prefix : mNamePrefixes) {
-                int prefixLength = prefix.length();
-                if (nameLength >= prefixLength
-                        && name.substring(0, prefixLength).equalsIgnoreCase(
-                                prefix)) {
+            for (Pattern nameRegex : mNameRegexes) {
+                if (nameRegex.matcher(name).lookingAt()) {
                     return new DeviceInfo(bluetoothDevice, mDriverCode,
                             SERIAL_BOARD_UUID, mConnectSecurely,
                             mFriendlyKeyNames);
@@ -228,6 +225,20 @@ public class DeviceFinder {
             return add("RoutingKey", R.string.key_Routing);
         }
 
+        public KeyNameMapBuilder dualJoysticks() {
+            add("LeftJoystickLeft", R.string.key_LeftJoystickLeft);
+            add("LeftJoystickRight", R.string.key_LeftJoystickRight);
+            add("LeftJoystickUp", R.string.key_LeftJoystickUp);
+            add("LeftJoystickDown", R.string.key_LeftJoystickDown);
+            add("LeftJoystickPress", R.string.key_LeftJoystickCenter);
+            add("RightJoystickLeft", R.string.key_RightJoystickLeft);
+            add("RightJoystickRight", R.string.key_RightJoystickRight);
+            add("RightJoystickUp", R.string.key_RightJoystickUp);
+            add("RightJoystickDown", R.string.key_RightJoystickDown);
+            add("RightJoystickPress", R.string.key_RightJoystickCenter);
+            return this;
+        }
+
         public Map<String, Integer> build() {
             return Collections.unmodifiableMap(mNameMap);
         }
@@ -240,7 +251,7 @@ public class DeviceFinder {
         ArrayList<SupportedDevice> l = new ArrayList<SupportedDevice>();
 
         // BraillePen
-        l.add(new NamePrefixSupportedDevice("vo", true,
+        l.add(new NameRegexSupportedDevice("vo", true,
                 new KeyNameMapBuilder()
                         .dots6()
                         .add("Shift", R.string.key_BP_Shift)
@@ -254,42 +265,23 @@ public class DeviceFinder {
                         .add("ScrollLeft", R.string.key_BP_ScrollLeft)
                         .add("ScrollRight", R.string.key_BP_ScrollRight)
                         .build(),
-                        "EL12-"));
+                        Pattern.compile("EL12-")));
 
         // Esys
-        l.add(new NamePrefixSupportedDevice("eu", true,
+        l.add(new NameRegexSupportedDevice("eu", true,
                 new KeyNameMapBuilder()
                         .dots8()
                         .add("Switch1Left", R.string.key_esys_SwitchLeft)
                         .add("Switch1Right", R.string.key_esys_SwitchRight)
-                        .add("LeftJoystickLeft",
-                                R.string.key_esys_LeftJoystickLeft)
-                        .add("LeftJoystickRight",
-                                R.string.key_esys_LeftJoystickRight)
-                        .add("LeftJoystickUp",
-                                R.string.key_esys_LeftJoystickUp)
-                        .add("LeftJoystickDown",
-                                R.string.key_esys_LeftJoystickDown)
-                        .add("LeftJoystickPress",
-                                R.string.key_esys_LeftJoystickCenter)
-                        .add("RightJoystickLeft",
-                                R.string.key_esys_RightJoystickLeft)
-                        .add("RightJoystickRight",
-                                R.string.key_esys_RightJoystickRight)
-                        .add("RightJoystickUp",
-                                R.string.key_esys_RightJoystickUp)
-                        .add("RightJoystickDown",
-                                R.string.key_esys_RightJoystickDown)
-                        .add("RightJoystickPress",
-                                R.string.key_esys_RightJoystickCenter)
+                        .dualJoysticks()
                         .add("Backspace", R.string.key_Backspace)
                         .add("Space", R.string.key_Space)
                         .add("RoutingKey1", R.string.key_Routing)
                         .build(),
-                        "Esys-"));
+                        Pattern.compile("Esys-")));
 
-        // Focus 40
-        l.add(new NamePrefixSupportedDevice("fs", true,
+        // Freedom Scientific Focus blue displays.
+        l.add(new NameRegexSupportedDevice("fs", true,
                 new KeyNameMapBuilder()
                         .dots8()
                         .add("Space", R.string.key_Space)
@@ -319,12 +311,12 @@ public class DeviceFinder {
                         .add("RightRockerDown",
                                 R.string.key_focus_RightRockerDown)
                         .build(),
-                        "Focus 40 BT"));
+                        Pattern.compile("Focus (40|14) BT")));
 
         // Brailliant
         // Secure connections currently fail on Android devices for the
         // Brailliant.
-        l.add(new NamePrefixSupportedDevice("hw", false,
+        l.add(new NameRegexSupportedDevice("hw", false,
                 new KeyNameMapBuilder()
                         .dots8()
                         .routing()
@@ -341,10 +333,10 @@ public class DeviceFinder {
                         .add("Thumb3", R.string.key_brailliant_Thumb3)
                         .add("Thumb4", R.string.key_brailliant_Thumb4)
                         .build(),
-                        "Brailliant BI"));
+                        Pattern.compile("Brailliant BI")));
 
         // HIMS
-        Map<String, Integer> himsKeys =
+        l.add(new NameRegexSupportedDevice("hm", false,
                 new KeyNameMapBuilder()
                         .dots8()
                         .routing()
@@ -355,18 +347,13 @@ public class DeviceFinder {
                         .add("F4", R.string.key_F4)
                         .add("Backward", R.string.key_Backward)
                         .add("Forward", R.string.key_Forward)
-                        .build();
-        l.add(new NamePrefixSupportedDevice("hm", false, himsKeys,
-                        "HansoneLX"));
-        l.add(new NamePrefixSupportedDevice("hm", false, himsKeys,
-                        "BrailleSense"));
-        l.add(new NamePrefixSupportedDevice("hm", false, himsKeys,
-                        "BrailleEDGE"));
+                        .build(),
+                        Pattern.compile("HansoneLX|BrailleSense|BrailleEDGE")));
 
         // APH Refreshabraille.
         // Secure connections get prematurely closed 50% of the time
         // by the Refreshabraille.
-        l.add(new NamePrefixSupportedDevice("bm", false,
+        l.add(new NameRegexSupportedDevice("bm", false,
                 new KeyNameMapBuilder()
                         .dots8()
                         .add("Left", R.string.key_JoystickLeft)
@@ -380,9 +367,9 @@ public class DeviceFinder {
                         .add("B9", R.string.key_Space)
                         .add("B10", R.string.key_Space)
                         .build(),
-                        "Refreshabraille"));
+                        Pattern.compile("Refreshabraille")));
         // Baum VarioConnect
-        l.add(new NamePrefixSupportedDevice("bm", false,
+        l.add(new NameRegexSupportedDevice("bm", false,
                 new KeyNameMapBuilder()
                         .dots8()
                         .add("Left", R.string.key_JoystickLeft)
@@ -396,13 +383,13 @@ public class DeviceFinder {
                         .add("B9", R.string.key_Space)
                         .add("B10", R.string.key_Space)
                         .build(),
-                        "VarioConnect"));
+                        Pattern.compile("VarioConnect")));
 
         // Older Brailliant, from Humanware group. Uses Baum
         // protocol. No Braille keyboard on this one. Secure
         // connections currently fail on Android devices with this
         // display.
-        l.add(new NamePrefixSupportedDevice("bm", false,
+        l.add(new NameRegexSupportedDevice("bm", false,
                 new KeyNameMapBuilder()
                         .add("Display1", R.string.key_hwg_brailliant_Display1)
                         .add("Display2", R.string.key_hwg_brailliant_Display2)
@@ -412,10 +399,10 @@ public class DeviceFinder {
                         .add("Display6", R.string.key_hwg_brailliant_Display6)
                         .routing()
                         .build(),
-                        "HWG Brailliant"));
+                        Pattern.compile("HWG Brailliant")));
 
         // Braillex Trio
-        l.add(new NamePrefixSupportedDevice("pm", true,
+        l.add(new NameRegexSupportedDevice("pm", true,
                 new KeyNameMapBuilder()
                         .dots8()
                         .add("LeftSpace", R.string.key_Space)
@@ -438,7 +425,98 @@ public class DeviceFinder {
                         .add("RightKeyFront",
                                 R.string.key_braillex_RightKeyFront)
                         .build(),
-                        "braillex trio"));
+                        Pattern.compile("braillex trio")));
+
+        // Alva BC640/BC680
+        l.add(new NameRegexSupportedDevice("al", false,
+                new KeyNameMapBuilder()
+                // No braille dot keys.
+                .add("ETouchLeftRear", R.string.key_albc_ETouchLeftRear)
+                .add("ETouchRightRear", R.string.key_albc_ETouchRightRear)
+                .add("ETouchLeftFront", R.string.key_albc_ETouchLeftFront)
+                .add("ETouchRightFront", R.string.key_albc_ETouchRightFront)
+                .add("SmartpadF1", R.string.key_albc_SmartpadF1)
+                .add("SmartpadF2", R.string.key_albc_SmartpadF2)
+                .add("SmartpadF3", R.string.key_albc_SmartpadF3)
+                .add("SmartpadF4", R.string.key_albc_SmartpadF4)
+                .add("SmartpadUp", R.string.key_albc_SmartpadUp)
+                .add("SmartpadDown", R.string.key_albc_SmartpadDown)
+                .add("SmartpadLeft", R.string.key_albc_SmartpadLeft)
+                .add("SmartpadRight", R.string.key_albc_SmartpadRight)
+                .add("SmartpadEnter", R.string.key_albc_SmartpadEnter)
+                .add("ThumbLeft", R.string.key_albc_ThumbLeft)
+                .add("ThumbRight", R.string.key_albc_ThumbRight)
+                .add("ThumbUp", R.string.key_albc_ThumbUp)
+                .add("ThumbDown", R.string.key_albc_ThumbDown)
+                .add("ThumbHome", R.string.key_albc_ThumbHome)
+                .add("RoutingKey1", R.string.key_Routing)
+                .build(),
+                Pattern.compile("Alva BC", Pattern.CASE_INSENSITIVE)));
+
+        // HandyTech displays
+        l.add(new NameRegexSupportedDevice("ht", true,
+                new KeyNameMapBuilder()
+                    .add("B4", R.string.key_Dot1)
+                    .add("B3", R.string.key_Dot2)
+                    .add("B2", R.string.key_Dot3)
+                    .add("B1", R.string.key_Dot7)
+                    .add("B5", R.string.key_Dot4)
+                    .add("B6", R.string.key_Dot5)
+                    .add("B7", R.string.key_Dot6)
+                    .add("B8", R.string.key_Dot8)
+                    .routing()
+                    .add("LeftRockerTop",
+                        R.string.key_handytech_LeftTrippleActionTop)
+                    .add("LeftRockerBottom",
+                        R.string.key_handytech_LeftTrippleActionBottom)
+                    .add("LeftRockerTop+LeftRockerBottom",
+                        R.string.key_handytech_LeftTrippleActionMiddle)
+                    .add("RightRockerTop",
+                        R.string.key_handytech_RightTrippleActionTop)
+                    .add("RightRockerBottom",
+                        R.string.key_handytech_RightTrippleActionBottom)
+                    .add("RightRockerTop+RightRockerBottom",
+                        R.string.key_handytech_RightTrippleActionMiddle)
+                    .add("SpaceLeft", R.string.key_handytech_LeftSpace)
+                    .add("SpaceRight", R.string.key_handytech_RightSpace)
+                    .add("Display1", R.string.key_hwg_brailliant_Display1)
+                    .add("Display2", R.string.key_hwg_brailliant_Display2)
+                    .add("Display3", R.string.key_hwg_brailliant_Display3)
+                    .add("Display4", R.string.key_hwg_brailliant_Display4)
+                    .add("Display5", R.string.key_hwg_brailliant_Display5)
+                    .add("Display6", R.string.key_hwg_brailliant_Display6)
+                    .build(),
+                    Pattern.compile("(Braille Wave( BRW)?|Braillino( BL2)?|Braille Star 40( BS4)?|Easy Braille( EBR)?|Active Braille( AB4)?|Basic Braille BB[3,4,6]?)\\/[a-zA-Z][0-9]-[0-9]{5}"),
+                    Pattern.compile("(BRW|BL2|BS4|EBR|AB4|BB(3|4|6)?)\\/[a-zA-Z][0-9]-[0-9]{5}")));
+
+        // Seika Mini Note Taker. Secure connections fail to connect reliably.
+        l.add(new NameRegexSupportedDevice("sk", false,
+                new KeyNameMapBuilder()
+                .dots8()
+                .routing()
+                .dualJoysticks()
+                .add("Backspace", R.string.key_Backspace)
+                .add("Space", R.string.key_Space)
+                .add("LeftButton", R.string.key_skntk_PanLeft)
+                .add("RightButton", R.string.key_skntk_PanRight)
+                .build(),
+                Pattern.compile("TSM")));
+
+        // Seika Braille Display. No Braille keys on this display.
+        l.add(new NameRegexSupportedDevice("sk", true,
+                new KeyNameMapBuilder()
+                .add("K1", R.string.key_skbdp_PanLeft)
+                .add("K8", R.string.key_skbdp_PanRight)
+                .add("K2", R.string.key_skbdp_LeftRockerLeft)
+                .add("K3", R.string.key_skbdp_LeftRockerRight)
+                .add("K4", R.string.key_skbdp_LeftLongKey)
+                .add("K5", R.string.key_skbdp_RightLongKey)
+                .add("K6", R.string.key_skbdp_RightRockerLeft)
+                .add("K7", R.string.key_skbdp_RightRockerRight)
+                .add("RoutingKey2", R.string.key_Routing)
+                .routing()
+                .build(),
+                Pattern.compile("TS5")));
 
         SUPPORTED_DEVICES = Collections.unmodifiableList(l);
     }

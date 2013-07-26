@@ -68,3 +68,6 @@ bind LeftAdvance+!RoutingKey CLIP_NEW
 bind RightAdvance+!RoutingKey COPY_RECT
 bind LeftGdf+!RoutingKey CLIP_ADD
 bind RightGdf+!RoutingKey COPY_LINE
+
+bind Dot7 KEY_BACKSPACE
+bind Dot8 KEY_ENTER

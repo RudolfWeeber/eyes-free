@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"„BrailleBack“ nuostatos"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Įrenginys"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Būsena"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Klavišų saistymas"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Klaviatūros pagalba"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Brailio raštas"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Brailio rašto tipas"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Liter. Brailio r. lentelė"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Kompiuterinis Brailio raštas"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automatinė (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automatinė (nėra)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Įvairūs"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Kūrėjo parinktys"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Perdanga ekrane"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Rod. duom. iš Br. r. ekr."</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Klavišų saistymas"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Paleisti mokymo programą"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Žurnalo išvesties lygis"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"„BrailleBack“ klaviatūros pagalba"</string>
     <string name="display_connected" msgid="2008600513914815101">"Įj.„brlback“"</string>
     <string name="shutting_down" msgid="1303701310644298807">"Iš.„brlback“"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"„BrailleBack“ klaviatūra aktyvi"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Palieskite, kad perjungtumėte į numatytąją klaviatūrą"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – <xliff:g id="GRADE_NUMBER">%2$d</xliff:g> laipsnis"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Pastumti kairėn"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Pastumti dešinėn"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Perdangos mokymo programa"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Baigti"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Brailio rašto perdanga imituoja atnaujinamą Brailio rašto ekraną. Ji pateikia Brailio rašto langelius su atitinkamu tekstu, kuris būtų pateikiamas aparatinės įrangos ekrane. Prieš tęsiant rekomenduojama įgalinti „TalkBack“ ir tyrinėjimo palietus režimą."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Pritaik. neįg. nustatymai"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Galite stumdyti Brailio rašto ekraną paspausdami vieną iš stumdymo mygtukų, esančių šalia teksto."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Ekrane vienu metu gali būti rodomi keli elementai. Galite spustelėti vieną iš jų palietę vieną iš tekste esančių Brailio rašto langelių. Tai atitinka vieno iš nukreipimo klavišų paspaudimą Brailio rašto ekrane."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Jei perdanga ekrane uždengia kitą elementą, galite ją patraukti. Paspaudę laikykite perdangą ir vilkite ją. Pakėlus pirštą ji bus prijungta prie ekrano viršaus arba apačios."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Rodyti perdangos mokymo progr."</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Rekomenduojame prieš naudojant perdangą ekrane peržiūrėti mokymo programą."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"P:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Paieška: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Paieškos ekrane esanti mokymo programa"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Naudodami paiešką ekrane galite sparčiai pereiti prie ekrano elementų įvesdami dalį jų teksto aprašo. Vedant tekstą suaktyvinamas kitas atitinkantis elementas."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Naudokite „<xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g>“, kad pereitumėte prie kito rezultato, ir „<xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>“, kad pereitumėte prie ankstesnio rezultato. Paspauskite „<xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g>“, kad išeitumėte iš paieškos režimo ir būtų suaktyvintas rezultatas. Paspauskite „<xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g>“, kad pereitumėte atgal į anksčiau suaktyvintą elementą."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Daugiau to nerodyti"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Uždaryti"</string>
 </resources>

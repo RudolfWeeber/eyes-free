@@ -18,7 +18,8 @@
         android:paddingLeft="@dimen/overlay_pan_button_padding"
         android:paddingRight="@dimen/overlay_pan_button_padding"
         android:background="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_prev" />
+        android:src="@drawable/ic_prev"
+        android:contentDescription="@string/overlay_pan_left_button" />
 
     <com.googlecode.eyesfree.brailleback.BrailleView
         android:id="@+id/braille_view"
@@ -41,6 +42,7 @@
         android:paddingLeft="@dimen/overlay_pan_button_padding"
         android:paddingRight="@dimen/overlay_pan_button_padding"
         android:background="?android:attr/selectableItemBackground"
-        android:src="@drawable/ic_next" />
+        android:src="@drawable/ic_next"
+        android:contentDescription="@string/overlay_pan_right_button" />
 
 </LinearLayout>

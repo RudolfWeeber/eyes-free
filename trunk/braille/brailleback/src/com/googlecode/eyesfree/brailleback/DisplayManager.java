@@ -336,6 +336,14 @@ public class DisplayManager
 
     public void shutdown() {
         mDisplayHandler.stop();
+        // Block on display shutdown. We need to make sure this finishes before
+        // we can consider DisplayManager to be shut down.
+        try {
+            mHandlerThread.join(1000 /*milis*/);
+        } catch (InterruptedException e) {
+            LogUtils.log(this, Log.WARN,
+                    "Display handler shutdown interrupted");
+        }
         mTranslatorManager.removeOnTablesChangedListener(this);
     }
 
@@ -650,7 +658,7 @@ public class DisplayManager
 
         private void handleStop() {
             mDisplay.shutdown();
-            mHandlerThread.quit();
+            mHandlerThread.quitSafely();
         }
     }
 

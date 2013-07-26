@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Inställningar för BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Enhet"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Status"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Tangentbindning"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Hjälp för tangentbord"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Brailleskrift"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Brailleskriftstyp"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabell över punktskrift"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Braille (för läsning på dator)"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automatisk (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automatisk (ingen)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Diverse"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Alternativ för utvecklare"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Skärmöverlagring"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Visa braille på skärmen"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Tangentbindning"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Starta självstudiekursen"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Utdatanivå för registrering"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Hjälp för BrailleBack-tangentbord"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback på"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback av"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Aktivt BrailleBack-tangentbord"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Tryck om du vill byta till standardtangentbord"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – grad <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Panorera vänster"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Panorera höger"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Överlagringssjälvstudier"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Avsluta"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Punktskriftsöverlagringen emulerar en punktskriftsskärm. Samma punktskriftsceller som skulle stå på en riktig punktskriftsskärm visas tillsammans med motsvarande text. Du bör aktivera TalkBack och läget för utforskning med gester innan du fortsätter."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Tillgänglighetsinst."</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Du kan panorera punktskriftsskärmen åt höger eller vänster med hjälp av panoreringsknapparna bredvid texten."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Flera objekt kan visas på skärmen samtidigt. Du kan klicka på ett av dem genom att trycka på en av punktskriftscellerna i texten. Detta motsvarar ett tryck på en av routing-knapparna på en punktskriftsskärm."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Om överlagringen skymmer någonting annat på skärmen kan du flytta den åt sidan. Tryck länge på överlagringen och dra sedan. När du släpper fäster överlagringen mot skärmens över- eller nederkant."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Visa överlagringssjälvstudier"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Vi rekommenderar att du tittar på självstudiekursen om skärmöverlagringen innan du använder den."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"S:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Sök efter: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Självstudie för att söka på skärmen"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Med hjälp av sökning på skärmen kan du snabbt hoppa till objekt på skärmen genom att ange en del av objektets beskrivande text. Fokus flyttas till nästa matchande objekt i takt med att du skriver."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Använd <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> om du vill hoppa till nästa resultat och <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> om du vill hoppa till föregående resultat. Tryck på <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> om du vill avsluta sökningsläget och behålla fokus på resultatet. Tryck på <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> om du vill flytta tillbaka till föregående objekt som stod i fokus."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Visa aldrig detta igen"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Stäng"</string>
 </resources>

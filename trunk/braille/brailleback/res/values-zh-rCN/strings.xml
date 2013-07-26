@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBack 偏好设置"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"设备"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"状态"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"按键组合"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"键盘帮助"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"盲文"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"盲文类型"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"书面盲文表格"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"计算机盲文"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"自动（<xliff:g id="TABLE_NAME">%1$s</xliff:g>）"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"自动（无）"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"其他"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"开发者选项"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"屏幕叠加层"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"在屏幕上显示盲文输出"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"按键组合"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"发布教程"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"日志输出级别"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"BrailleBack 键盘帮助"</string>
     <string name="display_connected" msgid="2008600513914815101">"BrlBack 已打开"</string>
     <string name="shutting_down" msgid="1303701310644298807">"BrlBack 已关闭"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack 键盘已启用"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"点按切换到默认键盘"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - <xliff:g id="GRADE_NUMBER">%2$d</xliff:g> 级"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"向左平移"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"向右平移"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"叠加层教程"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"完成"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"盲文叠加层能模拟可刷新的盲文显示屏，并可将盲文单元格以及相应的文本显示在硬件显示屏上。我们建议您先启用话语提示和触摸浏览模式，然后再继续使用该功能。"</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"辅助功能设置"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"您可以通过按文本旁边的某个平移按钮，平移盲文显示屏。"</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"显示屏上可能会一次显示多个元素。您可以通过点按文本中的某个盲文单元格，点击其中一个元素。此操作相当于按盲文显示屏上的某个路选键。"</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"如果叠加层覆盖了屏幕上的其他元素，那么您可以将其移开。长按叠加层，然后拖动。当您松开手指时，该叠加层将对准屏幕顶部或底部。"</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"显示叠加层教程"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"我们建议您在使用屏幕叠加层功能之前先查看相关教程。"</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"搜到："</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"搜索：<xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"“在屏幕上搜索”教程"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"在屏幕上搜索可让您通过输入部分文字说明，快速跳转至屏幕上相应的内容。在您输入文字说明时，焦点会自动移至下一个匹配的内容。"</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"使用 <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> 可移至下一个结果，使用 <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> 可移至上一个结果。按 <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> 可退出搜索模式并使焦点保留在搜索结果上。按 <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> 可返回到上一个焦点内容。"</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"不再显示此教程"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"关闭"</string>
 </resources>

@@ -60,3 +60,6 @@ bind Dot4+Right LNEND
 
 bind Dot6+Up WINUP
 bind Dot6+Down WINDN
+
+bind Dot7+Up TOP
+bind Dot7+Down BOT

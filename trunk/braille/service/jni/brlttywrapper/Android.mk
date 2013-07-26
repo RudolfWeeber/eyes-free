@@ -37,7 +37,10 @@ $(call build-braille-drivers,\
 	Baum \
 	Papenmeier \
 	HIMS \
-	)
+	Alva \
+	Seika \
+	HandyTech \
+       )
 
 #----------------------------------------------------------------
 # brlttywrap
@@ -136,7 +139,9 @@ LOCAL_SRC_FILES+= \
 	Programs/ktb_compile.c \
 	Programs/async.c \
 	Programs/datafile.c \
-	Programs/dataarea.c
+	Programs/dataarea.c \
+	Programs/touch.c \
+	Programs/hidkeys.c
 
 LOCAL_MODULE := brltty
 LOCAL_WHOLE_STATIC_LIBRARIES := $(DRIVER_MODULES)

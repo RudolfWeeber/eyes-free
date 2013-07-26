@@ -544,6 +544,13 @@ initCommandTables(JNIEnv* env) {
     { "CMD_SELECTION_SELECT_ALL", BRL_KEY_FUNCTION + 3 },
     { "CMD_SELECTION_CUT", BRL_KEY_FUNCTION + 4 },
     { "CMD_SELECTION_COPY", BRL_KEY_FUNCTION + 5 },
+    { "CMD_SECTION_NEXT", BRL_KEY_FUNCTION + 6 },
+    { "CMD_SECTION_PREVIOUS", BRL_KEY_FUNCTION + 7 },
+    { "CMD_CONTROL_NEXT", BRL_KEY_FUNCTION + 8 },
+    { "CMD_CONTROL_PREVIOUS", BRL_KEY_FUNCTION + 9 },
+    { "CMD_LIST_NEXT", BRL_KEY_FUNCTION + 10 },
+    { "CMD_LIST_PREVIOUS", BRL_KEY_FUNCTION + 11 },
+    { "CMD_TOGGLE_INCREMENTAL_SEARCH", BRL_KEY_FUNCTION + 12 },
   };
   brlttyKeyMap = createCommandMap(
       env, cls, namesToKeys,
@@ -644,7 +651,7 @@ mapBrlttyCommand(int brlttyCommand,
   int brlttyFlags = brlttyCommand & BRL_MSK_FLG;
   if ((brlttyCommand & BRL_MSK_BLK) != 0) {
     maskedCommand = (brlttyCommand & BRL_MSK_BLK);
-    brlttyArg = (brlttyCommand & BRL_MSK_ARG);
+    brlttyArg = BRL_ARG_GET(brlttyCommand);
   } else {
     maskedCommand = (brlttyCommand & BRL_MSK_CMD);
     brlttyArg = 0;

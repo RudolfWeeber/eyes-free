@@ -122,7 +122,7 @@ public class BrailleInputEvent implements Parcelable {
     /** Keyboard command: Delete forward. */
     public static final int CMD_KEY_FORWARD_DEL = 72;
 
-    // Glboal navigation keys.
+    // Global navigation keys.
 
     /** Keyboard command: Back button. */
     public static final int CMD_GLOBAL_BACK = 90;
@@ -137,6 +137,23 @@ public class BrailleInputEvent implements Parcelable {
 
     /** Keyboard command: Invoke keyboard help. */
     public static final int CMD_HELP = 100;
+
+    // Web content commands.
+
+    /** Keyboard command: Next section in page. */
+    public static final int CMD_SECTION_NEXT = 110;
+    /** Keyboard command: Previous section in page. */
+    public static final int CMD_SECTION_PREVIOUS = 111;
+    /** Keyboard command: Next control in page. */
+    public static final int CMD_CONTROL_NEXT = 112;
+    /** Keyboard command: Previous control in page. */
+    public static final int CMD_CONTROL_PREVIOUS = 113;
+    /** Keyboard command: Next list in page. */
+    public static final int CMD_LIST_NEXT = 114;
+    /** Keyboard command: Previous list in page. */
+    public static final int CMD_LIST_PREVIOUS = 115;
+    /** Keyboard command: Toggle Incremental search. */
+    public static final int CMD_TOGGLE_INCREMENTAL_SEARCH = 116;
 
     // Meanings of the argument to a command.
 
@@ -188,6 +205,14 @@ public class BrailleInputEvent implements Parcelable {
         CMD_NAMES.append(CMD_GLOBAL_RECENTS, "CMD_GLOBAL_RECENTS");
         CMD_NAMES.append(CMD_GLOBAL_NOTIFICATIONS, "CMD_GLOBAL_NOTIFICATIONS");
         CMD_NAMES.append(CMD_HELP, "CMD_HELP");
+        CMD_NAMES.append(CMD_SECTION_NEXT, "CMD_SECTION_NEXT");
+        CMD_NAMES.append(CMD_SECTION_PREVIOUS, "CMD_SECTION_PREVIOUS");
+        CMD_NAMES.append(CMD_CONTROL_NEXT, "CMD_CONTROL_NEXT");
+        CMD_NAMES.append(CMD_CONTROL_PREVIOUS, "CMD_CONTROL_PREVIOUS");
+        CMD_NAMES.append(CMD_LIST_NEXT, "CMD_LIST_NEXT");
+        CMD_NAMES.append(CMD_LIST_PREVIOUS, "CMD_LIST_PREVIOUS");
+        CMD_NAMES.append(CMD_TOGGLE_INCREMENTAL_SEARCH,
+            "CMD_TOGGLE_INCREMENTAL_SEARCH");
         for (int i = 0; i < CMD_NAMES.size(); ++i) {
             NAMES_TO_CMDS.put(CMD_NAMES.valueAt(i),
                     CMD_NAMES.keyAt(i));

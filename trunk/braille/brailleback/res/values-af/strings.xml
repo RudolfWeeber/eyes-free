@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBack-voorkeure"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Toestel"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Status"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Sleutelbindings"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Sleutelbordhulp"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Brailletipe"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Literêre brailletabel"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Rekenaarbraille"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Outo (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Outo (geen)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Diverse"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Ontwikkelaar-opsies"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Op-skerm oorlegger"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Wys braille-uitvoer op skerm"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Sleutelbindings"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Begin tutoriaal"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Teken uitvoervlak aan"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"BrailleBack-sleutelbordhulp"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback aan"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback af"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack-sleutelbord aktief"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Tik om na verstek sleutelbord oor te skakel"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - graad <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Swenk links"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Swenk regs"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Oorlegger-tutoriaal"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Klaar"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Die braille-oorlegger simuleer \'n verfrisbare braille-skerm. Dit vertoon die braille-selle saam met die korresponderende teks wat op \'n hardewareskerm vertoon sou word. Dit word aanbeveel dat jy TalkBack en raak-verkenningmodus aktiveer voordat jy voortgaan."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Toeganklikheidsinstellings"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Jy kan die braille-skerm swenk deur een van die swenkknoppies langsaan die teks te druk."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Veelvuldige elemente kan dalk tegelykertyd op die skerm verskyn. Jy kan een van hulle klik deur een van die braille-selle in die teks te tik. Dit korrespondeer met die druk van een van die herleidingsleutels op \'n braille-skerm."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"As die oorlegger \'n ander element op die skerm toemaak, kan jy dit uit die pad skuif. Langdruk die oorlegger en sleep dit dan. Dit sal na die bo- of onderkant van die skerm vasgryp wanneer jy jou vinger laat los."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Wys oorlegger-tutoriaal"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Ons beveel aan dat jy die tutoriaal vir die op-skerm oorlegger bekyk voordat jy dit gebruik."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"S:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Soek: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Soek-op-skerm-tutoriaal"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Soek-op-skerm laat jou vinnig spring na items op die skerm deur \'n deel van hul teksbeskrywing te tik. Soos wat jy tik, sal fokus skuif na die volgende passende item."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Gebruik <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> om na die volgende resultaat te beweeg en <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> om na die vorige resultaat te beweeg. Druk <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> om uit die soekmodus uit te gaan en fokus op die resultaat te hou. Druk <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> om terug te beweeg na die item waarop voorheen gefokus is."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Moet hierdie nooit weer wys nie"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Maak toe"</string>
 </resources>

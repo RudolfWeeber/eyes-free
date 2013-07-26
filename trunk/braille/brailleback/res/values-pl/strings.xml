@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Preferencje BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Urządzenie"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Stan"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Przypisanie klawiszy"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Pomoc do klawiatury"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Brajl"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Typ brajla"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Tabela brajla literackiego"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Brajl komputerowy"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automatyczna (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automatyczna (brak)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Inne"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Opcje programisty"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Nakładka na ekran"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Pokaż wyjście brajla na ekranie"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Przypisanie klawiszy"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Uruchom samouczek"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Poziom rejestrowania"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Pomoc do klawiatury BrailleBack"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback wł."</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback wył."</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Klawiatura BrailleBack aktywna"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Kliknij, by przełączyć na klawiaturę domyślną"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – stopień <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Przesuń w lewo"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Przesuń w prawo"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Samouczek nakładki"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Zakończ"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Nakładka symuluje odświeżalny ekran z alfabetem Braille\'a. Wyświetla ona komórki w alfabecie Braille\'a i przypisany do nich tekst, który byłby widoczny na ekranie urządzenia. Przed wykonaniem kolejnych czynności zalecamy włączenie aplikacji TalkBack i trybu rozpoznawania dotykiem."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Ustaw. ułatwień dostępu"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Możesz przesuwać ekran z alfabetem Braille\'a, naciskając jeden z przycisków przesuwania umieszczonych obok tekstu."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Na ekranie może się wyświetlić wiele elementów jednocześnie. Wybrany element możesz kliknąć, dotykając jednej z komórek w alfabecie Braille\'a w tekście. Odpowiada to naciśnięciu jednego z klawiszy przemieszczania kursora na ekranie z alfabetem Braille\'a."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Jeśli nakładka zasłania inny element widoczny na ekranie, możesz ją przesunąć. Naciśnij i przytrzymaj nakładkę, a następnie ją przeciągnij. Po zwolnieniu nakładki zostanie ona przyciągnięta do górnej lub dolnej krawędzi ekranu."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Pokaż samouczek nakładki"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Zalecamy zapoznanie się z samouczkiem nakładki na ekran przed jej użyciem."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"W:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Szukaj: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Samouczek wyszukiwania na ekranie"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Wyszukiwanie na ekranie pozwala szybko przechodzić do elementów na ekranie przez wprowadzenie części ich opisu tekstowego. Podczas pisania fokus przesuwa się na kolejny pasujący element."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Użyj <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g>, by przejść do następnego wyniku i <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>, by przejść do poprzedniego wyniku. Naciśnij <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g>, by wyjść z trybu wyszukiwania i pozostawić fokus na wyniku. Naciśnij <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g>, by powrócić do poprzednio aktywowanego elementu."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Nie pokazuj tego ponownie"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Zamknij"</string>
 </resources>

@@ -35,12 +35,18 @@
 #include "ktb_inspect.h"
 #include "log.h"
 #include "parse.h"
+#include "touch.h"
 
 // TODO: Consider making these adjustable by the user
 /* Initial delay before the first autorepeat and as long press timeout. */
 #define AUTOREPEAT_INITIAL_DELAY_MS 500
 /* Interval between autorepeats. */
 #define AUTOREPEAT_INTERVAL_MS 300
+
+// textStart and textCount are taken from Programs/brltty.c. We declare them
+// here so we don't have to include the entire brltty.c file.
+unsigned int textStart = 0;
+unsigned int textCount;
 
 /*
  * The global variable 'braille' is the driver struct with vtable etc.  It is
@@ -138,6 +144,8 @@ brltty_initialize (const char* driverCode, const char* brailleDevice,
     goto destructBraille;
   }
 
+  textCount = brltty_getTextCells();
+
   // TODO: Should set bufferResized to catch buffer size changes if we want to
   // singal those to the screen reader, which is probably useful.
   logMessage(LOG_DEBUG, "Allocating braille buffer");
@@ -216,8 +224,8 @@ handleLongPress(int* cmd) {
     // repeat state and let the autorepeat code handle the new keystroke.
     resetRepeatState(&repeatState);
     return 0;
-  } else if ((*cmd & BRL_MSK_BLK) == BRL_BLK_ROUTE) {
-
+  } else if (((*cmd & BRL_MSK_BLK) == BRL_BLK_ROUTE) &&
+             !(*cmd & BRL_FLG_REPEAT_INITIAL)) {
     /* Not currently handling a route key press. */
     if ((*cmd & BRL_FLG_REPEAT_DELAY) != 0) {
       /* Initial event for the key press, set up the state
@@ -434,9 +442,11 @@ listKeyBinding(const KeyBinding *binding, const KeyTable *keyTable,
   /* Since we implement long press automatically, add a corresponding
    * binding to the route command if this route command isn't already
    * a long press in the key table.
+   * Only do this if immediatekey flag is not active since in that
+   * case longpress isn't possible.
    */
-  if ((binding->command & (BRL_MSK_BLK | BRLTTY_ROUTE_ARG_FLG_LONG_PRESS))
-      == BRL_BLK_ROUTE) {
+  if (((binding->command & (BRL_MSK_BLK | BRLTTY_ROUTE_ARG_FLG_LONG_PRESS))
+         == BRL_BLK_ROUTE) && !(combination->flags & KCF_IMMEDIATE_KEY)) {
     ret = callback(binding->command | BRLTTY_ROUTE_ARG_FLG_LONG_PRESS,
                    i, keys, 1 /*isLongPress*/, data);
   }

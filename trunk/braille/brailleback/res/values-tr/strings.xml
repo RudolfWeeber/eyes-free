@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBack Tercihleri"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Cihaz"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Durum"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Tuş bağlamaları"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Klavye yardımı"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Braille türü"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Yazınsal braille tablosu"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Bilgisayar braille\'i"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Otomatik (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Otomatik (yok)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Çeşitli"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Geliştirici seçenekleri"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Ekranda yer paylaşımı"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Braille çıktısını ekranda göster"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Tuş bağlamaları"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Eğiticiyi başlat"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Günlüğe kaydın çıkış düzeyi"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"BrailleBack Klavyesi yardımı"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback açık"</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback kapalı"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBack klavyesi etkin"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Varsayılan klavyeye geçmek için hafifçe dokunun"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>. derece"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Sola kaydır"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Sağa kaydır"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Yer Paylaşımı Eğiticisi"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Son"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Braille yer paylaşımı yenilenebilir braille ekranını simüle eder. Braille hücrelerini, bir donanım ekranında gösterilebilecek karşılık gelen metinle birlikte görüntüler. Devam etmeden önce TalkBack ve dokunarak keşfetme modunu etkinleştirmeniz önerilir."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Erişilebilirlik Ayarları"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Metnin yanındaki kaydırma düğmelerinden birine basarak braille ekranı yatay kaydırabilirsiniz."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Ekranda aynı anda birden fazla öğe görünebilir. Metindeki braille hücrelerinden birine hafifçe vurarak bunlardan birini tıklayabilirsiniz. Bu işlem, braille ekranda yönlendirme tuşlarından birine basmaya karşılık gelir."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Yer paylaşımı, ekrandaki başka bir öğenin üstünü örtüyorsa, bunu başka bir yere taşıyabilirsiniz. Yer paylaşımına uzun basın ve sürükleyin. Parmağınızı kaldırdığınızda ekranın üstüne veya altına tutturulur."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Yer Paylaşımı Eğiticisini Göster"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Kullanmadan önce ekranda yer paylaşımı eğiticisini görüntülemenizi öneririz."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"A:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Ara: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Ekranda Arama Eğiticisi"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Ekranda arama, metin açıklamalarının bir bölümünü yazarak ekrandaki öğelere kolayca atlamanıza olanak sağlar. Yazdıkça, odak bir sonraki eşleşen öğeye geçer."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Bir sonraki sonuca gitmek için <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> tuşunu, önceki sonuca gitmek için de <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> tuşunu kullanın. Arama modundan çıkmak ve sonuçta odaklanmış olarak kalmak için <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> tuşuna basın. Odaklanılan önceki öğeye dönmek için <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> tuşuna basın."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Bunu bir daha gösterme"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Kapat"</string>
 </resources>

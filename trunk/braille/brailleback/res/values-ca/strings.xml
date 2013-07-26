@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Preferències de BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Dispositiu"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Estat"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Tecles de drecera"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Ajuda del teclat"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Tipus de braille"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Taula braille 6 punts"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Braille 8 punts"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"automàtic (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"automàtic (cap)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Altres"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Opcions de desenvolupador"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Superposició en pantalla"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Text braille en pantalla"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Tecles de drecera"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Inicia el tutorial"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Nivell de registre de sortida"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Ajuda del teclat de BrailleBack"</string>
     <string name="display_connected" msgid="2008600513914815101">"brlback act."</string>
     <string name="shutting_down" msgid="1303701310644298807">"brlback des."</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Teclat de BrailleBack actiu"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Toqueu per canviar al teclat predeterminat"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g>: grau <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Cap a l\'esquerra"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Cap a la dreta"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Tutorial de superposició"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Acaba"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"La superposició de braille simula una pantalla de braille actualitzable. Mostra les cel·les de braille, juntament amb el text corresponent, que es presentarien en una pantalla de maquinari. Us recomanem que activeu TalkBack i el mode d\'exploració tàctil abans de continuar."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Config. accessibilitat"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Podeu desplaçar la pantalla de braille si premeu un dels botons de desplaçament del costat del text."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"És possible que apareguin diversos elements a la pantalla alhora. Podeu fer-hi clic si toqueu una de les cel·les de braille del text. Aquesta acció correspon a prémer una de les tecles de direcció en una pantalla de braille."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Si la superposició cobreix un altre element de la pantalla, el podeu apartar. Mantingueu premuda la superposició i arrossegueu-la. S\'ajustarà a la part superior o inferior de la pantalla quan deixeu anar el dit."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Mostra tutorial superposició"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Us recomanem que visualitzeu el tutorial sobre la superposició en pantalla abans d\'utilitzar-la."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"C:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Cerca: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Tutorial de cerca en pantalla"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"La cerca en pantalla us permet saltar ràpidament als elements de la pantalla: només cal que escriviu part de la descripció del text. A mesura que escriviu, es destacarà el proper element coincident."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Feu servir <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> per passar al resultat següent i <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> per passar al resultat anterior. Premeu <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> per sortir del mode de cerca i per destacar el resultat. Premeu <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> per tornar a l\'element destacat anterior."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"No ho tornis a mostrar més"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Tanca"</string>
 </resources>

@@ -3,7 +3,8 @@
   android:accessibilityEventTypes="typeAllMask"
   android:accessibilityFeedbackType="feedbackGeneric"
   android:notificationTimeout="0"
-  android:accessibilityFlags="flagDefault"
-  android:description="@string/service_description"
+  android:accessibilityFlags="flagDefault|flagRequestEnhancedWebAccessibility"
   android:canRetrieveWindowContent="true"
+  android:canRequestEnhancedWebAccessibility="true"
+  android:description="@string/service_description"
   android:settingsActivity="com.googlecode.eyesfree.brailleback.BrailleBackPreferencesActivity" />

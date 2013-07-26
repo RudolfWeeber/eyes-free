@@ -10,19 +10,28 @@
     <item msgid="7111316948614107646">"Navigate to the previous line"</item>
     <item msgid="1092717670413169154">"Scroll forwards"</item>
     <item msgid="2672802569950877806">"Scroll backwards"</item>
-    <item msgid="8530687760031648049">"Activate the item under the finger"</item>
-    <item msgid="2965010005667399914">"Long press the item under the finger"</item>
-    <item msgid="7114563790387768347">"Activate the current item"</item>
-    <item msgid="6083375034241022486">"Long press the current item"</item>
-    <item msgid="6434332125338405390">"Enter a braille character"</item>
-    <item msgid="2845805874940074674">"Activate the back button"</item>
-    <item msgid="6272261186186982128">"Activate the home button"</item>
-    <item msgid="2876656758414605716">"Open the notifications window"</item>
-    <item msgid="2554673553387851889">"Open the recent apps window"</item>
-    <item msgid="4863807959891911585">"Activate the enter key when editing text"</item>
-    <item msgid="5917526604121492276">"Delete backwards when editing text"</item>
-    <item msgid="6047263121281919980">"Delete forwards when editing text"</item>
-    <item msgid="2622805964649872487">"Open the BrailleBack keyboard help"</item>
+    <item msgid="6858389246595464611">"Navigate to the top of the page"</item>
+    <item msgid="6077703163925348890">"Navigate to the bottom of the page"</item>
+    <item msgid="880847480793051862">"Activate the item under the finger"</item>
+    <item msgid="2643484595828025643">"Long press the item under the finger"</item>
+    <item msgid="2225564744515622940">"Activate the current item"</item>
+    <item msgid="2039335960797511513">"Long press the current item"</item>
+    <item msgid="5703473744103522479">"Enter a braille character"</item>
+    <item msgid="397805118186944475">"Activate the back button"</item>
+    <item msgid="2057979808256674943">"Activate the home button"</item>
+    <item msgid="3851017077578326256">"Open the notifications window"</item>
+    <item msgid="7100928240716386910">"Open the recent apps window"</item>
+    <item msgid="1288748126248312152">"Activate the enter key when editing text"</item>
+    <item msgid="6030744298808090187">"Delete backwards when editing text"</item>
+    <item msgid="4072293104009433677">"Delete forwards when editing text"</item>
+    <item msgid="5307038145607249298">"Navigate to next section in web content"</item>
+    <item msgid="8804572703982019495">"Navigate to previous section in web content"</item>
+    <item msgid="5442875833766760122">"Navigate to next link/control/form field in web content"</item>
+    <item msgid="65542415754308243">"Navigate to previous link/control/form field in web content"</item>
+    <item msgid="8658175115960567526">"Navigate to next list in web content"</item>
+    <item msgid="561134957068368670">"Navigate to previous list in web content"</item>
+    <item msgid="4431278105955644176">"Toggle search on screen mode"</item>
+    <item msgid="2754093362613614658">"Open the BrailleBack keyboard help"</item>
   </string-array>
     <string name="help_keyBindingDelimiter" msgid="1140579260785499060">" + "</string>
     <string name="help_longPressTemplate" msgid="5028857601567358274">"Long press <xliff:g id="KEY_LIST">%s</xliff:g>"</string>

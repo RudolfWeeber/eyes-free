@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBacki eelistused"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Seade"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Olek"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Klahvide sidumine"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Klaviatuuri abi"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Braille\'i tüüp"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Kirjakeele-Braille\'i tabel"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Arvuti-Braille"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Automaatne (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Automaatne (pole)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Mitmesugust"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Arendaja valikud"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Ekraani ülekate"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Näita Braille\'i väljundit ekraanil"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Klahvide sidumine"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Käivitamise õpetused"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Logi väljundi tase"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"BrailleBacki klaviatuuri abi"</string>
     <string name="display_connected" msgid="2008600513914815101">"BrlBack sees"</string>
     <string name="shutting_down" msgid="1303701310644298807">"BrlBack välj."</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"BrailleBacki klaviatuur on aktiivne"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Puudutage, et minna vaikeklaviatuurile"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> – tase <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Panoraami vasakule"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Panoraami paremale"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Õpetuste ülekate"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Valmis"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Braille\' ülekate simuleerib Braille\' värskendatavat kuva. See kuvab Braille\' lahtrid koos vastava tekstiga, mis esitatakse riistvara kuval. Enne jätkamist on soovitatav lubada TalkBack ja puudutusega uurimise režiim."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Juurdepääsetavuse seaded"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Braille\' kuva saate panoraamida, vajutades teksti kõrval ühte panoraamimise nuppudest."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Kuval võib ilmuda mitu elementi korraga. Saate ühel neist klõpsata, puudutades selleks mõnda tekstis olevat Braille\' lahtrit. See on samaväärne mõne marsruutimisklahvi vajutamisega Braille\' kuval."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Kui ülekate katab mõnda teist ekraanil olevat elementi, saate selle kõrvale nihutada. Vajutage pikalt ülekatet ja seejärel lohistage seda. Kui võtate sõrme elemendilt, teisaldatakse see ekraani üla- või alaossa."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Ülekatte õpetuste kuvamine"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Enne ekraani ülekatte kasutamist soovitame tutvuda õpetustega."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"O:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Otsing: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Ekraanil otsimise õpetused"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Ekraanil otsimisel saate kiiresti ekraanil olevatele üksustele liikuda, tippides osa nende tekstkirjeldusest. Tippimisel liigub fookusesse järgmine sobiv üksus."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Järgmise tulemuseni liikumiseks kasutage klahvikombinatsiooni <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> ja eelmise tulemuseni liikumiseks klahvikombinatsiooni <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g>. Otsingurežiimist väljumiseks vajutage klahvikombinatsiooni <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> ja hoidke tulemust fookuses. Uuesti eelnevalt fookuses olnud üksuse juurde liikumiseks vajutage klahvikombinatsiooni <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g>."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Ära kuva seda enam kunagi"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Sule"</string>
 </resources>

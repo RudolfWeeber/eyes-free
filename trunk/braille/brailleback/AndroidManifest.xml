@@ -17,10 +17,10 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.googlecode.eyesfree.brailleback"
-      android:versionCode="13"
-      android:versionName="0.91.3beta1">
+      android:versionCode="22"
+      android:versionName="0.93.0-beta2">
 
-    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="17" />
+    <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="18" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="com.googlecode.eyesfree.braille.display.PERMISSION_CONNECT" />
@@ -124,5 +124,25 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".OverlayTutorialActivity"
+            android:label="@string/overlay_tutorial_title">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".SearchTutorialActivity"
+            android:title="@string/search_tutorial_title" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>

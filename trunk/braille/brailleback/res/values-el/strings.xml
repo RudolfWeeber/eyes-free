@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"Προτιμήσεις BrailleBack"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"Συσκευή"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"Κατάσταση"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"Συνδέσεις πλήκτρων"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"Βοήθεια πληκτρολογίου"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"Braille"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"Τύπος Braille"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"Πίνακας Braille 6 κουκ."</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"Braille 8 κουκκίδων"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"Αυτόματο (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"Αυτόματο (κανένα)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"Διάφορα"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"Επιλογές προγραμματιστή"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"Επικάλυψη οθόνης"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"Εμφάνιση Braille στην οθόνη"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"Συνδέσεις πλήκτρων"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"Έναρξη οδηγού"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"Καταγραφή επιπέδου εξόδου"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"Βοήθεια πληκτρολογίου BrailleBack"</string>
     <string name="display_connected" msgid="2008600513914815101">"BrlBack on"</string>
     <string name="shutting_down" msgid="1303701310644298807">"BrlBack off"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"Ενεργό πληκτρολόγιο BrailleBack"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"Πατήστε για εναλλαγή στο προεπιλεγμένο πληκτρολόγιο"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - βαθμός <xliff:g id="GRADE_NUMBER">%2$d</xliff:g>"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"Μετακίνηση αριστερά"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"Μετακίνηση δεξιά"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"Επικάλυψη οδηγού"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"Τέλος"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"Η επικάλυψη braille αποτελεί προσομοίωση μιας οθόνης braille με δυνατότητα ανανέωσης. Εμφανίζει τα κελιά braille, καθώς και το αντίστοιχο κείμενο, το οποίο θα παρουσιάζεται σε μια προβολή οθόνης. Συνιστάται να ενεργοποιήσετε το TalkBack και να αγγίξετε τη λειτουργία εξερεύνησης πριν συνεχίσετε."</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"Ρυθμίσεις προσβασιμότητας"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"Μπορείτε να μετακινήσετε την οθόνη braille πατώντας ένα από τα κουμπιά μετακίνησης δίπλα στο κείμενο."</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"Ενδέχεται να εμφανίζονται πολλά στοιχεία στην οθόνη ταυτόχρονα. Μπορείτε να κάνετε κλικ σε ένα από αυτά πατώντας ένα από τα κελιά braille στο κείμενο. Αυτό αντιστοιχεί στο πάτημα ενός από τα κουμπιά δρομολόγησης στην οθόνη braille."</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"Εάν η επικάλυψη καλύπτει ένα άλλο στοιχείο της οθόνης σας, μπορείτε να τη μετακινήσετε. Πατήστε παρατεταμένα την επικάλυψη και, στη συνέχεια, σύρετε προς τα κάτω. Θα συμπτυχθεί στο κάτω μέρος της οθόνης όταν ελευθερώσετε το δάχτυλό σας."</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"Εμφάνιση οδηγού επικάλυψης"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"Σας προτείνουμε να συμβουλευτείτε τον οδηγό για την επικάλυψη οθόνης πριν τη χρησιμοποιήσετε."</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"Α:"</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"Αναζήτηση: <xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"Οδηγός Αναζήτησης στην οθόνη"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"Η Αναζήτηση στην οθόνη σάς δίνει τη δυνατότητα να μεταβαίνετε γρήγορα σε στοιχεία στην οθόνη πληκτρολογώντας μέρος της περιγραφής κειμένου τους. Καθώς πληκτρολογείτε, η εστίαση θα μεταφερθεί στο επόμενο στοιχείο που αντιστοιχεί."</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"Χρησιμοποιήστε την εντολή <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> για να μεταβείτε στο επόμενο αποτέλεσμα και την εντολή <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> για να μεταβείτε στο προηγούμενο αποτέλεσμα. Πατήστε <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> για έξοδο από τη λειτουργία αναζήτησης και για διατήρηση της εστίασης στο αποτέλεσμα. Πατήστε <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> για να επιστρέψετε στο προηγούμενο εστιασμένο στοιχείο."</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"Να μην εμφανιστεί ξανά"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"Κλείσιμο"</string>
 </resources>

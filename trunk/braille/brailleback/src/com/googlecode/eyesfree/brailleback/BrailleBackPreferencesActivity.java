@@ -19,6 +19,7 @@ package com.googlecode.eyesfree.brailleback;
 import com.googlecode.eyesfree.braille.display.Display;
 import com.googlecode.eyesfree.braille.display.DisplayClient;
 import com.googlecode.eyesfree.braille.translate.TableInfo;
+import com.googlecode.eyesfree.brailleback.utils.PreferenceUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import android.content.Intent;
@@ -55,6 +56,9 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
     private ListPreference mBrailleTypePreference;
     private ListPreference mSixDotTablePreference;
     private ListPreference mEightDotTablePreference;
+    private Preference mOverlayPreference;
+    private Preference mOverlayTutorialPreference;
+    private ListPreference mLogLevelPreference;
     private int mConnectionState = Display.STATE_NOT_CONNECTED;
     private String mConnectionProgress = null;
     private List<TableInfo> mTables;
@@ -80,6 +84,24 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
         mEightDotTablePreference = (ListPreference) findPreferenceByResId(
                 R.string.pref_eight_dot_braille_table_key);
         mEightDotTablePreference.setOnPreferenceChangeListener(this);
+
+        mOverlayPreference = findPreferenceByResId(
+                R.string.pref_braille_overlay_key);
+        mOverlayPreference.setOnPreferenceChangeListener(this);
+
+        mOverlayTutorialPreference = findPreferenceByResId(
+                R.string.pref_braille_overlay_tutorial_key);
+        mOverlayTutorialPreference.setOnPreferenceClickListener(this);
+
+        mLogLevelPreference = (ListPreference) findPreferenceByResId(
+                R.string.pref_log_level_key);
+        mLogLevelPreference.setOnPreferenceChangeListener(this);
+        if (BuildConfig.DEBUG) {
+            int logLevel = PreferenceUtils.getLogLevel(this);
+            updateListPreferenceSummary(mLogLevelPreference,
+                    Integer.toString(logLevel));
+            mLogLevelPreference.setEnabled(false);
+        }
     }
 
     @Override
@@ -245,23 +267,56 @@ public class BrailleBackPreferencesActivity extends PreferenceActivity
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         // Always update the summary based on the list preference value.
         if (preference instanceof ListPreference) {
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue((String) newValue);
-            CharSequence entries[] = listPreference.getEntries();
-            if (index < 0 || index >= entries.length) {
-                LogUtils.log(this, Log.ERROR,
-                        "Unknown preference value for %s: %s",
-                        preference.getKey(), newValue);
+            boolean updated = updateListPreferenceSummary(
+                (ListPreference) preference, (String) newValue);
+            if (!updated) {
                 return false;
             }
-            listPreference.setSummary(entries[index]);
         }
+
+        // If the overlay was turned on for the first time, launch the tutorial.
+        if (preference == mOverlayPreference && newValue.equals(true)) {
+            OverlayTutorialActivity.startIfFirstTime(this);
+        }
+
+        // If the log level was changed, update it in LogUtils.
+        if (preference == mLogLevelPreference) {
+            try {
+                int logLevel = Integer.parseInt((String) newValue);
+                return PreferenceUtils.updateLogLevel(logLevel);
+            } catch (IllegalArgumentException e) {
+                LogUtils.log(this, Log.ERROR,
+                        "illegal log level: %s", newValue);
+                return false;
+            }
+        }
+
         return true;
     }
 
     @Override
     public boolean onPreferenceClick(Preference pref) {
-        mDisplay.poll();
+        if (pref == mStatusPreference) {
+            mDisplay.poll();
+            return true;
+        } else if (pref == mOverlayTutorialPreference) {
+            startActivity(new Intent(this, OverlayTutorialActivity.class));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean updateListPreferenceSummary(
+            ListPreference listPreference, String newValue) {
+        int index = listPreference.findIndexOfValue(newValue);
+        CharSequence entries[] = listPreference.getEntries();
+        if (index < 0 || index >= entries.length) {
+            LogUtils.log(this, Log.ERROR,
+                    "Unknown preference value for %s: %s",
+                    listPreference.getKey(), newValue);
+            return false;
+        }
+        listPreference.setSummary(entries[index]);
         return true;
     }
 

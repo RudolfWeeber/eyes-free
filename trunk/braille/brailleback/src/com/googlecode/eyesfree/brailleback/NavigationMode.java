@@ -29,7 +29,7 @@ public interface NavigationMode {
     void onActivate();
     void onDeactivate();
     void onObserveAccessibilityEvent(AccessibilityEvent event);
-    void onAccessibilityEvent(AccessibilityEvent event);
+    boolean onAccessibilityEvent(AccessibilityEvent event);
     void onInvalidateAccessibilityNode(AccessibilityNodeInfoCompat node);
     boolean onPanLeftOverflow(DisplayManager.Content content);
     boolean onPanRightOverflow(DisplayManager.Content content);

@@ -18,6 +18,9 @@ package com.googlecode.eyesfree.brailleback;
 
 import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.braille.display.Display;
+import com.googlecode.eyesfree.brailleback.rule.BrailleRuleRepository;
+import com.googlecode.eyesfree.brailleback.utils.PreferenceUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import android.accessibilityservice.AccessibilityService;
@@ -39,7 +42,8 @@ public class BrailleBackService
         extends AccessibilityService
         implements Display.OnConnectionStateChangeListener,
         DisplayManager.OnMappedInputEventListener,
-        DisplayManager.OnPanOverflowListener {
+        DisplayManager.OnPanOverflowListener,
+        SearchNavigationMode.SearchStateListener {
 
     /** Start the service, initializing a few components. */
     private static final int WHAT_START = 2;
@@ -60,10 +64,12 @@ public class BrailleBackService
     private TranslatorManager mTranslatorManager;
     private DisplayManager mDisplayManager;
     private SelfBrailleManager mSelfBrailleManager;
+    private NodeBrailler mNodeBrailler;
+    private BrailleRuleRepository mRuleRepository;
     private FocusTracker mFocusTracker;
     private IMEHelper mIMEHelper;
-    private NavigationMode mNavigationMode;
     private ModeSwitcher mModeSwitcher;
+    private SearchNavigationMode mSearchNavigationMode;
 
     /** Set if the infrastructure is initialized. */
     private boolean isInfrastructureInitialized;
@@ -106,7 +112,7 @@ public class BrailleBackService
     @Override
     public void onMappedInputEvent(BrailleInputEvent event,
             DisplayManager.Content content) {
-        if (mNavigationMode == null) {
+        if (mModeSwitcher == null) {
             return;
         }
         // Global commands can't be overriden.
@@ -119,7 +125,15 @@ public class BrailleBackService
             mModeSwitcher.switchMode();
             return;
         }
-        if (mNavigationMode.onMappedInputEvent(event, content)) {
+        if (mModeSwitcher.onMappedInputEvent(event, content)) {
+            return;
+        }
+        // Check native case after navigation mode handler to allow navigation
+        // mode chance to deal with webview incremental search.
+        if (event.getCommand() ==
+                BrailleInputEvent.CMD_TOGGLE_INCREMENTAL_SEARCH) {
+            // Search Navigation mode will handle disabling the mode.
+            startSearchWithTutorial();
             return;
         }
         if (mIMEHelper.onInputEvent(event)) {
@@ -159,8 +173,8 @@ public class BrailleBackService
 
     @Override
     public void onPanLeftOverflow(DisplayManager.Content content) {
-        if (mNavigationMode != null
-                && !mNavigationMode.onPanLeftOverflow(content)) {
+        if (mModeSwitcher != null
+                && !mModeSwitcher.onPanLeftOverflow(content)) {
             mFeedbackManager.emitFeedback(
                 FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
         }
@@ -168,8 +182,8 @@ public class BrailleBackService
 
     @Override
     public void onPanRightOverflow(DisplayManager.Content content) {
-        if (mNavigationMode != null
-                && !mNavigationMode.onPanRightOverflow(content)) {
+        if (mModeSwitcher != null
+                && !mModeSwitcher.onPanRightOverflow(content)) {
             mFeedbackManager.emitFeedback(
                 FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
         }
@@ -178,12 +192,7 @@ public class BrailleBackService
     @Override
     public void onServiceConnected() {
         sInstance = this;
-        // TODO: Add setting like in talkback.
-        if (BuildConfig.DEBUG) {
-            LogUtils.setLogLevel(Log.VERBOSE);
-        } else {
-            LogUtils.setLogLevel(Log.WARN);
-        }
+        PreferenceUtils.initLogLevel(this);
         if (isInfrastructureInitialized) {
             return;
         }
@@ -214,9 +223,9 @@ public class BrailleBackService
         if (mIMEHelper != null) {
             mIMEHelper.onAccessibilityEvent(event);
         }
-        if (mNavigationMode != null) {
-            mNavigationMode.onObserveAccessibilityEvent(event);
-            mNavigationMode.onAccessibilityEvent(event);
+        if (mModeSwitcher != null) {
+            mModeSwitcher.onObserveAccessibilityEvent(event);
+            mModeSwitcher.onAccessibilityEvent(event);
         }
     }
 
@@ -232,10 +241,41 @@ public class BrailleBackService
         }
     }
 
+    @Override
+    public void onSearchStarted() {
+        // Nothing to do here.
+    }
+
+    @Override
+    public void onSearchFinished() {
+        mModeSwitcher.overrideMode(null);
+    }
+
+    /**
+     * Starts search mode in BrailleBack. Optionally tries to start the tutorial
+     * first.
+     */
+    public void startSearchMode() {
+        mModeSwitcher.overrideMode(mSearchNavigationMode);
+    }
+
+    private void startSearchWithTutorial() {
+        mSearchNavigationMode.setInitialNodeToCurrent();
+        // Try to start the search tutorial activity first. Only if it
+        // doesn't start do we activate search mode.
+        if (SearchTutorialActivity.tryStartActivity(this)) {
+            return;
+        }
+        startSearchMode();
+    }
+
     private void initializeDependencies() {
         mFeedbackManager = new FeedbackManager(this);
         mTranslatorManager = new TranslatorManager(this);
         mSelfBrailleManager = new SelfBrailleManager();
+        mRuleRepository = new BrailleRuleRepository(this);
+        mNodeBrailler = new NodeBrailler(this,
+                mRuleRepository, mSelfBrailleManager);
         initializeDisplayManager();
         initializeNavigationMode();
         mIMEHelper = new IMEHelper(this);
@@ -260,22 +300,35 @@ public class BrailleBackService
     }
 
     private void initializeNavigationMode() {
+        DefaultNavigationMode defaultNavigationMode =
+                new DefaultNavigationMode(
+                        mDisplayManager,
+                        this,
+                        mFeedbackManager,
+                        mSelfBrailleManager,
+                        mNodeBrailler,
+                        mRuleRepository);
+        IMENavigationMode imeNavigationMode = new IMENavigationMode(
+                defaultNavigationMode, this, mDisplayManager, mFeedbackManager,
+                mSelfBrailleManager, mTranslatorManager);
+        BrailleIME.setSingletonHost(imeNavigationMode);
         mModeSwitcher = new ModeSwitcher(
-            new DefaultNavigationMode(
-                mDisplayManager,
-                this,
-                mFeedbackManager,
-                mSelfBrailleManager),
+            imeNavigationMode,
             new TreeDebugNavigationMode(
                 mDisplayManager,
                 mFeedbackManager,
                 this));
-        IMENavigationMode imeNavigationMode = new IMENavigationMode(
-                mModeSwitcher, this, mDisplayManager, mFeedbackManager,
-                mSelfBrailleManager, mTranslatorManager);
-        BrailleIME.setSingletonHost(imeNavigationMode);
-        mNavigationMode = imeNavigationMode;
-        mNavigationMode.onActivate();
+        mModeSwitcher.onActivate();
+
+        // Create separate SearchNavigationMode.
+        mSearchNavigationMode = new SearchNavigationMode(
+            mDisplayManager,
+            this /*accessibilityService*/,
+            mFeedbackManager,
+            mTranslatorManager,
+            mSelfBrailleManager,
+            mNodeBrailler,
+            this /*searchStateListener*/);
     }
 
     private void shutdownDependencies() {
@@ -322,6 +375,6 @@ public class BrailleBackService
     public void invalidateNode(AccessibilityNodeInfo node) {
         AccessibilityNodeInfoCompat wrapped =
                 new AccessibilityNodeInfoCompat(node);
-        mNavigationMode.onInvalidateAccessibilityNode(wrapped);
+        mModeSwitcher.onInvalidateAccessibilityNode(wrapped);
     }
 }

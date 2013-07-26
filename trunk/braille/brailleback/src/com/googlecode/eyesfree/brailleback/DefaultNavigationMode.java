@@ -20,6 +20,7 @@ import com.googlecode.eyesfree.braille.display.BrailleInputEvent;
 import com.googlecode.eyesfree.brailleback.rule.BrailleRule;
 import com.googlecode.eyesfree.brailleback.rule.BrailleRuleRepository;
 import com.googlecode.eyesfree.brailleback.utils.AccessibilityEventUtils;
+import com.googlecode.eyesfree.compat.accessibilityservice.AccessibilityServiceCompatUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoRef;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
@@ -44,6 +45,16 @@ class DefaultNavigationMode implements NavigationMode {
     private static final int DIRECTION_FORWARD =
         WebInterfaceUtils.DIRECTION_FORWARD;
 
+    private static final String HTML_ELEMENT_MOVE_BY_SECTION =
+        WebInterfaceUtils.HTML_ELEMENT_MOVE_BY_SECTION;
+    private static final String HTML_ELEMENT_MOVE_BY_CONTROL =
+        WebInterfaceUtils.HTML_ELEMENT_MOVE_BY_CONTROL;
+    private static final String HTML_ELEMENT_MOVE_BY_LIST =
+        WebInterfaceUtils.HTML_ELEMENT_MOVE_BY_LIST;
+
+    private static final int ACTION_TOGGLE_INCREMENTAL_SEARCH =
+        WebInterfaceUtils.ACTION_TOGGLE_INCREMENTAL_SEARCH;
+
     // Actions in this range are reserved for Braille use.
     // TODO: use event arguments instead of this hack.
     private static final int ACTION_BRAILLE_CLICK_MAX = -275000000;
@@ -66,13 +77,14 @@ class DefaultNavigationMode implements NavigationMode {
             DisplayManager displayManager,
             AccessibilityService accessibilityService,
             FeedbackManager feedbackManager,
-            SelfBrailleManager selfBrailleManager) {
+            SelfBrailleManager selfBrailleManager,
+            NodeBrailler nodeBrailler,
+            BrailleRuleRepository ruleRepository) {
         mDisplayManager = displayManager;
         mAccessibilityService = accessibilityService;
         mSelfBrailleManager = selfBrailleManager;
-        mRuleRepository = new BrailleRuleRepository(mAccessibilityService);
-        mNodeBrailler = new NodeBrailler(mAccessibilityService,
-                mRuleRepository, mSelfBrailleManager);
+        mRuleRepository = ruleRepository;
+        mNodeBrailler = nodeBrailler;
         mFeedbackManager = feedbackManager;
         mFocusFinder = new FocusFinder(mAccessibilityService);
     }
@@ -346,6 +358,38 @@ class DefaultNavigationMode implements NavigationMode {
             FeedbackManager.TYPE_NAVIGATE_OUT_OF_BOUNDS);
     }
 
+    private boolean navigateHTMLElementAction(int direction, String element) {
+        AccessibilityNodeInfoCompat currentNode = getFocusedNode(true);
+        try {
+            if (currentNode != null
+                    && WebInterfaceUtils.hasWebContent(currentNode)
+                    && WebInterfaceUtils.performNavigationToHtmlElementAction(
+                            currentNode, direction, element)) {
+                return true;
+            }
+            return false;
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(currentNode);
+        }
+    }
+
+    private boolean handleIncrementalSearchAction() {
+        AccessibilityNodeInfoCompat currentNode = getFocusedNode(true);
+        try {
+            if (currentNode != null
+                    && WebInterfaceUtils.hasWebContent(currentNode)
+                    && mFeedbackManager.emitOnFailure(
+                        WebInterfaceUtils.performSpecialAction(currentNode,
+                            ACTION_TOGGLE_INCREMENTAL_SEARCH),
+                        FeedbackManager.TYPE_COMMAND_FAILED)) {
+                return true;
+            }
+            return false;
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(currentNode);
+        }
+    }
+
     @Override
     public boolean onMappedInputEvent(BrailleInputEvent event,
             DisplayManager.Content content) {
@@ -396,6 +440,45 @@ class DefaultNavigationMode implements NavigationMode {
                     attemptScrollAction(
                         AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD),
                     FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_NAV_TOP:
+                return mFeedbackManager.emitOnFailure(
+                    attemptNavigateTop(), FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_NAV_BOTTOM:
+                return mFeedbackManager.emitOnFailure(
+                    attemptNavigateBottom(),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_SECTION_NEXT:
+                return mFeedbackManager.emitOnFailure(
+                    navigateHTMLElementAction(DIRECTION_FORWARD,
+                        HTML_ELEMENT_MOVE_BY_SECTION),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_SECTION_PREVIOUS:
+                return mFeedbackManager.emitOnFailure(
+                    navigateHTMLElementAction(DIRECTION_BACKWARD,
+                        HTML_ELEMENT_MOVE_BY_SECTION),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_CONTROL_NEXT:
+                return mFeedbackManager.emitOnFailure(
+                    navigateHTMLElementAction(DIRECTION_FORWARD,
+                        HTML_ELEMENT_MOVE_BY_CONTROL),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_CONTROL_PREVIOUS:
+                return mFeedbackManager.emitOnFailure(
+                    navigateHTMLElementAction(DIRECTION_BACKWARD,
+                        HTML_ELEMENT_MOVE_BY_CONTROL),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_LIST_NEXT:
+                return mFeedbackManager.emitOnFailure(
+                    navigateHTMLElementAction(DIRECTION_FORWARD,
+                        HTML_ELEMENT_MOVE_BY_LIST),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_LIST_PREVIOUS:
+                return mFeedbackManager.emitOnFailure(
+                    navigateHTMLElementAction(DIRECTION_BACKWARD,
+                        HTML_ELEMENT_MOVE_BY_LIST),
+                    FeedbackManager.TYPE_COMMAND_FAILED);
+            case BrailleInputEvent.CMD_TOGGLE_INCREMENTAL_SEARCH:
+                return handleIncrementalSearchAction();
         }
         return false;
     }
@@ -404,7 +487,11 @@ class DefaultNavigationMode implements NavigationMode {
     public void onActivate() {
         mActive = true;
         mLastFocusedNode.clear();
-        brailleFocusedNode();
+        // Braille the focused node, or if that fails, braille
+        // the first focusable node.
+        if (!brailleFocusedNode()) {
+            brailleFirstFocusableNode();
+        }
     }
 
     @Override
@@ -418,7 +505,7 @@ class DefaultNavigationMode implements NavigationMode {
     }
 
     @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
+    public boolean onAccessibilityEvent(AccessibilityEvent event) {
         switch (event.getEventType()) {
             case AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED:
                 brailleNodeFromEvent(event);
@@ -437,6 +524,7 @@ class DefaultNavigationMode implements NavigationMode {
                 }
                 break;
         }
+        return true;
     }
 
     @Override
@@ -465,36 +553,8 @@ class DefaultNavigationMode implements NavigationMode {
 
     private AccessibilityNodeInfoCompat getFocusedNode(
             boolean fallbackOnRoot) {
-        AccessibilityNodeInfo root =
-                mAccessibilityService.getRootInActiveWindow();
-        AccessibilityNodeInfo focused = null;
-        try {
-            AccessibilityNodeInfo ret = null;
-            if (root != null) {
-                focused = root.findFocus(
-                    AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
-                if (focused != null && focused.isVisibleToUser()) {
-                    ret = focused;
-                    focused = null;
-                } else if (fallbackOnRoot) {
-                    ret = root;
-                    root = null;
-                }
-            } else {
-                LogUtils.log(this, Log.ERROR, "No current window root");
-            }
-            if (ret != null) {
-                return new AccessibilityNodeInfoCompat(ret);
-            }
-        } finally {
-            if (root != null) {
-                root.recycle();
-            }
-            if (focused != null) {
-                focused.recycle();
-            }
-        }
-        return null;
+        return FocusFinder.getFocusedNode(mAccessibilityService,
+                fallbackOnRoot);
     }
 
     private boolean activateNode(AccessibilityNodeInfoCompat node) {
@@ -708,7 +768,7 @@ class DefaultNavigationMode implements NavigationMode {
             }
 
             scrollableNode =
-                    AccessibilityNodeInfoUtils.getSelfOrMatchingPredecessor(
+                    AccessibilityNodeInfoUtils.getSelfOrMatchingAncestor(
                         mAccessibilityService, focusedNode,
                         AccessibilityNodeInfoUtils.FILTER_SCROLLABLE);
             if (scrollableNode == null) {
@@ -726,4 +786,71 @@ class DefaultNavigationMode implements NavigationMode {
         return mSelfBrailleManager.hasContentForNode(node);
     }
 
+    /**
+     * Attempts to navigate to the top-most focusable node in the tree.
+     */
+    private boolean attemptNavigateTop() {
+        AccessibilityNodeInfoCompat root =
+                AccessibilityServiceCompatUtils.getRootInActiveWindow(
+                    mAccessibilityService);
+        AccessibilityNodeInfoCompat toFocus = null;
+        if (AccessibilityNodeInfoUtils.shouldFocusNode(
+                        mAccessibilityService, root)) {
+            toFocus = root;
+            root = null;
+        } else {
+            toFocus = mFocusFinder.linear(root, FocusFinder.SEARCH_FORWARD);
+            if (toFocus == null) {
+                // Fall back on root as a last resort.
+                toFocus = root;
+                root = null;
+            }
+        }
+
+        try {
+            if (toFocus.isAccessibilityFocused()) {
+                brailleFocusedNode();
+                return true;
+            }
+
+            return toFocus.performAction(
+                AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(root, toFocus);
+        }
+    }
+
+    /**
+     * Attempts to navigate to the bottom-most focusable node in the tree.
+     */
+    private boolean attemptNavigateBottom() {
+        AccessibilityNodeInfoCompat root =
+                AccessibilityServiceCompatUtils.getRootInActiveWindow(
+                    mAccessibilityService);
+        AccessibilityNodeInfoCompat toFocus =
+                FocusFinder.findLastFocusableDescendant(root,
+                    mAccessibilityService);
+
+        try {
+            if (toFocus == null) {
+                if (AccessibilityNodeInfoUtils.shouldFocusNode(
+                        mAccessibilityService, root)) {
+                    root = null;
+                    toFocus = root;
+                } else {
+                    return false;
+                }
+            }
+
+            if (toFocus.isAccessibilityFocused()) {
+                brailleFocusedNode();
+                return true;
+            }
+
+            return toFocus.performAction(
+                AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS);
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(root, toFocus);
+        }
+    }
 }

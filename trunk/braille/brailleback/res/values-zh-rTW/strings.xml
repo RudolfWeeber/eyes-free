@@ -27,7 +27,7 @@
     <string name="preferences_title" msgid="368535298674637475">"BrailleBack 偏好設定"</string>
     <string name="pref_category_device_title" msgid="8644919099122845217">"裝置"</string>
     <string name="pref_connection_status_title" msgid="8350285056432214602">"狀態"</string>
-    <string name="pref_key_bindings_title" msgid="2713182458852540311">"按鍵繫結"</string>
+    <string name="pref_key_bindings_title" msgid="1228004448435300774">"鍵盤說明"</string>
     <string name="pref_category_braille_title" msgid="2900211401917503360">"點字"</string>
     <string name="pref_braille_type_title" msgid="830832481671746224">"點字類型"</string>
     <string name="pref_six_dot_braille_table_title" msgid="4612604998154279310">"文書點字參考表"</string>
@@ -39,12 +39,34 @@
     <string name="pref_braille_type_eight_dot_label" msgid="5837018272969076058">"電腦點字"</string>
     <string name="pref_braille_table_default_label" msgid="1462752739972207613">"自動選取 (<xliff:g id="TABLE_NAME">%1$s</xliff:g>)"</string>
     <string name="pref_braille_table_default_none_label" msgid="1448225003385606644">"自動選取 (無)"</string>
+    <string name="pref_category_miscellaneous_title" msgid="1296461419739225100">"其他"</string>
     <string name="pref_category_developer_title" msgid="7276576143816692867">"開發人員選項"</string>
+    <string name="pref_category_braille_overlay_title" msgid="1947056854402684698">"螢幕疊層"</string>
     <string name="pref_braille_overlay_title" msgid="1490370457319373830">"在螢幕上顯示點字輸出"</string>
-    <string name="key_bindings_title" msgid="5482900913343271532">"按鍵繫結"</string>
+    <string name="pref_braille_overlay_tutorial_title" msgid="6443284526953091708">"啟動教學課程"</string>
+    <string name="pref_log_level_label" msgid="3161296593165404029">"紀錄輸出等級"</string>
+    <string name="key_bindings_title" msgid="7481545872884477026">"BrailleBack 鍵盤說明"</string>
     <string name="display_connected" msgid="2008600513914815101">"BrlBack 開啟"</string>
     <string name="shutting_down" msgid="1303701310644298807">"BrlBack 關閉"</string>
     <string name="braille_keyboard_active" msgid="7094321134174837395">"已啟用 BrailleBack 鍵盤"</string>
     <string name="tap_to_switch_ime" msgid="8521400813452643324">"輕觸即可切換預設鍵盤"</string>
     <string name="table_name_grade" msgid="6813487904718787264">"<xliff:g id="LOCALE_NAME">%1$s</xliff:g> - <xliff:g id="GRADE_NUMBER">%2$d</xliff:g> 級點字"</string>
+    <string name="overlay_pan_left_button" msgid="3970960598254323366">"向左平移"</string>
+    <string name="overlay_pan_right_button" msgid="6982590158653468102">"向右平移"</string>
+    <string name="overlay_tutorial_title" msgid="323686269924134028">"疊層教學課程"</string>
+    <string name="overlay_tutorial_finish_button" msgid="8190984135613253372">"完成"</string>
+    <string name="overlay_tutorial_introduction" msgid="732693451088628629">"點字疊層功能的用途是模擬點字顯示器，讓硬體顯示器在畫面上出現文字時，顯示相對應的點字格。使用前，建議您啟用 TalkBack 和觸控探索模式。"</string>
+    <string name="overlay_tutorial_accessibility_settings_button" msgid="7614097829221431291">"協助工具設定"</string>
+    <string name="overlay_tutorial_pan" msgid="6845897761664313491">"只需按下文字旁邊的平移按鈕，即可平移點字疊層。"</string>
+    <string name="overlay_tutorial_routing_keys" msgid="4226607385598426316">"畫面上可能會一次顯示多個元素。只要輕按任一文字當中的點字格即可點選，效果等同於按下點字顯示器中的 Routing 鍵。"</string>
+    <string name="overlay_tutorial_moving" msgid="6583235883700027279">"如果疊層蓋到了畫面中的其他元素，您可以將疊層移開，方法是按住並拖曳疊層。放開手指後，疊層即會移至螢幕頂端或底部。"</string>
+    <string name="overlay_tutorial_dialog_title" msgid="4114032130535945266">"顯示疊層教學課程"</string>
+    <string name="overlay_tutorial_dialog_message" msgid="8623281534692086379">"建議您在使用螢幕疊層功能之前，先觀看該功能的教學課程。"</string>
+    <string name="search_result_prefix" msgid="404457595813397708">"結果："</string>
+    <string name="search_dialog_label" msgid="1816668691365362442">"搜尋：<xliff:g id="SEARCH_QUERY">%1$s</xliff:g>"</string>
+    <string name="search_tutorial_title" msgid="1035979397405903476">"搜尋畫面內容教學課程"</string>
+    <string name="search_tutorial_instructions_general" msgid="6818519646574055310">"在「搜尋畫面內容」模式中，只要輸入畫面上任一項目的部分文字說明，即可快速移至該項目。在您輸入文字時，游標會自動移至下一個相符項目。"</string>
+    <string name="search_tutorial_instructions_specific" msgid="6238171239009571192">"您可使用 <xliff:g id="NEXT_KEY_COMMAND">%1$s</xliff:g> 移至下一個搜尋結果，或使用 <xliff:g id="PREVIOUS_KEY_COMMAND">%2$s</xliff:g> 移至上一個搜尋結果。按下 <xliff:g id="ENTER_KEY_COMMAND">%3$s</xliff:g> 可結束搜尋模式，並將游標置於搜尋結果上方；按下 <xliff:g id="TOGGLE_SEARCH_KEY_COMMAND">%4$s</xliff:g> 則可返回游標停留的上一個項目。"</string>
+    <string name="search_tutorial_checkbox" msgid="3804049570909695877">"不再顯示教學課程"</string>
+    <string name="search_tutorial_close_button" msgid="8087574965051267276">"關閉"</string>
 </resources>

@@ -47,25 +47,49 @@ public class WebInterfaceUtils {
     public static final int DIRECTION_BACKWARD = -1;
 
     /**
-     * Action argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
-     * int, int)} to instruct ChromeVox to read the currently focused element
-     * within the node. within the page.
+     * Action argument to use with
+     * {@link #performSpecialAction(AccessibilityNodeInfoCompat, int)} to
+     * instruct ChromeVox to read the currently focused element within the node.
+     * within the page.
      */
     public static final int ACTION_READ_CURRENT_HTML_ELEMENT = -1;
 
     /**
-     * Action argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
-     * int, int)} to instruct ChromeVox to read the title of the page within
-     * the node.
+     * Action argument to use with
+     * {@link #performSpecialAction(AccessibilityNodeInfoCompat, int)} to
+     * instruct ChromeVox to read the title of the page within the node.
      */
     public static final int ACTION_READ_PAGE_TITLE_ELEMENT = -2;
 
     /**
-     * Action argument to use with {@link #performNavigationAtGranularityAction(AccessibilityNodeInfoCompat,
-     * int, int)} to instruct ChromeVox to stop all speech and automatic
-     * actions.
+     * Action argument to use with
+     * {@link #performSpecialAction(AccessibilityNodeInfoCompat, int)} to
+     * instruct ChromeVox to stop all speech and automatic actions.
      */
     public static final int ACTION_STOP_SPEECH = -3;
+
+    /**
+     * Action argument to use with
+     * {@link #performSpecialAction(AccessibilityNodeInfoCompat, int, int)} to
+     * instruct ChromeVox to move into or out of the special content navigation
+     * mode.
+     * <p>
+     * Using this constant also requires specifying a direction.
+     * {@link #DIRECTION_FORWARD} indicates ChromeVox should move into this
+     * content navigation mode, {@link #DIRECTION_BACKWARD} indicates ChromeVox
+     * should move out of this mode.
+     */
+    private static final int ACTION_TOGGLE_SPECIAL_CONTENT = -4;
+
+    /**
+     * Action argument to use with
+     * {@link #performSpecialAction(AccessibilityNodeInfoCompat, int, int)} to
+     * instruct ChromeVox to move into or out of the incremental search mode.
+     * <p>
+     * Using this constant does not require a direction as it only toggles
+     * the state.
+     */
+    public static final int ACTION_TOGGLE_INCREMENTAL_SEARCH = -5;
 
     /**
      * HTML element argument to use with {@link #performNavigationToHtmlElementAction(AccessibilityNodeInfoCompat,
@@ -161,35 +185,78 @@ public class WebInterfaceUtils {
 
     /**
      * Sends instruction to ChromeVox to perform one of the special actions
-     * defined by the ACTION constants in this class. WARNING: Calling this
-     * method with a source node of {@link android.webkit.WebView} has the side
-     * effect of closing the IME if currently displayed.
-     *
+     * defined by the ACTION constants in this class.
+     * <p>
      * WARNING: Calling this method with a source node of
-     * {@link android.webkit.WebView} has the side effect of closing the IME
-     * if currently displayed.
+     * {@link android.webkit.WebView} has the side effect of closing the IME if
+     * currently displayed.
      *
      * @param node The node containing web content with ChromeVox to which the
      *            message should be sent
      * @param action The ACTION constant in this class match the special action
      *            that ChromeVox should perform.
-     * @return {@code true} if the action was performed, {@code false} otherwise.
+     * @return {@code true} if the action was performed, {@code false}
+     *         otherwise.
      */
     public static boolean performSpecialAction(AccessibilityNodeInfoCompat node, int action) {
+        return performSpecialAction(node, action, DIRECTION_FORWARD);
+    }
+
+    /**
+     * Sends instruction to ChromeVox to perform one of the special actions
+     * defined by the ACTION constants in this class.
+     * <p>
+     * WARNING: Calling this method with a source node of
+     * {@link android.webkit.WebView} has the side effect of closing the IME if
+     * currently displayed.
+     *
+     * @param node The node containing web content with ChromeVox to which the
+     *            message should be sent
+     * @param action The ACTION constant in this class match the special action
+     *            that ChromeVox should perform.
+     * @param direction The DIRECTION constant in this class to add as an extra
+     *            argument to the special action.
+     * @return {@code true} if the action was performed, {@code false}
+     *         otherwise.
+     */
+    public static boolean performSpecialAction(
+            AccessibilityNodeInfoCompat node, int action, int direction) {
         /*
          * We use performNavigationAtGranularity to communicate with ChromeVox
          * for these actions because it is side-effect-free. If we use
          * performNavigationToHtmlElementAction and ChromeVox isn't injected,
-         * we'll actually move selection within the fallback implementation.
+         * we'll actually move selection within the fallback implementation. We
+         * use the granularity field to hold a value that ChromeVox interprets
+         * as a special command.
          */
-        return performNavigationAtGranularityAction(node, DIRECTION_FORWARD, action);
+        return performNavigationAtGranularityAction(node, direction, action /* fake granularity */);
+    }
+
+    /**
+     * Sends a message to ChromeVox indicating that it should enter or exit
+     * special content navigation. This is applicable for things like tables and
+     * math expressions.
+     * <p>
+     * NOTE: further navigation should occur at the default movement
+     * granularity.
+     *
+     * @param node The node representing the web content
+     * @param enabled Whether this mode should be entered or exited
+     * @return {@code true} if the action was performed, {@code false}
+     *         otherwise.
+     */
+    public static boolean setSpecialContentModeEnabled(
+            AccessibilityNodeInfoCompat node, boolean enabled) {
+        final int direction = (enabled) ? DIRECTION_FORWARD : DIRECTION_BACKWARD;
+        return performSpecialAction(node, ACTION_TOGGLE_SPECIAL_CONTENT, direction);
     }
 
     /**
      * Determines whether or not the given node contains web content.
      *
      * @param node The node to evaluate
-     * @return {@code true} if the node contains web content, {@code false} otherwise
+     * @return {@code true} if the node contains web content, {@code false}
+     *         otherwise
      */
     public static boolean hasWebContent(AccessibilityNodeInfoCompat node) {
         return AccessibilityNodeInfoUtils.supportsAnyAction(node,
@@ -205,5 +272,17 @@ public class WebInterfaceUtils {
         final int injectionSetting = Settings.Secure.getInt(
                 context.getContentResolver(), ACCESSIBILITY_SCRIPT_INJECTION, 0);
         return (injectionSetting == 1);
+    }
+
+    /**
+     * Returns whether the given node has navigable web content.
+     *
+     * @param context The parent context.
+     * @param node The node to check for web content.
+     * @return Whether the given node has navigable web content.
+     */
+    public static boolean hasNavigableWebContent(
+            Context context, AccessibilityNodeInfoCompat node) {
+        return (hasWebContent(node) && isScriptInjectionEnabled(context));
     }
 }
