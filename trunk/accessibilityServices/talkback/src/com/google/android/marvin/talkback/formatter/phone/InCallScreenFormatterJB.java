@@ -18,13 +18,13 @@ package com.google.android.marvin.talkback.formatter.phone;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
-import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -35,6 +35,8 @@ import java.util.List;
  * @author caseyburkhardt@google.com (Casey Burkhardt)
  */
 public final class InCallScreenFormatterJB implements AccessibilityEventFormatter {
+    private static final int MIN_EVENT_TEXT_COUNT = 3;
+
     private static final int INDEX_UPPER_TITLE = 1;
     private static final int INDEX_SUBTITILE = 2;
 
@@ -43,26 +45,26 @@ public final class InCallScreenFormatterJB implements AccessibilityEventFormatte
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final boolean speakCallerId = SharedPreferencesUtils.getBooleanPref(prefs,
                 context.getResources(), R.string.pref_caller_id_key, R.bool.pref_caller_id_default);
-
         if (!speakCallerId) {
             // Don't speak the caller ID screen.
-            return true;
+            return false;
         }
 
         final List<CharSequence> eventText = event.getText();
-        final StringBuilder utteranceText = utterance.getText();
+        if (eventText.size() < MIN_EVENT_TEXT_COUNT) {
+            return false;
+        }
 
         final CharSequence title = eventText.get(INDEX_UPPER_TITLE);
+        if (!TextUtils.isEmpty(title)) {
+            utterance.addSpoken(title);
+        }
+
         final CharSequence subtitle = eventText.get(INDEX_SUBTITILE);
-
-        if (title != null) {
-            StringBuilderUtils.appendWithSeparator(utteranceText, title);
+        if (!TextUtils.isEmpty(subtitle)) {
+            utterance.addSpoken(subtitle);
         }
 
-        if (subtitle != null) {
-            StringBuilderUtils.appendWithSeparator(utteranceText, subtitle);
-        }
-
-        return true;
+        return !utterance.getSpoken().isEmpty();
     }
 }

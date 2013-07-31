@@ -19,6 +19,7 @@ package com.google.android.marvin.talkback;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -59,6 +60,11 @@ public class TextToSpeechOverlay extends SimpleOverlay {
     }
 
     public void speak(String text) {
+        if (TextUtils.isEmpty(text)) {
+            hide();
+            return;
+        }
+
         show();
 
         final long displayTime = Math.max(2000, text.length() * 100);

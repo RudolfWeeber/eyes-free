@@ -21,6 +21,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -110,10 +111,14 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      */
     private void formatDayOrWeekViewSelected(AccessibilityEvent event, Context context,
             Utterance utterance) {
-        StringBuilder textBuilder = utterance.getText();
+        final SpannableStringBuilder textBuilder = new SpannableStringBuilder();
         appendSelectedRange(context, event, textBuilder);
         appendSelectedEventIndexAnouncement(context, event, textBuilder);
         appendSelectedEventDetails(context, event, textBuilder);
+
+        if (!TextUtils.isEmpty(textBuilder)) {
+            utterance.addSpoken(textBuilder);
+        }
     }
 
     /**
@@ -125,9 +130,13 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      */
     private void formatAgendaViewSelected(AccessibilityEvent event, Context context,
             Utterance utterance) {
-        StringBuilder textBuilder = utterance.getText();
+        final SpannableStringBuilder textBuilder = new SpannableStringBuilder();
         appendDisplayName(context, event, textBuilder);
         appendEventText(event, textBuilder);
+
+        if (!TextUtils.isEmpty(textBuilder)) {
+            utterance.addSpoken(textBuilder);
+        }
     }
 
     /**
@@ -136,7 +145,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      * @param event The event being processed.
      * @param textBuilder The builder to which to append the announcement.
      */
-    private void appendEventText(AccessibilityEvent event, StringBuilder textBuilder) {
+    private void appendEventText(AccessibilityEvent event, SpannableStringBuilder textBuilder) {
         List<CharSequence> text = event.getText();
         for (CharSequence subText : text) {
             textBuilder.append(subText);
@@ -152,7 +161,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      * @param textBuilder The builder to which to append the announcement.
      */
     private void appendSelectedRange(Context context, AccessibilityEvent event,
-            StringBuilder textBuilder) {
+            SpannableStringBuilder textBuilder) {
         String eventText = event.getText().get(0).toString();
         if (TextUtils.isEmpty(eventText)) {
             return;
@@ -226,7 +235,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      * @param textBuilder The builder to which to append the announcement.
      */
     private void appendSelectedEventIndexAnouncement(Context context, AccessibilityEvent event,
-            StringBuilder textBuilder) {
+            SpannableStringBuilder textBuilder) {
         int eventCount = event.getItemCount();
         if (eventCount > 1) {
             textBuilder.append(SPACE);
@@ -244,7 +253,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      * @param textBuilder The builder to which to append the announcement.
      */
     private void appendEventCountAnnouncement(Context context, AccessibilityEvent event,
-            StringBuilder textBuilder) {
+            SpannableStringBuilder textBuilder) {
         int eventIndex = event.getCurrentItemIndex() + 1;
         int eventCount = event.getItemCount();
         textBuilder.append(context.getString(R.string.template_announce_item_index, eventIndex,
@@ -263,7 +272,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      */
     @SuppressWarnings("deprecation")
     private void appendSelectedEventDetails(Context context, AccessibilityEvent event,
-            StringBuilder textBuilder) {
+            SpannableStringBuilder textBuilder) {
         Bundle parcelableData = (Bundle) event.getParcelableData();
         if (parcelableData == null) {
             return;
@@ -313,7 +322,7 @@ public final class DayOrWeekOrAgendaViewSelectedFormatter implements Accessibili
      * @param textBuilder The builder to which to append the announcement.
      */
     private void appendDisplayName(Context context, AccessibilityEvent event,
-            StringBuilder textBuilder) {
+            SpannableStringBuilder textBuilder) {
         Bundle parcelableData = (Bundle) event.getParcelableData();
         if (parcelableData == null) {
             return;

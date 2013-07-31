@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"您也可以通过滑动手指来滚动整个页面。要滚动到下一页，请使用先向右再向左滑动的组合手势。请尝试通过先向右再向左滑动来滚动到下一页。"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"请再次浏览屏幕并在当前页面上找到一个应用。"</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"反方向滑动（即先向左再向右滑动的组合手势）即可移动到上一页。请尝试通过先向左再向右滑动来滚动到上一页。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"要开始学习下一课，请找到并激活“<xliff:g id="NEXT">%s</xliff:g>”按钮（位于屏幕右下角附近）。"</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"第 3 课：按字符阅读"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"默认情况下，向左或向右滑动手指可完整阅读全文。当然，您也可以逐字阅读屏幕上的文本。首先，请找到以“这”开头的文本段落。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"接下来，您可以使用先向下再向上滑动手指的组合手势，开始以特定级别阅读此段文本。请尝试先向下再向上滑动来更改阅读级别，然后向右滑动以阅读文本。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"要离开当前这段文本，您需要返回默认阅读级别。请反方向（即，先向上再向下）滑动手指以便返回默认阅读级别。然后找到右下角的“<xliff:g id="FINISH">%s</xliff:g>”按钮并点按屏幕两次以将其激活，从而退出教程。"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"这是一个大段文本的示例。您可以使用滑动手势以特定的阅读级别在文本中跳转，也可以使用手势操作一次性完整阅读所有文本。"\n\n"这是第二段。"\n\n"这是第三段，也是最后一段。您可以先向下再向上滑动手指来更改阅读级别，然后向右滑动以在此文本中跳转。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"要开始学习下一课，请找到屏幕右下角的<xliff:g id="NEXT">%1$s</xliff:g>按钮，并点按两次将其激活。"</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"第3课：上下文菜单"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"话语提示有全局上下文菜单和本地上下文菜单这两种上下文菜单，方便用户轻松找到各种设置和控件。您可以用手指沿菜单项所组成的圆圈滑动，然后在听到相关项的语音反馈后松开手指，从而激活相应菜单项。要尝试打开全局上下文菜单，请<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>滑动手指，滑动过程中不要中断。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"全局上下文菜单包含各项话语提示通用命令。您可以尝试让系统朗读屏幕上的所有文字，具体操作如下：按屏幕中央以便在手指周围打开圆形菜单，然后沿着由选项组成的圆圈滑动手指，直至听到<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"您已关闭全局上下文菜单。要尝试重新打开全局上下文菜单，请<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>滑动手指，滑动过程中不要中断。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"很好！上述命令可让系统朗读屏幕上的所有项。除了全局上下文菜单外，话语提示还提供了本地上下文菜单，其中的控件会根据您在屏幕上选择的项而变化。要尝试打开本地上下文菜单，请<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>滑动手指，滑动过程中不要中断。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"用手指按住屏幕中央然后再松开，即可取消并关闭菜单。现在请尝试关闭本地上下文菜单。"</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"尚未指定手势"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"您尚未指定<xliff:g id="ACTION">%1$s</xliff:g>操作的手势。请访问话语提示设置，为此操作设置快捷手势，然后重新启动话语提示教程。"</string>
 </resources>

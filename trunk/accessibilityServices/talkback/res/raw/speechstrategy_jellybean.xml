@@ -1,14 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd">
+  <ss:speechstrategy
+      xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy ../../schema/speechstrategy.xsd">
+
+  <!-- TYPE_VIEW_SELECTED -->
+
+  <!-- WebView (duplicate from default strategy, but has high priority) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>android.webkit.WebView</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.WebContentFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Action bar tab selection (MR2 and up) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:platformSdk>&gt;=18</ss:platformSdk>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:classNameStrict>android.app.ActionBar$Tab</ss:classNameStrict>
+    </ss:filter>
+    <ss:metadata>
+      <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
+      <ss:customVibration>@id/patterns_selected</ss:customVibration>
+      <ss:customEarcon>@id/sounds_selected</ss:customEarcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:property>contentDescriptionOrText</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- ProgressBar (duplicate from default strategy, but has high priority) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:className>android.widget.ProgressBar</ss:className>
+    </ss:filter>
+    <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.ProgressBarFormatter</ss:custom>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Pattern unlock widget (prior to MR1 fixes) -->
+  <ss:rule>
+    <ss:filter>
+      <ss:platformSdk>16</ss:platformSdk>
+      <ss:eventType>TYPE_VIEW_SELECTED</ss:eventType>
+      <ss:classNameStrict>android.view.View</ss:classNameStrict>
+      <ss:packageName>android</ss:packageName>
+      <ss:text></ss:text>
+    </ss:filter>
+    <ss:metadata>
+      <ss:customVibration>@id/patterns_selected</ss:customVibration>
+      <ss:customEarcon>@id/sounds_selected</ss:customEarcon>
+    </ss:metadata>
+    <ss:formatter>
+      <ss:property>contentDescription</ss:property>
+    </ss:formatter>
+  </ss:rule>
 
   <!-- TYPE_VIEW_FOCUSED -->
 
   <!-- Special case for FOCUSED and SELECTED, we usually only want ACCESSIBILITY_FOCUS -->
   <ss:rule>
     <ss:filter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.FallbackFormatter</ss:custom>
+      <ss:eventType>TYPE_VIEW_FOCUSED||TYPE_VIEW_SELECTED||TYPE_VIEW_HOVER_ENTER</ss:eventType>
       <ss:platformSdk>&gt;=16</ss:platformSdk>
     </ss:filter>
     <ss:formatter>

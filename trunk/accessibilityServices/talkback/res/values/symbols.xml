@@ -100,4 +100,23 @@
     <string name="symbol_vertical_bar">Vertical bar</string>
     <!-- Spoken description for the "\u00a5" (YEN) keyboard key. [CHAR LIMIT="NONE" -->
     <string name="symbol_yen">Yen</string>
+    <!-- Spoken description for the "\u00ac" (NOT SIGN) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_not_sign">Not sign</string>
+    <!-- Spoken description for the "\u00a6" (BROKEN BAR) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_broken_bar">Broken bar</string>
+    <!-- Spoken description for the "\u00b5" (MICRO SIGN) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_micro_sign">Micro sign</string>
+    <!-- Spoken description for the "\u2248" (ALMOST EQUALS) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_almost_equals">Almost equals</string>
+    <!-- Spoken description for the "\u2260" (NOT EQUALS) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_not_equals">Not equals</string>
+    <!-- Spoken description for the "\u00a4" (CURRENCY SIGN) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_currency_sign">Currency sign</string>
+    <!-- Spoken description for the "\u00a7" (SECTION SIGN) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_section_sign">Section sign</string>
+    <!-- Spoken description for the "\u2191" (UPWARDS ARROW) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_upwards_arrow">Upwards arrow</string>
+    <!-- Spoken description for the "\u2190" (LEFTWARDS ARROW) keyboard key. [CHAR LIMIT="NONE" -->
+    <string name="symbol_leftwards_arrow">Leftwards arrow</string>
+
 </resources>

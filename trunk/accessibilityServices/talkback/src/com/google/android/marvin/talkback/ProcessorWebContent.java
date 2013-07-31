@@ -17,14 +17,16 @@
 package com.google.android.marvin.talkback;
 
 import android.annotation.TargetApi;
+import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.FullScreenReadController.AutomaticReadingState;
-import com.google.android.marvin.talkback.TalkBackService.EventListener;
+import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
 import com.google.android.marvin.utils.AutomationUtils;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.WebInterfaceUtils;
 
 /**
@@ -37,9 +39,9 @@ import com.googlecode.eyesfree.utils.WebInterfaceUtils;
  *
  * @author caseyburkhardt@google.com (Casey Burkhardt)
  */
-@TargetApi(16)
-public class ProcessorWebContent implements EventListener {
-    public static final int MIN_API_LEVEL = 16;
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+public class ProcessorWebContent implements AccessibilityEventListener {
+    public static final int MIN_API_LEVEL = Build.VERSION_CODES.JELLY_BEAN;
 
     private static final int MASK_ACCEPTED_EVENT_TYPES =
             AccessibilityEventCompat.TYPE_VIEW_ACCESSIBILITY_FOCUSED
@@ -65,9 +67,9 @@ public class ProcessorWebContent implements EventListener {
     }
 
     @Override
-    public void process(AccessibilityEvent event) {
+    public void onAccessibilityEvent(AccessibilityEvent event) {
         // Only announce relevant events
-        if ((event.getEventType() & MASK_ACCEPTED_EVENT_TYPES) == 0) {
+        if (!AccessibilityEventUtils.eventMatchesAnyType(event, MASK_ACCEPTED_EVENT_TYPES)) {
             return;
         }
 
@@ -101,14 +103,15 @@ public class ProcessorWebContent implements EventListener {
                 // into web content.
                 mFullScreenReadController.interrupt();
             }
-        } else {
-            // Inform the user that script injection is disabled.
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // On versions that include a script injection preference, inform
+            // the user that script injection is disabled.
             final String preferenceName = AutomationUtils.getPackageString(
                     mService, PACKAGE_SETTINGS, RES_NAME_SCRIPT_INJECTION_TITLE);
             if (preferenceName != null) {
                 final CharSequence announcement = mService.getString(
                         R.string.hint_script_injection, preferenceName);
-                mSpeechController.cleanUpAndSpeak(
+                mSpeechController.speak(
                         announcement, SpeechController.QUEUE_MODE_INTERRUPT, 0, null);
             }
         }

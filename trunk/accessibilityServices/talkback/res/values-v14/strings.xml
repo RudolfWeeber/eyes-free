@@ -2,6 +2,6 @@
 <resources>
 
     <!-- Message for the alert shown when a user attempts to suspend TalkBack, which also disables the Explore by Touch feature. -->
-    <string name="dialog_message_suspend_talkback">Are you sure you want to suspend TalkBack?\n\nWhile TalkBack is suspended, your device will not provide feedback and Explore by Touch will be disabled.\n\nYou can resume TalkBack from the notifications shade or by returning to the lock screen.</string>
+    <string name="dialog_message_suspend_talkback">Are you sure you want to suspend TalkBack?\n\nWhile TalkBack is suspended, your device will not provide feedback and Explore by Touch will be disabled.</string>
 
 </resources>

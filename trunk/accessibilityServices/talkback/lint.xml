@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="DefaultLocale" severity="ignore" />
+    <issue id="MissingTranslation" severity="ignore" />
+    <issue id="Overdraw">
+        <ignore path="res/layout/accessibility_touchguard.xml" />
+    </issue>
+    <issue id="ProtectedPermissions" severity="ignore" />
+    <issue id="ProtectedPermissons" severity="ignore" />
+    <issue id="Typos" severity="ignore" />
+    <issue id="UnusedResources" severity="ignore" />
+</lint>

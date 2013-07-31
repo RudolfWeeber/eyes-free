@@ -18,16 +18,17 @@ package com.google.android.marvin.talkback.speechrules;
 
 import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityNodeInfoCompatUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils.TopToBottomLeftToRightComparator;
 import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.StringBuilderUtils;
 
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -43,21 +44,23 @@ public class NodeSpeechRuleProcessor {
             COMPARATOR = new TopToBottomLeftToRightComparator();
 
     private static final LinkedList<NodeSpeechRule> mRules = new LinkedList<NodeSpeechRule>();
+    private static final RuleSwitch mRuleSwitch = new RuleSwitch();
+
+    private static NodeSpeechRuleProcessor sInstance;
 
     static {
         // Rules are matched in the order they are added, so make sure to place
         // general rules after specific ones (e.g. Button after RadioButton).
         mRules.add(new RuleSimpleHintTemplate(android.widget.Spinner.class,
                 R.string.template_spinner, R.string.template_hint_spinner));
+        mRules.add(mRuleSwitch);
+        mRules.add(new RuleNonTextViews()); // ImageViews and ImageButtons
         mRules.add(new RuleSimpleTemplate(android.widget.RadioButton.class,
                 R.string.template_radio_button));
         mRules.add(new RuleSimpleTemplate(android.widget.CompoundButton.class,
                 R.string.template_checkbox));
-        mRules.add(new RuleSimpleTemplate(android.widget.ImageButton.class,
-                R.string.template_button));
         mRules.add(new RuleSimpleTemplate(android.widget.Button.class,
                 R.string.template_button));
-        mRules.add(new RuleImageView());
         mRules.add(new RuleEditText());
         mRules.add(new RuleSeekBar());
         mRules.add(new RuleContainer());
@@ -67,9 +70,22 @@ public class NodeSpeechRuleProcessor {
         mRules.add(new RuleDefault());
     }
 
+    public static void initialize(Context context) {
+        sInstance = new NodeSpeechRuleProcessor(context);
+    }
+
+    public static NodeSpeechRuleProcessor getInstance() {
+        if (sInstance == null) {
+            throw new RuntimeException("NodeSpeechRuleProcessor not initialized");
+        }
+
+        return sInstance;
+    }
+
+    /** The parent context. */
     private final Context mContext;
 
-    public NodeSpeechRuleProcessor(Context context) {
+    private NodeSpeechRuleProcessor(Context context) {
         mContext = context;
     }
 
@@ -89,26 +105,36 @@ public class NodeSpeechRuleProcessor {
             return null;
         }
 
-        final StringBuilder builder = new StringBuilder();
+        final SpannableStringBuilder builder = new SpannableStringBuilder();
 
         appendDescriptionForTree(announcedNode, builder, event, source);
         formatTextWithLabel(announcedNode, builder);
         appendRootMetadataToBuilder(announcedNode, builder);
 
-        return builder.toString();
+        return builder;
+    }
+
+    /**
+     * Returns hint text for a node.
+     *
+     * @param node The node to provide hint text for.
+     * @return The node's hint text.
+     */
+    public CharSequence getHintForNode(AccessibilityNodeInfoCompat node) {
+        for (NodeSpeechRule rule : mRules) {
+            if ((rule instanceof NodeHintRule) && rule.accept(mContext, node)) {
+                LogUtils.log(this, Log.VERBOSE, "Processing node hint using %s", rule);
+                return ((NodeHintRule) rule).getHintText(mContext, node);
+            }
+        }
+
+        return null;
     }
 
     private void appendDescriptionForTree(AccessibilityNodeInfoCompat announcedNode,
-            StringBuilder builder, AccessibilityEvent event, AccessibilityNodeInfoCompat source) {
+            SpannableStringBuilder builder, AccessibilityEvent event,
+            AccessibilityNodeInfoCompat source) {
         if (announcedNode == null) {
-            return;
-        }
-
-        // Setting a content description overrides subtree node descriptions.
-        // TODO(alanv): Should nodes with "full" text also block children?
-        final CharSequence announcedDescription = announcedNode.getContentDescription();
-        if (!TextUtils.isEmpty(announcedDescription)) {
-            StringBuilderUtils.appendWithSeparator(builder, announcedDescription);
             return;
         }
 
@@ -117,7 +143,14 @@ public class NodeSpeechRuleProcessor {
         final CharSequence nodeDesc = getDescriptionForNode(announcedNode, nodeEvent);
         if (!TextUtils.isEmpty(nodeDesc)) {
             StringBuilderUtils.appendWithSeparator(builder, nodeDesc);
+
             appendMetadataToBuilder(announcedNode, builder);
+
+            // Setting a content description overrides subtree descriptions.
+            final CharSequence announcedDescription = announcedNode.getContentDescription();
+            if (!TextUtils.isEmpty(announcedDescription)) {
+                return;
+            }
         }
 
         // Recursively append descriptions for visible and non-focusable child nodes.
@@ -153,23 +186,6 @@ public class NodeSpeechRuleProcessor {
     }
 
     /**
-     * Returns hint text for a node.
-     *
-     * @param node The node to provide hint text for.
-     * @return The node's hint text.
-     */
-    public CharSequence getHintForNode(Context context, AccessibilityNodeInfoCompat node) {
-        for (NodeSpeechRule rule : mRules) {
-            if ((rule instanceof NodeHintRule) && rule.accept(mContext, node)) {
-                LogUtils.log(this, Log.VERBOSE, "Processing node hint using %s", rule);
-                return ((NodeHintRule) rule).getHintText(context, node);
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Processes the specified node using a series of speech rules.
      *
      * @param node The node to process.
@@ -194,14 +210,15 @@ public class NodeSpeechRuleProcessor {
      * If the supplied node has a label, replaces the builder text with a
      * version formatted with the label.
      */
-    private void formatTextWithLabel(AccessibilityNodeInfoCompat node, StringBuilder builder) {
+    private void formatTextWithLabel(
+            AccessibilityNodeInfoCompat node, SpannableStringBuilder builder) {
         final AccessibilityNodeInfoCompat labelNode =
                 AccessibilityNodeInfoCompatUtils.getLabeledBy(node);
         if (labelNode == null) {
             return;
         }
 
-        final StringBuilder labelDescription = new StringBuilder();
+        final SpannableStringBuilder labelDescription = new SpannableStringBuilder();
         appendDescriptionForTree(labelNode, labelDescription, null, null);
         if (TextUtils.isEmpty(labelDescription)) {
             return;
@@ -211,7 +228,7 @@ public class NodeSpeechRuleProcessor {
                 R.string.template_labeled_item, builder, labelDescription);
 
         // Replace the text of the builder.
-        builder.setLength(0);
+        builder.clear();
         builder.append(labeled);
     }
 
@@ -221,7 +238,7 @@ public class NodeSpeechRuleProcessor {
      * This should only be applied to the root node of a tree.
      */
     private void appendRootMetadataToBuilder(
-            AccessibilityNodeInfoCompat node, StringBuilder descriptionBuilder) {
+            AccessibilityNodeInfoCompat node, SpannableStringBuilder descriptionBuilder) {
         // Append state for actionable but disabled nodes.
         if (AccessibilityNodeInfoUtils.isActionableForAccessibility(node) && !node.isEnabled()) {
             StringBuilderUtils.appendWithSeparator(
@@ -242,9 +259,11 @@ public class NodeSpeechRuleProcessor {
      * This should be applied to all nodes in a tree, including the root.
      */
     private void appendMetadataToBuilder(
-            AccessibilityNodeInfoCompat node, StringBuilder descriptionBuilder) {
-        // Append the control's checked state, if applicable.
-        if (node.isCheckable()) {
+            AccessibilityNodeInfoCompat node, SpannableStringBuilder descriptionBuilder) {
+        // Append the control's checked state, if applicable. Ignore nodes that
+        // were accepted by the switch rule, since they already include the
+        // checkable state.
+        if (node.isCheckable() && !mRuleSwitch.accept(mContext, node)) {
             final int res = node.isChecked() ? R.string.value_checked : R.string.value_not_checked;
             StringBuilderUtils.appendWithSeparator(descriptionBuilder, mContext.getString(res));
         }

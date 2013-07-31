@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="inner_fill">#AAAA</color>
-    <color name="outer_fill">#8999</color>
-    <color name="corner_fill">#8999</color>
-    <color name="text_fill">#FFFF</color>
-    <color name="corner_text_fill">#FFFF</color>
-    <color name="outer_stroke">#AFFF</color>
-    <color name="corner_stroke">#AFFF</color>
-    <color name="selection_overlay">#FF00</color>
-    <color name="submenu_overlay">#F0F0</color>
+    <color name="center_fill">#D333</color>
+    <color name="center_text_fill">#FEEE</color>
+
+    <color name="outer_fill">#D333</color>
+    <color name="text_fill">#FEEE</color>
+
+    <color name="corner_fill">#D333</color>
+    <color name="corner_text_fill">#FEEE</color>
+
+    <color name="gradient_inner">#0000</color>
+    <color name="gradient_outer">#C000</color>
+
+    <color name="selection_fill">#FF40A5DA</color>
+    <color name="selection_text_fill">#FFFF</color>
+    <color name="selection_shadow">#9FFF</color>
+
+    <color name="submenu_overlay">#30F0</color>
+
+    <color name="dot_fill">#8333</color>
+    <color name="dot_stroke">#8FFF</color>
+
+    <color name="text_shadow">#A000</color>
 
 </resources>

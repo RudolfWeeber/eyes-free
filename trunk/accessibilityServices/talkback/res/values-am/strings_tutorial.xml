@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"በጣትዎ በማንሸራተትም አንድ ሙሉ ገጽ ማሸብለልም ይችላሉ። ወደ ቀጣዩ ገጽ ለማሸብለል በአንዲት እንቅስቃሴ በመጠቀም ወደ ቀኝ ከዚያ ወደ ግራ ያንሸራትቱ። ወደ ቀኝ ከዚያ ወደ ግራ በማንሸራተት ወደ ቀጣዩ ገጽ ለማሸብለል ይሞክሩ።"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"በአሁኑ ገጽ ውስጥ መተግበሪያ ለማግኘት ገጽ ማያውን እንደገና ዳስስ።"</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"በአንዲት እንቅስቃሴ ወደ ተቃራኒው አቅጣጫ፣ ግራ ከዚያ ወደ ቀኝ ማንሸራተት ወደ ቀዳሚው ገጽ ይወስዳል። ወደ ግራ ከዚያ ወደ ቀኝ በማንሸራተት ወደ ቀዳሚው ገጽ ለማሸብለል ይሞክሩ።"</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"ጥሩ። ወደሚቀጥለው ትምህርት ለመቀጠል፣በማያው ቀኝ ታች ጥግ ሥፍራ ያለውን የ<xliff:g id="NEXT">%s</xliff:g> አዝራርን በማግኘት አግብር።"</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"ትምህርት 3፦ በቁምፊ ማንበብ"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"እንደ ነባሪ ወደ ግራ እና ቀኝ ማንሸራተት የጽሁፍ ጥምሮችን በአንዴ ያነባል። እንደዚሁም በማያ ገጽ የቃል ወይም የቁምፊ ጥምሮችን ማንበብ ይችላሉ። በመጀመሪያ በ«ይህ» የሚጀምረውን ጽሁፍ ይፈልጉ።"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"በመቀጠልም በአንዲት እንቅስቃሴ ወደ ታች ከዚያ ወደ ላይ በማንሸራተት ይህን ጥምር በተወሰነ ደረጃ ማንበብ መጀመር ይችላሉ። የንባብ ደረጃውን ለመቀየር ወደ ታች ከዚያ ወደ ላይ ለማንሸራተት ይሞክሩ፣ ከዚያ ጽሑፉን ለማንበብ ወደ ቀኝ ያንሸራትቱ።"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"ከአሁኑ የጽሑፍ ጥምር ለመውጣት ወደ ነባሪ የንባብ ደረጃ መመለስ ይኖርብዎታል። ወደ ነባሪው የንባብ ደረጃ ለመመለስ ወደ ተቃራኒው አቅጣጫ፣ ወደ ላይና ከዚያ ወደ ታች ያንሸራትቱ። ከዚያ ከታች በስተቀኝ በኩል ያለው የ<xliff:g id="FINISH">%s</xliff:g> አዝራሩን ይፈልጉና እሱን ለማግበር ሁለቴ መታ ያድርጉት፣ ከዚያ ከመማሪያው ይውጡ።"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"ይሄ ትልቅ የጽሁፍ ጥምር ምሳሌ ነው። የማንሸራተት ምልክቶችን በመጠቀም በተወሰነ የንባብ ደረጃ በዚህ ጽሁፍ ውስጥ ማንቀሳቀስ ወይም ደግሞ የንኪ ምልክቶችን በመጠቀም ሁሉንም በአንዴ ማንበብ ይችላሉ። "\n\n"ይሄ ሁለተኛው አንቀጽ ነው። "\n\n"ይሄ ሦስተኛውና የመጨረሻው አንቀጽ ነው። የንባብ መጠኑን ለመቀየር ወደ ታችና ከዚያ ወደ ላይ ያንሸራትቱ፣ ከዚያም በዚህ ጽሁፍ ውስጥ ለማንቀሳቀስ ወደ ቀኝ ያንሸራትቱ።"</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"ወደ ቀጣዩ ትምህርት ለመሄድ በማያ ገጹ ከታች በስተቀኝ በኩል ላይ የሚገኘው የ<xliff:g id="NEXT">%1$s</xliff:g> አዝራሩን ያግኙ፣ ከዛ እሱን ለማግበር ሁለቴ ጠቅ ያድርጉት።"</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"ትምህርት 3፦ የአውድ ምናሌዎች"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack ቅንብሮችንና መቆጣጠሪያዎቹን ለማግኘት ቀላል የሚያደርጉ ሁለት የአውድ ምናሌዎች አሉት፣ ሁለንተናዊው የአውድ ምናሌ እና አካባቢያዊው የአውድ ምናሌ። ጣትዎን በምናሌ ንጥሎች ክብ ዙሪያ ላይ በማንሸራተትና የተፈለገውን ንጥል ሲሰሙ በመልቀቅ አንድ የምናሌ ንጥል ማግበር ይችላሉ። ጣትዎን በአንዲት እንቅስቃሴ ላይ በ<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> በማንሸራተት ሁለንተናዊውን የአውድ ምናሌ ለማምጣት ይሞክሩ።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"ሁለንተናዊው የአውድ ምናሌ በመላው TalkBalk ላይ የሚሰሩ አጠቃላይ ትዕዛዞችን የያዘ ነው። ጣትዎን በማያ ገጹ መሃል ላይ አሳርፈው በጣትዎ ዙሪያ ላይ ክብ ምናሌ በማምጣት እና «<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>» እስኪሰሙ ድረስ ጣትዎን በዙሪያው ባሉት የአማራጮች ክብ ላይ በማንሸራተት በማያ ገጹ ላይ ያለውን ሁሉም ጽሑፍ ለማንበብ ይሞክሩ።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"ሁለንተናዊ የአውድ ምናሌውን ዘግተዋል። ጣትዎን በአንዲት እንቅስቃሴ ላይ በ<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> በማንሸራተት ሁለንተናዊውን የአውድ ምናሌ እንደገና ለማምጣት ይሞክሩ።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"ጥሩ። ያ ትዕዛዝ በማያ ገጹ ላይ ያለውን ሁሉም ንጥሎችን ያነብበዋል። ከሁለንተናዊ አውድ ምናሌው በተጨማሪ TalkBack እንዲሁም አካባቢያዊ የአውደ ምናሌ አለው። የአካባቢያዊ አውድ ምናሌው በማያ ገጹ ላይ በመረጡት ንጥል መሠረት የሚቀየሩ መቆጣጠሪያዎችን የያዘ ነው። ጣትዎን በአንዲት እንቅስቃሴ ላይ በ<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> በማንሸራተት አካባቢያዊውን የአውድ ምናሌ ለማምጣት ይሞክሩ።"</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"ጣትዎን በማያ ገጹ መሃል ላይ ተጭነው ከዚያ ማንሳት ምናሌውን ይዘገዋል። አካባቢያዊውን የአውድ ምናሌ አሁን ለመዝጋት ይሞክሩ።"</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"የእጅ ምልክት ምደባ ይጎድላል"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"ለ«<xliff:g id="ACTION">%1$s</xliff:g> እርምጃው የተመደበ ምንም የእጅ ምልክት የለም። ለዚያ እርምጃ አንድ አቋራጭ የእጅ ምልክት ለማዋቀር እባክዎ የTalkBack ቅንብሮችን ይጎብኙና ከዚያ የTalkBack መማሪያውን ያስጀምሩት።"</string>
 </resources>

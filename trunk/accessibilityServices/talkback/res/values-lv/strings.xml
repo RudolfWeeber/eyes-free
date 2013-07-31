@@ -19,30 +19,33 @@
     <string name="notification_type_status_voicemail" msgid="7888717277194798847">"Balss pasts"</string>
     <string name="notification_status_play" msgid="5444333019485373575">"Notiek atskaņošana"</string>
     <string name="template_current_tts_engine" msgid="2402080656466274253">"Izmantojot programmu <xliff:g id="ENGINE_NAME">%1$s</xliff:g>"</string>
+    <string name="template_menu" msgid="1721331413132447874">"Izvēlne: <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_edit_box" msgid="8644462446565912356">"Lodziņš Rediģēt. <xliff:g id="TEXT_CONTENT">%1$s</xliff:g>"</string>
     <string name="template_alert_dialog_template" msgid="578525726030867650">"Trauksme: <xliff:g id="MESSAGE">%1$s</xliff:g>"</string>
-    <string name="template_text_replaced" msgid="6030467088396825159">"<xliff:g id="OLD_TEXT">%1$s</xliff:g> aizstāts ar: <xliff:g id="NEW_TEXT">%2$s</xliff:g>"</string>
+    <string name="template_text_replaced" msgid="7412248329207268610">"<xliff:g id="OLD_TEXT">%2$s</xliff:g> aizstāts ar <xliff:g id="NEW_TEXT">%1$s</xliff:g>"</string>
+    <string name="template_text_removed" msgid="515933675336971194">"<xliff:g id="TEXT">%1$s</xliff:g> — dzēsts"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> rakstzīmes ir aizstātas ar <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> rakstzīmēm"</string>
-    <string name="template_ringer_volume" msgid="5136691769333649340">"Zvanītājs: <xliff:g id="PERCENT">%d</xliff:g> procenti."</string>
     <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="ITEM">%1$s</xliff:g> — <xliff:g id="LABEL">%2$s</xliff:g>"</string>
     <string name="template_image_view" msgid="4213590103284596735">"Attēls: <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_list_view" msgid="4569888407076618446">"<xliff:g id="TITLE">%1$s</xliff:g>: saraksts"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Ilgi turot nospiestu, būs pieejams šis: <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_button" msgid="6774709818484366257">"Poga <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <string name="template_unlabeled_image_view" msgid="1433983285490648415">"attēls <xliff:g id="TITLE">%d</xliff:g>"</string>
+    <string name="template_unlabeled_image_view" msgid="6539830337756717284">"Attēls <xliff:g id="TITLE">%1$d</xliff:g>. Bez iezīmes."</string>
+    <string name="template_unlabeled_button" msgid="510330666175123037">"Poga <xliff:g id="TITLE">%1$d</xliff:g>. Bez iezīmes."</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"<xliff:g id="TITLE">%1$s</xliff:g> meklē vadību."</string>
     <string name="template_percent" msgid="8298434876867671403">"<xliff:g id="PERCENTAGE">%1$s</xliff:g> procenti."</string>
     <string name="template_container" msgid="8918583415236947599">"<xliff:g id="TYPE">%1$s</xliff:g> ietver <xliff:g id="COUNT">%2$d</xliff:g> vienumus."</string>
     <string name="value_gridview" msgid="9093738961981389981">"Režģis"</string>
     <string name="value_listview" msgid="3437715684913760710">"Saraksts"</string>
     <string name="value_tabwidget" msgid="5550633699198799743">"Ciļņu josla"</string>
-    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Tiek rādīts <xliff:g id="FROM_INDEX">%d</xliff:g>.–<xliff:g id="TO_INDEX">%d</xliff:g>. vienums no <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
-    <string name="template_scroll_from_count" msgid="677594507054979865">"Tiek rādīts <xliff:g id="FROM_INDEX">%d</xliff:g>. vienums no <xliff:g id="TOTAL_COUNT">%d</xliff:g>."</string>
+    <string name="template_scroll_from_to_count" msgid="3686789962835061906">"Tiek rādīts <xliff:g id="FROM_INDEX">%1$d</xliff:g>.–<xliff:g id="TO_INDEX">%2$d</xliff:g>. vienums no <xliff:g id="TOTAL_COUNT">%3$d</xliff:g>."</string>
+    <string name="template_scroll_from_count" msgid="677594507054979865">"Tiek rādīts <xliff:g id="FROM_INDEX">%1$d</xliff:g>. vienums no <xliff:g id="TOTAL_COUNT">%2$d</xliff:g>."</string>
     <string name="template_spinner" msgid="3914981448273826697">"Nolaižamais saraksts <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_password_selected" msgid="7528235887386963927">"Atlasītas rakstzīmes no <xliff:g id="FROM_INDEX">%1$s</xliff:g> līdz <xliff:g id="TO_INDEX">%1$s</xliff:g>"</string>
+    <string name="template_password_selected" msgid="7528235887386963927">"Atlasītas rakstzīmes no <xliff:g id="FROM_INDEX">%1$s</xliff:g> līdz <xliff:g id="TO_INDEX">%2$s</xliff:g>"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"lielais burts <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
-    <string name="template_checkbox" msgid="7902762816979572494">"Izvēles rūtiņa <xliff:g id="TITLE">%1$s</xliff:g>."</string>
-    <string name="template_radio_button" msgid="4272970081436888704">"Poga <xliff:g id="TITLE">%1$s</xliff:g>."</string>
+    <string name="template_checkbox" msgid="5452847405394165465">"Izvēles rūtiņa <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_radio_button" msgid="6220410400770793883">"Poga <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_switch" msgid="1615681613214625067">"Slēdzis <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="value_password" msgid="52094746222829357">"parole"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Bīdāmā atvilktne ir atvērta"</string>
     <string name="value_notification_shade_opened" msgid="3832526419695611670">"Panelis atvērts"</string>
@@ -61,26 +64,33 @@
     <string name="template_hint_checkable" msgid="6312875663486456665">"<xliff:g id="ACTION">%1$s</xliff:g>, lai pārslēgtu."</string>
     <string name="template_hint_edit_text" msgid="4793267613633348902">"<xliff:g id="ACTION">%1$s</xliff:g>, lai ievadītu tekstu."</string>
     <string name="template_hint_spinner" msgid="1320498935380159474">"<xliff:g id="ACTION">%1$s</xliff:g>, lai mainītu."</string>
-    <string name="hint_radial_menu" msgid="7030043763037187865">"Pieskarieties ekrānam un izpētiet to, lai atrastu vienumu; pēc tam atlaidiet pirkstu, lai to atlasītu."</string>
+    <string name="hint_radial_menu" msgid="3815241030009647972">"Pieskarieties ekrānam un pārlūkojiet vienumus riņķveida izkārtojumā. Atrodot vajadzīgo vienumu, paceliet to, lai to atlasītu."</string>
+    <string name="hint_summary_jog_dial" msgid="8205055415827657230">"Pieskarieties ekrānam un pārlūkojiet vienumus riņķveida izkārtojumā, lai pārvietotos ekrānā. Pēc tam paceliet vienumu, lai to fokusētu."</string>
     <string name="value_scrollable" msgid="2310899165772659098">"ritināms"</string>
     <string name="value_clicked" msgid="8306469740150249879">"noklikšķināja"</string>
-    <string name="value_unlabeled" msgid="687358669952513717">"bez iezīmēm"</string>
+    <string name="value_unlabeled" msgid="8693644316256459264">"Bez iezīmes"</string>
     <string name="value_ringer_vibrate" msgid="4632889587347385751">"Zvanītājs vibrē."</string>
     <string name="value_ringer_silent" msgid="672965424730167385">"Zvanītājs kluss."</string>
     <string name="value_screen_off" msgid="8705438751467344903">"Ekrāns ir izslēgts."</string>
     <string name="value_device_unlocked" msgid="1424846510201818289">"Ierīce ir atbloķēta."</string>
     <string name="value_web_view" msgid="8611542401983419041">"Tīmekļa saturs."</string>
+    <string name="value_no_items" msgid="3587303601074849845">"Nav vienumu."</string>
     <string name="title_pref_category_when_to_speak" msgid="9082038550046119493">"Runa"</string>
     <string name="title_pref_speech_volume" msgid="4013853601342391397">"Runas skaļums"</string>
-    <string name="title_pref_speak_ringer" msgid="129787842665516896">"Zvana skaļums"</string>
-    <string name="title_pref_speak_screenoff" msgid="1278357255432372076">"Runāt, kad ekr. ir izsl."</string>
+    <string name="title_pref_speak_screenoff" msgid="423335664627577373">"Izrunāt paziņojumus, kad ir izslēgts ekrāns."</string>
     <string name="title_pref_caller_id" msgid="1414845059814636961">"Izrunāt zvanītāja ID"</string>
     <string name="title_pref_proximity" msgid="4957940010293002852">"Izmantot tuvuma sensoru"</string>
     <string name="summaryOn_pref_proximity" msgid="9000886370261892995">"Tuvuma sensors klusina runu"</string>
     <string name="summaryOff_pref_proximity" msgid="3024213283254452034">"Tuvuma sensors nekontrolē runu"</string>
     <string name="title_pref_explore_by_touch" msgid="4051040843081874790">"Pārlūkot pieskaroties"</string>
+    <string name="title_pref_auto_scroll" msgid="5676036153048224469">"Automātiski ritināt sarakstus"</string>
     <string name="title_pref_category_touch_exploration" msgid="4152747299134842442">"Pārlūkošana ar pieskārienu"</string>
-    <string name="title_pref_category_touch_shortcuts" msgid="8194784315042495345">"Pārvaldīt saīšņu žestus"</string>
+    <string name="title_pref_single_tap" msgid="3053869870881145209">"Atlasīšana, vienreiz pieskaroties"</string>
+    <string name="summary_pref_single_tap" msgid="3011671416541372042">"(Eksperimentāli) Pieskarieties pašreiz fokusētajam vienumam, lai to atlasītu."</string>
+    <string name="title_pref_shake_to_read_threshold" msgid="544749941147543935">"Sākt nepārtraukto lasīšanu, pakratot tālruni"</string>
+    <string name="title_pref_category_manage_gestures" msgid="5457025819029526883">"Žestu pārvaldība"</string>
+    <string name="title_pref_category_touch_shortcuts" msgid="4220670726993962812">"Saīšņu žesti"</string>
+    <string name="title_pref_category_built_in_gestures" msgid="1088371786802119419">"Iebūvētie žesti"</string>
     <string name="title_pref_intonation" msgid="7762392438106753854">"Izmantojiet balss augstuma maiņu."</string>
     <string name="title_pref_keyboard_echo" msgid="860353418869467119">"Tastatūras atbalss"</string>
     <string name="summaryOn_pref_intonation" msgid="9077400986652228237">"Teksta izvade runā notiks zemākā balss tonī."</string>
@@ -88,11 +98,14 @@
     <string name="title_pref_category_feedback_settings" msgid="1245161004109313841">"Citas atsauksmes"</string>
     <string name="title_pref_vibration" msgid="3844312655168149890">"Vibrācija"</string>
     <string name="title_pref_soundback" msgid="4700299128916932277">"Skaņas signāls"</string>
+    <string name="title_pref_use_audio_focus" msgid="3377176622565829045">"Uzsvērt runas audio"</string>
+    <string name="summary_pref_use_audio_focus" msgid="6384160228414065955">"Samazināt citu lietotņu audio skaļumu runāšanas laikā"</string>
     <string name="title_pref_soundback_volume" msgid="7800640782909840723">"Skaņas skaļums"</string>
     <string name="title_pref_category_miscellaneous_settings" msgid="4300919879277841983">"Dažādi"</string>
     <string name="title_pref_category_developer_settings" msgid="6580150385309942699">"Izstrādātāja iestatījumi"</string>
     <string name="title_pref_log_level" msgid="1608733715034404715">"Žurnāla izvades līmenis"</string>
     <string name="title_pref_tts_overlay" msgid="7821227047722471620">"Rādīt runas izvadi"</string>
+    <string name="title_pref_resume_talkback" msgid="7672596366500481032">"Darbības atsākšana"</string>
     <string name="axis_character" msgid="5059604520074645703">"Pārvietošanās pa rakstzīmēm."</string>
     <string name="axis_word" msgid="7745798763195184060">"Pārvietošanās pa vārdiem."</string>
     <string name="axis_sentence" msgid="5569363499210008882">"Pārvietošanās pa teikumiem."</string>
@@ -102,24 +115,62 @@
     <string name="axis_sibling" msgid="7260754205862306385">"Pārvietošanās pa atvasēm."</string>
     <string name="axis_document" msgid="1581988340856497809">"Pārvietošanās pa dokumentiem."</string>
     <string name="axis_default_web_view_behavior" msgid="4427026616802959980">"Pārvietošanās pēc noklusējuma tīmekļa skatījuma darbības."</string>
-    <string name="attention" msgid="627104955956154539">"Uzmanību!"</string>
-    <string name="requires_talkback" msgid="3634159695179852501">"Lai skatītu šīs mācības, ir nepieciešama funkcija Pārlūkot pieskaroties. Lūdzu, vispirms atveriet lietotni TalkBack un iespējojiet funkciju Pārlūkot pieskaroties."</string>
-    <string name="granularity_character" msgid="5828563809381090688">"Lasīt pa rakstzīmei"</string>
-    <string name="granularity_word" msgid="3660181391007381559">"Lasīt pa vārdam"</string>
-    <string name="granularity_paragraph" msgid="1175015890341475666">"Lasīt pa rindkopai"</string>
-    <string name="granularity_default" msgid="554981185979733919">"Noklusējuma lasīšanas līmenis"</string>
+    <string name="granularity_default" msgid="1492012550776943179">"Noklusējuma precizitāte"</string>
+    <string name="granularity_character" msgid="4193116470272754377">"Rakstzīmes precizitāte"</string>
+    <string name="granularity_word" msgid="6605314874729471957">"Vārda precizitāte"</string>
+    <string name="granularity_line" msgid="1793187671583430921">"Rindas precizitāte"</string>
+    <string name="granularity_paragraph" msgid="679117001255664930">"Rindkopas precizitāte"</string>
+    <string name="granularity_page" msgid="6606518772023711853">"Lapas precizitāte"</string>
+    <string name="granularity_web_section" msgid="2970666819922742515">"Sadaļas navigācija"</string>
+    <string name="granularity_web_list" msgid="2865126503773287493">"Saraksta navigācija"</string>
+    <string name="granularity_web_control" msgid="8614337019107379031">"Vadības navigācija"</string>
+    <string name="granularity_pseudo_web_special_content" msgid="8235312346324504685">"Navigācija īpašā saturā"</string>
     <string name="orientation_portrait" msgid="5280362272647722922">"Portrets"</string>
     <string name="orientation_landscape" msgid="129313890178554132">"Ainava"</string>
     <string name="shortcut_unassigned" msgid="8631675444401168361">"Nav piešķirtas"</string>
     <string name="shortcut_back" msgid="8404153155835310379">"Poga Atpakaļ"</string>
     <string name="shortcut_home" msgid="3905505999818649470">"Poga Sākums"</string>
-    <string name="shortcut_recent_apps" msgid="4462279958679670485">"Poga Nesen izmantotās lietotnes"</string>
+    <string name="shortcut_recents" msgid="7901137492524332991">"Poga Nesen izmantotās lietotnes"</string>
     <string name="shortcut_notifications" msgid="7234767026975704922">"Atvērt paziņojumus"</string>
-    <string name="shortcut_read_all_breakout" msgid="4373114224519034620">"Atvērt nepārtrauktās lasīšanas izvēlni"</string>
     <string name="shortcut_talkback_breakout" msgid="568168492542718040">"Atvērt globālo kontekstizvēlni"</string>
+    <string name="shortcut_local_breakout" msgid="6177140532797600317">"Atvērt vietējo kontekstizvēlni"</string>
     <string name="shortcut_repeat_last_utterance" msgid="2063136654845335137">"Atkārtot pēdējo frāzi"</string>
     <string name="shortcut_spell_last_utterance" msgid="106643257328883413">"Izteikt pēdējo frāzi"</string>
     <string name="shortcut_pause_feedback" msgid="1125364186583919621">"Pauzēt atsauksmes"</string>
+    <string name="shortcut_read_from_top" msgid="2022846874992888639">"Lasīt no sākuma"</string>
+    <string name="shortcut_read_from_current" msgid="5207148703245353791">"Lasīt, sākot ar nākamo vienumu"</string>
+    <string name="two_part_vertical_gestures_jump" msgid="786459931228477337">"Pāriet uz pirmo un pēdējo ekrānā redzamo vienumu"</string>
+    <string name="two_part_vertical_gestures_cycle" msgid="7898335991188943683">"Mainīt lasīšanas precizitātes līmeni"</string>
+    <string name="title_local_breakout_no_items" msgid="1550674209206752498">"Nav neviena izvēlnes vienuma."</string>
+    <string name="title_web_controls" msgid="7406524994035322694">"Tīmekļa vadīklas"</string>
+    <string name="title_web_breakout_next_section" msgid="5988697179364261514">"Nākamā sadaļa"</string>
+    <string name="title_web_breakout_next_list" msgid="7718977609680126993">"Nākamais saraksts"</string>
+    <string name="title_web_breakout_next_control" msgid="2232647062212814971">"Nākamā vadīkla"</string>
+    <string name="title_web_breakout_prev_section" msgid="5962027293396650880">"Iepriekšējā sadaļa"</string>
+    <string name="title_web_breakout_prev_list" msgid="324873118848501053">"Iepriekšējais saraksts"</string>
+    <string name="title_web_breakout_prev_control" msgid="4941025100780529097">"Iepriekšējā vadīkla"</string>
+    <string name="title_edittext_controls" msgid="3244305133134056288">"Kursora vadība"</string>
+    <string name="title_edittext_breakout_move_to_beginning" msgid="8890923524547821086">"Pārvietot kursoru uz sākumu"</string>
+    <string name="title_edittext_breakout_move_to_end" msgid="2374451054202604999">"Pārvietot kursoru uz beigām"</string>
+    <string name="title_edittext_breakout_cut" msgid="492145887958376608">"Izgriezt"</string>
+    <string name="title_edittext_breakout_copy" msgid="5459984631508428704">"Kopēt"</string>
+    <string name="title_edittext_breakout_paste" msgid="7237616902064974298">"Ielīmēt"</string>
+    <string name="title_edittext_breakout_select_all" msgid="207908086353765396">"Atlasīt visu"</string>
+    <string name="title_edittext_breakout_start_selection_mode" msgid="7089324238012221820">"Ieslēgt atlases režīmu"</string>
+    <string name="title_edittext_breakout_end_selection_mode" msgid="4598173414473149328">"Izslēgt atlases režīmu"</string>
+    <string name="title_viewpager_controls" msgid="5445165716688066887">"Lapu vadīklas"</string>
+    <string name="title_viewpager_breakout_next_page" msgid="8569901339110496653">"Nākamā lapa"</string>
+    <string name="title_viewpager_breakout_prev_page" msgid="628828561164930528">"Iepriekšējā lapa"</string>
+    <string name="title_summary" msgid="1892383897326964505">"Ātrā navigācija"</string>
+    <string name="title_granularity" msgid="8810561997342447201">"Mainīt precizitāti"</string>
+    <string name="value_direction_down_and_left" msgid="1136254602001079211">"uz leju un pēc tam pa kreisi"</string>
+    <string name="value_direction_down_and_right" msgid="140660680925482349">"uz leju un pēc tam pa labi"</string>
+    <string name="value_direction_up_and_left" msgid="7249297190773068777">"uz augšu un pēc tam pa kreisi"</string>
+    <string name="value_direction_up_and_right" msgid="4554541402217255929">"uz augšu un pēc tam pa labi"</string>
+    <string name="value_direction_right_and_down" msgid="2454015754931124603">"pa labi un pēc tam uz leju"</string>
+    <string name="value_direction_right_and_up" msgid="3852212966335840721">"pa labi un pēc tam uz augšu"</string>
+    <string name="value_direction_left_and_down" msgid="4588058477082880034">"pa kreisi un pēc tam uz leju"</string>
+    <string name="value_direction_left_and_up" msgid="4226646383830488949">"pa kreisi un pēc tam uz augšu"</string>
     <string name="title_pref_shortcut_down_and_left" msgid="5252410921504649704">"Vilkt uz leju, pēc tam pa kreisi"</string>
     <string name="title_pref_shortcut_down_and_right" msgid="70468539039651273">"Vilkt uz leju, pēc tam pa labi"</string>
     <string name="title_pref_shortcut_up_and_left" msgid="6488345551912922700">"Vilkt uz augšu, pēc tam pa kreisi"</string>
@@ -128,10 +179,20 @@
     <string name="title_pref_shortcut_right_and_up" msgid="3803984082758463130">"Vilkt pa labi un uz augšu"</string>
     <string name="title_pref_shortcut_left_and_down" msgid="7133444152727902323">"Vilkt pa kreisi un uz leju"</string>
     <string name="title_pref_shortcut_left_and_up" msgid="2432229113065295801">"Vilkt pa kreisi un uz augšu"</string>
+    <string name="title_pref_two_part_vertical_gestures" msgid="3232021917181479854">"Divdaļīgie vertikālie žesti"</string>
     <string name="value_volume_100_percent" formatted="false" msgid="6676030754946177658">"Pielāgot multivides skaļumam"</string>
     <string name="value_volume_75_percent" formatted="false" msgid="7578844180160160971">"75% no multivides skaļuma"</string>
     <string name="value_volume_50_percent" formatted="false" msgid="2830571913174435107">"50% no multivides skaļuma"</string>
     <string name="value_volume_25_percent" formatted="false" msgid="4441038207089946938">"25% no multivides skaļuma"</string>
+    <string name="value_resume_screen_on" msgid="578384141075489503">"Kad tiek ieslēgts ekrāns"</string>
+    <string name="value_resume_keyguard" msgid="8491148490485472512">"Kad tiek parādīts bloķēšanas ekrāns"</string>
+    <string name="value_resume_manual" msgid="3579426418356648756">"Tikai no paziņojumu paneļa"</string>
+    <string name="value_shake_to_read_disabled" msgid="7945430806615898289">"Atspējots"</string>
+    <string name="value_shake_to_read_threshold_very_light" msgid="8259101887571872418">"Ļoti viegli"</string>
+    <string name="value_shake_to_read_threshold_light" msgid="4580119834253168964">"Viegli"</string>
+    <string name="value_shake_to_read_threshold_medium" msgid="2529807635899614805">"Vidēji"</string>
+    <string name="value_shake_to_read_threshold_hard" msgid="7069014518326801700">"Spēcīgi"</string>
+    <string name="value_shake_to_read_threshold_very_hard" msgid="8601099072316359601">"Ļoti spēcīgi"</string>
     <string name="value_keyboard_echo_always" msgid="6227871839200687680">"Vienmēr nosaukt nospiestos taustiņus"</string>
     <string name="value_keyboard_echo_softkeys" msgid="6592352879887617590">"Tikai ekrāna tastatūrai"</string>
     <string name="value_keyboard_echo_never" msgid="7272733066649438914">"Nekad nenosaukt nospiestos taustiņus"</string>
@@ -142,16 +203,21 @@
     <string name="notification_title_talkback_suspended" msgid="2185046615850691522">"TalkBack darbība ir apturēta"</string>
     <string name="notification_message_talkback_suspended" msgid="3312683762001713772">"Pieskarieties, lai atsāktu."</string>
     <string name="dialog_title_suspend_talkback" msgid="452536442417893349">"Vai apturēt pakalpojuma TalkBack darbību?"</string>
-    <string name="dialog_message_suspend_talkback" msgid="399684608846305231">"Vai tiešām vēlaties apturēt pakalpojuma TalkBack darbību?"\n\n"Ja pakalpojuma TalkBack darbība tiks apturēta, jūsu ierīce nesniegs atsauksmes."\n\n"Varat atsākt pakalpojuma TalkBack darbību paziņojumu panelī vai atgriežoties bloķēšanas ekrānā."</string>
+    <string name="dialog_message_suspend_talkback" msgid="7378497787526587410">"Vai tiešām vēlaties apturēt lietotnes TalkBack darbību?"\n\n"Kamēr TalkBack darbība ir apturēta, ierīce nesniegs balss komentārus."</string>
+    <string name="message_resume_manual" msgid="4491108398618252430">"Varat atsākt lietotnes TalkBack darbību, izmantojot paziņojumu paneli."</string>
+    <string name="message_resume_screen_on" msgid="2080032080971819102">"Varat atsākt lietotnes TalkBack darbību, izmantojot paziņojumu paneli vai ieslēdzot ekrānu."</string>
+    <string name="message_resume_keyguard" msgid="8347218053451487513">"Varat atsākt lietotnes TalkBack darbību, izmantojot paziņojumu paneli vai atgriežoties bloķēšanas ekrānā."</string>
+    <string name="show_suspend_warning_label" msgid="2767993698595859057">"Vienmēr rādīt šo brīdinājumu"</string>
     <string name="talkback_gesture_change_details" msgid="2919155220372343154">"Šajā TalkBack versijā ir iekļautas izmaiņas, kas veiktas noklusējuma pieejamības žestiem. Ar šiem žestiem saistītās darbības var pielāgot TalkBack iestatījumos. Iespējojot opciju Pārlūkot pieskaroties, konkrētu darbību veikšanai var izmantot tālāk norādītos žestus."\n\n"<xliff:g id="MAPPINGS">%1$s</xliff:g>"</string>
+    <string name="talkback_built_in_gesture_change_details" msgid="1504489384911892122">"Šajā TalkBack versijā ir mainīti noklusējuma pieejamības žesti."\n\n"Veicot žestu “uz augšu un pēc tam uz leju”, varat pāriet uz pirmo ekrānā redzamo vienumu, bet, veicot žestu “uz leju un pēc tam uz augšu”, varat pāriet uz pēdējo vienumu."\n\n"Tagad lasīšanas precizitāti var mainīt, iestatot fokusu uz kādu vienumu un pēc tam lokālajā kontekstizvēlnē atlasot precizitātes līmeni."\n\n"Šiem žestiem piesaistītās darbības var mainīt lietojumprogrammas TalkBack sadaļā Iestatījumi."</string>
     <string name="button_accept_changed_gesture_mappings" msgid="3709582843147387025">"Apstiprināt žestus"</string>
     <string name="button_customize_gesture_mappings" msgid="6198453024008558647">"Pielāgot žestus"</string>
     <string name="dialog_title_disable_exploration" msgid="6318745977662978395">"Vai atspējot funkciju Pārlūkot pieskaroties?"</string>
     <string name="dialog_message_disable_exploration" msgid="206632033549219529">"Vai tiešām vēlaties izslēgt funkciju Pārlūkot pieskaroties?"\n\n"Ierīce vairs neatbildēs uz saīšņu žestiem vai neizrunās vienumus, kad pieskarsieties ekrānam."</string>
-    <string name="read_from_top" msgid="4178188498867856189">"Lasīt visu no augšas"</string>
-    <string name="read_from_current" msgid="2331288178673192110">"Lasīt visu no nākamā vienuma"</string>
-    <string name="repeat_current" msgid="5909904824878426189">"Atkārtot pašreizējo vienumu"</string>
     <string name="hint_script_injection" msgid="2973894305173271874">"Tīmekļa saturam nav pieejama atklāšana ar pieskārienu. Ieslēdziet opciju <xliff:g id="PREFERENCE_NAME">%1$s</xliff:g> pieejamības iestatījumos, lai varētu atklāt tīmekļa saturu."</string>
     <string name="label_talkback_context_menu" msgid="102441078934343795">"TalkBack vispārējā kontekstizvēlne"</string>
     <string name="permission_talkback_label" msgid="7399199628843033396">"Vadīt lietotni TalkBack"</string>
+    <string name="links" msgid="5674175288909957654">"Saites"</string>
+    <string name="end_of_text" msgid="4039485166364049724">"Beigas"</string>
+    <string name="character_collapse_template" msgid="6127861834252515898">" <xliff:g id="NUMBER">%1$d</xliff:g><xliff:g id="CHARACTER">%2$s</xliff:g>"</string>
 </resources>

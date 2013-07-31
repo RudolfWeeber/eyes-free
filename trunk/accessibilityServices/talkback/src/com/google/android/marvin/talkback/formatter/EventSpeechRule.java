@@ -21,17 +21,20 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
+import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
+import com.google.android.marvin.talkback.speechrules.NodeSpeechRuleProcessor;
 import com.google.android.marvin.utils.NodeUtils;
-import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.ClassLoadingManager;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.PackageManagerUtils;
@@ -58,11 +61,6 @@ import java.util.regex.Pattern;
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public class EventSpeechRule {
-
-    // String separator constants.
-    private static final String SPACE = " ";
-    private static final String COLON = ":";
-
     // Node names.
     private static final String NODE_NAME_METADATA = "metadata";
     private static final String NODE_NAME_FILTER = "filter";
@@ -73,9 +71,12 @@ public class EventSpeechRule {
     private static final String PROPERTY_EVENT_TYPE = "eventType";
     private static final String PROPERTY_PACKAGE_NAME = "packageName";
     private static final String PROPERTY_CLASS_NAME = "className";
+    private static final String PROPERTY_CLASS_NAME_STRICT = "classNameStrict";
     private static final String PROPERTY_TEXT = "text";
     private static final String PROPERTY_BEFORE_TEXT = "beforeText";
     private static final String PROPERTY_CONTENT_DESCRIPTION = "contentDescription";
+    private static final String PROPERTY_CONTENT_DESCRIPTION_OR_TEXT = "contentDescriptionOrText";
+    private static final String PROPERTY_NODE_DESCRIPTION_OR_FALLBACK = "nodeDescriptionOrFallback";
     private static final String PROPERTY_EVENT_TIME = "eventTime";
     private static final String PROPERTY_ITEM_COUNT = "itemCount";
     private static final String PROPERTY_CURRENT_ITEM_INDEX = "currentItemIndex";
@@ -118,7 +119,7 @@ public class EventSpeechRule {
     private static final Pattern mResourceIdentifier = Pattern.compile("@([\\w\\.]+:)?\\w+/\\w+");
 
     /** Reusable builder to avoid object creation. */
-    private static final StringBuilder sTempBuilder = new StringBuilder();
+    private static final SpannableStringBuilder sTempBuilder = new SpannableStringBuilder();
 
     /** Mapping from event type name to its type. */
     private static final HashMap<String, Integer> sEventTypeNameToValueMap =
@@ -150,13 +151,13 @@ public class EventSpeechRule {
         sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_SELECTION_CHANGED",
                 AccessibilityEventCompat.TYPE_VIEW_TEXT_SELECTION_CHANGED);
         sEventTypeNameToValueMap.put("TYPE_ANNOUNCEMENT",
-                AccessibilityEvent.TYPE_ANNOUNCEMENT);
+                AccessibilityEventCompat.TYPE_ANNOUNCEMENT);
         sEventTypeNameToValueMap.put("TYPE_VIEW_ACCESSIBILITY_FOCUSED",
-                AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
+                AccessibilityEventCompat.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
         sEventTypeNameToValueMap.put("TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED",
-                AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED);
+                AccessibilityEventCompat.TYPE_VIEW_ACCESSIBILITY_FOCUS_CLEARED);
         sEventTypeNameToValueMap.put("TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY",
-                AccessibilityEvent.TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY);
+                AccessibilityEventCompat.TYPE_VIEW_TEXT_TRAVERSED_AT_MOVEMENT_GRANULARITY);
         sEventTypeNameToValueMap.put("TYPE_TOUCH_INTERACTION_START",
                 AccessibilityEventCompat.TYPE_TOUCH_INTERACTION_START);
         sEventTypeNameToValueMap.put("TYPE_TOUCH_INTERACTION_END",
@@ -325,31 +326,41 @@ public class EventSpeechRule {
     }
 
     /**
-     * Applies this rule to an {@link AccessibilityEvent}. If the event is
-     * accepted by the {@link AccessibilityEventFilter} the rule's
-     * {@link AccessibilityEventFormatter} is used to populate a formatted
-     * {@link Utterance}.
+     * Applies this rule's {@link AccessibilityEventFilter} to an
+     * {@link AccessibilityEvent}.
      *
-     * @param event The event to which to apply the rule.
-     * @param utterance Utterance to populate if the event is accepted.
-     * @return True if the event matched the filter, false otherwise.
+     * @param event The event to which this rule's filter will be applied.
+     * @return {@code true} if the event was accepted by the filter,
+     *         {@code false} otherwise.
      */
-    public boolean apply(AccessibilityEvent event, Utterance utterance) {
-        // No filter matches all events.
-        if (mFilter != null && !mFilter.accept(event, mContext)) {
-            return false;
+    public boolean applyFilter(AccessibilityEvent event) {
+        // Rules without a filter will match all events.
+        if (mFilter == null) {
+            return true;
+        } else {
+            return mFilter.accept(event, mContext);
         }
+    }
 
-        // No formatter means no utterance text.
-        if (mFormatter != null && !mFormatter.format(event, mContext, utterance)) {
+    /**
+     * Uses this rule's {@link AccessibilityEventFormatter} to populate a
+     * formatted {@link Utterance} based on an {@link AccessibilityEvent}
+     *
+     * @param event The event to be used by this rule's
+     *            {@link AccessibilityEventFormatter}
+     * @param utterance The utterance to format
+     * @return {@code true} if the formatter successfully populated the
+     *         utterance, {@code false} otherwise
+     */
+    public boolean applyFormatter(AccessibilityEvent event, Utterance utterance) {
+        // No formatter indicates there is no utterance text.
+        if ((mFormatter != null) && !mFormatter.format(event, mContext, utterance)) {
             return false;
         }
 
         utterance.getMetadata().putAll(mMetadata);
-        utterance.getEarcons().addAll(mEarcons);
-        utterance.getVibrationPatterns().addAll(mVibrationPatterns);
-        utterance.getCustomEarcons().addAll(mCustomEarcons);
-        utterance.getCustomVibrations().addAll(mCustomVibrations);
+        utterance.addAllAuditory(mCustomEarcons);
+        utterance.addAllHaptic(mCustomVibrations);
 
         return true;
     }
@@ -488,9 +499,12 @@ public class EventSpeechRule {
     private static boolean isStringProperty(String propertyName) {
         return (PROPERTY_PACKAGE_NAME.equals(propertyName)
                 || PROPERTY_CLASS_NAME.equals(propertyName)
+                || PROPERTY_CLASS_NAME_STRICT.equals(propertyName)
                 || PROPERTY_TEXT.equals(propertyName)
                 || PROPERTY_BEFORE_TEXT.equals(propertyName)
                 || PROPERTY_CONTENT_DESCRIPTION.equals(propertyName)
+                || PROPERTY_CONTENT_DESCRIPTION_OR_TEXT.equals(propertyName)
+                || PROPERTY_NODE_DESCRIPTION_OR_FALLBACK.equals(propertyName)
                 || PROPERTY_VERSION_NAME.equals(propertyName)
                 || PROPERTY_PLATFORM_RELEASE.equals(propertyName));
     }
@@ -684,7 +698,7 @@ public class EventSpeechRule {
      * @return The text content.
      */
     private static String getTextContent(Node node) {
-        StringBuilder builder = sTempBuilder;
+        SpannableStringBuilder builder = sTempBuilder;
         getTextContentRecursive(node, builder);
         String text = builder.toString();
         builder.delete(0, builder.length());
@@ -698,7 +712,7 @@ public class EventSpeechRule {
      * @param node The currently explored node.
      * @param builder Builder that aggregates the text content.
      */
-    private static void getTextContentRecursive(Node node, StringBuilder builder) {
+    private static void getTextContentRecursive(Node node, SpannableStringBuilder builder) {
         NodeList children = node.getChildNodes();
         for (int i = 0, count = children.getLength(); i < count; i++) {
             Node child = children.item(i);
@@ -717,7 +731,7 @@ public class EventSpeechRule {
      */
     private static String getUnqualifiedNodeName(Node node) {
         String nodeName = node.getNodeName();
-        int colonIndex = nodeName.indexOf(COLON);
+        int colonIndex = nodeName.indexOf(":");
         if (colonIndex > -1) {
             nodeName = nodeName.substring(colonIndex + 1);
         }
@@ -774,7 +788,8 @@ public class EventSpeechRule {
 
             // Special case for filtering based classes on package.
             // TODO(alanv): Is this necessary?
-            if (PROPERTY_CLASS_NAME.equals(propertyName)) {
+            if (PROPERTY_CLASS_NAME.equals(propertyName)
+                    || PROPERTY_CLASS_NAME_STRICT.equals(propertyName)) {
                 final CharSequence eventPackage = event.getPackageName();
                 final PropertyMatcher packageNameMatcher = mPropertyMatchers.get(
                         PROPERTY_PACKAGE_NAME);
@@ -810,12 +825,18 @@ public class EventSpeechRule {
             return event.getPackageName();
         } else if (PROPERTY_CLASS_NAME.equals(property)) {
             return event.getClassName();
+        } else if (PROPERTY_CLASS_NAME_STRICT.equals(property)) {
+            return event.getClassName();
         } else if (PROPERTY_TEXT.equals(property)) {
-            return AccessibilityEventUtils.getEventText(event);
+            return AccessibilityEventUtils.getEventAggregateText(event);
         } else if (PROPERTY_BEFORE_TEXT.equals(property)) {
             return event.getBeforeText();
         } else if (PROPERTY_CONTENT_DESCRIPTION.equals(property)) {
             return event.getContentDescription();
+        } else if (PROPERTY_CONTENT_DESCRIPTION_OR_TEXT.equals(property)) {
+            return AccessibilityEventUtils.getEventTextOrDescription(event);
+        } else if (PROPERTY_NODE_DESCRIPTION_OR_FALLBACK.equals(property)) {
+            return getNodeDescriptionOrFallback(event);
         } else if (PROPERTY_EVENT_TIME.equals(property)) {
             return event.getEventTime();
         } else if (PROPERTY_ITEM_COUNT.equals(property)) {
@@ -857,6 +878,41 @@ public class EventSpeechRule {
         } else {
             throw new IllegalArgumentException("Unknown property : " + property);
         }
+    }
+
+    /**
+     * Attempts to obtain a description for an event, using the
+     * {@link NodeSpeechRuleProcessor} to obtain a description for the source
+     * node if possible or falling back on the event text or content description
+     * otherwise.
+     *
+     * @param event The event to generate a description for.
+     * @return A description of the event, or an empty string on failure.
+     */
+    private CharSequence getNodeDescriptionOrFallback(AccessibilityEvent event) {
+        AccessibilityNodeInfoCompat source = null;
+
+        try {
+            source = new AccessibilityRecordCompat(event).getSource();
+            if (source != null) {
+                final NodeSpeechRuleProcessor nodeProcessor = NodeSpeechRuleProcessor.getInstance();
+                final CharSequence treeDescription = nodeProcessor.getDescriptionForTree(
+                        source, event, source);
+                if (!TextUtils.isEmpty(treeDescription)) {
+                    return treeDescription;
+                }
+            }
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(source);
+        }
+
+        final CharSequence eventDescription =
+                AccessibilityEventUtils.getEventTextOrDescription(event);
+        if (!TextUtils.isEmpty(eventDescription)) {
+            return eventDescription;
+        }
+
+        return "";
     }
 
     /**
@@ -920,7 +976,6 @@ public class EventSpeechRule {
         public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
             final List<Pair<String, String>> selectors = mSelectors;
             final Object[] arguments = new Object[selectors.size()];
-            final StringBuilder utteranceBuilder = utterance.getText();
 
             for (int i = 0, count = selectors.size(); i < count; i++) {
                 final Pair<String, String> selector = selectors.get(i);
@@ -936,17 +991,14 @@ public class EventSpeechRule {
                 }
             }
 
-            utterance.getEarcons().addAll(mEarcons);
-            utterance.getVibrationPatterns().addAll(mVibrationPatterns);
-
             formatTemplateOrAppendSpaceSeparatedValueIfNoTemplate(utterance, arguments);
 
-            final boolean speakState = (event.getEventType() & MASK_EVENT_TYPES_SPEAK_STATE) != 0;
+            final boolean speakState = AccessibilityEventUtils.eventMatchesAnyType(
+                    event, MASK_EVENT_TYPES_SPEAK_STATE);
 
             // Append the control's disabled state, if applicable.
-            if (!TextUtils.isEmpty(utteranceBuilder) && !event.isEnabled() && speakState) {
-                StringBuilderUtils.appendWithSeparator(
-                        utteranceBuilder, mContext.getString(R.string.value_disabled));
+            if (!utterance.getSpoken().isEmpty() && !event.isEnabled() && speakState) {
+                utterance.addSpoken(mContext.getString(R.string.value_disabled));
             }
 
             return true;
@@ -964,12 +1016,12 @@ public class EventSpeechRule {
          */
         private void formatTemplateOrAppendSpaceSeparatedValueIfNoTemplate(Utterance utterance,
                 Object[] arguments) {
-            final StringBuilder utteranceText = utterance.getText();
-
             if (mTemplate != null) {
                 try {
                     final String formatted = String.format(mTemplate, arguments);
-                    utteranceText.append(formatted);
+                    if (!TextUtils.isEmpty(formatted)) {
+                        utterance.addSpoken(formatted);
+                    }
                 } catch (MissingFormatArgumentException mfae) {
                     LogUtils.log(DefaultFormatter.class, Log.ERROR, "Speech rule: '%d' has "
                             + "inconsistency between template: '%s' and arguments: '%s'. "
@@ -978,11 +1030,10 @@ public class EventSpeechRule {
                 }
             } else {
                 for (Object arg : arguments) {
-                    utteranceText.append(arg);
-                    utteranceText.append(SPACE);
-                }
-                if (utteranceText.length() > 0) {
-                    utteranceText.deleteCharAt(utteranceText.length() - 1);
+                    final String formatted = String.valueOf(arg);
+                    if (!TextUtils.isEmpty(formatted)) {
+                        utterance.addSpoken(formatted);
+                    }
                 }
             }
         }
@@ -1214,13 +1265,14 @@ public class EventSpeechRule {
                 }
             }
 
-            if (PROPERTY_CLASS_NAME.equals(mPropertyName)) {
+            if (PROPERTY_CLASS_NAME.equals(mPropertyName)
+                    || PROPERTY_CLASS_NAME_STRICT.equals(mPropertyName)) {
                 final String eventClassName = (String) value;
                 final String eventPackageName = (String) arguments[0];
                 final String filteringPackageName = (String) arguments[1];
 
                 return acceptClassNameProperty(eventClassName, eventPackageName,
-                        filteringPackageName);
+                        filteringPackageName, PROPERTY_CLASS_NAME_STRICT.equals(mPropertyName));
             }
 
             return acceptProperty(value);
@@ -1232,13 +1284,21 @@ public class EventSpeechRule {
          *         (#PROPERTY_CLASS_NAME) from the <code>filteredPackageName</code>.
          */
         private boolean acceptClassNameProperty(String eventClassName, String eventPackageName,
-                String filteringPackageName) {
+                String filteringPackageName, boolean requireExactMatch) {
+
+            // Events with empty class names won't match the filter.
+            if (TextUtils.isEmpty(eventClassName)) {
+                return false;
+            }
+
             for (Object acceptedValue : mAcceptedValues) {
                 final String filteringClassName = (String) acceptedValue;
 
                 // Try a shortcut for efficiency.
                 if (filteringClassName.equals(eventClassName)) {
                     return true;
+                } else if (requireExactMatch) {
+                    return false;
                 }
 
                 final Class<?> filteringClass =
@@ -1335,7 +1395,10 @@ public class EventSpeechRule {
          * @param event The event.
          * @param context The context to be used for loading resources etc.
          * @param utterance The utterance instance to populate.
-         * @return {@code true} if the formatter produced output.
+         * @return {@code true} if the formatter produced output. Accepting an
+         *         event in an {@link AccessibilityEventFilter} and returning
+         *         {@code false} from an {@link AccessibilityEventFormatter}
+         *         will cause the event to be dropped entirely.
          */
         public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance);
     }

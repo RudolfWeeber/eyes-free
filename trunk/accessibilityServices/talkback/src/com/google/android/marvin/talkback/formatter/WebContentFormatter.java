@@ -22,12 +22,12 @@ import android.text.TextUtils;
 import android.util.Xml;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.utils.WebContentHandler;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 
 import org.xml.sax.SAXException;
 
@@ -98,7 +98,7 @@ public final class WebContentFormatter implements AccessibilityEventFormatter {
             if (actionCode == ACTION_PERFORM_AXIS_TRANSITION) {
                 final String axisAnnouncement = getAxisAnnouncement(
                         context, action.mSecondArgument);
-                utterance.getText().append(axisAnnouncement);
+                utterance.addSpoken(axisAnnouncement);
                 return true;
             }
         }
@@ -126,10 +126,10 @@ public final class WebContentFormatter implements AccessibilityEventFormatter {
         try {
             Xml.parse(cleaned, mHtmlHandler);
             final String speech = mHtmlHandler.getOutput();
-            utterance.getText().append(speech);
+            utterance.addSpoken(speech);
         } catch (final SAXException e) {
             e.printStackTrace();
-            utterance.getText().append(noTags);
+            utterance.addSpoken(noTags);
         }
 
         return true;

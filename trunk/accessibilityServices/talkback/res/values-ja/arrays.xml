@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"着信音量の設定に関係なく常に読み上げる"</item>
-    <item msgid="7158875206945163928">"マナーモードのときは読み上げない"</item>
-    <item msgid="4945285159234224758">"バイブレーションまたはマナーモード時は読み上げない"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"ボタン"</item>
     <item msgid="2031284088774168661">"チェックボックス"</item>

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"พูดตามระดับความดังของเสียงเรียกเข้า"</item>
-    <item msgid="7158875206945163928">"ไม่มีเสียงเมื่อปิดเสียงเรียกเข้า"</item>
-    <item msgid="4945285159234224758">"ไม่มีเสียงพูดเมื่อใช้ระบบสั่นและเมื่อปิดเสียงเรียกเข้า"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"ปุ่ม"</item>
     <item msgid="2031284088774168661">"ช่องทำเครื่องหมาย"</item>

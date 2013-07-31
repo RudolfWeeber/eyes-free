@@ -18,6 +18,7 @@ package com.google.android.marvin.talkback.formatter.calendar;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
@@ -51,16 +52,16 @@ public class DayViewWindowStateChangedFormatter implements AccessibilityEventFor
 
     @Override
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
-        StringBuilder textBuilder = utterance.getText();
+        final SpannableStringBuilder textBuilder = new SpannableStringBuilder();
 
-        CharSequence eventText = event.getText().get(0).toString();
+        final CharSequence eventText = event.getText().get(0).toString();
         switch (SDK_INT) {
             case GINGERBREAD:
                 textBuilder.append(context.getString(R.string.template_announce_day, eventText));
                 break;
             case HONEYCOMB:
-                Bundle bundle = (Bundle) event.getParcelableData();
-                int shownDayCount = bundle.getInt(KEY_SHOWN_DAY_COUNT);
+                final Bundle bundle = (Bundle) event.getParcelableData();
+                final int shownDayCount = bundle.getInt(KEY_SHOWN_DAY_COUNT);
                 if (shownDayCount == WEEK_DAY_COUNT) {
                     String[] rangeFragments = mWeekSplitPattern.split(eventText);
                     String fromDate = rangeFragments[0];
@@ -73,17 +74,18 @@ public class DayViewWindowStateChangedFormatter implements AccessibilityEventFor
                 break;
         }
 
-        int todayEventCount = event.getAddedCount();
+        final int todayEventCount = event.getAddedCount();
         if (todayEventCount > 0) {
             textBuilder.append(COMMA);
             textBuilder.append(SPACE);
-            textBuilder.append(todayEventCount);
+            textBuilder.append(String.valueOf(todayEventCount));
             textBuilder.append(SPACE);
             textBuilder.append(context.getResources().getQuantityString(R.plurals.plural_event,
                     todayEventCount));
         }
         textBuilder.append(PERIOD);
 
+        utterance.addSpoken(textBuilder);
         return true;
     }
 }

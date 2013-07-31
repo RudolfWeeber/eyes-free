@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Du kan også rulle gjennom en hel side ved å sveipe med fingeren. For å rulle til neste side sveiper du til høyre og så til venstre."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Utforsk skjermen igjen for å finne en app på den gjeldende siden."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Sveiping i motsatt retning – til venstre og så høyre i én bevegelse – tar deg til forrige side. Prøv å rulle til forrige side ved å sveipe til venstre og så til høyre."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Bra. Hvis du vil gå videre til neste leksjon, aktiverer du <xliff:g id="NEXT">%s</xliff:g>-knappen som ligger nederst til høyre på skjermen."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Leksjon 3: Lesing tegn for tegn"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"Som standard fører sveip mot venstre og høyre til at tekstblokker leses av i ett. Du kan også lese gjennom tekstblokker på skjermen ord for ord eller tegn for tegn. Finn først teksten som begynner med «Dette»."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Deretter kan du begynne med å lese denne tekstblokken fra et bestemt nivå ved å sveipe ned og så opp i én enkelt bevegelse. Prøv å sveipe ned og så opp for å endre lesenivå. Deretter sveiper du til høyre for å lese gjennom teksten."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"For å gå ut av den gjeldende tekstblokken må du gå tilbake til standard lesenivå. Sveip i motsatt retning – opp og så ned igjen – for å gå tilbake til standard lesenivå. Finn så <xliff:g id="FINISH">%s</xliff:g>-knappen nederst til høyre og dobbeltklikk for å aktivere den og avslutte veiledningen."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Dette er et eksempel på en stor tekstblokk. Du kan bevege deg gjennom denne teksten til et bestemt lesenivå ved å sveipe, eller du kan lese alt på én gang ved å berøre."\n\n"Dette er andre avsnitt."\n\n"Dette er tredje og siste avsnitt. Sveip ned og så opp for å endre lesenivå. Deretter sveiper du til høyre for å bevege deg gjennom denne teksten."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Hvis du vil gå videre til neste økt, finner du <xliff:g id="NEXT">%1$s</xliff:g>-knappen nederst i høyre hjørne av skjermen og trykker to ganger for å aktivere den."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Leksjon 3: Kontekstmenyer"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack har to kontekstmenyer som gjør det enkelt å finne innstillinger og kontroller – den globale og den lokale kontekstmenyen. Du kan aktivere et menyelement ved å sveipe fingeren din rundt sirkelen for menyelementene og slippe den når du hører elementet du er ute etter. Prøv å få frem den globale kontekstmenyen ved å sveipe fingeren din <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> i én enkelt bevegelse."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Den globale kontekstmenyen inneholder generelle kommandoer som fungerer overalt i TalkBack. Prøv å lese all teksten på skjermen ved å trykke ned på midten av skjermen for å få frem en sirkulær meny rundt fingeren din, for så å sveipe fingeren din rundt sirkelen med alternativer til du hører «<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>»"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Du har lukket den globale kontekstmenyen. Prøv å få frem den globale kontekstmenyen igjen ved å sveipe fingeren din <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> i én enkelt bevegelse."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Bra. Den kommandoen leser av alle elementene på skjermen. I tillegg til den globale kontekstmenyen, har TalkBack også en lokal kontekstmeny. Den lokale kontekstmenyen inneholder kontroller som endres basert på hvilket element på skjermen du har valgt. Prøv å få frem den lokale kontekstmenyen ved å sveipe fingeren din <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> i én enkelt bevegelse."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Ved å trykke fingeren ned på midten av skjermen for så å løfte den opp igjen, avsluttes og lukkes menyen. Prøv å lukke den lokale kontekstmenyen nå."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Manglende bevegelsestildeling"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"Ingen bevegelser er tildelt handlingen «<xliff:g id="ACTION">%1$s</xliff:g>». Gå til TalkBack-innstillingene for å angi en snarveisbevegelse for den handlingen, og start så TalkBack-veiledningen på nytt."</string>
 </resources>

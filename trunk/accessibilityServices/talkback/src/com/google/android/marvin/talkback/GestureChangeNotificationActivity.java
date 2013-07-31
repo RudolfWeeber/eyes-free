@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.SpannableStringBuilder;
 
 public class GestureChangeNotificationActivity extends Activity {
 
@@ -29,11 +30,11 @@ public class GestureChangeNotificationActivity extends Activity {
             R.string.shortcut_back,
             R.string.shortcut_home,
             R.string.shortcut_talkback_breakout,
-            R.string.shortcut_read_all_breakout,
+            R.string.shortcut_local_breakout,
             R.string.shortcut_notifications,
             R.string.shortcut_unassigned,
             R.string.shortcut_unassigned,
-            R.string.shortcut_recent_apps
+            R.string.shortcut_recents
     };
 
     @Override
@@ -100,7 +101,7 @@ public class GestureChangeNotificationActivity extends Activity {
     }
 
     private CharSequence getMappingDescription(int[] directions, int[] mappings) {
-        StringBuilder sb = new StringBuilder();
+        SpannableStringBuilder sb = new SpannableStringBuilder();
 
         for (int i = 0; i < directions.length; ++i) {
             sb.append(getString(directions[i]))

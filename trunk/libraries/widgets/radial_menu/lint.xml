@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="HardcodedText">
+        <ignore path="res/menu/radial_keyboard.xml" />
+    </issue>
+    <issue id="MissingTranslation" severity="ignore" />
+    <issue id="UnusedResources" severity="ignore" />
+    <issue id="ViewConstructor">
+        <ignore path="src/com/googlecode/eyesfree/widget/RadialMenuView.java" />
+    </issue>
+</lint>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="inner_radius">64dp</dimen>
+    <dimen name="inner_radius">72dp</dimen>
     <dimen name="outer_radius">80dp</dimen>
     <dimen name="corner_radius">64dp</dimen>
     <dimen name="extreme_radius">128dp</dimen>
     <dimen name="spacing">2dp</dimen>
     <dimen name="text_size">14sp</dimen>
+    <dimen name="text_shadow_radius">4dp</dimen>
+    <dimen name="shadow_radius">4dp</dimen>
 </resources>

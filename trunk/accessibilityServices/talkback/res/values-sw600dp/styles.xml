@@ -30,7 +30,7 @@
         <item name="android:paddingRight">0dip</item>
         <item name="android:paddingBottom">0dip</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-        <item name="android:textSize">20dip</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
     <style name="AccessibilityTutorialBodyTextPrimary" parent="@android:style/TextAppearance.Medium"></style>

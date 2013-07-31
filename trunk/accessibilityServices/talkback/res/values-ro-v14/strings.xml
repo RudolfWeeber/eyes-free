@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Sigur doriţi să suspendaţi TalkBack?"\n\n"Cu funcţia TalkBack suspendată, gadgetul nu va oferi feedback, iar funcţia Exploraţi prin atingere va fi dezactivată."\n\n"Puteţi reactiva TalkBack din fereastra de notificări sau revenind la ecranul de blocare."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"Sigur doriți să suspendați TalkBack?"\n\n"Cât timp TalkBack este suspendată, dispozitivul nu va oferi feedback, iar funcția Explorați prin atingere va fi dezactivată."</string>
 </resources>

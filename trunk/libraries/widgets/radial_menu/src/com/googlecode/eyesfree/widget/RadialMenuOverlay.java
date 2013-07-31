@@ -48,12 +48,14 @@ public class RadialMenuOverlay extends SimpleOverlay implements DialogInterface 
     public void showWithDot() {
         super.show();
 
+        mMenu.onShow();
         mMenuView.displayDot();
     }
 
     public void showAt(float centerX, float centerY) {
         super.show();
 
+        mMenu.onShow();
         mMenuView.displayAt(centerX, centerY);
     }
 
@@ -61,13 +63,18 @@ public class RadialMenuOverlay extends SimpleOverlay implements DialogInterface 
         return mMenu;
     }
 
+    public RadialMenuView getView() {
+        return mMenuView;
+    }
+
     @Override
     public void cancel() {
-        hide();
+        dismiss();
     }
 
     @Override
     public void dismiss() {
+        mMenu.onDismiss();
         hide();
     }
 }

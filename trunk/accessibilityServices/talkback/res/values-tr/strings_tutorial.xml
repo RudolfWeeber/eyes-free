@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Parmağınızı hızlıca kaydırarak da tüm sayfada kaydırma yapabilirsiniz. Sonraki sayfaya geçmek için tek bir hareketle sağa ve ardından sola hızlıca kaydırın. Sağa ve ardından sola hızlıca kaydırarak sonraki sayfaya geçmeye çalışın."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Mevcut sayfada bir uygulama bulmak için ekranda tekrar arama yapın."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Tek bir hareketle zıt yönde, sola ve ardından sağa hızlıca kaydırma yaptığınızda önceki sayfaya dönersiniz. Sola ve ardından sağa hızlıca kaydırarak önceki sayfaya geçmeye çalışın."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Bir sonraki derse geçmek için, ekranın sağ alt köşesinin yakınlarındaki <xliff:g id="NEXT">%s</xliff:g> düğmesini bulun ve etkinleştirin."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"3. Ders: Karakter okuma"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"Varsayılan olarak, sola veya sağa hızlıca kaydırdığınızda metin bloklarının tümünü bir kerede okursunuz. Ekrandaki metin bloklarını kelime kelime veya karakter karakter de okuyabilirsiniz. Önce \"Bu\" kelimesiyle başlayan metni bulun."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Şimdi, tek bir hareketle aşağı ve sonra yukarı hızlıca kaydırarak bu bloğu belirli bir yerinden okumaya başlayabilirsiniz. Okuma yerini değiştirmek için aşağı ve ardından yukarı hızlıca kaydırma yapmaya çalışın, metinde ilerlemek için ise sağa hızlıca kaydırın."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Mevcut metin bloğundan çıkmak için varsayılan okuma düzeyine dönmeniz gerekir. Varsayılan düzeye dönmek için farklı yönde, yukarı ve ardından aşağı hızlıca kaydırın. Sonra sağ alt köşedeki <xliff:g id="FINISH">%s</xliff:g> düğmesini bulup etkinleştirmek için hafifçe çift vurun ve eğiticiden çıkın."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Bu örnekte büyük bir metin bloğu kullanılmaktadır. Hızlıca kaydırma hareketini kullanarak bu metinde belirli bir okuma yerinde gezinebilir veya dokunma hareketlerini kullanarak tümünü okuyabilirsiniz."\n\n"Bu ikinci paragraftır."\n\n"Bu üçüncü ve son paragraftır. Okuma yerini değiştirmek için aşağı ve ardından yukarı hızlıca kaydırın, bu metinde ilerlemek için sağa kaydırın."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Bir sonraki derse geçmek için ekranın sağ alt bölümündeki <xliff:g id="NEXT">%1$s</xliff:g> düğmesini bulun ve etkinleştirmek için hafifçe çift vurun."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Ders 3: Bağlam menüleri"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack\'te ayarları ve denetimleri kolayca bulmayı sağlayan iki bağlam menüsü vardır: Genel Bağlam Menüsü ve Yerel Bağlam Menüsü. Bir menü öğesini etkinleştirmek için parmağınızı menü öğelerinin etrafında daire şeklinde kaydırabilir ve istediğiniz öğeyi duyduğunuzda parmağınızı kaldırabilirsiniz. Parmağınızı tek bir hareketle <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> hızlıca kaydırarak Genel Bağlam Menüsünü görüntülemeye çalışın."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Genel Bağlam Menüsü TalkBack\'te her yerde kullanılabilecek genel komutları içerir. Parmağınızın etrafında dairesel bir menü görüntülemek için ekranın ortasına basıp \"<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>\" sesini duyana kadar parmağınızı daire şeklindeki seçenekler üzerinde kaydırarak ekrandaki tüm metni okumaya çalışın."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Genel Bağlam Menüsünü kapattınız. Parmağınızı tek bir hareketle <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> kaydırarak Genel Bağlam Menüsünü tekrar görüntülemeyi deneyin."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Harika. Bu komut ekrandaki tüm öğeleri okur. Genel Bağlam Menüsüne ek olarak, TalkBack\'te ayrıca Yerel Bağlam Menüsü de bulunur. Yerel Bağlam Menüsü, ekranda seçmiş olduğunuz öğeye göre değişen denetimler içerir. Parmağınızı tek bir hareketle <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> hızlıca kaydırarak Yerel Bağlam Menüsünü görüntülemeye çalışın."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Parmağınızı ekranın ortasına bastırıp kaldırdığınızda menü iptal edilir ve kapatılır. Şimdi Yerel Bağlam Menüsünü kapatmayı deneyin."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Eksik hareket ataması"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"\"<xliff:g id="ACTION">%1$s</xliff:g>\" işlemiyle ilişkilendirilmiş hareket yok. Bu işlem için kısa bir hareket ayarlamak üzere lütfen TalkBack Ayarları\'nı ziyaret edin ve sonra TalkBack eğiticisini yeniden başlatın."</string>
 </resources>

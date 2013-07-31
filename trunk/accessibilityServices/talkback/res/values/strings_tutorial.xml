@@ -26,11 +26,11 @@
     <string name="accessibility_tutorial_lesson_1_text_3">You can also explore by swiping your finger left and right anywhere on the screen. Try quickly swiping from left to right to move to the next icon.</string>
     <!-- Instruction for touch exploration tutorial lesson 1, displayed after the user swipes from left to right. -->
     <string name="accessibility_tutorial_lesson_1_text_4">To activate something that you\'ve explored, tap the screen twice. Explore until you find the <xliff:g id="app_name" example="Browser">%1$s</xliff:g> icon. Then double-tap anywhere on the screen to activate it.</string>
-    <!-- Instruction for touch exploration tutorial lesson 1, displayed if the user touched the target area and stays inside it. -->
+    <!-- Instruction for touch exploration tutorial lesson 1, displayed after the user touches the target icon. -->
     <string name="accessibility_tutorial_lesson_1_text_5">You found the <xliff:g id="app_name" example="Browser">%1$s</xliff:g> icon. Double-tap anywhere on the screen to activate the icon.</string>
-    <!-- Instruction for touch exploration tutorial lesson 1, displayed if the user touches inside the target area but moves outside. -->
+    <!-- Instruction for touch exploration tutorial lesson 1, displayed after the user touches the target icon but then touches another icon. -->
     <string name="accessibility_tutorial_lesson_1_text_5_exited">You explored past the <xliff:g id="app_name" example="Browser">%1$s</xliff:g> icon. Try exploring the screen until you find the <xliff:g id="app_name" example="Browser">%1$s</xliff:g> icon again.</string>
-    <!-- Instruction for touch exploration tutorial lesson 1, displayed after the user has tapped the target icon. -->
+    <!-- Instruction for touch exploration tutorial lesson 1, displayed after the user activates the target icon. -->
     <string name="accessibility_tutorial_lesson_1_text_6">To move to the next lesson, find the <xliff:g id="next" example="Next">%1$s</xliff:g> button, located near the bottom-right corner of the screen, then double-tap to activate it.</string>
 
     <!-- Title for touch exploration tutorial lesson 2. -->
@@ -48,17 +48,6 @@
     <!-- Instruction for touch exploration tutorial lesson 2, displayed after the user touches another list item. -->
     <string name="accessibility_tutorial_lesson_2_text_6">Swiping the opposite direction, left then right in a single motion, will move to the previous page. Try to scroll to the previous page by swiping left then right.</string>
     <!-- Instruction for touch exploration tutorial lesson 2, displayed after the user has finished the lesson. -->
-    <string name="accessibility_tutorial_lesson_2_text_7">To move to the next lesson, find and activate the <xliff:g id="next" example="Next">%s</xliff:g> button, located near the bottom-right corner  of the screen.</string>
-
-    <!-- Title for touch exploration tutorial lesson 3. -->
-    <string name="accessibility_tutorial_lesson_3_title">Lesson 3: Reading by character</string>
-    <!-- Instruction for touch exploration tutorial lesson 3. -->
-    <string name="accessibility_tutorial_lesson_3_text_1">By default, swiping left or right reads blocks of text all at once. You can also read through blocks of on-screen text by word or character. First, find the text that begins with the word \"This\".</string>
-    <!-- Instruction for touch exploration tutorial lesson 3, displayed after the user navigates to a block of text. -->
-    <string name="accessibility_tutorial_lesson_3_text_2">Next, you can start reading this block at a specific level by swiping down then up in a single motion. Try swiping down then up to change the reading level, then swipe right to read through the text.</string>
-    <!-- Instruction for touch exploration tutorial lesson 2, displayed after the user changes the navigation level and tries to move through the text. -->
-    <string name="accessibility_tutorial_lesson_3_text_3">To move out of the current block of text, you will need to return to the default reading level. Swipe in the opposite direction, up then down, to return to the default reading level. Then find the <xliff:g id="finish" example="Finish">%s</xliff:g> button at the bottom-right and double-tap to activate it and exit the tutorial.</string>
-    <!-- Sample text used in the text navigation tutorial. -->
-    <string name="accessibility_tutorial_lesson_3_sample_text">This is an example of a large block of text. You can move through this text at a specific reading level using swipe gestures, or read it all at once using touch gestures.\n\nThis is the second paragraph.\n\nThis is the third and final paragraph. Swipe down then up to change the reading level, then swipe right to move through this text.</string>
+    <string name="accessibility_tutorial_lesson_2_text_7">This concludes the TalkBack tutorial. To exit the tutorial, find and activate the <xliff:g id="finish" example="Finish">%s</xliff:g> button, located near the bottom-right corner  of the screen.</string>
 
 </resources>

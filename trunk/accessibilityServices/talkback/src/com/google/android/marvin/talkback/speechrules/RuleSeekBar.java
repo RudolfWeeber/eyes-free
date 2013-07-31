@@ -18,11 +18,12 @@ package com.google.android.marvin.talkback.speechrules;
 
 import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.text.SpannableStringBuilder;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.StringBuilderUtils;
 
 /**
  * Formats speech for SeekBar widgets.
@@ -39,7 +40,7 @@ public class RuleSeekBar extends RuleDefault {
     @Override
     public CharSequence
             format(Context context, AccessibilityNodeInfoCompat node, AccessibilityEvent event) {
-        final StringBuilder output = new StringBuilder();
+        final SpannableStringBuilder output = new SpannableStringBuilder();
         final CharSequence text = super.format(context, node, event);
         final CharSequence formattedText = context.getString(R.string.template_seek_bar, text);
 

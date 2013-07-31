@@ -24,17 +24,19 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
-import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.googlecode.eyesfree.utils.SparseIterableArray;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Implements a radial menu with up to four hot corners.
+ * Implements a radial menu with up to four corners.
  *
  * @see Menu
  */
@@ -49,10 +51,11 @@ public class RadialMenu implements Menu {
     private final Context mContext;
     private final DialogInterface mParent;
     private final List<RadialMenuItem> mItems;
-    private final SparseArray<RadialMenuItem> mHotCorners;
+    private final SparseIterableArray<RadialMenuItem> mCorners;
 
     private MenuItem.OnMenuItemClickListener mListener;
     private RadialMenuItem.OnMenuItemSelectionListener mSelectionListener;
+    private OnMenuVisibilityChangedListener mVisibilityListener;
     private MenuLayoutListener mLayoutListener;
 
     @SuppressWarnings("unused")
@@ -68,7 +71,7 @@ public class RadialMenu implements Menu {
         mContext = context;
         mParent = parent;
         mItems = new ArrayList<RadialMenuItem>();
-        mHotCorners = new SparseArray<RadialMenuItem>();
+        mCorners = new SparseIterableArray<RadialMenuItem>();
 
         // Set default properties.
         mQwertyMode = false;
@@ -79,40 +82,30 @@ public class RadialMenu implements Menu {
     }
 
     /**
-     * Sets the default click listener for menu items. This change is propagated
-     * to sub-menus.
+     * Sets the default click listener for menu items. If the default click
+     * listener returns false for an event, it will be passed to the menu's
+     * parent menu (if any).
      *
      * @param listener The default click listener for menu items.
      */
     public void setDefaultListener(MenuItem.OnMenuItemClickListener listener) {
         mListener = listener;
-
-        // Propagate this change to all sub-menus.
-        for (RadialMenuItem item : mItems) {
-            if (item.hasSubMenu()) {
-                final RadialSubMenu subMenu = item.getSubMenu();
-                subMenu.setDefaultListener(listener);
-            }
-        }
     }
 
     /**
-     * Sets the default selection listener for menu items. This change is
-     * propagated to sub-menus.
+     * Sets the default selection listener for menu items. If the default
+     * selection listener returns false for an event, it will be passed to the
+     * menu's parent menu (if any).
      *
      * @param selectionListener The default selection listener for menu items.
      */
     public void setDefaultSelectionListener(
             RadialMenuItem.OnMenuItemSelectionListener selectionListener) {
         mSelectionListener = selectionListener;
+    }
 
-        // Propagate this change to all sub-menus.
-        for (RadialMenuItem item : mItems) {
-            if (item.hasSubMenu()) {
-                final RadialSubMenu subMenu = item.getSubMenu();
-                subMenu.setDefaultSelectionListener(selectionListener);
-            }
-        }
+    public void setOnMenuVisibilityChangedListener(OnMenuVisibilityChangedListener listener) {
+        mVisibilityListener = listener;
     }
 
     @Override
@@ -136,9 +129,24 @@ public class RadialMenu implements Menu {
     public RadialMenuItem add(int groupId, int itemId, int order, CharSequence title) {
         final RadialMenuItem item = new RadialMenuItem(mContext, groupId, itemId, order, title);
 
-        if (groupId == R.id.group_corners) {
-            item.setHotCorner(true);
-            mHotCorners.put(order, item);
+        return add(item);
+    }
+
+    /**
+     * Add a pre-constructed {@link RadialMenuItem} to the menu.
+     *
+     * @param item The item to add.
+     */
+    public RadialMenuItem add(RadialMenuItem item) {
+        // If this is a sub-menu, add the default selection and click listeners.
+        if (item.hasSubMenu()) {
+            item.setOnMenuItemSelectionListener(mSelectionListener);
+            item.setOnMenuItemClickListener(mListener);
+        }
+
+        if (item.getGroupId() == R.id.group_corners) {
+            item.setCorner(true);
+            mCorners.put(item.getOrder(), item);
         } else {
             mItems.add(item);
         }
@@ -146,6 +154,17 @@ public class RadialMenu implements Menu {
         onLayoutChanged();
 
         return item;
+    }
+
+    /**
+     * Adds all items from a collection of {@link RadialMenuItem}s to the menu.
+     *
+     * @param items The items to add.
+     */
+    public void addAll(Iterable<? extends RadialMenuItem> items) {
+        for (RadialMenuItem item : items) {
+            add(item);
+        }
     }
 
     @Override
@@ -197,17 +216,10 @@ public class RadialMenu implements Menu {
 
     @Override
     public RadialSubMenu addSubMenu(int groupId, int itemId, int order, CharSequence title) {
-        final RadialSubMenu submenu = new RadialSubMenu(mContext, mParent, groupId, itemId, order,
-                title);
-        final RadialMenuItem item = submenu.getItem();
+        final RadialSubMenu submenu = new RadialSubMenu(
+                mContext, mParent, this, groupId, itemId, order, title);
 
-        mItems.add(item);
-
-        // Propagate the current default listeners.
-        submenu.setDefaultListener(mListener);
-        submenu.setDefaultSelectionListener(mSelectionListener);
-
-        onLayoutChanged();
+        add(submenu.getItem());
 
         return submenu;
     }
@@ -217,8 +229,21 @@ public class RadialMenu implements Menu {
         mItems.clear();
     }
 
+    /*package*/ void onShow() {
+        if (mVisibilityListener != null) {
+            mVisibilityListener.onMenuShown(this);
+        }
+    }
+
+    /*package*/ void onDismiss() {
+        if (mVisibilityListener != null) {
+            mVisibilityListener.onMenuDismissed(this);
+        }
+    }
+
     @Override
     public void close() {
+        onDismiss();
         mParent.dismiss();
     }
 
@@ -234,9 +259,7 @@ public class RadialMenu implements Menu {
             }
         }
 
-        for (int i = 0; i < mHotCorners.size(); i++) {
-            final RadialMenuItem item = mHotCorners.valueAt(i);
-
+        for (RadialMenuItem item : mCorners) {
             if (item.getItemId() == id) {
                 return item;
             }
@@ -250,12 +273,34 @@ public class RadialMenu implements Menu {
         return mItems.get(index);
     }
 
+    /**
+     * Retrieves all items in the menu in an immutable list.
+     *
+     * @param includeCorners if {@code true}, will include menu items that are
+     *            in the corner group
+     * @return an immutable list of items in the menu.
+     */
+    public List<RadialMenuItem> getItems(boolean includeCorners) {
+        final int listSize = (includeCorners) ? mItems.size() : mItems.size() + mCorners.size();
+        final List<RadialMenuItem> itemsCopy = new ArrayList<RadialMenuItem>(listSize);
+
+        itemsCopy.addAll(mItems);
+
+        if (includeCorners) {
+            for (RadialMenuItem item : mCorners) {
+                itemsCopy.add(item);
+            }
+        }
+
+        return Collections.unmodifiableList(itemsCopy);
+    }
+
     public int indexOf(RadialMenuItem item) {
         return mItems.indexOf(item);
     }
 
     /**
-     * Gets the hot corner menu item with the given group ID.
+     * Gets the corner menu item with the given group ID.
      *
      * @param groupId The corner group ID of the item to be returned. One of:
      *            <ul>
@@ -264,14 +309,14 @@ public class RadialMenu implements Menu {
      *            <li>{@link RadialMenu#ORDER_SE}
      *            <li>{@link RadialMenu#ORDER_SW}
      *            </ul>
-     * @return The hot corner menu item.
+     * @return The corner menu item.
      */
-    public RadialMenuItem getHotCorner(int groupId) {
-        return mHotCorners.get(groupId);
+    public RadialMenuItem getCorner(int groupId) {
+        return mCorners.get(groupId);
     }
 
     /**
-     * Returns the rotation of a hot corner in degrees.
+     * Returns the rotation of a corner in degrees.
      *
      * @param groupId The corner group ID of the item to be returned. One of:
      *            <ul>
@@ -280,9 +325,9 @@ public class RadialMenu implements Menu {
      *            <li>{@link RadialMenu#ORDER_SE}
      *            <li>{@link RadialMenu#ORDER_SW}
      *            </ul>
-     * @return The rotation of a hot corner in degrees.
+     * @return The rotation of a corner in degrees.
      */
-    /* package */static float getHotCornerRotation(int groupId) {
+    /* package */ static float getCornerRotation(int groupId) {
         final float rotation;
 
         switch (groupId) {
@@ -306,7 +351,7 @@ public class RadialMenu implements Menu {
     }
 
     /**
-     * Returns the on-screen location of a hot corner as percentages of the
+     * Returns the on-screen location of a corner as percentages of the
      * screen size. The resulting point coordinates should be multiplied by
      * screen width and height.
      *
@@ -317,10 +362,10 @@ public class RadialMenu implements Menu {
      *            <li>{@link RadialMenu#ORDER_SE}
      *            <li>{@link RadialMenu#ORDER_SW}
      *            </ul>
-     * @return The on-screen location of a hot corner as percentages of the
+     * @return The on-screen location of a corner as percentages of the
      *         screen size.
      */
-    /* package */static PointF getHotCornerLocation(int groupId) {
+    /* package */ static PointF getCornerLocation(int groupId) {
         final float x;
         final float y;
 
@@ -351,7 +396,6 @@ public class RadialMenu implements Menu {
     @Override
     public void removeItem(int id) {
         final MenuItem item = findItem(id);
-
         if (item == null) {
             return;
         }
@@ -362,7 +406,7 @@ public class RadialMenu implements Menu {
     }
 
     /**
-     * Removes the hot corner item with the given group ID.
+     * Removes the corner item with the given group ID.
      *
      * @param groupId The corner group ID of the item to be removed. One of:
      *            <ul>
@@ -372,15 +416,14 @@ public class RadialMenu implements Menu {
      *            <li>{@link RadialMenu#ORDER_SW}
      *            </ul>
      */
-    public void removeHotCorner(int groupId) {
-        final RadialMenuItem hotCorner = mHotCorners.get(groupId);
-
-        if (hotCorner == null) {
+    public void removeCorner(int groupId) {
+        final RadialMenuItem corner = mCorners.get(groupId);
+        if (corner == null) {
             return;
         }
 
-        hotCorner.setHotCorner(false);
-        mHotCorners.put(groupId, null);
+        corner.setCorner(false);
+        mCorners.put(groupId, null);
 
         onLayoutChanged();
     }
@@ -428,12 +471,16 @@ public class RadialMenu implements Menu {
      * @param flags
      * @return {@code true} if the menu item performs an action
      */
-    private boolean selectMenuItem(RadialMenuItem item, int flags) {
-        if (item == null || !item.onSelectionPerformed()) {
-            return mSelectionListener != null && mSelectionListener.onMenuItemSelection(item);
+    public boolean selectMenuItem(RadialMenuItem item, int flags) {
+        if ((item != null) && item.onSelectionPerformed()) {
+            return true;
         }
 
-        return true;
+        if ((mSelectionListener != null) && mSelectionListener.onMenuItemSelection(item)) {
+            return true;
+        }
+
+        return false;
     }
 
     public boolean selectIdentifierAction(int id, int flags) {
@@ -454,24 +501,22 @@ public class RadialMenu implements Menu {
 
     /**
      * Performs the action associated with a particular {@link RadialMenuItem},
-     * or null if the menu was cancelled.
+     * or {@code null} if the menu was cancelled.
      *
      * @param item
      * @param flags
      * @return {@code true} if the menu item performs an action
      */
-    private boolean performMenuItem(RadialMenuItem item, int flags) {
-        if (item == null || !item.onClickPerformed()) {
-            if (mListener == null || !mListener.onMenuItemClick(item)) {
-                return false;
-            }
-        }
+    public boolean performMenuItem(RadialMenuItem item, int flags) {
+        final boolean performedAction = (item == null) || item.onClickPerformed()
+                || ((mListener != null) && mListener.onMenuItemClick(item));
 
-        if (item == null || (flags & FLAG_PERFORM_NO_CLOSE) == 0 || (flags & FLAG_ALWAYS_PERFORM_CLOSE) != 0) {
+        if ((item == null) || ((flags & FLAG_PERFORM_NO_CLOSE) == 0)
+                || ((flags & FLAG_ALWAYS_PERFORM_CLOSE) != 0)) {
             close();
         }
 
-        return true;
+        return performedAction;
     }
 
     @Override
@@ -571,5 +616,27 @@ public class RadialMenu implements Menu {
 
     public interface MenuLayoutListener {
         public void onLayoutChanged();
+    }
+
+    /**
+     * Interface definition for a callback to be invoked when a menu is shown or
+     * dismissed.
+     *
+     * @author caseyburkhardt@google.com (Casey Burkhardt)
+     */
+    public interface OnMenuVisibilityChangedListener {
+        /**
+         * Called when a menu has been displayed.
+         *
+         * @param menu The menu that was displayed.
+         */
+        public void onMenuShown(RadialMenu menu);
+
+        /**
+         * Called when a menu has been dismissed.
+         *
+         * @param menu The menu that was dismissed.
+         */
+        public void onMenuDismissed(RadialMenu menu);
     }
 }

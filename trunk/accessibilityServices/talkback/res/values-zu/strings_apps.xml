@@ -32,7 +32,7 @@
     <string name="value_owner" msgid="2356511106039974687">"Umnikazi"</string>
   <plurals name="plural_event">
     <item quantity="one" msgid="3277201357577016902">"umcimbi"</item>
-    <item quantity="other" msgid="40630539017439">"izehlakalo"</item>
+    <item quantity="other" msgid="40630539017439">"imicimbi"</item>
   </plurals>
     <string name="value_status_bar_opened" msgid="5815609260958160739">"Ibha yesimo ivuliwe"</string>
     <string name="value_googletv_screen_saver" msgid="4641188128529437451">"Isigcini sesikrini"</string>

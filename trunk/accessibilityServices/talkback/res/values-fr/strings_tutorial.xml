@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Vous pouvez également faire défiler une page entière en faisant glisser votre doigt. Pour passer à la page suivante, faites glisser votre doigt vers la droite, puis vers la gauche dans un même mouvement. Essayez de passer à la page suivante en faisant glisser votre doigt vers la droite, puis vers la gauche."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Explorez de nouveau l\'écran pour trouver une application sur la page actuelle."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Pour accéder à la page précédente, faites glisser votre doigt dans la direction opposée, de gauche à droite en un seul mouvement. Essayez de passer à la page précédente en faisant glisser votre doigt vers la gauche, puis vers la droite."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Pour passer à la leçon suivante, recherchez le bouton \"<xliff:g id="NEXT">%s</xliff:g>\" situé dans l\'angle inférieur droit de l\'écran, puis activez-le."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Leçon 3 : Lecture par caractère"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"Par défaut, en faisant glisser votre doigt vers la gauche ou vers la droite, vous pouvez lire des blocs de texte entiers. Vous pouvez également lire des blocs de texte à l\'écran par mot ou par caractère. Tout d\'abord, recherchez le texte qui commence par le mot \"Ceci\"."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Ensuite, vous pouvez commencer à lire ce bloc à un niveau spécifique en faisant glisser votre doigt vers le bas, puis vers le haut en un seul mouvement. Essayez de faire glisser votre doigt vers le bas, puis vers le haut pour changer le niveau de lecture, puis faites glisser votre doigt vers la droite pour lire le texte."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Pour sortir du bloc de texte actif, vous devez revenir au niveau de lecture par défaut. Pour cela, faites glisser votre doigt dans la direction opposée, vers le haut, puis à nouveau vers le bas. Recherchez ensuite le bouton <xliff:g id="FINISH">%s</xliff:g> situé dans l\'angle inférieur droit, puis appuyez deux fois sur celui-ci pour l\'activer et quitter le didacticiel."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Ceci est un exemple de grand bloc de texte. Vous pouvez vous déplacer au sein de ce texte à un niveau de lecture spécifique en faisant glisser votre doigt, ou le lire dans son intégralité via des commandes tactiles."\n\n"Ceci est le deuxième paragraphe."\n\n"Ceci est le troisième et dernier paragraphe. Faites glisser votre doigt vers le bas, puis vers le haut pour changer de niveau de lecture, puis faites-le glisser vers la droite pour vous déplacer au sein du texte."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Pour passer à la leçon suivante, recherchez le bouton \"<xliff:g id="NEXT">%1$s</xliff:g>\", situé près de l\'angle inférieur droit de l\'écran, puis appuyez deux fois dessus pour l\'activer."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Leçon 3 : menus contextuels"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack présente deux menus contextuels qui vous permettent de trouver facilement les paramètres et les commandes, le menu contextuel général et le menu contextuel local. Vous pouvez activer un élément de menu en faisant glisser votre doigt sur le cercle des éléments de menu, puis en relâchant lorsque l\'élément souhaité est énoncé. Essayez d\'afficher le menu contextuel général en faisant glisser votre doigt <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> en un seul mouvement."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Le menu contextuel général contient des commandes générales qui fonctionnent dans l\'ensemble de l\'interface TalkBack. Essayez de lire tout le texte affiché en appuyant au centre de l\'écran pour afficher un menu circulaire autour de votre doigt, puis de faire glisser votre doigt sur le cercle d\'options jusqu\'à ce que vous entendiez \"<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Vous avez fermé le menu contextuel général. Essayez de l\'afficher à nouveau en faisant glisser votre doigt <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> en un seul mouvement."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Parfait. Cette commande vous permet de lire tous les éléments affichés. En complément du menu contextuel général, TalkBack dispose également d\'un menu contextuel local. Celui-ci contient des commandes qui varient selon les éléments sélectionnés à l\'écran. Essayez d\'afficher le menu contextuel local en faisant glisser votre doigt <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> en un seul mouvement."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"En appuyant au centre de l\'écran, puis en relâchant la pression, vous annulez l\'action effectuée et fermez le menu. Essayez de fermer le menu contextuel local."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Aucun geste ass."</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"Aucun geste n\'est associé à l\'action \"<xliff:g id="ACTION">%1$s</xliff:g>\". Veuillez consulter les paramètres TalkBack pour associer un raccourci par geste à cette action, puis relancez le didacticiel TalkBack."</string>
 </resources>

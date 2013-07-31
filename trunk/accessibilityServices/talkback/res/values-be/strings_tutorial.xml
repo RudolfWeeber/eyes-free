@@ -23,10 +23,54 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Вы таксама можаце пракруціць ўсю старонку, правёўшы пальцам. Для пераходу да наступнай старонкi правядзіце ўправа, а потым улева адным рухам. Паспрабуйце пракруцiць да наступнай старонкi, правёўшы ўправа, а потым улева."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Зноў паглядзiце на экран, каб знайсці прыкладанне на бягучай старонцы."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Гартанне ў процiлеглым кiрунку, улева,а потым управа адным рухам, прывядзе на папярэднюю старонку. Паспрабуйце прагартаць да папярэдняй, правёўшы ўлева, а потым управа."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Каб перайсці да наступнага ўрока, знайдзіце і націсніце кнопку <xliff:g id="NEXT">%s</xliff:g> каля правага ніжняга вугла экрана."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Урок 3: Чытанне па знаках"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"Па змаўчанні перасоўванне ўлева або ўправа дазваляе чытаць адразу ўсе тэкставыя блокі. Вы таксама можаце чытаць тэкставыя блокі на экране па словах або па знаках. Па-першае, знайдзіце тэкст, які пачынаецца са слова \"Гэта\"."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Вы таксама можаце пачаць чытаць гэты блок на пэўным узроўні, праводзячы ўніз, затым ўверх адным рухам. Паспрабуйце правесцi ўніз, потым ўверх, каб змяніць узровень чытання, а потым правядзіце ўправа, каб прачытаць тэкст."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Каб выйсці з бягучага тэкставага блока, вярнiцеся на ўзровень чытання па змаўчанні. Перасуньце палец у процілеглым кірунку, уверх і ўніз, каб вярнуцца да ўзроўню чытання па змаўчанні. Затым знайдзіце кнопку <xliff:g id="FINISH">%s</xliff:g> у нiжняй правай частцы і двойчы націсніце яе, каб яе актываваць і выйсці з навучання."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Гэта прыклад вялікага блока тэксту. Вы можаце рухацца праз гэты тэкст на пэўным узроўні чытання з дапамогай перасоўвання або прачытаць усё разам з дапамогай дакранання."\n\n"Гэта другі абзац."\n\n"Гэта трэці і апошні абзац. Правядзіце пальцам уверх і ўніз, каб змяніць узровень чытання, а потым правядзіце направа, каб рухацца праз тэкст."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_2_text_7 (3684610203615874623) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_3_title (6024010587544294119) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_1 (9044343256290855911) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_2 (2357293277631473840) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_3_hidden (8766520681673257029) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_3 (2904044424555349808) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_4 (2111031135741866859) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_missing_assignment_title (5676431029357436455) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_missing_assignment_message (2845312981319504607) -->
+    <skip />
 </resources>

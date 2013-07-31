@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd" >
+  <ss:speechstrategy
+      xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy ../../schema/speechstrategy.xsd">
 
   <!-- Notification shade for Froyo -->
   <ss:rule>
@@ -29,7 +30,7 @@
     </ss:filter>
     <ss:formatter>
       <ss:template>@string/template_dragging_icon</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 

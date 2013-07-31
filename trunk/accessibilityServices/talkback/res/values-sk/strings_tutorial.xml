@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Celú stranu môžete tiež posúvať prstom. Ak chcete posunúť zobrazenie na ďalšiu stranu, jedným pohybom posuňte prstom doprava a doľava. Skúste posunúť zobrazenie na ďalšiu stranu posunutím prstom doprava a doľava."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Znova preskúmajte obrazovku a na aktuálnej stránke nájdite aplikáciu."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Posunutím prstom v opačnom smere (doľava a doprava) jedným pohybom prejdete na predchádzajúcu stránku. Skúste posunúť zobrazenie na predchádzajúcu stránku posunutím prstom doľava a doprava."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Ak chcete prejsť na ďalšiu lekciu, nájdite a aktivujte tlačidlo <xliff:g id="NEXT">%s</xliff:g>, ktoré sa nachádza v pravom dolnom rohu obrazovky."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lekcia 3: Čítanie po znakoch"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"V predvolenom nastavení čítate celé bloky textu naraz posunutím prstom doľava alebo doprava. Bloky textu na obrazovke môžete tiež čítať po slovách alebo znakoch. Najprv prejdite na text, ktorý začína slovom „Toto“."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Ďalej môžete začať čítať tento blok na konkrétnej úrovni posunutím prstom nadol a nahor jedným pohybom. Skúste posunúť prstom nadol a následne nahor a zmeniť tak úroveň čítania a potom posunúť prstom doprava a daný text prečítať."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Ak sa chcete presunúť z aktuálneho bloku textu, budete sa musieť vrátiť na predvolenú úroveň čítania. Posunutím prstom v opačnom smere nahor alebo nadol sa vrátite na predvolenú úroveň čítania. Potom nájdite tlačidlo <xliff:g id="FINISH">%s</xliff:g> v pravej dolnej časti. Dvojitým klepnutím ho aktivujete a ukončíte návod."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Toto je príklad väčšieho bloku textu. V texte sa môžete na určitej úrovni čítania posúvať pomocou gest posúvania alebo čítať všetko naraz pomocou gest dotykov."\n\n"Toto je druhý odsek."\n\n"Toto je tretí a posledný odsek. Posunutím prsta nadol a nahor zmeníte úroveň čítania, posunutím prsta doprava sa posúvate v texte."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Ak chcete prejsť na ďalšiu lekciu, nájdite tlačidlo <xliff:g id="NEXT">%1$s</xliff:g> v pravom dolnom rohu obrazovky. Dvojitým klepnutím ho aktivujete."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Lekcia 3: Kontextové ponuky"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"Aplikácia TalkBack obsahuje dve kontextové ponuky, Globálnu kontextovú ponuku a Miestnu kontextovú ponuku, pomocou ktorých ľahko nájdete nastavenia a ovládacie prvky. Ak chcete aktivovať položku ponuky, prechádzajte prstom po kruhu položiek ponuky a zodvihnite ho, keď budete počuť názov požadovanej položky. Skúste zobraziť Globálnu kontextovú ponuku posunutím prsta <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> jedným pohybom."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Globálna kontextová ponuka obsahuje všeobecné príkazy, ktoré fungujú v celej aplikácii TalkBack. Ak si chcete prečítať text na obrazovke, stlačte stred obrazovky a okolo vášho prsta sa zobrazí kruhová ponuka. Potom prechádzajte prstom po kruhu s možnosťami, kým nebudete počuť „<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>“."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Globálnu kontextovú ponuku ste zavreli. Skúste ju znova zobraziť posunutím prsta <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> jedným pohybom."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Tento príkaz prečíta všetky položky na obrazovke. Aplikácia TalkBack však obsahuje aj Miestnu kontextovú ponuku. V tej sú ovládacie prvky, ktoré sa menia v závislosti od položky, ktorú ste na obrazovke vybrali. Skúste si zobraziť Miestnu kontextovú ponuku posunutím prsta <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> jedným pohybom."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Ak chcete ponuku zrušiť a zavrieť, stlačte prstom stred obrazovky a potom ho zodvihnite. Teraz skúste zavrieť Miestnu kontextovú ponuku."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Neprirad. gesto"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"K akcii „<xliff:g id="ACTION">%1$s</xliff:g>“ nie je priradené žiadne gesto. Prejdite do Nastavení aplikácie TalkBack a nastavte gesto, ktoré bude skratkou pre danú akciu. Potom znova spustite príručku aplikácie TalkBack."</string>
 </resources>

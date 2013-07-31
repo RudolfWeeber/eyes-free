@@ -23,10 +23,29 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"您可透過滑動手指的方式捲動整個頁面。如要捲動至下一頁，請以連貫動作往右再往左滑動手指。請往右再往左滑動手指，嘗試捲動至下一頁。"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"重新探索螢幕，找出目前頁面中的應用程式。"</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"以連貫動作往反方向滑動手指 (也就是往左再往右)，即可捲動至上一頁。請往左再往右滑動手指，嘗試捲動至上一頁。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"如要前往下一課，請找出位於畫面右下角的 [<xliff:g id="NEXT">%s</xliff:g>] 按鈕，並且啟用該按鈕。"</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"第 3 課：逐字元朗讀"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"根據預設，左右滑動會一次朗讀整段文字。此外，您也可以逐字詞或逐字元朗讀螢幕上的文字段落。首先請找出以「這」這個字開頭的文字。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"接下來，您可透過連貫動作往下再往上滑動，開始以特定層級朗讀這個段落中的文字。請嘗試往下再往上滑動以變更朗讀層級，再向右滑動即可朗讀這段文字。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"如要離開目前的文字段落，您必須返回預設朗讀層級。請以反方向往上再往下滑動，返回預設朗讀層級。接著找出右下角的 [<xliff:g id="FINISH">%s</xliff:g>] 按鈕，輕按兩下以啟動這個按鈕並結束教學課程。"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"這是大型文字段落的範例。您可以透過滑動手勢，以特定朗讀層級逐步讀出文字，或是透過輕觸手勢一次朗讀整段文字。"\n\n"這是第二段。"\n\n"這是第三段，也是最後一段。往下再往上滑動可變更朗讀層級，接著向右滑動即可朗讀這段文字。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"如要瀏覽下一課，請找出畫面右下角的 [<xliff:g id="NEXT">%1$s</xliff:g>] 按鈕，輕按兩下即可開啟課程。"</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"第 3 課：內容選單"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack 提供「全域內容選單」和「區域內容選單」兩種內容選單，可讓您輕鬆找到各種設定和控制項。您可滑動手指圈選要啟用的選單項目，待聽見語音回饋後鬆開手指即可啟用該項目。如要存取全域內容選單，只需以連貫動作「<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>」滑動手指即可。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"全域內容選單包含各項 TalkBack 通用指令。如要讀出畫面上的所有文字，請以手指按下畫面中央存取環狀選單，然後滑動手指探索其中選項，待聽見「<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>」即可圈選。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"您已關閉全域內容選單。如要重新存取，只需以連貫動作「<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>」滑動手指即可。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"很好！這項指令可讓系統讀出畫面上的所有項目。除了全域內容選單以外，TalkBack 也提供區域內容選單，其中的控制項會根據您在畫面上選取的項目而變更。如要存取區域內容選單，只需以連貫動作「<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>」滑動手指即可。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"以手指按下畫面中央然後再鬆開，即可取消並關閉選單。請立即嘗試關閉區域內容選單。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_5" msgid="7941017643852409">"現在您已瞭解如何存取及瀏覽內容選單。在下一課中，您將進一步瞭解使用內容選單的時機。如要進入下一課，請找出並按下畫面右下角的 [<xliff:g id="NEXT">%1$s</xliff:g>] 按鈕。"</string>
+    <string name="accessibility_tutorial_lesson_4_title" msgid="3898999689844982160">"第 4 課：讀取切分設定"</string>
+    <string name="accessibility_tutorial_lesson_4_text_1" msgid="9109984626149104730">"TalkBack 提供讀取切分設定控制項，讓您以不同方式瀏覽文字。舉例來說，您可分段讀取文字、逐字讀取，甚至依字元切分。若要開始使用這項功能，請找到畫面中央的文字框，讀取其中的內容。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_2" msgid="2135471055480731456">"選取特定項目時，系統會以預設的切分設定等級讀出其中的所有文字。請嘗試變更這段文字的讀取切分設定，讓系統逐一讀出每個字元。首先，請「<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>」滑動手指，存取區域內容選單。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_3_focus_lost" msgid="8713408442068375091">"您已離開目標文字框。輕按畫面中央部分，即可返回文字框。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_3" msgid="5978230561116221609">"很好！現在，請滑動手指探索選單中的選項，待聽見 [<xliff:g id="CHARACTER_GRANULARITY">%1$s</xliff:g>] 即可選取。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_4_menu_hidden" msgid="879065229665819294">"您已關閉區域內容選單，但尚未變更為 [<xliff:g id="CHARACTER_GRANULARITY">%1$s</xliff:g>]。請「<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%2$s</xliff:g>」滑動手指，重新存取區域內容選單。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_4" msgid="2648520368832903832">"很好！現在您已使用字元切分設定來瀏覽文字。從畫面頂端向底部滑動，系統即會依序讀出每個字元。請嘗試從畫面頂端向底部滑動 3 次，讓系統一次讀出 3 個字元，依序讀完所有文字。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_5_granularity_changed" msgid="124123881203918192">"您已變更讀取切分設定，取代了原本的 [<xliff:g id="CHARACTER_GRANULARITY_0">%1$s</xliff:g>]。只要以連貫動作「<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%2$s</xliff:g>」滑動手指，即可存取區域內容選單，從中將設定改回 [<xliff:g id="CHARACTER_GRANULARITY_1">%1$s</xliff:g>]。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_5" msgid="5408515769417809079">"現在您已瞭解如何變更讀取切分設定，讓系統依此讀出文字。TalkBack 教學課程至此告一段落，如要結束教學課程，請找出並按下畫面右下角的 [<xliff:g id="FINISH">%1$s</xliff:g>] 按鈕。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_view_text" msgid="6855162251486030701">"這些範例文字可供您以不同切分設定讀取。"</string>
+    <string name="accessibility_tutorial_alert_dialog_exit" msgid="6604033839776950241">"結束"</string>
+    <string name="accessibility_tutorial_service_inactive_title" msgid="5640949274947370358">"請啟用「輕觸探索」"</string>
+    <string name="accessibility_tutorial_service_inactive_message" msgid="1808749405557397970">"您必須透過「輕觸探索」體驗這個教學課程。請先開啟 TalkBack 並啟用「輕觸探索」，然後再啟動這個教學課程。"</string>
+    <string name="accessibility_tutorial_service_suspended_title" msgid="7163740223497398638">"TalkBack 已停用"</string>
+    <string name="accessibility_tutorial_service_suspended_message" msgid="5633367032537299661">"語音回應功能已暫停，因此無法體驗 TalkBack 教學課程。如要繼續進行，請恢復 TalkBack 語音回應功能，並重新啟動教學課程。"</string>
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"尚未指派手勢"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"您尚未指派「<xliff:g id="ACTION">%1$s</xliff:g>」動作的手勢。請前往 [TalkBack 設定] 為該動作設定捷徑手勢，然後重新啟動 TalkBack 教學課程。"</string>
 </resources>

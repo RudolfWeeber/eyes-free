@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"क्या आप वाकई TalkBack को निलंबित करना चाहते हैं?"\n\n"TalkBack के निलंबित होने पर, आपका उपकरण फ़ीडबैक उपलब्ध नहीं कराएगा और स्‍पर्श के द्वारा अन्‍वेषण करें अक्षम हो जाएगा."\n\n"आप TalkBack को सूचनाएं शेड से या लॉक स्क्रीन पर वापस जाकर फिर से शुरू कर सकते हैं."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"क्या आप वाकई TalkBack को निलंबित करना चाहते हैं?"\n\n"TalkBack के निलंबित होने पर, आपका उपकरण फ़ीडबैक प्रदान नहीं करेगा और स्‍पर्श द्वारा एक्सप्लोर करें अक्षम हो जाएगा."</string>
 </resources>

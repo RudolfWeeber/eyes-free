@@ -107,7 +107,7 @@ public class StatusProvider extends ContentProvider {
             String sortOrder) {
         final StatusCursor cursor = new StatusCursor();
 
-        if (TalkBackService.isServiceInitialized()) {
+        if (TalkBackService.isServiceActive()) {
             cursor.setStatus(ENABLED);
         } else {
             cursor.setStatus(DISABLED);

@@ -4,12 +4,12 @@
     package="com.google.android.marvin.talkback"
     android:installLocation="internalOnly"
     android:sharedUserId="com.google.android.marvin.feedback"
-    android:versionCode="83"
-    android:versionName="3.2.1" >
+    android:versionCode="99"
+    android:versionName="3.4.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <!-- Permission used to restrict sending gestures and resuming feedback. -->
     <permission
@@ -26,22 +26,35 @@
     <!-- Required for various overlays. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
-    <!-- Required for keeping the screen awake during continuous reading. -->
+    <!-- Required for keeping the screen awake during continuous reading and key filtering. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Required for MIDI file loading on ICS. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <!-- Required for shortcuts and widgets. -->
     <uses-permission android:name="com.google.android.marvin.feedback.permission.TALKBACK" />
+
+    <!-- Required for managing audio levels on GB. -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <!-- Required for an upcoming feature. -->
+    <uses-permission android:name="android.permission.READ_FRAME_BUFFER" />
 
     <!-- Hardware compatibility. -->
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.sensor.accelerometer"
+        android:required="false" />
 
     <application
+        android:allowBackup="true"
         android:backupAgent="com.google.android.marvin.talkback.TalkBackBackupAgent"
         android:icon="@drawable/icon"
         android:label="@string/talkback_title"
-        android:allowBackup="true" >
+        android:supportsRtl="true" >
 
         <!-- TalkBack -->
         <service
@@ -64,6 +77,7 @@
             android:name=".TalkBackPreferencesActivity"
             android:label="@string/talkback_preferences_title"
             android:launchMode="singleTop"
+            android:taskAffinity="com.google.android.marvin.talkback.SettingsAffinity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,16 +91,8 @@
             android:name=".TalkBackShortcutPreferencesActivity"
             android:label="@string/talkback_preferences_title"
             android:launchMode="singleTop"
+            android:taskAffinity="com.google.android.marvin.talkback.SettingsAffinity"
             tools:ignore="ExportedActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
-        <!-- Test Activities -->
-        <activity
-            android:name="com.google.android.marvin.talkback.test.TextActivity"
-            android:permission="com.google.android.marvin.talkback.permission.TEST" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -102,18 +108,28 @@
         <!-- Accessibility tutorial -->
         <activity
             android:name=".tutorial.AccessibilityTutorialActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="false"
             android:immersive="true"
             android:label="@string/accessibility_tutorial_title"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <!-- Gesture Change Notification Activity -->
         <activity
             android:name=".GestureChangeNotificationActivity"
-            android:exported="false"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/DialogStyle"
+            tools:ignore="ExportedActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
+        <!-- Notification Activity used periodically to inform the user of changes -->
+        <activity
+            android:name=".NotificationActivity"
+            android:theme="@style/DialogStyle"
+            tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -125,7 +141,7 @@
             android:enabled="false"
             android:excludeFromRecents="true"
             android:label="@string/label_talkback_context_menu"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoDisplay"
             tools:ignore="ExportedActivity" >
             <intent-filter>
@@ -134,6 +150,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <!-- Proxy for TTS engine and language discovery -->
+        <activity
+            android:name=".TtsDiscoveryProxyActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.google.android.marvin.talkback.TtsDiscoveryAffinity"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.backup.api_key"

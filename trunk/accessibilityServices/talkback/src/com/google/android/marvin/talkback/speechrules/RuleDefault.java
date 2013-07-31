@@ -18,12 +18,13 @@ package com.google.android.marvin.talkback.speechrules;
 
 import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.StringBuilderUtils;
 
 /**
  * Default node processing rule. Returns a content description if available,
@@ -55,22 +56,20 @@ class RuleDefault implements NodeSpeechRule, NodeHintRule {
             return context.getString(R.string.value_disabled);
         }
 
-        final StringBuilder builder = new StringBuilder();
+        final SpannableStringBuilder builder = new SpannableStringBuilder();
         final int actions = node.getActions();
 
         // Don't read both the checkable AND clickable hints!
         if (node.isCheckable()) {
             StringBuilderUtils.appendWithSeparator(builder,
                     NodeHintHelper.getHintString(context, R.string.template_hint_checkable));
-        } else if (node.isClickable()
-                || ((actions & AccessibilityNodeInfoCompat.ACTION_CLICK) != 0)) {
+        } else if (AccessibilityNodeInfoUtils.isClickable(node)) {
             StringBuilderUtils.appendWithSeparator(builder,
                     NodeHintHelper.getHintString(context, R.string.template_hint_clickable));
         }
 
         // Long clickable is long.
-        if (node.isLongClickable()
-                || ((actions & AccessibilityNodeInfoCompat.ACTION_LONG_CLICK) != 0)) {
+        if (AccessibilityNodeInfoUtils.isLongClickable(node)) {
             StringBuilderUtils.appendWithSeparator(builder,
                     NodeHintHelper.getHintString(context, R.string.template_hint_long_clickable));
         }

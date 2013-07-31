@@ -44,13 +44,17 @@ public interface NodeHintRule {
     public CharSequence getHintText(Context context, AccessibilityNodeInfoCompat node);
 
     public static class NodeHintHelper {
-        private static final int mActionResId;
+        private static int mActionResId;
 
         static {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                mActionResId = R.string.value_double_tap;
-            } else {
+            updateActionResId(false);
+        }
+
+        public static void updateActionResId(boolean forceSingleTap) {
+            if (forceSingleTap || (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)) {
                 mActionResId = R.string.value_single_tap;
+            } else {
+                mActionResId = R.string.value_double_tap;
             }
         }
 

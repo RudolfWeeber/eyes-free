@@ -22,11 +22,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
@@ -53,20 +53,19 @@ public class ProgressBarFormatter implements AccessibilityEventFormatter {
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         if (shouldDropEvent(event)) {
             LogUtils.log(this, Log.VERBOSE, "Dropping unwanted progress bar event");
-            return true;
+            return false;
         }
 
-        final CharSequence text = AccessibilityEventUtils.getEventText(event);
-
+        final CharSequence text = AccessibilityEventUtils.getEventTextOrDescription(event);
         if (!TextUtils.isEmpty(text)) {
-            utterance.getText().append(text);
+            utterance.addSpoken(text);
             return true;
         }
 
         final float percent = getProgressPercent(event);
         final float rate = (float) Math.pow(2.0, (percent / 50.0) - 1);
 
-        utterance.getEarcons().add(R.raw.view_scrolled_tone);
+        utterance.addAuditory(R.id.sounds_scrolled_tone);
         utterance.getMetadata().putFloat(Utterance.KEY_METADATA_EARCON_RATE, rate);
         utterance.getMetadata().putFloat(Utterance.KEY_METADATA_EARCON_VOLUME, 0.5f);
 

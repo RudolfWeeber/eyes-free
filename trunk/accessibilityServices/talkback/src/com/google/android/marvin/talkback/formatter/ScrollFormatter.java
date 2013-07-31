@@ -20,6 +20,7 @@ import android.os.SystemClock;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.view.accessibility.AccessibilityEvent;
 
+import com.google.android.marvin.talkback.FeedbackItem;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
@@ -52,8 +53,9 @@ public class ScrollFormatter implements AccessibilityEventFormatter {
         final float percent = getScrollPercent(event);
         final float rate = (float) Math.pow(2.0, (percent / 50.0) - 1);
 
-        utterance.getEarcons().add(R.raw.view_scrolled_tone);
+        utterance.addAuditory(R.id.sounds_scrolled_tone);
         utterance.getMetadata().putFloat(Utterance.KEY_METADATA_EARCON_RATE, rate);
+        utterance.addSpokenFlag(FeedbackItem.FLAG_NO_SPEECH);
 
         return true;
     }

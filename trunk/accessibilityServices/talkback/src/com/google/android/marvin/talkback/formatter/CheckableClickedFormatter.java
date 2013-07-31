@@ -7,13 +7,13 @@ import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFilter;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
-import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
+import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
  * Filters and formats click events from checkable items.
@@ -52,29 +52,35 @@ public class CheckableClickedFormatter implements AccessibilityEventFilter, Acce
 
     @Override
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
-        final StringBuilder text = utterance.getText();
+        final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
+        final AccessibilityNodeInfoCompat source = record.getSource();
 
-        final CharSequence eventText = AccessibilityEventUtils.getEventText(event);
+        final CharSequence eventText = AccessibilityEventUtils.getEventTextOrDescription(event);
         if (!TextUtils.isEmpty(eventText)) {
-            StringBuilderUtils.appendWithSeparator(text, eventText);
+            utterance.addSpoken(eventText);
         }
 
-        // Event text doesn't contain the state on API 16+.
-        if (Build.VERSION.SDK_INT >= 16) {
-            // We're assuming that event.isChecked() and node.isChecked() are
-            // equivalent. As of API 16, there's a race condition for
-            // node.isChecked() that causes it to return the old state.
-            if (event.isChecked()) {
-                StringBuilderUtils.appendWithSeparator(
-                        text, context.getString(R.string.value_checked));
-            } else {
-                StringBuilderUtils.appendWithSeparator(
-                        text, context.getString(R.string.value_not_checked));
+        // Switch and ToggleButton state is sent along with the event, so only
+        // append checked / not checked state for other types of controls.
+        if (!AccessibilityNodeInfoUtils.nodeMatchesClassByType(
+                context, source, android.widget.ToggleButton.class)
+                || AccessibilityNodeInfoUtils.nodeMatchesClassByName(
+                        context, source, "android.widget.Switch.class")) {
+            // Event text doesn't contain the state on API 16+.
+            if (Build.VERSION.SDK_INT >= 16) {
+                // We're assuming that event.isChecked() and node.isChecked()
+                // are equivalent. As of API 16, there's a race condition for
+                // node.isChecked() that causes it to return the old state.
+                if (event.isChecked()) {
+                    utterance.addSpoken(context.getString(R.string.value_checked));
+                } else {
+                    utterance.addSpoken(context.getString(R.string.value_not_checked));
+                }
             }
         }
 
-        utterance.getCustomEarcons().add(R.id.sounds_clicked);
-        utterance.getCustomVibrations().add(R.id.patterns_clicked);
+        utterance.addAuditory(R.id.sounds_clicked);
+        utterance.addHaptic(R.id.patterns_clicked);
 
         return true;
     }

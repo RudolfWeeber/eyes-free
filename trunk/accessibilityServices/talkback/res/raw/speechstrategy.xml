@@ -2,19 +2,19 @@
   <ss:speechstrategy
       xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd">
+      xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy ../../schema/speechstrategy.xsd">
 
   <!-- This file contains only generic speech strategy rules that could apply to any app. -->
   <!-- Rules specific to just one app should go in speechstrategy_apps.xml or -->
   <!-- speechstrategy_thirdparty.xml. -->
 
-  <!-- TYPE_WINDOW_CONTENT_CHANGED -->
-
+  <!-- The EventRuleProcessor should drop certain events handled by other processors -->
   <ss:rule>
     <ss:filter>
-      <ss:eventType>TYPE_WINDOW_CONTENT_CHANGED</ss:eventType>
+      <ss:eventType>TYPE_TOUCH_INTERACTION_START||TYPE_TOUCH_INTERACTION_END||TYPE_GESTURE_DETECTION_START||TYPE_GESTURE_DETECTION_END||TYPE_TOUCH_EXPLORATION_GESTURE_START||TYPE_TOUCH_EXPLORATION_GESTURE_END||TYPE_WINDOW_CONTENT_CHANGED</ss:eventType>
     </ss:filter>
     <ss:formatter>
+      <ss:custom>com.google.android.marvin.talkback.formatter.DropEventFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -24,8 +24,13 @@
     <ss:filter>
       <ss:eventType>TYPE_ANNOUNCEMENT</ss:eventType>
     </ss:filter>
+    <ss:metadata>
+      <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
+      <ss:customVibration>@id/patterns_notification</ss:customVibration>
+      <ss:customEarcon>@id/sounds_notification</ss:customEarcon>
+    </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -60,7 +65,6 @@
     </ss:filter>
     <ss:metadata>
       <ss:customVibration>@id/patterns_clicked</ss:customVibration>
-      <ss:customEarcon>@id/sounds_clicked</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.CheckableClickedFormatter</ss:custom>
@@ -86,12 +90,12 @@
       <ss:eventType>TYPE_VIEW_LONG_CLICKED</ss:eventType>
     </ss:filter>
     <ss:metadata>
-      <ss:customVibration>@id/patterns_clicked</ss:customVibration>
-      <ss:customEarcon>@id/sounds_clicked</ss:customEarcon>
+      <ss:customVibration>@id/patterns_long_clicked</ss:customVibration>
+      <ss:customEarcon>@id/sounds_long_clicked</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_long_clicked</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>nodeDescriptionOrFallback</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -125,7 +129,7 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_edit_box</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -141,7 +145,7 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_seek_bar</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -157,7 +161,7 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_spinner</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -188,7 +192,7 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_button</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -204,7 +208,7 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_button</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -214,6 +218,7 @@
       <ss:eventType>TYPE_VIEW_FOCUSED</ss:eventType>
       <ss:className>android.widget.ImageView</ss:className>
       <ss:text></ss:text>
+      <ss:contentDescription></ss:contentDescription>
     </ss:filter>
     <ss:metadata>
       <ss:customVibration>@id/patterns_focused</ss:customVibration>
@@ -221,7 +226,7 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_image_view</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -235,7 +240,7 @@
       <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -253,7 +258,7 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_spinner</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -293,7 +298,7 @@
       <ss:customEarcon>@id/sounds_selected</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -308,11 +313,10 @@
     <ss:metadata>
       <ss:customVibration>@id/patterns_window_state</ss:customVibration>
       <ss:customEarcon>@id/sounds_window_state</ss:customEarcon>
-      <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_alert_dialog_template</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -370,6 +374,7 @@
       <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
       <ss:className>android.widget.ListView</ss:className>
       <ss:text></ss:text>
+      <ss:contentDescription></ss:contentDescription>
     </ss:filter>
     <ss:metadata>
       <ss:customVibration>@id/patterns_window_state</ss:customVibration>
@@ -378,8 +383,20 @@
     </ss:metadata>
     <ss:formatter>
       <ss:template>@string/template_container</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
       <ss:property>itemCount</ss:property>
+    </ss:formatter>
+  </ss:rule>
+
+  <!-- Lock screen appearance -->
+    <ss:rule>
+    <ss:filter>
+      <ss:eventType>TYPE_WINDOW_STATE_CHANGED</ss:eventType>
+      <ss:packageName>android</ss:packageName>
+      <ss:className>android.widget.FrameLayout</ss:className>
+      <ss:contentDescription></ss:contentDescription>
+    </ss:filter>
+    <ss:formatter>
     </ss:formatter>
   </ss:rule>
 
@@ -394,7 +411,7 @@
       <ss:queuing>UNINTERRUPTIBLE</ss:queuing>
     </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -405,9 +422,6 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_TEXT_CHANGED</ss:eventType>
     </ss:filter>
-    <ss:metadata>
-      <ss:customEarcon>@id/sounds_text_changed</ss:customEarcon>
-    </ss:metadata>
     <ss:formatter>
       <ss:custom>com.google.android.marvin.talkback.formatter.TextFormatters$ChangedTextFormatter</ss:custom>
     </ss:formatter>
@@ -438,7 +452,7 @@
       <ss:customEarcon>@id/sounds_notification</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 

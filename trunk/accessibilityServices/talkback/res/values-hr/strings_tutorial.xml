@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Također možete pomicati cijelu stranicu prelazeći prstom po zaslonu. Da biste prešli na sljedeću stranicu, u jednom pokretu prijeđite prstom udesno pa ulijevo. Pokušajte prijeći na sljedeću stranicu tako da prijeđete prstom udesno pa ulijevo."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Ponovo istražite zaslon da biste pronašli aplikaciju na trenutačnoj stranici."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Ako prijeđete prstom u suprotnom smjeru, ulijevo pa udesno u jednom pokretu, prijeći ćete na prethodnu stranicu. Pokušajte prijeći na prethodnu stranicu tako da prijeđete prstom ulijevo pa udesno."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Za pomicanje na sljedeću lekciju pronađite i aktivirajte gumb <xliff:g id="NEXT">%s</xliff:g> koji se nalazi blizu donjeg desnog kuta zaslona."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"3. lekcija: čitanje po znaku"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"Prema zadanim postavkama prelaskom ulijevo ili udesno čitaju se svi blokovi teksta odjednom. Blokove teksta na zaslonu također možete čitati po riječima ili znakovima. Najprije pronađite tekst koji počinje riječju \"Ovo\"."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Zatim možete početi čitati taj blok na određenoj razini prelazeći prstom prema dolje pa prema gore u jednoj kretnji. Pokušajte prijeći prstom prema dolje pa prema gore da biste promijenili razinu čitanja, pa prijeđite prstom udesno da biste čitali tekst."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Da biste izašli iz trenutačnog bloka teksta, morat ćete se vratiti na zadanu razinu čitanja. Prijeđite prstom u suprotnom smjeru, prema gore i natrag prema dolje, za povratak na zadanu razinu čitanja. Potom pronađite gumb <xliff:g id="FINISH">%s</xliff:g> dolje desno pa ga dvaput dotaknite da biste ga aktivirali i izašli iz vodiča."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Ovo je primjer velikog bloka teksta. Kroz ovaj se tekst možete kretati na određenoj razini čitanja prelazeći prstom po zaslonu ili dodirujući zaslon."\n\n"Ovo je drugi odlomak."\n\n"Ovo je treći i završni odlomak. Prijeđite prstom prema dolje i gore da biste promijenili razinu čitanja, a potom prijeđite prstom udesno za kretanje ovim tekstom."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Za pomicanje na sljedeću lekciju pronađite gumb <xliff:g id="NEXT">%1$s</xliff:g> u blizini donjeg desnog kuta zaslona, a potom ga dvaput dodirnite da biste ga aktivirali."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"3. lekcija: kontekstni izbornici"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack ima dva kontekstna izbornika na kojima ćete lako pronaći sve postavke i kontrole: globalni kontekstni izbornik i lokalni kontekstni izbornik. Stavku izbornika možete aktivirati tako da klizite prstom po krugu stavki izbornika i pustite ga kada čujete željenu stavku. Pokušajte prikazati globalni kontekstni izbornik tako da prijeđete prstom <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> u jednoj kretnji."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Globalni kontekstni izbornik sadržava opće komande koje funkcioniraju u cijeloj aplikaciji TalkBack. Pokušajte pročitati cijeli tekst na zaslonu tako što ćete pritisnuti na sredini zaslona za prikaz kružnog izbornika oko svojeg prsta, a potom klizite prstom po krugu opcija dok ne čujete \"<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Zatvorili ste globalni kontekstni izbornik. Pokušajte ponovo prikazati globalni kontekstni izbornik tako da prijeđete prstom <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> u jednoj kretnji."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Dobro. Ta naredba pročitat će sve stavke na zaslonu. Osim globalnog kontekstnog izbornika, TalkBack također ima lokalni kontekstni izbornik. Lokalni kontekstni izbornik sadržava kontrole koje se mijenjaju na temelju stavke na zaslonu koju ste odabrali. Pokušajte prikazati lokalni kontekstni izbornik tako da prijeđete prstom <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> u jednoj kretnji."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Izbornik ćete otkazati i zatvoriti tako da pritisnete prstom na sredini zaslona pa ga podignete. Pokušajte sada zatvoriti lokalni kontekstni izbornik."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Nema pridruženih pokreta"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"Nijedan pokret nije pridružen radnji \"<xliff:g id="ACTION">%1$s</xliff:g>\". Posjetite postavke aplikacije TalkBack da biste postavili pokret prečaca za tu radnju pa ponovo pokrenite vodič aplikacije TalkBack."</string>
 </resources>

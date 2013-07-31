@@ -16,12 +16,13 @@
 
 package com.google.android.marvin.talkback.tutorial;
 
-import android.content.Context;
+import android.annotation.TargetApi;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -31,11 +32,27 @@ import com.google.android.marvin.talkback.R;
 /**
  * Abstract class that represents a single module within a tutorial.
  */
+@TargetApi(16)
 abstract class TutorialModule extends FrameLayout implements OnClickListener {
     private static final int TRIGGER_DELAY = 1500;
 
+    /**
+     * A delegate used to drop accessibility events related to AbsListView's
+     * inflation of module content.
+     */
+    private final AccessibilityDelegate mDropEventsDelegate = new AccessibilityDelegate() {
+        @Override
+        public boolean onRequestSendAccessibilityEvent(
+                ViewGroup host, View child, AccessibilityEvent event) {
+            if (event.getEventType() == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
+                return false;
+            }
+
+            return super.onRequestSendAccessibilityEvent(host, child, event);
+        }
+    };
+
     private final AccessibilityTutorialActivity mParentTutorial;
-    private final TutorialSpeechController mSpeechController;
     private final TextView mInstructions;
     private final Button mSkip;
     private final Button mBack;
@@ -46,31 +63,23 @@ abstract class TutorialModule extends FrameLayout implements OnClickListener {
     /** Whether this module is currently focused. */
     private boolean mIsVisible;
 
-    public TutorialModule(Context context) {
-        super(context);
-
-        // This constructor should never be called.
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * Constructs a new tutorial module for the given context and controller
      * with the specified layout.
      *
      * @param layoutResId The layout to use for this module.
-     * @param parentTutorial TODO(alanv):
+     * @param parentTutorial The tutorial activity containing this module.
      */
     public TutorialModule(
             AccessibilityTutorialActivity parentTutorial, int layoutResId, int titleResId) {
         super(parentTutorial);
 
         mParentTutorial = parentTutorial;
-        mSpeechController = parentTutorial.getSpeechController();
         mTitleResId = titleResId;
 
         final LayoutInflater inflater = mParentTutorial.getLayoutInflater();
         final View container = inflater.inflate(
-                R.layout.accessibility_tutorial_container, this, true);
+                R.layout.tutorial_container, this, true);
 
         mInstructions = (TextView) container.findViewById(R.id.instructions);
         mSkip = (Button) container.findViewById(R.id.skip_button);
@@ -89,7 +98,11 @@ abstract class TutorialModule extends FrameLayout implements OnClickListener {
         }
 
         final ViewGroup contentHolder = (ViewGroup) container.findViewById(R.id.content);
+
+        // Inflate the tutorial module content while dropping certain accessibility events
+        contentHolder.setAccessibilityDelegate(mDropEventsDelegate);
         inflater.inflate(layoutResId, contentHolder, true);
+        contentHolder.setAccessibilityDelegate(null);
     }
 
     /**
@@ -105,14 +118,15 @@ abstract class TutorialModule extends FrameLayout implements OnClickListener {
     }
 
     /**
-     * Formats an instruction string and adds it to the speaking queue.
+     * Formats an instruction string, updates it on the screen, and passes it to
+     * the parent activity to be spoken.
      *
-     * @param resId The resource id of the instruction string.
-     * @param repeat Whether this instruction should repeat if nothing happens.
+     * @param resId The resource value of the instruction string.
+     * @param repeat Whether the instruction should be repeated indefinitely.
      * @param formatArgs Optional formatting arguments.
      * @see String#format(String, Object...)
      */
-    protected void addInstruction(final int resId, boolean repeat, Object... formatArgs) {
+    protected void addInstruction(int resId, boolean repeat, Object... formatArgs) {
         if (!mIsVisible) {
             return;
         }
@@ -122,12 +136,36 @@ abstract class TutorialModule extends FrameLayout implements OnClickListener {
         mInstructions.setVisibility(View.VISIBLE);
         mInstructions.setText(text);
 
-        // Always request that the instruction repeat if nothing happens.
-        mSpeechController.speak(text, resId, repeat);
+        mParentTutorial.speakInstruction(resId, repeat, formatArgs);
     }
 
+    /**
+     * Runs the given trigger after a delay.
+     * <p>
+     * Assumes that the resulting trigger will add an instruction, thus
+     * lowering the touch guard when the instruction speech output finishes.
+     *
+     * @param trigger The trigger that should be run after the delay.
+     */
     protected void installTriggerDelayed(Runnable trigger) {
+        // Stop repeating any previous instruction between when the touch guard
+        // raises and when the next instruction is spoken.
+        mParentTutorial.stopRepeating();
+
+        mParentTutorial.setTouchGuardActive(true);
+        mParentTutorial.lockOrientation();
         mHandler.postDelayed(trigger, TRIGGER_DELAY);
+    }
+
+    /**
+     * Runs the given trigger after a delay, giving the user immediate auditory
+     * feedback that a trigger occurred.
+     *
+     * @param trigger The trigger that should be run after the delay.
+     */
+    protected void installTriggerDelayedWithFeedback(Runnable trigger) {
+        installTriggerDelayed(trigger);
+        mParentTutorial.playTriggerSound();
     }
 
     /**

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- The focused and selected noises in ICS and above are different from the hover noise. -->
-    <item type="raw" name="def_sounds_focused">@raw/view_focused</item>
-    <item type="raw" name="def_sounds_selected">@raw/view_focused</item>
-
-</resources>

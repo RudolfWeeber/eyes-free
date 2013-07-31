@@ -44,14 +44,13 @@ public class RadialMenuItem implements MenuItem {
     private boolean mCheckable;
     private boolean mChecked;
     private boolean mEnabled;
-    private boolean mHotCorner;
+    private boolean mCorner;
 
     private RadialSubMenu mSubMenu;
     private OnMenuItemClickListener mListener;
     private OnMenuItemSelectionListener mSelectionListener;
 
-    /* package */float offset;
-
+    /* package */ float offset;
 
     /**
      * Creates a new menu item that represents a sub-menu.
@@ -63,7 +62,7 @@ public class RadialMenuItem implements MenuItem {
      * @param title The text to be displayed for this menu item.
      * @param subMenu The sub-menu represented by this menu item.
      */
-    /* package */RadialMenuItem(Context context, int groupId, int itemId,
+    /* package */ RadialMenuItem(Context context, int groupId, int itemId,
             int order, CharSequence title, RadialSubMenu subMenu) {
         this(context, groupId, itemId, order, title);
 
@@ -84,6 +83,7 @@ public class RadialMenuItem implements MenuItem {
         mMenuInfo = new RadialContextMenuInfo();
         mGroupId = groupId;
         mItemId = itemId;
+        mOrder = order;
         mTitle = title;
 
         // Set default properties.
@@ -174,10 +174,10 @@ public class RadialMenuItem implements MenuItem {
     }
 
     /**
-     * @return {@code true} if this menu is a hot corner.
+     * @return {@code true} if this menu is a corner.
      */
-    public boolean isHotCorner() {
-        return mHotCorner;
+    public boolean isCorner() {
+        return mCorner;
     }
 
     /**
@@ -326,13 +326,13 @@ public class RadialMenuItem implements MenuItem {
     }
 
     /**
-     * Sets whether this menu item is a hot corner.
+     * Sets whether this menu item is a corner.
      *
-     * @param hotCorner Whether this item is a hot corner.
+     * @param corner Whether this item is a corner.
      * @return This item so additional setters can be called.
      */
-    /* package */MenuItem setHotCorner(boolean hotCorner) {
-        mHotCorner = true;
+    /* package */MenuItem setCorner(boolean corner) {
+        mCorner = true;
 
         return this;
     }

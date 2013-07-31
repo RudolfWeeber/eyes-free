@@ -51,4 +51,13 @@
     <string name="symbol_underscore" msgid="4704253128574141726">"アンダースコア"</string>
     <string name="symbol_vertical_bar" msgid="1048988153298679308">"垂直バー"</string>
     <string name="symbol_yen" msgid="3603544638369460075">"円"</string>
+    <string name="symbol_not_sign" msgid="1705947242583463656">"否定記号"</string>
+    <string name="symbol_broken_bar" msgid="1777821269046780826">"ブロークンバー"</string>
+    <string name="symbol_micro_sign" msgid="647089591706610860">"マイクロ記号"</string>
+    <string name="symbol_almost_equals" msgid="1653570364882667595">"ほぼ等しい"</string>
+    <string name="symbol_not_equals" msgid="4969533365479104300">"不等号"</string>
+    <string name="symbol_currency_sign" msgid="7144446821437630777">"通貨記号"</string>
+    <string name="symbol_section_sign" msgid="5046720536230643125">"セクション記号"</string>
+    <string name="symbol_upwards_arrow" msgid="6902164954804994511">"上矢印"</string>
+    <string name="symbol_leftwards_arrow" msgid="7090590636020442062">"左矢印"</string>
 </resources>

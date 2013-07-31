@@ -27,7 +27,7 @@ import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**
  * Processes editable text fields.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
 class RuleEditText implements NodeSpeechRule, NodeHintRule {
@@ -57,7 +57,7 @@ class RuleEditText implements NodeSpeechRule, NodeHintRule {
     /**
      * Inverts the default priorities of text and content description. If the
      * field is a password, only returns the content description or "password".
-     * 
+     *
      * @param context
      * @param node
      * @return A text description of the editable text area.

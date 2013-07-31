@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"De asemenea, puteţi derula o întreagă pagină glisând degetul pe ecran. Pentru a derula la pagina următoare, glisaţi spre dreapta, apoi spre stânga cu o singură mişcare. Încercaţi să derulaţi la pagina următoare glisând spre dreapta, apoi spre stânga."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Exploraţi ecranul din nou pentru a găsi o aplicaţie în pagina curentă."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Dacă veţi glisa în direcţia opusă, spre stânga, apoi spre dreapta cu o singură mişcare, vă veţi deplasa la pagina anterioară. Încercaţi să derulaţi la pagina anterioară glisând spre stânga, apoi spre dreapta."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Pentru a trece la lecţia următoare, găsiţi şi activaţi butonul <xliff:g id="NEXT">%s</xliff:g>, situat în colţul din dreapta jos al ecranului."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lecţia 3: citirea în funcţie de caracter"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"În mod prestabilit, glisaţi spre stânga sau spre dreapta pentru a citi blocurile de text în întregime. De asemenea, puteţi să citiţi blocurile de text de pe ecran în funcţie de un anumit cuvânt sau de un anumit caracter. Mai întâi, găsiţi textul care începe cu „Acest”."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"În continuare, puteţi începe să citiţi acest bloc la un anumit nivel glisând în jos, apoi în sus cu o singură mişcare. Încercaţi să glisaţi în jos, apoi în sus pentru a schimba nivelul de citire, apoi glisaţi spre dreapta pentru a citi textul de la un capăt la celălalt."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Pentru a părăsi blocul de text actual, va trebui să reveniţi la nivelul de citire prestabilit. Glisaţi în direcţia opusă, în sus, apoi în jos, pentru a reveni la nivelul de citire prestabilit. Apoi găsiţi butonul <xliff:g id="FINISH">%s</xliff:g> aflat în partea dreaptă jos şi apăsaţi de două ori pentru a-l activa şi a ieşi din programul de instruire."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Acesta este un exemplu de bloc mare de text. Puteţi să vă deplasaţi în acest text la un anumit nivel de citire utilizând gesturi de glisare sau să îl citiţi pe tot odată utilizând gesturi tactile."\n\n"Acesta este al doilea paragraf."\n\n"Acesta este al treilea şi ultimul paragraf. Glisaţi în jos, apoi în sus pentru a schimba nivelul de citire, apoi glisaţi spre dreapta pentru a vă deplasa în cadrul textului."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Pentru a trece la următoarea lecție, găsiți butonul <xliff:g id="NEXT">%1$s</xliff:g>, aflat în colțul din dreapta-jos al ecranului, apoi apăsați de două ori pentru a-l activa."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Lecția 3: meniuri contextuale"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack are două meniuri contextuale, care vă ajută să găsiți mai ușor setările și comenzile: Meniul contextual global și Meniul contextual local. Puteți activa un element de meniu glisând degetul în jurul cercului cu elemente din meniu și ridicându-l când auziți elementul dorit. Încercați să afișați Meniul contextual global glisând degetul <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> cu o singură mișcare."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Meniul contextual global conține comenzi generale care funcționează peste tot în TalkBack. Încercați să citiți tot textul de pe ecran apăsând pe centrul ecranului pentru a afișa un meniu circular în jurul degetului, apoi să glisați degetul în jurul cercului de opțiuni până când auziți „<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>”."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Ați închis Meniul contextual global. Încercați să îl afișați din nou glisând degetul <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> cu o singură mișcare."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Perfect. Această comandă va citi toate elementele de pe ecran. În afară de Meniul contextual global, TalkBack are și un Meniu contextual local. Acesta conține comenzi care se schimbă în funcție de elementul de pe ecran pe care l-ați selectat. Încercați să afișați Meniul contextual local glisând degetul <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> cu o singură mișcare."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Pentru a anula și a închide meniul, apăsați cu degetul în centrul ecranului, apoi ridicați-l. Încercați să închideți Meniul contextual local acum."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Lipsește gestul asociat"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"Nu există niciun gest asociat acțiunii „<xliff:g id="ACTION">%1$s</xliff:g>”. Accesați Setările TalkBack pentru a seta un gest de comandă rapidă pentru această acțiune, apoi relansați tutorialul TalkBack."</string>
 </resources>

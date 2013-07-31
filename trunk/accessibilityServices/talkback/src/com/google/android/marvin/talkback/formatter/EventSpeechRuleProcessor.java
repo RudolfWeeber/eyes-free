@@ -125,37 +125,33 @@ public class EventSpeechRuleProcessor {
         final Resources res = mContext.getResources();
         final String speechStrategy = res.getResourceName(resourceId);
         final InputStream inputStream = res.openRawResource(resourceId);
-        final int added = addSpeechStrategy(inputStream);
+        final Document document = parseSpeechStrategy(inputStream);
+        final ArrayList<EventSpeechRule> speechRules = EventSpeechRule.createSpeechRules(
+                mContext, document);
+
+        final int added = addSpeechStrategy(speechRules);
 
         LogUtils.log(EventSpeechRuleProcessor.class, Log.INFO, "%d speech rules appended from: %s",
                 added, speechStrategy);
     }
 
     /**
-     * Loads a <code>speechStrategy</code> from a given <code>inputStream</code> to handle events from
-     * the specified <code>targetPackage</code> and use the resources from a given <code>context
-     * </code>. If the target package is <code>null</code> the rules of the loaded
-     * speech strategy are appended to the default speech rules. While for
-     * loading of resources is used the provided context instance, for loading
-     * plug-in classes (custom Filters and Formatters) from the <code>publicSourceDir</code>
-     * (specifies the location of the APK that defines them) is used the
-     * TalkBack {@link ClassLoader}.
+     * Loads speech rules from a list.
      *
-     * @param inputStream The input stream from which to load strategies.
-     * @return The number of speech rules loaded.
+     * @return The number of rules that were loaded successfully.
      */
-    private int addSpeechStrategy(InputStream inputStream) {
-        final Document document = parseSpeechStrategy(inputStream);
-        final ArrayList<EventSpeechRule> speechRules = EventSpeechRule.createSpeechRules(
-                mContext, document);
+    public int addSpeechStrategy(Iterable<EventSpeechRule> speechRules) {
+        int count = 0;
 
         synchronized (mPackageNameToSpeechRulesMap) {
             for (EventSpeechRule speechRule : speechRules) {
-                addSpeechRuleLocked(speechRule);
+                if (addSpeechRuleLocked(speechRule)) {
+                    count++;
+                }
             }
         }
 
-        return speechRules.size();
+        return count;
     }
 
     /**
@@ -189,13 +185,19 @@ public class EventSpeechRuleProcessor {
         for (EventSpeechRule speechRule : speechRules) {
             // We should never crash because of a bug in speech rules.
             try {
-                // Don't bother showing the rule for WINDOW_CONTENT_CHANGED.
-                if (speechRule.apply(event, utterance)) {
-                    if (event.getEventType() != AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED) {
+                if (speechRule.applyFilter(event)) {
+                    if (speechRule.applyFormatter(event, utterance)) {
                         LogUtils.log(EventSpeechRuleProcessor.class, Log.VERBOSE,
                                 "Processed event using rule:\n%s", speechRule);
+                        return true;
+                    } else {
+                        LogUtils.log(EventSpeechRuleProcessor.class, Log.VERBOSE,
+                                "The \"%s\" filter accepted the event, but the \"%s\" "
+                                        + "formatter indicated the event should be dropped.",
+                                speechRule.getFilter().getClass().getSimpleName(),
+                                speechRule.getFormatter().getClass().getSimpleName());
+                        return false;
                     }
-                    return true;
                 }
             } catch (Exception e) {
                 LogUtils.log(EventSpeechRuleProcessor.class, Log.ERROR,

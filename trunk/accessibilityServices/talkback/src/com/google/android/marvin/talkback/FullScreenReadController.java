@@ -18,19 +18,22 @@ package com.google.android.marvin.talkback;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.util.Log;
-import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.CursorGranularityManager.CursorGranularity;
+import com.google.android.marvin.talkback.SpeechController.UtteranceCompleteRunnable;
+import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
+import com.googlecode.eyesfree.compat.accessibilityservice.AccessibilityServiceCompatUtils;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.NodeFocusFinder;
 import com.googlecode.eyesfree.utils.WebInterfaceUtils;
-
-import java.util.HashSet;
 
 // TODO(caseyburkhardt): Handle changing window content.  Look at hierarchy cache invalidation.
 /**
@@ -38,23 +41,31 @@ import java.util.HashSet;
  *
  * @author caseyburkhardt@google.com (Casey Burkhardt)
  */
-@TargetApi(16)
-public class FullScreenReadController {
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+public class FullScreenReadController implements AccessibilityEventListener {
+    /** The minimum API level supported by the cursor controller. */
+    public static final int MIN_API_LEVEL = Build.VERSION_CODES.JELLY_BEAN;
 
-    /**
-     * The possible states of the controller.
-     *
-     * @author caseyburkhardt@google.com (Casey Burkhardt)
-     */
+    /** Tag used for log output and wake lock */
+    public static final String TAG = FullScreenReadController.class.getSimpleName();
+
+    /** The possible states of the controller. */
     public enum AutomaticReadingState {
         STOPPED, READING_FROM_BEGINNING, READING_FROM_NEXT, ENTERING_WEB_CONTENT
     }
 
-    /** The minimum API level supported by the cursor controller. */
-    public static final int MIN_API_LEVEL = 16;
-
-    /** Tag used for log output and wake lock */
-    public static final String TAG = "FullScreenReadController";
+    /** Event types that should interrupt continuous reading, if active. */
+    private static final int MASK_EVENT_TYPES_INTERRUPT_CONTINUOUS =
+            AccessibilityEvent.TYPE_VIEW_CLICKED |
+            AccessibilityEvent.TYPE_VIEW_LONG_CLICKED |
+            AccessibilityEvent.TYPE_VIEW_SELECTED |
+            AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED |
+            AccessibilityEventCompat.TYPE_ANNOUNCEMENT |
+            AccessibilityEventCompat.TYPE_GESTURE_DETECTION_START |
+            AccessibilityEventCompat.TYPE_TOUCH_EXPLORATION_GESTURE_START |
+            AccessibilityEventCompat.TYPE_TOUCH_INTERACTION_START |
+            AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER |
+            AccessibilityEventCompat.TYPE_VIEW_TEXT_SELECTION_CHANGED;
 
     /**
      * The current state of the controller. Should only be updated through
@@ -72,33 +83,23 @@ public class FullScreenReadController {
     private CursorController mCursorController;
 
     /** Controller for providing user feedback */
-    private PreferenceFeedbackController mFeedbackController;
+    private MappedFeedbackController mFeedbackController;
 
     /** Wake lock for keeping the device unlocked while reading */
     private WakeLock mWakeLock;
-
-    /** Runnable executed when a node has finished being spoken */
-    private Runnable mNodeSpokenRunnable;
 
     @SuppressWarnings("deprecation")
     public FullScreenReadController(TalkBackService service) {
         mService = service;
         mSpeechController = service.getSpeechController();
         mCursorController = service.getCursorController();
-        mFeedbackController = service.getFeedbackController();
+        mFeedbackController = MappedFeedbackController.getInstance();
+
         final PowerManager pm = (PowerManager) service.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(
                 PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, TAG);
+
         setReadingState(AutomaticReadingState.STOPPED);
-        mNodeSpokenRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (mCurrentState != AutomaticReadingState.STOPPED
-                        && mCurrentState != AutomaticReadingState.ENTERING_WEB_CONTENT) {
-                    moveForward();
-                }
-            }
-        };
     }
 
     /**
@@ -110,90 +111,117 @@ public class FullScreenReadController {
     }
 
     /**
-     * Starts linearly reading from the node with accessibility focus.
+     * Attempts to start reading, optionally starting from the beginning of the
+     * screen.
      */
-    public boolean startReadingFromNextNode() {
-        AccessibilityNodeInfoCompat startNode = mCursorController.getCursor();
-        if (startNode == null) {
+    public boolean startReading(boolean fromBeginning) {
+        if (isActive()) {
             return false;
         }
+
+        // TODO(caseyburkhardt): Attempt to unify these methods.
+        final boolean result;
+        if (fromBeginning) {
+            result = startReadingFromBeginning();
+        } else {
+            result = startReadingFromNextNode();
+        }
+
+        return result;
+    }
+
+    /**
+     * Starts linearly reading from the node with accessibility focus.
+     */
+    private boolean startReadingFromNextNode() {
+        final AccessibilityNodeInfoCompat currentNode = mCursorController.getCursor();
+        if (currentNode == null) {
+            return false;
+        }
+
         setReadingState(AutomaticReadingState.READING_FROM_NEXT);
-        mCursorController.setGranularity(CursorGranularity.DEFAULT);
+
+        mCursorController.setGranularity(CursorGranularity.DEFAULT, false /* fromUser */);
+
         if (!mWakeLock.isHeld()) {
             mWakeLock.acquire();
         }
-        moveForward();
+
+        // Avoid reading the elements in web content twice by calling directly
+        // into ChromeVox rather than advancing CursorController first.
+        if (WebInterfaceUtils.hasWebContent(currentNode)) {
+            moveIntoWebContent();
+        } else {
+            moveForward();
+        }
+
+        currentNode.recycle();
         return true;
+    }
+
+    /**
+     * Starts linearly reading from the top of the view hierarchy.
+     */
+    private boolean startReadingFromBeginning() {
+        AccessibilityNodeInfoCompat rootNode = null;
+        AccessibilityNodeInfoCompat currentNode = null;
+
+        try {
+            rootNode = AccessibilityServiceCompatUtils.getRootInActiveWindow(mService);
+            if (rootNode == null) {
+                return false;
+            }
+
+            currentNode = AccessibilityNodeInfoUtils.searchFromInOrderTraversal(mService, rootNode,
+                    AccessibilityNodeInfoUtils.FILTER_SHOULD_FOCUS, NodeFocusFinder.SEARCH_FORWARD);
+            if (currentNode == null) {
+                return false;
+            }
+
+            setReadingState(AutomaticReadingState.READING_FROM_BEGINNING);
+
+            mCursorController.setGranularity(CursorGranularity.DEFAULT, false /* fromUser */);
+
+            if (!mWakeLock.isHeld()) {
+                mWakeLock.acquire();
+            }
+
+            mCursorController.clearCursor();
+            mCursorController.setCursor(currentNode); // Will automatically move forward.
+
+            if (WebInterfaceUtils.hasWebContent(currentNode)) {
+                // This works only because a focused WebView has a rule to generate
+                // some default text and passes the isEmpty check above.
+                moveIntoWebContent();
+            }
+
+            return true;
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(rootNode, currentNode);
+        }
     }
 
     /**
      * Speaks the currently focused node or the currently selected HTML element.
      */
     public boolean speakCurrentNode() {
-        final AccessibilityNodeInfoCompat currentNode = mCursorController.getCursor();
-        if (currentNode != null) {
-            if (currentNodeHasWebContent()) {
-                return WebInterfaceUtils.performSpecialAction(
-                        currentNode, WebInterfaceUtils.ACTION_READ_CURRENT_HTML_ELEMENT);
-            } else {
-                mCursorController.clearCursor();
-                return mCursorController.setCursor(currentNode);
-            }
-        }
-        return false;
-    }
+        AccessibilityNodeInfoCompat currentNode = null;
 
-    /**
-     * Starts linearly reading from the top of the view hierarchy.
-     */
-    public boolean startReadingFromBeginning() {
-        final AccessibilityNodeInfo rootNode = mService.getRootInActiveWindow();
-        if (rootNode == null) {
-            return false;
-        }
-
-        final AccessibilityNodeInfoCompat compatRoot = new AccessibilityNodeInfoCompat(rootNode);
-        AccessibilityNodeInfoCompat currentNode = NodeFocusFinder.focusSearch(
-                compatRoot, NodeFocusFinder.SEARCH_FORWARD);
-
-        final HashSet<AccessibilityNodeInfoCompat> seenNodes =
-                new HashSet<AccessibilityNodeInfoCompat>();
-
-        // TODO(caseyburkhardt): Refactor to use CursorController to find the
-        // starting node by clearing focus and advancing.
-        while (currentNode != null) {
-            if (seenNodes.contains(currentNode)) {
+        try {
+            currentNode = mCursorController.getCursor();
+            if (currentNode == null) {
                 return false;
             }
-            if (AccessibilityNodeInfoUtils.shouldFocusNode(mService, currentNode)) {
-                break;
+
+            if (WebInterfaceUtils.hasWebContent(currentNode)) {
+                return WebInterfaceUtils.performSpecialAction(
+                        currentNode, WebInterfaceUtils.ACTION_READ_CURRENT_HTML_ELEMENT);
             }
-            seenNodes.add(currentNode);
-            currentNode = NodeFocusFinder.focusSearch(currentNode, NodeFocusFinder.SEARCH_FORWARD);
-        }
 
-        // Recycle all the seen nodes.
-        AccessibilityNodeInfoUtils.recycleNodes(seenNodes);
-        AccessibilityNodeInfoUtils.recycleNodes(compatRoot);
-
-        if (currentNode == null) {
-            return false;
+            return mCursorController.refocus();
+        } finally {
+            AccessibilityNodeInfoUtils.recycleNodes(currentNode);
         }
-
-        setReadingState(AutomaticReadingState.READING_FROM_BEGINNING);
-        mCursorController.setGranularity(CursorGranularity.DEFAULT);
-        if (!mWakeLock.isHeld()) {
-            mWakeLock.acquire();
-        }
-        mCursorController.clearCursor();
-        mCursorController.setCursor(currentNode); // Will automatically move forward.
-       if (currentNodeHasWebContent()) {
-            // This works only because a focused WebView has a rule to generate
-            // some default text and passes the isEmpty check above.
-            moveIntoWebContent();
-        }
-
-        return true;
     }
 
     /**
@@ -201,14 +229,15 @@ public class FullScreenReadController {
      */
     public void interrupt() {
         setReadingState(AutomaticReadingState.STOPPED);
+
         if (mWakeLock.isHeld()) {
             mWakeLock.release();
         }
     }
 
     private void moveForward() {
-        if (!mCursorController.next(false)) {
-            mFeedbackController.playSound(R.raw.complete, 1.3f, 1f);
+        if (!mCursorController.next(false /* shouldWrap */, true /* shouldScroll */)) {
+            mFeedbackController.playAuditory(R.id.sounds_complete, 1.3f, 1, 0);
             interrupt();
         }
 
@@ -219,38 +248,82 @@ public class FullScreenReadController {
 
     private void moveIntoWebContent() {
         final AccessibilityNodeInfoCompat webNode = mCursorController.getCursor();
-        if (webNode != null) {
-            if (mCurrentState == AutomaticReadingState.READING_FROM_BEGINNING) {
-                // Reset ChromeVox's active indicator to the start to the page.
-                WebInterfaceUtils.performNavigationAtGranularityAction(webNode,
-                        WebInterfaceUtils.DIRECTION_BACKWARD,
-                        AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PAGE);
-            }
-            WebInterfaceUtils.performNavigationAtGranularityAction(webNode,
-                    WebInterfaceUtils.DIRECTION_FORWARD,
-                    AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PAGE);
-            setReadingState(AutomaticReadingState.ENTERING_WEB_CONTENT);
-        } else {
+        if (webNode == null) {
             // Reset state.
             interrupt();
+            return;
         }
+
+        if (mCurrentState == AutomaticReadingState.READING_FROM_BEGINNING) {
+            // Reset ChromeVox's active indicator to the start to the page.
+            WebInterfaceUtils.performNavigationAtGranularityAction(webNode,
+                    WebInterfaceUtils.DIRECTION_BACKWARD,
+                    AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PAGE);
+        }
+
+        WebInterfaceUtils.performNavigationAtGranularityAction(webNode,
+                WebInterfaceUtils.DIRECTION_FORWARD,
+                AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PAGE);
+
+        setReadingState(AutomaticReadingState.ENTERING_WEB_CONTENT);
+
+        webNode.recycle();
     }
 
     public void setReadingState(AutomaticReadingState newState) {
         LogUtils.log(TAG, Log.VERBOSE, "Continuous reading switching to mode: %s", newState.name());
+
         mCurrentState = newState;
-        mSpeechController.setShouldInjectAutoReadingCallbacks(
-                (newState != AutomaticReadingState.STOPPED) ? true : false, mNodeSpokenRunnable);
+        mSpeechController.setShouldInjectAutoReadingCallbacks(isActive(), mNodeSpokenRunnable);
     }
 
     public AutomaticReadingState getReadingState() {
         return mCurrentState;
     }
 
+    /**
+     * Returns whether full-screen reading is currently active. Equivalent to
+     * calling {@code getReadingState() != AutomaticReadingState#STOPPED}.
+     *
+     * @return Whether full-screen reading is currently active.
+     */
+    public boolean isActive() {
+        return (getReadingState() != AutomaticReadingState.STOPPED);
+    }
+
     private boolean currentNodeHasWebContent() {
         final AccessibilityNodeInfoCompat currentNode = mCursorController.getCursor();
+        if (currentNode == null) {
+            return false;
+        }
+
         final boolean isWebContent = WebInterfaceUtils.hasWebContent(currentNode);
         currentNode.recycle();
         return isWebContent;
     }
+
+    @Override
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        if (!isActive()) {
+            return;
+        }
+
+        // Only interrupt full screen reading on events that can't be generated
+        // by automated cursor movement or from delayed user interaction.
+        if (AccessibilityEventUtils.eventMatchesAnyType(
+                event, MASK_EVENT_TYPES_INTERRUPT_CONTINUOUS)) {
+            interrupt();
+        }
+    }
+
+    /** Runnable executed when a node has finished being spoken */
+    private final UtteranceCompleteRunnable mNodeSpokenRunnable = new UtteranceCompleteRunnable() {
+        @Override
+        public void run(int status) {
+            if ((mCurrentState != AutomaticReadingState.STOPPED)
+                    && (mCurrentState != AutomaticReadingState.ENTERING_WEB_CONTENT)) {
+                moveForward();
+            }
+        }
+    };
 }

@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Du kan också rulla en hel sida genom att dra med fingret. Om du vill rulla till nästa sida drar du först till höger och sedan vänster i en enda rörelse. Testa att rulla till nästa sida genom att först dra till höger och sedan till vänster."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Utforska skärmen igen och hitta en app på den aktuella sidan."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Om du drar i motsatt riktning, från vänster till höger i en enda rörelse, kommer du till föregående sida. Testa att rulla till föregående sida genom att dra från vänster till höger."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Gå vidare till nästa lektion genom att leta reda på och aktivera knappen <xliff:g id="NEXT">%s</xliff:g>. Den finns nära det nedre högra hörnet av skärmen."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lektion 3: läsa tecken för tecken"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"Som standard läses hela textblock om du drar till vänster eller höger. Du kan även läsa igenom textblock på skärmen ord för ord eller tecken för tecken. Börja med att leta upp texten som inleds med ordet Detta."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Därefter kan du börja läsa detta block på en viss nivå genom att dra ner och sedan upp i en enda rörelse. Testa att ändra läsningsnivån genom att dra ned och sedan upp. Dra sedan åt höger om du vill läsa igenom texten."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Om du vill komma ut från det aktuella textblocket måste du återgå till standardläsnivån. Dra i motsatt riktning, upp och ned, för att återgå till standardläsnivån. Leta sedan reda på knappen <xliff:g id="FINISH">%s</xliff:g> längst ner till höger och dubbelknacka lätt på den så avslutas guiden."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Det här är ett exempel på ett stort textblock. Du kan gå igenom texten på en viss läsnivå genom att dra i textblock eller läsa allt på en gång genom att peka på det."\n\n"Det här är andra stycket."\n\n"Detta är det tredje och sista stycket. Dra ner och upp för att ändra läsnivån och dra sedan åt höger för att gå igenom texten."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Fortsätt till nästa lektion genom att leta upp knappen <xliff:g id="NEXT">%1$s</xliff:g> nära skärmens nedre högra hörn och tryck två gånger på den."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Lektion 3: snabbmenyer"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"I TalkBack finns det två snabbmenyer som gör det enkelt att hitta inställningar och kontroller: den globala snabbmenyn och den lokala snabbmenyn. Du kan aktivera ett objekt i menyn genom att dra fingret runt cirkeln med menyobjekt och släppa när namnet på det önskade objektet hörs. Testa att ta fram den globala snabbmenyn genom att dra fingret <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> i en enda rörelse."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"I den globala snabbmenyn finns allmänna kommandon som fungerar överallt i TalkBack. Testa att läsa all text på skärmen genom att trycka mitt i skärmen så att en cirkelformad meny visas runt fingret och sedan dra fingret runt cirkeln med alternativ tills du hör <xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Du stängde den globala snabbmenyn. Testa att ta fram den globala snabbmenyn igen genom att dra fingret <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> i en enda rörelse."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Bra. Med det här kommandot läses alla objekt på skärmen. Förutom den globala snabbmenyn finns det även en lokal snabbmeny i TalkBack. I den lokala snabbmenyn finns kontroller som ändras beroende på vilket objekt du har valt på skärmen. Testa att ta fram den lokala snabbmenyn genom att dra fingret <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> i en enda rörelse."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Om du trycker med fingret i mitten av skärmen och sedan lyfter det stängs menyn. Testa att stänga den lokala snabbmenyn nu."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Rörelse saknas"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"Det finns ingen rörelse kopplad till åtgärden <xliff:g id="ACTION">%1$s</xliff:g>. Ange en rörelse för åtgärden i inställningarna för TalkBack och starta sedan om självstudien för TalkBack."</string>
 </resources>

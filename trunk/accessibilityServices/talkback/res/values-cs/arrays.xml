@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"Mluvit při všech stupních hlasitosti vyzvánění"</item>
-    <item msgid="7158875206945163928">"Zakázat řeč v tichém režimu"</item>
-    <item msgid="4945285159234224758">"V režimu vibrace a v tichém režimu nemluvit"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"Tlačítko"</item>
     <item msgid="2031284088774168661">"Zaškrtávací políčko"</item>

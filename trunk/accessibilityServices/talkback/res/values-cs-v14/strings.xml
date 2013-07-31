@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Opravdu chcete aplikaci TalkBack pozastavit?"\n\n"Pokud bude aplikace TalkBack pozastavena, vaše zařízení nebude poskytovat zpětnou vazbu a funkce Explore by Touch bude vypnuta."\n\n"Aplikaci TalkBack můžete znovu spustit z panelu oznámení nebo tak, že se vrátíte na stránku zámku."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"Opravdu chcete aplikaci TalkBack pozastavit?"\n\n"Když bude aplikace TalkBack pozastavena, vaše zařízení nebude poskytovat zpětnou vazbu a bude zakázána funkce Prozkoumání dotykem."</string>
 </resources>

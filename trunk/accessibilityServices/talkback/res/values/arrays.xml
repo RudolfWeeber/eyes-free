@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string-array name="pref_speak_ringer_entries">
-    <!-- Label for a possible choice in the "when to speak" preference. Indicates that this app should speak out loud no matter what the user has set the ringer volume to. -->
-    <item>Speak at all ringer volumes</item>
-    <!-- Label for a possible choice in the "when to speak" preference. Indicates that this app should speak out loud unless the ringer volume is set to "silent". -->
-    <item>No speech in Silent Mode</item>
-    <!-- Label for a possible choice in the "when to speak" preference. Indicates that this app should speak out loud unless the ringer volume is set to "silent" or "vibrate". -->
-    <item>No speech in Vibrate and Silent Mode</item>
-  </string-array>
-
-  <string-array translatable="false" name="pref_speak_ringer_values">
-    <item translatable="false">0</item>
-    <item translatable="false">1</item>
-    <item translatable="false">2</item>
-  </string-array>
-
   <string-array translatable="false" name="html_input_to_desc_keys">
     <item translatable="false">button</item>
     <item translatable="false">checkbox</item>

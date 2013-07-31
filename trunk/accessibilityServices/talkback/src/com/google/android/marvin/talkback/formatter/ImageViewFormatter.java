@@ -23,7 +23,7 @@ import android.view.accessibility.AccessibilityEvent;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
-import com.google.android.marvin.talkback.speechrules.RuleImageView;
+import com.google.android.marvin.talkback.speechrules.RuleNonTextViews;
 
 /**
  * Formatter that returns an utterance to announce ImageViews.
@@ -35,19 +35,18 @@ import com.google.android.marvin.talkback.speechrules.RuleImageView;
  * @author clchen@google.conm (Charles L Chen)
  */
 public class ImageViewFormatter implements AccessibilityEventFormatter {
-    private RuleImageView ruleImageView;
+    private RuleNonTextViews ruleNonTextViews;
 
-    public ImageViewFormatter(){
-        super();
-        ruleImageView = new RuleImageView();
+    public ImageViewFormatter() {
+        ruleNonTextViews = new RuleNonTextViews();
     }
 
     @Override
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
         final AccessibilityNodeInfoCompat source = record.getSource();
-        final CharSequence text = ruleImageView.format(context, source, event);
-        utterance.getText().replace(0, utterance.getText().length(), text.toString());
+        final CharSequence text = ruleNonTextViews.format(context, source, event);
+        utterance.addSpoken(text);
         return true;
     }
 }

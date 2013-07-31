@@ -23,13 +23,12 @@ import android.content.IntentFilter;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.googlecode.eyesfree.utils.InfrastructureStateListener;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
  * {@link BroadcastReceiver} for detecting incoming calls.
  */
-class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateListener {
+class CallStateMonitor extends BroadcastReceiver {
     private static final IntentFilter STATE_CHANGED_FILTER = new IntentFilter(
             TelephonyManager.ACTION_PHONE_STATE_CHANGED);
 
@@ -38,9 +37,6 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
 
     /** Handler to transfer broadcasts to the service thread. */
     private final CallStateHandler mHandler = new CallStateHandler(this);
-
-    /** Whether the infrastructure has been initialized. */
-    private boolean mInfrastructureInitialized;
 
     public CallStateMonitor(TalkBackService context) {
         mService = context;
@@ -55,7 +51,7 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
     private void internalOnReceive(Intent intent) {
         final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
 
-        if (!mInfrastructureInitialized) {
+        if (!TalkBackService.isServiceActive()) {
             LogUtils.log(CallStateMonitor.class, Log.WARN, "Service not initialized during "
                     + "broadcast.");
             return;
@@ -64,11 +60,16 @@ class CallStateMonitor extends BroadcastReceiver implements InfrastructureStateL
         if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)) {
             mService.interruptAllFeedback();
         }
-    }
 
-    @Override
-    public void onInfrastructureStateChange(Context context, boolean isInitialized) {
-        mInfrastructureInitialized = isInitialized;
+        final ShakeDetector shakeDetector = mService.getShakeDetector();
+        if (shakeDetector != null) {
+            // Shake detection should be stopped during phone calls.
+            if (TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
+                shakeDetector.setEnabled(false);
+            } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
+                shakeDetector.setEnabled(true);
+            }
+        }
     }
 
     public IntentFilter getFilter() {

@@ -5,9 +5,9 @@
     <string name="template_search_box" msgid="7674310082251778508">"የፍለጋ ሳጥን"</string>
     <string name="template_voice_search" msgid="6344082494914081067">"የድምፅ ፍለጋ"</string>
     <string name="template_dragging_icon" msgid="856607323610801888">"የ<xliff:g id="TITLE">%1$s</xliff:g> አዶ በመጎተት ላይ።"</string>
-    <string name="value_increment_hours" msgid="3948602939148321286">"ሰዓታት ጨምር።"</string>
+    <string name="value_increment_hours" msgid="3948602939148321286">"ሰዓቶች ጨምር።"</string>
     <string name="value_increment_minutes" msgid="7973429691186941970">"ደቂቃዎች ጨምር።"</string>
-    <string name="value_decrement_hours" msgid="1185897832058708910">"ሰዓታት ቀንስ።"</string>
+    <string name="value_decrement_hours" msgid="1185897832058708910">"ሰዓቶች ቀንስ።"</string>
     <string name="value_decrement_minutes" msgid="1675671130873460387">"ደቂቃዎች ቀንስ።"</string>
     <string name="value_increment_month" msgid="2108075360629168256">"ወር ጨምር።"</string>
     <string name="value_increment_day" msgid="774372627775704794">"ቀን ጨምር።"</string>

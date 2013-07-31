@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Taip pat galite slinkti visu puslapiu perbraukdami pirštu. Jei norite slinkti į kitą puslapį, vienu judesiu perbraukite į dešinę ir kairę. Pabandykite slinkti į kitą puslapį perbraukdami į dešinę, paskui į kairę."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Dar kartą naršykite ekraną, kad rastumėte programą dabartiniame puslapyje."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Perbraukdami į priešingą pusę (į kairę, paskui į dešinę), pateksite į ankstesnį puslapį. Pabandykite slinkti į ankstesnį puslapį perbraukdami į kairę, paskui į dešinę."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Jei norite pereiti prie kitos pamokos, raskite mygtuką „<xliff:g id="NEXT">%s</xliff:g>“, kuris yra apatiniame dešiniajame ekrano kampe, ir jį suaktyvinkite."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"3 pamoka: skaitymas po vieną simbolį"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"Pagal numatytuosius nustatymus perbraukiant į kairę ir dešinę skaitomi iš karto visi teksto blokai. Be to, ekrane pateikiamo teksto blokus galite skaityti po vieną žodį ar simbolį. Pirmiausia raskite tekstą, prasidedantį žodžiu „Šis“."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"Tada galėsite skaityti šį teksto bloką konkrečiu lygiu vienu judesiu perbraukdami žemyn. Pabandykite perbraukti žemyn, paskui aukštyn, kad pakeistumėte skaitymo lygį, ir perbraukite į dešinę, kad skaitytumėte tekstą."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Jei norite išeiti iš dabartinio teksto bloko, grąžinkite numatytąjį skaitymo lygį. Perbraukite priešinga kryptimi (į viršų ir į apačią), kad grąžintumėte numatytąjį skaitymo lygį. Tada dešiniajame apatiniame kampe raskite mygtuką „<xliff:g id="FINISH">%s</xliff:g>“ ir dukart palieskite, kad suaktyvintumėte jį ir išeitumėte iš mokymo programos."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Pateikiamas didelio teksto bloko pavyzdys. Galite perbraukdami judėti šiuo tekstu konkrečiu skaitymo lygiu arba paliesdami skaityti jį visą iš karto."\n\n"Tai antra pastraipa."\n\n"Tai trečia ir paskutinė pastraipa. Perbraukite žemyn ir aukštyn, kad pakeistumėte skaitymo lygį, tada perbraukite dešinėn, kad judėtumėte šiuo tekstu."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Kad pereitumėte prie kitos pamokos, raskite mygtuką „<xliff:g id="NEXT">%1$s</xliff:g>“, esantį dešiniajame apatiniame ekrano kampe, ir dukart palieskite, kad suaktyvintumėte."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"3 pamoka: kontekstiniai meniu"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"„TalkBack“ yra du kontekstiniai meniu, kuriais naudodamiesi galite lengvai rasti nustatymus ir valdiklius: visuotinis kontekstinis meniu ir vietinis kontekstinis meniu. Meniu elementą galite suaktyvinti: slyskite pirštu aplink meniu elementų apskritimą ir atleiskite, kai išgirsite pageidaujamą elementą. Pabandykite parodyti visuotinį kontekstinį meniu vienu judesiu perbraukę pirštu <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Visuotiniame kontekstiniame meniu pateikiamos dvi bendrosios komandos, kurios veikia visoje „TalkBack“. Pabandykite perskaityti visą ekrano tekstą: paspauskite ekrano centre, kad aplink pirštą būtų rodomas apskritas meniu, ir slyskite pirštu aplink parinkčių apskritimą, kol išgirsite „<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>“."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Uždarėte visuotinį kontekstinį meniu. Pabandykite dar kartą parodyti visuotinį kontekstinį meniu vienu judesiu perbraukę pirštu <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Gerai. Naudojant šią komandą perskaitomi visi ekrano elementai. Be visuotinio kontekstinio meniu, „TalkBack“ taip pat yra vietinis kontekstinis meniu. Vietiniame kontekstiniame meniu pateikiami valdikliai, kurie kinta pagal pasirinktą ekrano elementą. Pabandykite parodyti vietinį kontekstinį meniu vienu judesiu perbraukę pirštu <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Paspaudus pirštu ekrano centre ir pakėlus pirštą atšaukiamas ir uždaromas meniu. Dabar pabandykite uždaryti vietinį kontekstinį meniu."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Gestas neprisk."</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"Nėra gestui „<xliff:g id="ACTION">%1$s</xliff:g>“ priskirto veiksmo. Apsilankykite „TalkBack“ nustatymuose, kad šiam veiksmui nustatytumėte sparčiojo klavišo gestą, tada iš naujo paleiskite „TalkBack“ mokymo programą."</string>
 </resources>

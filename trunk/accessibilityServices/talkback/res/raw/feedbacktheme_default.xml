@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feedbacktheme
+    xmlns="http://www.google.android.marvin.talkback.com/feedbacktheme"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.google.android.marvin.talkback.com/feedbacktheme ../../schema/feedbacktheme.xsd">
+
+    <!-- Auditory feedback played when user hovers over a non-actionable item. -->
+    <auditory id="hover">
+        <resource>@array/midi_focus</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when user hovers over an actionable item. -->
+    <auditory id="actionable">
+        <resource>@array/midi_focus_actionable</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when user clicks an item. -->
+    <auditory id="clicked">
+        <resource>@raw/tick</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when user long-clicks an item. -->
+    <auditory id="long_clicked">
+        <resource>@array/midi_long_clicked</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when user focuses an item (versions prior to Jelly Bean). -->
+    <auditory id="focused">
+        <resource>@array/midi_focus_actionable</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when user focuses a list item (versions prior to Jelly Bean). -->
+    <auditory id="selected">
+        <resource>@array/midi_focus_actionable</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the system adds a notification. -->
+    <auditory id="notification">
+        <!-- Silence this feedback. -->
+    </auditory>
+
+    <!-- Auditory feedback played when the system opens a new activity or dialog. -->
+    <auditory id="window_state">
+        <resource>@array/midi_window_state</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the user adds text, either by typing or auto-completion. -->
+    <auditory id="text_added">
+        <!-- Silence this feedback. -->
+    </auditory>
+
+    <!-- Auditory feedback played when the user removes text. -->
+    <auditory id="text_removed">
+        <!-- Silence this feedback. -->
+    </auditory>
+
+    <!-- Auditory feedback played when the user can scroll within a container. -->
+    <auditory id="scroll_for_more">
+        <resource>@array/midi_scroll_more</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the user moves in to a container that can be scrolled. -->
+    <auditory id="scrollable_enter">
+        <resource>@array/midi_chime_up</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the user moves out of a container that can be scrolled. -->
+    <auditory id="scrollable_exit">
+        <resource>@array/midi_chime_down</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when an action fails, e.g. when focus cannot move in the requested direction. -->
+    <auditory id="complete">
+        <resource>@array/midi_complete</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the system recognizes that the user is performing a gesture. -->
+    <auditory id="gesture_begin">
+        <resource>@array/midi_gesture_begin</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the system recognizes that the user has finished performing a gesture. -->
+    <auditory id="gesture_end">
+        <resource>@array/midi_gesture_end</resource>
+    </auditory>
+
+    <!-- Auditory feedback played at varying pitch while the user scrolling through a list. -->
+    <auditory id="scrolled_tone">
+        <resource>@array/midi_scroll_tone</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the user suspends feedback. -->
+    <auditory id="paused_feedback">
+        <resource>@array/midi_paused_feedback</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the screen turns off to indicate ringer volume. -->
+    <auditory id="volume_beep_ring" stream="ring">
+        <resource>@raw/volume_beep</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when the screen turns off to indicate ringer volume. Plays on the music stream to avoid issues with headsets. -->
+    <auditory id="volume_beep" stream="music">
+        <resource>@raw/volume_beep</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when TalkBack begins speaking bold text. -->
+    <auditory id="bold">
+        <resource>@array/midi_bold</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when TalkBack begins speaking italic text. -->
+    <auditory id="italic">
+        <resource>@array/midi_italic</resource>
+    </auditory>
+
+    <!-- Auditory feedback played when TalkBack begins speaking a hyperlink. -->
+    <auditory id="hyperlink">
+        <resource>@array/midi_hyperlink</resource>
+    </auditory>
+
+    <!-- Haptic feedback played when user hovers over a non-actionable item. -->
+    <haptic id="hover">
+        <resource>@array/view_hovered_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played when user hovers over an actionable item. -->
+    <haptic id="actionable">
+        <resource>@array/view_actionable_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played when user clicks an item. -->
+    <haptic id="clicked">
+        <resource>@array/view_clicked_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played when user long-clicks an item. -->
+    <haptic id="long_clicked">
+        <resource>@array/view_long_clicked_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played when user focuses an item (versions prior to Jelly Bean). -->
+    <haptic id="focused">
+        <resource>@array/view_focused_or_selected_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played when user focuses a list item (versions prior to Jelly Bean). -->
+    <haptic id="selected">
+        <resource>@array/view_focused_or_selected_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played when the system adds a notification. -->
+    <haptic id="notification">
+        <resource>@array/notification_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played when the system opens a new activity or dialog. -->
+    <haptic id="window_state">
+        <resource>@array/window_state_pattern</resource>
+    </haptic>
+
+    <!-- Haptic feedback played continuously while the user is performing a gesture. -->
+    <haptic id="gesture_detection">
+        <resource>@array/gesture_detection_repeated_pattern</resource>
+    </haptic>
+</feedbacktheme>

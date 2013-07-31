@@ -18,6 +18,7 @@ package com.google.android.marvin.talkback.formatter.phone;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
@@ -36,69 +37,63 @@ import java.util.List;
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public final class InCallScreenFormatterICS implements AccessibilityEventFormatter {
+    private static final int MIN_EVENT_TEXT_COUNT = 6;
+
     private static final int INDEX_UPPER_TITLE = 1;
     private static final int INDEX_PHOTO = 2;
     private static final int INDEX_NAME = 3;
-    private static final int INDEX_NUMBER = 4;
     private static final int INDEX_LABEL = 5;
-
-    private static final String SPACE = " ";
 
     @Override
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         final boolean speakCallerId = SharedPreferencesUtils.getBooleanPref(prefs,
                 context.getResources(), R.string.pref_caller_id_key, R.bool.pref_caller_id_default);
-
         if (!speakCallerId) {
             // Don't speak the caller ID screen.
-            return true;
+            return false;
         }
 
         final List<CharSequence> eventText = event.getText();
-        final StringBuilder utteranceText = utterance.getText();
+        if (eventText.size() < MIN_EVENT_TEXT_COUNT) {
+            return false;
+        }
 
         final CharSequence title = eventText.get(INDEX_UPPER_TITLE);
+        if (!TextUtils.isEmpty(title)) {
+            utterance.addSpoken(title);
+        }
+
         final CharSequence name = eventText.get(INDEX_NAME);
-        final CharSequence number = eventText.get(INDEX_NUMBER);
-
-        if (title != null) {
-            utteranceText.append(title);
-            utteranceText.append(SPACE);
+        if (TextUtils.isEmpty(name)) {
+            // Return immediately if there is no contact name.
+            return !utterance.getSpoken().isEmpty();
         }
 
-        if (name != null) {
-            utteranceText.append(name);
-            utteranceText.append(SPACE);
-        }
+        utterance.addSpoken(name);
 
-        if (name == null) {
-            return true;
-        }
-
+        // If the contact name is not a phone number, add the label and photo.
         if (!isPhoneNumber(name.toString())) {
             final CharSequence label = eventText.get(INDEX_LABEL);
-            final CharSequence photo = eventText.get(INDEX_PHOTO);
-
             if (label != null) {
-                utteranceText.append(label);
-                utteranceText.append(SPACE);
+                utterance.addSpoken(label);
             }
 
+            final CharSequence photo = eventText.get(INDEX_PHOTO);
             if (photo != null) {
-                utteranceText.append(photo);
-                utteranceText.append(SPACE);
+                utterance.addSpoken(photo);
             }
         }
 
-        return true;
+        return !utterance.getSpoken().isEmpty();
     }
 
     /**
      * Returns if a <code>value</code> is a phone number.
      */
     private boolean isPhoneNumber(String value) {
-        String valueNoDashes = value.replaceAll("-", "");
+        final String valueNoDashes = value.replaceAll("-", "");
+
         try {
             Long.parseLong(valueNoDashes);
             return true;

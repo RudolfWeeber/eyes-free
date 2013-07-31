@@ -24,26 +24,41 @@ import android.view.View;
 
 /**
  * Implements a radial sub-menu.
- * 
+ *
  * @author alanv@google.com (Alan Viverette)
  */
 public class RadialSubMenu extends RadialMenu implements SubMenu {
+    private final RadialMenu mParentMenu;
     private final RadialMenuItem mMenuItem;
 
     /**
      * Creates a new radial sub-menu and associated radial menu item.
-     * 
+     *
      * @param context The parent context.
      * @param groupId The menu item's group identifier.
      * @param itemId The menu item's identifier (should be unique).
      * @param order The order of this item.
      * @param title The text to be displayed for this menu item.
      */
-    /* package */RadialSubMenu(Context context, DialogInterface parent, int groupId, int itemId,
-            int order, CharSequence title) {
+    /* package */ RadialSubMenu(Context context, DialogInterface parent, RadialMenu parentMenu,
+            int groupId, int itemId, int order, CharSequence title) {
         super(context, parent);
 
+        mParentMenu = parentMenu;
         mMenuItem = new RadialMenuItem(context, groupId, itemId, order, title, this);
+    }
+
+    @Override
+    public boolean selectMenuItem(RadialMenuItem item, int flags) {
+        if (super.selectMenuItem(item, flags)) {
+            return true;
+        }
+
+        if ((mParentMenu != null) && mParentMenu.selectMenuItem(item, flags)) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

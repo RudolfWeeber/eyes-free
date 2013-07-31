@@ -18,6 +18,7 @@ package com.google.android.marvin.talkback.formatter;
 
 import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -25,20 +26,20 @@ import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
-import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.StringBuilderUtils;
 
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Formatter for touch exploration events from the System UI.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  * @author alanv@google.com (Alan Viverette)
  */
 public class TouchExplorationSystemUiFormatter implements AccessibilityEventFormatter {
     /** The most recently spoken utterance. Used to eliminate duplicates. */
-    private final StringBuilder mLastUtteranceText = new StringBuilder();
+    private final SpannableStringBuilder mLastUtteranceText = new SpannableStringBuilder();
 
     @Override
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
@@ -54,18 +55,18 @@ public class TouchExplorationSystemUiFormatter implements AccessibilityEventForm
             return false;
         }
 
-        utterance.getText().append(recordText);
-        utterance.getVibrationPatterns().add(R.array.view_hovered_pattern);
-        utterance.getEarcons().add(R.raw.view_hover_enter);
+        utterance.addSpoken(recordText);
+        utterance.addHaptic(R.id.patterns_hover);
+        utterance.addAuditory(R.id.sounds_hover);
 
-        mLastUtteranceText.setLength(0);
+        mLastUtteranceText.clear();
         mLastUtteranceText.append(recordText);
 
         return true;
     }
 
     private CharSequence getRecordText(Context context, AccessibilityEvent event) {
-        final StringBuilder builder = new StringBuilder();
+        final SpannableStringBuilder builder = new SpannableStringBuilder();
         final List<CharSequence> entries = AccessibilityEventCompat.getRecord(event, 0).getText();
 
         // Reverse the entries so that time is read aloud first.

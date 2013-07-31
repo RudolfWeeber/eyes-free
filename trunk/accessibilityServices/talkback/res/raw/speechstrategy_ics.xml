@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <ss:speechstrategy xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy speechstrategy.xsd">
+  <ss:speechstrategy
+      xmlns:ss="http://www.google.android.marvin.talkback.com/speechstrategy"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.google.android.marvin.talkback.com/speechstrategy ../../schema/speechstrategy.xsd">
 
   <!-- This file contains speech strategy rules for built-in Android apps. -->
   <!-- They override the default handlers to work around apps in current -->
@@ -21,7 +22,7 @@
       <ss:customEarcon>@id/sounds_actionable</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -38,7 +39,7 @@
       <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -54,7 +55,7 @@
       <ss:customEarcon>@id/sounds_focused</ss:customEarcon>
     </ss:metadata>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -74,7 +75,7 @@
     <ss:filter>
       <ss:eventType>TYPE_VIEW_HOVER_ENTER</ss:eventType>
       <ss:packageName>com.android.systemui</ss:packageName>
-      <ss:recordCount>>0</ss:recordCount>
+      <ss:recordCount>&gt;0</ss:recordCount>
       <ss:platformSdk>&gt;=14</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
@@ -107,7 +108,7 @@
       <ss:platformSdk>14||15</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -121,7 +122,7 @@
     </ss:filter>
     <ss:formatter>
       <ss:template>@string/template_dragging_icon</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 
@@ -135,7 +136,7 @@
     </ss:filter>
     <ss:formatter>
       <ss:template>@string/template_dragging_icon</ss:template>
-      <ss:property>text</ss:property>
+      <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
 

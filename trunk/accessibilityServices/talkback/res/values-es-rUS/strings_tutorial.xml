@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"También puedes deslizar el dedo para desplazar toda la página. Para avanzar a la página siguiente, desliza el dedo hacia la derecha y, a continuación, hacia la izquierda en un único movimiento. Intenta deslizar el dedo de esta forma para avanzar a la página siguiente."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Vuelve a explorar la pantalla para encontrar una aplicación en la página actual."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"Si deslizas el dedo en la dirección contraria (hacia la izquierda y, a continuación, hacia la derecha) en un único movimiento, se abrirá la página anterior. Intenta deslizar el dedo de esta forma para abrir la página anterior."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"Para pasar a la siguiente lección, encuentra y activa el botón <xliff:g id="NEXT">%s</xliff:g>, situado cerca de la esquina inferior derecha de la pantalla."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Lección 3: Lectura por carácter"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"De forma predeterminada, si deslizas tu dedo hacia la izquierda o hacia la derecha, se leerán diferentes bloques de texto en simultáneo. También puedes leer bloques completos de texto en pantalla según el carácter o palabra con los que comiencen. Primero, busca el bloque de texto que comienza con la palabra \"Este\"."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"A continuación, puedes deslizar el dedo hacia abajo y hacia arriba en un único movimiento para empezar a leer este bloque de texto en un nivel determinado. Intenta deslizar el dedo hacia abajo y hacia arriba para cambiar el nivel de lectura. A continuación, desliza el dedo hacia la derecha para leer el texto."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"Para abandonar el bloque de texto actual, tendrás que volver al nivel de lectura predeterminado. Desliza tu dedo en la dirección contraria, hacia arriba y luego hacia abajo, para volver al nivel de lectura predeterminado. Luego busca el botón <xliff:g id="FINISH">%s</xliff:g>, ubicado en la esquina inferior derecha, y tócalo dos veces para activarlo y abandonar el tutorial."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Este es un ejemplo de un gran bloque de texto. Puedes desplazarte por este texto a un determinado nivel de lectura deslizando el dedo o leerlo todo completo tocándolo con el dedo. "\n\n"Este es el segundo párrafo."\n\n"Este es el tercer y último párrafo. Desliza el dedo hacia abajo y luego hacia arriba para cambiar el nivel de lectura y, a continuación, desliza el dedo hacia la derecha para desplazarte por el texto."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"Para pasar a la siguiente lección, busca el botón <xliff:g id="NEXT">%1$s</xliff:g>, cerca de la esquina inferior derecha de la pantalla, y presiónalo dos veces para activarlo."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Lección 3: menús contextuales"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack tiene dos menús contextuales que permiten encontrar parámetros de configuración y controles con facilidad: el menú contextual global y el menú contextual local. Para activar un elemento del menú, desliza el dedo por el círculo de elementos del menú y suéltalo cuando escuches el elemento deseado. Para que aparezca el menú contextual global, desliza el dedo <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> en un solo movimiento."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"El menú contextual global contiene comandos generales que funcionan en todo TalkBack. Si quieres leer todo el texto que aparece en la pantalla, presiona el centro de la pantalla con el dedo para que aparezca un menú circular alrededor del dedo y luego desliza el dedo alrededor del círculo de opciones hasta que escuches \"<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>\"."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Cerraste el menú contextual global. Para que aparezca de nuevo, desliza el dedo <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> en un solo movimiento."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Ese comando leerá todos los elementos de la pantalla. Además de un menú contextual global, TalkBack tiene un menú contextual local. Este menú contiene controles que cambian según el elemento de la pantalla que se seleccione. Para que aparezca el menú contextual local, desliza el dedo <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> en un solo movimiento."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Si presionas el centro de la pantalla con el dedo y luego lo levantas, el menú se cancela y se cierra. Intenta cerrar el menú contextual local ahora."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Sin gesto asig."</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"No hay gestos asignados a la acción \"<xliff:g id="ACTION">%1$s</xliff:g>\". Accede a la Configuración de TalkBack para establecer un gesto de acceso directo para esa acción y vuelve a iniciar el tutorial de TalkBack."</string>
 </resources>

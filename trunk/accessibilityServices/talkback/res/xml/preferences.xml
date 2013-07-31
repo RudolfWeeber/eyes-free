@@ -13,16 +13,6 @@
             android:summary="%s"
             android:title="@string/title_pref_speech_volume" />
 
-        <!-- TODO: Move to advanced preferences. -->
-        <ListPreference
-            android:defaultValue="@string/pref_speak_ringer_default"
-            android:dialogTitle="@string/title_pref_speak_ringer"
-            android:entries="@array/pref_speak_ringer_entries"
-            android:entryValues="@array/pref_speak_ringer_values"
-            android:key="@string/pref_speak_ringer_key"
-            android:summary="%s"
-            android:title="@string/title_pref_speak_ringer" />
-
         <CheckBoxPreference
             android:defaultValue="@bool/pref_intonation_default"
             android:key="@string/pref_intonation_key"
@@ -47,6 +37,14 @@
             android:summaryOff="@string/summaryOff_pref_proximity"
             android:summaryOn="@string/summaryOn_pref_proximity"
             android:title="@string/title_pref_proximity" />
+        <ListPreference
+            android:defaultValue="@string/pref_shake_to_read_threshold_default"
+            android:dialogTitle="@string/title_pref_shake_to_read_threshold"
+            android:entries="@array/pref_shake_to_read_threshold_entries"
+            android:entryValues="@array/pref_shake_to_read_threshold_values"
+            android:key="@string/pref_shake_to_read_threshold_key"
+            android:summary="%s"
+            android:title="@string/title_pref_shake_to_read_threshold" />
         <CheckBoxPreference
             android:defaultValue="@bool/pref_caller_id_default"
             android:key="@string/pref_caller_id_key"
@@ -63,7 +61,11 @@
             android:defaultValue="@bool/pref_soundback_default"
             android:key="@string/pref_soundback_key"
             android:title="@string/title_pref_soundback" />
-
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_use_audio_focus_default"
+            android:key="@string/pref_use_audio_focus_key"
+            android:title="@string/title_pref_use_audio_focus"
+            android:summary="@string/summary_pref_use_audio_focus" />
         <ListPreference
             android:defaultValue="@string/pref_soundback_volume_default"
             android:dependency="@string/pref_soundback_key"
@@ -81,16 +83,25 @@
             android:defaultValue="@bool/pref_explore_by_touch_default"
             android:key="@string/pref_explore_by_touch_reflect_key"
             android:title="@string/title_pref_explore_by_touch" />
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_auto_scroll_default"
+            android:key="@string/pref_auto_scroll_key"
+            android:title="@string/title_pref_auto_scroll" />
+        <CheckBoxPreference
+            android:defaultValue="@bool/pref_single_tap_default"
+            android:dependency="@string/pref_explore_by_touch_reflect_key"
+            android:key="@string/pref_single_tap_key"
+            android:summary="@string/summary_pref_single_tap"
+            android:title="@string/title_pref_single_tap" />
         <Preference
             android:key="@string/pref_tutorial_key"
             android:title="@string/title_pref_tutorial"
             android:dependency="@string/pref_explore_by_touch_reflect_key" />
         <Preference
-            android:key="@string/pref_category_touch_shortcuts_key"
-            android:title="@string/title_pref_category_touch_shortcuts" >
-        </Preference>
+            android:key="@string/pref_category_manage_gestures_key"
+            android:title="@string/title_pref_category_manage_gestures" />
     </PreferenceCategory>
-<PreferenceCategory
+    <PreferenceCategory
         android:key="@string/pref_category_miscellaneous_key"
         android:title="@string/title_pref_category_miscellaneous_settings" >
         <PreferenceScreen
@@ -105,11 +116,21 @@
                 android:summary="%s"
                 android:title="@string/title_pref_log_level" />
 
+            <ListPreference
+                android:defaultValue="@string/pref_resume_talkback_default"
+                android:dialogTitle="@string/title_pref_resume_talkback"
+                android:entries="@array/pref_resume_talkback_entries"
+                android:entryValues="@array/pref_resume_talkback_values"
+                android:key="@string/pref_resume_talkback_key"
+                android:summary="%s"
+                android:title="@string/title_pref_resume_talkback" />
+
             <CheckBoxPreference
                 android:defaultValue="@bool/pref_tts_overlay_default"
                 android:key="@string/pref_tts_overlay_key"
                 android:title="@string/title_pref_tts_overlay" />
         </PreferenceScreen>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

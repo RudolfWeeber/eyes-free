@@ -19,6 +19,7 @@ package com.google.android.marvin.talkback;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Message;
+import android.os.PowerManager;
 
 import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
@@ -28,18 +29,22 @@ import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 public class OrientationMonitor {
     private final Context mContext;
     private final SpeechController mSpeechController;
+    private final PowerManager mPowerManager;
 
+    /** The orientation of the most recently received configuration. */
     private int mLastOrientation;
 
     public OrientationMonitor(TalkBackService context) {
         mContext = context;
         mSpeechController = context.getSpeechController();
+        mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
     }
 
-    public void shutdown() {
-        // Do nothing. This method is only here for consistency.
-    }
-
+    /**
+     * Called by {@link TalkBackService} when the configuration changes.
+     *
+     * @param newConfig The new configuration.
+     */
     public void onConfigurationChanged(Configuration newConfig) {
         final int orientation = newConfig.orientation;
         if (orientation == mLastOrientation) {
@@ -51,6 +56,11 @@ public class OrientationMonitor {
     }
 
     private void announceCurrentRotation(int orientation) {
+        if (!mPowerManager.isScreenOn()) {
+            // Don't announce rotation when the screen is off.
+            return;
+        }
+
         final int resId;
 
         switch (orientation) {
@@ -64,14 +74,16 @@ public class OrientationMonitor {
                 return;
         }
 
-        mSpeechController.cleanUpAndSpeak(mContext.getString(resId),
-                SpeechController.QUEUE_MODE_QUEUE, SpeechController.FLAG_NO_HISTORY, null);
+        mSpeechController.speak(mContext.getString(resId),
+                SpeechController.QUEUE_MODE_UNINTERRUPTIBLE, FeedbackItem.FLAG_NO_HISTORY, null);
     }
 
     private final OrientationHandler mHandler = new OrientationHandler(this);
 
     private static class OrientationHandler extends WeakReferenceHandler<OrientationMonitor> {
         private static final int ANNOUNCE_ROTATION = 1;
+
+        /** The delay in milliseconds before announcing rotation changes. */
         private static final long DELAY_ANNOUNCE_ROTATION = 250;
 
         public OrientationHandler(OrientationMonitor parent) {
@@ -90,7 +102,7 @@ public class OrientationMonitor {
         public void startAnnounceTimeout(int orientation) {
             removeMessages(ANNOUNCE_ROTATION);
 
-            final Message msg = obtainMessage(ANNOUNCE_ROTATION, orientation);
+            final Message msg = obtainMessage(ANNOUNCE_ROTATION, orientation, 0);
             sendMessageDelayed(msg, DELAY_ANNOUNCE_ROTATION);
         }
     }

@@ -19,13 +19,15 @@ package com.google.android.marvin.talkback;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.TalkBackService.EventListener;
+import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
 import com.google.android.marvin.talkback.formatter.EventSpeechRuleProcessor;
-import com.googlecode.eyesfree.utils.FeedbackController;
+import com.google.android.marvin.talkback.test.TalkBackListener;
 import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 /**
@@ -35,7 +37,7 @@ import com.googlecode.eyesfree.utils.WeakReferenceHandler;
  *
  * @author alanv@google.com (Alan Viverette)
  */
-public class ProcessorEventQueue implements EventListener {
+public class ProcessorEventQueue implements AccessibilityEventListener {
     /** Manages pending speech events. */
     private final ProcessorEventHandler mHandler = new ProcessorEventHandler(this);
 
@@ -47,8 +49,6 @@ public class ProcessorEventQueue implements EventListener {
      */
     private final EventQueue mEventQueue = new EventQueue();
 
-    private final CustomResourceMapper mCustomResourceMapper;
-    private final FeedbackController mFeedbackController;
     private final SpeechController mSpeechController;
 
     /**
@@ -57,21 +57,36 @@ public class ProcessorEventQueue implements EventListener {
      */
     private EventSpeechRuleProcessor mEventSpeechRuleProcessor;
 
+    /** TalkBack-specific listener used for testing. */
+    private TalkBackListener mTestingListener;
+
+    /** Event type for the most recently processed event. */
     private int mLastEventType;
 
+    /** Event time for the most recent window state changed event. */
+    private long mLastWindowStateChanged = 0;
+
     public ProcessorEventQueue(TalkBackService context) {
-        mCustomResourceMapper = new CustomResourceMapper(context);
-        mFeedbackController = context.getFeedbackController();
         mSpeechController = context.getSpeechController();
         mEventSpeechRuleProcessor = new EventSpeechRuleProcessor(context);
 
         loadDefaultRules();
     }
 
+    public void setTestingListener(TalkBackListener testingListener) {
+        mTestingListener = testingListener;
+    }
+
     @Override
-    public void process(AccessibilityEvent event) {
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        final int eventType = event.getEventType();
+
+        if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            mLastWindowStateChanged = SystemClock.uptimeMillis();
+        }
+
         synchronized (mEventQueue) {
-            mEventQueue.add(event);
+            mEventQueue.enqueue(event);
             mHandler.postSpeak(event);
         }
     }
@@ -96,10 +111,6 @@ public class ProcessorEventQueue implements EventListener {
             mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_gingerbread);
         } else if (Build.VERSION.SDK_INT >= 8) {
             mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_froyo);
-        } else if (Build.VERSION.SDK_INT >= 5) {
-            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_eclair);
-        } else if (Build.VERSION.SDK_INT >= 4) {
-            mEventSpeechRuleProcessor.addSpeechStrategy(R.raw.speechstrategy_donut);
         }
 
         // Add generic speech strategy. This should always be added last so that
@@ -127,6 +138,10 @@ public class ProcessorEventQueue implements EventListener {
             return;
         }
 
+        if (mTestingListener != null) {
+            mTestingListener.onUtteranceQueued(utterance);
+        }
+
         provideFeedbackForUtterance(event, utterance);
 
         utterance.recycle();
@@ -143,41 +158,18 @@ public class ProcessorEventQueue implements EventListener {
         final Bundle metadata = utterance.getMetadata();
         final float earconRate = metadata.getFloat(Utterance.KEY_METADATA_EARCON_RATE, 1.0f);
         final float earconVolume = metadata.getFloat(Utterance.KEY_METADATA_EARCON_VOLUME, 1.0f);
+        final Bundle nonSpeechMetadata = new Bundle();
+        nonSpeechMetadata.putFloat(Utterance.KEY_METADATA_EARCON_RATE, earconRate);
+        nonSpeechMetadata.putFloat(Utterance.KEY_METADATA_EARCON_VOLUME, earconVolume);
 
-        // Play all earcons.
-        for (int resId : utterance.getEarcons()) {
-            mFeedbackController.playSound(resId, earconRate, earconVolume);
-        }
-
-        // Play all vibration patterns.
-        for (int resId : utterance.getVibrationPatterns()) {
-            mFeedbackController.playVibration(resId);
-        }
-
-        // Retrieve and play all custom earcons.
-        for (int prefId : utterance.getCustomEarcons()) {
-            final int resId = mCustomResourceMapper.getResourceIdForPreference(prefId);
-
-            if (resId > 0) {
-                mFeedbackController.playSound(resId, earconRate, earconVolume);
-            }
-        }
-
-        // Retrieve and play all custom vibrations.
-        for (int prefId : utterance.getCustomVibrations()) {
-            final int resId = mCustomResourceMapper.getResourceIdForPreference(prefId);
-
-            if (resId > 0) {
-                mFeedbackController.playVibration(resId);
-            }
-        }
-
-        // Speak the text.  Utterances with empty speech will be filtered at the SpeechController.
-        final Bundle params = metadata.getBundle(Utterance.KEY_METADATA_SPEECH_PARAMS);
+        // Retrieve and play all spoken text.
+        final CharSequence textToSpeak = StringBuilderUtils.getAggregateText(utterance.getSpoken());
         final int queueMode = computeQueuingMode(utterance, event);
-        final StringBuilder text = utterance.getText();
+        final int flags = metadata.getInt(Utterance.KEY_METADATA_SPEECH_FLAGS, 0);
+        final Bundle speechMetadata = metadata.getBundle(Utterance.KEY_METADATA_SPEECH_PARAMS);
 
-        mSpeechController.cleanUpAndSpeak(text, queueMode, 0, params);
+        mSpeechController.speak(textToSpeak, utterance.getAuditory(), utterance.getHaptic(),
+                queueMode, flags, speechMetadata, nonSpeechMetadata);
     }
 
     /**
@@ -195,6 +187,13 @@ public class ProcessorEventQueue implements EventListener {
         final Bundle metadata = utterance.getMetadata();
         final int eventType = event.getEventType();
         final int mode;
+
+        // Queue events that occur automatically after window state changes.
+        if (((event.getEventType() & TalkBackService.AUTOMATIC_AFTER_STATE_CHANGE) != 0)
+                && ((event.getEventTime() - mLastWindowStateChanged)
+                        < TalkBackService.DELAY_AUTO_AFTER_STATE)) {
+            return SpeechController.QUEUE_MODE_QUEUE;
+        }
 
         // Always collapse events of the same type.
         if (mLastEventType == eventType) {
@@ -241,7 +240,7 @@ public class ProcessorEventQueue implements EventListener {
                         return;
                     }
 
-                    event = parent.mEventQueue.remove(0);
+                    event = parent.mEventQueue.dequeue();
                 }
 
                 parent.processAndRecycleEvent(event);

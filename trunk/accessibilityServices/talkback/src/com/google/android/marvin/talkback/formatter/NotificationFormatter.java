@@ -28,7 +28,6 @@ import com.google.android.marvin.talkback.NotificationType;
 import com.google.android.marvin.talkback.TalkBackService;
 import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
-import com.google.android.marvin.utils.StringBuilderUtils;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -61,19 +60,18 @@ public class NotificationFormatter implements AccessibilityEventFormatter {
             return false;
         }
 
-        final StringBuilder builder = utterance.getText();
         final CharSequence typeText = getTypeText(context, notification);
         final CharSequence tickerText = notification.tickerText;
 
         if (!TextUtils.isEmpty(typeText)) {
-            StringBuilderUtils.appendWithSeparator(builder, typeText);
+            utterance.addSpoken(typeText);
         }
 
         if (!TextUtils.isEmpty(tickerText)) {
-            StringBuilderUtils.appendWithSeparator(builder, tickerText);
+            utterance.addSpoken(tickerText);
         }
 
-        return !TextUtils.isEmpty(builder);
+        return !utterance.getSpoken().isEmpty();
     }
 
     /**

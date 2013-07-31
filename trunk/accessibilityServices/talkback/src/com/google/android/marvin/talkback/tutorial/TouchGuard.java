@@ -17,6 +17,7 @@
 package com.google.android.marvin.talkback.tutorial;
 
 import android.accessibilityservice.AccessibilityService;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -30,6 +31,7 @@ import android.widget.FrameLayout;
  * currently focused node.
  * </p>
  */
+@TargetApi(16)
 public class TouchGuard extends FrameLayout {
     public TouchGuard(Context context) {
         super(context);

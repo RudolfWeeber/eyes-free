@@ -23,10 +23,29 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"画面を指でスワイプしてページ全体をスクロールすることもできます。次のページにスクロールするには、右にスワイプしてから指を離さずに左にスワイプします。では、右にスワイプしてから左にスワイプして次のページにスクロールしてみてください。"</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"再び画面上をスライドして、現在のページでアプリを見つけます。"</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"反対方向に、つまり左にスワイプしてから指を離さずに右にスワイプすると、前のページに移動します。では、左にスワイプしてから右にスワイプして前のページにスクロールしてみてください。"</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"次のレッスンに進むには、画面の右下にある[<xliff:g id="NEXT">%s</xliff:g>]ボタンを探して有効にしてください。"</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"レッスン 3: 1文字ずつ読み上げる"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"デフォルトでは、左または右にスワイプすると複数の段落からなるテキストがまとめて読み上げられます。また、画面上のテキストを1語ずつまたは1文字ずつ読むこともできます。ではまず、「これは」で始まるテキストを探してください。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"次に、下にスワイプしてから指を離さずに上にスワイプすると、特定の読み上げレベルでこの段落の読み上げを開始できます。では、下にスワイプしてから上にスワイプして読み上げレベルを変更し、次に右にスワイプしてテキストの読み上げを開始してみてください。"</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"現在の段落以外の場所に移動するには、デフォルトの読み上げレベルに戻る必要があります。デフォルトの読み上げレベルに戻るには、反対方向に、つまり上にスワイプしてから下にスワイプします。次に右下にある[<xliff:g id="FINISH">%s</xliff:g>]ボタンを探し、ダブルタップして有効にすると、チュートリアルが終了します。"</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"これは長いテキストのサンプルです。このテキストの中を特定の読み上げレベルで移動するにはスワイプジェスチャーを、テキスト全体をまとめて読み上げるにはタップジェスチャーを使用します。"\n\n"ここは第2段落です。"\n\n"ここは最後の第3段落です。では、下にスワイプしてから上にスワイプして読み上げレベルを変更し、次に右にスワイプしてテキスト内を移動してみてください。"</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"次のレッスンに進むには、画面の右下にある[<xliff:g id="NEXT">%1$s</xliff:g>]ボタンを探し、ダブルタップして有効にしてください。"</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"レッスン3: コンテキストメニュー"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBackには、グローバルコンテキストメニューとローカルコンテキストメニューという2つのコンテキストメニューがあります。これらのメニューを使うと、設定とコントロールを簡単に見つけることができます。メニューアイテムを有効にするには、メニューアイテムの円に沿って指をスライドし、目的のアイテムが聞こえたら指を離します。では、グローバルコンテキストメニューを開いてみましょう。指を離さずに<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>してください。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"グローバルコンテキストメニューには、TalkBackのどこでも使用できる一般的なコマンドが含まれています。では、画面上のすべてのテキストを読み上げてみましょう。画面の中央をタップすると指のまわりに円形のメニューが表示されますので、「<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>」が聞こえるまでオプションの円に沿って指をスライドしてください。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"グローバルコンテキストメニューが閉じました。もう一度開いてみましょう。指を離さずに<xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>してください。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"そのコマンドは、画面上のすべてのアイテムを読み上げてくれます。TalkBackには、グローバルコンテキストメニューだけでなくローカルコンテキストメニューもあります。ローカルコンテキストメニューに含まれるコントロールは、画面上で選択しているアイテムに応じて変わります。では、ローカルコンテキストメニューを開いてみましょう。指を離さずに<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>してください。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"画面の中央をタップして指を離すと、メニューが閉じます。では、ローカルコンテキストメニューを閉じてみましょう。"</string>
+    <string name="accessibility_tutorial_lesson_3_text_5" msgid="7941017643852409">"これで、コンテキストメニューを開いてナビゲートできるようになりました。コンテキストメニューの使用例については、次のレッスンでさらに詳しく説明します。次のレッスンに進むには、画面の右下にある[<xliff:g id="NEXT">%1$s</xliff:g>]ボタンを探して有効にしてください。"</string>
+    <string name="accessibility_tutorial_lesson_4_title" msgid="3898999689844982160">"レッスン 4: 読み上げ単位"</string>
+    <string name="accessibility_tutorial_lesson_4_text_1" msgid="9109984626149104730">"TalkBackには、テキスト内をさまざまな方法で移動できる読み上げ単位コントロールが用意されています。たとえば、テキストを段落ごとに読み上げたり、1語ずつ読み上げたり、または1文字ずつ読み上げたりすることもできます。まずは、画面中央のテキストボックスを探してコンテンツを読み上げてみましょう。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_2" msgid="2135471055480731456">"アイテムを選択すると、テキストがすべてデフォルトの単位で読み上げられます。このテキストの読み上げ単位を1文字ずつに変更してみましょう。まず、画面を指で<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g>してローカルコンテキストメニューを開きます。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_3_focus_lost" msgid="8713408442068375091">"対象のテキストボックスから離れた位置に移動しました。テキストボックスまで戻るには、画面中央をタップしてみてください。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_3" msgid="5978230561116221609">"次に、メニューに沿って指をスライドさせて、「<xliff:g id="CHARACTER_GRANULARITY">%1$s</xliff:g>」と聞こえたら選択します。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_4_menu_hidden" msgid="879065229665819294">"<xliff:g id="CHARACTER_GRANULARITY">%1$s</xliff:g>に変更せずにローカルコンテキストメニューを閉じました。画面を指で<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%2$s</xliff:g>して、ローカルコンテキストメニューをもう一度開いてみましょう。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_4" msgid="2648520368832903832">"これで、文字単位で移動するよう設定されました。画面上部から下部に向かってスワイプすると、1文字ずつ進みます。画面上部から下部に向かって3回スワイプして、テキストの次の3文字を読み上げてみましょう。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_5_granularity_changed" msgid="124123881203918192">"単位を<xliff:g id="CHARACTER_GRANULARITY_0">%1$s</xliff:g>から変更しました。指を離さずに画面を<xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%2$s</xliff:g>すると、ローカルコンテキストメニューから再び<xliff:g id="CHARACTER_GRANULARITY_1">%1$s</xliff:g>に戻すことができます。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_5" msgid="5408515769417809079">"これで、読み上げ単位を変更してテキストを読み上げることができるようになりました。TalkBackのチュートリアルは以上です。チュートリアルを終了するには、画面の右下にある[<xliff:g id="FINISH">%1$s</xliff:g>]ボタンを探して有効にしてください。"</string>
+    <string name="accessibility_tutorial_lesson_4_text_view_text" msgid="6855162251486030701">"このサンプルテキストを使用して、さまざまな単位でテキストを読み上げてみてください。"</string>
+    <string name="accessibility_tutorial_alert_dialog_exit" msgid="6604033839776950241">"終了"</string>
+    <string name="accessibility_tutorial_service_inactive_title" msgid="5640949274947370358">"タッチガイドが必要"</string>
+    <string name="accessibility_tutorial_service_inactive_message" msgid="1808749405557397970">"このチュートリアルではタッチガイドが必要です。起動する前にTalkBackをONにしてタッチガイドを有効にしてください。"</string>
+    <string name="accessibility_tutorial_service_suspended_title" msgid="7163740223497398638">"TalkBackが停止状態"</string>
+    <string name="accessibility_tutorial_service_suspended_message" msgid="5633367032537299661">"音声応答が一時停止状態の場合、TalkBackチュートリアルは使用できません。TalkBackの音声応答を再開してからチュートリアルを再起動して続行してください。"</string>
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"ジェスチャーの未割り当て"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"「<xliff:g id="ACTION">%1$s</xliff:g>」の操作にジェスチャーが割り当てられていません。TalkBackの設定に移動し、アクションのショートカットジェスチャーを設定してから、TalkBackのチュートリアルをやり直してください。"</string>
 </resources>

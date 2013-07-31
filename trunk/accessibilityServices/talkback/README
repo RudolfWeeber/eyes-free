@@ -10,8 +10,8 @@ The default version on Linux is 1.7, which is too old for the latest Android
 SDK. 
 
 First, you'll need to have utils, compatutils, and widgets/radial-menu checked
-out from marvin.
-Next, generate the required build scripts with the Android tools.
+out from marvin. Next, generate the required build scripts with the Android
+tools.
 
 From the utils directory, run:
 

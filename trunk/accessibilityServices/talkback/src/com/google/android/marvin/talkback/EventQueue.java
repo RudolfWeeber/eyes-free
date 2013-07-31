@@ -16,112 +16,142 @@
 
 package com.google.android.marvin.talkback;
 
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
+import android.util.SparseIntArray;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityEventCompatUtils;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * This class is an event queue which keeps track of relevant events. Such
- * events do not have {@link AccessibilityEvent#TYPE_NOTIFICATION_STATE_CHANGED}
- * . We treat such events in a special manner.
+ * This class is a queue that tracks events that TalkBack will process. This
+ * queue self-prunes events that exceed a maximum threshold for certain event
+ * types.
+ *
+ * @author caseyburkhardt@google.com (Casey Burkhardt)
  */
-class EventQueue extends ArrayList<AccessibilityEvent> {
-    /** The maximal size to the queue of cached events. */
-    private static final int EVENT_QUEUE_MAX_SIZE = 10;
-    
-    private int mNonNotificationEventCount;
+class EventQueue {
 
-    @Override
-    public boolean add(AccessibilityEvent event) {
+    /**
+     * The maximum number of events for each type included in
+     * {@code MASK_LIMITED_EVENT_TYPES} that may remain in the queue.
+     */
+    private static final int MAXIMUM_QUALIFYING_EVENTS = 2;
+
+    /**
+     * The types of events that should be pruned if there are more than
+     * {@code MAXIMUM_QUALIFYING_EVENTS} of these events in the queue.
+     */
+    private static final int MASK_LIMITED_EVENT_TYPES =
+            AccessibilityEventCompat.TYPE_VIEW_HOVER_ENTER;
+
+    /**
+     * The list responsible for maintaining events in the event queue.
+     */
+    private final ArrayList<AccessibilityEvent> mEventQueue = new ArrayList<AccessibilityEvent>();
+
+    /**
+     * The current number of events in the queue for each event type that match
+     * a type defined in {@code MASK_LIMITED_EVENT_TYPES}.
+     */
+    private final SparseIntArray mQualifyingEvents = new SparseIntArray();
+
+    /**
+     * Adds an {@link AccessibilityEvent} to the queue for processing. If this
+     * addition causes the queue to exceed the maximum allowable events for an
+     * event's type, earlier events of this type will be pruned from the queue.
+     *
+     * @param event The event to add to the queue
+     */
+    public void enqueue(AccessibilityEvent event) {
         final AccessibilityEvent clone = AccessibilityEventCompatUtils.obtain(event);
-        
-        if (!isNotificationEvent(clone)) {
-            mNonNotificationEventCount++;
+        final int eventType = clone.getEventType();
+
+        if (AccessibilityEventUtils.eventMatchesAnyType(clone, MASK_LIMITED_EVENT_TYPES)) {
+            final int eventCountOfType = mQualifyingEvents.get(eventType, 0);
+            mQualifyingEvents.put(eventType, (eventCountOfType + 1));
         }
 
-        final boolean result = super.add(clone);
-
-        enforceRelevantEventSize();
-
-        return result;
+        mEventQueue.add(clone);
+        enforceEventLimits();
     }
 
-    @Override
-    public void add(int location, AccessibilityEvent object) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends AccessibilityEvent> collection) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean addAll(int location, Collection<? extends AccessibilityEvent> collection) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public AccessibilityEvent remove(int location) {
-        final AccessibilityEvent event = get(location);
-
-        if (event != null && !isNotificationEvent(event)) {
-            mNonNotificationEventCount--;
+    /**
+     * Removes and returns an AccessibilityEvent from the front of the event queue.
+     *
+     * @return The event at the front of the queue.
+     */
+    public AccessibilityEvent dequeue() {
+        if (mEventQueue.isEmpty()) {
+            return null;
         }
 
-        return super.remove(location);
+        final AccessibilityEvent event = mEventQueue.remove(0);
+
+        if (event != null
+                && AccessibilityEventUtils.eventMatchesAnyType(event, MASK_LIMITED_EVENT_TYPES)) {
+            final int eventType = event.getEventType();
+            final int eventCountOfType = mQualifyingEvents.get(eventType, 0);
+            mQualifyingEvents.put(eventType, (eventCountOfType - 1));
+        }
+        return event;
     }
 
-    @Override
-    public boolean remove(Object object) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
+    /**
+     * Clears the event queue and discards all events waiting for processing.
+     */
     public void clear() {
-        final Iterator<AccessibilityEvent> iterator = iterator();
-
-        while (iterator.hasNext()) {
-            final AccessibilityEvent next = iterator.next();
-
-            // Never remove notification events.
-            if (!isNotificationEvent(next)) {
-                iterator.remove();
-            }
-        }
-
-        mNonNotificationEventCount = 0;
+        mEventQueue.clear();
+        mQualifyingEvents.clear();
     }
 
     /**
-     * Enforces that the event queue is not more than
-     * {@link #EVENT_QUEUE_MAX_SIZE}. The excessive events are
-     * pruned through a FIFO strategy i.e. removing the oldest event first.
+     * Determines if the event queue is empty.
+     *
+     * @return {@code true} if the queue is empty, {@code false} otherwise
      */
-    public void enforceRelevantEventSize() {
-        final Iterator<AccessibilityEvent> iterator = iterator();
-
-        while (iterator().hasNext()
-                && (mNonNotificationEventCount > EVENT_QUEUE_MAX_SIZE)) {
-            final AccessibilityEvent next = iterator.next();
-
-            // Never remove notification events.
-            if (!isNotificationEvent(next)) {
-                mNonNotificationEventCount--;
-                iterator.remove();
-            }
-        }
+    public boolean isEmpty() {
+        return mEventQueue.isEmpty();
     }
 
     /**
-     * Returns if an event type is
-     * AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED.
+     * Enforces that the event queue has no more than
+     * {@code MAXIMUM_QUALIFYING_EVENTS} events of each type defined by
+     * {@code MASK_LIMITED_EVENT_TYPES}. The excessive events are pruned by
+     * removing the oldest event first.
      */
-    private static boolean isNotificationEvent(AccessibilityEvent event) {
-        return (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);
+    private void enforceEventLimits() {
+        int eventTypesToPrune = 0;
+        // Locate event types which exceed the allowable limit
+        for (int i = 0; i < mQualifyingEvents.size(); i++) {
+            final int eventType = mQualifyingEvents.keyAt(i);
+            final int eventsOfType = mQualifyingEvents.valueAt(i);
+            if (eventsOfType > MAXIMUM_QUALIFYING_EVENTS) {
+                eventTypesToPrune |= eventType;
+            }
+        }
+
+        final Iterator<AccessibilityEvent> iterator = mEventQueue.iterator();
+        while (iterator.hasNext() && (eventTypesToPrune != 0)) {
+            final AccessibilityEvent next = iterator.next();
+
+            // Prune offending events
+            if (AccessibilityEventUtils.eventMatchesAnyType(next, eventTypesToPrune)) {
+                final int eventType = next.getEventType();
+                int eventCountOfType = mQualifyingEvents.get(eventType, 0);
+                eventCountOfType--;
+                mQualifyingEvents.put(eventType, eventCountOfType);
+                iterator.remove();
+
+                // Stop pruning further events of this type if the number of
+                // events is below the limit
+                if (eventCountOfType <= MAXIMUM_QUALIFYING_EVENTS) {
+                    eventTypesToPrune &= ~eventType;
+                }
+            }
+        }
     }
 }

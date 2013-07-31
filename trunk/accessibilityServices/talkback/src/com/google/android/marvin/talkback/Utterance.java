@@ -18,31 +18,29 @@ package com.google.android.marvin.talkback;
 
 import android.os.Bundle;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This class represents an utterance composed of text to be spoken and meta
  * data about how this text to be spoken. The utterances are cached in a pool of
  * instances to be reused as an optimization to reduce new object instantiation.
- * 
+ *
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public class Utterance {
 
-    /**
-     * Key for obtaining the queuing meta-data property.
-     */
+    /** Key for obtaining the queuing meta-data property. */
     public static final String KEY_METADATA_QUEUING = "queuing";
 
-    /**
-     * Key for obtaining the earcon rate meta-data property.
-     */
+    /** Key for obtaining the earcon rate meta-data property. */
     public static final String KEY_METADATA_EARCON_RATE = "earcon_rate";
 
-    /**
-     * Key for obtaining the earcon volume meta-data property.
-     */
+    /** Key for obtaining the earcon volume meta-data property. */
     public static final String KEY_METADATA_EARCON_VOLUME = "earcon_volume";
 
     /**
@@ -51,77 +49,78 @@ public class Utterance {
      */
     public static final String KEY_METADATA_SPEECH_PARAMS = "speech_params";
 
-    /**
-     * The maximal size of the pool with cached utterances.
-     */
+    /** Key for obtaining the speech flags meta-data property. */
+    public static final String KEY_METADATA_SPEECH_FLAGS = "speech_flags";
+
+    /** The maximum size of the pool with cached utterances. */
     private static final int MAX_POOL_SIZE = 3;
 
-    /**
-     * Mutex lock for accessing the utterance pool.
-     */
+    /** Lock for accessing the utterance pool. */
     private static final Object sPoolLock = new Object();
 
-    /**
-     * Pool of cached utterances.
-     */
+    /** Pool of cached utterances. */
     private static Utterance sPool;
 
-    /**
-     * The current size of the utterance pool.
-     */
+    /** The current size of the utterance pool. */
     private static int sPoolSize;
 
-    /**
-     * The text of the utterance.
-     */
-    private final StringBuilder mText = new StringBuilder();
+    /** Lock for modifying the {@link #mReferenceCount}. */
+    private final Object mReferenceLock = new Object();
 
-    /**
-     * Meta-data of how the utterance should be spoken.
-     */
+    /** Meta-data of how the utterance should be spoken. */
     private final Bundle mMetadata = new Bundle();
 
-    /**
-     * The list of resource identifiers for this utterance's earcons.
-     */
-    private final List<Integer> mEarcons = new LinkedList<Integer>();
+    /** The list of text to speak. */
+    private final List<CharSequence> mSpokenFeedback = new LinkedList<CharSequence>();
 
-    /**
-     * The list of resource identifiers for this utterance's vibration patterns.
-     */
-    private final List<Integer> mVibrationPatterns = new LinkedList<Integer>();
+    /** The list of auditory feedback identifiers to play. */
+    private final Set<Integer> mAuditoryFeedback = new HashSet<Integer>();
 
-    /**
-     * The list of resource identifiers for this utterance's earcons.
-     */
-    private final List<Integer> mCustomEarcons = new LinkedList<Integer>();
+    /** The list of haptic feedback identifiers to play. */
+    private final Set<Integer> mHapticFeedback = new HashSet<Integer>();
 
-    /**
-     * The list of resource identifiers for this utterance's vibration patterns.
-     */
-    private final List<Integer> mCustomVibrations = new LinkedList<Integer>();
-
-    /**
-     * The next cached utterance
-     */
+    /** The next cached utterance. */
     private Utterance mNext;
 
-    /**
-     * Denotes if an utterance is currently in the cache pool.
-     */
+    /** Denotes if an utterance is currently in the cache pool. */
     private boolean mIsInPool;
+
+    /** The number of references held to the data in this utterance. */
+    private int mReferenceCount;
 
     /**
      * Creates a new instance.
      */
     private Utterance() {
-        /* do nothing - reducing constructor visibility */
+        // This class is not publicly instantiable.
+    }
+
+    /**
+     * Returns a shallow clone of an utterance.
+     * <p>
+     * It is safe to call {@link #recycle} on the original {@link Utterance} and
+     * continue using the returned value.
+     *
+     * @param other An utterance.
+     * @return A shallow clone of the utterance.
+     */
+    public static Utterance clone(Utterance other) {
+        if (other == null) {
+            return null;
+        }
+
+        // Increase the reference count to prevent recycling.
+        synchronized (other.mReferenceLock) {
+            other.mReferenceCount++;
+        }
+
+        return other;
     }
 
     /**
      * Returns a cached instance if such is available or a new one is
      * instantiated.
-     * 
+     *
      * @return An instance.
      */
     public static Utterance obtain() {
@@ -131,7 +130,7 @@ public class Utterance {
     /**
      * Returns a cached instance if such is available or a new one is
      * instantiated and sets its <code>text</code>.
-     * 
+     *
      * @param text The text of the returned utterance.
      * @return An instance.
      */
@@ -150,55 +149,100 @@ public class Utterance {
     }
 
     /**
-     * Gets the text of this utterance.
-     * 
-     * @return The utterance text.
+     * Adds spoken feedback to this utterance.
+     *
+     * @param text The text to speak.
      */
-    public StringBuilder getText() {
-        return mText;
+    public void addSpoken(CharSequence text) {
+        // TODO: Consider adding additional parameters (flags, pitch, etc.) and
+        // allowing each element of spoken feedback to have different
+        // properties. Will require extensive SpeechController modifications.
+        mSpokenFeedback.add(text);
     }
 
     /**
-     * Gets the list of earcons for this utterance.
-     * 
-     * @return A list of sound resource identifiers.
+     * Adds a spoken feedback flag to this utterance's metadata.
+     *
+     * @param flag The flag to add. One of:
+     *            <ul>
+     *            <li>{@link FeedbackItem#FLAG_DURING_RECO}
+     *            <li>{@link FeedbackItem#FLAG_NO_HISTORY}
+     *            <li>{@link FeedbackItem#FLAG_ADVANCE_CONTINUOUS_READING}
+     *            </ul>
      */
-    public List<Integer> getEarcons() {
-        return mEarcons;
+    public void addSpokenFlag(int flag) {
+        final int flags = mMetadata.getInt(KEY_METADATA_SPEECH_FLAGS, 0);
+        mMetadata.putInt(KEY_METADATA_SPEECH_FLAGS, flags | flag);
     }
 
     /**
-     * Gets the list of vibration patterns for this utterance.
-     * 
-     * @return A list of vibration pattern resource identifiers.
+     * Adds auditory feedback to this utterance.
+     *
+     * @param id The value associated with the auditory feedback to play.
      */
-    public List<Integer> getVibrationPatterns() {
-        return mVibrationPatterns;
+    public void addAuditory(int id) {
+        mAuditoryFeedback.add(id);
     }
 
     /**
-     * @return A list of preference identifiers that correspond to earcon
-     *         resource identifiers.
+     * Adds auditory feedback to this utterance.
+     *
+     * @param ids A collection of identifiers associated with the auditory
+     *            feedback to play.
      */
-    public List<Integer> getCustomEarcons() {
-        return mCustomEarcons;
+    public void addAllAuditory(Collection<? extends Integer> ids) {
+        mAuditoryFeedback.addAll(ids);
     }
 
     /**
-     * @return A list of preference identifiers that correspond to vibration
-     *         pattern resource identifiers.
+     * Adds haptic feedback to this utterance.
+     *
+     * @param id The value associated with the haptic feedback to play.
      */
-    public List<Integer> getCustomVibrations() {
-        return mCustomVibrations;
+    public void addHaptic(int id) {
+        mHapticFeedback.add(id);
+    }
+
+    /**
+     * Adds haptic feedback to this utterance.
+     *
+     * @param ids A collection of identifiers associated with the haptic
+     *            feedback to play.
+     */
+    public void addAllHaptic(Collection<? extends Integer> ids) {
+        mHapticFeedback.addAll(ids);
     }
 
     /**
      * Gets the meta-data of this utterance.
-     * 
+     *
      * @return The utterance meta-data.
      */
     public Bundle getMetadata() {
         return mMetadata;
+    }
+
+    /**
+     * @return An unmodifiable list of spoken text attached to this utterance.
+     */
+    public List<CharSequence> getSpoken() {
+        return Collections.unmodifiableList(mSpokenFeedback);
+    }
+
+    /**
+     * @return An unmodifiable set of auditory feedback identifiers attached to
+     *         this utterance.
+     */
+    public Set<Integer> getAuditory() {
+        return Collections.unmodifiableSet(mAuditoryFeedback);
+    }
+
+    /**
+     * @return An unmodifiable set of haptic feedback identifiers attached to
+     *         this utterance.
+     */
+    public Set<Integer> getHaptic() {
+        return Collections.unmodifiableSet(mHapticFeedback);
     }
 
     /**
@@ -207,10 +251,20 @@ public class Utterance {
      * <b>Note: You must not touch the object after calling this function.</b>
      */
     public void recycle() {
+        synchronized (mReferenceLock) {
+            mReferenceCount--;
+
+            if (mReferenceCount > 0) {
+                return;
+            }
+        }
+
         if (mIsInPool) {
             return;
         }
+
         clear();
+
         synchronized (sPoolLock) {
             if (sPoolSize <= MAX_POOL_SIZE) {
                 mNext = sPool;
@@ -225,19 +279,17 @@ public class Utterance {
      * Clears the state of this instance.
      */
     private void clear() {
-        mText.delete(0, mText.length());
         mMetadata.clear();
-        mEarcons.clear();
-        mVibrationPatterns.clear();
-        mCustomEarcons.clear();
-        mCustomVibrations.clear();
+        mSpokenFeedback.clear();
+        mAuditoryFeedback.clear();
+        mHapticFeedback.clear();
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("Text:{");
-        builder.append(mText);
+        builder.append(mSpokenFeedback);
         builder.append("}, Metadata:");
         builder.append(mMetadata);
         return builder.toString();

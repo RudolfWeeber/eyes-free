@@ -17,7 +17,11 @@
 package com.google.android.marvin.talkback;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.SparseIntArray;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utilities for cleaning up speech text.
@@ -25,6 +29,17 @@ import android.util.SparseIntArray;
  * @author alanv@google.com (Alan Viverette)
  */
 public class SpeechCleanupUtils {
+    /** The regular expression used to match consecutive identical characters */
+    // Double escaping of regex characters is required. "\\1" refers to the
+    // first capturing group between the outer nesting of "[]"s and "{2,}"
+    // refers to two or more additional repetitions thereof.
+    private static final
+            String CONSECUTIVE_CHARACTER_REGEX = "([\\-\\\\/|!@#$%^&*\\(\\)=_+\\[\\]\\{\\}.?;'\":<>])\\1{2,}";
+
+    /** The Pattern used to match consecutive identical characters */
+    private static Pattern CONSECUTIVE_CHARACTER_PATTERN = Pattern.compile(
+            CONSECUTIVE_CHARACTER_REGEX);
+
     /** Map containing string to speech conversions. */
     private static final SparseIntArray UNICODE_MAP = new SparseIntArray();
 
@@ -78,6 +93,15 @@ public class SpeechCleanupUtils {
         UNICODE_MAP.put('_', R.string.symbol_underscore);
         UNICODE_MAP.put('|', R.string.symbol_vertical_bar);
         UNICODE_MAP.put('\u00a5', R.string.symbol_yen);
+        UNICODE_MAP.put('\u00ac', R.string.symbol_not_sign);
+        UNICODE_MAP.put('\u00a6', R.string.symbol_broken_bar);
+        UNICODE_MAP.put('\u00b5', R.string.symbol_micro_sign);
+        UNICODE_MAP.put('\u2248', R.string.symbol_almost_equals);
+        UNICODE_MAP.put('\u2260', R.string.symbol_not_equals);
+        UNICODE_MAP.put('\u00a4', R.string.symbol_currency_sign);
+        UNICODE_MAP.put('\u00a7', R.string.symbol_section_sign);
+        UNICODE_MAP.put('\u2191', R.string.symbol_upwards_arrow);
+        UNICODE_MAP.put('\u2190', R.string.symbol_leftwards_arrow);
     }
 
     /**
@@ -92,10 +116,32 @@ public class SpeechCleanupUtils {
             return text;
         }
 
-        final String value = getCleanValueFor(context, text.charAt(0));
+        return getCleanValueFor(context, text.charAt(0));
+    }
 
-        if (value != null) {
-            return value;
+    /**
+     * Collapses repeated consecutive characters in a CharSequence by matching
+     * against {@link #CONSECUTIVE_CHARACTER_REGEX}.
+     *
+     * @param context Context for retrieving resources
+     * @param text The text to process
+     * @return The text with consecutive identical characters collapsed
+     */
+    public static CharSequence collapseRepeatedCharacters(Context context, CharSequence text) {
+        if (TextUtils.isEmpty(text)) {
+            return null;
+        }
+
+        // TODO(caseyburkhardt): Add tests
+        Matcher matcher = CONSECUTIVE_CHARACTER_PATTERN.matcher(text);
+        while (matcher.find()) {
+            final String replacement = context.getString(R.string.character_collapse_template,
+                    matcher.group().length(), getCleanValueFor(context, matcher.group().charAt(0)));
+            final int matchFromIndex = matcher.end() - matcher.group().length()
+                    + replacement.length();
+            text = matcher.replaceFirst(replacement);
+            matcher = CONSECUTIVE_CHARACTER_PATTERN.matcher(text);
+            matcher.region(matchFromIndex, text.length());
         }
 
         return text;
@@ -104,7 +150,7 @@ public class SpeechCleanupUtils {
     /**
      * Returns the "clean" value for the specified character.
      */
-    private static String getCleanValueFor(Context context, char key) {
+    public static String getCleanValueFor(Context context, char key) {
         final int resId = UNICODE_MAP.get(key);
 
         if (resId != 0) {
@@ -115,6 +161,6 @@ public class SpeechCleanupUtils {
             return context.getString(R.string.template_capital_letter, Character.toString(key));
         }
 
-        return null;
+        return Character.toString(key);
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Vai tiešām vēlaties apturēt pakalpojuma TalkBack darbību?"\n\n"Ja pakalpojuma TalkBack darbība tiks apturēta, jūsu ierīce nesniegs atsauksmes un funkcija “Pārlūkot pieskaroties” tiks atspējota."\n\n"Varat atsākt pakalpojuma TalkBack darbību paziņojumu panelī vai atgriežoties bloķēšanas ekrānā."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"Vai tiešām vēlaties apturēt lietotnes TalkBack darbību?"\n\n"Kamēr lietotnes TalkBack darbība būs apturēta, ierīce nesniegs atbildes un funkcija “Pārlūkot pieskaroties” būs atspējota."</string>
 </resources>

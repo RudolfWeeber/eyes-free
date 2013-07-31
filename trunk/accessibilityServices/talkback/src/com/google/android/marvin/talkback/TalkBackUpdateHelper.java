@@ -25,6 +25,7 @@ import android.view.accessibility.AccessibilityEvent;
 import com.google.android.marvin.utils.AutomationUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.PackageManagerUtils;
+import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
 
 import java.util.List;
 
@@ -56,6 +57,9 @@ class TalkBackUpdateHelper {
      */
     /* package */static final int GESTURE_CHANGE_NOTIFICATION_ID = 2;
 
+    /** Notification ID for the built-in gesture change notification. */
+    /* package */static final int BUILT_IN_GESTURE_CHANGE_NOTIFICATION_ID = 3;
+
     private final Handler mHandler = new Handler();
 
     private final TalkBackService mService;
@@ -77,7 +81,16 @@ class TalkBackUpdateHelper {
                 mService.getString(R.string.pref_must_accept_gesture_change_notification), false);
 
         if (userMustAcceptGestureChange) {
-            mHandler.postDelayed(mNotificationRunnable, NOTIFICATION_DELAY);
+            // Build the intent for when the notification is clicked.
+            final Intent notificationIntent = new Intent(
+                    mService, GestureChangeNotificationActivity.class);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+
+            NotificationPosterRunnable runnable = new NotificationPosterRunnable(
+                    buildGestureChangeNotification(notificationIntent),
+                    GESTURE_CHANGE_NOTIFICATION_ID);
+            mHandler.postDelayed(runnable, NOTIFICATION_DELAY);
         }
     }
 
@@ -132,8 +145,31 @@ class TalkBackUpdateHelper {
         }
 
         // Revision 74 changes the gesture model added in revision 68.
-        if ((previousVersion >= 68) && (previousVersion < 74) && (Build.VERSION.SDK_INT >= 16)) {
+        if ((previousVersion >= 68) && (previousVersion < 74)
+                && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)) {
             notifyUserOfGestureChanges();
+        }
+
+        // Revision 84 combines the TalkBack and continuous reading breakout
+        // menus. References to the continuous reading menu are silently
+        // remapped to the local breakout menu.
+        if (previousVersion < 84) {
+            remapContinuousReadingMenu();
+        }
+
+        // Revision 90 removes the "shake to read" checkbox preference and
+        // replaces it with a list preference of shake velocity thresholds that
+        // includes a default "Off" option.
+        if (previousVersion < 90) {
+            remapShakeToReadPref();
+        }
+
+        // Revision 97 moved granularity selection into a local context menu, so
+        // the up-then-down and down-then-up gestures were remapped to help
+        // users navigate past groups of things, like web content and lists.
+        if ((previousVersion != -1) && (previousVersion < 97)
+                && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)) {
+            notifyUserOfBuiltInGestureChanges();
         }
 
         editor.commit();
@@ -210,7 +246,58 @@ class TalkBackUpdateHelper {
 
         editor.commit();
 
-        mHandler.postDelayed(mNotificationRunnable, NOTIFICATION_DELAY);
+        // Build the intent for when the notification is clicked.
+        final Intent notificationIntent = new Intent(
+                mService, GestureChangeNotificationActivity.class);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+
+        NotificationPosterRunnable runnable = new NotificationPosterRunnable(
+                buildGestureChangeNotification(notificationIntent), GESTURE_CHANGE_NOTIFICATION_ID);
+        mHandler.postDelayed(runnable, NOTIFICATION_DELAY);
+    }
+
+    private void notifyUserOfBuiltInGestureChanges() {
+        // Build the intent for when the notification is clicked.
+        final Intent notificationIntent = new Intent(
+                mService, NotificationActivity.class);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        notificationIntent.putExtra(NotificationActivity.EXTRA_INT_DIALOG_TITLE,
+                R.string.notification_title_talkback_gestures_changed);
+        notificationIntent.putExtra(NotificationActivity.EXTRA_INT_DIALOG_MESSAGE,
+                R.string.talkback_built_in_gesture_change_details);
+        notificationIntent.putExtra(NotificationActivity.EXTRA_INT_NOTIFICATION_ID,
+                BUILT_IN_GESTURE_CHANGE_NOTIFICATION_ID);
+
+        NotificationPosterRunnable runnable = new NotificationPosterRunnable(
+                buildGestureChangeNotification(notificationIntent),
+                BUILT_IN_GESTURE_CHANGE_NOTIFICATION_ID);
+        mHandler.postDelayed(runnable, NOTIFICATION_DELAY);
+    }
+
+    private Notification buildGestureChangeNotification(Intent clickIntent) {
+        final PendingIntent pendingIntent = PendingIntent.getActivity(
+                mService, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final String ticker = mService.getString(
+                R.string.notification_title_talkback_gestures_changed);
+        final String contentTitle = mService.getString(
+                R.string.notification_title_talkback_gestures_changed);
+        final String contentText = mService.getString(
+                R.string.notification_message_talkback_gestures_changed);
+        final Notification notification = new NotificationCompat.Builder(mService)
+                .setSmallIcon(R.drawable.ic_stat_info)
+                        .setTicker(ticker)
+                        .setContentTitle(contentTitle)
+                        .setContentText(contentText)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(false)
+                        .setWhen(0).build();
+
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        return notification;
     }
 
     /**
@@ -232,56 +319,79 @@ class TalkBackUpdateHelper {
     }
 
     /**
-     * Displays a notification that TalkBack's gestures have been changed from
-     * their previous defaults and can be further customized from within
-     * TalkBack settings.
+     * Replaces any user-defined gesture mappings that reference the continuous
+     * reading menu with the local breakout menu.
      */
-    private void displayGestureChangedNotification() {
-        final Intent notificationIntent = new Intent(
-                mService, GestureChangeNotificationActivity.class);
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+    private void remapContinuousReadingMenu() {
+        final Editor editor = mSharedPreferences.edit();
+        final String targetValue = "READ_ALL_BREAKOUT";
+        final String replaceValue = "LOCAL_BREAKOUT";
+        final int[] gestureKeys = {
+                R.string.pref_shortcut_down_and_left_key,
+                R.string.pref_shortcut_down_and_right_key,
+                R.string.pref_shortcut_left_and_down_key,
+                R.string.pref_shortcut_left_and_up_key,
+                R.string.pref_shortcut_right_and_down_key,
+                R.string.pref_shortcut_right_and_up_key,
+                R.string.pref_shortcut_up_and_left_key,
+                R.string.pref_shortcut_up_and_right_key };
 
-        final PendingIntent pendingIntent = PendingIntent.getActivity(
-                mService, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        for (int key : gestureKeys) {
+            final String prefKey = mService.getString(key);
+            if (mSharedPreferences.getString(prefKey, "").equals(targetValue)) {
+                editor.putString(prefKey, replaceValue);
+            }
+        }
 
-        final String ticker = mService.getString(
-                R.string.notification_title_talkback_gestures_changed);
-        final String contentTitle = mService.getString(
-                R.string.notification_title_talkback_gestures_changed);
-        final String contentText = mService.getString(
-                R.string.notification_message_talkback_gestures_changed);
-        final Notification notification = new NotificationCompat.Builder(mService)
-                .setSmallIcon(R.drawable.ic_stat_info)
-                        .setTicker(ticker)
-                        .setContentTitle(contentTitle)
-                        .setContentText(contentText)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(false)
-                        .setWhen(0).build();
-
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-
-        mNotificationManager.notify(GESTURE_CHANGE_NOTIFICATION_ID, notification);
+        editor.commit();
     }
 
     /**
-     * Displays the user notification after a short delay.
+     * Handles the conversion from the check box preference to the list
+     * preference for the shake to read feature. Users who have previously
+     * enabled the shake to read feature will be switched to the medium velocity
+     * threshold.
      */
-    private final Runnable mNotificationRunnable = new Runnable() {
+    private void remapShakeToReadPref() {
+        final boolean oldPrefOn = SharedPreferencesUtils.getBooleanPref(mSharedPreferences,
+                mService.getResources(), R.string.pref_shake_to_read_key,
+                R.bool.pref_shake_to_read_default);
+
+        if (oldPrefOn) {
+            final Editor editor = mSharedPreferences.edit();
+            editor.putString(mService.getString(R.string.pref_shake_to_read_threshold_key),
+                    mService.getString(R.string.pref_shake_to_read_threshold_conversion_default));
+            editor.putBoolean(mService.getString(R.string.pref_shake_to_read_key), false);
+            editor.commit();
+        }
+    }
+
+    /**
+     * Runnable used for posting notifications to the
+     * {@link NotificationManager} after a short delay.
+     */
+    private class NotificationPosterRunnable implements Runnable {
+        private Notification mNotification;
+        private int mId;
+
+        public NotificationPosterRunnable(Notification n, int id) {
+            mNotification = n;
+            mId = id;
+        }
+
         @Override
         public void run() {
-            displayGestureChangedNotification();
+            mNotificationManager.notify(mId, mNotification);
         }
-    };
+    }
 
     /**
      * Event listener that helps handle a bug when upgrading TalkBack from the
      * Jelly Bean factory ROM version (68) on device running the Jelly Bean
      * factory ROM version of Android.
      */
-    private static class ExploreByTouchUpdateHelper implements TalkBackService.EventListener {
+    private static class ExploreByTouchUpdateHelper
+            implements TalkBackService.AccessibilityEventListener {
         private final TalkBackService mService;
 
         public ExploreByTouchUpdateHelper(TalkBackService service) {
@@ -289,7 +399,7 @@ class TalkBackUpdateHelper {
         }
 
         @Override
-        public void process(AccessibilityEvent event) {
+        public void onAccessibilityEvent(AccessibilityEvent event) {
             // If we're able to process this event, remove this listener from
             // the service (even if we failed).
             if (attemptToProcess(event)) {

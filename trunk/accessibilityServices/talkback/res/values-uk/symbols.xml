@@ -51,4 +51,13 @@
     <string name="symbol_underscore" msgid="4704253128574141726">"Символ підкреслення"</string>
     <string name="symbol_vertical_bar" msgid="1048988153298679308">"Вертикальна риска"</string>
     <string name="symbol_yen" msgid="3603544638369460075">"Єна"</string>
+    <string name="symbol_not_sign" msgid="1705947242583463656">"Знак м’якого переносу"</string>
+    <string name="symbol_broken_bar" msgid="1777821269046780826">"Розірвана вертикальна лінія"</string>
+    <string name="symbol_micro_sign" msgid="647089591706610860">"Знак мікро"</string>
+    <string name="symbol_almost_equals" msgid="1653570364882667595">"Майже дорівнює"</string>
+    <string name="symbol_not_equals" msgid="4969533365479104300">"Не дорівнює"</string>
+    <string name="symbol_currency_sign" msgid="7144446821437630777">"Знак валюти"</string>
+    <string name="symbol_section_sign" msgid="5046720536230643125">"Знак параграфа"</string>
+    <string name="symbol_upwards_arrow" msgid="6902164954804994511">"Стрілка вгору"</string>
+    <string name="symbol_leftwards_arrow" msgid="7090590636020442062">"Стрілка вліво"</string>
 </resources>

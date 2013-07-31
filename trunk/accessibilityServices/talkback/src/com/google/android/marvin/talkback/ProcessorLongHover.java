@@ -21,12 +21,16 @@ import android.os.Message;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.TalkBackService.EventListener;
+import com.google.android.marvin.talkback.SpeechController.UtteranceCompleteRunnable;
+import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
 import com.google.android.marvin.talkback.speechrules.NodeSpeechRuleProcessor;
+import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
 import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityEventCompatUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 /**
@@ -39,7 +43,7 @@ import com.googlecode.eyesfree.utils.WeakReferenceHandler;
  *
  * @author alanv@google.com (Alan Viverette)
  */
-class ProcessorLongHover implements EventListener {
+class ProcessorLongHover implements AccessibilityEventListener {
     /** The minimum API level required to use this class. */
     public static final int MIN_API_LEVEL = 14;
 
@@ -59,13 +63,14 @@ class ProcessorLongHover implements EventListener {
     public ProcessorLongHover(TalkBackService context) {
         mContext = context;
         mSpeechController = context.getSpeechController();
-        mRuleProcessor = context.getNodeProcessor();
+
+        mRuleProcessor = NodeSpeechRuleProcessor.getInstance();
 
         mHandler = new LongHoverHandler(this);
     }
 
     @Override
-    public void process(AccessibilityEvent event) {
+    public void onAccessibilityEvent(AccessibilityEvent event) {
         final int eventType = event.getEventType();
 
         if ((eventType == AccessibilityEvent.TYPE_VIEW_HOVER_ENTER)
@@ -111,6 +116,13 @@ class ProcessorLongHover implements EventListener {
      * @param event The source event.
      */
     private void speakLongHover(AccessibilityEvent event) {
+        // Never speak hint text if the tutorial is active
+        if (AccessibilityTutorialActivity.isTutorialActive()) {
+            LogUtils.log(this, Log.VERBOSE,
+                    "Dropping long hover hint speech because tutorial is active.");
+            return;
+        }
+
         final AccessibilityRecordCompat record = new AccessibilityRecordCompat(event);
         AccessibilityNodeInfoCompat source = record.getSource();
 
@@ -128,12 +140,12 @@ class ProcessorLongHover implements EventListener {
             }
         }
 
-        final CharSequence text = mRuleProcessor.getHintForNode(mContext, source);
+        final CharSequence text = mRuleProcessor.getHintForNode(source);
         source.recycle();
 
         // Use QUEUE mode so that we don't interrupt more important messages.
-        mSpeechController.cleanUpAndSpeak(
-                text, SpeechController.QUEUE_MODE_QUEUE, SpeechController.FLAG_NO_HISTORY, null);
+        mSpeechController.speak(
+                text, SpeechController.QUEUE_MODE_QUEUE, FeedbackItem.FLAG_NO_HISTORY, null);
     }
 
     private void cacheEnteredNode(AccessibilityNodeInfoCompat node) {
@@ -182,11 +194,15 @@ class ProcessorLongHover implements EventListener {
     /**
      * Posts a delayed long hover action.
      */
-    private final Runnable mLongHoverRunnable = new Runnable() {
+    private final UtteranceCompleteRunnable mLongHoverRunnable = new UtteranceCompleteRunnable() {
         @Override
-        public void run() {
-            final AccessibilityEvent event = mPendingLongHoverEvent;
+        public void run(int status) {
+            // The utterance must have been spoken successfully.
+            if (status != SpeechController.STATUS_SPOKEN) {
+                return;
+            }
 
+            final AccessibilityEvent event = mPendingLongHoverEvent;
             if (event == null) {
                 return;
             }

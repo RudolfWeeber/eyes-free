@@ -21,7 +21,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
+import android.os.Handler;
+import android.util.Log;
+
+import com.googlecode.eyesfree.utils.LogUtils;
 
 /**
  * Convenience class for working with the ProximitySensor. Also uses the ambient
@@ -30,18 +33,28 @@ import android.os.Build;
  * @author clchen@google.com (Charles L. Chen)
  */
 public class ProximitySensor {
+
+    /**
+     * Number of milliseconds to wait before reporting onSensorChanged events to
+     * the listener. Used to compensate for platform inconsistencies surrounding
+     * reporting the sensor state after listener registration or an accuracy
+     * change.
+     */
+    private static final long REGISTRATION_EVENT_FILTER_TIMEOUT = 120;
+
     private final SensorManager mSensorManager;
     private final Sensor mProxSensor;
+    private final Handler mHandler = new Handler();
+
     private final float mFarValue;
 
     private ProximityChangeListener mCallback;
 
     /**
-     * Whether the next proximity sensor event should be dropped. Used on API <
-     * 14 to ignore the first sensor event that occurs after registering a
-     * listener.
+     * Whether this class should be dropping onSensorChanged events from
+     * reaching the client.
      */
-    private boolean mIgnoreNextEvent;
+    private boolean mShouldDropEvents;
 
     /** Whether the user is close to the proximity sensor. */
     private boolean mIsClose;
@@ -81,6 +94,8 @@ public class ProximitySensor {
             return;
         }
 
+        LogUtils.log(
+                this, Log.VERBOSE, "Proximity sensor stopped at %d.", System.currentTimeMillis());
         mIsActive = false;
         mSensorManager.unregisterListener(mListener);
     }
@@ -93,31 +108,48 @@ public class ProximitySensor {
             return;
         }
 
-        // On API < 14, the proximity sensor sends an event immediately after
-        // registering a listener. We should ignore this event.
-        if (Build.VERSION.SDK_INT < 14) {
-            mIgnoreNextEvent = true;
-        }
-
         mIsActive = true;
+        mShouldDropEvents = true;
         mSensorManager.registerListener(mListener, mProxSensor, SensorManager.SENSOR_DELAY_UI);
+        LogUtils.log(this, Log.VERBOSE,
+                "Proximity sensor registered at %d.", System.currentTimeMillis());
+        mHandler.postDelayed(mFilterRunnable, REGISTRATION_EVENT_FILTER_TIMEOUT);
     }
 
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // Do nothing.
+            LogUtils.log(this, Log.VERBOSE,
+                    "Processing onAccuracyChanged event at %d.", System.currentTimeMillis());
+            mShouldDropEvents = true;
+            mHandler.removeCallbacks(mFilterRunnable);
+            mHandler.postDelayed(mFilterRunnable, REGISTRATION_EVENT_FILTER_TIMEOUT);
         }
 
         @Override
         public void onSensorChanged(SensorEvent event) {
-            if (mIgnoreNextEvent) {
-                mIgnoreNextEvent = false;
+            if (mShouldDropEvents) {
+                LogUtils.log(this, Log.VERBOSE,
+                        "Dropping onSensorChanged event at %d.", System.currentTimeMillis());
                 return;
             }
 
+            LogUtils.log(this, Log.VERBOSE,
+                    "Processing onSensorChanged event at %d.", System.currentTimeMillis());
             mIsClose = (event.values[0] < mFarValue);
             mCallback.onProximityChanged(mIsClose);
+        }
+    };
+
+    /**
+     * Runnable used to enforce the {@link #REGISTRATION_EVENT_FILTER_TIMEOUT}
+     */
+    private final Runnable mFilterRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mShouldDropEvents = false;
+            LogUtils.log(this, Log.VERBOSE,
+                    "Stopped filtering proximity events at %d.", System.currentTimeMillis());
         }
     };
 

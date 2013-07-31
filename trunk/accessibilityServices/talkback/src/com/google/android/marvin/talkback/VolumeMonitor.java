@@ -16,29 +16,49 @@
 
 package com.google.android.marvin.talkback;
 
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Message;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.util.SparseIntArray;
 
+import com.google.android.marvin.talkback.SpeechController.UtteranceCompleteRunnable;
 import com.googlecode.eyesfree.compat.media.AudioManagerCompatUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.WeakReferenceHandler;
 
 /**
  * Listens for and responds to volume changes.
  */
-public class VolumeMonitor {
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+public class VolumeMonitor extends BroadcastReceiver {
+    /** Minimum API version required for this class to function. */
+    public static final int MIN_API_LEVEL = Build.VERSION_CODES.JELLY_BEAN;
+
     /** Pseudo stream type for master volume. */
     private static final int STREAM_MASTER = -100;
 
-    /** Minimum API version required for this class to function. */
-    public static final int MIN_API_LEVEL = 16;
+    private static final SparseIntArray STREAM_NAMES = new SparseIntArray();
+
+    static {
+         STREAM_NAMES.put(STREAM_MASTER, R.string.value_stream_master);
+         STREAM_NAMES.put(AudioManager.STREAM_VOICE_CALL, R.string.value_stream_voice_call);
+         STREAM_NAMES.put(AudioManager.STREAM_SYSTEM, R.string.value_stream_system);
+         STREAM_NAMES.put(AudioManager.STREAM_RING, R.string.value_stream_ring);
+         STREAM_NAMES.put(AudioManager.STREAM_MUSIC, R.string.value_stream_music);
+         STREAM_NAMES.put(AudioManager.STREAM_ALARM, R.string.value_stream_alarm);
+         STREAM_NAMES.put(AudioManager.STREAM_NOTIFICATION, R.string.value_stream_notification);
+         STREAM_NAMES.put(AudioManagerCompatUtils.STREAM_DTMF, R.string.value_stream_dtmf);
+    }
 
     /** Keep track of adjustments made by this class. */
-    private final int[] mSelfAdjustments = new int[10];
+    private final SparseIntArray mSelfAdjustments = new SparseIntArray(10);
 
     private Context mContext;
     private SpeechController mSpeechController;
@@ -58,41 +78,24 @@ public class VolumeMonitor {
         mSpeechController = context.getSpeechController();
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         mTelephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+    }
 
+    public IntentFilter getFilter() {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(AudioManagerCompatUtils.VOLUME_CHANGED_ACTION);
         intentFilter.addAction(AudioManagerCompatUtils.MASTER_VOLUME_CHANGED_ACTION);
-
-        mContext.registerReceiver(mBroadcastReceiver, intentFilter);
-    }
-
-    /**
-     * Shuts down and disables the volume monitor.
-     */
-    public void shutdown() {
-        releaseControl();
-
-        mContext.unregisterReceiver(mBroadcastReceiver);
-        mContext = null;
-
-        mSpeechController = null;
+        return intentFilter;
     }
 
     public void setStreamVolume(int streamType, int index, int flags) {
-        if (streamType >= mSelfAdjustments.length) {
-            return;
-        }
-
-        mSelfAdjustments[streamType] = index;
+        mSelfAdjustments.put(streamType, index);
     }
 
     private boolean isSelfAdjusted(int streamType, int volume) {
-        if (streamType >= mSelfAdjustments.length) {
+        if (mSelfAdjustments.indexOfKey(streamType) < 0) {
             return false;
-        }
-
-        if (mSelfAdjustments[streamType] == volume) {
-            mSelfAdjustments[streamType] = -1;
+        } else if (mSelfAdjustments.get(streamType) == volume) {
+            mSelfAdjustments.put(streamType, -1);
             return true;
         }
 
@@ -126,7 +129,7 @@ public class VolumeMonitor {
             return;
         }
 
-        mHandler.releaseControl();
+        mHandler.releaseControlDelayed();
     }
 
     /**
@@ -136,17 +139,32 @@ public class VolumeMonitor {
      * @param streamType The stream type over which control has been acquired.
      */
     private void internalOnControlAcquired(int streamType) {
-        final String streamName = getStreamName(streamType);
-        final int volume = getStreamVolume(streamType);
-        final String text = mContext.getString(
-                R.string.template_stream_volume, streamName, volume);
+        LogUtils.log(this, Log.VERBOSE, "Acquired control of stream %d", streamType);
 
-        if (!shouldAnnounceStream(streamType)) {
-            mHandler.post(mStartReleaseTimeout);
-            return;
+        mHandler.releaseControlDelayed();
+    }
+
+    /**
+     * Returns the volume announcement text for the specified stream.
+     *
+     * @param streamType The stream to announce.
+     * @return The volume announcement text for the stream.
+     */
+    private String getAnnouncementForStreamType(int templateResId, int streamType) {
+        // The ringer has special cases for silent and vibrate.
+        if (streamType == AudioManager.STREAM_RING) {
+            switch (mAudioManager.getRingerMode()) {
+                case AudioManager.RINGER_MODE_VIBRATE:
+                    return mContext.getString(R.string.value_ringer_vibrate);
+                case AudioManager.RINGER_MODE_SILENT:
+                    return mContext.getString(R.string.value_ringer_silent);
+            }
         }
 
-        speakWithCompletion(text, mStartReleaseTimeout);
+        final String streamName = getStreamName(streamType);
+        final int volume = getStreamVolume(streamType);
+
+        return mContext.getString(templateResId, streamName, volume);
     }
 
     /**
@@ -158,21 +176,21 @@ public class VolumeMonitor {
         mHandler.clearReleaseControl();
 
         final int streamType = mCurrentStream;
-
         if (streamType < 0) {
             // Already released!
             return;
         }
 
+        LogUtils.log(this, Log.VERBOSE, "Released control of stream %d", mCurrentStream);
+
         if (!shouldAnnounceStream(streamType)) {
-            mHandler.post(mReleaseControl);
+            mHandler.post(new SpeechController.CompletionRunner(
+                    mReleaseControl, SpeechController.STATUS_INTERRUPTED));
             return;
         }
 
-        final String streamName = getStreamName(streamType);
-        final int volume = getStreamVolume(streamType);
-        final String text = mContext.getString(
-                R.string.template_stream_volume_set, streamName, volume);
+        final String text = getAnnouncementForStreamType(
+                R.string.template_stream_volume_set, streamType);
 
         speakWithCompletion(text, mReleaseControl);
     }
@@ -180,7 +198,7 @@ public class VolumeMonitor {
     /**
      * Releases control of the stream.
      */
-    private void releaseControl() {
+    public void releaseControl() {
         mCurrentStream = -1;
         AudioManagerCompatUtils.forceVolumeControlStream(mAudioManager, -1);
     }
@@ -196,6 +214,11 @@ public class VolumeMonitor {
             case AudioManager.STREAM_MUSIC:
                 // Only announce music stream if it's not being used.
                 return !mAudioManager.isMusicActive();
+            case AudioManager.STREAM_VOICE_CALL:
+                // Never speak voice call volume. Since we only speak when
+                // telephony is idle, this check is only necessary for
+                // non-telephony voice calls (e.g. Google Talk).
+                return false;
             default:
                 // Announce all other streams by default. The VOICE_CALL and
                 // RING streams are handled by checking the telephony state in
@@ -212,16 +235,18 @@ public class VolumeMonitor {
      * @param text The text to speak.
      * @param completedAction The action to run after speaking.
      */
-    private void speakWithCompletion(String text, Runnable completedAction) {
+    private void speakWithCompletion(String text, UtteranceCompleteRunnable completedAction) {
         if ((mTelephonyManager != null)
                 && (mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE)) {
             // If the phone is busy, don't speak anything.
-            mHandler.post(completedAction);
+            mHandler.post(new SpeechController.CompletionRunner(
+                    completedAction, SpeechController.STATUS_INTERRUPTED));
             return;
         }
 
-        mSpeechController.cleanUpAndSpeak(
-                text, SpeechController.QUEUE_MODE_QUEUE, 0, null, completedAction);
+        mSpeechController.speak(
+                text, null, null, SpeechController.QUEUE_MODE_QUEUE, 0, null, null,
+                completedAction);
     }
 
     /**
@@ -231,42 +256,48 @@ public class VolumeMonitor {
      * @return The localized stream name.
      */
     private String getStreamName(int streamType) {
-        final int resId;
-
-        switch (streamType) {
-            case STREAM_MASTER:
-                resId = R.string.value_stream_master;
-                break;
-            case AudioManager.STREAM_VOICE_CALL:
-                resId = R.string.value_stream_voice_call;
-                break;
-            case AudioManager.STREAM_SYSTEM:
-                resId = R.string.value_stream_system;
-                break;
-            case AudioManager.STREAM_RING:
-                resId = R.string.value_stream_ring;
-                break;
-            case AudioManager.STREAM_MUSIC:
-                resId = R.string.value_stream_music;
-                break;
-            case AudioManager.STREAM_ALARM:
-                resId = R.string.value_stream_alarm;
-                break;
-            case AudioManager.STREAM_NOTIFICATION:
-                resId = R.string.value_stream_notification;
-                break;
-            case AudioManagerCompatUtils.STREAM_DTMF:
-                resId = R.string.value_stream_dtmf;
-                break;
-            default:
-                return "";
+        final int resId = STREAM_NAMES.get(streamType);
+        if (resId <= 0) {
+            return "";
         }
 
         return mContext.getString(resId);
     }
 
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        final String action = intent.getAction();
+
+        if (AudioManagerCompatUtils.VOLUME_CHANGED_ACTION.equals(action)) {
+            final int type = intent.getIntExtra(
+                    AudioManagerCompatUtils.EXTRA_VOLUME_STREAM_TYPE, -1);
+            final int value = intent.getIntExtra(
+                    AudioManagerCompatUtils.EXTRA_VOLUME_STREAM_VALUE, -1);
+            final int prevValue = intent.getIntExtra(
+                    AudioManagerCompatUtils.EXTRA_PREV_VOLUME_STREAM_VALUE, -1);
+
+            if (type < 0 || value < 0 || prevValue < 0) {
+                return;
+            }
+
+            mHandler.onVolumeChanged(type, value, prevValue);
+        } else if (AudioManagerCompatUtils.MASTER_VOLUME_CHANGED_ACTION.equals(action)) {
+            final int value = intent.getIntExtra(
+                    AudioManagerCompatUtils.EXTRA_MASTER_VOLUME_VALUE, -1);
+            final int prevValue = intent.getIntExtra(
+                    AudioManagerCompatUtils.EXTRA_PREV_MASTER_VOLUME_VALUE, -1);
+
+            if (value < 0 || prevValue < 0) {
+                return;
+            }
+
+            mHandler.onVolumeChanged(STREAM_MASTER, value, prevValue);
+        }
+    }
+
     /**
-     * Returns the stream volume as a percentage.
+     * Returns the stream volume as a percentage of maximum volume in increments
+     * of 5%, e.g. 73% is returned as 70.
      *
      * @param streamType A stream type constant.
      * @return The stream volume as a percentage.
@@ -285,57 +316,10 @@ public class VolumeMonitor {
      * Runnable that hides the volume overlay. Used as a completion action for
      * the "volume set" utterance.
      */
-    private final Runnable mReleaseControl = new Runnable() {
+    private final UtteranceCompleteRunnable mReleaseControl = new UtteranceCompleteRunnable() {
         @Override
-        public void run() {
+        public void run(int status) {
             releaseControl();
-        }
-    };
-
-    /**
-     * Runnable that starts the "release control" timeout. Used as a completion
-     * action for the "current volume" utterance.
-     */
-    private final Runnable mStartReleaseTimeout = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.releaseControl();
-        }
-    };
-
-    /**
-     * Broadcast receiver for system volume change actions.
-     */
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-
-            if (AudioManagerCompatUtils.VOLUME_CHANGED_ACTION.equals(action)) {
-                final int type = intent.getIntExtra(
-                        AudioManagerCompatUtils.EXTRA_VOLUME_STREAM_TYPE, -1);
-                final int value = intent.getIntExtra(
-                        AudioManagerCompatUtils.EXTRA_VOLUME_STREAM_VALUE, -1);
-                final int prevValue = intent.getIntExtra(
-                        AudioManagerCompatUtils.EXTRA_PREV_VOLUME_STREAM_VALUE, -1);
-
-                if (type < 0 || value < 0 || prevValue < 0) {
-                    return;
-                }
-
-                mHandler.onVolumeChanged(type, value, prevValue);
-            } else if (AudioManagerCompatUtils.MASTER_VOLUME_CHANGED_ACTION.equals(action)) {
-                final int value = intent.getIntExtra(
-                        AudioManagerCompatUtils.EXTRA_MASTER_VOLUME_VALUE, -1);
-                final int prevValue = intent.getIntExtra(
-                        AudioManagerCompatUtils.EXTRA_PREV_MASTER_VOLUME_VALUE, -1);
-
-                if (value < 0 || prevValue < 0) {
-                    return;
-                }
-
-                mHandler.onVolumeChanged(STREAM_MASTER, value, prevValue);
-            }
         }
     };
 
@@ -389,7 +373,7 @@ public class VolumeMonitor {
          *
          * @see #internalOnReleaseControl
          */
-        public void releaseControl() {
+        public void releaseControlDelayed() {
             clearReleaseControl();
 
             final Message msg = obtainMessage(MSG_RELEASE_CONTROL);

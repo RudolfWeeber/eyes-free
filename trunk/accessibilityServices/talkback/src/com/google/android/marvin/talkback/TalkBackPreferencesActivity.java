@@ -16,11 +16,13 @@
 
 package com.google.android.marvin.talkback;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.Sensor;
@@ -39,10 +41,12 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 
 import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
 import com.googlecode.eyesfree.compat.os.VibratorCompatUtils;
+import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.PackageManagerUtils;
 import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
 
@@ -51,15 +55,20 @@ import com.googlecode.eyesfree.utils.SharedPreferencesUtils;
  *
  * @author alanv@google.com (Alan Viverette)
  */
+@SuppressWarnings("deprecation")
 public class TalkBackPreferencesActivity extends PreferenceActivity {
+    /** Preferences managed by this activity. */
+    private SharedPreferences mPrefs;
+
     /**
      * Loads the preferences from the XML preference definition and defines an
      * onPreferenceChangeListener
      */
-    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         addPreferencesFromResource(R.xml.preferences);
 
@@ -71,6 +80,7 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         checkTelephonySupport();
         checkVibrationSupport();
         checkProximitySupport();
+        checkAccelerometerSupport();
         checkInstalledBacks();
     }
 
@@ -79,8 +89,7 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         super.onResume();
 
         if (TalkBackService.SUPPORTS_TOUCH_PREF) {
-            final Uri uri = Settings.Secure.getUriFor(Settings.Secure.TOUCH_EXPLORATION_ENABLED);
-            getContentResolver().registerContentObserver(uri, false, mTouchExploreObserver);
+            registerTouchSettingObserver();
         }
     }
 
@@ -91,6 +100,12 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         if (TalkBackService.SUPPORTS_TOUCH_PREF) {
             getContentResolver().unregisterContentObserver(mTouchExploreObserver);
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void registerTouchSettingObserver() {
+        final Uri uri = Settings.Secure.getUriFor(Settings.Secure.TOUCH_EXPLORATION_ENABLED);
+        getContentResolver().registerContentObserver(uri, false, mTouchExploreObserver);
     }
 
     /**
@@ -105,34 +120,58 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
             return;
         }
 
-        if (Build.VERSION.SDK_INT < AccessibilityTutorialActivity.MIN_API_LEVEL) {
+        final int touchscreenState = getResources().getConfiguration().touchscreen;
+        if (Build.VERSION.SDK_INT < AccessibilityTutorialActivity.MIN_API_LEVEL
+                || (touchscreenState == Configuration.TOUCHSCREEN_NOTOUCH)) {
             category.removePreference(prefTutorial);
             return;
         }
 
         final Intent tutorialIntent = new Intent(this, AccessibilityTutorialActivity.class);
+        tutorialIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        tutorialIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         prefTutorial.setIntent(tutorialIntent);
     }
 
     /**
      * Assigns the appropriate intent to the touch exploration preference.
      */
-    @SuppressWarnings("deprecation")
     private void checkTouchExplorationSupport() {
-        final PreferenceGroup category =
-                (PreferenceGroup) findPreferenceByResId(
-                        R.string.pref_category_touch_exploration_key);
-        final CheckBoxPreference prefTouchExploration = (CheckBoxPreference) findPreferenceByResId(
-                R.string.pref_explore_by_touch_reflect_key);
-
-        if ((category == null) || (prefTouchExploration == null)) {
+        final PreferenceGroup category = (PreferenceGroup) findPreferenceByResId(
+                R.string.pref_category_touch_exploration_key);
+        if (category == null) {
             return;
         }
 
         // Touch exploration is managed by the system before JellyBean.
-        if (!TalkBackService.SUPPORTS_TOUCH_PREF) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             getPreferenceScreen().removePreference(category);
             return;
+        }
+
+        checkTouchExplorationSupportInner(category);
+    }
+
+    /**
+     * Touch exploration preference management code specific to devices running
+     * Jelly Bean and above.
+     *
+     * @param category The touch exploration category.
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void checkTouchExplorationSupportInner(PreferenceGroup category) {
+        final CheckBoxPreference prefTouchExploration = (CheckBoxPreference) findPreferenceByResId(
+                R.string.pref_explore_by_touch_reflect_key);
+        if (prefTouchExploration == null) {
+            return;
+        }
+
+        // Remove single-tap preference if it's not supported on this device.
+        final CheckBoxPreference prefSingleTap = (CheckBoxPreference) findPreferenceByResId(
+                R.string.pref_single_tap_key);
+        if ((prefSingleTap != null)
+                && (Build.VERSION.SDK_INT < ProcessorFocusAndSingleTap.MIN_API_LEVEL_SINGLE_TAP)) {
+            category.removePreference(prefSingleTap);
         }
 
         // Ensure that changes to the reflected preference's checked state never
@@ -145,9 +184,9 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         // Set up listeners that will keep the state synchronized.
         prefTouchExploration.setOnPreferenceChangeListener(mTouchExplorationChangeListener);
 
-        // Hook in the external PreferenceActivity for gesture shortcuts
+        // Hook in the external PreferenceActivity for gesture management
         final Preference shortcutsScreen = findPreferenceByResId(
-                R.string.pref_category_touch_shortcuts_key);
+                R.string.pref_category_manage_gestures_key);
         final Intent shortcutsIntent = new Intent(this, TalkBackShortcutPreferencesActivity.class);
         shortcutsScreen.setIntent(shortcutsIntent);
     }
@@ -157,6 +196,7 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
      * exploration. This is called once when the preferences activity launches
      * and again whenever the actual state of touch exploration changes.
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void updateTouchExplorationState() {
         final CheckBoxPreference prefTouchExploration = (CheckBoxPreference) findPreferenceByResId(
                 R.string.pref_explore_by_touch_reflect_key);
@@ -175,7 +215,7 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
 
         // If accessibility is disabled then touch exploration is always
         // disabled, so the "actual" state should just be the requested state.
-        if (isAccessibilityEnabled(resolver)) {
+        if (TalkBackService.isServiceActive()) {
             actualState = isTouchExplorationEnabled(resolver);
         } else {
             actualState = requestedState;
@@ -185,6 +225,8 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         // must have declined the "Enable touch exploration" dialog. Update the
         // requested value to reflect this.
         if (requestedState != actualState) {
+            LogUtils.log(this, Log.DEBUG,
+                    "Set touch exploration preference to reflect actual state %b", actualState);
             SharedPreferencesUtils.putBooleanPref(
                     prefs, res, R.string.pref_explore_by_touch_key, actualState);
         }
@@ -197,18 +239,11 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
     }
 
     /**
-     * Returns whether accessibility is enabled. This is more reliable than
-     * {@link AccessibilityManager#isEnabled()} because it updates atomically.
-     */
-    private boolean isAccessibilityEnabled(ContentResolver resolver) {
-        return (Settings.Secure.getInt(resolver, Settings.Secure.ACCESSIBILITY_ENABLED, 0) == 1);
-    }
-
-    /**
      * Returns whether touch exploration is enabled. This is more reliable than
      * {@link AccessibilityManager#isTouchExplorationEnabled()} because it
      * updates atomically.
      */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private boolean isTouchExplorationEnabled(ContentResolver resolver) {
         return (Settings.Secure.getInt(resolver, Settings.Secure.TOUCH_EXPLORATION_ENABLED, 0) == 1);
     }
@@ -257,14 +292,9 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         final PreferenceGroup category = (PreferenceGroup) findPreferenceByResId(
                 R.string.pref_category_when_to_speak_key);
         final Preference prefCallerId = findPreferenceByResId(R.string.pref_caller_id_key);
-        final Preference prefSpeakRinger = findPreferenceByResId(R.string.pref_speak_ringer_key);
 
         if (prefCallerId != null) {
             category.removePreference(prefCallerId);
-        }
-
-        if (prefSpeakRinger != null) {
-            category.removePreference(prefSpeakRinger);
         }
     }
 
@@ -314,10 +344,31 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
     }
 
     /**
+     * Ensure that the shake to start continuous reading setting does not
+     * appear on devices without a proximity sensor.
+     */
+    private void checkAccelerometerSupport() {
+        final SensorManager manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        final Sensor accel = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        if (accel != null && (Build.VERSION.SDK_INT >= ShakeDetector.MIN_API_LEVEL)) {
+            return;
+        }
+
+        final PreferenceGroup category =
+                (PreferenceGroup) findPreferenceByResId(R.string.pref_category_when_to_speak_key);
+        final ListPreference prefShake =
+                (ListPreference) findPreferenceByResId(R.string.pref_shake_to_read_threshold_key);
+
+        if (prefShake != null) {
+            category.removePreference(prefShake);
+        }
+    }
+
+    /**
      * Ensure that sound and vibration preferences are removed if the latest
      * versions of KickBack and SoundBack are installed.
      */
-    @SuppressWarnings("deprecation")
     private void checkInstalledBacks() {
         final PreferenceGroup category =
                 (PreferenceGroup) findPreferenceByResId(R.string.pref_category_feedback_key);
@@ -366,32 +417,37 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
      * @param resId A string resource identifier.
      * @return The preference associated with the specified resource identifier.
      */
-    @SuppressWarnings("deprecation")
     private Preference findPreferenceByResId(int resId) {
         return findPreference(getString(resId));
     }
 
+    /**
+     * Updates the preference that controls whether TalkBack will attempt to
+     * request Explore by Touch.
+     *
+     * @param requestedState The state requested by the user.
+     * @return Whether to update the reflected state.
+     */
     private boolean setTouchExplorationRequested(boolean requestedState) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
                 TalkBackPreferencesActivity.this);
 
-        // Update the "requested" state. This will trigger a
-        // listener in TalkBack that changes the "actual" state.
+        // Update the "requested" state. This will trigger a listener in
+        // TalkBack that changes the "actual" state.
         SharedPreferencesUtils.putBooleanPref(prefs, getResources(),
                 R.string.pref_explore_by_touch_key, requestedState);
 
-        // If accessibility is off, then TalkBack is off and we
-        // should immediately reflect the change in "requested"
-        // state.
-        if (!isAccessibilityEnabled(getContentResolver())) {
+        // If TalkBack is inactive, we should immediately reflect the change in
+        // "requested" state.
+        if (!TalkBackService.isServiceActive()) {
             return true;
         }
 
-        // If accessibility is on, we should wait for the "actual"
-        // state to change, then reflect that change. If the user
-        // declines the system's touch exploration dialog, the
-        // "actual" state will not change and nothing needs to
-        // happen.
+        // If accessibility is on, we should wait for the "actual" state to
+        // change, then reflect that change. If the user declines the system's
+        // touch exploration dialog, the "actual" state will not change and
+        // nothing needs to happen.
+        LogUtils.log(this, Log.DEBUG, "TalkBack active, waiting for EBT request to take effect");
         return false;
     }
 
@@ -399,7 +455,14 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
         final DialogInterface.OnClickListener onClick = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                setTouchExplorationRequested(false);
+                if (setTouchExplorationRequested(false)) {
+                    // Manually tick the check box since we're not returning to
+                    // the preference change listener.
+                    final CheckBoxPreference prefTouchExploration =
+                            (CheckBoxPreference) findPreferenceByResId(
+                                    R.string.pref_explore_by_touch_reflect_key);
+                    prefTouchExploration.setChecked(false);
+                }
             }
         };
 
@@ -459,6 +522,19 @@ public class TalkBackPreferencesActivity extends PreferenceActivity {
                             preference.setSummary(entries[index].toString().replaceAll("%", "%%"));
                         } else {
                             preference.setSummary("");
+                        }
+                    }
+
+                    final String key = preference.getKey();
+                    if (getString(R.string.pref_resume_talkback_key).equals(key)) {
+                        final String oldValue = SharedPreferencesUtils.getStringPref(
+                                mPrefs, getResources(), R.string.pref_resume_talkback_key,
+                                R.string.pref_resume_talkback_default);
+                        if (!newValue.equals(oldValue)) {
+                            // Reset the suspend warning dialog when the resume
+                            // preference changes.
+                            SharedPreferencesUtils.putBooleanPref(mPrefs, getResources(),
+                                    R.string.pref_show_suspension_confirmation_dialog, true);
                         }
                     }
 

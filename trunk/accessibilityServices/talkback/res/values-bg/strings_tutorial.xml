@@ -23,10 +23,45 @@
     <string name="accessibility_tutorial_lesson_2_text_4" msgid="8714551968743323879">"Можете също да превъртите цяла страница, като прекарате пръста си. За да превъртите към следващата страница, плъзнете надясно, след което наляво посредством едно движение. Опитайте да го направите по този начин."</string>
     <string name="accessibility_tutorial_lesson_2_text_5" msgid="8943035012040524546">"Изследвайте отново екрана, за да намерите приложение в текущата страница."</string>
     <string name="accessibility_tutorial_lesson_2_text_6" msgid="6541093467485133324">"С прекарването на пръст в обратната посока – наляво, а след това надясно посредством едно движение – ще се придвижите към предишната страница. Опитайте да го направите по този начин."</string>
-    <string name="accessibility_tutorial_lesson_2_text_7" msgid="4029094564874259975">"За да се придвижите към следващия урок, намерете и активирайте бутона „<xliff:g id="NEXT">%s</xliff:g>“, който се намира в долния десен ъгъл на екрана."</string>
-    <string name="accessibility_tutorial_lesson_3_title" msgid="8291191041122782216">"Урок 3: Четене по знак"</string>
-    <string name="accessibility_tutorial_lesson_3_text_1" msgid="4682593437497885653">"По подразбиране с прекарване на пръст наляво или надясно четете целите текстови блокове наведнъж. Можете също да четете блоковете с екранен текст по дума или по знак. Първо намерете текста, който започва с думата „Това“."</string>
-    <string name="accessibility_tutorial_lesson_3_text_2" msgid="8336262285590061281">"След това можете да започнете да четете този блок на определено ниво, като прекарате пръст надолу и после нагоре посредством едно движение. Опитайте да прекарате пръст надолу и обратно нагоре, за да промените нивото за четене, и след това надясно, за да прочетете текста."</string>
-    <string name="accessibility_tutorial_lesson_3_text_3" msgid="4464025351711623452">"За да излезете от текущия текстов блок, ще трябва да се върнете към нивото за четене по подразбиране. За целта прекарайте пръст в обратна посока – нагоре и после надолу. След това намерете бутона „<xliff:g id="FINISH">%s</xliff:g>“ долу вдясно и го докоснете двукратно, за да го активирате и да излезете от урока."</string>
-    <string name="accessibility_tutorial_lesson_3_sample_text" msgid="6847846832198448362">"Това е пример за голям текстов блок. Можете да се придвижвате в съответния текст на определено ниво за четене посредством жестове с прекарване на пръст или да го прочетете целия наведнъж посредством жестове с докосване."\n\n"Това е вторият абзац."\n\n"Това е третият и последен абзац. Прекарайте пръст надолу и после нагоре, за да промените нивото за четене, след което надясно, за да се придвижите в този текст."</string>
+    <string name="accessibility_tutorial_lesson_2_text_7" msgid="3684610203615874623">"За да се придвижите към следващия урок, намерете бутона „<xliff:g id="NEXT">%1$s</xliff:g>“, който се намира в долния десен ъгъл на екрана, и след това го докоснете двукратно, за да го активирате."</string>
+    <string name="accessibility_tutorial_lesson_3_title" msgid="6024010587544294119">"Урок 3: Контекстни менюта"</string>
+    <string name="accessibility_tutorial_lesson_3_text_1" msgid="9044343256290855911">"TalkBack има две контекстни менюта, които улесняват намирането на настройките и контролите – глобално и локално. Можете да активирате елемент от менюто, като плъзнете пръста си около кръга с елементи и го вдигнете, когато чуете желания от вас. Опитайте да изведете глобалното контекстно меню, като прекарате пръст <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> с едно движение."</string>
+    <string name="accessibility_tutorial_lesson_3_text_2" msgid="2357293277631473840">"Глобалното контекстно меню съдържа общи команди, които работят навсякъде в TalkBack. Опитайте да прочетете целия текст на екрана, като натиснете в центъра на дисплея, за да изведете кръгло меню около пръста си, и след това плъзнете пръст около кръга с опции, докато не чуете „<xliff:g id="READ_FROM_TOP_ITEM_TEXT">%1$s</xliff:g>“."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3_hidden" msgid="8766520681673257029">"Затворихте глобалното контекстно меню. Опитайте да го изведете отново, като прекарате пръст <xliff:g id="GLOBAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> с едно движение."</string>
+    <string name="accessibility_tutorial_lesson_3_text_3" msgid="2904044424555349808">"Добре. С тази команда ще бъдат прочетени всички елементи на екрана. Освен глобално контекстно меню в TalkBack има и локално. То съдържа контроли, които се променят въз основа на това, кой елемент на екрана сте избрали. Опитайте да изведете локалното контекстно меню, като прекарате пръст <xliff:g id="LOCAL_CONTEXT_MENU_GESTURE_DIRECTION">%1$s</xliff:g> с едно движение."</string>
+    <string name="accessibility_tutorial_lesson_3_text_4" msgid="2111031135741866859">"Натискането с пръст в центъра на екрана и вдигането му след това ще анулира и затвори менюто. Опитайте да затворите локалното контекстно меню сега."</string>
+    <!-- no translation found for accessibility_tutorial_lesson_3_text_5 (7941017643852409) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_title (3898999689844982160) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_1 (9109984626149104730) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_2 (2135471055480731456) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3_focus_lost (8713408442068375091) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_3 (5978230561116221609) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4_menu_hidden (879065229665819294) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_4 (2648520368832903832) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5_granularity_changed (124123881203918192) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_5 (5408515769417809079) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_lesson_4_text_view_text (6855162251486030701) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_alert_dialog_exit (6604033839776950241) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_title (5640949274947370358) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_inactive_message (1808749405557397970) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_title (7163740223497398638) -->
+    <skip />
+    <!-- no translation found for accessibility_tutorial_service_suspended_message (5633367032537299661) -->
+    <skip />
+    <string name="accessibility_tutorial_missing_assignment_title" msgid="5676431029357436455">"Незададен жест"</string>
+    <string name="accessibility_tutorial_missing_assignment_message" msgid="2845312981319504607">"За действието „<xliff:g id="ACTION">%1$s</xliff:g>“ няма зададен жест. Моля, посетете настройките на TalkBack, за да посочите за него жест за пряк път, и след това стартирайте отново урока за TalkBack."</string>
 </resources>

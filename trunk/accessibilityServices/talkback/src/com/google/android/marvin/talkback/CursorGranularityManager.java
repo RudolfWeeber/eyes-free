@@ -17,6 +17,8 @@
 package com.google.android.marvin.talkback;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.text.TextUtils;
@@ -24,89 +26,16 @@ import android.util.Log;
 
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
+import com.googlecode.eyesfree.utils.WebInterfaceUtils;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-@TargetApi(16)
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 public class CursorGranularityManager {
-
     /** The minimum API level supported by the granularity manager. */
-    public static final int MIN_API_LEVEL = 16;
-
-    /* package */enum CursorGranularity {
-        DEFAULT(Integer.MIN_VALUE, R.string.granularity_default),
-        CHARACTER(AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_CHARACTER,
-                R.string.granularity_character),
-        WORD(AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_WORD,
-                R.string.granularity_word),
-        // LINE(AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_LINE,
-        // R.string.axis_line),
-        PARAGRAPH(AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PARAGRAPH,
-                R.string.granularity_paragraph);
-        // PAGE(AccessibilityNodeInfoCompat.MOVEMENT_GRANULARITY_PAGE,
-        // R.string.axis_page),
-
-        /** The system identifier for this granularity. */
-        public final int id;
-
-        /** The resource identifier for the name of this granularity. */
-        public final int resId;
-
-        /**
-         * Constructs a new granularity with the specified system identifier.
-         *
-         * @param id The system identifier. See the GRANULARITY_ constants in
-         *            {@link AccessibilityNodeInfoCompat} for a complete list.
-         */
-        private CursorGranularity(int id, int resId) {
-            this.id = id;
-            this.resId = resId;
-        }
-
-        /**
-         * Returns the next best granularity supported by a given node. The
-         * returned granularity will always be equal to or larger than the
-         * requested granularity.
-         *
-         * @param requested The requested granularity.
-         * @param node The node to test.
-         * @return The next best granularity supported by the node.
-         */
-        public static CursorGranularity getNextBestGranularity(
-                CursorGranularity requested, AccessibilityNodeInfoCompat node) {
-            final int bitmask = node.getMovementGranularities();
-
-            for (CursorGranularity granularity : CursorGranularity.values()) {
-                if (granularity.id < requested.id) {
-                    // Don't return a smaller granularity.
-                    continue;
-                }
-
-                if ((bitmask & granularity.id) == granularity.id) {
-                    // This is a supported granularity.
-                    return granularity;
-                }
-            }
-
-            // If we cannot find a supported granularity, use the default.
-            return DEFAULT;
-        }
-
-        public static void extractFromMask(int bitmask, ArrayList<CursorGranularity> result) {
-            final CursorGranularity[] values = values();
-
-            result.clear();
-            result.add(DEFAULT);
-
-            for (CursorGranularity value : values) {
-                if ((bitmask & value.id) == value.id) {
-                    result.add(value);
-                }
-            }
-        }
-    }
-
-    private static final CursorGranularity[] GRANULARITIES = CursorGranularity.values();
+    public static final int MIN_API_LEVEL = Build.VERSION_CODES.JELLY_BEAN;
 
     /** Unsupported movement within a granularity */
     public static final int NOT_SUPPORTED = -1;
@@ -123,183 +52,388 @@ public class CursorGranularityManager {
     /** Represents a decrease in granularity */
     public static final int CHANGE_GRANULARITY_LOWER = -1;
 
+    /**
+     * The list of navigable nodes. Computed by {@link #extractNavigableNodes}.
+     */
     private final ArrayList<AccessibilityNodeInfoCompat>
-            mNodes = new ArrayList<AccessibilityNodeInfoCompat>();
-    private final Bundle mArguments = new Bundle();
+            mNavigableNodes = new ArrayList<AccessibilityNodeInfoCompat>();
 
+    /**
+     * The list of granularities supported by the navigable nodes. Computed
+     * by {@link #extractNavigableNodes}.
+     */
+    private final ArrayList<CursorGranularity>
+            mSupportedGranularities = new ArrayList<CursorGranularity>();
+
+    /** The parent context. */
+    private final Context mContext;
+
+    /**
+     * The top-level node within which the user is navigating. This node's
+     * navigable children are represented in {@link #mNavigableNodes}.
+     */
     private AccessibilityNodeInfoCompat mLockedNode;
 
+    /** The index of the current node within {@link #mNavigableNodes}. */
     private int mCurrentNodeIndex;
+
+    /** The index of the currently requested granularity. */
     private int mRequestedGranularityIndex;
+
+    /** Used on API 18+ to track when text selection mode is active. */
+    private boolean mSelectionModeActive;
+
+    public CursorGranularityManager(Context context) {
+        mContext = context;
+    }
 
     /**
      * Releases resources associated with this object.
      */
     public void shutdown() {
-        clearCurrentNode();
-    }
-
-    public CursorGranularity getRequestedGranularity() {
-        return GRANULARITIES[mRequestedGranularityIndex];
+        clear();
     }
 
     /**
-     * Moves the current granularity directly to the requested granularity.
+     * Whether granular navigation is locked to {@code node}. If the currently
+     * requested granularity is {@link CursorGranularity#DEFAULT} this will
+     * always return {@code false}.
      *
-     * @param granularity the requested granularity
-     * @return {@code true} if successful, {@code false} otherwise
+     * @param node The node to check.
+     * @return Whether navigation is locked to {@code node}.
      */
-    public boolean requestGranularity(CursorGranularity granularity) {
-        for (int i = 0; i < GRANULARITIES.length; ++i) {
-            if (GRANULARITIES[i] == granularity) {
-                mRequestedGranularityIndex = i;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Attempt to navigate within the specified cursor at the current
-     * granularity.
-     *
-     * @param node The node to navigate within.
-     * @return The result of navigation.
-     */
-    public int navigateWithin(AccessibilityNodeInfoCompat node, int action) {
-        handleRequestedNode(node);
-
-        final int count = mNodes.size();
-        final CursorGranularity requestedGranularity = GRANULARITIES[mRequestedGranularityIndex];
-
-        if (requestedGranularity == CursorGranularity.DEFAULT) {
-            return NOT_SUPPORTED;
-        }
-
-        switch (action) {
-            case AccessibilityNodeInfoCompat.ACTION_NEXT_AT_MOVEMENT_GRANULARITY:
-                if (mCurrentNodeIndex < 0) {
-                    mCurrentNodeIndex++;
-                }
-                break;
-            case AccessibilityNodeInfoCompat.ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY:
-                if (mCurrentNodeIndex >= count) {
-                    mCurrentNodeIndex--;
-                }
-                break;
-        }
-
-        while ((mCurrentNodeIndex >= 0) && (mCurrentNodeIndex < count)) {
-            final AccessibilityNodeInfoCompat currentNode = mNodes.get(mCurrentNodeIndex);
-            final CursorGranularity supportedAtNode = CursorGranularity.getNextBestGranularity(
-                    requestedGranularity, currentNode);
-
-            mArguments.putInt(AccessibilityNodeInfoCompat.ACTION_ARGUMENT_MOVEMENT_GRANULARITY_INT,
-                    supportedAtNode.id);
-
-            if ((supportedAtNode != CursorGranularity.DEFAULT)
-                    && currentNode.performAction(action, mArguments)) {
-                return SUCCESS;
-            }
-
-            // If granularity movement failed, advance the cursor to the
-            // next node and try again.
-            switch (action) {
-                case AccessibilityNodeInfoCompat.ACTION_NEXT_AT_MOVEMENT_GRANULARITY:
-                    mCurrentNodeIndex++;
-                    break;
-                case AccessibilityNodeInfoCompat.ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY:
-                    mCurrentNodeIndex--;
-                    break;
-            }
-
-            LogUtils.log(this, Log.VERBOSE, "Failed to move with granularity %s, trying next node",
-                    supportedAtNode.name());
-        }
-
-        return HIT_EDGE;
-    }
-
-    /**
-     * Adjust the granularity within the specified cursor.
-     *
-     * @param node The node to navigate within.
-     * @param direction The direction to adjust granularity. One of
-     *            {@link CursorGranularityManager#CHANGE_GRANULARITY_HIGHER} or
-     *            {@link CursorGranularityManager#CHANGE_GRANULARITY_LOWER}
-     * @return {@code true} if the granularity changed.
-     */
-    public boolean adjustWithin(AccessibilityNodeInfoCompat node, int direction) {
-        handleRequestedNode(node);
-
-        final int current = mRequestedGranularityIndex;
-        final int count = GRANULARITIES.length;
-
-        mRequestedGranularityIndex += direction;
-
-        if (mRequestedGranularityIndex < 0) {
-            mRequestedGranularityIndex = (count - 1);
-        } else if (mRequestedGranularityIndex >= count) {
-            mRequestedGranularityIndex = 0;
-        }
-
-        return (mRequestedGranularityIndex != current);
-    }
-
-    public boolean isLockedToNode(AccessibilityNodeInfoCompat node) {
-        if (getRequestedGranularity() == CursorGranularity.DEFAULT) {
+    public boolean isLockedTo(AccessibilityNodeInfoCompat node) {
+        // If the requested granularity is default, don't report as locked.
+        if (mRequestedGranularityIndex == 0) {
             return false;
         }
 
         return ((mLockedNode != null) && mLockedNode.equals(node));
     }
 
-    private void handleRequestedNode(AccessibilityNodeInfoCompat node) {
-        if ((mLockedNode != null) && !mLockedNode.equals(node)) {
-            // Recycle the old cursor.
-            // TODO: We need to be clearing the current node whenever
-            // accessibility focus moves away from the locked node.
-            clearCurrentNode();
+    /**
+     * @return The current navigation granularity, or
+     *         {@link CursorGranularity#DEFAULT} if the currently requested
+     *         granularity is invalid.
+     */
+    public CursorGranularity getRequestedGranularity() {
+        if ((mRequestedGranularityIndex < 0)
+                || (mRequestedGranularityIndex >= mSupportedGranularities.size())) {
+            return CursorGranularity.DEFAULT;
         }
 
-        if (mLockedNode == null) {
-            // Load the cursor.
-            setCurrentNode(node);
-        }
-    }
-
-    private void setCurrentNode(AccessibilityNodeInfoCompat node) {
-        extractNodes(node, mNodes);
-
-        mLockedNode = AccessibilityNodeInfoCompat.obtain(node);
-    }
-
-    private void clearCurrentNode() {
-        mArguments.clear();
-
-        mCurrentNodeIndex = 0;
-        mRequestedGranularityIndex = 0;
-
-        AccessibilityNodeInfoUtils.recycleNodes(mNodes);
-        AccessibilityNodeInfoUtils.recycleNodes(mLockedNode);
-
-        mLockedNode = null;
+        return mSupportedGranularities.get(mRequestedGranularityIndex);
     }
 
     /**
-     * Extract the child nodes from the given root.
+     * Locks navigation within the specified node, if not already locked, and
+     * sets the current granularity.
+     *
+     * @param granularity The requested granularity.
+     * @return {@code true} if successful, {@code false} otherwise.
+     */
+    public boolean setGranularityAt(
+            AccessibilityNodeInfoCompat node, CursorGranularity granularity) {
+        setLockedNode(node);
+
+        final int index = mSupportedGranularities.indexOf(granularity);
+        if (index < 0) {
+            mRequestedGranularityIndex = 0;
+            return false;
+        }
+
+        mRequestedGranularityIndex = index;
+
+        navigateCurrent();
+        return true;
+    }
+
+    /**
+     * Sets the current state of selection mode for navigation within text
+     * content. When enabled, the manager will attempt to extend selection
+     * during navigation within a locked node.
+     *
+     * @param active {@code true} to activate selection mode, {@code false} to
+     *            deactivate.
+     */
+    public void setSelectionModeActive(boolean active) {
+        mSelectionModeActive = active;
+    }
+
+    /**
+     * @return {@code true} if selection mode is active, {@code false}
+     *         otherwise.
+     */
+    public boolean isSelectionModeActive() {
+        return mSelectionModeActive;
+    }
+
+    /**
+     * Locks navigation within the specified node, if not already locked, and
+     * adjusts the current granularity in the specified direction.
+     *
+     * @param direction The direction to adjust granularity. One of
+     *            {@link CursorGranularityManager#CHANGE_GRANULARITY_HIGHER} or
+     *            {@link CursorGranularityManager#CHANGE_GRANULARITY_LOWER}
+     * @return {@code true} if the granularity changed.
+     */
+    public boolean adjustGranularityAt(AccessibilityNodeInfoCompat node, int direction) {
+        setLockedNode(node);
+
+        final int current = mRequestedGranularityIndex;
+        final int count = mSupportedGranularities.size();
+
+        // Granularity adjustments always wrap around.
+        mRequestedGranularityIndex = (mRequestedGranularityIndex + direction) % count;
+        if (mRequestedGranularityIndex < 0) {
+            mRequestedGranularityIndex = count - 1;
+        }
+
+        return mRequestedGranularityIndex != current;
+    }
+
+    /**
+     * Clears the currently locked node and associated state variables. Recycles
+     * all currently held nodes. Resets the requested granularity.
+     */
+    public void clear() {
+        mCurrentNodeIndex = 0;
+        mRequestedGranularityIndex = 0;
+        mSupportedGranularities.clear();
+
+        AccessibilityNodeInfoUtils.recycleNodes(mNavigableNodes);
+        mNavigableNodes.clear();
+
+        AccessibilityNodeInfoUtils.recycleNodes(mLockedNode);
+        mLockedNode = null;
+
+        mSelectionModeActive = false;
+    }
+
+    /**
+     * Processes TYPE_VIEW_ACCESSIBILITY_FOCUSED events by clearing the
+     * currently locked node and associated state variables if the provided node
+     * is different from the locked node and from the same window.
+     *
+     * @param node The node to compare against the locked node.
+     */
+    public void onNodeFocused(AccessibilityNodeInfoCompat node) {
+        if ((mLockedNode == null) || (node == null)) {
+            return;
+        }
+
+        if (!mLockedNode.equals(node) && (mLockedNode.getWindowId() == node.getWindowId())) {
+            clear();
+        }
+    }
+
+    /**
+     * Attempt to navigate within the currently locked node at the current
+     * granularity. You should call either {@link #setGranularityAt} or
+     * {@link #adjustGranularityAt} before calling this method.
+     *
+     * @return The result of navigation, which is always {@link #NOT_SUPPORTED}
+     *         if there is no locked node or if the requested granularity is
+     *         {@link CursorGranularity#DEFAULT}.
+     */
+    public int navigate(int action) {
+        if (mLockedNode == null) {
+            return NOT_SUPPORTED;
+        }
+
+        final CursorGranularity requestedGranularity = getRequestedGranularity();
+        if ((requestedGranularity == null) || (requestedGranularity == CursorGranularity.DEFAULT)) {
+            return NOT_SUPPORTED;
+        }
+
+        // Handle web granularity separately.
+        if (CursorGranularity.isWebGranularity(requestedGranularity)) {
+            return navigateWeb(action, requestedGranularity);
+        }
+
+        final Bundle arguments = new Bundle();
+        final int count = mNavigableNodes.size();
+        final int increment;
+
+        switch (action) {
+            case AccessibilityNodeInfoCompat.ACTION_NEXT_AT_MOVEMENT_GRANULARITY:
+                increment = 1;
+                if (mCurrentNodeIndex < 0) {
+                    mCurrentNodeIndex++;
+                }
+                break;
+            case AccessibilityNodeInfoCompat.ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY:
+                increment = -1;
+                if (mCurrentNodeIndex >= count) {
+                    mCurrentNodeIndex--;
+                }
+                break;
+            default:
+                return NOT_SUPPORTED;
+        }
+
+        while ((mCurrentNodeIndex >= 0) && (mCurrentNodeIndex < count)) {
+            if (mSelectionModeActive) {
+                arguments.putBoolean(
+                        AccessibilityNodeInfoCompat.ACTION_ARGUMENT_EXTEND_SELECTION_BOOLEAN, true);
+            }
+
+            arguments.putInt(AccessibilityNodeInfoCompat.ACTION_ARGUMENT_MOVEMENT_GRANULARITY_INT,
+                    requestedGranularity.value);
+
+            final AccessibilityNodeInfoCompat currentNode = mNavigableNodes.get(mCurrentNodeIndex);
+            if (currentNode.performAction(action, arguments)) {
+                return SUCCESS;
+            }
+
+            LogUtils.log(this, Log.VERBOSE, "Failed to move with granularity %s, trying next node",
+                    requestedGranularity.name());
+
+            // If movement failed, advance to the next node and try again.
+            mCurrentNodeIndex += increment;
+        }
+
+        return HIT_EDGE;
+    }
+
+    /**
+     * Attempts to invoke an event for the current selection.
+     */
+    public void navigateCurrent() {
+        // TODO: We really need a CURRENT_AT_MOVEMENT_GRANULARITY action.
+        navigate(AccessibilityNodeInfoCompat.ACTION_NEXT_AT_MOVEMENT_GRANULARITY);
+        navigate(AccessibilityNodeInfoCompat.ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY);
+    }
+
+    /**
+     * Attempts to navigate web content at the specified granularity.
+     *
+     * @param action The accessibility action to perform, one of:
+     *            <ul>
+     *            <li>{@link AccessibilityNodeInfoCompat#ACTION_NEXT_AT_MOVEMENT_GRANULARITY}
+     *            <li>{@link AccessibilityNodeInfoCompat#ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY}
+     *            </ul>
+     * @param granularity The granularity at which to navigate.
+     * @return The result of navigation, which is always {@link #NOT_SUPPORTED}
+     *         if there is no locked node or if the requested granularity is
+     *         {@link CursorGranularity#DEFAULT}.
+     */
+    private int navigateWeb(int action, CursorGranularity granularity) {
+        final int movementType;
+        final String htmlElementType;
+
+        switch (action) {
+            case AccessibilityNodeInfoCompat.ACTION_NEXT_AT_MOVEMENT_GRANULARITY:
+                movementType = WebInterfaceUtils.DIRECTION_FORWARD;
+                break;
+            case AccessibilityNodeInfoCompat.ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY:
+                movementType = WebInterfaceUtils.DIRECTION_BACKWARD;
+                break;
+            default:
+                return NOT_SUPPORTED;
+
+        }
+
+        switch (granularity) {
+            case WEB_SECTION:
+                htmlElementType = WebInterfaceUtils.HTML_ELEMENT_MOVE_BY_SECTION;
+                break;
+            case WEB_LIST:
+                htmlElementType = WebInterfaceUtils.HTML_ELEMENT_MOVE_BY_LIST;
+                break;
+            case WEB_CONTROL:
+                htmlElementType = WebInterfaceUtils.HTML_ELEMENT_MOVE_BY_CONTROL;
+                break;
+            default:
+                return NOT_SUPPORTED;
+        }
+
+        if (!WebInterfaceUtils.performNavigationToHtmlElementAction(
+                mLockedNode, movementType, htmlElementType)) {
+            return HIT_EDGE;
+        }
+
+        return SUCCESS;
+    }
+
+    /**
+     * Manages the currently locked node, clearing properties and loading
+     * navigable children if necessary.
+     *
+     * @param node The node the user wishes to navigate within.
+     */
+    private void setLockedNode(AccessibilityNodeInfoCompat node) {
+        if ((mLockedNode != null) && !mLockedNode.equals(node)) {
+            clear();
+        }
+
+        if (mLockedNode == null) {
+            mLockedNode = AccessibilityNodeInfoCompat.obtain(node);
+
+            if (shouldClearSelection(mLockedNode)) {
+                mLockedNode.performAction(AccessibilityNodeInfoCompat.ACTION_SET_SELECTION);
+            }
+
+            // Extract the navigable nodes and supported granularities.
+            final List<CursorGranularity> supported = mSupportedGranularities;
+            final int supportedMask = extractNavigableNodes(mContext, mLockedNode, mNavigableNodes);
+            final boolean hasWebContent = WebInterfaceUtils.hasNavigableWebContent(
+                    mContext, mLockedNode);
+
+            CursorGranularity.extractFromMask(supportedMask, hasWebContent, supported);
+        }
+    }
+
+    /**
+     * Return whether selection should be cleared from the specified node when
+     * locking navigation to it.
+     *
+     * @param node The node to check.
+     * @return {@code true} if selection should be cleared.
+     */
+    private boolean shouldClearSelection(AccessibilityNodeInfoCompat node) {
+        // EditText has has a stable cursor position, so don't clear selection.
+        return !AccessibilityNodeInfoUtils.nodeMatchesAnyClassByType(
+                mContext, node, android.widget.EditText.class);
+    }
+
+    /**
+     * Populates a list with the set of {@link CursorGranularity}s supported by
+     * the specified root node and its navigable children.
+     *
+     * @param context The parent context.
+     * @param root The root node from which to extract granularities.
+     * @return A list of supported granularities.
+     */
+    public static List<CursorGranularity> getSupportedGranularities(
+            Context context, AccessibilityNodeInfoCompat root) {
+        final LinkedList<CursorGranularity> supported = new LinkedList<CursorGranularity>();
+        final int supportedMask = extractNavigableNodes(context, root, null);
+        final boolean hasWebContent = WebInterfaceUtils.hasNavigableWebContent(context, root);
+
+        CursorGranularity.extractFromMask(supportedMask, hasWebContent, supported);
+
+        return supported;
+    }
+
+    /**
+     * Extract the child nodes from the given root and adds them to the supplied
+     * list of nodes.
      *
      * @param root The root node.
      * @param nodes The list of child nodes.
-     * @return The mask of supported granularities.
+     * @return The mask of supported all granularities supported by the root and
+     *         child nodes.
      */
-    private static int extractNodes(
-            AccessibilityNodeInfoCompat root, ArrayList<AccessibilityNodeInfoCompat> nodes) {
+    private static int extractNavigableNodes(Context context, AccessibilityNodeInfoCompat root,
+            ArrayList<AccessibilityNodeInfoCompat> nodes) {
         if (root == null) {
             return 0;
         }
 
-        nodes.add(AccessibilityNodeInfoCompat.obtain(root));
+        if (nodes != null) {
+            nodes.add(AccessibilityNodeInfoCompat.obtain(root));
+        }
 
         int supportedGranularities = root.getMovementGranularities();
 
@@ -309,14 +443,17 @@ public class CursorGranularityManager {
         }
 
         final int childCount = root.getChildCount();
-
         for (int i = 0; i < childCount; i++) {
             final AccessibilityNodeInfoCompat child = root.getChild(i);
+            if (child == null) {
+                continue;
+            }
+
+            child.performAction(AccessibilityNodeInfoCompat.ACTION_SET_SELECTION, null);
 
             // Only extract nodes that aren't reachable by traversal.
-            // TODO: This is incomplete, we should probably use shouldFocusNode().
-            if (!AccessibilityNodeInfoUtils.isActionableForAccessibility(child)) {
-                supportedGranularities |= extractNodes(child, nodes);
+            if (!AccessibilityNodeInfoUtils.shouldFocusNode(context, child)) {
+                supportedGranularities |= extractNavigableNodes(context, child, nodes);
             }
 
             child.recycle();

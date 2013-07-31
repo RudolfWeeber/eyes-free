@@ -24,7 +24,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.AccessibilityEventUtils;
+import com.google.android.marvin.talkback.FeedbackItem;
 import com.google.android.marvin.talkback.R;
 import com.google.android.marvin.talkback.SpeechController;
 import com.google.android.marvin.talkback.TalkBackService;
@@ -32,7 +32,7 @@ import com.google.android.marvin.talkback.Utterance;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 import com.google.android.marvin.talkback.formatter.EventSpeechRule.ContextBasedRule;
 import com.google.android.marvin.talkback.speechrules.NodeSpeechRuleProcessor;
-import com.google.android.marvin.utils.StringBuilderUtils;
+import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 
@@ -41,16 +41,21 @@ import com.googlecode.eyesfree.utils.LogUtils;
  * implementation is simple and handles only hover enter events.
  */
 public final class TouchExplorationFormatter
-        implements AccessibilityEventFormatter, ContextBasedRule, TalkBackService.EventListener {
+        implements AccessibilityEventFormatter, ContextBasedRule, TalkBackService.AccessibilityEventListener {
 
     /** Whether this build supports accessibility focus. */
-    private static final boolean SUPPORTS_A11Y_FOCUS = (Build.VERSION.SDK_INT >= 16);
+    private static final boolean SUPPORTS_A11Y_FOCUS =
+            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN);
 
     /** Whether this build supports caching node infos. */
-    private static final boolean SUPPORTS_NODE_CACHE = (Build.VERSION.SDK_INT >= 16);
+    private static final boolean SUPPORTS_NODE_CACHE =
+            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN);
 
     /** The default queuing mode for touch exploration feedback. */
     private static final int DEFAULT_QUEUING_MODE = SpeechController.QUEUE_MODE_FLUSH_ALL;
+
+    /** The default text spoken for nodes with no description. */
+    private static final CharSequence DEFAULT_DESCRIPTION = "";
 
     /** Whether the last region the user explored was scrollable. */
     private boolean mLastNodeWasScrollable;
@@ -78,17 +83,15 @@ public final class TouchExplorationFormatter
         mContext = context;
         mContext.addEventListener(this);
 
-        mNodeProcessor = context.getNodeProcessor();
+        mNodeProcessor = NodeSpeechRuleProcessor.getInstance();
     }
 
     /**
-     * Implementation of {@link TalkBackService.EventListener#process}.
-     * <p>
      * Resets cached scrollable state when touch exploration after window state
      * changes.
      */
     @Override
-    public void process(AccessibilityEvent event) {
+    public void onAccessibilityEvent(AccessibilityEvent event) {
         switch (event.getEventType()) {
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
                 // Reset cached scrollable state.
@@ -118,10 +121,14 @@ public final class TouchExplorationFormatter
 
         // Populate the utterance.
         addDescription(utterance, focusedNode, event, sourceNode);
-        addEarcons(utterance, focusedNode);
+        addFeedback(utterance, focusedNode);
 
         // By default, touch exploration flushes all other events.
         utterance.getMetadata().putInt(Utterance.KEY_METADATA_QUEUING, DEFAULT_QUEUING_MODE);
+
+        // Events formatted by this class should always advance continuous
+        // reading, if active.
+        utterance.addSpokenFlag(FeedbackItem.FLAG_ADVANCE_CONTINUOUS_READING);
 
         AccessibilityNodeInfoUtils.recycleNodes(sourceNode, focusedNode);
 
@@ -197,53 +204,50 @@ public final class TouchExplorationFormatter
      *            the source node is a progress bar.
      * @param source The source node, used to determine whether the source event
      *            should be passed to the node formatter.
-     * @return {@code true} if the utterance was populated with text.
+     * @return {@code true} if a description could be obtained for the node.
      */
     private boolean addDescription(Utterance utterance, AccessibilityNodeInfoCompat announcedNode,
             AccessibilityEvent event, AccessibilityNodeInfoCompat source) {
+        // Ensure that we speak touch exploration, even during speech reco.
+        utterance.addSpokenFlag(FeedbackItem.FLAG_DURING_RECO);
+
         final CharSequence treeDescription = mNodeProcessor.getDescriptionForTree(
                 announcedNode, event, source);
         if (!TextUtils.isEmpty(treeDescription)) {
-            StringBuilderUtils.appendWithSeparator(utterance.getText(), treeDescription);
+            utterance.addSpoken(treeDescription);
             return true;
         }
 
-        // If all else fails, fall back on the event description.
-        return addDescriptionForEvent(utterance, event);
-    }
-
-    /**
-     * Populates an utterance with text from an event.
-     *
-     * @param utterance The target utterance.
-     * @param event The source event.
-     * @return {@code true} if the utterance was populated with text.
-     */
-    private boolean addDescriptionForEvent(Utterance utterance, AccessibilityEvent event) {
-        final CharSequence eventText = AccessibilityEventUtils.getEventText(event);
-        if (TextUtils.isEmpty(eventText)) {
-            return false;
+        final CharSequence eventDescription =
+                AccessibilityEventUtils.getEventTextOrDescription(event);
+        if (!TextUtils.isEmpty(eventDescription)) {
+            utterance.addSpoken(eventDescription);
+            return true;
         }
 
-        final StringBuilder builder = utterance.getText();
-        StringBuilderUtils.appendWithSeparator(builder, eventText);
-
-        return true;
+        // Full-screen reading requires onUtteranceCompleted to occur, which
+        // requires that we always speak something when focusing an item.
+        utterance.addSpoken(DEFAULT_DESCRIPTION);
+        return false;
     }
 
     /**
-     * Adds earcons for a focused node.
+     * Adds auditory and haptic feedback for a focused node.
      *
      * @param utterance The utterance to which to add the earcons.
      * @param announcedNode The node that is announced.
      */
-    private void addEarcons(Utterance utterance, AccessibilityNodeInfoCompat announcedNode) {
+    private void addFeedback(Utterance utterance, AccessibilityNodeInfoCompat announcedNode) {
         if (announcedNode == null) {
             return;
         }
 
-        final boolean userCanScroll = AccessibilityNodeInfoUtils
-                .isScrollableOrHasScrollablePredecessor(mContext, announcedNode);
+        final AccessibilityNodeInfoCompat scrollableNode =
+                AccessibilityNodeInfoUtils.getSelfOrMatchingAncestor(mContext, announcedNode,
+                        AccessibilityNodeInfoUtils.FILTER_SCROLLABLE);
+        final boolean userCanScroll = (scrollableNode != null);
+
+        AccessibilityNodeInfoUtils.recycleNodes(scrollableNode);
 
         // Announce changes in whether the user can scroll the item they are
         // touching. This includes items with scrollable parents.
@@ -251,9 +255,9 @@ public final class TouchExplorationFormatter
             mLastNodeWasScrollable = userCanScroll;
 
             if (userCanScroll) {
-                utterance.getEarcons().add(R.raw.chime_up);
+                utterance.addAuditory(R.id.sounds_scrollable_enter);
             } else {
-                utterance.getEarcons().add(R.raw.chime_down);
+                utterance.addAuditory(R.id.sounds_scrollable_exit);
             }
         }
 
@@ -262,16 +266,16 @@ public final class TouchExplorationFormatter
         // Don't run this for API < 16 because it's slow without node caching.
         if (SUPPORTS_NODE_CACHE && userCanScroll
                 && AccessibilityNodeInfoUtils.isEdgeListItem(mContext, announcedNode)) {
-            utterance.getCustomEarcons().add(R.id.sounds_scroll_for_more);
+            utterance.addAuditory(R.id.sounds_scroll_for_more);
         }
 
         // Actionable items provide different feedback than non-actionable ones.
         if (AccessibilityNodeInfoUtils.isActionableForAccessibility(announcedNode)) {
-            utterance.getCustomEarcons().add(R.id.sounds_actionable);
-            utterance.getCustomVibrations().add(R.id.patterns_actionable);
+            utterance.addAuditory(R.id.sounds_actionable);
+            utterance.addHaptic(R.id.patterns_actionable);
         } else {
-            utterance.getCustomEarcons().add(R.id.sounds_hover);
-            utterance.getCustomVibrations().add(R.id.patterns_hover);
+            utterance.addAuditory(R.id.sounds_hover);
+            utterance.addHaptic(R.id.patterns_hover);
         }
     }
 }

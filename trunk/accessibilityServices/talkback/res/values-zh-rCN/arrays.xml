@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string-array name="pref_speak_ringer_entries">
-    <item msgid="5487065349227839121">"不管铃声大小一律说话"</item>
-    <item msgid="7158875206945163928">"静音模式下不说话"</item>
-    <item msgid="4945285159234224758">"在“振动”和“静音”模式下不说话"</item>
-  </string-array>
   <string-array name="html_input_to_desc_values">
     <item msgid="2793341578357584466">"按钮"</item>
     <item msgid="2031284088774168661">"复选框"</item>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- See http://en.wikipedia.org/wiki/General_MIDI for instruments. -->
+    <!-- See http://www.phys.unsw.edu.au/jw/notes.html for note pitches. -->
+    <!-- Format is pitch,velocity,duration -->
+
+    <integer-array name="midi_ready">
+        <item>9</item>
+        <item>60</item>
+        <item>127</item>
+        <item>150</item>
+    </integer-array>
+
+    <integer-array name="midi_complete">
+        <item>115</item>
+        <item>60</item>
+        <item>127</item>
+        <item>30</item>
+    </integer-array>
+
+    <integer-array name="midi_scroll_tone">
+        <item>13</item>
+        <item>60</item>
+        <item>127</item>
+        <item>80</item>
+    </integer-array>
+
+    <integer-array name="midi_scroll_more">
+        <item>13</item>
+        <item>51</item>
+        <item>0</item>
+        <item>50</item>
+        <item>60</item>
+        <item>105</item>
+        <item>50</item>
+    </integer-array>
+
+    <integer-array name="midi_focus">
+        <item>28</item>
+        <item>60</item>
+        <item>127</item>
+        <item>30</item>
+    </integer-array>
+
+    <integer-array name="midi_focus_actionable">
+        <item>27</item>
+        <item>60</item>
+        <item>100</item>
+        <item>30</item>
+    </integer-array>
+
+    <integer-array name="midi_long_clicked">
+        <item>28</item>
+        <item>62</item>
+        <item>127</item>
+        <item>30</item>
+        <item>59</item>
+        <item>105</item>
+        <item>30</item>
+        <item>57</item>
+        <item>127</item>
+        <item>100</item>
+    </integer-array>
+
+    <integer-array name="midi_window_state">
+        <item>27</item>
+        <item>51</item>
+        <item>127</item>
+        <item>30</item>
+        <item>60</item>
+        <item>105</item>
+        <item>30</item>
+    </integer-array>
+
+    <integer-array name="midi_chime_up">
+        <item>92</item>
+        <item>60</item>
+        <item>0</item>
+        <item>100</item>
+        <item>60</item>
+        <item>127</item>
+        <item>50</item>
+        <item>69</item>
+        <item>105</item>
+        <item>100</item>
+    </integer-array>
+
+    <integer-array name="midi_chime_down">
+        <item>92</item>
+        <item>60</item>
+        <item>0</item>
+        <item>100</item>
+        <item>60</item>
+        <item>127</item>
+        <item>50</item>
+        <item>51</item>
+        <item>105</item>
+        <item>100</item>
+    </integer-array>
+
+    <integer-array name="midi_gesture_begin">
+        <item>121</item>
+        <item>36</item>
+        <item>127</item>
+        <item>50</item>
+        <item>54</item>
+        <item>105</item>
+        <item>100</item>
+    </integer-array>
+
+    <integer-array name="midi_gesture_end">
+        <item>121</item>
+        <item>54</item>
+        <item>127</item>
+        <item>50</item>
+        <item>36</item>
+        <item>105</item>
+        <item>100</item>
+    </integer-array>
+
+    <integer-array name="midi_paused_feedback">
+        <item>113</item>
+        <item>54</item>
+        <item>127</item>
+        <item>50</item>
+        <item>52</item>
+        <item>127</item>
+        <item>50</item>
+        <item>50</item>
+        <item>127</item>
+        <item>50</item>
+    </integer-array>
+
+    <integer-array name="midi_hyperlink">
+        <item>108</item>
+        <item>72</item>
+        <item>64</item>
+        <item>50</item>
+        <item>74</item>
+        <item>48</item>
+        <item>50</item>
+        <item>76</item>
+        <item>32</item>
+        <item>100</item>
+    </integer-array>
+
+    <integer-array name="midi_bold">
+        <item>108</item>
+        <item>60</item>
+        <item>64</item>
+        <item>50</item>
+        <item>56</item>
+        <item>32</item>
+        <item>50</item>
+    </integer-array>
+
+    <integer-array name="midi_italic">
+        <item>108</item>
+        <item>70</item>
+        <item>64</item>
+        <item>50</item>
+        <item>74</item>
+        <item>32</item>
+        <item>50</item>
+    </integer-array>
+
+</resources>

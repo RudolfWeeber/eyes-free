@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Ingabe uqinisekile ukuthi ufuna ukumisa okwesikhashana i-TalkBack?"\n\n"Ngenkathi i-TalkBack imisiwe, idivayisi yakho ngeke inikele ngempendulo futhi i-Explore by Touch izokhutshazwa."\n\n"Ungabuyisa i-TalkBack kusuka emthunzini wezaziso noma ngokubuyela esikrinini sokukhiya."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"Uqinisekile ukuthi ufuna ukumisa isikhashana i-TalkBack?"\n\n"Ngenkathi i-TalkBack isamisiwe, idivayisi yakho ngeke ikwazi ukunikeza ngempendulo futhi ukuhlola ngokuthinta kuzokhutshazwa."</string>
 </resources>

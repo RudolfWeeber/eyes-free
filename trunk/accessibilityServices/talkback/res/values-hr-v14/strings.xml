@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Jeste li sigurni da želite obustaviti TalkBack?"\n\n"Dok je TalkBack obustavljen, vaš uređaj neće davati povratne informacije i značajka istraživanja dodirom bit će onemogućena."\n\n"TalkBack ponovo možete uključiti na zaslonu obavijesti ili tako da se vratite na zaključani zaslon."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"Jeste li sigurni da želite obustaviti značajku TalkBack?"\n\n"Dok je TalkBack obustavljen, vaš uređaj neće pružati povratne informacije i značajka Istraži dodirom bit će onemogućena."</string>
 </resources>

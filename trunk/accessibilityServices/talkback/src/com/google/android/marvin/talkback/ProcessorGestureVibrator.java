@@ -17,79 +17,56 @@
 package com.google.android.marvin.talkback;
 
 import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
-import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.TalkBackService.EventListener;
-import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
-import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
+import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
 
 /**
  * Produces continuous vibration feedback during framework gesture recognition.
  * <p>
- * Requires API 17+.
+ * Requires API 17+ (JB MR1).
  * </p>
  *
  * @author caseyburkhardt@google.com (Casey Burkhardt)
  */
-@TargetApi(17)
-class ProcessorGestureVibrator implements EventListener {
-
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+class ProcessorGestureVibrator implements AccessibilityEventListener {
     /** The minimum API level required to use this class. */
-    public static final int MIN_API_LEVEL = 17;
+    public static final int MIN_API_LEVEL = Build.VERSION_CODES.JELLY_BEAN_MR1;
 
+    /** Delay after a gesture starts before feedback begins. */
     private static final int FEEDBACK_DELAY = 70;
 
-    private final TalkBackService mService;
+    /** Feedback controller, used to vibrate and play sounds. */
+    private final MappedFeedbackController mFeedbackController;
 
-    private final PreferenceFeedbackController mFeedbackController;
-
-    private final CursorController mCursorController;
-
-    private final Handler mHandler;
-
-    private final Runnable mFeedbackRunnable;
-
-    public ProcessorGestureVibrator(TalkBackService context) {
-        mService = context;
-        mFeedbackController = context.getFeedbackController();
-        mCursorController = context.getCursorController();
-        mHandler = new Handler();
-        mFeedbackRunnable = new Runnable() {
-
-            @Override
-            public void run() {
-                mFeedbackController.playRepeatedVibration(
-                        R.array.gesture_recognition_repeating_pattern, 2);
-                mFeedbackController.playSound(R.raw.gesture_begin, 1.0f, 0.5f);
-            }
-        };
+    public ProcessorGestureVibrator() {
+        mFeedbackController = MappedFeedbackController.getInstance();
     }
 
     @Override
-    public void process(AccessibilityEvent event) {
+    public void onAccessibilityEvent(AccessibilityEvent event) {
         switch (event.getEventType()) {
-            case AccessibilityEventCompat.TYPE_TOUCH_INTERACTION_START:
-                AccessibilityNodeInfoCompat currentNode = mCursorController.getCursor();
-                // Don't silence speech on first touch if the tutorial is active
-                // or if a WebView is active. This works around an issue where
-                // the IME is unintentionally dismissed by WebView's
-                // performAction implementation.
-                if (!AccessibilityTutorialActivity.isTutorialActive()
-                        && !AccessibilityNodeInfoUtils.nodeMatchesClassByType(
-                                mService, currentNode, android.webkit.WebView.class)) {
-                    mService.interruptAllFeedback();
-                }
-                break;
             case AccessibilityEventCompat.TYPE_GESTURE_DETECTION_START:
                 mHandler.postDelayed(mFeedbackRunnable, FEEDBACK_DELAY);
                 break;
             case AccessibilityEventCompat.TYPE_GESTURE_DETECTION_END:
                 mHandler.removeCallbacks(mFeedbackRunnable);
-                mFeedbackController.cancelVibration();
+                mFeedbackController.interrupt();
                 break;
         }
     }
+
+    private final Handler mHandler = new Handler();
+
+    private final Runnable mFeedbackRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mFeedbackController.playHaptic(R.id.patterns_gesture_detection, 2);
+            mFeedbackController.playAuditory(R.id.sounds_gesture_begin, 1.0f, 0.5f, 0);
+        }
+    };
 }

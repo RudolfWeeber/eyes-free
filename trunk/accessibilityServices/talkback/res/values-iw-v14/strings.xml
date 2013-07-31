@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"האם אתה בטוח שברצונך להשעות את TalkBack‏?"\n\n"בזמן ש-TalkBack מושעה, המכשיר שלך לא יספק משוב ו\'גילוי באמצעות מגע\' יושבת."\n\n"תוכל להפעיל מחדש את TalkBack מתריס ההתראות או על ידי חזרה למסך הנעילה."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"האם אתה בטוח שברצונך להשעות את TalkBack?‏"\n\n"בזמן ש-TalkBack מושעה המכשיר לא יספק משוב. כמו כן, גילוי באמצעות מגע יושבת."</string>
 </resources>

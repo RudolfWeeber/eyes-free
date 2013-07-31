@@ -47,7 +47,8 @@ class RuleSimpleTemplate extends RuleDefault {
         }
 
         if (mTargetClassName != null) {
-            return AccessibilityNodeInfoUtils.nodeMatchesClassByName(node, mTargetClassName);
+            return AccessibilityNodeInfoUtils.nodeMatchesClassByName(
+                    context, node, mTargetClassName);
         }
 
         return false;

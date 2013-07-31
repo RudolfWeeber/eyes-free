@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="dialog_message_suspend_talkback" msgid="5626424211186834537">"Sigurado ka bang nais mong suspendihin ang TalkBack?"\n\n"Habang nakasuspinde ang TalkBack, hindi magbibigay ng feedback ang iyong device at hindi papaganahin ang Maggalugad ayon sa Pagpindot."\n\n"Maaari mong ituloy ang TalkBack mula sa shade ng mga notification o sa pamamagitan ng pagbalik sa lock screen."</string>
+    <string name="dialog_message_suspend_talkback" msgid="2135700124003003344">"Sigurado ka bang gusto mong suspindehin ang TalkBack?"\n\n"Habang nakasuspinde ang TalkBack, hindi magbibigay ang iyong device ng feedback at idi-disable ang Explore by Touch."</string>
 </resources>

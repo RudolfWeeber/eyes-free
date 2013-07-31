@@ -18,6 +18,7 @@ package com.google.android.marvin.talkback.formatter.phone;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
@@ -36,19 +37,14 @@ import java.util.List;
  * @author svetoslavganov@google.com (Svetoslav Ganov)
  */
 public final class InCallScreenFormatter implements AccessibilityEventFormatter {
+    private static final int MIN_EVENT_TEXT_COUNT = 8;
 
     // Indices of the text elements for a in-call-screen event
     private static final int INDEX_UPPER_TITLE = 1;
-
     private static final int INDEX_PHOTO = 2;
-
     private static final int INDEX_NAME = 4;
-
     private static final int INDEX_LABEL = 6;
-
     private static final int INDEX_SOCIAL_STATUS = 7;
-
-    private static final String SPACE = " ";
 
     @Override
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
@@ -58,55 +54,48 @@ public final class InCallScreenFormatter implements AccessibilityEventFormatter 
 
         if (!speakCallerId) {
             // Don't speak the caller ID screen.
-            return true;
+            return false;
         }
 
         final List<CharSequence> eventText = event.getText();
-        final StringBuilder utteranceText = utterance.getText();
-
-        // guard against old version of the phone application
-        if (eventText.size() == 1) {
-            utteranceText.append(eventText.get(0));
+        if (eventText.size() < MIN_EVENT_TEXT_COUNT) {
+            // Guard against old version of the phone application.
+            utterance.addSpoken(eventText.get(0));
             return true;
         }
 
         final CharSequence title = eventText.get(INDEX_UPPER_TITLE);
+        if (!TextUtils.isEmpty(title)) {
+            utterance.addSpoken(title);
+        }
+
         final CharSequence name = eventText.get(INDEX_NAME);
-
-        if (title != null) {
-            utteranceText.append(title);
-            utteranceText.append(SPACE);
+        if (TextUtils.isEmpty(name)) {
+            // Return immediately if there is no contact name.
+            return !utterance.getSpoken().isEmpty();
         }
 
-        if (name == null) {
-            return true;
-        }
+        utterance.addSpoken(name);
 
-        utteranceText.append(name);
-        utteranceText.append(SPACE);
-
+        // If the contact name is not a phone number, add the label and photo.
         if (!isPhoneNumber(name.toString())) {
             final CharSequence label = eventText.get(INDEX_LABEL);
-            final CharSequence photo = eventText.get(INDEX_PHOTO);
-            final CharSequence socialStatus = eventText.get(INDEX_SOCIAL_STATUS);
-
             if (label != null) {
-                utteranceText.append(label);
-                utteranceText.append(SPACE);
+                utterance.addSpoken(label);
             }
 
+            final CharSequence photo = eventText.get(INDEX_PHOTO);
             if (photo != null) {
-                utteranceText.append(photo);
-                utteranceText.append(SPACE);
+                utterance.addSpoken(photo);
             }
 
+            final CharSequence socialStatus = eventText.get(INDEX_SOCIAL_STATUS);
             if (socialStatus != null) {
-                utteranceText.append(socialStatus);
-                utteranceText.append(SPACE);
+                utterance.addSpoken(socialStatus);
             }
         }
 
-        return true;
+        return !utterance.getSpoken().isEmpty();
     }
 
     /**

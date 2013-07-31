@@ -16,6 +16,7 @@
 
 package com.google.android.marvin.talkback.formatter.calendar;
 
+import android.text.SpannableStringBuilder;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.google.android.marvin.talkback.R;
@@ -38,12 +39,12 @@ public class MonthViewSelectedFormatter implements AccessibilityEventFormatter {
 
     @Override
     public boolean format(AccessibilityEvent event, TalkBackService context, Utterance utterance) {
-        StringBuilder textBuilder = utterance.getText();
-        String eventText = event.getText().get(0).toString();
+        final SpannableStringBuilder textBuilder = new SpannableStringBuilder();
+        final String eventText = event.getText().get(0).toString();
 
         // append day of week
-        int firstCommaIndex = eventText.indexOf(',');
-        String dayFragment = eventText.substring(0, firstCommaIndex);
+        final int firstCommaIndex = eventText.indexOf(',');
+        final String dayFragment = eventText.substring(0, firstCommaIndex);
         if (!dayFragment.equals(mLastDayFragment)) {
             mLastDayFragment = dayFragment;
             textBuilder.append(dayFragment);
@@ -52,21 +53,22 @@ public class MonthViewSelectedFormatter implements AccessibilityEventFormatter {
         }
 
         // append date
-        String monthDayFragment = eventText.substring(firstCommaIndex + 1);
+        final String monthDayFragment = eventText.substring(firstCommaIndex + 1);
         textBuilder.append(monthDayFragment);
 
         // append event count
-        int todayEventCount = event.getItemCount();
+        final int todayEventCount = event.getItemCount();
         if (todayEventCount > 0) {
             textBuilder.append(COMMA);
             textBuilder.append(SPACE);
-            textBuilder.append(todayEventCount);
+            textBuilder.append(String.valueOf(todayEventCount));
             textBuilder.append(SPACE);
             textBuilder.append(context.getResources().getQuantityString(R.plurals.plural_event,
                     todayEventCount));
         }
         textBuilder.append(PERIOD);
 
+        utterance.addSpoken(textBuilder);
         return true;
     }
 }
