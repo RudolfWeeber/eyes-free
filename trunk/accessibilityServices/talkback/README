@@ -13,21 +13,21 @@ First, you'll need to have utils, compatutils, and widgets/radial-menu checked
 out from marvin. Next, generate the required build scripts with the Android
 tools.
 
-From the utils directory, run:
+From the libraries/utils directory, run:
 
-android update project --path .
+android update project --path . --subprojects --target android-18
 
-From the compatutils directory, run:
+From the libraries/compatutils directory, run:
 
-android update project --path .
+android update project --path . --subprojects --target android-18
 
-From the widgets/radial-menu directory, run:
+From the libraries/widgets/radial-menu directory, run:
 
-android update project --path .
+android update project --path . --subprojects --target android-18
 
 From the talkback directory, run:
 
-android update project --path .
+android update project --path . --subprojects --target android-18
 
 This will create or update some default build files for Android. These are
 build.xml, project.properties, and local.properties. Now you can build an
