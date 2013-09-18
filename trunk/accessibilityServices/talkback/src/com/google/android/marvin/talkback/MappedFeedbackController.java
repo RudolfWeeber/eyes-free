@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.content.Context;
 import android.content.SharedPreferences;

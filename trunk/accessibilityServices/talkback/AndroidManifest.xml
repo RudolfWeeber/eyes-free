@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.google.android.marvin.talkback"
+    package="com.google.android.marvin.mytalkback"
     android:installLocation="internalOnly"
-    android:sharedUserId="com.google.android.marvin.feedback"
+    android:sharedUserId="com.google.android.marvin.myfeedback"
     android:versionCode="99"
     android:versionName="3.4.0" >
 
@@ -13,9 +13,9 @@
 
     <!-- Permission used to restrict sending gestures and resuming feedback. -->
     <permission
-        android:name="com.google.android.marvin.feedback.permission.TALKBACK"
+        android:name="com.google.android.marvin.myfeedback.permission.TALKBACK"
         android:label="@string/permission_talkback_label"
-        android:protectionLevel="signature" />
+         />
 
     <!-- Required to monitor phone busy state. -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -33,7 +33,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <!-- Required for shortcuts and widgets. -->
-    <uses-permission android:name="com.google.android.marvin.feedback.permission.TALKBACK" />
+    <uses-permission android:name="com.google.android.marvin.myfeedback.permission.TALKBACK" />
 
     <!-- Required for managing audio levels on GB. -->
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
@@ -51,7 +51,7 @@
 
     <application
         android:allowBackup="true"
-        android:backupAgent="com.google.android.marvin.talkback.TalkBackBackupAgent"
+        android:backupAgent="com.google.android.marvin.mytalkback.TalkBackBackupAgent"
         android:icon="@drawable/icon"
         android:label="@string/talkback_title"
         android:supportsRtl="true" >
@@ -60,7 +60,7 @@
         <service
             android:name=".TalkBackService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:settingsActivity="com.google.android.marvin.talkback.TalkBackPreferencesActivity" >
+            android:settingsActivity="com.google.android.marvin.mytalkback.TalkBackPreferencesActivity" >
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
 
@@ -77,7 +77,7 @@
             android:name=".TalkBackPreferencesActivity"
             android:label="@string/talkback_preferences_title"
             android:launchMode="singleTop"
-            android:taskAffinity="com.google.android.marvin.talkback.SettingsAffinity"
+            android:taskAffinity="com.google.android.marvin.mytalkback.SettingsAffinity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,7 +91,7 @@
             android:name=".TalkBackShortcutPreferencesActivity"
             android:label="@string/talkback_preferences_title"
             android:launchMode="singleTop"
-            android:taskAffinity="com.google.android.marvin.talkback.SettingsAffinity"
+            android:taskAffinity="com.google.android.marvin.mytalkback.SettingsAffinity"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -101,7 +101,7 @@
         <!-- Status provider is required for compatibility with pre-ICS (API 14) apps -->
         <provider
             android:name=".StatusProvider"
-            android:authorities="com.google.android.marvin.talkback.providers.StatusProvider"
+            android:authorities="com.google.android.marvin.mytalkback.providers.StatusProvider"
             android:exported="true"
             tools:ignore="ExportedContentProvider" />
 
@@ -156,7 +156,7 @@
             android:name=".TtsDiscoveryProxyActivity"
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:taskAffinity="com.google.android.marvin.talkback.TtsDiscoveryAffinity"
+            android:taskAffinity="com.google.android.marvin.mytalkback.TtsDiscoveryAffinity"
             android:theme="@android:style/Theme.NoDisplay"
             android:exported="false" />
 

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -29,8 +29,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
-import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
+import com.google.android.marvin.mytalkback.TalkBackService.AccessibilityEventListener;
+import com.google.android.marvin.mytalkback.tutorial.AccessibilityTutorialActivity;
 import com.googlecode.eyesfree.compat.accessibilityservice.AccessibilityServiceCompatUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;

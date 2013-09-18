@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!--The human-readable name of this service. Do not translate. -->
-    <string name="talkback_title" translatable="false">TalkBack</string>
+    <string name="talkback_title" translatable="false">My TalkBack</string>
     <!--
       Source: Title for the activity that manages TalkBack settings.
       Description: This is presented to the user when managing TalkBack settings. [CHAR LIMIT="NONE"]
     -->
-    <string name="talkback_preferences_title">TalkBack Settings</string>
+    <string name="talkback_preferences_title">My TalkBack Settings</string>
     <!--
       Source: A brief description of TalkBack.
       Description: This is presented to the user on the accessibility settings view. [CHAR LIMIT="NONE"]

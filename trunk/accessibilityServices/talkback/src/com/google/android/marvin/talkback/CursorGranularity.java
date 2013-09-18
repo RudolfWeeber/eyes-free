@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 

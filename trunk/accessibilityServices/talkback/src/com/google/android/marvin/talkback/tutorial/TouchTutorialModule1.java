@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.tutorial;
+package com.google.android.marvin.mytalkback.tutorial;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -25,7 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 
-import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.mytalkback.R;
 
 /**
  * A tutorial lesson that introduces using a finger to explore and interact with

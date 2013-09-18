@@ -14,11 +14,11 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.os.Bundle;
 
-import com.google.android.marvin.talkback.SpeechController.SpeechParam;
+import com.google.android.marvin.mytalkback.SpeechController.SpeechParam;
 
 import java.util.Collections;
 import java.util.HashSet;

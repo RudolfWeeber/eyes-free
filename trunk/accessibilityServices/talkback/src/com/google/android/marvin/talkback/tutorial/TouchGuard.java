@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.tutorial;
+package com.google.android.marvin.mytalkback.tutorial;
 
 import android.accessibilityservice.AccessibilityService;
 import android.annotation.TargetApi;

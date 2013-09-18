@@ -14,13 +14,13 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.KeyEvent;
 
-import com.google.android.marvin.talkback.TalkBackService.KeyEventListener;
+import com.google.android.marvin.mytalkback.TalkBackService.KeyEventListener;
 
 import java.util.LinkedList;
 

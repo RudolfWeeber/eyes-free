@@ -1,4 +1,4 @@
-package com.google.android.marvin.talkback.menurules;
+package com.google.android.marvin.mytalkback.menurules;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -6,8 +6,8 @@ import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.MenuItem;
 
-import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.TalkBackService;
+import com.google.android.marvin.mytalkback.R;
+import com.google.android.marvin.mytalkback.TalkBackService;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.NodeFilter;
 import com.googlecode.eyesfree.widget.RadialMenu;

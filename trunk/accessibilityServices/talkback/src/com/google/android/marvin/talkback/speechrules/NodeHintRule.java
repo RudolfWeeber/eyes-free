@@ -14,13 +14,13 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback.speechrules;
+package com.google.android.marvin.mytalkback.speechrules;
 
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 
-import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.mytalkback.R;
 
 public interface NodeHintRule {
     /**

@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.formatter;
+package com.google.android.marvin.mytalkback.formatter;
 
 import android.content.res.Resources;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.TalkBackService;
-import com.google.android.marvin.talkback.Utterance;
+import com.google.android.marvin.mytalkback.TalkBackService;
+import com.google.android.marvin.mytalkback.Utterance;
 import com.googlecode.eyesfree.utils.LogUtils;
 
 import org.w3c.dom.Document;

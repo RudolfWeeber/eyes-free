@@ -1,5 +1,5 @@
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.app.Activity;
 import android.app.AlertDialog;

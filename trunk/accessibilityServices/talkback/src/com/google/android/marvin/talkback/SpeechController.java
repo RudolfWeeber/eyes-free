@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,7 +29,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.android.marvin.talkback.TalkBackService.ServiceState;
+import com.google.android.marvin.mytalkback.TalkBackService.ServiceState;
 import com.google.android.marvin.utils.FailoverTextToSpeech;
 import com.google.android.marvin.utils.FailoverTextToSpeech.FailoverTtsListener;
 import com.google.android.marvin.utils.ProximitySensor;

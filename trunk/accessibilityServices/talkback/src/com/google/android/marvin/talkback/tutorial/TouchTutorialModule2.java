@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.tutorial;
+package com.google.android.marvin.mytalkback.tutorial;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -25,8 +25,8 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.TextView;
 
-import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.tutorial.InstrumentedListView.ListViewListener;
+import com.google.android.marvin.mytalkback.R;
+import com.google.android.marvin.mytalkback.tutorial.InstrumentedListView.ListViewListener;
 
 /**
  * A tutorial lesson that introduces using two fingers to scroll through a list

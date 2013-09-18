@@ -1,4 +1,4 @@
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.WindowManager;
 
-import com.google.android.marvin.talkback.SpeechController.UtteranceCompleteRunnable;
-import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
+import com.google.android.marvin.mytalkback.SpeechController.UtteranceCompleteRunnable;
+import com.google.android.marvin.mytalkback.tutorial.AccessibilityTutorialActivity;
 import com.googlecode.eyesfree.utils.FeedbackController;
 import com.googlecode.eyesfree.widget.RadialMenu;
 import com.googlecode.eyesfree.widget.RadialMenuItem;

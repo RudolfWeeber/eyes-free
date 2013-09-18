@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.formatter.calendar;
+package com.google.android.marvin.mytalkback.formatter.calendar;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -28,10 +28,10 @@ import android.text.format.DateUtils;
 import android.util.SparseArray;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.TalkBackService;
-import com.google.android.marvin.talkback.Utterance;
-import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
+import com.google.android.marvin.mytalkback.R;
+import com.google.android.marvin.mytalkback.TalkBackService;
+import com.google.android.marvin.mytalkback.Utterance;
+import com.google.android.marvin.mytalkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 
 import java.util.List;
 

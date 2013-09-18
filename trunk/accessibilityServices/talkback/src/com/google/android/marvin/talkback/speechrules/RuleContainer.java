@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback.speechrules;
+package com.google.android.marvin.mytalkback.speechrules;
 
 import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
@@ -22,7 +22,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.widget.AbsListView;
 import android.widget.TabWidget;
 
-import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.mytalkback.R;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 
 /**

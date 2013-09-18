@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -23,9 +23,9 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
-import com.google.android.marvin.talkback.formatter.EventSpeechRuleProcessor;
-import com.google.android.marvin.talkback.test.TalkBackListener;
+import com.google.android.marvin.mytalkback.TalkBackService.AccessibilityEventListener;
+import com.google.android.marvin.mytalkback.formatter.EventSpeechRuleProcessor;
+import com.google.android.marvin.mytalkback.test.TalkBackListener;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.StringBuilderUtils;
 import com.googlecode.eyesfree.utils.WeakReferenceHandler;

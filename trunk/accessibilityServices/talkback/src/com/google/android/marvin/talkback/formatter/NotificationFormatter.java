@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.formatter;
+package com.google.android.marvin.mytalkback.formatter;
 
 import android.app.Notification;
 import android.content.Context;
@@ -24,10 +24,10 @@ import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.RemoteViews;
 
-import com.google.android.marvin.talkback.NotificationType;
-import com.google.android.marvin.talkback.TalkBackService;
-import com.google.android.marvin.talkback.Utterance;
-import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
+import com.google.android.marvin.mytalkback.NotificationType;
+import com.google.android.marvin.mytalkback.TalkBackService;
+import com.google.android.marvin.mytalkback.Utterance;
+import com.google.android.marvin.mytalkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 
 import java.util.Iterator;
 import java.util.LinkedList;

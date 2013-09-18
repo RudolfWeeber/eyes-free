@@ -1,5 +1,5 @@
 
-package com.google.android.marvin.talkback.menurules;
+package com.google.android.marvin.mytalkback.menurules;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -12,8 +12,8 @@ import android.text.TextUtils;
 import android.text.style.URLSpan;
 import android.view.MenuItem;
 
-import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.TalkBackService;
+import com.google.android.marvin.mytalkback.R;
+import com.google.android.marvin.mytalkback.TalkBackService;
 import com.googlecode.eyesfree.widget.RadialMenu;
 import com.googlecode.eyesfree.widget.RadialMenuItem;
 

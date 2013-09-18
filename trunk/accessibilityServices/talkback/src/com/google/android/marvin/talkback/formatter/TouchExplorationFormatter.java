@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.formatter;
+package com.google.android.marvin.mytalkback.formatter;
 
 import android.os.Build;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
@@ -24,14 +24,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.FeedbackItem;
-import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.SpeechController;
-import com.google.android.marvin.talkback.TalkBackService;
-import com.google.android.marvin.talkback.Utterance;
-import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
-import com.google.android.marvin.talkback.formatter.EventSpeechRule.ContextBasedRule;
-import com.google.android.marvin.talkback.speechrules.NodeSpeechRuleProcessor;
+import com.google.android.marvin.mytalkback.FeedbackItem;
+import com.google.android.marvin.mytalkback.R;
+import com.google.android.marvin.mytalkback.SpeechController;
+import com.google.android.marvin.mytalkback.TalkBackService;
+import com.google.android.marvin.mytalkback.Utterance;
+import com.google.android.marvin.mytalkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
+import com.google.android.marvin.mytalkback.formatter.EventSpeechRule.ContextBasedRule;
+import com.google.android.marvin.mytalkback.speechrules.NodeSpeechRuleProcessor;
 import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.LogUtils;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.tutorial;
+package com.google.android.marvin.mytalkback.tutorial;
 
 import android.annotation.TargetApi;
 import android.os.Handler;
@@ -27,7 +27,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.mytalkback.R;
 
 /**
  * Abstract class that represents a single module within a tutorial.

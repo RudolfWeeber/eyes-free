@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
@@ -44,7 +44,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityManager;
 
-import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
+import com.google.android.marvin.mytalkback.tutorial.AccessibilityTutorialActivity;
 import com.googlecode.eyesfree.compat.os.VibratorCompatUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.PackageManagerUtils;

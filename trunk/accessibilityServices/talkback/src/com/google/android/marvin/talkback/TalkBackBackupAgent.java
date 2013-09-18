@@ -1,4 +1,4 @@
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.app.backup.BackupAgentHelper;
@@ -9,7 +9,7 @@ import android.app.backup.SharedPreferencesBackupHelper;
  */
 @TargetApi(8)
 public class TalkBackBackupAgent extends BackupAgentHelper {
-    private static final String PREFS_DEFAULT = "com.google.android.marvin.talkback";
+    private static final String PREFS_DEFAULT = "com.google.android.marvin.mytalkback";
 
     private static final String KEY_PREFS_BACKUP = "prefsBackup";
 

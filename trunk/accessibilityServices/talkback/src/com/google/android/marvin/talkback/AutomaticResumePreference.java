@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 /**
  * Enumeration of automatic resume preference values. Must be synchronized with

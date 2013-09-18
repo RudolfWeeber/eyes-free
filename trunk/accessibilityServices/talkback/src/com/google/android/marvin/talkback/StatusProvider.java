@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -39,7 +39,7 @@ import android.net.Uri;
  *    Screen readers are expected to implement:
  *    <packagename>.providers.StatusProvider.
  *    For example, in TalkBack, the status provider is:
- *    com.google.android.marvin.talkback.providers.StatusProvider
+ *    com.google.android.marvin.mytalkback.providers.StatusProvider
  *
  * 3. The status provider returns 0 for inactive, and
  *    1 for active.

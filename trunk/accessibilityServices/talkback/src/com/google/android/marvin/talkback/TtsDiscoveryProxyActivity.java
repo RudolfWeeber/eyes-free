@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -43,7 +43,7 @@ import java.util.List;
 public class TtsDiscoveryProxyActivity extends Activity {
     /** Broadcast indicating that TTS engine discovery has started. */
     public static final String BROADCAST_TTS_DISCOVERY_STARTED =
-            "com.google.android.marvin.talkback.TTS_DISCOVERY_STARTED";
+            "com.google.android.marvin.mytalkback.TTS_DISCOVERY_STARTED";
 
     /**
      * Broadcast indicating that a TTS engine was discovered. Contains the
@@ -55,11 +55,11 @@ public class TtsDiscoveryProxyActivity extends Activity {
      * </ul>
      */
     public static final String BROADCAST_TTS_DISCOVERED =
-            "com.google.android.marvin.talkback.TTS_DISCOVERED";
+            "com.google.android.marvin.mytalkback.TTS_DISCOVERED";
 
     /** Broadcast indicating that TTS engine discovery has finished. */
     public static final String BROADCAST_TTS_DISCOVERY_FINISHED =
-            "com.google.android.marvin.talkback.TTS_DISCOVERY_FINISHED";
+            "com.google.android.marvin.mytalkback.TTS_DISCOVERY_FINISHED";
 
     /**
      * String extra specifying an engine package name. Returned as an extra with

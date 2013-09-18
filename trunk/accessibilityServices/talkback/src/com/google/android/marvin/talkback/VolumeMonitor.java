@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
@@ -28,7 +28,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.SparseIntArray;
 
-import com.google.android.marvin.talkback.SpeechController.UtteranceCompleteRunnable;
+import com.google.android.marvin.mytalkback.SpeechController.UtteranceCompleteRunnable;
 import com.googlecode.eyesfree.compat.media.AudioManagerCompatUtils;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.WeakReferenceHandler;

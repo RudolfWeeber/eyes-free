@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback.speechrules;
+package com.google.android.marvin.mytalkback.speechrules;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -24,7 +24,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.R;
+import com.google.android.marvin.mytalkback.R;
 import com.googlecode.eyesfree.utils.AccessibilityEventUtils;
 import com.googlecode.eyesfree.utils.AccessibilityNodeInfoUtils;
 import com.googlecode.eyesfree.utils.StringBuilderUtils;

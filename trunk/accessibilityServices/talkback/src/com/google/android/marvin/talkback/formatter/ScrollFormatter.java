@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.formatter;
+package com.google.android.marvin.mytalkback.formatter;
 
 import android.os.SystemClock;
 import android.support.v4.view.accessibility.AccessibilityRecordCompat;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.FeedbackItem;
-import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.TalkBackService;
-import com.google.android.marvin.talkback.Utterance;
-import com.google.android.marvin.talkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
+import com.google.android.marvin.mytalkback.FeedbackItem;
+import com.google.android.marvin.mytalkback.R;
+import com.google.android.marvin.mytalkback.TalkBackService;
+import com.google.android.marvin.mytalkback.Utterance;
+import com.google.android.marvin.mytalkback.formatter.EventSpeechRule.AccessibilityEventFormatter;
 
 /**
  * Formatter that returns an utterance to announce scrolling.

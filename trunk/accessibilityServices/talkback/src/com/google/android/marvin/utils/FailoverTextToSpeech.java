@@ -20,7 +20,7 @@ import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.android.marvin.talkback.SpeechController;
+import com.google.android.marvin.mytalkback.SpeechController;
 import com.googlecode.eyesfree.compat.provider.SettingsCompatUtils.SecureCompatUtils;
 import com.googlecode.eyesfree.compat.speech.tts.TextToSpeechCompatUtils;
 import com.googlecode.eyesfree.utils.LogUtils;

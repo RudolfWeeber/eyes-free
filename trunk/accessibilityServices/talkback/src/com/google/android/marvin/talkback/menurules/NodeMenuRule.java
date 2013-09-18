@@ -14,12 +14,12 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback.menurules;
+package com.google.android.marvin.mytalkback.menurules;
 
 import android.content.Context;
 import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 
-import com.google.android.marvin.talkback.TalkBackService;
+import com.google.android.marvin.mytalkback.TalkBackService;
 import com.googlecode.eyesfree.widget.RadialMenuItem;
 
 import java.util.List;

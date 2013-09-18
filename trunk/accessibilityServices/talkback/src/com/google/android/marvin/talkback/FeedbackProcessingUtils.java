@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -25,7 +25,7 @@ import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 
-import com.google.android.marvin.talkback.SpeechController.SpeechParam;
+import com.google.android.marvin.mytalkback.SpeechController.SpeechParam;
 
 import java.util.Set;
 

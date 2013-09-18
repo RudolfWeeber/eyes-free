@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -25,9 +25,9 @@ import android.support.v4.view.accessibility.AccessibilityNodeInfoCompat;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.android.marvin.talkback.BreakoutMenuUtils.JogDial;
-import com.google.android.marvin.talkback.RadialMenuManager.RadialMenuClient;
-import com.google.android.marvin.talkback.menurules.NodeMenuRuleProcessor;
+import com.google.android.marvin.mytalkback.BreakoutMenuUtils.JogDial;
+import com.google.android.marvin.mytalkback.RadialMenuManager.RadialMenuClient;
+import com.google.android.marvin.mytalkback.menurules.NodeMenuRuleProcessor;
 import com.googlecode.eyesfree.widget.RadialMenu;
 import com.googlecode.eyesfree.widget.RadialMenu.OnMenuVisibilityChangedListener;
 import com.googlecode.eyesfree.widget.RadialMenuItem;

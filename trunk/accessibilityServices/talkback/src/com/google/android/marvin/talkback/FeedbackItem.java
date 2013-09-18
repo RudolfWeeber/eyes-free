@@ -14,11 +14,11 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.text.SpannableStringBuilder;
 
-import com.google.android.marvin.talkback.SpeechController.UtteranceCompleteRunnable;
+import com.google.android.marvin.mytalkback.SpeechController.UtteranceCompleteRunnable;
 import com.googlecode.eyesfree.utils.StringBuilderUtils;
 
 import java.util.Collections;

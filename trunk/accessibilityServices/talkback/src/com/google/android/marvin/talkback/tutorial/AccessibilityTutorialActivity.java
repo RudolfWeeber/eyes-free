@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.android.marvin.talkback.tutorial;
+package com.google.android.marvin.mytalkback.tutorial;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -38,12 +38,12 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewAnimator;
 
-import com.google.android.marvin.talkback.R;
-import com.google.android.marvin.talkback.SpeechController;
-import com.google.android.marvin.talkback.SpeechController.UtteranceCompleteRunnable;
-import com.google.android.marvin.talkback.TalkBackService;
-import com.google.android.marvin.talkback.TalkBackService.ServiceState;
-import com.google.android.marvin.talkback.TalkBackService.ServiceStateListener;
+import com.google.android.marvin.mytalkback.R;
+import com.google.android.marvin.mytalkback.SpeechController;
+import com.google.android.marvin.mytalkback.SpeechController.UtteranceCompleteRunnable;
+import com.google.android.marvin.mytalkback.TalkBackService;
+import com.google.android.marvin.mytalkback.TalkBackService.ServiceState;
+import com.google.android.marvin.mytalkback.TalkBackService.ServiceStateListener;
 import com.googlecode.eyesfree.utils.FeedbackController;
 import com.googlecode.eyesfree.utils.LogUtils;
 import com.googlecode.eyesfree.utils.WeakReferenceHandler;

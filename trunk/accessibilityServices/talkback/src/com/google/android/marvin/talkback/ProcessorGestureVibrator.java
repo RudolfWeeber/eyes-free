@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -22,7 +22,7 @@ import android.os.Handler;
 import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.google.android.marvin.talkback.TalkBackService.AccessibilityEventListener;
+import com.google.android.marvin.mytalkback.TalkBackService.AccessibilityEventListener;
 
 /**
  * Produces continuous vibration feedback during framework gesture recognition.

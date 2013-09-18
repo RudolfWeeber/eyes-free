@@ -1,5 +1,5 @@
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.app.Notification;
 import android.app.NotificationManager;

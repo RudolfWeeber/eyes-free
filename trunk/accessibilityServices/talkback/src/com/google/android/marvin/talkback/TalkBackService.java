@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.google.android.marvin.talkback;
+package com.google.android.marvin.mytalkback;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -62,13 +62,13 @@ import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.marvin.talkback.CursorController.CursorControllerListener;
-import com.google.android.marvin.talkback.KeyComboManager.KeyComboListener;
-import com.google.android.marvin.talkback.TextToSpeechManager.TtsDiscoveryListener;
-import com.google.android.marvin.talkback.speechrules.NodeHintRule;
-import com.google.android.marvin.talkback.speechrules.NodeSpeechRuleProcessor;
-import com.google.android.marvin.talkback.test.TalkBackListener;
-import com.google.android.marvin.talkback.tutorial.AccessibilityTutorialActivity;
+import com.google.android.marvin.mytalkback.CursorController.CursorControllerListener;
+import com.google.android.marvin.mytalkback.KeyComboManager.KeyComboListener;
+import com.google.android.marvin.mytalkback.TextToSpeechManager.TtsDiscoveryListener;
+import com.google.android.marvin.mytalkback.speechrules.NodeHintRule;
+import com.google.android.marvin.mytalkback.speechrules.NodeSpeechRuleProcessor;
+import com.google.android.marvin.mytalkback.test.TalkBackListener;
+import com.google.android.marvin.mytalkback.tutorial.AccessibilityTutorialActivity;
 import com.googlecode.eyesfree.compat.accessibilityservice.AccessibilityServiceCompatUtils;
 import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityEventCompatUtils;
 import com.googlecode.eyesfree.compat.view.accessibility.AccessibilityServiceInfoCompatUtils;
@@ -146,7 +146,7 @@ public class TalkBackService extends AccessibilityService
 
     /** Action used to resume feedback. */
     private static final String ACTION_RESUME_FEEDBACK =
-            "com.google.android.marvin.talkback.RESUME_FEEDBACK";
+            "com.google.android.marvin.mytalkback.RESUME_FEEDBACK";
 
     /** An active instance of TalkBack. */
     private static TalkBackService sInstance = null;
