@@ -1,3 +1,18 @@
+This is a modified version of Talkback. It calls itself "My Talkback", so that 
+it can be installed alongside Google's original version. To activate it,
+choose "My Talkback" in the accessibility settings and turn it on.
+
+-- 2013-09-17 rudolf.weeber@gmx.de
+
+
+
+Original Readme file follows:
+
+
+
+
+
+
 Building TalkBack from the command line using Ant
 -------------------------------------------------
 
