@@ -26,10 +26,10 @@
     <string name="template_text_removed" msgid="515933675336971194">"<xliff:g id="TEXT">%1$s</xliff:g> gelöscht"</string>
     <string name="template_replaced_characters" msgid="5425385364820310962">"<xliff:g id="OLD_TEXT_LENGTH">%1$s</xliff:g> Zeichen durch <xliff:g id="NEW_TEXT_LENGTH">%2$s</xliff:g> Zeichen ersetzt"</string>
     <string name="template_labeled_item" msgid="3704140260750999514">"<xliff:g id="ITEM">%1$s</xliff:g> für <xliff:g id="LABEL">%2$s</xliff:g>"</string>
-    <string name="template_image_view" msgid="4213590103284596735">"Bild <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_image_view" msgid="4213590103284596735">"<xliff:g id="TITLE">%1$s</xliff:g> Bild"</string>
     <string name="template_list_view" msgid="4569888407076618446">"Liste für <xliff:g id="TITLE">%1$s</xliff:g>"</string>
     <string name="template_long_clicked" msgid="915072513538350747">"Längeres Drücken auf <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <string name="template_button" msgid="6774709818484366257">"Schaltfläche <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_button" msgid="6774709818484366257">"<xliff:g id="TITLE">%1$s</xliff:g> Schaltfläche"</string>
     <string name="template_unlabeled_image_view" msgid="6539830337756717284">"Bild \"<xliff:g id="TITLE">%1$d</xliff:g>\", unbenannt"</string>
     <string name="template_unlabeled_button" msgid="510330666175123037">"Schaltfläche \"<xliff:g id="TITLE">%1$d</xliff:g>\", unbenannt"</string>
     <string name="template_seek_bar" msgid="8598603084443742698">"Suchleiste <xliff:g id="TITLE">%1$s</xliff:g>."</string>
@@ -45,8 +45,8 @@
     <string name="template_spinner" msgid="3914981448273826697">"Drop-down-Liste <xliff:g id="TITLE">%1$s</xliff:g>."</string>
     <string name="template_password_selected" msgid="7528235887386963927">"Ausgewählte Zeichen: <xliff:g id="FROM_INDEX">%1$s</xliff:g> bis <xliff:g id="TO_INDEX">%2$s</xliff:g>"</string>
     <string name="template_capital_letter" msgid="9151240217884890264">"großes <xliff:g id="UPPERCASE_CHARACTER">%1$s</xliff:g>"</string>
-    <string name="template_checkbox" msgid="5452847405394165465">"Kontrollkästchen <xliff:g id="TITLE">%1$s</xliff:g>"</string>
-    <string name="template_radio_button" msgid="6220410400770793883">"Optionsfeld <xliff:g id="TITLE">%1$s</xliff:g>"</string>
+    <string name="template_checkbox" msgid="5452847405394165465">"<xliff:g id="TITLE">%1$s</xliff:g> Kontrollkästchen"</string>
+    <string name="template_radio_button" msgid="6220410400770793883">"<xliff:g id="TITLE">%1$s</xliff:g> Optionsfeld"</string>
     <string name="template_switch" msgid="1615681613214625067">"<xliff:g id="TITLE">%1$s</xliff:g>, Schalter"</string>
     <string name="value_password" msgid="52094746222829357">"Passwort"</string>
     <string name="value_sliding_drawer_opened" msgid="2149064620861446612">"Schieberegler geöffnet"</string>
