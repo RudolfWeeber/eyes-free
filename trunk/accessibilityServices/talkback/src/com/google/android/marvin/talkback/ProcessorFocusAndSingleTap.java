@@ -56,7 +56,8 @@ class ProcessorFocusAndSingleTap implements AccessibilityEventListener {
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1);
 
     /** The timeout after which an event is no longer considered a tap. */
-    public static final long TAP_TIMEOUT = ViewConfiguration.getJumpTapTimeout();
+    //public static final long TAP_TIMEOUT = ViewConfiguration.getJumpTapTimeout()/2;
+    public static final long TAP_TIMEOUT = 10;
 
     /** The period after a scroll event when focus following is disabled. */
     private static final long TIMEOUT_VIEW_SCROLLED = TalkBackService.DELAY_AUTO_AFTER_STATE;
@@ -682,11 +683,11 @@ class ProcessorFocusAndSingleTap implements AccessibilityEventListener {
         private static final int CLEAR_SCROLL_ACTION = 4;
 
         /** Delay after a scroll event before checking focus. */
-        private static final long FOCUS_AFTER_SCROLL_DELAY = 250;
-        private static final long FOCUS_AFTER_CONTENT_CHANGED_DELAY = 500;
+        private static final long FOCUS_AFTER_SCROLL_DELAY = 100;
+        private static final long FOCUS_AFTER_CONTENT_CHANGED_DELAY = 200;
 
         /** Delay after a scroll event to clear the cached scroll action. */
-        private static final long CLEAR_SCROLL_ACTION_DELAY = 200;
+         private static final long CLEAR_SCROLL_ACTION_DELAY = 100;
 
         private AccessibilityRecordCompat mCachedContentRecord;
         private AccessibilityNodeInfoCompat mCachedScrollNode;

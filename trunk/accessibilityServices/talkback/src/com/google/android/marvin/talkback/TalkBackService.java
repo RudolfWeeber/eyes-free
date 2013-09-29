@@ -103,7 +103,7 @@ public class TalkBackService extends AccessibilityService
             "com.google.android.marvin.feedback.permission.TALKBACK";
 
     /** The minimum delay between window state change and automatic events. */
-    /* package */ static final long DELAY_AUTO_AFTER_STATE = 100;
+    /* package */ static final long DELAY_AUTO_AFTER_STATE = 50;
 
     /** Event types to drop after receiving a window state change. */
     /* package */ static final int AUTOMATIC_AFTER_STATE_CHANGE =
