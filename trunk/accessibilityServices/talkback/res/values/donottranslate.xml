@@ -291,7 +291,7 @@
     <string name="settings_manager_market_uri">market://details?id=com.marvin.preferences</string>
 
     <!-- Intent ACTION for launching the gesture change notification activity -->
-    <string name="action_gesture_change_notification">com.google.android.marvin.talkback.NOTIFY_GESTURE_CHANGE</string>
+    <string name="action_gesture_change_notification">com.google.android.marvin.mytalkback.NOTIFY_GESTURE_CHANGE</string>
 
     <!-- Those building from open source should obtain their own backup agent key -->
     <string name="backup_api_key">INVALID</string>

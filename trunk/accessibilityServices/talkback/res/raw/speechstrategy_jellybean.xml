@@ -13,7 +13,7 @@
       <ss:className>android.webkit.WebView</ss:className>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.WebContentFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.WebContentFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -41,7 +41,7 @@
       <ss:className>android.widget.ProgressBar</ss:className>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.ProgressBarFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.ProgressBarFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -72,7 +72,7 @@
       <ss:platformSdk>&gt;=16</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.FallbackFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.FallbackFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -85,7 +85,7 @@
       <ss:platformSdk>&gt;=16</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.phone.InCallScreenFormatterJB</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.phone.InCallScreenFormatterJB</ss:custom>
     </ss:formatter>
   </ss:rule>
 

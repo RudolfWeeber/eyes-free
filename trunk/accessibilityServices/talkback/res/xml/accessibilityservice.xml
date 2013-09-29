@@ -9,4 +9,4 @@
     android:canRetrieveWindowContent="true"
     android:description="@string/talkback_service_description"
     android:notificationTimeout="0"
-    android:settingsActivity="com.google.android.marvin.talkback.TalkBackPreferencesActivity" />
+    android:settingsActivity="com.google.android.marvin.mytalkback.TalkBackPreferencesActivity" />

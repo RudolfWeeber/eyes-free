@@ -14,5 +14,5 @@
 -dontobfuscate
 
 # Keep all classes that might be used in XML speech rules.
--keep class * implements com.google.android.marvin.talkback.formatter.EventSpeechRule$AccessibilityEventFormatter
--keep class * implements com.google.android.marvin.talkback.formatter.EventSpeechRule$AccessibilityEventFilter
+-keep class * implements com.google.android.marvin.mytalkback.formatter.EventSpeechRule$AccessibilityEventFormatter
+-keep class * implements com.google.android.marvin.mytalkback.formatter.EventSpeechRule$AccessibilityEventFilter

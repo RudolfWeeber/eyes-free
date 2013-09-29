@@ -40,7 +40,7 @@
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -53,7 +53,7 @@
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -66,7 +66,7 @@
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.MonthViewSelectedFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.calendar.MonthViewSelectedFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -79,7 +79,7 @@
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.calendar.DayOrWeekOrAgendaViewSelectedFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -92,7 +92,7 @@
       <ss:platformSdk>9||10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-       <ss:custom>com.google.android.marvin.talkback.formatter.calendar.DayViewWindowStateChangedFormatter</ss:custom>
+       <ss:custom>com.google.android.marvin.mytalkback.formatter.calendar.DayViewWindowStateChangedFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 

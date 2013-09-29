@@ -66,7 +66,7 @@
       <ss:className>android.widget.ImageView</ss:className>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.ImageViewFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.ImageViewFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -79,7 +79,7 @@
       <ss:platformSdk>&gt;=14</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.TouchExplorationSystemUiFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.TouchExplorationSystemUiFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -149,7 +149,7 @@
       <ss:platformSdk>&gt;=14</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.phone.InCallScreenFormatterICS</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.phone.InCallScreenFormatterICS</ss:custom>
     </ss:formatter>
   </ss:rule>
 

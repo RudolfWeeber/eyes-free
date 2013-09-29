@@ -29,7 +29,7 @@
       <ss:platformSdk>10</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.calendar.MonthViewSelectedFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.calendar.MonthViewSelectedFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 
@@ -41,7 +41,7 @@
       <ss:packageName>com.google.android.calendar</ss:packageName>
     </ss:filter>
     <ss:formatter>
-      <ss:template>@com.google.android.marvin.talkback:string/template_announce_month</ss:template>
+      <ss:template>@com.google.android.marvin.mytalkback:string/template_announce_month</ss:template>
       <ss:property>contentDescriptionOrText</ss:property>
     </ss:formatter>
   </ss:rule>
@@ -67,7 +67,7 @@
       <ss:platformSdk>&lt;=13</ss:platformSdk>
     </ss:filter>
     <ss:formatter>
-      <ss:custom>com.google.android.marvin.talkback.formatter.phone.InCallScreenFormatter</ss:custom>
+      <ss:custom>com.google.android.marvin.mytalkback.formatter.phone.InCallScreenFormatter</ss:custom>
     </ss:formatter>
   </ss:rule>
 

@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 
-<com.google.android.marvin.talkback.tutorial.InstrumentedListView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.marvin.mytalkback.tutorial.InstrumentedListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" />
