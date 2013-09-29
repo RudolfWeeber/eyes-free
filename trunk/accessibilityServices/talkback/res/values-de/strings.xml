@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="talkback_preferences_title" msgid="615685549632541311">"TalkBack-Einstellungen"</string>
+    <string name="talkback_preferences_title" msgid="615685549632541311">"My TalkBack-Einstellungen"</string>
     <string name="talkback_service_description" msgid="983212841294665356">"Wenn TalkBack aktiviert ist, gibt das Gerät blinden Nutzern und Nutzern mit geringem Sehvermögen gesprochenes Feedback. So werden etwa die Elemente beschrieben, die Sie berühren, auswählen und aktivieren."</string>
     <string name="notification_type_text_message" msgid="2840489326612585077">"SMS"</string>
     <string name="notification_type_failed_text_message" msgid="3279662617442887805">"Nicht gesendete SMS"</string>
